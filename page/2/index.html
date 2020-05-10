@@ -181,6 +181,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Mysql AICD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/Mysql AICD/">Mysql AICD</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/Mysql AICD/" class="archive-article-date">
+  	<time datetime="2020-05-04T23:24:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>A 原子性<br>C 一致性<br>I   分离性～并发<br>D 永久性</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/Mysql AICD/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/mysql 范式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -785,75 +848,6 @@ transition: color .3s;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/04/yuque/Redis/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Goroutine与Channel锁之外的另一种同步机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/">Goroutine与Channel锁之外的另一种同步机制</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/" class="archive-article-date">
-  	<time datetime="2020-04-26T19:14:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Goroutine-与-Channel-锁之外的另一种同步机制"><a href="#Goroutine-与-Channel-锁之外的另一种同步机制" class="headerlink" title="Goroutine 与 Channel: 锁之外的另一种同步机制"></a>Goroutine 与 Channel: 锁之外的另一种同步机制</h3><p>在主流的编程语言中为了保证多线程之间共享数据安全性和一致性，都会提供一套基本的同步工具集，如锁，条件变量，原子操作等等。Go 语言标准库也毫不意外的提供了这些同步机制，使用方式也和其他语言也差不多。</p>
-<p>除了这些基本的同步手段，Go 语言还提供了一种新的同步机制: Channel，它在 Go 语言中是一个像 int, float32 等的基本类型，一个 channel 可以认为是一个能够在多个 Goroutine 之间传递某一类型的数据的管道。Go 中的 channel 无论是实现机制还是使用场景都和 Java 中的 BlockingQueue 很接近。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明channel变量</span></span><br><span class="line"><span class="keyword">var</span> syncChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)  <span class="comment">// 无缓冲channel，主要用于两个Goroutine之间建立同步点</span></span><br><span class="line"><span class="keyword">var</span> cacheChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)  <span class="comment">// 缓冲channel</span></span><br><span class="line"><span class="comment">// 向channel中写入数据</span></span><br><span class="line">syncChan &lt;- <span class="number">1</span></span><br><span class="line">cacheChan &lt;- <span class="number">1</span></span><br><span class="line"><span class="comment">// 从channel读取数据</span></span><br><span class="line"><span class="keyword">var</span> i = &lt;-syncChan</span><br><span class="line"><span class="keyword">var</span> j = &lt;-cacheChan</span><br></pre></td></tr></table></figure>
-<p>几乎等价于的 Java 中的操作:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TransferQueue&lt;Integer&gt; syncQueue = <span class="keyword">new</span> LinkedTransferQueue&lt;Integer&gt;();</span><br><span class="line">BlockingQueue&lt;Integer&gt; cacheQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Integer&gt;(<span class="number">10</span>);</span><br><span class="line">syncQueue.transfer(<span class="number">1</span>);</span><br><span class="line">cacheQueue.put(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> i = syncQueue.take();</span><br><span class="line"><span class="keyword">int</span> j = cacheQueu.take();</span><br></pre></td></tr></table></figure>
-<p>a. 与 Java 的 BlockingQueue 一样用在需要生产者消费者模型的并发环境中。</p>
-<p>b. 锁同步场景下一种替代方案。在 Go 的并发编程中有一句很经典的话：<a href="https://golang.org/doc/effective_go.html#concurrency" target="_blank" rel="noopener">不要以共享内存的方式去通信，而要以通信的方式去共享内存</a>。在 Go 语言中并不鼓励用锁保护共享状态的方式在不同的 Goroutine 中分享信息(以共享内存的方式去通信)。而是鼓励通过 channel 将共享状态或共享状态的变化在各个 Goroutine 之间传递（以通信的方式去共享内存），这样同样能像用锁一样保证在同一的时间只有一个 Goroutine 访问共享状态。但这的确需要转换以前用锁做并发同步的思维方式，大家觉得那种适合自己和自己的使用场景就用哪种好了，并不能很简单、绝对地说哪种方式更好，更高效。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/">展开全文 >></a>
         </p>
       
 

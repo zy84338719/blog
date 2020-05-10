@@ -181,6 +181,112 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/JAVA HttpURLConnection" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/30/yuque/JAVA HttpURLConnection/">JAVA HttpURLConnection</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/30/yuque/JAVA HttpURLConnection/" class="archive-article-date">
+  	<time datetime="2019-03-30T17:08:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
+<p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
+<p>通过服务器返回的信息获取会话例程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">"set-cookie"</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">";"</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">""</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">""</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的 session 格式为:  JSESSIONID=XXXXXXXXX</p>
+<p>获取 session ID 之后需要在每次发送请求的同时设置请求参数才能保持会话，例程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"http://adugiudadiugb"</span>);</span><br><span class="line"></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">this</span>.sessionID.equals(<span class="string">""</span>))&#123;<span class="comment">//如果sessionID存在，即存在会话</span></span><br><span class="line"></span><br><span class="line">	connection.setRequestProperty(<span class="string">"cookie"</span>, <span class="keyword">this</span>.sessionID);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只要 session ID 不改变，相应的会话也就不会改变</p>
+<p>小结：利用 Java 的 HttpURLConnection 进行请求发送时，如果需要保持同服务器的会话，需要先通过连接服务器获取 session ID ，之后发送请求加入 session ID 到请求参数中就可以了。</p>
+<p>注意：此时的服务器后台需要支持会话，即 Java Web 后台实现了 session。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J//" class="article-tag-list-link color2">J</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v//" class="article-tag-list-link color2">v</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/30/yuque/JAVA HttpURLConnection/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/《变量》金句摘要" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1354,124 +1460,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/02/18/yuque/如何写一个优雅的文档/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何写一个优雅的 PPT" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/18/yuque/如何写一个优雅的 PPT/">如何写一个优雅的 PPT</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/18/yuque/如何写一个优雅的 PPT/" class="archive-article-date">
-  	<time datetime="2019-02-18T01:25:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104642-03ea5f42-081a-4a7f-aea3-1e2c04fb2474.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104651-97919a2a-4eb1-4ee3-a4ea-4ec9884a9703.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104663-d96fa507-f703-4652-a0ea-877f1e7d51d2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104618-acf7d654-0691-4bcb-be22-adda8ff27800.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104663-53986226-874e-431f-a495-3de097f8668d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104676-ff53e4fa-20f4-4381-bbd0-0143dd18f2ce.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104639-9d800044-c2a0-45c9-bc5d-3e2d6ba51b7b.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104679-85a19489-5a27-47d6-84f4-2c00eed77bc7.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104660-1ae5f2b6-13cd-40e6-ac73-35cba2613312.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104692-83313fc3-f6ec-4cc0-be90-af364e9a37d0.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104647-c940000b-848f-4ccc-9b25-5aae62dadf8c.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104677-e4bb2c5b-b6e3-4f5a-8596-ff2420e1e94f.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104648-05d7e183-1b1a-4311-99a0-bd9218f5f240.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104680-99d1c3f2-accd-49c0-ba57-99367a908336.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104728-adc44371-62bf-47eb-8a1d-aeafdf6f35d2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104699-573d66ca-39a6-4eeb-b379-8b8bc1536aa6.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104689-bbca0130-93a1-4558-83e0-361f2bb9183f.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104681-4af0d5d5-e63c-48ce-8e12-7989363a5a28.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104704-273237b1-3e0c-47ab-a232-81340ed84578.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104704-496d2260-dc3b-4e59-8709-7e4d681dbfd8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104740-2152de6c-bc0f-4090-908e-c8e9f2c06003.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104754-4dfc1298-01ac-4bd1-9c91-97a2a49ad440.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104719-58143ceb-227a-4089-9549-2c00c76baf56.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104724-0fa4ec5b-cc82-402a-b937-777b294d2342.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104746-358c0174-ea5f-4657-bb26-e510f9c52c46.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104726-0f7248b8-063f-4f47-9b6e-98e8400f66fb.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104754-65eff5ad-440d-4bce-b01f-01f5aa8f0de4.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104789-a4e1c1b3-10ef-486d-a0b6-125e1451e98d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104782-d6e490e2-4b1d-4343-a99a-50b8f01917db.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104793-25bb309f-cabb-4aa4-bec2-698dbccf5406.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104758-9ad06da8-f5f7-4824-a973-e3be53fda1bb.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104710-c556c477-68b8-48e2-9831-41b095b6de70.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104729-ed2bbc1d-8fbe-4003-bbfd-2cdc977d8143.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104794-00b8bc22-3e78-4bb2-98a9-f6899212cd19.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104782-abdd446a-ee9b-47ff-9e6e-cd60d2cd7460.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104787-01c36fa7-87f6-4a07-b449-04fbb8ec4985.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104744-e2d7a7de-7087-4046-a6df-350c4db5504d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104783-0740f0ae-64c1-4460-8dda-c1e95896a2b4.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104805-e0630a78-16db-4bbf-8742-0f69d1de73df.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104801-aaef6f5c-cb96-4caa-8a31-503afc8d0414.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104780-f00ceccf-7405-46b1-b8cd-bef32e464cca.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104791-b70b3203-e3bb-41f3-9583-b618b2a11ff2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104788-12c7f3f5-0c1e-4735-93c2-aa452044f23b.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104793-7c07b7ce-b329-4874-9f46-262153932d01.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104848-4a8221ab-7f8b-464f-896a-ce677f3cf103.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104804-aaf7ad20-2c75-4ab1-a4fc-36dd22f8668c.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104800-4a098d61-fe9c-4c8b-9c31-2a8e8bc8fce9.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104703-7985867c-e1a3-4a4b-a70a-c060138a66f8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104831-e2b5d0b7-2495-44b7-94a1-908fa37f6e50.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104860-4708d102-bc79-4eb1-ba28-ea867df46edf.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104849-30edf516-d51b-4147-8926-295c7864e5fc.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104851-51da22c5-a803-40d9-9620-0a6bc0b944db.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104739-8c6dc67c-0b65-4f33-907d-41d6e69167a6.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104746-10e0bb86-d64e-441c-9016-c83fb5a75c97.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104749-f3c70d86-f991-4d82-8f19-ec45222bfe2e.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104894-9ad5afc1-ab3d-43dc-bc00-6b89db668cb8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/18/yuque/如何写一个优雅的 PPT/">展开全文 >></a>
         </p>
       
 

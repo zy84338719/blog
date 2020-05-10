@@ -181,6 +181,71 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 集锦" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/18/yuque/Java 集锦/">Java 集锦</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/18/yuque/Java 集锦/" class="archive-article-date">
+  	<time datetime="2018-10-18T07:50:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="String-StringBuffer-StringBuilder-区别"><a href="#String-StringBuffer-StringBuilder-区别" class="headerlink" title="String StringBuffer StringBuilder 区别"></a>String StringBuffer StringBuilder 区别</h3><p>String 是不可修改的（开发常用）因为不可更改，所以效率高<br>StringBuffer 是线程安全的有 synchronized 关键字（字符变化比较频繁，使用）<br>StringBuilder 不是线程安全的</p>
+<h3 id="Runtime-单例设计模式"><a href="#Runtime-单例设计模式" class="headerlink" title="Runtime 单例设计模式"></a>Runtime 单例设计模式</h3><p>具体查看文档，同 getRuntime（）<br>Runtime 是一个私有方法，每一个程序在运行时都会自动启动它，当程序内产生垃圾后，会调用 Runtime 中 gc（） 类，用来回收内存。（该方法是不定期调用的）</p>
+<h3 id="System-类"><a href="#System-类" class="headerlink" title="System 类"></a>System 类</h3><p>System 中有 gc 方法，从源码上看是调用 Runtime 的 gc 方法；<br>final ， finally ，finalize 却别<br>Final 是一个关键字，用于定义不能被继承的父类，和不能重写的方法<br>Finally 是一个异常处理的统一处出口。<br>Finalize 是一个 Object 调用 finalize 来做类似于 C++析构函数的作用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/18/yuque/Java 集锦/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Java (二)探 多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

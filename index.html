@@ -181,6 +181,198 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Map" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/10/yuque/Map/">Map</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/10/yuque/Map/" class="archive-article-date">
+  	<time datetime="2020-05-10T17:21:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="开篇语"><a href="#开篇语" class="headerlink" title="开篇语"></a>开篇语</h4><blockquote>
+<p>Map 是一种常用的 kv 数据结构，程序设计中经常使用，且作为一种最基础的数据结构，很多编程语言本身提供的 api 都会有实现，Go 也不例外，今天我们将从一下三个方面为大家分析 Go 中的 Map。</p>
+<ul>
+<li>什么是 Map？</li>
+<li>Go 中如何使用 Map？</li>
+<li>以及 Go 的 Map 实现机制是什么样？</li>
+</ul>
+<p>希望通过这几个方面的讲解，让大家真正理解 Go 的 Map 使用和实现。</p>
+</blockquote>
+<h4 id="什么是-Map"><a href="#什么是-Map" class="headerlink" title="什么是 Map"></a>什么是 Map</h4><h5 id="key，value-存储"><a href="#key，value-存储" class="headerlink" title="key，value 存储"></a>key，value 存储</h5><blockquote>
+<p>最通俗的话说 Map 是一种通过 key 来获取 value 的一个数据结构，其底层存储方式为数组，在存储时 key 不能重复，当 key 重复时，value 进行覆盖，我们通过 key 进行 hash 运算（可以简单理解为把 key 转化为一个整形数字）然后对数组的长度取余，得到 key 存储在数组的哪个下标位置，最后将 key 和 value 组装为一个结构体，放入数组下标处，看下图：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">length = len(array) = 4</span><br><span class="line">hashkey1 = hash(xiaoming) = 4</span><br><span class="line">index1  = hashkey1% length= 0</span><br><span class="line">hashkey2 = hash(xiaoli) = 6</span><br><span class="line">index2  = hashkey2% length= 2</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302223-a2052a91-b12b-4cd2-abe0-87518ae2fd10.png#align=left&amp;display=inline&amp;height=255&amp;margin=%5Bobject%20Object%5D&amp;originHeight=255&amp;originWidth=588&amp;size=0&amp;status=done&amp;style=none&amp;width=588" alt></p>
+<h5 id="hash-冲突"><a href="#hash-冲突" class="headerlink" title="hash 冲突"></a>hash 冲突</h5><blockquote>
+<p>如上图所示，数组一个下标处只能存储一个元素，也就是说一个数组下标只能存储一对 key，value, hashkey(xiaoming)=4 占用了下标 0 的位置，假设我们遇到另一个 key，hashkey(xiaowang)也是 4，这就是 hash 冲突（不同的 key 经过 hash 之后得到的值一样），那么 key=xiaowang 的怎么存储？<br>hash 冲突的常见解决方法</p>
+</blockquote>
+<ul>
+<li>开放定址法<blockquote>
+<p>也就是说当我们存储一个 key，value 时，发现 hashkey(key)的下标已经被别 key 占用，那我们在这个数组中空间中重新找一个没被占用的存储这个冲突的 key，那么没被占用的有很多，找哪个好呢？常见的有线性探测法，线性补偿探测法，随机探测法，这里我们主要说一下线性探测法<br><strong>线性探测</strong>，字面意思就是按照顺序来，从冲突的下标处开始往后探测，到达数组末尾时，从数组开始处探测，直到找到一个空位置存储这个 key，当数组都找不到的情况下回扩容（事实上当数组容量快满的时候就会扩容了）；查找某一个 key 的时候，找到 key 对应的下标，比较 key 是否相等，如果相等直接取出来，否则按照顺寻探测直到碰到一个空位置，说明 key 不存在。如下图：</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302300-ff0a429f-f2e4-4cf3-b449-1fd5dc2337f9.png#align=left&amp;display=inline&amp;height=522&amp;margin=%5Bobject%20Object%5D&amp;originHeight=522&amp;originWidth=799&amp;size=0&amp;status=done&amp;style=none&amp;width=799" alt></p>
+<blockquote>
+<p>首先存储 key=xiaoming 在下标 0 处，当存储 key=xiaowang 时，hash 冲突了，按照线性探测，存储在下标 1 处，（红色的线是冲突或者下标已经被占用了） 再者 key=xiaozhao 存储在下标 4 处，当存储 key=xiaoliu 是，hash 冲突了，按照线性探测，从头开始，存储在下标 2 处 （黄色的是冲突或者下标已经被占用了）</p>
+</blockquote>
+<ul>
+<li>拉链法<blockquote>
+<p>何为拉链，简单理解为链表，当 key 的 hash 冲突时，我们在冲突位置的元素上形成一个链表，通过指针互连接，当查找时，发现 key 冲突，顺着链表一直往下找，直到链表的尾节点，找不到则返回空，如下图：</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302210-f99d7211-503e-4862-9c42-026f85d338ba.png#align=left&amp;display=inline&amp;height=393&amp;margin=%5Bobject%20Object%5D&amp;originHeight=393&amp;originWidth=682&amp;size=0&amp;status=done&amp;style=none&amp;width=682" alt></p>
+<ul>
+<li>开放定址（线性探测）和拉链的优缺点<ol>
+<li>由上面可以看出拉链法比线性探测处理简单</li>
+<li>线性探测查找是会被拉链法会更消耗时间</li>
+<li>线性探测会更加容易导致扩容，而拉链不会</li>
+<li>拉链存储了指针，所以空间上会比线性探测占用多一点</li>
+<li>拉链是动态申请存储空间的，所以更适合链长不确定的</li>
+</ol>
+</li>
+</ul>
+<h4 id="Go-中-Map-的使用"><a href="#Go-中-Map-的使用" class="headerlink" title="Go 中 Map 的使用"></a>Go 中 Map 的使用</h4><blockquote>
+<p>直接用代码描述，直观，简单，易理解</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//直接创建初始化一个mao</span></span><br><span class="line"><span class="keyword">var</span> mapInit = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> &#123;<span class="string">"xiaoli"</span>:<span class="string">"湖南"</span>, <span class="string">"xiaoliu"</span>:<span class="string">"天津"</span>&#125;</span><br><span class="line"><span class="comment">//声明一个map类型变量,</span></span><br><span class="line"><span class="comment">//map的key的类型是string，value的类型是string</span></span><br><span class="line"><span class="keyword">var</span> mapTemp <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line"><span class="comment">//使用make函数初始化这个变量,并指定大小(也可以不指定)</span></span><br><span class="line">mapTemp = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>,<span class="number">10</span>)</span><br><span class="line"><span class="comment">//存储key ，value</span></span><br><span class="line">mapTemp[<span class="string">"xiaoming"</span>] = <span class="string">"北京"</span></span><br><span class="line">mapTemp[<span class="string">"xiaowang"</span>]= <span class="string">"河北"</span></span><br><span class="line"><span class="comment">//根据key获取value,</span></span><br><span class="line"><span class="comment">//如果key存在，则ok是true，否则是flase</span></span><br><span class="line"><span class="comment">//v1用来接收key对应的value,当ok是false时，v1是nil</span></span><br><span class="line">v1,ok := mapTemp[<span class="string">"xiaoming"</span>]</span><br><span class="line">fmt.Println(ok,v1)</span><br><span class="line"><span class="comment">//当key=xiaowang存在时打印value</span></span><br><span class="line"><span class="keyword">if</span> v2,ok := mapTemp[<span class="string">"xiaowang"</span>]; ok&#123;</span><br><span class="line">    fmt.Println(v2)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//遍历map,打印key和value</span></span><br><span class="line"><span class="keyword">for</span> k,v := <span class="keyword">range</span> mapTemp&#123;</span><br><span class="line">    fmt.Println(k,v)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//删除map中的key</span></span><br><span class="line"><span class="built_in">delete</span>(mapTemp,<span class="string">"xiaoming"</span>)</span><br><span class="line"><span class="comment">//获取map的大小</span></span><br><span class="line">l := <span class="built_in">len</span>(mapTemp)</span><br><span class="line">fmt.Println(l)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>看了上面的 map 创建，初始化，增删改查等操作，我们发现 go 的 api 其实挺简单易学的</p>
+</blockquote>
+<h4 id="Go-中-Map-的实现原理"><a href="#Go-中-Map-的实现原理" class="headerlink" title="Go 中 Map 的实现原理"></a>Go 中 Map 的实现原理</h4><blockquote>
+<p>知其然，更得知其所以然，会使用 map 了，多问问为什么，go 底层 map 到底怎么存储呢?接下来我们一探究竟。<br><strong>map 的源码位于 src/runtime/map.go 中 笔者 go 的版本是 1.12</strong><br>在 go 中，map 同样也是数组存储的的，每个数组下标处存储的是一个 bucket,这个 bucket 的类型见下面代码，每个 bucket 中可以存储 8 个 kv 键值对，当每个 bucket 存储的 kv 对到达 8 个之后，会通过 overflow 指针指向一个新的 bucket，从而形成一个链表,看 bmap 的结构，我想大家应该很纳闷，没看见 kv 的结构和 overflow 指针啊，事实上，这两个结构体并没有显示定义，是通过指针运算进行访问的。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//bucket结构体定义 b就是bucket</span></span><br><span class="line"><span class="keyword">type</span> bmap&#123;</span><br><span class="line">    <span class="comment">// tophash generally contains the top byte of the hash value// for each key  in this bucket. If tophash[0] &lt; minTopHash,// tophash[0] is a bucket               evacuation state instead.</span></span><br><span class="line">    <span class="comment">//翻译：top hash通常包含该bucket中每个键的hash值的高八位。如果tophash[0]小于mintophash，则tophash[0]为桶疏散状态</span></span><br><span class="line">    <span class="comment">//bucketCnt 的初始值是8</span></span><br><span class="line">    tophash [bucketCnt]<span class="keyword">uint8</span></span><br><span class="line">    <span class="comment">// Followed by bucketCnt keys and then bucketCnt values.// <span class="doctag">NOTE:</span> packing all the keys together and then all the values together makes the// code a bit more complicated than alternating key/value/key/value/... but it allows// us to eliminate padding which would be needed for, e.g., map[int64]int8.// Followed by an overflow pointer.</span></span><br><span class="line">    <span class="comment">//翻译：接下来是bucketcnt键，然后是bucketcnt值。注意：将所有键打包在一起，然后将所有值打包在一起，使得//代码比交替键/值/键/值/更复杂。但它允许//我们消除可能需要的填充，例如map[int64]int8./后面跟一个溢出指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>看上面代码以及注释，我们能得到 bucket 中存储的 kv 是这样的，tophash 用来快速查找 key 值是否在该 bucket 中，而不同每次都通过真值进行比较；还有 kv 的存放，为什么不是 k1v1，k2v2….. 而是 k1k2…v1v2…，我们看上面的注释说的 map[int64]int8,key 是 int64（8 个字节），value 是 int8（一个字节），kv 的长度不同，如果按照 kv 格式存放，则考虑内存对齐 v 也会占用 int64，而按照后者存储时，8 个 v 刚好占用一个 int64,从这个就可以看出 go 的 map 设计之巧妙。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302293-b0ea8202-7c36-49c8-a965-7982a454b5d3.png#align=left&amp;display=inline&amp;height=325&amp;margin=%5Bobject%20Object%5D&amp;originHeight=325&amp;originWidth=337&amp;size=0&amp;status=done&amp;style=none&amp;width=337" alt></p>
+<blockquote>
+<p>最后我们分析一下 go 的整体内存结构，阅读一下 map 存储的源码，如下图所示，当往 map 中存储一个 kv 对时，通过 k 获取 hash 值，hash 值的低八位和 bucket 数组长度取余，定位到在数组中的那个下标，hash 值的高八位存储在 bucket 中的 tophash 中，用来快速判断 key 是否存在，key 和 value 的具体值则通过指针运算存储，当一个 bucket 满时，通过 overfolw 指针链接到下一个 bucket。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302299-eca3c11e-552c-4e48-b360-33085c497c7e.png#align=left&amp;display=inline&amp;height=509&amp;margin=%5Bobject%20Object%5D&amp;originHeight=509&amp;originWidth=1221&amp;size=0&amp;status=done&amp;style=none&amp;width=1221" alt></p>
+<blockquote>
+<p>go 的 map 存储源码如下，省略了一些无关紧要的代码</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mapassign</span><span class="params">(t *maptype, h *hmap, key unsafe.Pointer)</span> <span class="title">unsafe</span>.<span class="title">Pointer</span></span> &#123;</span><br><span class="line">    <span class="comment">//获取hash算法</span></span><br><span class="line">    alg := t.key.alg</span><br><span class="line">    <span class="comment">//计算hash值</span></span><br><span class="line">    hash := alg.hash(key, <span class="keyword">uintptr</span>(h.hash0))</span><br><span class="line">    <span class="comment">//如果bucket数组一开始为空，则初始化</span></span><br><span class="line">    <span class="keyword">if</span> h.buckets == <span class="literal">nil</span> &#123;</span><br><span class="line">        h.buckets = newobject(t.bucket) <span class="comment">// newarray(t.bucket, 1)</span></span><br><span class="line">    &#125;</span><br><span class="line">again:</span><br><span class="line">    <span class="comment">// 定位存储在哪一个bucket中</span></span><br><span class="line">    bucket := hash &amp; bucketMask(h.B)</span><br><span class="line">    <span class="comment">//得到bucket的结构体</span></span><br><span class="line">    b := (*bmap)(unsafe.Pointer(<span class="keyword">uintptr</span>(h.buckets) +bucket*<span class="keyword">uintptr</span>(t.bucketsize)))</span><br><span class="line">    <span class="comment">//获取高八位hash值</span></span><br><span class="line">    top := tophash(hash)</span><br><span class="line">    <span class="keyword">var</span> inserti *<span class="keyword">uint8</span></span><br><span class="line">    <span class="keyword">var</span> insertk unsafe.Pointer</span><br><span class="line">    <span class="keyword">var</span> val unsafe.Pointer</span><br><span class="line">bucketloop:</span><br><span class="line">    <span class="comment">//死循环</span></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="comment">//循环bucket中的tophash数组</span></span><br><span class="line">        <span class="keyword">for</span> i := <span class="keyword">uintptr</span>(<span class="number">0</span>); i &lt; bucketCnt; i++ &#123;</span><br><span class="line">            <span class="comment">//如果hash不相等</span></span><br><span class="line">            <span class="keyword">if</span> b.tophash[i] != top &#123;</span><br><span class="line">             <span class="comment">//判断是否为空，为空则插入</span></span><br><span class="line">                <span class="keyword">if</span> isEmpty(b.tophash[i]) &amp;&amp; inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">                    inserti = &amp;b.tophash[i]</span><br><span class="line">                    insertk = add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">                    val = add( unsafe.Pointer(b),</span><br><span class="line">                    dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize) )</span><br><span class="line">                &#125;</span><br><span class="line">              <span class="comment">//插入成功，终止最外层循环</span></span><br><span class="line">                <span class="keyword">if</span> b.tophash[i] == emptyRest &#123;</span><br><span class="line">                    <span class="keyword">break</span> bucketloop</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//到这里说明高八位hash一样，获取已存在的key</span></span><br><span class="line">            k := add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">            <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">                k = *((*unsafe.Pointer)(k))</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//判断两个key是否相等，不相等就循环下一个</span></span><br><span class="line">            <span class="keyword">if</span> !alg.equal(key, k) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果相等则更新</span></span><br><span class="line">            <span class="keyword">if</span> t.needkeyupdate() &#123;</span><br><span class="line">                typedmemmove(t.key, k, key)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//获取已存在的value</span></span><br><span class="line">            val = add(unsafe.Pointer(b), dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize))</span><br><span class="line">            <span class="keyword">goto</span> done</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果上一个bucket没能插入，则通过overflow获取链表上的下一个bucket</span></span><br><span class="line">        ovf := b.overflow(t)</span><br><span class="line">        <span class="keyword">if</span> ovf == <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        b = ovf</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// all current buckets are full, allocate a new one.</span></span><br><span class="line">        newb := h.newoverflow(t, b)</span><br><span class="line">        inserti = &amp;newb.tophash[<span class="number">0</span>]</span><br><span class="line">        insertk = add(unsafe.Pointer(newb), dataOffset)</span><br><span class="line">        val = add(insertk, bucketCnt*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// store new key/value at insert position</span></span><br><span class="line">    <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">        kmem := newobject(t.key)</span><br><span class="line">        *(*unsafe.Pointer)(insertk) = kmem</span><br><span class="line">        insertk = kmem</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> t.indirectvalue() &#123;</span><br><span class="line">        vmem := newobject(t.elem)</span><br><span class="line">        *(*unsafe.Pointer)(val) = vmem</span><br><span class="line">    &#125;</span><br><span class="line">    typedmemmove(t.key, insertk, key)</span><br><span class="line">    <span class="comment">//将高八位hash值存储</span></span><br><span class="line">    *inserti = top</span><br><span class="line">    h.count++</span><br><span class="line">    <span class="keyword">return</span> val</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/10/yuque/Map/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Docker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/10/yuque/Docker/">Docker</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/10/yuque/Docker/" class="archive-article-date">
+  	<time datetime="2020-05-10T08:19:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jinshu <a href="https://www.jianshu.com/p/41bee79b6cbc" target="_blank" rel="noopener">https://www.jianshu.com/p/41bee79b6cbc</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/10/yuque/Docker/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/go 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -747,184 +939,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Mysql 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql 锁/">Mysql 锁</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql 锁/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:23:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>加上一个版本控制即可</p>
-<p>##</p>
-<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>会话 0：<br>lock table tablelock read;<br>select * from tablelock; —读（查），可以（自己加了锁，自己可以读）<br>delete from tablelock where id=1; —写（增删改），不可以</p>
-<p>在当前会话中访问其他表（emp 表，未加锁）：<br>select * from emp; —读，不可以<br>delete from emp where eid = 1; —写，不可以</p>
-<p>结论 1：<br>—如果某一个会话，对 A 表加了锁，则该会话可以对 A 表进行读操作，不能进行写操作；且该会话不能对其他表进行读、写操作。<br>—即如果给 A 表加了读锁，则当前会话只能对 A 表进行读操作。</p>
-<p>会话 1（其他会话）：<br>select * from tablelock; –读（查），可以<br>delete from tablelock where id=1; —写，会“等待”会话 0 将锁释放</p>
-<p>select * from emp; –读（查），可以<br>delete from emp where eid=1; —写，可以</p>
-<p>结论 2：<br>会话 0 给 A 表加了锁：</p>
-<p>其他会话的操作：<br>a.可以对其他表（A 表以外的表）进行读、写操作<br>b.对 A 表：读–可以；写–需要等待释放锁</p>
-<p>加写锁：</p>
-<p>会话 0：<br>lock table tablelock write;<br>结论：当前会话（会话 0）可以对加了写锁的表进行任何操作（增删改查）；但是不能操作（增删改查）其他表</p>
-<p>其他会话：<br>对会话 0 中加写锁的表可以进行增删改查的前提是：等待会话 0 释放写锁</p>
-<p>MySQL 表级锁的锁模式：<br>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，<br>在执行更新操作（增删改（DML））前，会自动给涉及的表加写锁。</p>
-<p>所以对 MyISAM 表进行操作，会有以下情况：<br>a.对 MyISAM 表的读操作（如读锁），不会阻塞其他进程（会话）对同一表的读请求，但会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它进程的写操作。<br>b.对 MyISAM 表的写操作（加写锁），会阻塞其他进程（会话）对同一表的读和写操作，只有当写锁释放后，才会执行其他进程的读写操作。</p>
-<h2 id="行锁（InnoDB-需要命中索引，否则行锁无效）"><a href="#行锁（InnoDB-需要命中索引，否则行锁无效）" class="headerlink" title="行锁（InnoDB 需要命中索引，否则行锁无效）"></a>行锁（InnoDB 需要命中索引，否则行锁无效）</h2><p>创建行锁条件：</p>
-<p>1、表中创建索引， select 。。。 where   字段（必须是索引）   不然行锁就无效。</p>
-<p>2、必须要有事务，这样才是 行锁（排他锁）</p>
-<p>3、在 select   语句后面 加 上    FOR UPDATE；</p>
-<p>例子： 测试是否 加了锁，先执行 1 后执行 2</p>
-<p>查询 1</p>
-<p>START TRANSACTION;  #加事务</p>
-<p>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;  #加锁</p>
-<p>select SLEEP(5);  # 睡眠</p>
-<p>COMMIT; #提交</p>
-<p>查询 2 ：</p>
-<p>START TRANSACTION;<br>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;<br>COMMIT;</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql 锁/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Mysql 创建索引方法及类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql 创建索引方法及类型/">Mysql 创建索引方法及类型</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql 创建索引方法及类型/" class="archive-article-date">
-  	<time datetime="2020-05-04T22:54:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>类型 4 种<br>1。普通索引 index<br>2。唯一索引 unique<br>3。全文索引 fulltext 不支持中文<br>4。多列值索引  index</p>
-<h3 id="1-1-新建表中添加索引"><a href="#1-1-新建表中添加索引" class="headerlink" title="1.1 新建表中添加索引"></a>1.1 新建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>index index_no(no)<br>) |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>unique index index_no(no)<br>） |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>fulltext index index_no(no) |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>key index_no_name(no,name)<br>) |<br>| — | — |</p>
-<h3 id="1-2-在已建表中添加索引"><a href="#1-2-在已建表中添加索引" class="headerlink" title="1.2 在已建表中添加索引"></a>1.2 在已建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | create index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | create unique index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | create fulltext index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | create index index_name_no<br>on t_dept(name,no) |<br>| — | — |</p>
-<h3 id="1-3-以修改表的方式添加索引"><a href="#1-3-以修改表的方式添加索引" class="headerlink" title="1.3 以修改表的方式添加索引"></a>1.3 以修改表的方式添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add unique index index_name(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add fulltext index_name(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name_no(name,no); |<br>| — | — |</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql 创建索引方法及类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 

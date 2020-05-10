@@ -181,6 +181,216 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 类加载机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/24/yuque/Java 类加载机制/">Java 类加载机制</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/24/yuque/Java 类加载机制/" class="archive-article-date">
+  	<time datetime="2019-04-24T06:42:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="什么是类加载机制"><a href="#什么是类加载机制" class="headerlink" title="什么是类加载机制"></a>什么是类加载机制</h3><p>众所周知我们编写的 Java 文件都是以.java 为后缀的文件，编译器会将我们编写的.java 的文件编译成.class 文件，简单来说类加载机制就是从文件系统将一系列的 class 文件读入 JVM 内存中为后续程序运行提供资源的动作。</p>
+<h3 id="类加载的流程"><a href="#类加载的流程" class="headerlink" title="类加载的流程"></a>类加载的流程</h3><p>我们先看下类加载的过程中有哪些阶段，后面再对其一一解释做了什么。<br><a href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader1.jpg" target="_blank" rel="noopener"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088172305-f0ac9a02-dc58-40ea-8956-5f2016e496d6.jpeg#align=left&amp;display=inline&amp;height=361&amp;originHeight=838&amp;originWidth=1730&amp;size=0&amp;status=done&amp;width=746" alt></a><br>简单画了一个图，从上图我们可以看出，类加载的整个过程有五个阶段，下面分别解释每个过程做了什么。</p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>通过一个类的完整路径查找此类字节码文件（class 文件即二进制文件）。将二进制文件的静态存储结构转化为方法区的运行时数据结构，并利用二进制流文件创建一个 Class 对象，存储在 Java 堆中用于对方法区的数据结构引用的入口；</p>
+<ol>
+<li><p>class 文件的来源：有一点需要注意的是类加载机制不仅可以从文件系统读取 class 文件，也可以通过网络获取，其他 jar 包或者其他程序生成，如 JSP 应用。</p>
+</li>
+<li><p>类加载器：讲到类加载不得不讲到类加载的顺序和类加载器。Java 中大概有四种类加载器，分别是：启动类加载器（Bootstrap ClassLoader），扩展类加载器（Extension ClassLoader），系统类加载器（System ClassLoader），自定义类加载器（Custom ClassLoader），依次属于继承关系（注意这里的继承不是 Java 类里面的 extends）</p>
+</li>
+</ol>
+<p><a href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader2.jpg" target="_blank" rel="noopener"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088171604-7777b8f7-0337-450a-8ff2-5e4e5bfb5a11.jpeg#align=left&amp;display=inline&amp;height=477&amp;originHeight=1084&amp;originWidth=1636&amp;size=0&amp;status=done&amp;width=720" alt></a></p>
+<ol start="3">
+<li><p>启动类加载器（Bootstrap ClassLoader）：主要负责加载存放在 Java_Home/jre/lib 下，或被-Xbootclasspath 参数指定的路径下的，并且能被虚拟机识别的类库（如 rt.jar，所有的 java.*开头的类均被 Bootstrap ClassLoader 加载），启动类加载器是无法被 Java 程序直接引用的。</p>
+</li>
+<li><p>扩展类加载器（Extension ClassLoader）：主要负责加载器由 sun.misc.Launcher\$ExtClassLoader 实现，它负责加载 Java_Home/jre/lib/ext 目录中，或者由 java.ext.dirs 系统变量指定的路径中的所有类库（如 javax.*开头的类），开发者可以直接使用扩展类加载器。</p>
+</li>
+<li><p>系统类加载器（System ClassLoader）：主要负责加载器由 sun.misc.Launcher\$AppClassLoader 来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
+</li>
+<li><p>自定义类加载器（Custom ClassLoader：自己开发的类加载器</p>
+</li>
+<li><p><strong>双亲委派原则</strong>：类加载器在加载 class 文件的时候，遵从双亲委派原则，意思是加载依次由父加载器先执行加载动作，只有当父加载器没有加载到 class 文件时才由子类加载器进行加载。这种机制很好的保证了 Java API 的安全性，使得 JDK 的代码不会被篡改。</p>
+</li>
+</ol>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证的过程只要是保证 class 文件的安全性和正确性，确保加载了该 class 文件不会导致 JVM 出现任何异常，不会危害 JVM 的自身安全。验证包括对文件格式的验证，元数据和字节码的验证。</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是为类变量进行内存分配和初始化零值的过程。注意这时候分配的是类变量的内存，这些内存会在方法区中分配。此时不会分配实例变量的内存，因为实例变量是在实例化对象时一起创建在 Java 堆中的。而且此时类变量是赋值为零值，即 int 类型的零值为 0，引用类型零值为 null，而不是代码中显示赋值的数值。</p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程。在 class 文件中常量池里面存放了字面量和符号引用，符号引用包括类和接口的全限定名以及字段和方法的名称与描述符。在 JVM 动态链接的时候需要根据这些符号引用来转换为直接引用存放内存使用。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>初始化的阶段是类加载的最后一步，这个阶段主要是执行 java 代码，进行相关初始化的动作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/24/yuque/Java 类加载机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Mysql 中对 date datetime time timestamp 区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">Mysql 中对 date datetime time timestamp 区别</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/" class="archive-article-date">
+  	<time datetime="2019-04-22T11:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中对于时间的存储自己见表的时候都是设置的 varchar 类型的，感觉挺方便的。<br>昨天拿别人建好的表写代码，发现这张表中时间类型为 datetime 的，凭感觉试了一下不行，网上查了刚开始试了好几个都是不对的，一脸懵逼。</p>
+<hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#align=left&amp;display=inline&amp;height=469&amp;originHeight=634&amp;originWidth=1009&amp;size=0&amp;status=done&amp;width=746" alt></p>
+<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。</p>
+<p>用 navicat 找了一张表添加了一个 timestamp 的字段，如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#align=left&amp;display=inline&amp;height=211&amp;originHeight=211&amp;originWidth=654&amp;size=0&amp;status=done&amp;width=654" alt></p>
+<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,</p>
+<p>言归正传，本次数据库中用的是 datetime 类型的，在 java 中生成可以存储的时间数据方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Date date = new Date();</span><br><span class="line"></span><br><span class="line">Timestamp timeStamep = new Timestamp(date.getTime());</span><br><span class="line"></span><br><span class="line">System.out.println(timeStamep);</span><br><span class="line"></span><br><span class="line">//输出结果： 2016-09-22 10:38:14.964</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2017,233 +2227,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/yuque自动化构建部署到github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/yuque/yuque自动化构建部署到github/">yuque自动化构建部署到github</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/29/yuque/yuque自动化构建部署到github/" class="archive-article-date">
-  	<time datetime="2019-03-29T16:10:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><a href="https://www.yuque.com/" target="_blank" rel="noopener">语雀</a>  是一款非常好用的知识管理网站（类似 GitBook)，它的编辑器非常好用，而且支持导出 Markdown，这篇文章是教你如何使用语雀的编辑器写静态博客。这里的静态博客用了 Hexo，Jekyll 也是没有问题的。</p>
-<h2 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h2><p>已经有 Hexo 博客的可以跳过。如果你是 Jekyll ，也可以跳过。</p>
-<ul>
-<li>安装 Node.js</li>
-<li><p>安装 Hexo 脚手架<br>| 1 | npm install -g hexo-cli |<br>| — | — |</p>
-</li>
-<li><p>初始化一个博客<br>| 123 | hexo init <folder>cd <folder>npm install |<br>| — | — |</folder></folder></p>
-</li>
-<li><p>其他设置和命令见：<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
-</li>
-</ul>
-<h2 id="安装语雀文章下载插件"><a href="#安装语雀文章下载插件" class="headerlink" title="安装语雀文章下载插件"></a>安装语雀文章下载插件</h2><p><a href="https://github.com/x-cold/yuque-hexo/" target="_blank" rel="noopener">yuque-hexo</a>  是一个 Node.js 环境下的语雀下载器，使用 npm 安装</p>
-<ul>
-<li><p>安装 yuque-hexo<br>| 1 | npm i -g yuque-hexo |<br>| — | — |</p>
-</li>
-<li><p>注册语雀，创建知识库，获得你的个人路径和知识库的名字，比如我的博客的知识库是  <a href="https://www.yuque.com/page/zhangyi-ul3zj" target="_blank" rel="noopener">https://www.yuque.com/page/</a>zhangyi-ul3zj</p>
-</li>
-<li>在 Hexo 博客的目录下面的 package.json 中，进行下面的配置</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"your hexo project"</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">"yuqueConfig"</span>: &#123;</span><br><span class="line">                   <span class="string">"cachePath"</span>: <span class="string">"yuque.json"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"adapter"</span>: <span class="string">"hexo"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"concurrency"</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"baseUrl"</span>: <span class="string">"https://www.yuque.com/api/v2"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"login"</span>: <span class="string">"zhangyi-ul3zj"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"repo"</span>: <span class="string">"blog"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"mdNameFormat"</span>: <span class="string">"title"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"postPath"</span>: <span class="string">"source/_posts"</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
-<li>同步文章<br>| 1 | yuque-hexo sync |<br>| — | — |</li>
-</ul>
-<p>PS: 插件支持 Front-matter，在语雀写文章的时候直接写在前面，然后插入一条分割线即可，不写也没问题：</p>
-<table>
-<thead>
-<tr>
-<th>123</th>
-<th>tags: [Hexo]categories: 教程 date: 2018-10-05 10:43:50</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="手动启动-部署-Hexo-博客"><a href="#手动启动-部署-Hexo-博客" class="headerlink" title="手动启动/部署 Hexo 博客"></a>手动启动/部署 Hexo 博客</h2><ul>
-<li><p>本地启动（调试用）<br>| 1 | hexo s |<br>| — | — |</p>
-</li>
-<li><p>生成 html 不部署<br>| 1 | hexo g |<br>| — | — |</p>
-</li>
-<li><p>自动上传到服务器/静态空间/git （部署）</p>
-</li>
-</ul>
-<ol>
-<li><p>先找到一个部署插件</p>
-</li>
-<li><p>在配置文件中配置好相关的账号密码</p>
-</li>
-<li><p>在 hexo 中生成 HTML 并且部署</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo g -d</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="Travis-ci-severless"><a href="#Travis-ci-severless" class="headerlink" title="Travis-ci + severless"></a>Travis-ci + severless</h3><p>可以参考原文：<a href="https://segmentfault.com/a/1190000017797561" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017797561</a><br>Travis_ci 具体配置<br>可以参考：<a href="https://www.cnblogs.com/morang/p/7228488.html" target="_blank" rel="noopener">https://www.cnblogs.com/morang/p/7228488.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教//" class="article-tag-list-link color2">教</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教/程//" class="article-tag-list-link color2">程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/29/yuque/yuque自动化构建部署到github/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">mysql 的 服务层和存储引擎层</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/" class="archive-article-date">
-  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
-<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
-<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
-<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 

@@ -6,19 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>GO(一) | Murphy Yi site</title>
+  <title>如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？ | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文确保你一定安装了 brew 包管理器macOS 安装 Golang 过程 12345678910brew install gomkdir ~/go_workmkdir ~/go_work/binmkdir ~/go_work/pkgmkdir ~/go_work/srcecho &quot;export GOROOT=/usr/local/opt/go/libexec&quot; &amp;gt;&amp;gt; ~.zshrc">
+  <meta name="description" content="## 其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你使用消息队列如何保证幂等性，这个是你架构里要考虑的一个问题。 面试题剖析回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你先大概说一说可能会有哪些重复消费的问题。首先，比如 Rabb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GO(一)">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2019/10/20/yuque/GO(一)/index.html">
+<meta property="og:title" content="如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="本文确保你一定安装了 brew 包管理器macOS 安装 Golang 过程 12345678910brew install gomkdir ~/go_workmkdir ~/go_work/binmkdir ~/go_work/pkgmkdir ~/go_work/srcecho &quot;export GOROOT=/usr/local/opt/go/libexec&quot; &amp;gt;&amp;gt; ~.zshrc">
+<meta property="og:description" content="## 其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你使用消息队列如何保证幂等性，这个是你架构里要考虑的一个问题。 面试题剖析回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你先大概说一说可能会有哪些重复消费的问题。首先，比如 Rabb">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-12T07:54:27.135Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267373953-13528044-a9d5-460d-9423-6bd54673a916.png#align=left&display=inline&height=454&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=568&size=0&status=done&style=none&width=568">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267376202-9923a8ef-e923-4b8b-953c-fe9723c70f08.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&originHeight=371&originWidth=401&size=0&status=done&style=none&width=401">
+<meta property="og:updated_time" content="2020-05-12T07:54:29.867Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GO(一)">
-<meta name="twitter:description" content="本文确保你一定安装了 brew 包管理器macOS 安装 Golang 过程 12345678910brew install gomkdir ~/go_workmkdir ~/go_work/binmkdir ~/go_work/pkgmkdir ~/go_work/srcecho &quot;export GOROOT=/usr/local/opt/go/libexec&quot; &amp;gt;&amp;gt; ~.zshrc">
+<meta name="twitter:title" content="如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？">
+<meta name="twitter:description" content="## 其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你使用消息队列如何保证幂等性，这个是你架构里要考虑的一个问题。 面试题剖析回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你先大概说一说可能会有哪些重复消费的问题。首先，比如 Rabb">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267373953-13528044-a9d5-460d-9423-6bd54673a916.png#align=left&display=inline&height=454&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=568&size=0&status=done&style=none&width=568">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -180,28 +183,36 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/GO(一)" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      GO(一)
+      如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？
     </h1>
   
 
         
-        <a href="/2019/10/20/yuque/GO(一)/" class="archive-article-date">
-  	<time datetime="2019-10-20T06:28:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
+        <a href="/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/" class="archive-article-date">
+  	<time datetime="2020-05-12T07:09:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文确保你一定安装了 brew 包管理器<br>macOS 安装 Golang 过程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">mkdir ~/go_work</span><br><span class="line">mkdir ~/go_work/bin</span><br><span class="line">mkdir ~/go_work/pkg</span><br><span class="line">mkdir ~/go_work/src</span><br><span class="line"></span><br><span class="line">echo "export GOROOT=/usr/local/opt/go/libexec" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOPATH=~/go_work" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOBIN=~/go_work/bin" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export PATH=$PATH:$GOROOT/bin:$GOPATH:$GOBIN" &gt;&gt; ~.zshrc</span><br></pre></td></tr></table></figure>
+        <p>##</p>
+<p>其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你<strong>使用消息队列如何保证幂等性</strong>，这个是你架构里要考虑的一个问题。</p>
+<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90" target="_blank" rel="noopener">面试题剖析</a></h2><p>回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你<strong>先大概说一说可能会有哪些重复消费的问题</strong>。<br>首先，比如 RabbitMQ、RocketMQ、Kafka，都有可能会出现消息重复消费的问题，正常。因为这问题通常不是 MQ 自己保证的，是由我们开发来保证的。挑一个 Kafka 来举个例子，说说怎么重复消费吧。<br>Kafka 实际上有个 offset 的概念，就是每个消息写进去，都有一个 offset，代表消息的序号，然后 consumer 消费了数据之后，<strong>每隔一段时间</strong>（定时定期），会把自己消费过的消息的 offset 提交一下，表示“我已经消费过了，下次我要是重启啥的，你就让我继续从上次消费到的 offset 来继续消费吧”。<br>但是凡事总有意外，比如我们之前生产经常遇到的，就是你有时候重启系统，看你怎么重启了，如果碰到点着急的，直接 kill 进程了，再重启。这会导致 consumer 有些消息处理了，但是没来得及提交 offset，尴尬了。重启之后，少数消息会再次消费一次。<br>举个栗子。<br>有这么个场景。数据 1/2/3 依次进入 kafka，kafka 会给这三条数据每条分配一个 offset，代表这条数据的序号，我们就假设分配的 offset 依次是 152/153/154。消费者从 kafka 去消费的时候，也是按照这个顺序去消费。假如当消费者消费了 <code>offset=153</code> 的这条数据，刚准备去提交 offset 到 zookeeper，此时消费者进程被重启了。那么此时消费过的数据 1/2 的 offset 并没有提交，kafka 也就不知道你已经消费了 <code>offset=153</code> 这条数据。那么重启之后，消费者会找 kafka 说，嘿，哥儿们，你给我接着把上次我消费到的那个地方后面的数据继续给我传递过来。由于之前的 offset 没有提交成功，那么数据 1/2 会再次传过来，如果此时消费者没有去重的话，那么就会导致重复消费。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267373953-13528044-a9d5-460d-9423-6bd54673a916.png#align=left&amp;display=inline&amp;height=454&amp;margin=%5Bobject%20Object%5D&amp;originHeight=454&amp;originWidth=568&amp;size=0&amp;status=done&amp;style=none&amp;width=568" alt><br>如果消费者干的事儿是拿一条数据就往数据库里写一条，会导致说，你可能就把数据 1/2 在数据库里插入了 2 次，那么数据就错啦。<br>其实重复消费不可怕，可怕的是你没考虑到重复消费之后，<strong>怎么保证幂等性</strong>。<br>举个例子吧。假设你有个系统，消费一条消息就往数据库里插入一条数据，要是你一个消息重复两次，你不就插入了两条，这数据不就错了？但是你要是消费到第二次的时候，自己判断一下是否已经消费过了，若是就直接扔了，这样不就保留了一条数据，从而保证了数据的正确性。<br>一条数据重复出现两次，数据库里就只有一条数据，这就保证了系统的幂等性。<br>幂等性，通俗点说，就一个数据，或者一个请求，给你重复来多次，你得确保对应的数据是不会改变的，<strong>不能出错</strong>。<br>所以第二个问题来了，怎么保证消息队列消费的幂等性？<br>其实还是得结合业务来思考，我这里给几个思路：</p>
+<ul>
+<li>比如你拿个数据要写库，你先根据主键查一下，如果这数据都有了，你就别插入了，update 一下好吧。</li>
+<li>比如你是写 Redis，那没问题了，反正每次都是 set，天然幂等性。</li>
+<li>比如你不是上面两个场景，那做的稍微复杂一点，你需要让生产者发送每条数据的时候，里面加一个全局唯一的 id，类似订单 id 之类的东西，然后你这里消费到了之后，先根据这个 id 去比如 Redis 里查一下，之前消费过吗？如果没有消费过，你就处理，然后这个 id 写 Redis。如果消费过了，那你就别处理了，保证别重复处理相同的消息即可。</li>
+<li>比如基于数据库的唯一键来保证重复数据不会重复插入多条。因为有唯一键约束了，重复数据插入只会报错，不会导致数据库中出现脏数据。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267376202-9923a8ef-e923-4b8b-953c-fe9723c70f08.png#align=left&amp;display=inline&amp;height=371&amp;margin=%5Bobject%20Object%5D&amp;originHeight=371&amp;originWidth=401&amp;size=0&amp;status=done&amp;style=none&amp;width=401" alt><br>当然，如何保证 MQ 的消费是幂等性的，需要结合具体的业务来看。</p>
 
       
 
@@ -291,7 +302,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2019/10/20/yuque/GO(一)/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -305,18 +316,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/05/12/yuque/如何保证消息队列的高可用？/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mac快捷键设置（大自然的搬运工）
+          如何保证消息队列的高可用？
         
       </div>
     </a>
   
   
-    <a href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">佛系提升macOS Catalina &amp;amp;&amp;amp; iPad&amp;amp;iphone 使用体验</div>
+    <a href="/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">高并发和高性能系统中锁的影响与解决办法</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -355,7 +366,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'GO(一)',
+  id: '如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？',
   owner: 'zy84338719',
   repo: 'zy84338719.github.io',
   oauth: {

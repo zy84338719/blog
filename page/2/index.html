@@ -181,6 +181,239 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Golang关键字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/07/yuque/Golang关键字/">Golang关键字</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/07/yuque/Golang关键字/" class="archive-article-date">
+  	<time datetime="2020-05-07T03:49:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>var 和 const ：变量和常量的声明</li>
+<li>var varName type   或者 varName : = value</li>
+<li>package and import: 导入</li>
+<li>func： 用于定义函数和方法</li>
+<li>return ：用于从函数返回</li>
+<li>defer someCode ：在函数退出之前执行</li>
+<li>go : 用于并行</li>
+<li>select 用于选择不同类型的通讯</li>
+<li>interface 用于定义接口</li>
+<li>struct 用于定义抽象数据类型</li>
+<li>break、case、continue、for、fallthrough、else、if、switch、goto、default 流程控制<ul>
+<li>fallthrough 的用法注意总结 [推荐阅读 <a href="https://blog.csdn.net/ajdfhajdkfakr/article/details/79086125" target="_blank" rel="noopener">https://blog.csdn.net/ajdfhajdkfakr/article/details/79086125</a>]</li>
+</ul>
+</li>
+</ul>
+<p><strong>1.加了 fallthrough 后，会直接运行【紧跟的后一个】case 或 default 语句，不论条件是否满足都会执行</strong><br><strong>2.加了 fallthrough 语句后，【紧跟的后一个】case 条件不能定义常量和变量</strong><br><strong>3.执行完 fallthrough 后直接跳到下一个条件语句，本条件执行语句后面的语句不执行</strong></p>
+<ul>
+<li>chan 用于 channel 通讯</li>
+<li>type 用于声明自定义类型</li>
+<li>map 用于声明 map 类型数据</li>
+<li>range 用于读取 slice、map、channel 数据</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/07/yuque/Golang关键字/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/make和new关键字的区别及实现原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/07/yuque/make和new关键字的区别及实现原理/">make和new关键字的区别及实现原理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/07/yuque/make和new关键字的区别及实现原理/" class="archive-article-date">
+  	<time datetime="2020-05-07T03:02:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当我们想要在 Go 语言中初始化一个结构时，其实会使用到两个完全不同的关键字，也就是 make 和 new，同时出现两个用于初始化的关键字对于初学者来说可能会感到非常困惑，不过它们两者却有着完全不同的作用。</p>
+<p>在 Go 语言中，make 关键字的主要作用是初始化内置的数据结构，也就是我们在前面提到的数组、切片和 Channel，而当我们想要获取指向某个类型的指针时可以使用 new 关键字，只是知道如何使用 new 的人真的比较少，下面我们就来介绍一下 make 和 new 它们的区别以及实现原理。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虽然 make 和 new 都是能够用于初始化数据结构，但是它们两者能够初始化的结构类型却有着较大的不同，make 在 Go 语言中只能用于初始化语言中的基本类型：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">hash := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">bool</span>, <span class="number">10</span>)</span><br><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p>这些基本类型都是语言为我们提供的，我们在前面已经介绍过了它们初始化的过程以及原理，但是在这里还是需要提醒大家注意的是，这三者返回了不同类型的数据结构：</p>
+<p>slice 是一个包含 data、cap 和 len 的结构体；<br>hash 是一个指向 hmap 结构体的指针；<br>ch 是一个指向 hchan 结构体的指针。</p>
+<p>而另一个用于初始化数据结构的关键字 new 的作用其实就非常简单了，它只是接收一个类型作为参数然后返回一个指向这个类型的指针：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i := <span class="built_in">new</span>(<span class="keyword">int</span>)</span><br><span class="line"><span class="keyword">var</span> v <span class="keyword">int</span></span><br><span class="line">i := &amp;v</span><br></pre></td></tr></table></figure>
+<p>上述代码片段中的两种不同初始化方法其实是等价的，它们都会创建一个指向 int 零值的指针。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1588821415072-b0b0dadd-1773-4ed2-98df-3ca087137f75.png#align=left&amp;display=inline&amp;height=256&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=256&amp;originWidth=366&amp;size=13285&amp;status=done&amp;style=none&amp;width=366" alt="image.png"></p>
+<p>到了这里我们对 Go 语言中这两种不同关键字的使用也有了一定的了解：make 用于创建切片、哈希表和管道等内置数据结构，new 用于分配并创建一个指向对应类型的指针。</p>
+<p>实现原理<br>接下来我们将分别介绍 make 和 new 在初始化不同数据结构时的具体过程，我们会从编译期间和运行时两个不同的阶段理解这两个关键字的原理。</p>
+<p>make</p>
+<p>我们已经了解了 make 在创建数组和切片、哈希表和 Channel 的具体过程，所以在这里我们也只是会简单提及 make 相关的数据结构初始化原理。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1588821459878-58170971-2450-4ab1-94c0-ad84861487fc.png#align=left&amp;display=inline&amp;height=199&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=199&amp;originWidth=367&amp;size=13311&amp;status=done&amp;style=none&amp;width=367" alt="image.png"></p>
+<p>在编译期间的类型检查阶段，Go 语言其实就将代表 make 关键字的 OMAKE 节点根据参数类型的不同转换成了 OMAKESLICE、OMAKEMAP 和 OMAKECHAN 三种不同类型的节点，这些节点最终也会调用不同的运行时函数来初始化数据结构。</p>
+<p>new</p>
+<p>内置函数 new 会在编译期间的 SSA 代码生成阶段经过 callnew 函数的处理，如果请求创建的类型大小是 0，那么就会返回一个表示空指针的 zerobase 变量，在遇到其他情况时会将关键字转换成 newobject：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">callnew</span><span class="params">(t *types.Type)</span> *<span class="title">Node</span></span> &#123;</span><br><span class="line">   <span class="keyword">if</span> t.NotInHeap() &#123;</span><br><span class="line">       yyerror(<span class="string">"%v is go:notinheap; heap allocation disallowed"</span>, t)</span><br><span class="line">   &#125;</span><br><span class="line">   dowidth(t)</span><br><span class="line">   <span class="keyword">if</span> t.Size() == <span class="number">0</span> &#123;</span><br><span class="line">       z := newname(Runtimepkg.Lookup(<span class="string">"zerobase"</span>))</span><br><span class="line">       z.SetClass(PEXTERN)</span><br><span class="line">       z.Type = t</span><br><span class="line">       <span class="keyword">return</span> typecheck(nod(OADDR, z, <span class="literal">nil</span>), ctxExpr)</span><br><span class="line">   &#125;</span><br><span class="line">   fn := syslook(<span class="string">"newobject"</span>)</span><br><span class="line">   fn = substArgTypes(fn, t)</span><br><span class="line">   v := mkcall1(fn, types.NewPtr(t), <span class="literal">nil</span>, typename(t))</span><br><span class="line">   v.SetNonNil(<span class="literal">true</span>)</span><br><span class="line">   <span class="keyword">return</span> v</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要提到的是，哪怕当前变量是使用 var 进行初始化，在这一阶段也可能会被转换成 newobject 的函数调用并在堆上申请内存：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">walkstmt</span><span class="params">(n *Node)</span> *<span class="title">Node</span></span> &#123;</span><br><span class="line">   <span class="keyword">switch</span> n.Op &#123;</span><br><span class="line">   <span class="keyword">case</span> ODCL:</span><br><span class="line">       v := n.Left</span><br><span class="line">       <span class="keyword">if</span> v.Class() == PAUTOHEAP &#123;</span><br><span class="line">           <span class="keyword">if</span> prealloc[v] == <span class="literal">nil</span> &#123;</span><br><span class="line">               prealloc[v] = callnew(v.Type)</span><br><span class="line">           &#125;</span><br><span class="line">           nn := nod(OAS, v.Name.Param.Heapaddr, prealloc[v])</span><br><span class="line">           nn.SetColas(<span class="literal">true</span>)</span><br><span class="line">           nn = typecheck(nn, ctxStmt)</span><br><span class="line">           <span class="keyword">return</span> walkstmt(nn)</span><br><span class="line">       &#125;</span><br><span class="line">   <span class="keyword">case</span> ONEW:</span><br><span class="line">       <span class="keyword">if</span> n.Esc == EscNone &#123;</span><br><span class="line">           r := temp(n.Type.Elem())</span><br><span class="line">           r = nod(OAS, r, <span class="literal">nil</span>)</span><br><span class="line">           r = typecheck(r, ctxStmt)</span><br><span class="line">           init.Append(r)</span><br><span class="line">           r = nod(OADDR, r.Left, <span class="literal">nil</span>)</span><br><span class="line">           r = typecheck(r, ctxExpr)</span><br><span class="line">           n = r</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           n = callnew(n.Type.Elem())</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然这也不是绝对的，如果当前声明的变量或者参数不需要在当前作用域外生存，那么其实就不会被初始化在堆上，而是会初始化在当前函数的栈中并随着函数调用的结束而被销毁。</p>
+<p>newobject 函数的工作就是获取传入类型的大小并调用 mallocgc 在堆上申请一片大小合适的内存空间并返回指向这片内存空间的指针：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newobject</span><span class="params">(typ *_type)</span> <span class="title">unsafe</span>.<span class="title">Pointer</span></span> &#123;</span><br><span class="line">   <span class="keyword">return</span> mallocgc(typ.size, typ, <span class="literal">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结<br>最后，简单总结一下 Go 语言中 make 和 new 关键字的实现原理，make 关键字的主要作用是创建切片、哈希表和 Channel 等内置的数据结构，而 new 的主要作用是为类型申请一片内存空间，并返回指向这片内存的指针。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/07/yuque/make和new关键字的区别及实现原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/计算机网络" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/06/yuque/计算机网络/">计算机网络</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/06/yuque/计算机网络/" class="archive-article-date">
+  	<time datetime="2020-05-06T12:50:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/06/yuque/计算机网络/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/TCP!IP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -648,212 +881,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/04/yuque/RPC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MQ" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/MQ/">MQ</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/MQ/" class="archive-article-date">
-  	<time datetime="2020-05-04T16:27:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/MQ/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql/">Mysql</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql/" class="archive-article-date">
-  	<time datetime="2020-05-04T16:26:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>&lt;!doctype html&gt;<div class="lake-content-editor-core lake-engine lake-typography-traditional" data-lake-element="root"><div data-card-type="block" data-lake-card="localdoc" id="WvOwa" class>&lt;a href=”<a href="https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609611227-c8c36a37-f1d4-4189-801b-45040e2ad4e4.mindnode.zip&quot;" target="_blank" rel="noopener">https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609611227-c8c36a37-f1d4-4189-801b-45040e2ad4e4.mindnode.zip&quot;</a> style=”</div></div></p>
-<pre><code>word-wrap: break-word;
-color: #096DD9;
-touch-action: manipulation;
-background-color: rgba(0,0,0,0);
-text-decoration: none;
-outline: none;
-cursor: pointer;
-transition: color .3s;
-</code></pre><p>“&gt;MySQL.mindnode.zip</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Java 基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Java 基础/">Java 基础</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Java 基础/" class="archive-article-date">
-  	<time datetime="2020-05-04T16:23:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>&lt;!doctype html&gt;<div class="lake-content-editor-core lake-engine lake-typography-traditional" data-lake-element="root"><div data-card-type="block" data-lake-card="localdoc" id="uu10J" class>&lt;a href=”<a href="https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609420143-b2cad930-c7f2-4368-a053-13774403bbe3.mindnode.zip&quot;" target="_blank" rel="noopener">https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609420143-b2cad930-c7f2-4368-a053-13774403bbe3.mindnode.zip&quot;</a> style=”</div></div></p>
-<pre><code>word-wrap: break-word;
-color: #096DD9;
-touch-action: manipulation;
-background-color: rgba(0,0,0,0);
-text-decoration: none;
-outline: none;
-cursor: pointer;
-transition: color .3s;
-</code></pre><p>“&gt;Java 基础.mindnode.zip</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Java 基础/">展开全文 >></a>
         </p>
       
 

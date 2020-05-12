@@ -181,6 +181,298 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/JDK12新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/25/yuque/JDK12新特性/">JDK12新特性</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/25/yuque/JDK12新特性/" class="archive-article-date">
+  	<time datetime="2019-03-25T04:44:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：</p>
+<ul>
+<li><p>189: <a href="http://openjdk.java.net/jeps/189" target="_blank" rel="noopener">Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)</a> ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。</p>
+</li>
+<li><p>230: <a href="http://openjdk.java.net/jeps/230" target="_blank" rel="noopener">Microbenchmark Suite</a>：新增一套微基准测试，使开发者能够基于现有的 Java Microbenchmark Harness（JMH）轻松测试 JDK 的性能，并创建新的基准测试。</p>
+</li>
+<li><p>325: <a href="http://openjdk.java.net/jeps/325" target="_blank" rel="noopener">Switch Expressions (Preview)</a> ：对 switch 语句进行扩展，使其可以用作语句或表达式，简化日常代码。</p>
+</li>
+<li><p>334: <a href="http://openjdk.java.net/jeps/334" target="_blank" rel="noopener">JVM Constants API</a> ：引入一个 API 来对关键类文件 (key class-file) 和运行时工件的名义描述（nominal descriptions）进行建模，特别是那些可从常量池加载的常量。</p>
+</li>
+<li><p>340: <a href="http://openjdk.java.net/jeps/340" target="_blank" rel="noopener">One AArch64 Port, Not Two</a> ：删除与 arm64 端口相关的所有源码，保留 32 位 ARM 移植和 64 位 aarch64 移植。</p>
+</li>
+<li><p>341: <a href="http://openjdk.java.net/jeps/341" target="_blank" rel="noopener">Default CDS Archives</a> ：默认生成类数据共享（CDS）存档。</p>
+</li>
+<li><p>344: <a href="http://openjdk.java.net/jeps/344" target="_blank" rel="noopener">Abortable Mixed Collections for G1</a> ：当 G1 垃圾回收器的回收超过暂停目标，则能中止垃圾回收过程。</p>
+</li>
+<li><p>346: <a href="http://openjdk.java.net/jeps/346" target="_blank" rel="noopener">Promptly Return Unused Committed Memory from G1</a> ：改进 G1 垃圾回收器，以便在空闲时自动将 Java 堆内存返回给操作系统。</p>
+</li>
+</ul>
+<p>总结<br>1.JDK12 新增了一个垃圾回收器 2.新增一套微基准测试，方便测试 JDK 性能 3.对 switch 进行扩展，使其可以作语句的表达式。 4.新增一个 API 来对关键类和运行时共建进行建模 5.删除 arm64 源码，保留 arm64 和 aarch64 移植 6.默认生成类数据共享存档 7.当 G1 垃圾回收超过暂停目标，则能终止垃圾回收过程 8.改进 G1 垃圾回收机制，以便在空闲时自动将 JAVA 堆内存韩会给操作系统</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/25/yuque/JDK12新特性/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/redis锁与zookeerper锁区别（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/redis锁与zookeerper锁区别（1）/">redis锁与zookeerper锁区别（1）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/redis锁与zookeerper锁区别（1）/" class="archive-article-date">
+  	<time datetime="2019-03-18T14:47:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近完成毕设过程中对 redis 锁有所了解，随后呢想到著名的分布式锁 zk<br>为了巩固自己的知识领域，为此写这么一篇小文章</p>
+<h1 id="Redis-实现分布式锁"><a href="#Redis-实现分布式锁" class="headerlink" title="Redis 实现分布式锁"></a>Redis 实现分布式锁</h1><p>1.根据 lockKey 区进行 setnx（set not exist，如果 key 值为空，则正常设置，返回 1，否则不会进行设置并返回 0）操作，如果设置成功，表示已经获得锁，否则并没有获取锁。<br>　　 2.如果没有获得锁，去 Redis 上拿到该 key 对应的值，在该 key 上我们存储一个时间戳（用毫秒表示，t1），为了避免死锁以及其他客户端占用该锁超过一定时间（5 秒），使用该客户端当前时间戳，与存储的时间戳作比较。<br>　　 3.如果没有超过该 key 的使用时限，返回 false，表示其他人正在占用该 key，不能强制使用；如果已经超过时限，那我们就可以进行解锁，使用我们的时间戳来代替该字段的值。<br>　　 4.但是如果在 setnx 失败后，get 该值却无法拿到该字段时，说明操作之前该锁已经被释放，这个时候，最好的办法就是重新执行一遍 setnx 方法来获取其值以获得该锁。<br>　　释放锁：删除 redis 中 key</p>
+<h1 id="Zookeeper-实现分布式锁"><a href="#Zookeeper-实现分布式锁" class="headerlink" title="Zookeeper 实现分布式锁"></a>Zookeeper 实现分布式锁</h1><p>基于临时顺序节点：<br>　　 1.客户端调用 create()方法创建名为“locknode/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为 EPHEMERAL_SEQUENTIAL。<br>　　 2.客户端调用 getChildren(“locknode”)方法来获取所有已经创建的子节点。<br>　　 3.客户端获取到所有子节点 path 之后，如果发现自己在步骤 1 中创建的节点是所有节点中序号最小的，那么就认为这个客户端获得了锁。<br>　　 4.如果创建的节点不是所有节点中序号最小的，那么则监视比自己创建节点的序列号小的最大的节点，进入等待。直到下次监视的子节点变更的时候，再进行子节点的获取，判断是否获取锁。<br>　　释放锁的过程相对比较简单，就是删除自己创建的那个子节点即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>redis 分布式锁，其实需要自己不断去尝试获取锁，比较消耗性能<br>　　 zk 分布式锁，获取不到锁，注册个监听器即可，不需要不断主动尝试获取锁，性能开销较小<br>　　另外一点就是，如果是 redis 获取锁的那个客户端 bug 了或者挂了，那么只能等待超时时间之后才能释放锁；而 zk 的话，因为创建的是临时 znode，只要客户端挂了，znode 就没了，此时就自动释放锁</p>
+<p>由于自己资金有限，毕设项目 redis 先行。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/redis锁与zookeerper锁区别（1）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Java 小抄（三）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/06/yuque/Java 小抄（三）/">Java 小抄（三）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/06/yuque/Java 小抄（三）/" class="archive-article-date">
+  	<time datetime="2019-03-06T01:50:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h3><h4 id="1-JDK-和-JRE-有什么区别？"><a href="#1-JDK-和-JRE-有什么区别？" class="headerlink" title="1.JDK 和 JRE 有什么区别？"></a>1.JDK 和 JRE 有什么区别？</h4><ul>
+<li>JDK：Java Development Kit 的简称，java 开发工具包，提供了 java 的开发环境和运行环境。</li>
+<li>JRE：Java Runtime Environment 的简称，java 运行环境，为 java 的运行提供了所需环境。</li>
+</ul>
+<p>具体来说 JDK 其实包含了 JRE，同时还包含了编译 java 源码的编译器 javac，还包含了很多 java 程序调试和分析的工具。简单来说：如果你需要运行 java 程序，只需安装 JRE 就可以了，如果你需要编写 java 程序，需要安装 JDK。</p>
+<h4 id="2-和-equals-的区别是什么？"><a href="#2-和-equals-的区别是什么？" class="headerlink" title="2.== 和 equals 的区别是什么？"></a>2.== 和 equals 的区别是什么？</h4><p><strong>== 解读</strong><br>对于基本类型和引用类型 == 的作用效果是不同的，如下所示：</p>
+<ul>
+<li>基本类型：比较的是值是否相同；</li>
+<li>引用类型：比较的是引用是否相同；</li>
+</ul>
+<p>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String x = &quot;string&quot;;</span><br><span class="line">String y = &quot;string&quot;;</span><br><span class="line">String z = new String(&quot;string&quot;);</span><br><span class="line">System.out.println(x==y); // true</span><br><span class="line">System.out.println(x==z); // false</span><br><span class="line">System.out.println(x.equals(y)); // true</span><br><span class="line">System.out.println(x.equals(z)); // true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>代码解读：因为 x 和 y 指向的是同一个引用，所以 == 也是 true，而 new String()方法则重写开辟了内存空间，所以 == 结果为 false，而 equals 比较的一直是值，所以结果都为 true。<br><strong>equals 解读</strong><br>equals 本质上就是 ==，只不过 String 和 Integer 等重写了 equals 方法，把它变成了值比较。看下面的代码就明白了。<br>首先来看默认情况下 equals 比较一个有相同值的对象，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Cat &#123;</span><br><span class="line">    public Cat(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    private String name;</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat c1 = new Cat(&quot;王磊&quot;);</span><br><span class="line">Cat c2 = new Cat(&quot;王磊&quot;);</span><br><span class="line">System.out.println(c1.equals(c2)); // false</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>输出结果出乎我们的意料，竟然是 false？这是怎么回事，看了 equals 源码就知道了，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">		return (this == obj);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>原来 equals 本质上就是 ==。<br>那问题来了，两个相同值的 String 对象，为什么返回的是 true？代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 = new String(&quot;老王&quot;);</span><br><span class="line">String s2 = new String(&quot;老王&quot;);</span><br><span class="line">System.out.println(s1.equals(s2)); // true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>同样的，当我们进入 String 的 equals 方法，找到了答案，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object anObject) &#123;</span><br><span class="line">    if (this == anObject) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    if (anObject instanceof String) &#123;</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line">        int n = value.length;</span><br><span class="line">        if (n == anotherString.value.length) &#123;</span><br><span class="line">            char v1[] = value;</span><br><span class="line">            char v2[] = anotherString.value;</span><br><span class="line">            int i = 0;</span><br><span class="line">            while (n-- != 0) &#123;</span><br><span class="line">                if (v1[i] != v2[i])</span><br><span class="line">                    return false;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>原来是 String 重写了 Object 的 equals 方法，把引用比较改成了值比较。<br><strong>总结</strong> ：== 对于基本类型来说是值比较，对于引用类型来说是比较的是引用；而 equals 默认情况下是引用比较，只是很多类重新了 equals 方法，比如 String、Integer 等把它变成了值比较，所以一般情况下 equals 比较的是值是否相等。</p>
+<h4 id="3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？"><a href="#3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？" class="headerlink" title="3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？"></a>3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？</h4><p>不对，两个对象的 hashCode()相同，equals()不一定 true。<br>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;通话&quot;;</span><br><span class="line">String str2 = &quot;重地&quot;;</span><br><span class="line">System.out.println(String.format(&quot;str1：%d | str2：%d&quot;,  str1.hashCode(),str2.hashCode()));</span><br><span class="line">System.out.println(str1.equals(str2));</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>执行的结果：<br>str1：1179395 | str2：1179395<br>false<br>代码解读：很显然“通话”和“重地”的 hashCode() 相同，然而 equals() 则为 false，因为在散列表中，hashCode()相等即两个键值对的哈希值相等，然而哈希值相等，并不一定能得出键值对相等。</p>
+<h4 id="4-final-在-java-中有什么作用？"><a href="#4-final-在-java-中有什么作用？" class="headerlink" title="4.final 在 java 中有什么作用？"></a>4.final 在 java 中有什么作用？</h4><ul>
+<li>final 修饰的类叫最终类，该类不能被继承。</li>
+<li>final 修饰的方法不能被重写。</li>
+<li>final 修饰的变量叫常量，常量必须初始化，初始化之后值就不能被修改。</li>
+</ul>
+<h4 id="5-java-中的-Math-round-1-5-等于多少？"><a href="#5-java-中的-Math-round-1-5-等于多少？" class="headerlink" title="5.java 中的 Math.round(-1.5) 等于多少？"></a>5.java 中的 Math.round(-1.5) 等于多少？</h4><p>等于 -1，因为在数轴上取值时，中间值（0.5）向右取整，所以正 0.5 是往上取整，负 0.5 是直接舍弃。</p>
+<h4 id="6-String-属于基础的数据类型吗？"><a href="#6-String-属于基础的数据类型吗？" class="headerlink" title="6.String 属于基础的数据类型吗？"></a>6.String 属于基础的数据类型吗？</h4><p>String 不属于基础类型，基础类型有 8 种：byte、boolean、char、short、int、float、long、double，而 String 属于对象。</p>
+<h4 id="7-java-中操作字符串都有哪些类？它们之间有什么区别？"><a href="#7-java-中操作字符串都有哪些类？它们之间有什么区别？" class="headerlink" title="7.java 中操作字符串都有哪些类？它们之间有什么区别？"></a>7.java 中操作字符串都有哪些类？它们之间有什么区别？</h4><p>操作字符串的类有：String、StringBuffer、StringBuilder。<br>String 和 StringBuffer、StringBuilder 的区别在于 String 声明的是不可变的对象，每次操作都会生成新的 String 对象，然后将指针指向新的 String 对象，而 StringBuffer、StringBuilder 可以在原有对象的基础上进行操作，所以在经常改变字符串内容的情况下最好不要使用 String。<br>StringBuffer 和 StringBuilder 最大的区别在于，StringBuffer 是线程安全的，而 StringBuilder 是非线程安全的，但 StringBuilder 的性能却高于 StringBuffer，所以在单线程环境下推荐使用 StringBuilder，多线程环境下推荐使用 StringBuffer。</p>
+<h4 id="8-String-str-”i”与-String-str-new-String-“i”-一样吗？"><a href="#8-String-str-”i”与-String-str-new-String-“i”-一样吗？" class="headerlink" title="8.String str=”i”与 String str=new String(“i”)一样吗？"></a>8.String str=”i”与 String str=new String(“i”)一样吗？</h4><p>不一样，因为内存的分配方式不一样。String str=”i”的方式，java 虚拟机会将其分配到常量池中；而 String str=new String(“i”) 则会被分到堆内存中。</p>
+<h4 id="9-如何将字符串反转？"><a href="#9-如何将字符串反转？" class="headerlink" title="9.如何将字符串反转？"></a>9.如何将字符串反转？</h4><p>使用 StringBuilder 或者 stringBuffer 的 reverse() 方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// StringBuffer reverse</span><br><span class="line">StringBuffer stringBuffer = new StringBuffer();</span><br><span class="line">stringBuffer.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuffer.reverse()); // gfedcba</span><br><span class="line">// StringBuilder reverse</span><br><span class="line">StringBuilder stringBuilder = new StringBuilder();</span><br><span class="line">stringBuilder.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuilder.reverse()); // gfedcba</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<h4 id="10-String-类的常用方法都有那些？"><a href="#10-String-类的常用方法都有那些？" class="headerlink" title="10.String 类的常用方法都有那些？"></a>10.String 类的常用方法都有那些？</h4><ul>
+<li>indexOf()：返回指定字符的索引。</li>
+<li>charAt()：返回指定索引处的字符。</li>
+<li>replace()：字符串替换。</li>
+<li>trim()：去除字符串两端空白。</li>
+<li>split()：分割字符串，返回一个分割后的字符串数组。</li>
+<li>getBytes()：返回字符串的 byte 类型数组。</li>
+<li>length()：返回字符串长度。</li>
+<li>toLowerCase()：将字符串转成小写字母。</li>
+<li>toUpperCase()：将字符串转成大写字符。</li>
+<li>substring()：截取字符串。</li>
+<li>equals()：字符串比较。</li>
+</ul>
+<h4 id="11-抽象类必须要有抽象方法吗？"><a href="#11-抽象类必须要有抽象方法吗？" class="headerlink" title="11.抽象类必须要有抽象方法吗？"></a>11.抽象类必须要有抽象方法吗？</h4><p>不需要，抽象类不一定非要有抽象方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">abstract class Cat &#123;</span><br><span class="line">    public static void sayHi() &#123;</span><br><span class="line">        System.out.println(&quot;hi~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>上面代码，抽象类并没有抽象方法但完全可以正常运行。</p>
+<h4 id="12-普通类和抽象类有哪些区别？"><a href="#12-普通类和抽象类有哪些区别？" class="headerlink" title="12.普通类和抽象类有哪些区别？"></a>12.普通类和抽象类有哪些区别？</h4><ul>
+<li>普通类不能包含抽象方法，抽象类可以包含抽象方法。</li>
+<li>抽象类不能直接实例化，普通类可以直接实例化。</li>
+</ul>
+<h4 id="13-抽象类能使用-final-修饰吗？"><a href="#13-抽象类能使用-final-修饰吗？" class="headerlink" title="13.抽象类能使用 final 修饰吗？"></a>13.抽象类能使用 final 修饰吗？</h4><p>不能，定义抽象类就是让其他类继承的，如果定义为 final 该类就不能被继承，这样彼此就会产生矛盾，所以 final 不能修饰抽象类，如下图所示，编辑器也会提示错误信息：</p>
+<h4 id="14-接口和抽象类有什么区别？"><a href="#14-接口和抽象类有什么区别？" class="headerlink" title="14.接口和抽象类有什么区别？"></a>14.接口和抽象类有什么区别？</h4><ul>
+<li>实现：抽象类的子类使用 extends 来继承；接口必须使用 implements 来实现接口。</li>
+<li>构造函数：抽象类可以有构造函数；接口不能有。</li>
+<li>main 方法：抽象类可以有 main 方法，并且我们能运行它；接口不能有 main 方法。</li>
+<li>实现数量：类可以实现很多个接口；但是只能继承一个抽象类。</li>
+<li>访问修饰符：接口中的方法默认使用 public 修饰；抽象类中的方法可以是任意访问修饰符。</li>
+</ul>
+<h4 id="15-java-中-IO-流分为几种？"><a href="#15-java-中-IO-流分为几种？" class="headerlink" title="15.java 中 IO 流分为几种？"></a>15.java 中 IO 流分为几种？</h4><p>按功能来分：输入流（input）、输出流（output）。<br>按类型来分：字节流和字符流。<br>字节流和字符流的区别是：字节流按 8 位传输以字节为单位输入输出数据，字符流按 16 位传输以字符为单位输入输出数据。</p>
+<h4 id="16-BIO、NIO、AIO-有什么区别？"><a href="#16-BIO、NIO、AIO-有什么区别？" class="headerlink" title="16.BIO、NIO、AIO 有什么区别？"></a>16.BIO、NIO、AIO 有什么区别？</h4><ul>
+<li>BIO：Block IO 同步阻塞式 IO，就是我们平常使用的传统 IO，它的特点是模式简单使用方便，并发处理能力低。</li>
+<li>NIO：New IO 同步非阻塞 IO，是传统 IO 的升级，客户端和服务器端通过 Channel（通道）通讯，实现了多路复用。</li>
+<li>AIO：Asynchronous IO 是 NIO 的升级，也叫 NIO2，实现了异步非堵塞 IO ，异步 IO 的操作基于事件和回调机制。</li>
+</ul>
+<h4 id="17-Files-的常用方法都有哪些？"><a href="#17-Files-的常用方法都有哪些？" class="headerlink" title="17.Files 的常用方法都有哪些？"></a>17.Files 的常用方法都有哪些？</h4><ul>
+<li>Files.exists()：检测文件路径是否存在。</li>
+<li>Files.createFile()：创建文件。</li>
+<li>Files.createDirectory()：创建文件夹。</li>
+<li>Files.delete()：删除一个文件或目录。</li>
+<li>Files.copy()：复制文件。</li>
+<li>Files.move()：移动文件。</li>
+<li>Files.size()：查看文件个数。</li>
+<li>Files.read()：读取文件。</li>
+<li>Files.write()：写入文件。</li>
+</ul>
+<p>作者：王磊的博客<br>链接：<a href="https://juejin.im/post/5c7cfdef6fb9a049f746ed47" target="_blank" rel="noopener">https://juejin.im/post/5c7cfdef6fb9a049f746ed47</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/06/yuque/Java 小抄（三）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/mybait xml 配置谨记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -928,200 +1220,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/14/yuque/JVM 学习 值传递与对象引用传递/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Intellij 需配置项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/14/yuque/Intellij 需配置项/">Intellij 需配置项</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/14/yuque/Intellij 需配置项/" class="archive-article-date">
-  	<time datetime="2019-01-14T15:08:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Intellij-快捷键"><a href="#Intellij-快捷键" class="headerlink" title="Intellij 快捷键"></a>Intellij 快捷键</h2><h2 id><a href="#" class="headerlink" title></a><img src="https://cdn.nlark.com/yuque/18/2019/png/214234/1547478405006-86781dce-a19c-4089-94a4-18e2067aee34.png#align=left&amp;display=inline&amp;height=407&amp;name=jetbrains%20%E5%BF%AB%E6%8D%B7%E9%94%AE.png&amp;originHeight=1805&amp;originWidth=3308&amp;size=633235&amp;width=746" alt="jetbrains 快捷键.png"></h2><p>Intellij 有八条一定要改的配置呢！我没列快捷键，是因为 IDEA 原生的快捷键，我用的也挺顺手，所以并不是认为一定要改！<br>•   自动编译开关<br>•   忽略大小写开关<br>•   智能导包开关<br>•   悬浮提示开关<br>•   取消单行显示 tabs 的操作<br>•   项目文件编码<br>•   滚轴修改字体大小<br>•   设置行号显示</p>
-<h2 id="自动编译开关"><a href="#自动编译开关" class="headerlink" title="自动编译开关"></a>自动编译开关</h2><p>在 Eclipse 中自动编译开关是开着的，如下所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212506-82aad7fe-3e2a-447d-a5f1-5aa0a844c831.jpeg#align=left&amp;display=inline&amp;height=351&amp;originHeight=351&amp;originWidth=338&amp;size=0&amp;width=338" alt><br>那么，在 IDEA 中，务必要手动将其打开，非常重要！如下所示</p>
-<p><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212476-9b55717b-ee5a-4681-b982-a4bfbccbb7f1.jpeg#align=left&amp;display=inline&amp;height=539&amp;originHeight=577&amp;originWidth=798&amp;size=0&amp;width=746" alt><br><strong>忽略大小写开关</strong><br>IDEA 默认是匹配大小写，此开关如果未关。你输入字符一定要符合大小写。比如你敲 string 是不会出现代码提示或智能补充。<br>但是，如果你开了这个开关，你无论输入 String 或者 string 都会出现代码提示或者智能补充！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-b0010e3e-d1c1-427a-9b11-f94024cd922c.jpeg#align=left&amp;display=inline&amp;height=550&amp;originHeight=550&amp;originWidth=700&amp;size=0&amp;width=700" alt><br><strong>智能导包开关</strong><br>如下图所示，将<br>•   自动导入不明确的结构<br>•   智能优化包<br>这两个选项勾上。那么有什么效果呢？<br>你在代码中，只要敲 list，就会出现提示，自动导入 java.util.List 这个类。而这个特性，在 eclipse 中，是无法做到的。如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212473-0fa385fd-49e6-456b-9df3-2646810c4aae.jpeg#align=left&amp;display=inline&amp;height=446&amp;originHeight=493&amp;originWidth=825&amp;size=0&amp;width=746" alt><br><strong>悬浮提示开关</strong><br>这个容易理解，打开这个开关后。只要把鼠标放在相应的类上，就会出现提示，如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212501-d8f90823-5964-4d27-9312-2884df42bcbf.jpeg#align=left&amp;display=inline&amp;height=382&amp;originHeight=505&amp;originWidth=986&amp;size=0&amp;width=746" alt><br><strong>取消单行显示 tabs 的操作</strong><br>如下图所示，把该按钮去了<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212486-d65add22-9202-47f3-a828-f105fb2e6773.jpeg#align=left&amp;display=inline&amp;height=547&amp;originHeight=607&amp;originWidth=828&amp;size=0&amp;width=746" alt><br>那么去掉后有什么效果呢？</p>
-<p>打开多个文件的时候，会换行显示，非常直观。大大提升效率！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-7bfebd85-7463-4f68-a539-c285019b6b1c.jpeg#align=left&amp;display=inline&amp;height=94&amp;originHeight=130&amp;originWidth=1037&amp;size=0&amp;width=746" alt><br><strong>项目文件编码</strong><br>如下图所示进行设置<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212485-a6ae7361-bd42-45a4-9ced-923209f7f3ed.jpeg#align=left&amp;display=inline&amp;height=404&amp;originHeight=585&amp;originWidth=1080&amp;size=0&amp;width=746" alt><br>Transparent native-to-ascii conversion 的意思是：自动转换 ASCII 编码。<br>他的工作原理是：在文件中输入文字时他会自动的转换为 Unicode 编码，然后在 idea 中发开文件时他会自动转回文字来显示。<br>这样做是为了防止文件乱码。<br>这样你的 properties 文件，一般都不会出现中文乱码！<br><strong>滚轴修改字体大小</strong></p>
-<p>是这样的，我一般在写代码的时候。都是设按住 Ctrl+滚轴可以修改编辑器字体大小，这样其实很方便，大家不妨试试。</p>
-<p>如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212504-d341e539-9ea5-4b92-b812-6a4747a0c12a.jpeg#align=left&amp;display=inline&amp;height=289&amp;originHeight=419&amp;originWidth=1080&amp;size=0&amp;width=746" alt><br><strong>设置行号显示</strong><br>这个的重要性就不用多说了，勾上后代码中，会显示行数!<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212514-62ccc6a5-ac78-4772-a9b5-c32613e64290.jpeg#align=left&amp;display=inline&amp;height=439&amp;originHeight=612&amp;originWidth=1040&amp;size=0&amp;width=746" alt></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/14/yuque/Intellij 需配置项/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/docker 目录挂载踩坑记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/12/yuque/docker 目录挂载踩坑记录/">docker 目录挂载踩坑记录</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/12/yuque/docker 目录挂载踩坑记录/" class="archive-article-date">
-  	<time datetime="2019-01-12T13:57:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在弄容器化数据库，一开始自己的技术选择方案是用 docker-compose 但是发现采用这个需要自己编写好 docker-compose 里面的 my.conf 需要外挂所以自己没有选择这样做，而是选择 docker 原生创建，自己把数据层外挂，配置层也想外挂，后来发现配置层外挂会导致 mysql 找不到配置，从而导致容器无法启动。自己一直在排查这个问题原因。一开始以为是权限问题导致的，因为数据外挂并没有实现，后来给目录加权限，增加权限后还是不可以。随后切换到 root 账户去增加权限，也是不可以的。后来没办法了找了一个网上数据库的搭建的命令对比后发现问题在配置文件外挂的问题。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/12/yuque/docker 目录挂载踩坑记录/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/小网站计划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/08/yuque/小网站计划/">小网站计划</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/08/yuque/小网站计划/" class="archive-article-date">
-  	<time datetime="2019-01-08T19:20:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>小计 2019.1.1<br>这个想法从 2018 年九月份就开始有了，一直没有付出实施，真的真的快毕业了（其实是为了给这四年大学生活添加点乐趣），自己做一个小网站。也是为了巩固自己所学的知识，目前自己购买了一台腾讯云的服务器 1U1G1M 的配置，买的腾讯域名一口气买了 3 年的<br>2018 年 11 月某天，依托自己的服务本地主机群晖，以及自己的域名，搭建了邮件系统。<br>2018 年 12 月某天，依托本地主机，搭建了 maridb,以及两台 rdeis 服务器（尚未进行鉴权，主从操作）<br>2018 年 12.27 进行备案<br>2019.1.5 增加一台阿里云，1U2G1M<br>2019.1.8 备案下来了。<br>目前强制所有请求地址为 HTTPS，为了防止中间人获取 2019.1.9 将自己的简历通过反向代理的方式将数据转发到云端，发现一个严重的问题，自己的贷款太小了。（目前主要业务还没有，先不考虑进行 cdn 加速操作）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/08/yuque/小网站计划/">展开全文 >></a>
         </p>
       
 

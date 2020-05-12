@@ -181,6 +181,100 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Golang 指针" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang 指针/">Golang 指针</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang 指针/" class="archive-article-date">
+  	<time datetime="2020-02-17T10:59:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ol>
+<li>基本数据类型，变量存的就是值，也叫值类型</li>
+<li>获取变量的地址，用&amp;，比如: var num int, 获取 num 的地址:#</li>
+</ol>
+<p>基本数据类型在内存的布局.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581939949916-ecc921d5-3da1-48d2-b7da-7f9d6cb3e12a.png#align=left&amp;display=inline&amp;height=243&amp;name=image.png&amp;originHeight=243&amp;originWidth=586&amp;size=94804&amp;status=done&amp;style=none&amp;width=586" alt="image.png"></p>
+<ol start="3">
+<li>指针类型，指针变量存的是一个地址，这个地址指向的空间存的才是值<br>比如:var ptr *int = #</li>
+</ol>
+<p>指针在内存的布局.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940016274-8ce22fcb-ed17-4f13-bb4d-fdc51109af1e.png#align=left&amp;display=inline&amp;height=246&amp;name=image.png&amp;originHeight=246&amp;originWidth=602&amp;size=160843&amp;status=done&amp;style=none&amp;width=602" alt="image.png"></p>
+<ol start="4">
+<li>获取指针类型所指向的值，使用:<em>，比如:var ptr </em>int, 使用*ptr 获取 ptr 指向的值</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"></p>
+<ol start="5">
+<li>一个案例再说明</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940101590-9e1e8b55-d19b-4526-ab55-6190aa74aca3.png#align=left&amp;display=inline&amp;height=185&amp;name=image.png&amp;originHeight=185&amp;originWidth=580&amp;size=67458&amp;status=done&amp;style=none&amp;width=580" alt="image.png"></p>
+<h2 id="值类型和引用类型的使用特点"><a href="#值类型和引用类型的使用特点" class="headerlink" title="值类型和引用类型的使用特点"></a>值类型和引用类型的使用特点</h2><ol>
+<li>值类型:变量直接存储值，内存通常在栈中分配<pre><code>值类型:基本数据类型 int 系列, float 系列, bool, string 、数组和结构体 struct
+</code></pre></li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"></p>
+<ol start="2">
+<li>引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</li>
+</ol>
+<p>引用类型:指针、slice 切片、map、管道 chan、interface 等都是引用类型</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"></p>
+<ol start="3">
+<li>内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang 指针/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Golang 基础类型使用细节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1100,249 +1194,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/01/18/yuque/人生的前0.25再见，你好第二个25年/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Golang 基础题(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/12/yuque/Golang 基础题(一)/">Golang 基础题(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/12/yuque/Golang 基础题(一)/" class="archive-article-date">
-  	<time datetime="2020-01-12T03:59:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-在-A-和-B-处填入代码，使输出为-foo"><a href="#1-在-A-和-B-处填入代码，使输出为-foo" class="headerlink" title="1.  在 A 和 B 处填入代码，使输出为 foo"></a>1.  在 A 和 B 处填入代码，使输出为 foo</h3><p>| <strong>package </strong>main</p>
-<p><strong>type </strong>S <strong>struct
-</strong>{</p>
-<p>m string</p>
-<p>}</p>
-<p><strong>func </strong>f()*S  {</p>
-<p><strong>return </strong>___ _//A</p>
-<p>_}</p>
-<p><strong>func </strong>main()  {</p>
-<p>p:=___ _//B</p>
-<p>_print(p.m)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     m <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span>*<span class="title">S</span></span>  &#123;</span><br><span class="line">      <span class="keyword">return</span> _&amp;S&#123;<span class="string">"foo"</span>&#125; <span class="comment">//A</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">     p:=_f()__ <span class="comment">//B</span></span><br><span class="line">     <span class="built_in">print</span>(p.m)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-下面代码输出是什么，若想输出-012，怎么改"><a href="#2-下面代码输出是什么，若想输出-012，怎么改" class="headerlink" title="2.  下面代码输出是什么，若想输出 012，怎么改"></a>2.  下面代码输出是什么，若想输出 012，怎么改</h3><p>| <strong>package </strong>main</p>
-<p><strong>const _N _</strong>= 3</p>
-<p><strong>func </strong>main() {</p>
-<p>m := make(<strong>map</strong>[int]*int)</p>
-<p><strong>for </strong>i :=<br>0; i &lt; <strong>_N_</strong>;<br>i++ {</p>
-<p>m[i] = &amp;i</p>
-<p>}</p>
-<p><strong>for </strong>_, v<br>:= <strong>range </strong>m {</p>
-<p>print(*v)</p>
-<p>}</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     <span class="keyword">for</span> i :=<span class="number">0</span>; i &lt; N;i++ &#123;</span><br><span class="line">        m[i] = i</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">for</span> _, v:= <span class="keyword">range</span> m &#123;</span><br><span class="line">        <span class="built_in">print</span>(v)</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-代码输出什么？为什么？如何改会使得-len-m-为-10"><a href="#3-代码输出什么？为什么？如何改会使得-len-m-为-10" class="headerlink" title="3.  代码输出什么？为什么？如何改会使得 len(m)为 10"></a>3.  代码输出什么？为什么？如何改会使得 len(m)为 10</h3><p>| <strong>package </strong>main</p>
-<p>**import “sync”</p>
-<p>const _N _**= 10</p>
-<p><strong>func </strong>main() {</p>
-<p>m := make(<strong>map</strong>[int]int)</p>
-<p>wg := &amp;sync.WaitGroup{}</p>
-<p>mu := &amp;sync.Mutex{}</p>
-<p>wg.Add(<strong>_N_</strong>)</p>
-<p><strong>for </strong>i :=<br>0; i &lt; <strong>_N_</strong>;<br>i++ {</p>
-<p><strong>go func</strong>() {</p>
-<p><strong>defer </strong>wg.Done()</p>
-<p>mu.Lock()</p>
-<p>m[i] = i</p>
-<p>mu.Unlock()</p>
-<p>}()</p>
-<p>}</p>
-<p>wg.Wait()</p>
-<p>println(len(m))</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">"sync"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     wg := &amp;sync.WaitGroup&#123;&#125;</span><br><span class="line">     mu := &amp;sync.Mutex&#123;&#125;</span><br><span class="line">     wg.Add(N)</span><br><span class="line">     <span class="keyword">for</span> i :=</span><br><span class="line">  <span class="number">0</span>; i &lt; N;</span><br><span class="line">  i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">           <span class="keyword">defer</span> wg.Done()</span><br><span class="line">           mu.Lock()</span><br><span class="line">           m[i] = i</span><br><span class="line">           mu.Unlock()</span><br><span class="line">        &#125;()</span><br><span class="line">     &#125;</span><br><span class="line">     wg.Wait()</span><br><span class="line">     <span class="built_in">println</span>(<span class="built_in">len</span>(m))</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="4-请描述-golang-语言的初始化顺序：包，变量，常量，init-函数"><a href="#4-请描述-golang-语言的初始化顺序：包，变量，常量，init-函数" class="headerlink" title="4.   请描述 golang 语言的初始化顺序：包，变量，常量，init 函数"></a>4.   请描述 golang 语言的初始化顺序：包，变量，常量，init 函数</h3><p>main 包-&gt;import 包-&gt;常量-&gt;变量-&gt;init 函数</p>
-<h3 id="5-描述下面代码输出"><a href="#5-描述下面代码输出" class="headerlink" title="5.   描述下面代码输出"></a>5.   描述下面代码输出</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S1 <span class="keyword">struct</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s1 S1)</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">"S1.f()"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s1 S1)</span> <span class="title">g</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">"S1.g()"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S2 <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     S1</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s2 S2)</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">"S2.f()"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> I <span class="keyword">interface</span></span><br><span class="line">  &#123;</span><br><span class="line">     f()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">printType</span><span class="params">(i I)</span></span> &#123;</span><br><span class="line">     <span class="keyword">if</span> s1,</span><br><span class="line">  ok := i.(S1); ok &#123;</span><br><span class="line">        s1.f()</span><br><span class="line">        s1.g()</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> s2,</span><br><span class="line">  ok := i.(S2); ok &#123;</span><br><span class="line">        s2.f()</span><br><span class="line">        s2.g()</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     printType(S1&#123;&#125;)</span><br><span class="line">     printType(S2&#123;&#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="6-下面代码有什么问题，怎么修改"><a href="#6-下面代码有什么问题，怎么修改" class="headerlink" title="6.   下面代码有什么问题，怎么修改"></a>6.   下面代码有什么问题，怎么修改</h3><p>| <strong>package </strong>main</p>
-<p><strong>import </strong>(</p>
-<p>**“sync”</p>
-<p>“math/rand”</p>
-<p>**)</p>
-<p><strong>const _N _</strong>= 10</p>
-<p><strong>func </strong>main() {</p>
-<p>m := make(<strong>map</strong>[int]int)</p>
-<p>wg := &amp;sync.WaitGroup{}</p>
-<p>wg.Add(<strong>_N_</strong>)</p>
-<p><strong>for </strong>i :=<br>0; i &lt; <strong>_N_</strong>;<br>i++ {</p>
-<p><strong>go func</strong>() {_<br>         _<strong>defer </strong>wg.Done()</p>
-<p>m[rand.Int()] = rand.Int()_<br>      _}()</p>
-<p>}</p>
-<p>wg.Wait()</p>
-<p>println(len(m))</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> (</span><br><span class="line">     <span class="string">"sync"</span></span><br><span class="line">     <span class="string">"math/rand"</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     wg := &amp;sync.WaitGroup&#123;&#125;</span><br><span class="line">     wg.Add(N)</span><br><span class="line">      mu:=sync.Mutex&#123;&#125;</span><br><span class="line">     <span class="keyword">for</span> i :=<span class="number">0</span>; i &lt; N;i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">           <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            mu.Lock()</span><br><span class="line">           m[rand.Int()] = rand.Int()</span><br><span class="line">            mu.Unlock()</span><br><span class="line">        &#125;()</span><br><span class="line">     &#125;</span><br><span class="line">     wg.Wait()</span><br><span class="line">     <span class="built_in">println</span>(<span class="built_in">len</span>(m))</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="7-请描述-make-和-new-的区别"><a href="#7-请描述-make-和-new-的区别" class="headerlink" title="7.   请描述 make 和 new 的区别"></a>7.   请描述 make 和 new 的区别</h3><p>make 被用来分配引用类型的内存： map, slice, channel<br>new 被用来分配除了引用类型的所有其他类型的内存： int, string, array 等</p>
-<h3 id="8-下面代码输出什么，如何让输出为-true"><a href="#8-下面代码输出什么，如何让输出为-true" class="headerlink" title="8.   下面代码输出什么，如何让输出为 true"></a>8.   下面代码输出什么，如何让输出为 true</h3><p>| <strong>package </strong>main</p>
-<p>**import “fmt”</p>
-<p>type <strong>S </strong>struct **{</p>
-<p>a, b, c string</p>
-<p>}</p>
-<p><strong>func </strong>main() {</p>
-<p>x := <strong>interface</strong>{}(&amp;S{<strong>“a”</strong>, <strong>“b”</strong>, <strong>“c”</strong>})</p>
-<p>y := <strong>interface</strong>{}(&amp;S{<strong>“a”</strong>, <strong>“b”</strong>, <strong>“c”</strong>})</p>
-<p>fmt.Println(x == y)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span> &#123;</span><br><span class="line">     a, b, c <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     x := <span class="keyword">interface</span>&#123;&#125;(S&#123;<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>&#125;)</span><br><span class="line">     y := <span class="keyword">interface</span>&#123;&#125;(S&#123;<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>&#125;)</span><br><span class="line">     fmt.Println(x == y)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="9-下面代码问题是什么，如何修改"><a href="#9-下面代码问题是什么，如何修改" class="headerlink" title="9.   下面代码问题是什么，如何修改"></a>9.   下面代码问题是什么，如何修改</h3><p>| <strong>package </strong>main</p>
-<p><strong>type </strong>S <strong>struct
-</strong>{</p>
-<p>name string</p>
-<p>}</p>
-<p><strong>func </strong>main() {_<br>   _m := <strong>map</strong>[string]S{<strong>“x”</strong>: S{<strong>“one”</strong>}}</p>
-<p>m[<strong>“x”</strong>].name = **“two”</p>
-<table>
-<thead>
-<tr>
-<th>**}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     name <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="keyword">map</span>[<span class="keyword">string</span>]S&#123;<span class="string">"x"</span>: &amp;S&#123;<span class="string">"one"</span>&#125;&#125;</span><br><span class="line">     m[<span class="string">"x"</span>].name = <span class="string">"two"</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="10-修改代码，使得-status-输出为-200"><a href="#10-修改代码，使得-status-输出为-200" class="headerlink" title="10. 修改代码，使得 status 输出为 200"></a>10. 修改代码，使得 status 输出为 200</h3><p>| <strong>package </strong>main</p>
-<p><strong>import </strong>(</p>
-<p>**“encoding/json”</p>
-<p>“fmt”</p>
-<p>**)</p>
-<p><strong>type </strong>Result <strong>struct </strong>{</p>
-<p>status int_<br>_}</p>
-<p><strong>func </strong>main() {</p>
-<p><strong>var </strong>data<br>= []byte(<strong><code>{&quot;status&quot;:200}</code></strong>)</p>
-<p>result := &amp;Result{}</p>
-<p><strong>if </strong>err<br>:= json.Unmarshal(data, &amp;result); err != nil {</p>
-<p>fmt.Println(<strong>“error:”</strong>, err)</p>
-<p>**return</p>
-<p>**}</p>
-<p>fmt.Printf(<strong>“result=%+v”</strong>, result)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> (</span><br><span class="line">     <span class="string">"encoding/json"</span></span><br><span class="line">     <span class="string">"fmt"</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> Result <span class="keyword">struct</span> &#123;</span><br><span class="line">     Status <span class="keyword">int</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     <span class="keyword">var</span> data= []<span class="keyword">byte</span>(<span class="string">`&#123;"status":200&#125;`</span>)</span><br><span class="line">     result := &amp;Result&#123;&#125;</span><br><span class="line">     <span class="keyword">if</span> err:= json.Unmarshal(data, &amp;result); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"error:"</span>, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">     &#125;</span><br><span class="line">     fmt.Printf(<span class="string">"result=%+v"</span>, result)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="11-描述-golang-中的-stack-和-heap-的区别，分别在什么情况下会分配-stack？又在何时会分配到-heap-中"><a href="#11-描述-golang-中的-stack-和-heap-的区别，分别在什么情况下会分配-stack？又在何时会分配到-heap-中" class="headerlink" title="11. 描述 golang 中的 stack 和 heap 的区别，分别在什么情况下会分配 stack？又在何时会分配到 heap 中"></a>11. 描述 golang 中的 stack 和 heap 的区别，分别在什么情况下会分配 stack？又在何时会分配到 heap 中</h3><p>区别：<br>栈：一般存放变量名，比较小，系统自动处理内存分配和释放<br>堆：一般存放具体数据，比较大，一般程序员处理内存<br>例如 a:=123    a 在栈，123 在堆</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/12/yuque/Golang 基础题(一)/">展开全文 >></a>
         </p>
       
 

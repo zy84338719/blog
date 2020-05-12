@@ -181,6 +181,70 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/memcache" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/memcache/">memcache</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/memcache/" class="archive-article-date">
+  	<time datetime="2020-05-04T15:40:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2020/svg/190217/1588608394667-351ac965-90f6-4e8b-b593-401a5b8d8ed7.svg" alt><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">适合存储的数据</span><br><span class="line">① 访问比较频繁的数据，安全性差的数据，丢失无所谓的数据。</span><br><span class="line">② 数据更新，比较频繁的数据，比如用户的在线状态。</span><br><span class="line">③ 数据的单个键值不能太大，不要超过 1Mb 数据</span><br></pre></td></tr></table></figure></p>
+<p><code>`</code></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/memcache/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2310,100 +2374,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Golang 指针" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/17/yuque/Golang 指针/">Golang 指针</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/17/yuque/Golang 指针/" class="archive-article-date">
-  	<time datetime="2020-02-17T10:59:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ol>
-<li>基本数据类型，变量存的就是值，也叫值类型</li>
-<li>获取变量的地址，用&amp;，比如: var num int, 获取 num 的地址:#</li>
-</ol>
-<p>基本数据类型在内存的布局.</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581939949916-ecc921d5-3da1-48d2-b7da-7f9d6cb3e12a.png#align=left&amp;display=inline&amp;height=243&amp;name=image.png&amp;originHeight=243&amp;originWidth=586&amp;size=94804&amp;status=done&amp;style=none&amp;width=586" alt="image.png"></p>
-<ol start="3">
-<li>指针类型，指针变量存的是一个地址，这个地址指向的空间存的才是值<br>比如:var ptr *int = #</li>
-</ol>
-<p>指针在内存的布局.</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940016274-8ce22fcb-ed17-4f13-bb4d-fdc51109af1e.png#align=left&amp;display=inline&amp;height=246&amp;name=image.png&amp;originHeight=246&amp;originWidth=602&amp;size=160843&amp;status=done&amp;style=none&amp;width=602" alt="image.png"></p>
-<ol start="4">
-<li>获取指针类型所指向的值，使用:<em>，比如:var ptr </em>int, 使用*ptr 获取 ptr 指向的值</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"></p>
-<ol start="5">
-<li>一个案例再说明</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940101590-9e1e8b55-d19b-4526-ab55-6190aa74aca3.png#align=left&amp;display=inline&amp;height=185&amp;name=image.png&amp;originHeight=185&amp;originWidth=580&amp;size=67458&amp;status=done&amp;style=none&amp;width=580" alt="image.png"></p>
-<h2 id="值类型和引用类型的使用特点"><a href="#值类型和引用类型的使用特点" class="headerlink" title="值类型和引用类型的使用特点"></a>值类型和引用类型的使用特点</h2><ol>
-<li>值类型:变量直接存储值，内存通常在栈中分配<pre><code>值类型:基本数据类型 int 系列, float 系列, bool, string 、数组和结构体 struct
-</code></pre></li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"></p>
-<ol start="2">
-<li>引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</li>
-</ol>
-<p>引用类型:指针、slice 切片、map、管道 chan、interface 等都是引用类型</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"></p>
-<ol start="3">
-<li>内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/17/yuque/Golang 指针/">展开全文 >></a>
         </p>
       
 

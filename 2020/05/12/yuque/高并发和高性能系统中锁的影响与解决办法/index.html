@@ -6,19 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>JDK12新特性 | Murphy Yi site</title>
+  <title>高并发和高性能系统中锁的影响与解决办法 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
+  <meta name="description" content="【为什么需要锁呢？】在单核时代，在不需要并行运算的情况下，锁确实是不需要的。那么多核并行运算的时候，为什么需要锁呢？我们先来看一个例子：古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。这一天，来了两个客户，客户">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JDK12新特性">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2019/03/25/yuque/JDK12新特性/index.html">
+<meta property="og:title" content="高并发和高性能系统中锁的影响与解决办法">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
+<meta property="og:description" content="【为什么需要锁呢？】在单核时代，在不需要并行运算的情况下，锁确实是不需要的。那么多核并行运算的时候，为什么需要锁呢？我们先来看一个例子：古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。这一天，来了两个客户，客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-12T02:55:24.938Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061637-5225bbd9-5dcf-48c4-ab60-b2ad0a339133.jpeg#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&originHeight=240&originWidth=420&size=0&status=done&style=none&width=420">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061663-8cf8685c-47e7-4ff9-856f-e4f456b2d2b8.jpeg#align=left&display=inline&height=145&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=348&size=0&status=done&style=none&width=348">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061867-9962de26-59d5-496e-ad5b-c8635318c5da.jpeg#align=left&display=inline&height=225&margin=%5Bobject%20Object%5D&originHeight=225&originWidth=225&size=0&status=done&style=none&width=225">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061669-f8c74302-0830-4e1b-9173-bad1886a452b.jpeg#align=left&display=inline&height=446&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=700&size=0&status=done&style=none&width=700">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061690-5f577fc5-e07e-4d32-9921-c04cd2804080.jpeg#align=left&display=inline&height=305&margin=%5Bobject%20Object%5D&originHeight=305&originWidth=310&size=0&status=done&style=none&width=310">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061632-0175b53e-9417-4c3e-b83d-7ae1ff262ffc.jpeg#align=left&display=inline&height=481&margin=%5Bobject%20Object%5D&originHeight=481&originWidth=500&size=0&status=done&style=none&width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061850-c6a67064-0a63-4cb6-80ac-033ac735d3e0.jpeg#align=left&display=inline&height=375&margin=%5Bobject%20Object%5D&originHeight=375&originWidth=750&size=0&status=done&style=none&width=750">
+<meta property="og:updated_time" content="2020-05-12T02:55:26.026Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JDK12新特性">
-<meta name="twitter:description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
+<meta name="twitter:title" content="高并发和高性能系统中锁的影响与解决办法">
+<meta name="twitter:description" content="【为什么需要锁呢？】在单核时代，在不需要并行运算的情况下，锁确实是不需要的。那么多核并行运算的时候，为什么需要锁呢？我们先来看一个例子：古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。这一天，来了两个客户，客户">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061637-5225bbd9-5dcf-48c4-ab60-b2ad0a339133.jpeg#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&originHeight=240&originWidth=420&size=0&status=done&style=none&width=420">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -180,46 +188,27 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/JDK12新特性" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/高并发和高性能系统中锁的影响与解决办法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      JDK12新特性
+      高并发和高性能系统中锁的影响与解决办法
     </h1>
   
 
         
-        <a href="/2019/03/25/yuque/JDK12新特性/" class="archive-article-date">
-  	<time datetime="2019-03-25T04:44:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
+        <a href="/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/" class="archive-article-date">
+  	<time datetime="2020-05-12T02:54:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：</p>
-<ul>
-<li><p>189: <a href="http://openjdk.java.net/jeps/189" target="_blank" rel="noopener">Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)</a> ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。</p>
-</li>
-<li><p>230: <a href="http://openjdk.java.net/jeps/230" target="_blank" rel="noopener">Microbenchmark Suite</a>：新增一套微基准测试，使开发者能够基于现有的 Java Microbenchmark Harness（JMH）轻松测试 JDK 的性能，并创建新的基准测试。</p>
-</li>
-<li><p>325: <a href="http://openjdk.java.net/jeps/325" target="_blank" rel="noopener">Switch Expressions (Preview)</a> ：对 switch 语句进行扩展，使其可以用作语句或表达式，简化日常代码。</p>
-</li>
-<li><p>334: <a href="http://openjdk.java.net/jeps/334" target="_blank" rel="noopener">JVM Constants API</a> ：引入一个 API 来对关键类文件 (key class-file) 和运行时工件的名义描述（nominal descriptions）进行建模，特别是那些可从常量池加载的常量。</p>
-</li>
-<li><p>340: <a href="http://openjdk.java.net/jeps/340" target="_blank" rel="noopener">One AArch64 Port, Not Two</a> ：删除与 arm64 端口相关的所有源码，保留 32 位 ARM 移植和 64 位 aarch64 移植。</p>
-</li>
-<li><p>341: <a href="http://openjdk.java.net/jeps/341" target="_blank" rel="noopener">Default CDS Archives</a> ：默认生成类数据共享（CDS）存档。</p>
-</li>
-<li><p>344: <a href="http://openjdk.java.net/jeps/344" target="_blank" rel="noopener">Abortable Mixed Collections for G1</a> ：当 G1 垃圾回收器的回收超过暂停目标，则能中止垃圾回收过程。</p>
-</li>
-<li><p>346: <a href="http://openjdk.java.net/jeps/346" target="_blank" rel="noopener">Promptly Return Unused Committed Memory from G1</a> ：改进 G1 垃圾回收器，以便在空闲时自动将 Java 堆内存返回给操作系统。</p>
-</li>
-</ul>
-<p>总结<br>1.JDK12 新增了一个垃圾回收器 2.新增一套微基准测试，方便测试 JDK 性能 3.对 switch 进行扩展，使其可以作语句的表达式。 4.新增一个 API 来对关键类和运行时共建进行建模 5.删除 arm64 源码，保留 arm64 和 aarch64 移植 6.默认生成类数据共享存档 7.当 G1 垃圾回收超过暂停目标，则能终止垃圾回收过程 8.改进 G1 垃圾回收机制，以便在空闲时自动将 JAVA 堆内存韩会给操作系统</p>
+        <p>【为什么需要锁呢？】<br>在单核时代，在不需要并行运算的情况下，锁确实是不需要的。<br>那么多核并行运算的时候，为什么需要锁呢？<br>我们先来看一个例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061637-5225bbd9-5dcf-48c4-ab60-b2ad0a339133.jpeg#align=left&amp;display=inline&amp;height=240&amp;margin=%5Bobject%20Object%5D&amp;originHeight=240&amp;originWidth=420&amp;size=0&amp;status=done&amp;style=none&amp;width=420" alt><br>古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。<br>而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。<br>这一天，来了两个客户，客户 A 找伙计 A 存 50 两银子，客户 B 找伙计 B 取 50 两银子。<br>伙计 A 和伙计 B 在自己的账本上分别记录上自己操作的这笔业务，然后同时去看了一下总账户余额是 1200 两。<br>伙计 A 算了下，1200+50=1250 两，于是把 1250 更新为总账户余额了。<br>伙计 B 算了下，1200-50=1150 两，于是把 1150 更新为总账户余额了。<br>大家是不是发现问题了，两笔业务，一个+50，一个-50，最后应该是不变，但是在伙计 B 更新完成后，总账户余额却少了 50 两。<br>上面就是因为并行运算导致数据更新异常的情况。<br>要怎么解决这个问题呢？<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061663-8cf8685c-47e7-4ff9-856f-e4f456b2d2b8.jpeg#align=left&amp;display=inline&amp;height=145&amp;margin=%5Bobject%20Object%5D&amp;originHeight=145&amp;originWidth=348&amp;size=0&amp;status=done&amp;style=none&amp;width=348" alt><br>掌柜给总账户余额的本子上面加了一个锁。谁要看和写总账户余额之前都需要上锁，操作完成之后再解开锁。<br>于是上面的两个业务操作就有些变化了。如下：<br>伙计 A 去看查看总账户余额，先上锁，看到余额是 1200，然后回来计算下 1200+50=1250，把 1250 更新为总账户余额，然后解开锁。<br>伙计 B 也来查看总账户余额，一看上锁了，就只好先等着，等锁解开了，他才能去看余额是 1250，回来计算下 1250-50=1200，把 1200 更新为总账户余额，然后解开锁。<br>这样，数据更新也就安全了。<br>锁，是为了解决并行运算时，数据并发读写的安全性问题。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061867-9962de26-59d5-496e-ad5b-c8635318c5da.jpeg#align=left&amp;display=inline&amp;height=225&amp;margin=%5Bobject%20Object%5D&amp;originHeight=225&amp;originWidth=225&amp;size=0&amp;status=done&amp;style=none&amp;width=225" alt><br>【增加锁的操作，带来的影响】<br>首先，增加锁的操作，伙计的工作流程中多了上锁解锁，虽然这个上锁解锁的速度很快，但毕竟是增加了操作和开销。<br>另外，伙计 B 看到已经上锁，意味着有冲突时，需要增加额外的等待，对总账户余额的更新变成串行化。<br>从上面可以看出来，如果工作流程中，有一个大循环，循环里面不断有对数据操作，大量的上锁解锁，也是很影响性能。<br>如果不只 2 个伙计，如果是 20 个伙计，非常频繁的去更新总账户余额，冲突太频繁，伙计的工作效率会急剧下降。<br>所以，我们知道了，在并发编程中，锁带来了安全性，同时也带来了性能瓶颈。<br>锁和并发，貌似有一种相克相生的关系。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061669-f8c74302-0830-4e1b-9173-bad1886a452b.jpeg#align=left&amp;display=inline&amp;height=446&amp;margin=%5Bobject%20Object%5D&amp;originHeight=446&amp;originWidth=700&amp;size=0&amp;status=done&amp;style=none&amp;width=700" alt><br>【怎么减少锁的负面影响，同时保证数据安全呢】<br>下面几种方法大家可以考虑：<br>方法 1：<br>对单个数据的更新，可以使用 CAS（Compare-and-Swap）指令。<br>伙计们的操作变成下面这个过程：<br>伙计 A 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200+50=1250，回去修改，一看总账户余额还是 1200，于是成功修改为 1250；<br>伙计 B 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200-50=1150，回去修改，一看总账户余额是 1250，不是原来的 1200，说明数据被修改了，需要重新计算，于是记住新的值 1250，回去重新计算 1250-50=1200，在回去修改，一看总账户余额是 1250，于是成功修改为 1200。<br>上面的操作过程就是运用了 CAS 指令，修改之前先对比，数据没变化说明没有被修改过，这时候才能进行更新。<br>但是 CAS 操作时，还有一个 ABA 的问题。<br>例如：伙计 A 动作很快，改了一笔 1200-&gt;1250，又改了一笔 1250-&gt;1200；这时候伙计 B 回来改，看到的 1200 虽然数量没变，但是已经被改动两次了。<br>虽然上面的这种情况 ABA 问题不会有什么影响，但是有时候还是会出问题。<br>例如：总账户余额是每天记录一个数。<br>伙计 A 在今天的总账户余额上面改了一笔 1200-&gt;1250，掌柜过来翻了一下总账户，翻到了昨天那页，而那页的总账户余额刚好是 1200；<br>伙计 B 过来更新数据，一看还是 1200，就改成了 1150，这个改动是有问题的，因为伙计 B 改的是昨天的总账户余额。<br>要怎么解决这种 ABA 问题呢？<br>只需要在之前的数据基础上，再增加一个日期数据，检查的时候，需要同时检查总账户余额的数据和日期的数据，都没有变化才可以成功更新。<br>方法 2：<br>引入队列，让一个任务专门来做数据的更新，避免并行运算。<br>这时候，就是让掌柜一个人来更新总账户余额，伙计们只需要把自己的每一笔业务结果记录在总账户下面。<br>伙计 A 有一笔业务是存 50 两，则在总账户下面记录上+50；<br>伙计 B 有一笔业务是取 50 两，则在总账户下面记录上-50；<br>而掌柜只需要从总账户里面，顺序的把+50，-50 的操作更新到总账户余额就可以了。<br>这种方法的好处是，避免伙计并行更新总账户余额，发生冲突时的等待，既提高了伙计的效率也保证了数据更新的安全。<br>方法 3：<br>还是需要有锁的操作，但是让运算的过程更快，减少锁冲突的频率和时间。<br>前面是伙计先上锁，然后看总账户余额，再回去运算，再回来更新和解锁。<br>把这个过程改一下，伙计带着算盘过来，先上锁，然后现场运算，更新后解锁，再回去。<br>这样一来，整个的读写时间变短了，锁的冲突时间也就减少了，效率和性能也就能有所提高。<br>方法 4：<br>能否进一步减少锁的冲突时间，比如：将读、写的锁分开考虑，毕竟大部分业务中读的次数会远多于写的次数。<br>A 使用读写锁而不是互斥锁，可以提高并发读的效率，减少读时候的锁冲突。<br>例如：大量的业务都需要查看总账余额才可以做决定，那么就会有大量的读需求。而多个人一起读不冲突，只是在需要写的时候才独占总账余额的锁。<br>B 将大的数据分拆为多段的小数据，这样通过多个锁分别作用在小数据上，避免一个锁作用在大的数据中，减少冲突的概率。<br>例如：对总账余额的每一位设置单独的锁，而不是对整个数设置一个锁。这样的话，+50 只需要得到十位数的锁，-3 只需要得到个位的锁，如果是+55 则要个位和十位两个锁。<br>C 读的时候不需要锁，而写入的时候串行化同时只能一个人更新<br>例如：总账余额对所有人公开的，大家可以随便看，但是修改的时候，只能由掌柜来操作。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061690-5f577fc5-e07e-4d32-9921-c04cd2804080.jpeg#align=left&amp;display=inline&amp;height=305&amp;margin=%5Bobject%20Object%5D&amp;originHeight=305&amp;originWidth=310&amp;size=0&amp;status=done&amp;style=none&amp;width=310" alt><br>【死锁是怎么造成的？怎么避免？】<br>锁有两个操作，一个是加锁，一个是解锁。<br>锁冲突的时候，所有需要加锁的人就要等待，而无限等待就是死锁的状态。<br>造成的情况有下面 2 种：<br>1 如果伙计 A 对总账余额加锁，但是被客户叫走了，就会导致伙计 B 陷入死锁，一直等待。<br>这种情况就是伙计 A 出现了异常，没能及时的操作完，进行解锁。<br>2 如果伙计 A 对今天的总账余额加锁，同时伙计 B 对昨天的总账余额加锁，然后伙计 A 又想要获取昨天总账余额的锁，同时伙计 B 要今天的总账余额锁。<br>那这个时候，伙计 A、B 就会因为今天、昨天的总账余额两个锁互相依赖，都无法成功完成操作，造成死锁。<br>要怎么避免呢？<br>针对情况 1，就需要对异常情况做更周密的考虑，增加超时处理，锁占用时间最多 1 分钟，超时就自动解锁。<br>针对情况 2，可以考虑把锁的粒度设置粗一些，锁的效率低些总比造成死锁的情况要好很多。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061632-0175b53e-9417-4c3e-b83d-7ae1ff262ffc.jpeg#align=left&amp;display=inline&amp;height=481&amp;margin=%5Bobject%20Object%5D&amp;originHeight=481&amp;originWidth=500&amp;size=0&amp;status=done&amp;style=none&amp;width=500" alt><br>【单机的锁是怎么实现的？】<br>锁总线，只能有一个 CPU 核心可以通过数据总线访问主存，其他 CPU 等待，保证多 CPU 并行时数据读写的一致性。效率低，CPU 闲置。<br>缓存锁，针对单个缓存行中的数据地址，缓存读写只能发生在一个 CPU 核心，其他 CPU 缓存全部失效。数据少，只能是一个缓存行的数据。<br>因此，只对一个变量做更新的时候，能用缓存锁就尽量不要使用锁总线的方式。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061850-c6a67064-0a63-4cb6-80ac-033ac735d3e0.jpeg#align=left&amp;display=inline&amp;height=375&amp;margin=%5Bobject%20Object%5D&amp;originHeight=375&amp;originWidth=750&amp;size=0&amp;status=done&amp;style=none&amp;width=750" alt><br>【分布式锁的实现】<br>多服务器多进程之间需要做到数据安全更新的时候，就需要用到分布式锁。<br>而分布式锁的实现，还是需要有独立的线程安全的服务来提供锁的实现。<br>比如：<br>redis，实现简单，吞吐量十分可观，对于高并发情况应付自如，自带超时保护，对于网络抖动的情况也可以利用超时删除策略保证不会阻塞所有流程。<br>zookeeper，实现分布式锁虽然是比较重量级的，但实现的锁功能十分健全，由于 Zookeeper 本身需要维护自己的一致性，所以性能上较 Redis 还是有一定差距的。<br>【写在最后】<br>并发编程是非常复杂，充满挑战的一项工作，可为什么大部分感觉不到它的难点呢？<br>互联网应用、Web 应用，都是并发编程的典型应用，大家写着业务代码，却体会不到其中的难点呢？<br>我个人理解，是不是以为工作任务只是测试通过，功能跑通而已呢？<br>是不是以为几次几十次的操作，数据写入成功，返回正常就可以呢？<br>是不是以为偶尔出个错，排查后修正解决了就完事了呢？<br>我们的应用如果是作为一个系统，那么就不能是片面去看待和思考它，要有系统化的思维，从很小的点开始，认真面对这一切。</p>
 
       
 
@@ -309,7 +298,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2019/03/25/yuque/JDK12新特性/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -323,18 +312,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2019/03/25/yuque/JDK11新特性/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          JDK11新特性
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/18/yuque/redis锁与zookeerper锁区别（1）/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">redis锁与zookeerper锁区别（1）</div>
+    <a href="/2020/05/12/yuque/并发编程与锁的底层原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">并发编程与锁的底层原理</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -373,7 +353,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'JDK12新特性',
+  id: '高并发和高性能系统中锁的影响与解决办法',
   owner: 'zy84338719',
   repo: 'zy84338719.github.io',
   oauth: {

@@ -6,19 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>JDK12新特性 | Murphy Yi site</title>
+  <title>Archives: 2020 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
-<meta property="og:type" content="article">
-<meta property="og:title" content="JDK12新特性">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2019/03/25/yuque/JDK12新特性/index.html">
+  <meta name="description" content="学习总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Murphy Yi site">
+<meta property="og:url" content="http://zy84338719.github.io/blog/archives/2020/page/5/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
+<meta property="og:description" content="学习总结">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-12T02:55:24.938Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JDK12新特性">
-<meta name="twitter:description" content="作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：  189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental) ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。  230: Microbenchmark S">
+<meta name="twitter:title" content="Murphy Yi site">
+<meta name="twitter:description" content="学习总结">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -180,209 +179,52 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/JDK12新特性" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      JDK12新特性
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/01/12/yuque/Golang 基础题(一)/" class="archive-article-date">
+  	<time datetime="2020-01-12T03:59:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-12</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/01/12/yuque/Golang 基础题(一)/">Golang 基础题(一)</a>
     </h1>
   
 
-        
-        <a href="/2019/03/25/yuque/JDK12新特性/" class="archive-article-date">
-  	<time datetime="2019-03-25T04:44:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：</p>
-<ul>
-<li><p>189: <a href="http://openjdk.java.net/jeps/189" target="_blank" rel="noopener">Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)</a> ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。</p>
-</li>
-<li><p>230: <a href="http://openjdk.java.net/jeps/230" target="_blank" rel="noopener">Microbenchmark Suite</a>：新增一套微基准测试，使开发者能够基于现有的 Java Microbenchmark Harness（JMH）轻松测试 JDK 的性能，并创建新的基准测试。</p>
-</li>
-<li><p>325: <a href="http://openjdk.java.net/jeps/325" target="_blank" rel="noopener">Switch Expressions (Preview)</a> ：对 switch 语句进行扩展，使其可以用作语句或表达式，简化日常代码。</p>
-</li>
-<li><p>334: <a href="http://openjdk.java.net/jeps/334" target="_blank" rel="noopener">JVM Constants API</a> ：引入一个 API 来对关键类文件 (key class-file) 和运行时工件的名义描述（nominal descriptions）进行建模，特别是那些可从常量池加载的常量。</p>
-</li>
-<li><p>340: <a href="http://openjdk.java.net/jeps/340" target="_blank" rel="noopener">One AArch64 Port, Not Two</a> ：删除与 arm64 端口相关的所有源码，保留 32 位 ARM 移植和 64 位 aarch64 移植。</p>
-</li>
-<li><p>341: <a href="http://openjdk.java.net/jeps/341" target="_blank" rel="noopener">Default CDS Archives</a> ：默认生成类数据共享（CDS）存档。</p>
-</li>
-<li><p>344: <a href="http://openjdk.java.net/jeps/344" target="_blank" rel="noopener">Abortable Mixed Collections for G1</a> ：当 G1 垃圾回收器的回收超过暂停目标，则能中止垃圾回收过程。</p>
-</li>
-<li><p>346: <a href="http://openjdk.java.net/jeps/346" target="_blank" rel="noopener">Promptly Return Unused Committed Memory from G1</a> ：改进 G1 垃圾回收器，以便在空闲时自动将 Java 堆内存返回给操作系统。</p>
-</li>
-</ul>
-<p>总结<br>1.JDK12 新增了一个垃圾回收器 2.新增一套微基准测试，方便测试 JDK 性能 3.对 switch 进行扩展，使其可以作语句的表达式。 4.新增一个 API 来对关键类和运行时共建进行建模 5.删除 arm64 源码，保留 arm64 和 aarch64 移植 6.默认生成类数据共享存档 7.当 G1 垃圾回收超过暂停目标，则能终止垃圾回收过程 8.改进 G1 垃圾回收机制，以便在空闲时自动将 JAVA 堆内存韩会给操作系统</p>
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>扫码打赏，你说多少就多少<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/alipay.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixin.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2019/03/25/yuque/JDK12新特性/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/03/25/yuque/JDK11新特性/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          JDK11新特性
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/03/18/yuque/redis锁与zookeerper锁区别（1）/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">redis锁与zookeerper锁区别（1）</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: 'JDK12新特性',
-  owner: 'zy84338719',
-  repo: 'zy84338719.github.io',
-  oauth: {
-    client_id: '18e4bca6b23d1ae9fae7',
-    client_secret: '7f78d9ff7fa13d9363f6a14321a90cfba2c7a807',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/2020/page/4/">&laquo; Prev</a><a class="page-number" href="/archives/2020/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2020/page/3/">3</a><a class="page-number" href="/archives/2020/page/4/">4</a><span class="page-number current">5</span>
+    </nav>
   
 
 
@@ -406,8 +248,8 @@ gitment.render('gitment-ctn')
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

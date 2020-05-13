@@ -6,19 +6,41 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>Golang 基础数据类型 | Murphy Yi site</title>
+  <title>channel的整体结构图 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="数据类型 基本数据类型 数值型 整数类型(int,int8,int16,int32,int64)        (uint,uint8,uint16,uint64,byte)     字符型 （没有专门的字符类型，使用 byte 来保存单个字母字符）     布尔类型 bool     字符串 (string)【官方将 string 归属到基本数据类型】          派生/复杂数据类型">
+  <meta name="description" content="channel 的整体结构图简单说明：  buf是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表 sendx和recvx用于记录buf这个循环链表中的发送或者接收的 index lock是个互斥锁。 recvq和sendq分别是接收(&amp;lt;-channel)或者发送(channel &amp;lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Golang 基础数据类型">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2020/02/17/yuque/Golang 基础数据类型/index.html">
+<meta property="og:title" content="channel的整体结构图">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/13/yuque/channel的整体结构图/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="数据类型 基本数据类型 数值型 整数类型(int,int8,int16,int32,int64)        (uint,uint8,uint16,uint64,byte)     字符型 （没有专门的字符类型，使用 byte 来保存单个字母字符）     布尔类型 bool     字符串 (string)【官方将 string 归属到基本数据类型】          派生/复杂数据类型">
+<meta property="og:description" content="channel 的整体结构图简单说明：  buf是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表 sendx和recvx用于记录buf这个循环链表中的发送或者接收的 index lock是个互斥锁。 recvq和sendq分别是接收(&amp;lt;-channel)或者发送(channel &amp;lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-13T14:58:22.101Z">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan.png#align=left&display=inline&height=673&margin=%5Bobject%20Object%5D&originHeight=673&originWidth=898&status=uploading&style=none&width=898">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_gif1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_gif2.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381844596-946fe7aa-394a-4788-a1c5-823827771819.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_gif6.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842416-1c3eb9a9-ea28-4140-bb72-ff5d6214dbdf.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/send_single.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842056-5f3f00d7-b84d-46c5-97b3-f67955996ed6.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_channl.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block2.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_blok3.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block4.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block5.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block6.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block7_1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block7.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block8.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block9.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
+<meta property="og:updated_time" content="2020-05-13T14:58:24.865Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Golang 基础数据类型">
-<meta name="twitter:description" content="数据类型 基本数据类型 数值型 整数类型(int,int8,int16,int32,int64)        (uint,uint8,uint16,uint64,byte)     字符型 （没有专门的字符类型，使用 byte 来保存单个字母字符）     布尔类型 bool     字符串 (string)【官方将 string 归属到基本数据类型】          派生/复杂数据类型">
+<meta name="twitter:title" content="channel的整体结构图">
+<meta name="twitter:description" content="channel 的整体结构图简单说明：  buf是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表 sendx和recvx用于记录buf这个循环链表中的发送或者接收的 index lock是个互斥锁。 recvq和sendq分别是接收(&amp;lt;-channel)或者发送(channel &amp;lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向">
+<meta name="twitter:image" content="https://i6448038.github.io/img/channel/hchan.png#align=left&display=inline&height=673&margin=%5Bobject%20Object%5D&originHeight=673&originWidth=898&status=uploading&style=none&width=898">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -180,115 +202,66 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/Golang 基础数据类型" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/channel的整体结构图" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Golang 基础数据类型
+      channel的整体结构图
     </h1>
   
 
         
-        <a href="/2020/02/17/yuque/Golang 基础数据类型/" class="archive-article-date">
-  	<time datetime="2020-02-17T07:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+        <a href="/2020/05/13/yuque/channel的整体结构图/" class="archive-article-date">
+  	<time datetime="2020-05-13T14:57:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <table>
-<thead>
-<tr>
-<th style="text-align:center">数据类型</th>
-<th style="text-align:center">基本数据类型</th>
-<th style="text-align:center">数值型</th>
-<th>整数类型(int,int8,int16,int32,int64)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td>(uint,uint8,uint16,uint64,byte)</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">字符型</td>
-<td>（没有专门的字符类型，使用 byte 来保存单个字母字符）</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">布尔类型</td>
-<td>bool</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">字符串</td>
-<td>(string)【官方将 string 归属到基本数据类型】</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">派生/复杂数据类型</td>
-<td style="text-align:center">1.指针</td>
-<td>pointer</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">2.数组</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">3.结构体</td>
-<td>struct</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">4.管道</td>
-<td>channel</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">5.函数</td>
-<td>也是一种数据类型</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">6.切片</td>
-<td>slice</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">7.接口</td>
-<td>interface</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center">8.map</td>
-</tr>
-</tbody>
-</table>
+        <h2 id="channel-的整体结构图"><a href="#channel-的整体结构图" class="headerlink" title="channel 的整体结构图"></a>channel 的整体结构图</h2><p><img src="https://i6448038.github.io/img/channel/hchan.png#align=left&amp;display=inline&amp;height=673&amp;margin=%5Bobject%20Object%5D&amp;originHeight=673&amp;originWidth=898&amp;status=uploading&amp;style=none&amp;width=898" alt><br>简单说明：</p>
+<ul>
+<li><code>buf</code>是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表</li>
+<li><code>sendx</code>和<code>recvx</code>用于记录<code>buf</code>这个循环链表中的发送或者接收的 index</li>
+<li><code>lock</code>是个互斥锁。</li>
+<li><code>recvq</code>和<code>sendq</code>分别是接收(&lt;-channel)或者发送(channel &lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向链表</li>
+</ul>
+<p>源码位于<code>/runtime/chan.go</code>中(目前版本：1.11)。结构体为<code>hchan</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">type hchan struct &#123;</span><br><span class="line">    qcount   uint           // total data in the queue</span><br><span class="line">    dataqsiz uint           // size of the circular queue</span><br><span class="line">    buf      unsafe.Pointer // points to an array of dataqsiz elements</span><br><span class="line">    elemsize uint16</span><br><span class="line">    closed   uint32</span><br><span class="line">    elemtype *_type // element type</span><br><span class="line">    sendx    uint   // send index</span><br><span class="line">    recvx    uint   // receive index</span><br><span class="line">    recvq    waitq  // list of recv waiters</span><br><span class="line">    sendq    waitq  // list of send waiters</span><br><span class="line">    // lock protects all fields in hchan, as well as several</span><br><span class="line">    // fields in sudogs blocked on this channel.</span><br><span class="line">    //</span><br><span class="line">    // Do not change another G&apos;s status while holding this lock</span><br><span class="line">    // (in particular, do not ready a G), as this can deadlock</span><br><span class="line">    // with stack shrinking.</span><br><span class="line">    lock mutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面我们来详细介绍<code>hchan</code>中各部分是如何使用的。</p>
+<h2 id="先从创建开始"><a href="#先从创建开始" class="headerlink" title="先从创建开始"></a>先从创建开始</h2><p>我们首先创建一个 channel。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan int, 3)</span><br></pre></td></tr></table></figure>
+<p><img src="https://i6448038.github.io/img/channel/hchan1.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>创建 channel 实际上就是在内存中实例化了一个<code>hchan</code>的结构体，并返回一个 ch 指针，我们使用过程中 channel 在函数之间的传递都是用的这个指针，这就是为什么函数传递中无需使用 channel 的指针，而直接用 channel 就行了，因为 channel 本身就是一个指针。</p>
+<h2 id="channel-中发送-send-ch-lt-xxx-和-recv-lt-ch-接收"><a href="#channel-中发送-send-ch-lt-xxx-和-recv-lt-ch-接收" class="headerlink" title="channel 中发送 send(ch &lt;- xxx)和 recv(&lt;- ch)接收"></a>channel 中发送 send(ch &lt;- xxx)和 recv(&lt;- ch)接收</h2><p>先考虑一个问题，如果你想让 goroutine 以先进先出(FIFO)的方式进入一个结构体中，你会怎么操作？<br>加锁！对的！channel 就是用了一个锁。hchan 本身包含一个互斥锁<code>mutex</code></p>
+<h3 id="channel-中队列是如何实现的"><a href="#channel-中队列是如何实现的" class="headerlink" title="channel 中队列是如何实现的"></a>channel 中队列是如何实现的</h3><p>channel 中有个缓存 buf，是用来缓存数据的(假如实例化了带缓存的 channel 的话)队列。我们先来看看是如何实现“队列”的。<br>还是刚才创建的那个 channel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan int, 3)</span><br></pre></td></tr></table></figure>
+<p><img src="https://i6448038.github.io/img/channel/hchan_gif1.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>当使用<code>send (ch &lt;- xx)</code>或者<code>recv ( &lt;-ch)</code>的时候，首先要锁住<code>hchan</code>这个结构体。<br><img src="https://i6448038.github.io/img/channel/hchan_gif2.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>然后开始<code>send (ch &lt;- xx)</code>数据。<br>一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+<p>二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+<p>三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+<p>这时候满了，队列塞不进去了<br>动态图表示为：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381844596-946fe7aa-394a-4788-a1c5-823827771819.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;size=0&amp;status=done&amp;style=none&amp;width=800" alt><br>然后是取<code>recv ( &lt;-ch)</code>的过程，是个逆向的操作，也是需要加锁。<br><img src="https://i6448038.github.io/img/channel/hchan_gif6.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>然后开始<code>recv (&lt;-ch)</code>数据。<br>一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+<p>二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+<p>三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+<p>图为：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842416-1c3eb9a9-ea28-4140-bb72-ff5d6214dbdf.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;size=0&amp;status=done&amp;style=none&amp;width=800" alt><br>注意以上两幅图中<code>buf</code>和<code>recvx</code>以及<code>sendx</code>的变化，<code>recvx</code>和<code>sendx</code>是根据循环链表<code>buf</code>的变动而改变的。<br>至于为什么 channel 会使用循环链表作为缓存结构，我个人认为是在缓存列表在动态的<code>send</code>和<code>recv</code>过程中，定位当前<code>send</code>或者<code>recvx</code>的位置、选择<code>send</code>的和<code>recvx</code>的位置比较方便吧，只要顺着链表顺序一直旋转操作就好。<br>缓存中按链表顺序存放，取数据的时候按链表顺序读取，符合 FIFO 的原则。</p>
+<h3 id="send-recv-的细化操作"><a href="#send-recv-的细化操作" class="headerlink" title="send/recv 的细化操作"></a>send/recv 的细化操作</h3><p>注意：缓存链表中以上每一步的操作，都是需要加锁操作的！<br>每一步的操作的细节可以细化为：</p>
+<ul>
+<li>第一，加锁</li>
+<li>第二，把数据从 goroutine 中 copy 到“队列”中(或者从队列中 copy 到 goroutine 中）。</li>
+<li>第三，释放锁</li>
+</ul>
+<p>每一步的操作总结为动态图为：(发送过程)<br><img src="https://i6448038.github.io/img/channel/send_single.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>或者为：(接收过程)<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842056-5f3f00d7-b84d-46c5-97b3-f67955996ed6.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;size=0&amp;status=done&amp;style=none&amp;width=800" alt><br>所以不难看出，Go 中那句经典的话：<code>Do not communicate by sharing memory; instead, share memory by communicating.</code>的具体实现就是利用 channel 把数据从一端 copy 到了另一端！<br>还真是符合<code>channel</code>的英文含义：<br><img src="https://i6448038.github.io/img/channel/hchan_channl.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt></p>
+<h3 id="当-channel-缓存满了之后会发生什么？这其中的原理是怎样的？"><a href="#当-channel-缓存满了之后会发生什么？这其中的原理是怎样的？" class="headerlink" title="当 channel 缓存满了之后会发生什么？这其中的原理是怎样的？"></a>当 channel 缓存满了之后会发生什么？这其中的原理是怎样的？</h3><p>使用的时候，我们都知道，当 channel 缓存满了，或者没有缓存的时候，我们继续 send(ch &lt;- xxx)或者 recv(&lt;- ch)会阻塞当前 goroutine，但是，是如何实现的呢？<br>我们知道，Go 的 goroutine 是用户态的线程(<code>user-space threads</code>)，用户态的线程是需要自己去调度的，Go 有运行时的 scheduler 去帮我们完成调度这件事情。关于 Go 的调度模型 GMP 模型我在此不做赘述，如果不了解，可以看我另一篇文章(<a href="https://i6448038.github.io/2017/12/04/golang-concurrency-principle/" target="_blank" rel="noopener">Go 调度原理</a>)<br>goroutine 的阻塞操作，实际上是调用<code>send (ch &lt;- xx)</code>或者<code>recv ( &lt;-ch)</code>的时候主动触发的，具体请看以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//goroutine1 中，记做G1</span><br><span class="line">ch := make(chan int, 3)</span><br><span class="line">ch &lt;- 1</span><br><span class="line">ch &lt;- 1</span><br><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+<p><img src="https://i6448038.github.io/img/channel/hchan_block.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br><img src="https://i6448038.github.io/img/channel/hchan_block1.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>这个时候 G1 正在正常运行,当再次进行 send 操作(ch&lt;-1)的时候，会主动调用 Go 的调度器,让 G1 等待，并从让出 M，让其他 G 去使用<br><img src="https://i6448038.github.io/img/channel/hchan_block2.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>同时 G1 也会被抽象成含有 G1 指针和 send 元素的<code>sudog</code>结构体保存到 hchan 的<code>sendq</code>中等待被唤醒。<br><img src="https://i6448038.github.io/img/channel/hchan_blok3.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>那么，G1 什么时候被唤醒呢？这个时候 G2 隆重登场。<br><img src="https://i6448038.github.io/img/channel/hchan_block4.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>G2 执行了 recv 操作<code>p := &lt;-ch</code>，于是会发生以下的操作：<br><img src="https://i6448038.github.io/img/channel/hchan_block5.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>G2 从缓存队列中取出数据，channel 会将等待队列中的 G1 推出，将 G1 当时 send 的数据推到缓存中，然后调用 Go 的 scheduler，唤醒 G1，并把 G1 放到可运行的 Goroutine 队列中。<br><img src="https://i6448038.github.io/img/channel/hchan_block6.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt></p>
+<h3 id="假如是先进行执行-recv-操作的-G2-会怎么样？"><a href="#假如是先进行执行-recv-操作的-G2-会怎么样？" class="headerlink" title="假如是先进行执行 recv 操作的 G2 会怎么样？"></a>假如是先进行执行 recv 操作的 G2 会怎么样？</h3><p>你可能会顺着以上的思路反推。首先：<br><img src="https://i6448038.github.io/img/channel/hchan_block7_1.png#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>这个时候 G2 会主动调用 Go 的调度器,让 G2 等待，并从让出 M，让其他 G 去使用。<br>G2 还会被抽象成含有 G2 指针和 recv 空元素的<code>sudog</code>结构体保存到 hchan 的<code>recvq</code>中等待被唤醒<br><img src="https://i6448038.github.io/img/channel/hchan_block7.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>此时恰好有个 goroutine G1 开始向 channel 中推送数据 <code>ch &lt;- 1</code>。<br>此时，非常有意思的事情发生了：<br><img src="https://i6448038.github.io/img/channel/hchan_block8.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt><br>G1 并没有锁住 channel，然后将数据放到缓存中，而是直接把数据从 G1 直接 copy 到了 G2 的栈中。<br>这种方式非常的赞！在唤醒过程中，G2 无需再获得 channel 的锁，然后从缓存中取数据。减少了内存的 copy，提高了效率。<br>之后的事情显而易见：<br><img src="https://i6448038.github.io/img/channel/hchan_block9.gif#align=left&amp;display=inline&amp;height=600&amp;margin=%5Bobject%20Object%5D&amp;originHeight=600&amp;originWidth=800&amp;status=uploading&amp;style=none&amp;width=800" alt></p>
 
       
 
@@ -378,7 +351,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/02/17/yuque/Golang 基础数据类型/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/13/yuque/channel的整体结构图/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -392,18 +365,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2020/02/17/yuque/Golang 基础类型使用细节/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Golang 基础类型使用细节
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/02/17/yuque/Golang 注释（comment）/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Golang 注释（comment）</div>
+    <a href="/2020/05/12/yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -442,7 +406,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'Golang 基础数据类型',
+  id: 'channel的整体结构图',
   owner: 'zy84338719',
   repo: 'zy84338719.github.io',
   oauth: {

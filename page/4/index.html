@@ -181,6 +181,84 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/切片数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/25/yuque/切片数组/">切片数组</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/25/yuque/切片数组/" class="archive-article-date">
+  	<time datetime="2020-03-25T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>数组是值拷贝<br>切片是引用传递</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.数组是多个相同类型数据的组合,一个数组一旦声明/定义了,其长度是固定的, 不能动态变化</p>
+<p>2.数组中的元素可以是任何数据类型，包括值类型和引用类型，但是不能混用。</p>
+<p>3.数组创建后，如果没有赋值，有默认值(零值)</p>
+<p>4.数组的下标是从 0 开始的</p>
+<p>5.数组下标必须在指定范围内使用，否则报 panic:数组越界，比如</p>
+<p>6.数组默认是值传递，因此值会进行拷贝。数组间不会相互影响 7.长度是数组类型的一部分，在传递函数参数时 需要考虑数组的长度</p>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>1.切片的英文是 slice 2.切片是数组的一个引用，因此切片是引用类型，在进行传递时，遵守引用传递的机制。</p>
+<p>3.切片的使用和数组类似，遍历切片、访问切片的元素和求切片长度 len(slice)都一样。</p>
+<p>4.切片的长度是可以变化的，因此切片是一个可以动态变化数组。 5.通过 make 方式创建切片可以指定切片的大小和容量 6.通过 make 方式创建的切片对应的数组是由 make 底层维护，对外不可见，即只能通过 slice 去访问各个元素.<br>切片的数据类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer</span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩容</p>
+<ul>
+<li>当需要的容量超过原切片容量的两倍时，会使用需要的容量作为新容量。</li>
+<li>当原切片长度小于 1024 时，新切片的容量会直接翻倍。而当原切片的容量大于等于 1024 时，会反复地增加 25%，直到新容量超过所需要的容量。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/25/yuque/切片数组/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/常见算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2535,78 +2613,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Golang 注释（comment）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/17/yuque/Golang 注释（comment）/">Golang 注释（comment）</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/17/yuque/Golang 注释（comment）/" class="archive-article-date">
-  	<time datetime="2020-02-17T05:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="介绍注释"><a href="#介绍注释" class="headerlink" title="介绍注释"></a>介绍注释</h1><p>用于注解说明解释程序的文字就是注释，注释提高了代码的阅读性;<br>注释是一个程序员必须要具有的良好编程习惯。将自己的思想通过注释先整理出来，再用代码去<br>体现。</p>
-<p>#</p>
-<h1 id="在-Golang-中注释有两种形式"><a href="#在-Golang-中注释有两种形式" class="headerlink" title="在 Golang 中注释有两种形式"></a>在 Golang 中注释有两种形式</h1><h2 id="1-行注释（官方推荐）"><a href="#1-行注释（官方推荐）" class="headerlink" title="1) 行注释（官方推荐）"></a>1) 行注释（官方推荐）</h2><p>基本语法</p>
-<p>// 注释内容</p>
-<p>举例</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581918600021-bd2facc7-1ebd-47c7-92ca-13a5d1a1fd6d.png#align=left&amp;display=inline&amp;height=327&amp;name=image.png&amp;originHeight=327&amp;originWidth=806&amp;size=273831&amp;status=done&amp;style=none&amp;width=806" alt="image.png"></p>
-<h2 id="2-块注释-多行注释"><a href="#2-块注释-多行注释" class="headerlink" title="2) 块注释(多行注释)"></a>2) 块注释(多行注释)</h2><p>基本语法</p>
-<p>/*<br>注释内容</p>
-<p>*/</p>
-<p>举例<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581918689210-538cf128-84ae-4e9e-af3c-1991e5bb9232.png#align=left&amp;display=inline&amp;height=118&amp;name=image.png&amp;originHeight=130&amp;originWidth=790&amp;size=103688&amp;status=done&amp;style=none&amp;width=715" alt="image.png"></p>
-<h2 id="使用细节"><a href="#使用细节" class="headerlink" title="使用细节"></a>使用细节</h2><h5 id="1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。"><a href="#1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。" class="headerlink" title="1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。"></a>1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。</h5><h5 id="2-块注释里面不允许有块注释嵌套-注意一下"><a href="#2-块注释里面不允许有块注释嵌套-注意一下" class="headerlink" title="2) 块注释里面不允许有块注释嵌套 [注意一下]"></a>2) 块注释里面不允许有块注释嵌套 [注意一下]</h5>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/17/yuque/Golang 注释（comment）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -2728,15 +2734,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">read</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
             
             <div class="clearfix"></div>

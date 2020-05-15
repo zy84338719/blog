@@ -181,6 +181,102 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/16/yuque/K8S 应用篇/">K8S 应用篇</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/16/yuque/K8S 应用篇/" class="archive-article-date">
+  	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>部署 dashboard</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta4/aio/deploy/recommended.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io/service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io/service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io/service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">====</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
+<p>部署</p>
+<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><ul>
+<li><a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a> users can use <code>brew install kubernetes-helm</code>.</li>
+<li><a href="https://chocolatey.org/" target="_blank" rel="noopener">Chocolatey</a> users can use <code>choco install kubernetes-helm</code>.</li>
+<li><a href="https://scoop.sh/" target="_blank" rel="noopener">Scoop</a> users can use <code>scoop install helm</code>.</li>
+<li><a href="https://gofi.sh/" target="_blank" rel="noopener">GoFish</a> users can use <code>gofish install helm</code>.</li>
+<li><a href="https://snapcraft.io/" target="_blank" rel="noopener">Snap</a> users can use <code>sudo snap install helm --classic</code>.</li>
+</ul>
+<p>k8s 升级以及容器版本升级</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get upgrade  kubeadm</span><br><span class="line">更新到1.13.0后，在master执行,执行一次</span><br><span class="line">kubeadm upgrade plan</span><br></pre></td></tr></table></figure>
+<p>docker 降级<br>打印可用版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache madison docker-ce</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>安装指定版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce=&lt;VERSION&gt;</span><br></pre></td></tr></table></figure>
+<p>三、给 Tiller 授权<br>因为 Helm 的服务端 Tiller 是一个部署在 Kubernetes 中 Kube-System Namespace 下 的 Deployment，它会去连接 Kube-Api 在 Kubernetes 里创建和删除应用。</p>
+<p>而从 Kubernetes 1.6 版本开始，API Server 启用了 RBAC 授权。目前的 Tiller 部署时默认没有定义授权的 ServiceAccount，这会导致访问 API Server 时被拒绝。所以我们需要明确为 Tiller 部署添加授权。</p>
+<p>创建 Kubernetes 的服务帐号和绑定角色</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br></pre></td></tr></table></figure>
+<p>为 Tiller 设置帐号</p>
+<h1 id="使用-kubectl-patch-更新-API-对象"><a href="#使用-kubectl-patch-更新-API-对象" class="headerlink" title="使用 kubectl patch 更新 API 对象"></a>使用 kubectl patch 更新 API 对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p <span class="string">'&#123;"spec":&#123;"template":&#123;"spec":&#123;"serviceAccount":"tiller"&#125;&#125;&#125;&#125;'</span></span><br><span class="line">deployment.extensions <span class="string">"tiller-deploy"</span> patched</span><br></pre></td></tr></table></figure>
+<p>查看是否授权成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount</span><br><span class="line">serviceAccount: tiller</span><br><span class="line">serviceAccountName: tiller</span><br></pre></td></tr></table></figure>
+<p>四、验证 Tiller 是否安装成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n kube-system get pods|grep tiller</span><br><span class="line">tiller-deploy-6d68f5c78f-nql2z          1/1       Running   0          5m</span><br><span class="line">helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="NFS-挂载失败"><a href="#NFS-挂载失败" class="headerlink" title="NFS 挂载失败"></a>NFS 挂载失败</h2><p>在一台机器上创建 Pod，挂载 nfs 失败。<br>然后在节点上尝试挂载，依然显示失败</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: mount point /nfs does not exist</span><br><span class="line">root@master:~# mkdir /nfs</span><br><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: wrong fs type, bad option, bad superblock on 192.168.207.121:/nas/dg_vd,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a /sbin/mount.&lt;type&gt; helper program)</span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line">root@master:~# showmount -e 192.168.207.121</span><br><span class="line">The program &apos;showmount&apos; is currently not installed. You can install it by typing:</span><br><span class="line">apt install nfs-common</span><br></pre></td></tr></table></figure>
+<p>执行<code>apt install nfs-common</code>后可以本地挂载 nfs。<br>这是再创建 pod 成功</p>
+<h2 id="Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117"><a href="#Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117" class="headerlink" title="Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117."></a>Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.</h2><p>Calico 问题排障<br>// 错误信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
+<p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">// 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface=ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/16/yuque/K8S 应用篇/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Tool" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -885,71 +981,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Python 风靡的原因" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/02/yuque/Python 风靡的原因/">Python 风靡的原因</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/02/yuque/Python 风靡的原因/" class="archive-article-date">
-  	<time datetime="2019-05-02T06:50:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1556779808182-ca1fbf9b-5a67-445a-b0a0-e5f179fa1956.png#align=left&amp;display=inline&amp;height=313&amp;originHeight=313&amp;originWidth=500&amp;size=0&amp;status=done&amp;width=500" alt><br>Python 已经成为目前使用最广泛且用户增长最快的编程语言。它优雅简洁的语法、强大的第三方库支持等都是 Python 能够风靡各行各业的原因。然而，你或许不知道，Python 能够实现用户飞速增长，背后其实另有玄机。<br>就让大讲台老师从近年来大数据的兴起说起，为你娓娓道来 Python 火爆的真正原因。<br>Ruby 与 Python 的“Web 开发语言之争”<br>大讲台老师再往回讲讲，在大数据还没有真正风靡之前，Ruby 和 Python 曾在成为最受欢迎的“web 开发语言”上发生过激烈的争战。 两者都非常适合开发 Web 应用程序。 Ruby 的受欢迎程度与 Rails 框架密切相关。 在那个年代，大多数自称为“Ruby 程序员”其实更应该称自己为 “Rails 程序员”。 而 Python 在学术界和少数不同行业已经相当完善。 在 Python 中，与 Rails 最相近的是 Django，Django 尽管在 Rails 之前发布，但它的受欢迎程度似乎远远落后于 Rails。<br>很多人认为，Python 和 Ruby 的性能都很相似，最终只会有一种语言能够赢得“web 开发语言之战”。 但实际上，Ruby 的流行度与 Rails 密切相关，而 Django 只代表了一个已经很活跃的 Python 生态系统的一小部分。事实也证明，“Web 开发语言之战”的重要性远低于人们的预期。即便从很多层面来讲，Ruby 都凭借 Rails 赢得了这场争战，但这丝毫不影响 Python 成为当今最受欢迎的语言。这到底是为什么呢？</p>
-<h4 id="Oliphant-的大手笔"><a href="#Oliphant-的大手笔" class="headerlink" title="Oliphant 的大手笔"></a>Oliphant 的大手笔</h4><p>为了揭开这个谜团，大讲台老师就不得不提一下一位大佬了，他就是 Travis Oliphant。追溯到 2006 年。当时，Travis Oliphant 还是 BYU 的助理教授，他仍未创办 Anaconda（注：Anaconda 是一个完全以 Python 为基础的，目前最成功的商业数据科学平台之一）。 一年前，他参考科学计算库 Numeric 开发了 NumPy。 他后来又成为 SciPy 的创始人并兼任了 PSF 的主管。<br>在 2006 年，他与 Carl Banks 一起提交了 PEP 3118，这是 Python 的“缓冲区协议”的修订版。这为 Python 的兴起埋下了重要伏笔。<br>Python 的缓冲协议：Python 风靡全球的首要原因<br>缓冲器协议是一个极低级别的 API，被其他库用来直接操纵内存缓冲区。 这些是由解释器创建和使用的缓冲器，用于存储连续存储器中某些类型的数据。<br>提供这样一个 API 的主要动机是：消除在只读取时复制数据的必要性，澄清缓冲区的所有权转移语意，并将数据存储在连续的存储器中，其中读取访问速度非常快。 那些将使用该 API 的“其他库”一般都是用 C 写的，而且对性能十分敏感。 这一新协议意味着，如果我创建了一个 NumPy 的 int 数组，其他库可以直接访问底层内存缓冲区，而不是间接访问或者在使用该数据之前复制该数据。</p>
-<h4 id="现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？"><a href="#现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？" class="headerlink" title="现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？"></a>现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？</h4><h4 id="当然是数据科学家了！"><a href="#当然是数据科学家了！" class="headerlink" title="当然是数据科学家了！"></a>当然是数据科学家了！</h4><p>让大讲台老师梳理一下事件的发展过程：<br>Oliphant 和 Banks 提出了 Python 的缓冲协议的修订，以简化对刚开始的 NumPy 项目工作所驱动的某些数据结构的底层内存的直接访问。<br>PEP 3118 提交，被认可，实施。<br>受益于 PEP 3118 的实现，Python 已悄然成为一个非常吸引人的编译语言。在此基础上，就有了很多基于 C 语言扩展的数字计算库被开发出来。<br>Python 和 Ruby 在网络上一决雌雄，大多数人认为“Web 开发语言之战”必有分晓。<br>随着磁存储设备价格暴跌，存储大量数据以供日后分析变得可行。<br>对新一代程序员的需求发生变化：具有统计学背景，最好还得有应用数学背景的，且先前有过一些编程经验的程序员开始被哄抢——数据科学家的时代来临了！<br>数据科学家们想寻找一种既具有表现力又快速的语言，所有的这些需求都指向于 Python。<br>后来，就如大家看到的那样，Python 受到万千宠爱，一跃成为了最受欢迎的编程语言。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/02/yuque/Python 风靡的原因/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -1071,15 +1102,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">read</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
             
             <div class="clearfix"></div>

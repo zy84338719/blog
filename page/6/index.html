@@ -181,6 +181,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/MacOS 制作Ubuntu ISO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/04/yuque/MacOS 制作Ubuntu ISO/">MacOS 制作Ubuntu ISO</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/04/yuque/MacOS 制作Ubuntu ISO/" class="archive-article-date">
+  	<time datetime="2019-12-04T01:28:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">☁  Desktop [master] ⚡ hdiutil convert -format UDRW -o ./ubuntu-18.04-desktop-amd64 ./ubuntu-18.04-desktop-amd64.iso    <span class="comment"># 将ISO转为DMG</span></span><br><span class="line">正在读取Driver Descriptor Map（DDM：0）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：1）…</span><br><span class="line">正在读取Apple（Apple_partition_map：2）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：3）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取EFI（Apple_HFS：4）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：5）…</span><br><span class="line">..............................................................................</span><br><span class="line">已耗时： 2.082s</span><br><span class="line">速度：880.0M 字节/秒</span><br><span class="line">节省：0.0%</span><br><span class="line">created: /Users/huqilin/Desktop/ubuntu-18.04-desktop-amd64.dmg</span><br><span class="line">☁  Desktop [master] ⚡ diskutil list    <span class="comment"># 得到 U 盘设备号</span></span><br><span class="line">/dev/disk0 (internal):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      GUID_partition_scheme                         251.0 GB   disk0</span><br><span class="line">   1:                        EFI EFI                     314.6 MB   disk0s1</span><br><span class="line">   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2</span><br><span class="line">/dev/disk1 (synthesized):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      APFS Container Scheme -                      +250.7 GB   disk1</span><br><span class="line">                                 Physical Store disk0s2</span><br><span class="line">   1:                APFS Volume Macintosh HD            112.5 GB   disk1s1</span><br><span class="line">   2:                APFS Volume Preboot                 21.1 MB    disk1s2</span><br><span class="line">   3:                APFS Volume Recovery                517.8 MB   disk1s3</span><br><span class="line">   4:                APFS Volume VM                      3.2 GB     disk1s4</span><br><span class="line">/dev/disk2 (external, physical):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:     FDisk_partition_scheme                        *7.8 GB     disk2</span><br><span class="line">   1:                  Apple_HFS USB8G                   7.8 GB     disk2s1</span><br><span class="line">☁  Desktop [master] ⚡ diskutil unmountDisk /dev/disk2    <span class="comment"># 卸载 U 盘设备</span></span><br><span class="line">Unmount of all volumes on disk2 was successful</span><br><span class="line">☁  Desktop [master] ⚡ sudo dd <span class="keyword">if</span>=ubuntu-18.04-desktop-amd64.dmg of=/dev/disk2 bs=1m    <span class="comment"># 创建可启动的 USB 驱动盘</span></span><br><span class="line">Password:</span><br><span class="line">1832+1 records <span class="keyword">in</span></span><br><span class="line">1832+1 records out</span><br><span class="line">1921843200 bytes transferred <span class="keyword">in</span> 207.200284 secs (9275292 bytes/sec)</span><br><span class="line">☁  Desktop [master] ⚡ diskutil eject /dev/disk2    <span class="comment"># 弹出磁盘</span></span><br><span class="line">Disk /dev/disk2 ejected</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/04/yuque/MacOS 制作Ubuntu ISO/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Golang Date 的日期（转载）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -958,102 +1021,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/16/yuque/K8S 应用篇/">K8S 应用篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/16/yuque/K8S 应用篇/" class="archive-article-date">
-  	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>部署 dashboard</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta4/aio/deploy/recommended.yaml</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io/service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io/service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io/service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">====</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
-<p>部署</p>
-<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><ul>
-<li><a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a> users can use <code>brew install kubernetes-helm</code>.</li>
-<li><a href="https://chocolatey.org/" target="_blank" rel="noopener">Chocolatey</a> users can use <code>choco install kubernetes-helm</code>.</li>
-<li><a href="https://scoop.sh/" target="_blank" rel="noopener">Scoop</a> users can use <code>scoop install helm</code>.</li>
-<li><a href="https://gofi.sh/" target="_blank" rel="noopener">GoFish</a> users can use <code>gofish install helm</code>.</li>
-<li><a href="https://snapcraft.io/" target="_blank" rel="noopener">Snap</a> users can use <code>sudo snap install helm --classic</code>.</li>
-</ul>
-<p>k8s 升级以及容器版本升级</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get upgrade  kubeadm</span><br><span class="line">更新到1.13.0后，在master执行,执行一次</span><br><span class="line">kubeadm upgrade plan</span><br></pre></td></tr></table></figure>
-<p>docker 降级<br>打印可用版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache madison docker-ce</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-<p>安装指定版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce=&lt;VERSION&gt;</span><br></pre></td></tr></table></figure>
-<p>三、给 Tiller 授权<br>因为 Helm 的服务端 Tiller 是一个部署在 Kubernetes 中 Kube-System Namespace 下 的 Deployment，它会去连接 Kube-Api 在 Kubernetes 里创建和删除应用。</p>
-<p>而从 Kubernetes 1.6 版本开始，API Server 启用了 RBAC 授权。目前的 Tiller 部署时默认没有定义授权的 ServiceAccount，这会导致访问 API Server 时被拒绝。所以我们需要明确为 Tiller 部署添加授权。</p>
-<p>创建 Kubernetes 的服务帐号和绑定角色</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br></pre></td></tr></table></figure>
-<p>为 Tiller 设置帐号</p>
-<h1 id="使用-kubectl-patch-更新-API-对象"><a href="#使用-kubectl-patch-更新-API-对象" class="headerlink" title="使用 kubectl patch 更新 API 对象"></a>使用 kubectl patch 更新 API 对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p <span class="string">'&#123;"spec":&#123;"template":&#123;"spec":&#123;"serviceAccount":"tiller"&#125;&#125;&#125;&#125;'</span></span><br><span class="line">deployment.extensions <span class="string">"tiller-deploy"</span> patched</span><br></pre></td></tr></table></figure>
-<p>查看是否授权成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount</span><br><span class="line">serviceAccount: tiller</span><br><span class="line">serviceAccountName: tiller</span><br></pre></td></tr></table></figure>
-<p>四、验证 Tiller 是否安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n kube-system get pods|grep tiller</span><br><span class="line">tiller-deploy-6d68f5c78f-nql2z          1/1       Running   0          5m</span><br><span class="line">helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="NFS-挂载失败"><a href="#NFS-挂载失败" class="headerlink" title="NFS 挂载失败"></a>NFS 挂载失败</h2><p>在一台机器上创建 Pod，挂载 nfs 失败。<br>然后在节点上尝试挂载，依然显示失败</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: mount point /nfs does not exist</span><br><span class="line">root@master:~# mkdir /nfs</span><br><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: wrong fs type, bad option, bad superblock on 192.168.207.121:/nas/dg_vd,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a /sbin/mount.&lt;type&gt; helper program)</span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line">root@master:~# showmount -e 192.168.207.121</span><br><span class="line">The program &apos;showmount&apos; is currently not installed. You can install it by typing:</span><br><span class="line">apt install nfs-common</span><br></pre></td></tr></table></figure>
-<p>执行<code>apt install nfs-common</code>后可以本地挂载 nfs。<br>这是再创建 pod 成功</p>
-<h2 id="Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117"><a href="#Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117" class="headerlink" title="Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117."></a>Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.</h2><p>Calico 问题排障<br>// 错误信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
-<p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">// 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface=ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/16/yuque/K8S 应用篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -1175,15 +1142,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">read</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
             
             <div class="clearfix"></div>

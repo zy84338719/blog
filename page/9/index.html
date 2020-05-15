@@ -181,6 +181,230 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/yuque自动化构建部署到github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/29/yuque/yuque自动化构建部署到github/">yuque自动化构建部署到github</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/29/yuque/yuque自动化构建部署到github/" class="archive-article-date">
+  	<time datetime="2019-03-29T16:10:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><a href="https://www.yuque.com/" target="_blank" rel="noopener">语雀</a>  是一款非常好用的知识管理网站（类似 GitBook)，它的编辑器非常好用，而且支持导出 Markdown，这篇文章是教你如何使用语雀的编辑器写静态博客。这里的静态博客用了 Hexo，Jekyll 也是没有问题的。</p>
+<h2 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h2><p>已经有 Hexo 博客的可以跳过。如果你是 Jekyll ，也可以跳过。</p>
+<ul>
+<li>安装 Node.js</li>
+<li><p>安装 Hexo 脚手架<br>| 1 | npm install -g hexo-cli |<br>| — | — |</p>
+</li>
+<li><p>初始化一个博客<br>| 123 | hexo init <folder>cd <folder>npm install |<br>| — | — |</folder></folder></p>
+</li>
+<li><p>其他设置和命令见：<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
+</li>
+</ul>
+<h2 id="安装语雀文章下载插件"><a href="#安装语雀文章下载插件" class="headerlink" title="安装语雀文章下载插件"></a>安装语雀文章下载插件</h2><p><a href="https://github.com/x-cold/yuque-hexo/" target="_blank" rel="noopener">yuque-hexo</a>  是一个 Node.js 环境下的语雀下载器，使用 npm 安装</p>
+<ul>
+<li><p>安装 yuque-hexo<br>| 1 | npm i -g yuque-hexo |<br>| — | — |</p>
+</li>
+<li><p>注册语雀，创建知识库，获得你的个人路径和知识库的名字，比如我的博客的知识库是  <a href="https://www.yuque.com/page/zhangyi-ul3zj" target="_blank" rel="noopener">https://www.yuque.com/page/</a>zhangyi-ul3zj</p>
+</li>
+<li>在 Hexo 博客的目录下面的 package.json 中，进行下面的配置</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"your hexo project"</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">"yuqueConfig"</span>: &#123;</span><br><span class="line">                   <span class="string">"cachePath"</span>: <span class="string">"yuque.json"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"adapter"</span>: <span class="string">"hexo"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"concurrency"</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"baseUrl"</span>: <span class="string">"https://www.yuque.com/api/v2"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"login"</span>: <span class="string">"zhangyi-ul3zj"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"repo"</span>: <span class="string">"blog"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"mdNameFormat"</span>: <span class="string">"title"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"postPath"</span>: <span class="string">"source/_posts"</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
+<li>同步文章<br>| 1 | yuque-hexo sync |<br>| — | — |</li>
+</ul>
+<p>PS: 插件支持 Front-matter，在语雀写文章的时候直接写在前面，然后插入一条分割线即可，不写也没问题：</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>tags: [Hexo]categories: 教程 date: 2018-10-05 10:43:50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="手动启动-部署-Hexo-博客"><a href="#手动启动-部署-Hexo-博客" class="headerlink" title="手动启动/部署 Hexo 博客"></a>手动启动/部署 Hexo 博客</h2><ul>
+<li><p>本地启动（调试用）<br>| 1 | hexo s |<br>| — | — |</p>
+</li>
+<li><p>生成 html 不部署<br>| 1 | hexo g |<br>| — | — |</p>
+</li>
+<li><p>自动上传到服务器/静态空间/git （部署）</p>
+</li>
+</ul>
+<ol>
+<li><p>先找到一个部署插件</p>
+</li>
+<li><p>在配置文件中配置好相关的账号密码</p>
+</li>
+<li><p>在 hexo 中生成 HTML 并且部署</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>hexo g -d</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Travis-ci-severless"><a href="#Travis-ci-severless" class="headerlink" title="Travis-ci + severless"></a>Travis-ci + severless</h3><p>可以参考原文：<a href="https://segmentfault.com/a/1190000017797561" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017797561</a><br>Travis_ci 具体配置<br>可以参考：<a href="https://www.cnblogs.com/morang/p/7228488.html" target="_blank" rel="noopener">https://www.cnblogs.com/morang/p/7228488.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/教//" class="article-tag-list-link color2">教</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/教/程//" class="article-tag-list-link color2">程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/29/yuque/yuque自动化构建部署到github/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">mysql 的 服务层和存储引擎层</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/" class="archive-article-date">
+  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
+<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
+<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
+<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/JDK11新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1227,141 +1451,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/冒烟测试和回归测试的区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/16/yuque/冒烟测试和回归测试的区别/">冒烟测试和回归测试的区别</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/16/yuque/冒烟测试和回归测试的区别/" class="archive-article-date">
-  	<time datetime="2019-01-16T16:28:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>区别：<br>冒烟测试就是完成一个新版本的开发后，对该版本最基本的功能进行测试，保证基本的功能和流程能走通。如果不通过，则打回开发那边重新开发；如果通过测试，才会进行下一步的测试(功能测试，集成测试，系统测试等等)。冒烟测试优点是节省测试时间，防止 build 失败。缺点是覆盖率还是比较低。<br>回归测试我有两层理解，一是就是当你修复一个 bug 后，把之前的测试用例再次应用到修复后的版本上进行测试。二是当一个新版本开发好后，而且冒烟测试通过，此时可以先用上一个版本的测试用例对新版本进行测试，看是否有 bug。<br><a href="https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/8694a4c27d1ed21b29fabb1aa16eddc451da3f19.jpg" target="_blank" rel="noopener"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1548160046594-24358355-6f79-4f92-b9af-3a85237bae20.jpeg#align=left&amp;display=inline&amp;height=450&amp;originHeight=450&amp;originWidth=600&amp;size=0&amp;width=600" alt></a><br>拓展资料： 1.冒烟测试就是在一个新版本出来的时候，将软件的全部功能过一遍，看有没有什么大问题。如果功能可以正常运行，不会影响测试进行，那么这个版本就可以真正开始测试了。如果功能有重大问题或影响测试进行，那么这个版本就是不合格的，不用进行进一步的测试。 2.回归测试就是以前版本中发现的 bug 在新的版本中验证是否存在且是否引发新的 bug。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/16/yuque/冒烟测试和回归测试的区别/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Resource    autowired区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/16/yuque/Resource    autowired区别/">Resource    autowired区别</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/16/yuque/Resource    autowired区别/" class="archive-article-date">
-  	<time datetime="2019-01-16T14:18:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>@Resources 是 jdk 的，而@Autowired 的，使用@Resources 解耦。<br>@Resource 的作用相当于@Autowired，只不过@Autowired 按 byType 自动注入，而@Resource 默认按 byName 自动注入罢了。@Resource 有两个属性是比较重要的，分是 name 和 type，Spring 将@Resource 注解的 name 属性解析为 bean 的名字，而 type 属性则解析为 bean 的类型。所以如果使用 name 属性，则使用 byName 的自动注入策略，而使用 type 属性时则使用 byType 自动注入策略。如果既不指定 name 也不指定 type 属性，这时将通过反射机制使用 byName 自动注入策略。<br>@Resource 装配顺序</p>
-<ol>
-<li>如果同时指定了 name 和 type，则从 Spring 上下文中找到唯一匹配的 bean 进行装配，找不到则抛出异常</li>
-<li>如果指定了 name，则从上下文中查找名称（id）匹配的 bean 进行装配，找不到则抛出异常</li>
-<li>如果指定了 type，则从上下文中找到类型匹配的唯一 bean 进行装配，找不到或者找到多个，都会抛出异常</li>
-<li>如果既没有指定 name，又没有指定 type，则自动按照 byName 方式进行装配；如果没有匹配，则回退为一个原始类型进行匹配，如果匹配则自动装配；</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/16/yuque/Resource    autowired区别/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
     </nav>
   
 

@@ -6,18 +6,38 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>Archives: 2019/4 | Murphy Yi site</title>
+  <title>系统设计 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="学习总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Murphy Yi site">
-<meta property="og:url" content="http://zy84338719.github.io/blog/archives/2019/04/index.html">
+  <meta name="description" content="背景对于技术来说，每一个系统都少不了最重要的一个环节，系统设计。系统设计的成功与否直接决定了后续的系统开发能否成功。这次的分享，我们将系统设计的方法简化为三板斧，简单易懂，居家旅行学习进修必备。三包承诺：包记住，包理解，包会用。如有问题，请再看一遍。如想快速浏览，可以先看总论 大纲 1 系统设计的基本流程 2 三板斧的招式 3 实例讲解，权限系统设计 4 总结   什么是系统设计The proce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统设计">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/18/yuque/系统设计/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="学习总结">
+<meta property="og:description" content="背景对于技术来说，每一个系统都少不了最重要的一个环节，系统设计。系统设计的成功与否直接决定了后续的系统开发能否成功。这次的分享，我们将系统设计的方法简化为三板斧，简单易懂，居家旅行学习进修必备。三包承诺：包记住，包理解，包会用。如有问题，请再看一遍。如想快速浏览，可以先看总论 大纲 1 系统设计的基本流程 2 三板斧的招式 3 实例讲解，权限系统设计 4 总结   什么是系统设计The proce">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956326-9ee7312e-d443-4be9-b86d-93168f7ca37f.jpeg#align=left&display=inline&height=244&margin=%5Bobject%20Object%5D&originHeight=244&originWidth=326&size=0&status=done&style=none&width=326">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956235-bb06d7f8-2bc9-4bef-bba7-a4340e37ff50.jpeg#align=left&display=inline&height=419&margin=%5Bobject%20Object%5D&originHeight=419&originWidth=638&size=0&status=done&style=none&width=638">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956212-d3e9b6ee-03a7-4137-8870-abafcdbd7f97.jpeg#align=left&display=inline&height=351&margin=%5Bobject%20Object%5D&originHeight=351&originWidth=952&size=0&status=done&style=none&width=952">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956214-e3ec2ac7-2271-41df-a6f6-39e0921854b8.jpeg#align=left&display=inline&height=261&margin=%5Bobject%20Object%5D&originHeight=261&originWidth=500&size=0&status=done&style=none&width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956220-5f62a64e-c7a3-47d4-bbca-739ee5d11f48.jpeg#align=left&display=inline&height=266&margin=%5Bobject%20Object%5D&originHeight=266&originWidth=479&size=0&status=done&style=none&width=479">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956246-40e7f983-d7d4-4658-bac3-d1f49f3c9727.jpeg#align=left&display=inline&height=275&margin=%5Bobject%20Object%5D&originHeight=275&originWidth=462&size=0&status=done&style=none&width=462">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956241-cedbc9dd-3aea-4e45-9257-a7491088b716.jpeg#align=left&display=inline&height=264&margin=%5Bobject%20Object%5D&originHeight=264&originWidth=332&size=0&status=done&style=none&width=332">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-bf5c86f1-debe-4bc7-8619-5211986311fb.jpeg#align=left&display=inline&height=410&margin=%5Bobject%20Object%5D&originHeight=410&originWidth=372&size=0&status=done&style=none&width=372">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956211-782b9043-98d7-41c7-b5e1-c9c7b5627444.jpeg#align=left&display=inline&height=435&margin=%5Bobject%20Object%5D&originHeight=435&originWidth=298&size=0&status=done&style=none&width=298">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956230-ac9cdc85-12ce-41e4-a135-0ab71d15eb1a.jpeg#align=left&display=inline&height=453&margin=%5Bobject%20Object%5D&originHeight=453&originWidth=500&size=0&status=done&style=none&width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956250-800d6067-0fbf-4cba-b491-1e5cb45cfa11.jpeg#align=left&display=inline&height=411&margin=%5Bobject%20Object%5D&originHeight=411&originWidth=577&size=0&status=done&style=none&width=577">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956248-8ded5322-4c83-4a9f-8731-80b46f173733.jpeg#align=left&display=inline&height=311&margin=%5Bobject%20Object%5D&originHeight=311&originWidth=684&size=0&status=done&style=none&width=684">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1589798956295-7d950b7d-f588-4038-9c39-a580b5f2dff4.png#align=left&display=inline&height=1334&margin=%5Bobject%20Object%5D&originHeight=1334&originWidth=2148&size=0&status=done&style=none&width=2148">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-c87fc415-1440-4123-834d-997e87e2e5db.jpeg#align=left&display=inline&height=540&margin=%5Bobject%20Object%5D&originHeight=540&originWidth=378&size=0&status=done&style=none&width=378">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956254-d644e927-9769-4710-892d-dea89c47b5f8.jpeg#align=left&display=inline&height=221&margin=%5Bobject%20Object%5D&originHeight=221&originWidth=735&size=0&status=done&style=none&width=735">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956238-fd21bd6d-7a80-468e-95e8-da04c5d06253.jpeg#align=left&display=inline&height=316&margin=%5Bobject%20Object%5D&originHeight=316&originWidth=640&size=0&status=done&style=none&width=640">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956262-129bd7ed-c3e6-4fe3-8e28-e18e10a00a00.jpeg#align=left&display=inline&height=369&margin=%5Bobject%20Object%5D&originHeight=369&originWidth=660&size=0&status=done&style=none&width=660">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956288-a836eaac-5b26-4883-8292-b17ab31a9eb7.jpeg#align=left&display=inline&height=385&margin=%5Bobject%20Object%5D&originHeight=385&originWidth=535&size=0&status=done&style=none&width=535">
+<meta property="og:updated_time" content="2020-05-18T12:34:05.197Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Murphy Yi site">
-<meta name="twitter:description" content="学习总结">
+<meta name="twitter:title" content="系统设计">
+<meta name="twitter:description" content="背景对于技术来说，每一个系统都少不了最重要的一个环节，系统设计。系统设计的成功与否直接决定了后续的系统开发能否成功。这次的分享，我们将系统设计的方法简化为三板斧，简单易懂，居家旅行学习进修必备。三包承诺：包记住，包理解，包会用。如有问题，请再看一遍。如想快速浏览，可以先看总论 大纲 1 系统设计的基本流程 2 三板斧的招式 3 实例讲解，权限系统设计 4 总结   什么是系统设计The proce">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956326-9ee7312e-d443-4be9-b86d-93168f7ca37f.jpeg#align=left&display=inline&height=244&margin=%5Bobject%20Object%5D&originHeight=244&originWidth=326&size=0&status=done&style=none&width=326">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -179,440 +199,360 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/系统设计" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      系统设计
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/yuque/系统设计/" class="archive-article-date">
+  	<time datetime="2020-05-18T10:49:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>对于技术来说，每一个系统都少不了最重要的一个环节，系统设计。<br>系统设计的成功与否直接决定了后续的系统开发能否成功。<br>这次的分享，我们将系统设计的方法简化为三板斧，简单易懂，居家旅行学习进修必备。<br><strong>三包承诺：包记住，包理解，包会用。如有问题，请再看一遍。如想快速浏览，可以先看总论</strong></p>
+<h2 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h2><ul>
+<li>1 系统设计的基本流程</li>
+<li>2 三板斧的招式</li>
+<li>3 实例讲解，权限系统设计</li>
+<li>4 总结</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956326-9ee7312e-d443-4be9-b86d-93168f7ca37f.jpeg#align=left&amp;display=inline&amp;height=244&amp;margin=%5Bobject%20Object%5D&amp;originHeight=244&amp;originWidth=326&amp;size=0&amp;status=done&amp;style=none&amp;width=326" alt></p>
+<h2 id="什么是系统设计"><a href="#什么是系统设计" class="headerlink" title="什么是系统设计"></a>什么是系统设计</h2><p>The process of <strong>defining</strong> the 　　　　　　　　　 　 定义（产出）<br><strong>architecture</strong>, 　　　　　　　　　　　　　　　　　架构<br><strong>components</strong>, 　　　　　　　　　　　　　　　　　组件<br><strong>modules</strong>, 　　　　　　　　　　　　　　　　　　　模块<br><strong>interfaces</strong>, 　　　　　　　　　　　　　　　　　　接口<br>and <strong>data</strong> 　　　　　　　　　　　　　　　　　　　数据<br>for a system to satisfy specified <strong>requirements</strong>. 　　需求（目标）</p>
+<h2 id="1-系统设计的基本流程"><a href="#1-系统设计的基本流程" class="headerlink" title="1 系统设计的基本流程"></a>1 系统设计的基本流程</h2><h3 id="1-1-软件开发流程"><a href="#1-1-软件开发流程" class="headerlink" title="1.1 软件开发流程"></a>1.1 软件开发流程</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956235-bb06d7f8-2bc9-4bef-bba7-a4340e37ff50.jpeg#align=left&amp;display=inline&amp;height=419&amp;margin=%5Bobject%20Object%5D&amp;originHeight=419&amp;originWidth=638&amp;size=0&amp;status=done&amp;style=none&amp;width=638" alt></p>
+<ul>
+<li>1 需求分析</li>
+<li>2 <strong>概要设计</strong></li>
+<li>3 <strong>详细设计</strong></li>
+<li>4 系统开发</li>
+<li>5 系统测试</li>
+<li>6 软件交付</li>
+</ul>
+<p>软件开发流程，详细内容可以参考： <a href="https://baike.baidu.com/item/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B" target="_blank" rel="noopener">https://baike.baidu.com/item/软件开发流程</a></p>
+<p>需求分析就是一个很专业的工作，对于大型的软件开发，也有专门的需求分析师，所以这里面的方法和流程也还有很多细分的内容，有兴趣的同学可以继续挖掘。</p>
+<p>系统设计主要就是 2、3 两部分，大学毕业设计的时候，应该也都有深刻的印象，自己的文档是怎么写出来，怎么组织和编排的吧。</p>
+<h3 id="1-2-系统设计的流程"><a href="#1-2-系统设计的流程" class="headerlink" title="1.2 系统设计的流程"></a>1.2 系统设计的流程</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956212-d3e9b6ee-03a7-4137-8870-abafcdbd7f97.jpeg#align=left&amp;display=inline&amp;height=351&amp;margin=%5Bobject%20Object%5D&amp;originHeight=351&amp;originWidth=952&amp;size=0&amp;status=done&amp;style=none&amp;width=952" alt><br>系统设计的内容可以用 16 或者 32 课时来专门开一课，大学时候应该也有这样的课，可能是选修吧。<br>详细内容可以参考： 从 0 到 1 教你设计业务系统 <a href="https://36kr.com/p/5105245" target="_blank" rel="noopener">https://36kr.com/p/5105245</a></p>
+<h3 id="1-3-总结，系统设计的基本流程"><a href="#1-3-总结，系统设计的基本流程" class="headerlink" title="1.3 总结，系统设计的基本流程"></a>1.3 总结，系统设计的基本流程</h3><p>上面的软件开发流程和系统设计流程，看着就很复杂，分工很细，要完全遵守这些方法来做互联网产品开发的话，很多人是无法想象的，2 周上线，1 天 1 个版本？<br>所以，上面的流程都是来自传统的企业软件开发方法。而传统软件的开发周期，最少也是半年、一年的周期，交付物也都会比较严格，也不会有持续迭代一说。<br>传统企业软件开发，有很多是外包公司，规模很大，类似富士康的工厂。而规模的基础就需要标准化，遵守各种认证体系的要求，这样也更能被企业认可和信任。<br>但是，这些流程、方法，对于我们互联网研发就很不合适，系统设计也是。所以，才有了本文的核心方法。</p>
+<h2 id="2-三板斧的招式"><a href="#2-三板斧的招式" class="headerlink" title="2 三板斧的招式"></a>2 三板斧的招式</h2><h3 id="2-1-第一招：抽象，万物归一"><a href="#2-1-第一招：抽象，万物归一" class="headerlink" title="2.1 第一招：抽象，万物归一"></a>2.1 第一招：抽象，万物归一</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956214-e3ec2ac7-2271-41df-a6f6-39e0921854b8.jpeg#align=left&amp;display=inline&amp;height=261&amp;margin=%5Bobject%20Object%5D&amp;originHeight=261&amp;originWidth=500&amp;size=0&amp;status=done&amp;style=none&amp;width=500" alt></p>
+<ul>
+<li>1 人，主体对象</li>
+</ul>
+<p>实体模型，数据结构</p>
+<ul>
+<li>2 事，核心功能</li>
+</ul>
+<p>组件模块，功能需求</p>
+<ul>
+<li>3 物，资源要求</li>
+</ul>
+<p>系统规模，开发周期，架构设计</p>
+<p>宏观上的面，提炼和定义，不拘泥细节。<br>从繁杂的系统中剥离、提炼，抽象出来我们系统的核心，定义好系统的人、事、物，也就有了系统的大致样貌。<br><strong>抽象，这是最重要的一步，也是最厉害的一招。</strong></p>
+<h3 id="2-2-第二招：具象，有血有肉"><a href="#2-2-第二招：具象，有血有肉" class="headerlink" title="2.2 第二招：具象，有血有肉"></a>2.2 第二招：具象，有血有肉</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956220-5f62a64e-c7a3-47d4-bbca-739ee5d11f48.jpeg#align=left&amp;display=inline&amp;height=266&amp;margin=%5Bobject%20Object%5D&amp;originHeight=266&amp;originWidth=479&amp;size=0&amp;status=done&amp;style=none&amp;width=479" alt></p>
+<ul>
+<li>1 数据结构设计</li>
+</ul>
+<p>对象的属性，数据表</p>
+<ul>
+<li>2 业务功能设计</li>
+</ul>
+<p>功能模块，任务清单</p>
+<ul>
+<li>3 系统架构设计</li>
+</ul>
+<p>性能、并发、伸缩、扩展、安全</p>
+<p>微观实现的点，为后续的编码扫平模糊。<br>系统设计在这一招完成后，基本上就要全面完工了，交付给开发来编码。如果这时候还有不清晰的地方，还有遗留的点，那么后续就会出现很严重的需求变更、技术变更、甚至重构，会严重影响项目开发的周期和质量。<br><strong>具象，这是需要细致且耐心的一步，也是势大力沉的一招。</strong></p>
+<h3 id="2-3-第三招：演算，活灵活现"><a href="#2-3-第三招：演算，活灵活现" class="headerlink" title="2.3 第三招：演算，活灵活现"></a>2.3 第三招：演算，活灵活现</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956246-40e7f983-d7d4-4658-bac3-d1f49f3c9727.jpeg#align=left&amp;display=inline&amp;height=275&amp;margin=%5Bobject%20Object%5D&amp;originHeight=275&amp;originWidth=462&amp;size=0&amp;status=done&amp;style=none&amp;width=462" alt></p>
+<ul>
+<li>1 业务流程</li>
+</ul>
+<p>让功能细节发生互动（业务恋爱）</p>
+<ul>
+<li>2 数据流程</li>
+</ul>
+<p>让对象之间发生关系（数据怀孕）</p>
+<ul>
+<li>3 模拟操作与系统预估</li>
+</ul>
+<p>模拟的运转和系统压力评估（成长烦恼）</p>
+<p>流程不通，操作不顺，系统瓶颈，及早发现和补充完善。<br>纯脑力运算的过程，可能是设计者来做，也可能是要系统相关人一起来做。<br>这里用时 2 小时或者一起开个会，把系统设计的方方面面都模拟的运转起来，各个环节，各个角色带入进来，发现问题马上调整前面的抽象和具象的设计。<br>演算是一个快速查缺补漏的环节，也是对系统设计进行方案优化、调整的最后环节，这里投入的每一分钟都是十倍百倍于后续研发阶段的调整时间效率。<br><strong>演算，这是最容易忽略的一步，也是最难的一招。</strong></p>
+<h3 id="2-4-总结，系统设计的三板斧"><a href="#2-4-总结，系统设计的三板斧" class="headerlink" title="2.4 总结，系统设计的三板斧"></a>2.4 总结，系统设计的三板斧</h3><p>围绕系统设计中的人、事、物，我们通过宏观层面的抽象，提炼和定义出来核心内容，在通过微观层面的具象，把各个细节补充完善，最后，运用演算，让这个系统在我们的脑子里面活起来，重复这三板斧，完善我们的系统设计。</p>
+<h2 id="3-实例讲解，权限系统设计"><a href="#3-实例讲解，权限系统设计" class="headerlink" title="3 实例讲解，权限系统设计"></a>3 实例讲解，权限系统设计</h2><p>介绍：权限系统管理着应用和服务之间的调用关系。应用要调用服务的接口，必须先申请对应的服务接口权限才可以。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956241-cedbc9dd-3aea-4e45-9257-a7491088b716.jpeg#align=left&amp;display=inline&amp;height=264&amp;margin=%5Bobject%20Object%5D&amp;originHeight=264&amp;originWidth=332&amp;size=0&amp;status=done&amp;style=none&amp;width=332" alt></p>
+<h3 id="3-1-1-抽象：权限系统的核心对象（主体）"><a href="#3-1-1-抽象：权限系统的核心对象（主体）" class="headerlink" title="3.1.1 抽象：权限系统的核心对象（主体）"></a>3.1.1 抽象：权限系统的核心对象（主体）</h3><ul>
+<li>1 主要对象</li>
+</ul>
+<p>应用，服务</p>
+<ul>
+<li>2 派生对象</li>
+</ul>
+<p>接口，应用请求服务</p>
+<p>权限，接口权限</p>
+<ul>
+<li>3 外部对象</li>
+</ul>
+<p>网关，系统平台，第三方服务等</p>
+<p>提炼权限系统内部的主体对象，确定系统的数据模型。</p>
+<h3 id="3-1-2-抽象：权限系统的核心功能（硬性）"><a href="#3-1-2-抽象：权限系统的核心功能（硬性）" class="headerlink" title="3.1.2 抽象：权限系统的核心功能（硬性）"></a>3.1.2 抽象：权限系统的核心功能（硬性）</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-bf5c86f1-debe-4bc7-8619-5211986311fb.jpeg#align=left&amp;display=inline&amp;height=410&amp;margin=%5Bobject%20Object%5D&amp;originHeight=410&amp;originWidth=372&amp;size=0&amp;status=done&amp;style=none&amp;width=372" alt></p>
+<ul>
+<li>1 权限相关功能</li>
+</ul>
+<p>应用端申请，服务端审批，查询</p>
+<ul>
+<li>2 后台管理功能</li>
+</ul>
+<p>服务信息和扩展权限的配置</p>
+<ul>
+<li>3 扩展功能</li>
+</ul>
+<p>消息通知，权限推送</p>
+<p>定义必须的应用的全后端功能，扩展的与外部系统的交互功能。</p>
+<h3 id="3-1-3-抽象：权限系统的资源要求（软性）"><a href="#3-1-3-抽象：权限系统的资源要求（软性）" class="headerlink" title="3.1.3 抽象：权限系统的资源要求（软性）"></a>3.1.3 抽象：权限系统的资源要求（软性）</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956211-782b9043-98d7-41c7-b5e1-c9c7b5627444.jpeg#align=left&amp;display=inline&amp;height=435&amp;margin=%5Bobject%20Object%5D&amp;originHeight=435&amp;originWidth=298&amp;size=0&amp;status=done&amp;style=none&amp;width=298" alt></p>
+<ul>
+<li>1 权限的管理系统，不涉及权限验证</li>
+</ul>
+<p>系统并发量很有限，性能要求低</p>
+<ul>
+<li>2 平台内应用、服务的权限依赖度高</li>
+</ul>
+<p>系统的安全和稳定性高</p>
+<ul>
+<li>3 内部和外部服务的权限定义差别大</li>
+</ul>
+<p>扩展性要求高</p>
+<p>系统的架构设计不必过于复杂，保证应用程序的安全和稳定性，定义好系统的可扩展性。</p>
+<h3 id="3-2-1-具象：权限系统的数据结构"><a href="#3-2-1-具象：权限系统的数据结构" class="headerlink" title="3.2.1 具象：权限系统的数据结构"></a>3.2.1 具象：权限系统的数据结构</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956230-ac9cdc85-12ce-41e4-a135-0ab71d15eb1a.jpeg#align=left&amp;display=inline&amp;height=453&amp;margin=%5Bobject%20Object%5D&amp;originHeight=453&amp;originWidth=500&amp;size=0&amp;status=done&amp;style=none&amp;width=500" alt></p>
+<ul>
+<li>1 申请记录表 tb_privilege</li>
+</ul>
+<p>应用相关</p>
+<p>服务相关</p>
+<p>接口相关</p>
+<p>申请相关</p>
+<p>审批相关</p>
+<p>标准字段</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956250-800d6067-0fbf-4cba-b491-1e5cb45cfa11.jpeg#align=left&amp;display=inline&amp;height=411&amp;margin=%5Bobject%20Object%5D&amp;originHeight=411&amp;originWidth=577&amp;size=0&amp;status=done&amp;style=none&amp;width=577" alt></p>
+<ul>
+<li>2 服务配置表 tb_paas</li>
+</ul>
+<p>服务信息</p>
+<p>推送相关</p>
+<p>外部相关</p>
+<p>扩展相关</p>
+<p>标准字段</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956248-8ded5322-4c83-4a9f-8731-80b46f173733.jpeg#align=left&amp;display=inline&amp;height=311&amp;margin=%5Bobject%20Object%5D&amp;originHeight=311&amp;originWidth=684&amp;size=0&amp;status=done&amp;style=none&amp;width=684" alt></p>
+<ul>
+<li>3 操作日志表 tb_log</li>
+</ul>
+<p>数据模型</p>
+<p>新旧数据</p>
+<p>标准字段</p>
+<h3 id="3-2-2-具象：权限系统的业务功能"><a href="#3-2-2-具象：权限系统的业务功能" class="headerlink" title="3.2.2 具象：权限系统的业务功能"></a>3.2.2 具象：权限系统的业务功能</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589798956295-7d950b7d-f588-4038-9c39-a580b5f2dff4.png#align=left&amp;display=inline&amp;height=1334&amp;margin=%5Bobject%20Object%5D&amp;originHeight=1334&amp;originWidth=2148&amp;size=0&amp;status=done&amp;style=none&amp;width=2148" alt><br>细化每一个功能的处理过程，要结合交互页面，操作流程，数据输入和产出等。</p>
+<h3 id="3-2-3-具象：权限系统的系统架构"><a href="#3-2-3-具象：权限系统的系统架构" class="headerlink" title="3.2.3 具象：权限系统的系统架构"></a>3.2.3 具象：权限系统的系统架构</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-c87fc415-1440-4123-834d-997e87e2e5db.jpeg#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;originHeight=540&amp;originWidth=378&amp;size=0&amp;status=done&amp;style=none&amp;width=378" alt></p>
+<ul>
+<li>1 分层模型，前后端分离</li>
+</ul>
+<p>前端展现和交互，后端数据和逻辑，前后端耦合度低</p>
+<ul>
+<li>2 服务的权限订阅和推送，预留第三方服务和扩展权限</li>
+</ul>
+<p>定制化多端推送，扩展能力强</p>
+<ul>
+<li>3 多机分布式，定时任务更新权限和通知</li>
+</ul>
+<p>资源伸缩性强</p>
+<p><strong>架构演化：</strong>单机 -&gt; 分布式，单库 -&gt; 主从库 -&gt; 缓存层 -&gt; 数据分拆（水平、垂直） -&gt; 应用分拆（微服务）</p>
+<p>架构选择，只有合适与否，没有好坏之分。</p>
+<h3 id="3-3-演算：数据流程、业务流程和交互模拟"><a href="#3-3-演算：数据流程、业务流程和交互模拟" class="headerlink" title="3.3 演算：数据流程、业务流程和交互模拟"></a>3.3 演算：数据流程、业务流程和交互模拟</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956254-d644e927-9769-4710-892d-dea89c47b5f8.jpeg#align=left&amp;display=inline&amp;height=221&amp;margin=%5Bobject%20Object%5D&amp;originHeight=221&amp;originWidth=735&amp;size=0&amp;status=done&amp;style=none&amp;width=735" alt></p>
+<ul>
+<li>1 权限申请流程</li>
+</ul>
+<p>方便查找服务，方便申请接口权限</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956238-fd21bd6d-7a80-468e-95e8-da04c5d06253.jpeg#align=left&amp;display=inline&amp;height=316&amp;margin=%5Bobject%20Object%5D&amp;originHeight=316&amp;originWidth=640&amp;size=0&amp;status=done&amp;style=none&amp;width=640" alt></p>
+<ul>
+<li>2 权限审批流程</li>
+</ul>
+<p>方便查找服务，方便申请接口权限</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956262-129bd7ed-c3e6-4fe3-8e28-e18e10a00a00.jpeg#align=left&amp;display=inline&amp;height=369&amp;margin=%5Bobject%20Object%5D&amp;originHeight=369&amp;originWidth=660&amp;size=0&amp;status=done&amp;style=none&amp;width=660" alt></p>
+<ul>
+<li>3 接口权限申请的状态变更</li>
+</ul>
+<p>申请、审批和推送、通知，把开发者、服务方、网关、服务都串联起来</p>
+<p>流程，让整个系统运转起来，是一个活的系统，不再是冷冰冰的数据结构和系统框架。</p>
+<p>考虑开发者和服务方的用户，带入用户的立场和操作，更好地模拟整个系统的交互体验。</p>
+<h3 id="3-4-总结，实例讲解，权限系统设计"><a href="#3-4-总结，实例讲解，权限系统设计" class="headerlink" title="3.4 总结，实例讲解，权限系统设计"></a>3.4 总结，实例讲解，权限系统设计</h3><p>这里的实例比较简单，但毕竟是最近设计开发的一个系统。<br>而对于更加复杂的系统，方法还是互通的。<br>定义好，写下来，画下来，这就是一个系统设计和项目文档。<br>当然系统设计不仅仅是上面呈现出来的内容，还有关于接口，任务清单等内容。</p>
+<h2 id="4-总结，系统设计的三板斧"><a href="#4-总结，系统设计的三板斧" class="headerlink" title="4 总结，系统设计的三板斧"></a>4 总结，系统设计的三板斧</h2><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956288-a836eaac-5b26-4883-8292-b17ab31a9eb7.jpeg#align=left&amp;display=inline&amp;height=385&amp;margin=%5Bobject%20Object%5D&amp;originHeight=385&amp;originWidth=535&amp;size=0&amp;status=done&amp;style=none&amp;width=535" alt><br><strong>一句话形容，从宏观到微观，互动更长久。</strong><br><strong>抽象</strong>，先从宏观层面做好抽象；<br><strong>具象</strong>，再从微观层面补充完善细节；<br><strong>演算</strong>，全流程的模拟，查缺补漏；<br>重复上述三板斧，不断完善系统设计。<br>注意：不用纠结未知和差异化太大的部分。<br>系统设计的三板斧，相信不仅仅可以用在系统设计中，在其他的很多方面应该也是类似，比如：写作。<br>主题 -&gt; 目标<br>创意 -&gt; 抽象（人、事、物）<br>细节 -&gt; 具象（有血有肉）<br>故事 -&gt; 演算（活灵活现）<br><strong>在最后，强调一遍，抽象和推理是数学的重要能力，数学绝对是极其重要的学科，掌握好数学，能够更好地掌握科学方法，而不仅仅只有个人的经验和直觉。</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>扫码打赏，你说多少就多少<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/Java 类加载机制/" class="archive-article-date">
-  	<time datetime="2019-04-24T06:42:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/Java 类加载机制/">Java 类加载机制</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/18/yuque/系统设计/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/" class="archive-article-date">
-  	<time datetime="2019-04-22T11:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/05/18/yuque/go 面试题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          go 面试题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/18/yuque/系统架构升级知道/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">系统架构升级知道</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">Mysql 中对 date datetime time timestamp 区别</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/09/yuque/dockerfile 的学习/" class="archive-article-date">
-  	<time datetime="2019-04-09T07:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/09/yuque/dockerfile 的学习/">dockerfile 的学习</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/HTTP 状态码的完整列表/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:59:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/HTTP 状态码的完整列表/">HTTP 状态码的完整列表</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/能力提升——计算机基础知识/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:25:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/能力提升——计算机基础知识/">能力提升——计算机基础知识</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/数据库相关/" class="archive-article-date">
-  	<time datetime="2019-04-08T08:53:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/数据库相关/">数据库相关</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/能力提升——Linux!常用命令/" class="archive-article-date">
-  	<time datetime="2019-04-04T08:02:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/能力提升——Linux!常用命令/">能力提升——Linux:常用命令</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l//" class="article-tag-list-link color2">l</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i//" class="article-tag-list-link color2">i</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n//" class="article-tag-list-link color2">n</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u//" class="article-tag-list-link color2">u</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u/x//" class="article-tag-list-link color2">x</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/" class="archive-article-date">
-  	<time datetime="2019-04-03T10:09:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/">能力提升——数据结构算法（可视化）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数//" class="article-tag-list-link color2">数</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据//" class="article-tag-list-link color2">据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结//" class="article-tag-list-link color2">结</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结/构//" class="article-tag-list-link color2">构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: '系统设计',
+  owner: 'zy84338719',
+  repo: 'zy84338719.github.io',
+  oauth: {
+    client_id: '18e4bca6b23d1ae9fae7',
+    client_secret: '7f78d9ff7fa13d9363f6a14321a90cfba2c7a807',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -635,8 +575,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

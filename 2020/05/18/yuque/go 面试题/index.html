@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>Archives: 2019/4 | Murphy Yi site</title>
+  <title>go 面试题 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="学习总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Murphy Yi site">
-<meta property="og:url" content="http://zy84338719.github.io/blog/archives/2019/04/index.html">
+  <meta name="description" content="【初级】下面属于关键字的是（）A. funcB. defC. structD. class  参考答案：AC  【初级】定义一个包内全局字符串变量，下面语法正确的是（）A. var str stringB. str := “”C. str = “”D. var str = “”  参考答案：AD  【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）A. p.nameB. (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go 面试题">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/18/yuque/go 面试题/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="学习总结">
+<meta property="og:description" content="【初级】下面属于关键字的是（）A. funcB. defC. structD. class  参考答案：AC  【初级】定义一个包内全局字符串变量，下面语法正确的是（）A. var str stringB. str := “”C. str = “”D. var str = “”  参考答案：AD  【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）A. p.nameB. (">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-18T12:34:05.101Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Murphy Yi site">
-<meta name="twitter:description" content="学习总结">
+<meta name="twitter:title" content="go 面试题">
+<meta name="twitter:description" content="【初级】下面属于关键字的是（）A. funcB. defC. structD. class  参考答案：AC  【初级】定义一个包内全局字符串变量，下面语法正确的是（）A. var str stringB. str := “”C. str = “”D. var str = “”  参考答案：AD  【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）A. p.nameB. (">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -179,440 +180,1154 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/go 面试题" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      go 面试题
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/yuque/go 面试题/" class="archive-article-date">
+  	<time datetime="2020-05-18T12:32:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>【初级】下面属于关键字的是（）<br>A. func<br>B. def<br>C. struct<br>D. class</li>
+</ol>
+<p>参考答案：AC</p>
+<ol start="2">
+<li>【初级】定义一个包内全局字符串变量，下面语法正确的是（）<br>A. var str string<br>B. str := “”<br>C. str = “”<br>D. var str = “”</li>
+</ol>
+<p>参考答案：AD</p>
+<ol start="3">
+<li>【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）<br>A. p.name<br>B. (*p).name<br>C. (&amp;p).name<br>D. p-&gt;name</li>
+</ol>
+<p>参考答案：AB</p>
+<ol start="4">
+<li>【初级】关于接口和类的说法，下面说法正确的是（）<br>A. 一个类只需要实现了接口要求的所有函数，我们就说这个类实现了该接口<br>B. 实现类的时候，只需要关心自己应该提供哪些方法，不用再纠结接口需要拆得多细才合理<br>C. 类实现接口时，需要导入接口所在的包<br>D. 接口由使用方按自身需求来定义，使用方无需关心是否有其他模块定义过类似的接口</li>
+</ol>
+<p>参考答案：ABD</p>
+<ol start="5">
+<li>【初级】关于字符串连接，下面语法正确的是（）<br>A. str := ‘abc’ + ‘123’<br>B. str := “abc” + “123”<br>C. str ：= ‘123’ + “abc”<br>D. fmt.Sprintf(“abc%d”, 123)</li>
+</ol>
+<p>参考答案：BD</p>
+<ol start="6">
+<li>【初级】关于协程，下面说法正确是（）<br>A. 协程和线程都可以实现程序的并发执行<br>B. 线程比协程更轻量级<br>C. 协程不存在死锁问题<br>D. 通过 channel 来进行协程间的通信</li>
+</ol>
+<p>参考答案：AD</p>
+<ol start="7">
+<li>【中级】关于 init 函数，下面说法正确的是（）<br>A. 一个包中，可以包含多个 init 函数<br>B. 程序编译时，先执行导入包的 init 函数，再执行本包内的 init 函数<br>C. main 包中，不能有 init 函数<br>D. init 函数可以被其他函数调用</li>
+</ol>
+<p>参考答案：AB</p>
+<ol start="8">
+<li><p>【初级】关于循环语句，下面说法正确的有（）<br>A. 循环语句既支持 for 关键字，也支持 while 和 do-while<br>B. 关键字 for 的基本使用方法与 C/C++中没有任何差异<br>C. for 循环支持 continue 和 break 来控制循环，但是它提供了一个更高级的 break，可以选择中断哪一个循环<br>D. for 循环不支持以逗号为间隔的多个赋值语句，必须使用平行赋值的方式来初始化多个变量<br>参考答案：CD</p>
+</li>
+<li><p>【中级】对于函数定义：</p>
+</li>
+<li><p>func add(args …int) int {</p>
+</li>
+<li>sum :=0</li>
+<li>for _,arg := range args {</li>
+<li>sum += arg</li>
+<li>}</li>
+<li>returnsum</li>
+</ol>
+<p>}</p>
+<p>下面对 add 函数调用正确的是（）<br>A. add(1, 2)<br>B. add(1, 3, 7)<br>C. add([]int{1, 2})<br>D. add([]int{1, 3, 7}…)</p>
+<p>参考答案：ABD</p>
+<ol start="16">
+<li>【初级】关于类型转化，下面语法正确的是（）</li>
+</ol>
+<p>A.</p>
+<ol start="16">
+<li>type MyInt int</li>
+<li>var i int = 1</li>
+</ol>
+<p>var jMyInt = i</p>
+<p>B.</p>
+<p>type MyIntint</p>
+<p>var i int= 1</p>
+<p>var jMyInt = (MyInt)i</p>
+<p>C.</p>
+<p>type MyIntint</p>
+<p>var i int= 1</p>
+<p>var jMyInt = MyInt(i)</p>
+<p>D.</p>
+<p>type MyIntint</p>
+<p>var i int= 1</p>
+<p>var jMyInt = i.(MyInt)</p>
+<p>参考答案：C</p>
+<ol start="19">
+<li>【初级】关于局部变量的初始化，下面正确的使用方式是（）</li>
+</ol>
+<p>A. var i int = 10</p>
+<p>B. var i = 10</p>
+<p>C. i := 10</p>
+<p>D. i = 10</p>
+<p>参考答案：ABC</p>
+<ol start="20">
+<li>【初级】关于 const 常量定义，下面正确的使用方式是（）</li>
+</ol>
+<p>A.</p>
+<ol start="20">
+<li>const Pi float64 = 3.14159265358979323846</li>
+</ol>
+<p>const zero= 0.0</p>
+<p>B.</p>
+<p>const (</p>
+<p>size int64= 1024</p>
+<p>eof = -1</p>
+<p>)</p>
+<p>C.</p>
+<p>const (</p>
+<p>ERR_ELEM_EXISTerror = errors.New(“element already exists”)</p>
+<p>ERR_ELEM_NT_EXISTerror = errors.New(“element not exists”)</p>
+<p>)</p>
+<p>D.</p>
+<p>const u, vfloat32 = 0, 3</p>
+<p>const a,b, c = 3, 4, “foo”</p>
+<p>参考答案：ABD</p>
+<ol start="22">
+<li>【初级】关于布尔变量 b 的赋值，下面错误的用法是（）</li>
+</ol>
+<p>A. b = true</p>
+<p>B. b = 1</p>
+<p>C. b = bool(1)</p>
+<p>D. b = (1 == 2)</p>
+<p>参考答案：BC</p>
+<ol start="23">
+<li>【中级】下面的程序的运行结果是（）</li>
+<li>func main() {</li>
+<li>if (true) {</li>
+<li>defer fmt.Printf(“1”)</li>
+<li>} else {</li>
+<li>defer fmt.Printf(“2”)</li>
+<li>}</li>
+<li>fmt.Printf(“3”)</li>
+</ol>
+<p>}</p>
+<p>A. 321<br>B. 32<br>C. 31<br>D. 13</p>
+<p>参考答案：C</p>
+<ol start="31">
+<li>【初级】关于 switch 语句，下面说法正确的有（）</li>
+</ol>
+<p>A. 条件表达式必须为常量或者整数</p>
+<p>B. 单个 case 中，可以出现多个结果选项</p>
+<p>C. 需要用 break 来明确退出一个 case</p>
+<p>D. 只有在 case 中明确添加 fallthrough 关键字，才会继续执行紧跟的下一个 case</p>
+<p>参考答案：BD</p>
+<ol start="32">
+<li>【中级】 golang 中没有隐藏的 this 指针，这句话的含义是（）</li>
+</ol>
+<p>A. 方法施加的对象显式传递，没有被隐藏起来</p>
+<p>B. golang 沿袭了传统面向对象编程中的诸多概念，比如继承、虚函数和构造函数</p>
+<p>C. golang 的面向对象表达更直观，对于面向过程只是换了一种语法形式来表达</p>
+<p>D. 方法施加的对象不需要非得是指针，也不用非得叫 this</p>
+<p>参考答案：ACD</p>
+<ol start="33">
+<li>【中级】 golang 中的引用类型包括（）</li>
+</ol>
+<p>A. 数组切片</p>
+<p>B. map</p>
+<p>C. channel</p>
+<p>D. interface</p>
+<p>参考答案：ABCD</p>
+<ol start="34">
+<li>【中级】 golang 中的指针运算包括（）</li>
+</ol>
+<p>A. 可以对指针进行自增或自减运算</p>
+<p>B. 可以通过“&amp;”取指针的地址</p>
+<p>C. 可以通过“*”取指针指向的数据</p>
+<p>D. 可以对指针进行下标运算</p>
+<p>参考答案：BC</p>
+<ol start="35">
+<li>【初级】关于 main 函数（可执行程序的执行起点），下面说法正确的是（）</li>
+</ol>
+<p>A. main 函数不能带参数</p>
+<p>B. main 函数不能定义返回值</p>
+<p>C. main 函数所在的包必须为 main 包</p>
+<p>D. main 函数中可以使用 flag 包来获取和解析命令行参数</p>
+<p>参考答案：ABCD</p>
+<ol start="36">
+<li>【中级】下面赋值正确的是（）</li>
+</ol>
+<p>A. var x = nil</p>
+<p>B. var x interface{} = nil</p>
+<p>C. var x string = nil</p>
+<p>D. var x error = nil</p>
+<p>参考答案：BD</p>
+<ol start="37">
+<li>【中级】关于整型切片的初始化，下面正确的是（）</li>
+</ol>
+<p>A. s := make([]int)</p>
+<p>B. s := make([]int, 0)</p>
+<p>C. s := make([]int, 5, 10)</p>
+<p>D. s := []int{1, 2, 3, 4, 5}</p>
+<p>参考答案：BCD</p>
+<ol start="38">
+<li>【中级】从切片中删除一个元素，下面的算法实现正确的是（）</li>
+</ol>
+<p>A.</p>
+<ol start="38">
+<li>func (s *Slice)Remove(value interface{})error {</li>
+<li>for i, v := range *s {</li>
+<li>if isEqual(value, v) {</li>
+<li>if i== len(*s) - 1 {</li>
+<li>_s = (_s)[:i]</li>
+<li>}else {</li>
+<li>_s = append((_s)[:i],(*s)[i + 2:]…)</li>
+<li>}</li>
+<li>return nil</li>
+<li>}</li>
+<li>}</li>
+<li>return ERR_ELEM_NT_EXIST</li>
+</ol>
+<p>}</p>
+<p>B.</p>
+<p>func (s*Slice)Remove(value interface{}) error {</p>
+<p>for i, v:= range *s {</p>
+<p>if isEqual(value, v) {</p>
+<p>_s =append((_s)[:i],(*s)[i + 1:])</p>
+<p>return nil</p>
+<p>}</p>
+<p>}</p>
+<p>returnERR_ELEM_NT_EXIST</p>
+<p>}</p>
+<p>C.</p>
+<p>func (s*Slice)Remove(value interface{}) error {</p>
+<p>for i, v:= range *s {</p>
+<p>if isEqual(value, v) {</p>
+<p>delete(*s, v)</p>
+<p>return nil</p>
+<p>}</p>
+<p>}</p>
+<p>returnERR_ELEM_NT_EXIST</p>
+<p>}</p>
+<p>D.</p>
+<p>func (s*Slice)Remove(value interface{}) error {</p>
+<p>for i, v:= range *s {</p>
+<p>if isEqual(value, v) {</p>
+<p>_s =append((_s)[:i],(*s)[i + 1:]…)</p>
+<p>return nil</p>
+<p>}</p>
+<p>}</p>
+<p>returnERR_ELEM_NT_EXIST</p>
+<p>}</p>
+<p>参考答案：D</p>
+<ol start="51">
+<li>【初级】对于局部变量整型切片 x 的赋值，下面定义正确的是（）</li>
+</ol>
+<p>A.</p>
+<ol start="51">
+<li>x := []int{</li>
+<li>1, 2, 3,</li>
+<li>4, 5, 6,</li>
+</ol>
+<p>}</p>
+<p>B.</p>
+<p>x :=[]int{</p>
+<p>1, 2, 3,</p>
+<p>4, 5, 6</p>
+<p>}</p>
+<p>C.</p>
+<p>x :=[]int{</p>
+<p>1, 2, 3,</p>
+<p>4, 5, 6}</p>
+<p>D.</p>
+<p>x :=[]int{1, 2, 3, 4, 5, 6,}</p>
+<p>参考答案：ACD</p>
+<ol start="55">
+<li>【初级】关于变量的自增和自减操作，下面语句正确的是（）</li>
+</ol>
+<p>A.</p>
+<ol start="55">
+<li>i := 1</li>
+</ol>
+<p>i++</p>
+<p>B.</p>
+<p>i := 1</p>
+<p>j = i++</p>
+<p>C.</p>
+<p>i := 1</p>
+<p>++i</p>
+<p>D.</p>
+<p>i := 1</p>
+<p>i–</p>
+<p>参考答案：AD</p>
+<ol start="57">
+<li>【中级】关于函数声明，下面语法错误的是（）</li>
+</ol>
+<p>A. func f(a, b int) (value int, err error)</p>
+<p>B. func f(a int, b int) (value int, err error)</p>
+<p>C. func f(a, b int) (value int, error)</p>
+<p>D. func f(a int, b int) (int, int, error)</p>
+<p>参考答案：C</p>
+<ol start="58">
+<li>【中级】如果 Add 函数的调用代码为：</li>
+<li>func main() {</li>
+<li>var a Integer = 1</li>
+<li>var b Integer = 2</li>
+<li>var i interface{} = &amp;a</li>
+<li>sum := i.(*Integer).Add(b)</li>
+<li>fmt.Println(sum)</li>
+</ol>
+<p>}</p>
+<p>则 Add 函数定义正确的是（）<br>A.</p>
+<p>typeInteger int</p>
+<p>func (aInteger) Add(b Integer) Integer {</p>
+<p>return a + b</p>
+<p>}</p>
+<p>B.</p>
+<p>typeInteger int</p>
+<p>func (aInteger) Add(b *Integer) Integer {</p>
+<p>return a + *b</p>
+<p>}</p>
+<p>C.</p>
+<p>typeInteger int</p>
+<p>func (a*Integer) Add(b Integer) Integer {</p>
+<p>return *a + b</p>
+<p>}</p>
+<p>D.</p>
+<p>typeInteger int</p>
+<p>func (a_Integer) Add(b _Integer) Integer {</p>
+<p>return _a + _b</p>
+<p>}</p>
+<p>参考答案：AC</p>
+<ol start="65">
+<li>【中级】如果 Add 函数的调用代码为：</li>
+<li>func main() {</li>
+<li>var a Integer = 1</li>
+<li>var b Integer = 2</li>
+<li>var i interface{} = a</li>
+<li>sum := i.(Integer).Add(b)</li>
+<li>fmt.Println(sum)</li>
+</ol>
+<p>}</p>
+<p>则 Add 函数定义正确的是（）<br>A.</p>
+<p>typeInteger int</p>
+<p>func (a Integer)Add(b Integer) Integer {</p>
+<p>return a + b</p>
+<p>}</p>
+<p>B.</p>
+<p>typeInteger int</p>
+<p>func (aInteger) Add(b *Integer) Integer {</p>
+<p>return a + *b</p>
+<p>}</p>
+<p>C.</p>
+<p>typeInteger int</p>
+<p>func (a*Integer) Add(b Integer) Integer {</p>
+<p>return *a + b</p>
+<p>}</p>
+<p>D.</p>
+<p>typeInteger int</p>
+<p>func (a_Integer) Add(b _Integer) Integer {</p>
+<p>return _a + _b</p>
+<p>}</p>
+<p>参考答案：A</p>
+<ol start="72">
+<li>【中级】关于 GetPodAction 定义，下面赋值正确的是（）</li>
+<li>type Fragment interface {</li>
+<li>Exec(transInfo *TransInfo) error</li>
+<li>}</li>
+<li>type GetPodAction struct {</li>
+<li>}</li>
+<li>func (g GetPodAction) Exec(transInfo*TransInfo) error {</li>
+<li>…</li>
+<li>return nil</li>
+</ol>
+<p>}</p>
+<p>A. var fragment Fragment =new(GetPodAction)<br>B. var fragment Fragment = GetPodAction<br>C. var fragment Fragment = &amp;GetPodAction{}<br>D. var fragment Fragment = GetPodAction{}</p>
+<p>参考答案：ACD</p>
+<ol start="81">
+<li>【中级】关于 GoMock，下面说法正确的是（）</li>
+</ol>
+<p>A. GoMock 可以对 interface 打桩</p>
+<p>B. GoMock 可以对类的成员函数打桩</p>
+<p>C. GoMock 可以对函数打桩</p>
+<p>D. GoMock 打桩后的依赖注入可以通过 GoStub 完成</p>
+<p>参考答案：AD</p>
+<ol start="82">
+<li>【中级】关于接口，下面说法正确的是（）</li>
+</ol>
+<p>A. 只要两个接口拥有相同的方法列表（次序不同不要紧），那么它们就是等价的，可以相互赋值</p>
+<p>B. 如果接口 A 的方法列表是接口 B 的方法列表的子集，那么接口 B 可以赋值给接口 A</p>
+<p>C. 接口查询是否成功，要在运行期才能够确定</p>
+<p>D. 接口赋值是否可行，要在运行期才能够确定</p>
+<p>参考答案：ABC</p>
+<ol start="83">
+<li>【初级】关于 channel，下面语法正确的是（）</li>
+</ol>
+<p>A. var ch chan int</p>
+<p>B. ch := make(chan int)</p>
+<p>C. &lt;- ch</p>
+<p>D. ch &lt;-</p>
+<p>参考答案：ABC</p>
+<ol start="84">
+<li>【初级】关于同步锁，下面说法正确的是（）</li>
+</ol>
+<p>A. 当一个 goroutine 获得了 Mutex 后，其他 goroutine 就只能乖乖的等待，除非该 goroutine 释放这个 Mutex</p>
+<p>B. RWMutex 在读锁占用的情况下，会阻止写，但不阻止读</p>
+<p>C. RWMutex 在写锁占用情况下，会阻止任何其他 goroutine（无论读和写）进来，整个锁相当于由该 goroutine 独占</p>
+<p>D. Lock()操作需要保证有 Unlock()或 RUnlock()调用与之对应</p>
+<p>参考答案：ABC</p>
+<ol start="85">
+<li>【中级】 golang 中大多数数据类型都可以转化为有效的 JSON 文本，下面几种类型除外（）</li>
+</ol>
+<p>A. 指针</p>
+<p>B. channel</p>
+<p>C. complex</p>
+<p>D. 函数</p>
+<p>参考答案：BCD</p>
+<ol start="86">
+<li>【中级】关于 go vendor，下面说法正确的是（）</li>
+</ol>
+<p>A. 基本思路是将引用的外部包的源代码放在当前工程的 vendor 目录下面</p>
+<p>B. 编译 go 代码会优先从 vendor 目录先寻找依赖包</p>
+<p>C. 可以指定引用某个特定版本的外部包</p>
+<p>D. 有了 vendor 目录后，打包当前的工程代码到其他机器的\$GOPATH/src 下都可以通过编译</p>
+<p>参考答案：ABD</p>
+<ol start="87">
+<li>【初级】 flag 是 bool 型变量，下面 if 表达式符合编码规范的是（）</li>
+</ol>
+<p>A. if flag == 1</p>
+<p>B. if flag</p>
+<p>C. if flag == false</p>
+<p>D. if !flag</p>
+<p>参考答案：BD</p>
+<ol start="88">
+<li>【初级】 value 是整型变量，下面 if 表达式符合编码规范的是（）</li>
+</ol>
+<p>A. if value == 0</p>
+<p>B. if value</p>
+<p>C. if value != 0</p>
+<p>D. if !value</p>
+<p>参考答案：AC</p>
+<ol start="89">
+<li>【中级】关于函数返回值的错误设计，下面说法正确的是（）</li>
+</ol>
+<p>A. 如果失败原因只有一个，则返回 bool</p>
+<p>B. 如果失败原因超过一个，则返回 error</p>
+<p>C. 如果没有失败原因，则不返回 bool 或 error</p>
+<p>D. 如果重试几次可以避免失败，则不要立即返回 bool 或 error</p>
+<p>参考答案：ABCD</p>
+<ol start="90">
+<li>【中级】关于异常设计，下面说法正确的是（）</li>
+</ol>
+<p>A. 在程序开发阶段，坚持速错，让程序异常崩溃</p>
+<p>B. 在程序部署后，应恢复异常避免程序终止</p>
+<p>C. 一切皆错误，不用进行异常设计</p>
+<p>D. 对于不应该出现的分支，使用异常处理</p>
+<p>参考答案：ABD</p>
+<ol start="91">
+<li>【中级】关于 slice 或 map 操作，下面正确的是（）</li>
+</ol>
+<p>A.</p>
+<ol start="91">
+<li>var s []int</li>
+</ol>
+<p>s =append(s,1)</p>
+<p>B.</p>
+<p>var mmap[string]int</p>
+<p>m[“one”]= 1</p>
+<p>C.</p>
+<p>var s[]int</p>
+<p>s =make([]int, 0)</p>
+<p>s =append(s,1)</p>
+<p>D.</p>
+<p>var mmap[string]int</p>
+<p>m =make(map[string]int)</p>
+<p>m[“one”]= 1</p>
+<p>参考答案：ACD</p>
+<ol start="93">
+<li>【中级】关于 channel 的特性，下面说法正确的是（）</li>
+</ol>
+<p>A. 给一个 nil channel 发送数据，造成永远阻塞</p>
+<p>B. 从一个 nil channel 接收数据，造成永远阻塞</p>
+<p>C. 给一个已经关闭的 channel 发送数据，引起 panic</p>
+<p>D. 从一个已经关闭的 channel 接收数据，如果缓冲区中为空，则返回一个零值</p>
+<p>参考答案：ABCD</p>
+<ol start="94">
+<li>【中级】关于无缓冲和有冲突的 channel，下面说法正确的是（）</li>
+</ol>
+<p>A. 无缓冲的 channel 是默认的缓冲为 1 的 channel</p>
+<p>B. 无缓冲的 channel 和有缓冲的 channel 都是同步的</p>
+<p>C. 无缓冲的 channel 和有缓冲的 channel 都是非同步的</p>
+<p>D. 无缓冲的 channel 是同步的，而有缓冲的 channel 是非同步的</p>
+<p>参考答案：D</p>
+<ol start="95">
+<li>【中级】关于异常的触发，下面说法正确的是（）</li>
+</ol>
+<p>A. 空指针解析</p>
+<p>B. 下标越界</p>
+<p>C. 除数为 0</p>
+<p>D. 调用 panic 函数</p>
+<p>参考答案：ABCD</p>
+<ol start="96">
+<li>【中级】关于 cap 函数的适用类型，下面说法正确的是（）</li>
+</ol>
+<p>A. array</p>
+<p>B. slice</p>
+<p>C. map</p>
+<p>D. channel</p>
+<p>参考答案：ABD</p>
+<ol start="97">
+<li>【中级】关于 beego 框架，下面说法正确的是（）</li>
+</ol>
+<p>A. beego 是一个 golang 实现的轻量级 HTTP 框架</p>
+<p>B. beego 可以通过注释路由、正则路由等多种方式完成 url 路由注入</p>
+<p>C. 可以使用 bee new 工具生成空工程，然后使用 bee run 命令自动热编译</p>
+<p>D. beego 框架只提供了对 url 路由的处理，而对于 MVC 架构中的数据库部分未提供框架支持</p>
+<p>参考答案：ABC</p>
+<ol start="98">
+<li>【中级】关于 goconvey，下面说法正确的是（）</li>
+</ol>
+<p>A. goconvey 是一个支持 golang 的单元测试框架</p>
+<p>B. goconvey 能够自动监控文件修改并启动测试，并可以将测试结果实时输出到 web 界面</p>
+<p>C. goconvey 提供了丰富的断言简化测试用例的编写</p>
+<p>D. goconvey 无法与 go test 集成</p>
+<p>参考答案：ABC</p>
+<ol start="99">
+<li>【中级】关于 go vet，下面说法正确的是（）</li>
+</ol>
+<p>A. go vet 是 golang 自带工具 go tool vet 的封装</p>
+<p>B. 当执行 go vet database 时，可以对 database 所在目录下的所有子文件夹进行递归检测</p>
+<p>C. go vet 可以使用绝对路径、相对路径或相对 GOPATH 的路径指定待检测的包</p>
+<p>D. go vet 可以检测出死代码</p>
+<p>参考答案：ACD</p>
+<ol start="100">
+<li>【中级】关于 map，下面说法正确的是（）<br>A. map 反序列化时 json.unmarshal 的入参必须为 map 的地址<br>B. 在函数调用中传递 map，则子函数中对 map 元素的增加不会导致父函数中 map 的修改<br>C. 在函数调用中传递 map，则子函数中对 map 元素的修改不会导致父函数中 map 的修改<br>D. 不能使用内置函数 delete 删除 map 的元素</li>
+</ol>
+<p>参考答案：A</p>
+<ol start="101">
+<li>【中级】关于 GoStub，下面说法正确的是（）<br>A. GoStub 可以对全局变量打桩<br>B. GoStub 可以对函数打桩<br>C. GoStub 可以对类的成员方法打桩<br>D. GoStub 可以打动态桩，比如对一个函数打桩后，多次调用该函数会有不同的行为</li>
+</ol>
+<p>参考答案：ABD</p>
+<ol start="102">
+<li>【初级】关于 select 机制，下面说法正确的是（）<br>A. select 机制用来处理异步 IO 问题<br>B. select 机制最大的一条限制就是每个 case 语句里必须是一个 IO 操作<br>C. golang 在语言级别支持 select 关键字<br>D. select 关键字的用法与 switch 语句非常类似，后面要带判断条件</li>
+</ol>
+<p>参考答案：ABC</p>
+<ol start="103">
+<li>【初级】关于内存泄露，下面说法正确的是（）<br>A. golang 有自动垃圾回收，不存在内存泄露<br>B. golang 中检测内存泄露主要依靠的是 pprof 包<br>C. 内存泄露可以在编译阶段发现<br>D. 应定期使用浏览器来查看系统的实时内存信息，及时发现内存泄露问题</li>
+</ol>
+<p>参考答案：BD</p>
+<p>填空题</p>
+<ol>
+<li>【初级】声明一个整型变量 i<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var i int</p>
+<ol start="2">
+<li>【初级】声明一个含有 10 个元素的整型数组 a<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var a [10]int</p>
+<ol start="3">
+<li>【初级】声明一个整型数组切片 s<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var s []int</p>
+<ol start="4">
+<li>【初级】声明一个整型指针变量 p<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var p *int</p>
+<ol start="5">
+<li>【初级】声明一个 key 为字符串型 value 为整型的 map 变量 m<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var m map[string]int</p>
+<ol start="6">
+<li>【初级】声明一个入参和返回值均为整型的函数变量 f<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var f func(a int) int</p>
+<ol start="7">
+<li>【初级】声明一个只用于读取 int 数据的单向 channel 变量 ch<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：var ch &lt;-chan int</p>
+<ol start="8">
+<li>【初级】假设源文件的命名为 slice.go，则测试文件的命名为<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：slice_test.go</p>
+<ol start="9">
+<li>【初级】 go test 要求测试函数的前缀必须命名为<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：Test</p>
+<ol start="10">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>for i := 0; i &lt; 5; i++ {</li>
+<li>defer fmt.Printf(“%d “, i)</li>
+</ol>
+<p>}</p>
+<p>参考答案：4 3 2 1 0</p>
+<ol start="13">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func main() {</li>
+<li>x := 1</li>
+<li>{</li>
+<li>x := 2</li>
+<li>fmt.Print(x)</li>
+<li>}</li>
+<li>fmt.Println(x)</li>
+</ol>
+<p>}</p>
+<p>参考答案：21</p>
+<ol start="21">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func main() {</li>
+<li>strs := []string{“one”,”two”, “three”}<br>24.</li>
+</ol>
+<p>21) for _, s := range strs {<br>22) go func() {<br>23) time.Sleep(1 * time.Second)<br>24) fmt.Printf(“%s “, s)<br>25) }()<br>26) }<br>27) time.Sleep(3 * time.Second)</p>
+<p>}</p>
+<p>参考答案：three threethree</p>
+<ol start="32">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func main() {</li>
+<li>x := []string{“a”, “b”,”c”}</li>
+<li>for v := range x {</li>
+<li>fmt.Print(v)</li>
+<li>}</li>
+</ol>
+<p>}</p>
+<p>参考答案：012</p>
+<ol start="38">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func main() {</li>
+<li>x := []string{“a”, “b”,”c”}</li>
+<li>for _, v := range x {</li>
+<li>fmt.Print(v)</li>
+<li>}</li>
+</ol>
+<p>}</p>
+<p>参考答案：abc</p>
+<ol start="44">
+<li>【初级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func main() {</li>
+<li>i := 1</li>
+<li>j := 2</li>
+<li>i, j = j, i</li>
+<li>fmt.Printf(“%d%d\n”, i, j)</li>
+</ol>
+<p>}</p>
+<p>参考答案：21</p>
+<ol start="50">
+<li>【初级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>func incr(p *int) int {</li>
+<li>*p++</li>
+<li>return *p</li>
+<li>}</li>
+<li>func main() {</li>
+<li>v := 1</li>
+<li>incr(&amp;v)</li>
+<li>fmt.Println(v)</li>
+</ol>
+<p>}</p>
+<p>参考答案：2</p>
+<ol start="59">
+<li>【初级】启动一个 goroutine 的关键字是<strong><strong>__</strong></strong></li>
+</ol>
+<p>参考答案：go</p>
+<ol start="60">
+<li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
+<li>type Slice []int</li>
+<li>func NewSlice() Slice {</li>
+<li>return make(Slice, 0)</li>
+<li>}</li>
+<li>func (s_ Slice) Add(elem int) _Slice {</li>
+<li>_s = append(_s, elem)</li>
+<li>fmt.Print(elem)</li>
+<li>return s</li>
+<li>}</li>
+<li>func main() {</li>
+<li>s := NewSlice()</li>
+<li>defer s.Add(1).Add(2)</li>
+<li>s.Add(3)</li>
+</ol>
+<p>}</p>
+<p>参考答案：132</p>
+<p>判断题</p>
+<ol>
+<li>【初级】数组是一个值类型（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="2">
+<li>【初级】使用 map 不需要引入任何库（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="3">
+<li>【中级】内置函数 delete 可以删除数组切片内的元素（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="4">
+<li>【初级】指针是基础类型（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="5">
+<li>【初级】 interface{}是可以指向任意对象的 Any 类型（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="6">
+<li><p>【中级】下面关于文件操作的代码可能触发异常（）</p>
+</li>
+<li><p>file, err := os.Open(“test.go”)</p>
+</li>
+<li><p>defer file.Close()</p>
+</li>
+<li><p>if err != nil {</p>
+</li>
+<li><p>fmt.Println(“open file failed:”,err)</p>
+</li>
+<li>return</li>
+<li>}</li>
+</ol>
+<p>…</p>
+<p>参考答案：T</p>
+<ol start="13">
+<li>【初级】 Golang 不支持自动垃圾回收（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="14">
+<li>【初级】 Golang 支持反射，反射最常见的使用场景是做对象的序列化（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="15">
+<li>【初级】 Golang 可以复用 C/C++的模块，这个功能叫 Cgo（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="16">
+<li>【初级】下面代码中两个斜点之间的代码，比如 json:”x”，作用是 X 字段在从结构体实例编码到 JSON 数据格式的时候，使用 x 作为名字，这可以看作是一种重命名的方式（）</li>
+<li>type Position struct {</li>
+<li>X int <code>json:&quot;x&quot;</code></li>
+<li>Y int <code>json:&quot;y&quot;</code></li>
+<li>Z int <code>json:&quot;z&quot;</code></li>
+</ol>
+<p>}</p>
+<p>参考答案：T</p>
+<ol start="21">
+<li>【初级】通过成员变量或函数首字母的大小写来决定其作用域（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="22">
+<li>【初级】对于常量定义 zero(const zero = 0.0)，zero 是浮点型常量（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="23">
+<li>【初级】对变量 x 的取反操作是~x（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="24">
+<li>【初级】下面的程序的运行结果是 xello（）</li>
+<li>func main() {</li>
+<li>str := “hello”</li>
+<li>str[0] = ‘x’</li>
+<li>fmt.Println(str)</li>
+</ol>
+<p>}</p>
+<p>参考答案：F</p>
+<ol start="29">
+<li>【初级】 golang 支持 goto 语句（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="30">
+<li>【初级】下面代码中的指针 p 为野指针，因为返回的栈内存在函数结束时会被释放（）</li>
+<li>type TimesMatcher struct {</li>
+<li>base int</li>
+<li>}</li>
+<li>func NewTimesMatcher(base int) *TimesMatcher{</li>
+<li>return &amp;TimesMatcher{base:base}</li>
+<li>}</li>
+<li>func main() {</li>
+<li>p := NewTimesMatcher(3)</li>
+<li>…</li>
+</ol>
+<p>}</p>
+<p>参考答案：F</p>
+<ol start="40">
+<li>【初级】匿名函数可以直接赋值给一个变量或者直接执行（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="41">
+<li>【初级】如果调用方调用了一个具有多返回值的方法，但是却不想关心其中的某个返回值，可以简单地用一个下划线“_”来跳过这个返回值，该下划线对应的变量叫匿名变量（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="42">
+<li>【初级】在函数的多返回值中，如果有 error 或 bool 类型，则一般放在最后一个（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="43">
+<li>【初级】错误是业务过程的一部分，而异常不是（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="44">
+<li>【初级】函数执行时，如果由于 panic 导致了异常，则延迟函数不会执行（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="45">
+<li>【中级】当程序运行时，如果遇到引用空指针、下标越界或显式调用 panic 函数等情况，则先触发 panic 函数的执行，然后调用延迟函数。调用者继续传递 panic，因此该过程一直在调用栈中重复发生：函数停止执行，调用延迟执行函数。如果一路在延迟函数中没有 recover 函数的调用，则会到达该携程的起点，该携程结束，然后终止其他所有携程，其他携程的终止过程也是重复发生：函数停止执行，调用延迟执行函数（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="46">
+<li>【初级】同级文件的包名不允许有多个（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="47">
+<li>【中级】可以给任意类型添加相应的方法（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="48">
+<li>【初级】 golang 虽然没有显式的提供继承语法，但是通过匿名组合实现了继承（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="49">
+<li>【初级】使用 for range 迭代 map 时每次迭代的顺序可能不一样，因为 map 的迭代是随机的（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="50">
+<li>【初级】 switch 后面可以不跟表达式（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="51">
+<li>【中级】结构体在序列化时非导出变量（以小写字母开头的变量名）不会被 encode，因此在 decode 时这些非导出变量的值为其类型的零值（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="52">
+<li>【初级】 golang 中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以 NewXXX 来命名（）</li>
+</ol>
+<p>参考答案：T</p>
+<ol start="53">
+<li>【中级】当函数 deferDemo 返回失败时，并不能 destroy 已 create 成功的资源（）</li>
+<li>func deferDemo() error {</li>
+<li>err := createResource1()</li>
+<li>if err != nil {</li>
+<li>return ERR_CREATE_RESOURCE1_FAILED</li>
+<li>}</li>
+<li>defer func() {</li>
+<li>if err != nil {</li>
+<li>destroyResource1()</li>
+<li>}</li>
+<li>}()<br>64.</li>
+</ol>
+<p>53) err = createResource2()<br>54) if err != nil {<br>55) return ERR_CREATE_RESOURCE2_FAILED<br>56) }<br>57) defer func() {<br>58) if err != nil {<br>59) destroyResource2()<br>60) }<br>61) }()<br>62)</p>
+<ol start="53">
+<li>err = createResource3()</li>
+<li>if err != nil {</li>
+<li>return ERR_CREATE_RESOURCE3_FAILED</li>
+<li>}</li>
+<li>return nil</li>
+</ol>
+<p>}</p>
+<p>参考答案：F</p>
+<ol start="80">
+<li>【中级】 channel 本身必然是同时支持读写的，所以不存在单向 channel（）</li>
+</ol>
+<p>参考答案：F</p>
+<ol start="81">
+<li>【初级】 import 后面的最后一个元素是包名（）</li>
+</ol>
+<p>参考答案：F</p>
+<p>最近在很多地方看到了 golang 的面试题，看到了很多人对 Golang 的面试题心存恐惧，也是为了复习基础，我把解题的过程总结下来。</p>
+<p>面试题</p>
+<p>1 写出下面代码输出内容。</p>
+<p>package main<br>import (<br>“fmt”<br>)<br>funcmain() {<br>    defer_call()<br>}<br>funcdefer_call() {<br>    deferfunc() {fmt.Println(“打印前”)}()<br>    deferfunc() {fmt.Println(“打印中”)}()<br>    deferfunc() {fmt.Println(“打印后”)}()<br>    panic(“触发异常”)<br>}</p>
+<p>考点：defer 执行顺序<br>解答：<br>defer 是后进先出。<br>panic 需要等 defer 结束后才会向上传递。 出现 panic 恐慌时候，会先按照 defer 的后入先出的顺序执行，最后才会执行 panic。</p>
+<p>打印后<br>打印中<br>打印前<br>panic: 触发异常</p>
+<p>2 以下代码有什么问题，说明原因。</p>
+<p>type student struct {<br>    Name string<br>    Age  int<br>}<br>funcpase<em>student() {<br>    m := make(map[string]\</em>student)<br>    stus := []student{<br>        {Name: “zhou”,Age: 24},<br>        {Name: “li”,Age: 23},<br>        {Name: “wang”,Age: 22},<br>    }    for *,stu := range stus {<br>        m[stu.Name] =&amp;stu<br>    }<br>}</p>
+<p>考点：foreach<br>解答：<br>这样的写法初学者经常会遇到的，很危险！ 与 Java 的 foreach 一样，都是使用副本的方式。所以 m[stu.Name]=&amp;stu 实际上一致指向同一个指针， 最终该指针的值为遍历的最后一个 struct 的值拷贝。 就像想修改切片元素的属性：</p>
+<p>for _, stu := rangestus {<br>    stu.Age = stu.Age+10}</p>
+<p>也是不可行的。 大家可以试试打印出来：</p>
+<p>func pase<em>student() {<br>    m := make(map[string]\</em>student)<br>    stus := []student{<br>        {Name: “zhou”,Age: 24},<br>        {Name: “li”,Age: 23},<br>        {Name: “wang”,Age: 22},<br>    }<br>    // 错误写法<br>    for *,stu := range stus {<br>        m[stu.Name] =&amp;stu<br>    }<br>     fork,v:=range m{<br>      println(k,”=&gt;”,v.Name)<br>    }<br>      // 正确<br>    for i:=0;i&lt;len(stus);i++ {<br>       m[stus[i].Name] = &amp;stus[i]<br>    }<br>     fork,v:=range m{<br>       println(k,”=&gt;”,v.Name)<br>    }<br>}</p>
+<p>3 下面的代码会输出什么，并说明原因</p>
+<p>func main() {<br>    runtime.GOMAXPROCS(1)<br>    wg := sync.WaitGroup{}<br>    wg.Add(20)   for i := 0; i &lt; 10; i++ {<br>         gofunc() {<br>           fmt.Println(“A: “, i)<br>           wg.Done()<br>        }()<br>    }<br>        for i:= 0; i &lt; 10; i++ {<br>           gofunc(i int) {<br>           fmt.Println(“B: “, i)<br>           wg.Done()<br>        }(i)<br>    }<br>    wg.Wait()<br>}</p>
+<p>考点：go 执行的随机性和闭包<br>解答：<br>谁也不知道执行后打印的顺序是什么样的，所以只能说是随机数字。 但是 A:均为输出 10，B:从 0~9 输出(顺序不定)。 第一个 go func 中 i 是外部 for 的一个变量，地址不变化。遍历完成后，最终 i=10。 故 go func 执行时，i 的值始终是 10。</p>
+<p>第二个 go func 中 i 是函数参数，与外部 for 中的 i 完全是两个变量。 尾部(i)将发生值拷贝，go func 内部指向值拷贝地址。<br>4 下面代码会输出什么？</p>
+<p>type People struct{}func (p <em>People)ShowA() {<br>    fmt.Println(“showA”)<br>    p.ShowB()<br>}<br>func(p</em>People)ShowB() {<br>    fmt.Println(“showB”)<br>}<br>typeTeacher struct {<br>    People<br>}<br>func(t*Teacher)ShowB() {<br>    fmt.Println(“teachershowB”)<br>}<br>funcmain() {<br>    t := Teacher{}<br>    t.ShowA()<br>}</p>
+<p>考点：go 的组合继承<br>解答：<br>这是 Golang 的组合模式，可以实现 OOP 的继承。 被组合的类型 People 所包含的方法虽然升级成了外部类型 Teacher 这个组合类型的方法（一定要是匿名字段），但它们的方法(ShowA())调用时接受者并没有发生变化。 此时 People 类型并不知道自己会被什么类型组合，当然也就无法调用方法时去使用未知的组合者 Teacher 类型的功能。<br>showAshowB</p>
+<p>5 下面代码会触发异常吗？请详细说明</p>
+<p>func main() {<br>    runtime.GOMAXPROCS(1)<br>    int_chan := make(chanint, 1)<br>    string_chan := make(chanstring, 1)<br>    int_chan &lt;- 1<br>    string_chan &lt;- “hello”<br>    select {<br>            case value := &lt;-int_chan:<br>       fmt.Println(value)<br>          casevalue := &lt;-string_chan:<br>          panic(value)<br>    }<br>}</p>
+<p>考点：select 随机性<br>解答：<br>select 会随机选择一个可用通用做收发操作。 所以代码是有肯触发异常，也有可能不会。 单个 chan 如果无缓冲时，将会阻塞。但结合 select 可以在多个 chan 间等待执行。有三点原则：</p>
+<p>select 中只要有一个 case 能 return，则立刻执行。<br>当如果同一时间有多个 case 均能 return 则伪随机方式抽取任意一个执行。<br>如果没有一个 case 能 return 则可以执行”default”块。</p>
+<p>6 下面代码输出什么？</p>
+<p>funccalc(indexstring, a, bint) int {<br>    ret := a+ b<br>    fmt.Println(index,a, b, ret)<br>    return ret<br>}<br>funcmain() {<br>      a := 1<br>    b := 2<br>    defer calc(“1”, a,calc(“10”, a, b))    a = 0<br>    defer calc(“2”, a,calc(“20”, a, b))    b = 1<br>}</p>
+<p>考点：defer 执行顺序<br>解答：<br>这道题类似第 1 题 需要注意到 defer 执行顺序和值传递 index:1 肯定是最后执行的，但是 index:1 的第三个参数是一个函数，所以最先被调用<br>calc(“10”,1,2)&gt;20,0,2,2 执行到 b=1 时候开始调用，index:2==&gt;calc(“2”,0,2)&gt;calc(“1”,1,3)==&gt;1,1,3,4</p>
+<p>10 1 2 320 0 2 22 0 2 21 1 3 4</p>
+<p>7 请写出以下输入内容</p>
+<p>funcmain() {<br>       s := make([]int,5)<br>    s = append(s,1, 2, 3)<br>    fmt.Println(s)<br>}</p>
+<p>考点：make 默认值和 append<br>解答：<br>make 初始化是由默认值的哦，此处默认值为 0</p>
+<p>[00000123]</p>
+<p>大家试试改为:</p>
+<p>s := make([]int, 0)<br>s = append(s, 1, 2, 3)<br>fmt.Println(s)//[1 2 3]</p>
+<p>8 下面的代码有什么问题?</p>
+<p>type UserAges struct {<br>    ages map[string]int<br>    sync.Mutex<br>}<br>func(ua<em>UserAges)Add(name string, age int) {<br>    ua.Lock()<br>       deferua.Unlock()<br>    ua.ages[name] = age<br>}<br>func(ua</em>UserAges)Get(name string)int {<br>      ifage, ok := ua.ages[name]; ok {<br>         return age<br>    }<br>      return-1<br>}</p>
+<p>考点：map 线程安全<br>解答：<br>可能会出现</p>
+<p>fatal error: concurrent mapreadandmapwrite.</p>
+<p>修改一下看看效果</p>
+<p>func (ua *UserAges)Get(namestring)int {<br>    ua.Lock()<br>     deferua.Unlock()<br>     ifage, ok := ua.ages[name]; ok {<br>          return age<br>    }<br>       return-1<br>}</p>
+<ol start="9">
+<li>下面的迭代会有什么问题？</li>
+</ol>
+<p>func (set *threadSafeSet)Iter()&lt;-chaninterface{} {<br>    ch := make(chaninterface{})<br>              gofunc() {<br>        set.RLock()<br>            for elem := range set.s {<br>           ch &lt;- elem<br>        }<br>             close(ch)<br>        set.RUnlock()<br>    }()<br>     return ch<br>}</p>
+<p>考点：chan 缓存池<br>解答：<br>看到这道题，我也在猜想出题者的意图在哪里。 chan?sync.RWMutex?go?chan 缓存池?迭代? 所以只能再读一次题目，就从迭代入手看看。 既然是迭代就会要求 set.s 全部可以遍历一次。但是 chan 是为缓存的，那就代表这写入一次就会阻塞。 我们把代码恢复为可以运行的方式，看看效果</p>
+<p>package main<br>import (<br>      “sync”<br>    “fmt”)//下面的迭代会有什么问题？type threadSafeSet struct {<br>    sync.RWMutex<br>    s []interface{}<br>}<br>func(set*threadSafeSet)Iter() &lt;-chaninterface{} {<br>//ch := make(chan interface{}) // 解除注释看看！<br>    ch := make(chaninterface{},len(set.s))<br>gofunc() {<br>        set.RLock()<br>forelem,value := range set.s {<br>           ch &lt;- elem<br>println(“Iter:”,elem,value)<br>        }       close(ch)<br>        set.RUnlock()<br>    }()<br>return ch<br>}<br>funcmain() {<br>    th:=threadSafeSet{<br>        s:[]interface{}{“1”,”2”},<br>    }<br>    v:=&lt;-th.Iter()<br>    fmt.Sprintf(“%s%v”,”ch”,v)<br>}</p>
+<p>10 以下代码能编译过去吗？为什么？</p>
+<p>package main<br>import (   “fmt”)<br>typePeople interface {<br>    Speak(string) string<br>}<br>typeStduent struct{}<br>func(stu*Stduent)Speak(think string)(talk string) {<br>ifthink == “bitch” {<br>        talk = “Youare a good boy”<br>    } else {<br>        talk = “hi”<br>    }<br>    return<br>}<br>funcmain() {<br>    var peoPeople = Stduent{}<br>    think := “bitch”<br>   fmt.Println(peo.Speak(think))<br>}</p>
+<p>考点：golang 的方法集<br>解答：<br>编译不通过！ 做错了！？说明你对 golang 的方法集还有一些疑问。 一句话：golang 的方法集仅仅影响接口实现和方法表达式转化，与通过实例或者指针调用方法无关。</p>
+<p>11 以下代码打印出来什么内容，说出为什么。</p>
+<p>package main<br>import (   “fmt”)<br>typePeople interface {<br>    Show()<br>}<br>typeStudent struct{}<br>func(stu<em>Student)Show() {<br>}<br>funclive()People {<br>    var stu</em>Student<br>    return stu<br>}<br>funcmain() {   if live() == nil<br>{<br>        fmt.Println(“AAAAAAA”)<br>    } else {<br>        fmt.Println(“BBBBBBB”)<br>    }<br>}</p>
+<p>考点：interface 内部结构<br>解答：<br>很经典的题！ 这个考点是很多人忽略的 interface 内部结构。 go 中的接口分为两种一种是空的接口类似这样：</p>
+<p>varininterface{}</p>
+<p>另一种如题目：</p>
+<p>type People interface {<br>    Show()<br>}</p>
+<p>他们的底层结构如下：</p>
+<p>type eface struct {      //空接口<br>    _type __type        //类型信息<br>    data  unsafe.Pointer //指向数据的指针(go 语言中特殊的指针类型 unsafe.Pointer 类似于 c 语言中的 void_)}<br>typeiface struct {      //带有方法的接口<br>    tab  <em>itab          //存储 type 信息还有结构实现方法的集合<br>    data unsafe.Pointer  //指向数据的指针(go 语言中特殊的指针类型 unsafe.Pointer 类似于 c 语言中的 void</em>)}<br>type_type struct {<br>    size       uintptr //类型大小<br>    ptrdata    uintptr //前缀持有所有指针的内存大小<br>    hash       uint32  //数据 hash 值<br>    tflag     tflag<br>    align      uint8   //对齐<br>    fieldalign uint8   //嵌入结构体时的对齐<br>    kind       uint8   //kind 有些枚举值 kind 等于 0 是无效的<br>    alg       <em>typeAlg //函数指针数组，类型实现的所有方法<br>    gcdata    </em>byte   str       nameOff<br>    ptrToThis typeOff<br>}type itab struct {<br>    inter  _interfacetype //接口类型</p>
+<p>_type  __type         //结构类型<br>    link   *itab<br>    bad    int32<br>    inhash int32<br>    fun    [1]uintptr     //可变大小方法集合}</p>
+<p>可以看出 iface 比 eface 中间多了一层 itab 结构。 itab 存储_type 信息和[]fun 方法集，从上面的结构我们就可得出，因为 data 指向了 nil 并不代表 interface 是 nil， 所以返回值并不为空，这里的 fun(方法集)定义了接口的接收规则，在编译的过程中需要验证是否实现接口 结果：</p>
+<p>BBBBBBB 12.是否可以编译通过？如果通过，输出什么？</p>
+<p>func main() {<br>    i := GetValue() switch i.(type) {<br>        caseint:<br>        println(“int”)<br>        casestring:<br>        println(“string”)<br>        caseinterface{}:<br>        println(“interface”)<br>        default:<br>         println(“unknown”)<br>    }<br>}<br>funcGetValue()int {<br>return1<br>}</p>
+<p>解析<br>考点：type</p>
+<p>编译失败，因为 type 只能使用在 interface</p>
+<p>13.下面函数有什么问题？</p>
+<p>func funcMui(x,y int)(sum int,error){<br>returnx+y,nil<br>}</p>
+<p>解析<br>考点：函数返回值命名<br>在函数有多个返回值时，只要有一个返回值有指定命名，其他的也必须有命名。 如果返回值有有多个返回值必须加上括号； 如果只有一个返回值并且有命名也需要加上括号； 此处函数第一个返回值有 sum 名称，第二个未命名，所以错误。</p>
+<p>14.是否可以编译通过？如果通过，输出什么？</p>
+<p>package mainfunc main() {    println(DeferFunc1(1)) println(DeferFunc2(1)) println(DeferFunc3(1))<br>}func DeferFunc1(i int)(t int) {<br>    t = i   deferfunc() {<br>        t += 3<br>    }() return t<br>}<br>funcDeferFunc2(i int)int {<br>    t := i  deferfunc() {<br>        t += 3<br>    }() return t<br>}<br>funcDeferFunc3(i int)(t int) {   deferfunc() {<br>        t += i<br>    }() return2}</p>
+<p>解析<br>考点:defer 和函数返回值<br>需要明确一点是 defer 需要在函数结束前执行。 函数返回值名字会在函数起始处被初始化为对应类型的零值并且作用域为整个函数 DeferFunc1 有函数返回值 t 作用域为整个函数，在 return 之前 defer 会被执行，所以 t 会被修改，返回 4; DeferFunc2 函数中 t 的作用域为函数，返回 1;DeferFunc3 返回 3</p>
+<p>15.是否可以编译通过？如果通过，输出什么？</p>
+<p>funcmain() {    list := new([]int)<br>    list = append(list,1)<br>    fmt.Println(list)<br>}</p>
+<p>解析<br>考点：new</p>
+<p>list:=make([]int,0)</p>
+<p>16.是否可以编译通过？如果通过，输出什么？</p>
+<p>package mainimport “fmt”funcmain() {<br>    s1 := []int{1, 2, 3}<br>    s2 := []int{4, 5}<br>    s1 = append(s1,s2)<br>    fmt.Println(s1)<br>}</p>
+<p>解析<br>考点：append<br>append 切片时候别漏了’…’</p>
+<p>17.是否可以编译通过？如果通过，输出什么？</p>
+<p>func main() {<br>    sn1 := struct {<br>        age  int<br>        name string<br>    }{age: 11,name: “qq”}<br>    sn2 := struct {<br>        age  int<br>        name string<br>    }{age: 11,name: “qq”}  if sn1== sn2 {<br>        fmt.Println(“sn1== sn2”)<br>    }<br>    sm1 := struct {<br>        age int<br>        m   map[string]string<br>    }{age: 11, m:map[string]string{“a”: “1”}}<br>    sm2 := struct {<br>        age int<br>        m   map[string]string<br>    }{age: 11, m:map[string]string{“a”: “1”}}<br>           if sm1 == sm2 {<br>        fmt.Println(“sm1== sm2”)<br>    }<br>}</p>
+<p>解析<br>考点:结构体比较<br>进行结构体比较时候，只有相同类型的结构体才可以比较，结构体是否相同不但与属性类型个数有关，还与属性顺序相关。</p>
+<p>sn3:= struct {<br>    name string<br>    age  int<br>}<br>{age:11,name:”qq”}</p>
+<p>sn3 与 sn1 就不是相同的结构体了，不能比较。 还有一点需要注意的是结构体是相同的，但是结构体属性中有不可以比较的类型，如 map,slice。 如果该结构属性都是可以比较的，那么就可以使用“==”进行比较操作。</p>
+<p>可以使用 reflect.DeepEqual 进行比较</p>
+<p>if reflect.DeepEqual(sn1, sm) {<br>    fmt.Println(“sn1==sm”)<br>}else {<br>    fmt.Println(“sn1!=sm”)<br>}</p>
+<p>所以编译不通过： invalid operation: sm1 == sm2</p>
+<p>18.是否可以编译通过？如果通过，输出什么？</p>
+<p>func Foo(x interface{}) {    if x== nil {<br>        fmt.Println(“emptyinterface”)<br>          return<br>    }<br>    fmt.Println(“non-emptyinterface”)<br>}<br>       funcmain() {<br>       var x *int = nil<br>    Foo(x)<br>}</p>
+<p>解析<br>考点：interface 内部结构</p>
+<p>non-emptyinterface</p>
+<p>19.是否可以编译通过？如果通过，输出什么？</p>
+<p>func GetValue(m map[int]string, id int)(string, bool) {<br>         if _,exist := m[id]; exist {<br>           return”存在数据”, true<br>    }<br>         returnnil, false}funcmain() {<br>    intmap:=map[int]string{<br>1:”a”,<br>2:”bb”,<br>3:”ccc”,<br>    }<br>    v,err:=GetValue(intmap,3)<br>    fmt.Println(v,err)<br>}</p>
+<p>解析<br>考点：函数返回值类型<br>nil 可以用作 interface、function、pointer、map、slice 和 channel 的“空值”。但是如果不特别指定的话，Go 语言不能识别类型，所以会报错。报:cannot use nil as type string in return argument.</p>
+<p>20.是否可以编译通过？如果通过，输出什么？</p>
+<p>const (<br>    x = iota<br>    y<br>    z = “zz”<br>    k<br>    p = iota)<br>funcmain()<br>{<br>    fmt.Println(x,y,z,k,p)<br>}</p>
+<p>解析<br>考点：iota<br>结果:</p>
+<p>0 1 zz zz 4</p>
+<p>21.编译执行下面代码会出现什么?</p>
+<p>package mainvar(<br>    size :=1024<br>    max_size = size*2)<br>funcmain() {<br>println(size,max_size)<br>}</p>
+<p>解析<br>考点:变量简短模式<br>变量简短模式限制：</p>
+<p>定义变量同时显式初始化<br>不能提供数据类型<br>只能在函数内部使用<br>结果：</p>
+<p>syntaxerror: unexpected :=</p>
+<p>22.下面函数有什么问题？</p>
+<p>package main<br>const cl = 100<br>var bl   = 123<br>funcmain() {<br>println(&amp;bl,bl)<br>println(&amp;cl,cl)<br>}</p>
+<p>解析<br>考点:常量<br>常量不同于变量的在运行期分配内存，常量通常会被编译器在预处理阶段直接展开，作为指令数据使用，</p>
+<p>cannot take the address of cl</p>
+<p>23.编译执行下面代码会出现什么?</p>
+<p>package main<br>funcmain() {<br>for i:=0;i&lt;10;i++  {<br>    loop:<br>println(i)<br>    }    gotoloop<br>}</p>
+<p>解析<br>考点：goto<br>goto 不能跳转到其他函数或者内层代码</p>
+<p>goto loop jumps intoblock starting at</p>
+<p>24.编译执行下面代码会出现什么?</p>
+<p>package main<br>import”fmt”<br>funcmain() {<br> typeMyInt1 int<br> typeMyInt2 = int<br>    var i int =9<br>    var i1MyInt1 = i<br>    var i2MyInt2 = i<br>    fmt.Println(i1,i2)<br>}</p>
+<p>解析<br>考点：<strong>Go 1.9 新特性 Type Alias </strong><br>基于一个类型创建一个新类型，称之为 defintion；基于一个类型创建一个别名，称之为 alias。 MyInt1 为称之为 defintion，虽然底层类型为 int 类型，但是不能直接赋值，需要强转； MyInt2 称之为 alias，可以直接赋值。</p>
+<p>结果:</p>
+<p>cannot use i (typeint) astype MyInt1 in assignment</p>
+<p>25.编译执行下面代码会出现什么?</p>
+<p>package main<br>import”fmt”<br>typeUser struct {<br>}<br>typeMyUser1 User<br>typeMyUser2 = User<br>func(iMyUser1)m1(){<br>    fmt.Println(“MyUser1.m1”)<br>}<br>func(iUser)m2(){<br>    fmt.Println(“User.m2”)<br>}<br>funcmain() {<br>    var i1MyUser1<br>    var i2MyUser2<br>    i1.m1()<br>    i2.m2()<br>}</p>
+<p>解析<br>考点：<strong>Go 1.9 新特性 Type Alias </strong><br>因为 MyUser2 完全等价于 User，所以具有其所有的方法，并且其中一个新增了方法，另外一个也会有。 但是</p>
+<p>i1.m2()</p>
+<p>是不能执行的，因为 MyUser1 没有定义该方法。 结果:</p>
+<p>MyUser1.m1User.m2</p>
+<p>26.编译执行下面代码会出现什么?</p>
+<p>package main<br>import”fmt”<br>type T1 struct {<br>}<br>func(tT1)m1(){<br>    fmt.Println(“T1.m1”)<br>}<br>type T2= T1<br>typeMyStruct struct {<br>    T1<br>    T2<br>}<br>funcmain() {<br>    my:=MyStruct{}<br>    my.m1()<br>}</p>
+<p>解析<br>考点：<strong>Go 1.9 新特性 Type Alias </strong><br>是不能正常编译的,异常：</p>
+<p>ambiguousselectormy.m1</p>
+<p>结果不限于方法，字段也也一样；也不限于 type alias，type defintion 也是一样的，只要有重复的方法、字段，就会有这种提示，因为不知道该选择哪个。 改为:</p>
+<p>my.T1.m1()<br>my.T2.m1()</p>
+<p>type alias 的定义，本质上是一样的类型，只是起了一个别名，源类型怎么用，别名类型也怎么用，保留源类型的所有方法、字段等。</p>
+<p>27.编译执行下面代码会出现什么?</p>
+<p>package main<br>import (<br>       “errors”<br>    “fmt”)<br>varErrDidNotWork = errors.New(“did not work”)<br>funcDoTheThing(reallyDoItbool)(errerror) {<br>ifreallyDoIt {<br>        result, err:= tryTheThing()<br>if err!= nil || result != “it worked” {<br>           err = ErrDidNotWork<br>        }<br>    }    return err<br>}<br>functryTheThing()(string,error) {<br>return””,ErrDidNotWork<br>}<br>funcmain() {<br>    fmt.Println(DoTheThing(true))<br>    fmt.Println(DoTheThing(false))<br>}</p>
+<p>解析<br>考点：变量作用域<br>因为 if 语句块内的 err 变量会遮罩函数作用域内的 err 变量，结果：</p>
+<p>改为：</p>
+<p>func DoTheThing(reallyDoIt bool)(errerror) {<br>varresult string<br>    ifreallyDoIt {<br>        result, err =tryTheThing()<br>if err!= nil || result != “it worked” {<br>           err = ErrDidNotWork<br>        }<br>    }    return err<br>}</p>
+<p>28.编译执行下面代码会出现什么?</p>
+<p>package main<br>functest() []func() {<br>varfuns []func()<br>    fori:=0;i&lt;2;i++  {<br>        funs = append(funs,func() {<br>           println(&amp;i,i)<br>        })<br>    }    returnfuns<br>}<br>funcmain(){<br>    funs:=test()<br>       for_,f:=range funs{<br>        f()<br>    }<br>}</p>
+<p>解析<br>考点：闭包延迟求值<br>for 循环复用局部变量 i，每一次放入匿名函数的应用都是想一个变量。 结果：</p>
+<p>0xc042046000 2<br>0xc042046000 2</p>
+<p>如果想不一样可以改为：</p>
+<p>func test() []func()  {<br>varfuns []func()<br>    fori:=0;i&lt;2;i++  {<br>        x:=i<br>        funs = append(funs,func() {<br>println(&amp;x,x)<br>        })<br>    }    returnfuns<br>}</p>
+<p>29.编译执行下面代码会出现什么?</p>
+<p>package main<br>functest(x int)(func(),func()) {<br>returnfunc() {<br>println(x)<br>    x+=10<br>    }, func() {<br>      println(x)<br>    }<br>}<br>funcmain() {<br>    a,b:=test(100)<br>    a()<br>    b()<br>}</p>
+<p>解析<br>考点：闭包引用相同变量*<br>结果：</p>
+<p>100<br>110</p>
+<ol start="30">
+<li>编译执行下面代码会出现什么?</li>
+</ol>
+<p>package main<br>import (   “fmt”<br>    “reflect”)<br>funcmain1() {<br>deferfunc() {<br>iferr:=recover();err!=nil{<br>          fmt.Println(err)<br>       }else {<br>          fmt.Println(“fatal”)<br>       }<br>    }()<br>deferfunc() {<br>panic(“deferpanic”)<br>    }()<br>panic(“panic”)<br>}<br>funcmain() {<br>deferfunc() {<br>iferr:=recover();err!=nil{<br>           fmt.Println(“++++”)<br>           f:=err.(func()string)<br>fmt.Println(err,f(),reflect.TypeOf(err).Kind().String())<br>        }else {<br>           fmt.Println(“fatal”)<br>        }<br>    }()<br>deferfunc() {<br>panic(func()string {<br>return “defer panic”<br>        })<br>    }()<br>panic(“panic”)<br>}</p>
+<p>解析<br>考点：panic 仅有最后一个可以被 revover 捕获<br>触发 panic(“panic”)后顺序执行 defer，但是 defer 中还有一个 panic，所以覆盖了之前的 panic(“panic”)</p>
+<p>————————————————<br>版权声明：本文为 CSDN 博主「尹成」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/itcastcpp/java/article/details/80462619" target="_blank" rel="noopener">https://blog.csdn.net/itcastcpp/java/article/details/80462619</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>扫码打赏，你说多少就多少<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/Java 类加载机制/" class="archive-article-date">
-  	<time datetime="2019-04-24T06:42:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/Java 类加载机制/">Java 类加载机制</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/18/yuque/go 面试题/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/" class="archive-article-date">
-  	<time datetime="2019-04-22T11:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/18/yuque/系统设计/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">系统设计</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">Mysql 中对 date datetime time timestamp 区别</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/09/yuque/dockerfile 的学习/" class="archive-article-date">
-  	<time datetime="2019-04-09T07:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/09/yuque/dockerfile 的学习/">dockerfile 的学习</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/HTTP 状态码的完整列表/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:59:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/HTTP 状态码的完整列表/">HTTP 状态码的完整列表</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/能力提升——计算机基础知识/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:25:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/能力提升——计算机基础知识/">能力提升——计算机基础知识</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/数据库相关/" class="archive-article-date">
-  	<time datetime="2019-04-08T08:53:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/数据库相关/">数据库相关</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/能力提升——Linux!常用命令/" class="archive-article-date">
-  	<time datetime="2019-04-04T08:02:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/能力提升——Linux!常用命令/">能力提升——Linux:常用命令</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l//" class="article-tag-list-link color2">l</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i//" class="article-tag-list-link color2">i</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n//" class="article-tag-list-link color2">n</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u//" class="article-tag-list-link color2">u</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u/x//" class="article-tag-list-link color2">x</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/" class="archive-article-date">
-  	<time datetime="2019-04-03T10:09:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/">能力提升——数据结构算法（可视化）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数//" class="article-tag-list-link color2">数</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据//" class="article-tag-list-link color2">据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结//" class="article-tag-list-link color2">结</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结/构//" class="article-tag-list-link color2">构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'go 面试题',
+  owner: 'zy84338719',
+  repo: 'zy84338719.github.io',
+  oauth: {
+    client_id: '18e4bca6b23d1ae9fae7',
+    client_secret: '7f78d9ff7fa13d9363f6a14321a90cfba2c7a807',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -635,8 +1350,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

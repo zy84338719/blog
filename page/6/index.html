@@ -181,6 +181,296 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/leetcode （20-easy，10-middle，2-hard)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/21/yuque/leetcode （20-easy，10-middle，2-hard)/">leetcode （20-easy，10-middle，2-hard)</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/21/yuque/leetcode （20-easy，10-middle，2-hard)/" class="archive-article-date">
+  	<time datetime="2020-01-21T04:25:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、LCP-1-猜数字"><a href="#一、LCP-1-猜数字" class="headerlink" title="一、LCP 1. 猜数字"></a>一、<a href="https://leetcode-cn.com/problems/guess-numbers/" target="_blank" rel="noopener">LCP 1. 猜数字</a></h1><p>小 A 和 小 B 在玩猜数字。小 B 每次从 1, 2, 3 中随机选择一个，小 A 每次也从 1, 2, 3 中选择一个猜。他们一共进行三次这个游戏，请返回 小 A 猜对了几次？<br>输入的 guess 数组为 小 A 每次的猜测，answer 数组为 小 B 每次的选择。guess 和 answer 的长度都等于 3。<br>示例 1：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：guess = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], answer = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">输出：<span class="number">3</span></span><br><span class="line">解释：小A 每次都猜对了。</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：guess = [<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>], answer = [<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>]</span><br><span class="line">输出：<span class="number">1</span></span><br><span class="line">解释：小A 只猜对了第二次。</span><br></pre></td></tr></table></figure>
+<p>限制：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">guess的长度 = <span class="number">3</span></span><br><span class="line">answer的长度 = <span class="number">3</span></span><br><span class="line">guess的元素取值为 &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; 之一。</span><br><span class="line">answer的元素取值为 &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; 之一。</span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">game</span><span class="params">(guess []<span class="keyword">int</span>, answer []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    num := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i,_:= <span class="keyword">range</span> guess&#123;</span><br><span class="line">        <span class="keyword">if</span> guess[i]==answer[i]&#123;</span><br><span class="line">            num+=<span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> num</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 下面这种效率高</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">game</span><span class="params">(guess []<span class="keyword">int</span>, answer []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    num := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i,g:= <span class="keyword">range</span> guess&#123;</span><br><span class="line">        <span class="keyword">if</span> g==answer[i]&#123;</span><br><span class="line">            num+=<span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> num</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="二、1281-整数的各位积和之差"><a href="#二、1281-整数的各位积和之差" class="headerlink" title="二、1281. 整数的各位积和之差"></a>二、<a href="https://leetcode-cn.com/problems/subtract-the-product-and-sum-of-digits-of-an-integer/" target="_blank" rel="noopener">1281. 整数的各位积和之差</a></h1><p>给你一个整数  n，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。</p>
+<p>示例 1：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：n = <span class="number">234</span></span><br><span class="line">输出：<span class="number">15</span></span><br><span class="line">解释：</span><br><span class="line">各位数之积 = <span class="number">2</span> * <span class="number">3</span> * <span class="number">4</span> = <span class="number">24</span></span><br><span class="line">各位数之和 = <span class="number">2</span> + <span class="number">3</span> + <span class="number">4</span> = <span class="number">9</span></span><br><span class="line">结果 = <span class="number">24</span> - <span class="number">9</span> = <span class="number">15</span></span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：n = <span class="number">4421</span></span><br><span class="line">输出：<span class="number">21</span></span><br><span class="line">解释：</span><br><span class="line">各位数之积 = <span class="number">4</span> * <span class="number">4</span> * <span class="number">2</span> * <span class="number">1</span> = <span class="number">32</span></span><br><span class="line">各位数之和 = <span class="number">4</span> + <span class="number">4</span> + <span class="number">2</span> + <span class="number">1</span> = <span class="number">11</span></span><br><span class="line">结果 = <span class="number">32</span> - <span class="number">11</span> = <span class="number">21</span></span><br></pre></td></tr></table></figure>
+<p>提示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> &lt;= n &lt;= <span class="number">10</span>^<span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">subtractProductAndSum</span><span class="params">(n <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">-1</span>,<span class="number">-1</span>,<span class="number">-1</span>,<span class="number">-1</span>,<span class="number">-1</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		<span class="keyword">if</span> n ==<span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		a[i] = n%<span class="number">10</span></span><br><span class="line">		n = n/<span class="number">10</span></span><br><span class="line">	&#125;</span><br><span class="line">	sum :=<span class="number">0</span></span><br><span class="line">	mult :=<span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> w:= <span class="keyword">range</span> a&#123;</span><br><span class="line">		<span class="keyword">if</span> a[w]==<span class="number">-1</span>&#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		sum+=a[w]</span><br><span class="line">		mult*=a[w]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> mult-sum</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 优化版 一开始太傻逼了。不应该不应该这样想啊</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">subtractProductAndSum</span><span class="params">(n <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	sum :=<span class="number">0</span></span><br><span class="line">	mult :=<span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		sum+= n%<span class="number">10</span></span><br><span class="line">		mult*= n%<span class="number">10</span></span><br><span class="line">		n = n/<span class="number">10</span></span><br><span class="line">        <span class="keyword">if</span> n ==<span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> mult-sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="三、1290-二进制链表转整数"><a href="#三、1290-二进制链表转整数" class="headerlink" title="三、1290. 二进制链表转整数"></a>三、<a href="https://leetcode-cn.com/problems/convert-binary-number-in-a-linked-list-to-integer/" target="_blank" rel="noopener">1290. 二进制链表转整数</a></h1><p>给你一个单链表的引用结点  head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。</p>
+<p>请你返回该链表所表示数字的 十进制值 。</p>
+<p>示例 1：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：head = [<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">输出：<span class="number">5</span></span><br><span class="line">解释：二进制数 (<span class="number">101</span>) 转化为十进制数 (<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：head = [<span class="number">0</span>]</span><br><span class="line">输出：<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>示例 3：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：head = [<span class="number">1</span>]</span><br><span class="line">输出：<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>示例 4：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：head = [<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">输出：<span class="number">18880</span></span><br></pre></td></tr></table></figure>
+<p>示例 5：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：head = [<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">输出：<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>提示：</p>
+<p>链表不为空。<br>链表的结点总数不超过  30。<br>每个结点的值不是  0 就是 1。</p>
+<p>这道题巧妙的运运用到了 位运算符 ｜或   &amp;与 运算   这个思想需要谨记<br>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDecimalValue</span><span class="params">(head *ListNode)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	re := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> tmp := head ; <span class="literal">nil</span> != tmp ; &#123;</span><br><span class="line">		re = (re &lt;&lt; <span class="number">1</span>) | (tmp.Val)</span><br><span class="line">		tmp = tmp.Next</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> re</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="四、反转字符串"><a href="#四、反转字符串" class="headerlink" title="四、反转字符串"></a>四、反转字符串</h1><p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 <code>char[]</code> 的形式给出。<br>不要给另外的数组分配额外的空间，你必须<strong><a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">原地</a>修改输入数组</strong>、使用 O(1) 的额外空间解决这一问题。<br>你可以假设数组中的所有字符都是 <a href="https://baike.baidu.com/item/ASCII" target="_blank" rel="noopener">ASCII</a> 码表中的可打印字符。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[<span class="string">"h"</span>,<span class="string">"e"</span>,<span class="string">"l"</span>,<span class="string">"l"</span>,<span class="string">"o"</span>]</span><br><span class="line">输出：[<span class="string">"o"</span>,<span class="string">"l"</span>,<span class="string">"l"</span>,<span class="string">"e"</span>,<span class="string">"h"</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[<span class="string">"H"</span>,<span class="string">"a"</span>,<span class="string">"n"</span>,<span class="string">"n"</span>,<span class="string">"a"</span>,<span class="string">"h"</span>]</span><br><span class="line">输出：[<span class="string">"h"</span>,<span class="string">"a"</span>,<span class="string">"n"</span>,<span class="string">"n"</span>,<span class="string">"a"</span>,<span class="string">"H"</span>]</span><br></pre></td></tr></table></figure>
+<p>答案<br><strong>递归方案</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverseString</span><span class="params">(s []<span class="keyword">byte</span>)</span></span> &#123;</span><br><span class="line">	bytes, _ := helper(s, <span class="number">0</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%c"</span>,bytes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">helper</span><span class="params">(s []<span class="keyword">byte</span>, n <span class="keyword">int</span>)</span><span class="params">([]<span class="keyword">byte</span>, <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	i := <span class="built_in">len</span>(s)</span><br><span class="line">	<span class="keyword">if</span> n&lt;i/<span class="number">2</span>&#123;</span><br><span class="line">		a:=s[n]</span><br><span class="line">		s[n]=s[i-n<span class="number">-1</span>]</span><br><span class="line">		s[i-n<span class="number">-1</span>]=a</span><br><span class="line">		n=n+<span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> helper(s,n)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s,<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>for 循环</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverseString</span><span class="params">(s []<span class="keyword">byte</span>)</span></span> &#123;</span><br><span class="line">	w := <span class="built_in">len</span>(s)</span><br><span class="line">	<span class="keyword">for</span> i,j:=<span class="keyword">range</span>(s)&#123;</span><br><span class="line">		<span class="keyword">if</span> i&lt;w/<span class="number">2</span> &#123;</span><br><span class="line">			s[i]=s[w-i<span class="number">-1</span>]</span><br><span class="line">			s[w-i<span class="number">-1</span>]=j</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"%c"</span>,s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="五、771-宝石与石头"><a href="#五、771-宝石与石头" class="headerlink" title="五、771. 宝石与石头"></a>五、<a href="https://leetcode-cn.com/problems/jewels-and-stones/" target="_blank" rel="noopener">771. 宝石与石头</a></h1><p>给定字符串 J  代表石头中宝石的类型，和字符串  S 代表你拥有的石头。 S  中每个字符代表了一种你拥有的石头的类型，你想知道你拥有的石头中有多少是宝石。</p>
+<p>J  中的字母不重复，J  和  S 中的所有字符都是字母。字母区分大小写，因此”a”和”A”是不同类型的石头。</p>
+<p>示例 1:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: J = <span class="string">"aA"</span>, S = <span class="string">"aAAbbbb"</span></span><br><span class="line">输出: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: J = <span class="string">"z"</span>, S = <span class="string">"ZZ"</span></span><br><span class="line">输出: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>注意:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">S 和 J 最多含有<span class="number">50</span>个字母。</span><br><span class="line"> J 中的字符不重复。</span><br></pre></td></tr></table></figure>
+<p>答案：<br>golang 里面没有集合<br>不过 map 也是一种好的解决方案（待实现）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">numJewelsInStones</span><span class="params">(J <span class="keyword">string</span>, S <span class="keyword">string</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b = []<span class="keyword">byte</span>(J)</span><br><span class="line">	<span class="keyword">var</span> s = []<span class="keyword">byte</span>(S)</span><br><span class="line">	n:=<span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> _, bb := <span class="keyword">range</span> b&#123;</span><br><span class="line">		<span class="keyword">for</span> _, ss := <span class="keyword">range</span> s&#123;</span><br><span class="line">			<span class="keyword">if</span> bb == ss &#123;</span><br><span class="line">				n=n+<span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="六、链表交换"><a href="#六、链表交换" class="headerlink" title="六、链表交换"></a>六、链表交换</h1><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。<br><strong>你不能只是单纯的改变节点内部的值</strong>，而是需要实际的进行节点交换。<br><strong>示例:</strong><br>给定 <code>1-&gt;2-&gt;3-&gt;4</code>, 你应该返回 <code>2-&gt;1-&gt;4-&gt;3</code>.<br>答案：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * type ListNode struct &#123;</span></span><br><span class="line"><span class="comment"> *     Val int</span></span><br><span class="line"><span class="comment"> *     Next *ListNode</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">swapPairs</span><span class="params">(head *ListNode)</span> *<span class="title">ListNode</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> head == <span class="literal">nil</span> || head.Next == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> head</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> prev *ListNode</span><br><span class="line">    cur := head</span><br><span class="line">    head = cur.Next</span><br><span class="line">    <span class="keyword">for</span> ; cur != <span class="literal">nil</span> &amp;&amp; cur.Next != <span class="literal">nil</span>; cur = cur.Next &#123;</span><br><span class="line">        next := cur.Next</span><br><span class="line">        <span class="comment">//注意：第一次循环时，prev为nil</span></span><br><span class="line">        <span class="keyword">if</span> prev != <span class="literal">nil</span> &#123;</span><br><span class="line">            prev.Next = next</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//交换两个节点</span></span><br><span class="line">        cur.Next, next.Next, prev = next.Next, cur, cur</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="七、杨辉三角"><a href="#七、杨辉三角" class="headerlink" title="七、杨辉三角"></a>七、杨辉三角</h1><p>给定一个非负整数 <em>numRows，</em>生成杨辉三角的前 <em>numRows </em>行。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1580828131352-d42d1169-e7f3-4287-a972-d76391ebc89b.gif#align=left&amp;display=inline&amp;height=240&amp;originHeight=240&amp;originWidth=260&amp;size=0&amp;status=done&amp;style=none&amp;width=260" alt><br>在杨辉三角中，每个数是它左上方和右上方的数的和。<br><strong>示例:</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line">     [<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">   [<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>],</span><br><span class="line">  [<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">1</span>],</span><br><span class="line"> [<span class="number">1</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">1</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generate</span><span class="params">(numRows <span class="keyword">int</span>)</span> [][]<span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = [][]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>&#125;,&#123;<span class="number">1</span>,<span class="number">1</span>&#125;&#125;</span><br><span class="line">    <span class="keyword">if</span>(numRows==<span class="number">0</span>)&#123;</span><br><span class="line">		a = [][]<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(numRows==<span class="number">1</span>)&#123;</span><br><span class="line">		a = [][]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>&#125;&#125;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	i, _, _ := zy(a, <span class="number">2</span>, numRows)</span><br><span class="line">	<span class="keyword">return</span> i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">zy</span><span class="params">(a [][]<span class="keyword">int</span>,n <span class="keyword">int</span>,numRows <span class="keyword">int</span>)</span><span class="params">([][]<span class="keyword">int</span>,<span class="keyword">int</span>,<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n&gt;=numRows&#123;</span><br><span class="line">		<span class="keyword">return</span> a,n,numRows</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> b = []<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;=n;i++&#123;</span><br><span class="line">		<span class="keyword">if</span>(i==<span class="number">0</span>||i==n)&#123;</span><br><span class="line">			b=<span class="built_in">append</span>(b,a[n<span class="number">-1</span>][<span class="number">0</span>])</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			b=<span class="built_in">append</span>(b,a[n<span class="number">-1</span>][i<span class="number">-1</span>]+a[n<span class="number">-1</span>][i])</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	a = <span class="built_in">append</span>(a,b)</span><br><span class="line">	n=n+<span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> zy(a,n,numRows)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="八、杨辉三角-II"><a href="#八、杨辉三角-II" class="headerlink" title="八、杨辉三角 II"></a>八、杨辉三角 II</h1><p>给定一个非负索引 _k_，其中 _k_ ≤ 33，返回杨辉三角的第 <em>k </em>行。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1580828612975-3fd67c2d-8ed5-4280-97eb-f2f2e2b99d51.gif#align=left&amp;display=inline&amp;height=240&amp;originHeight=240&amp;originWidth=260&amp;size=0&amp;status=done&amp;style=none&amp;width=260" alt><br>在杨辉三角中，每个数是它左上方和右上方的数的和。<br><strong>示例:</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">3</span></span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getRow</span><span class="params">(rowIndex <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a = [][]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>&#125;,&#123;<span class="number">1</span>,<span class="number">1</span>&#125;&#125;</span><br><span class="line">	<span class="keyword">if</span>(rowIndex==<span class="number">0</span>)&#123;</span><br><span class="line">		b := []<span class="keyword">int</span>&#123;<span class="number">1</span>&#125;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">if</span>(rowIndex==<span class="number">1</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> a[<span class="number">1</span>]</span><br><span class="line">	&#125;</span><br><span class="line">	i, _, _ := zy(a, <span class="number">2</span>, rowIndex+<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> i[rowIndex]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">zy</span><span class="params">(a [][]<span class="keyword">int</span>,n <span class="keyword">int</span>,numRows <span class="keyword">int</span>)</span><span class="params">([][]<span class="keyword">int</span>,<span class="keyword">int</span>,<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n&gt;=numRows&#123;</span><br><span class="line">		<span class="keyword">return</span> a,n,numRows</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> b = []<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;=n;i++&#123;</span><br><span class="line">		<span class="keyword">if</span>(i==<span class="number">0</span>||i==n)&#123;</span><br><span class="line">			b=<span class="built_in">append</span>(b,a[n<span class="number">-1</span>][<span class="number">0</span>])</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			b=<span class="built_in">append</span>(b,a[n<span class="number">-1</span>][i<span class="number">-1</span>]+a[n<span class="number">-1</span>][i])</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	a = <span class="built_in">append</span>(a,b)</span><br><span class="line">	n=n+<span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> zy(a,n,numRows)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>进阶：</strong><br>你可以优化你的算法到 _O_(_k_) 空间复杂度吗？<br>优化版本</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getRow</span><span class="params">(rowIndex <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    	<span class="comment">// 第0行</span></span><br><span class="line">	nums := []<span class="keyword">int</span>&#123;<span class="number">1</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= rowIndex; i++ &#123;</span><br><span class="line">		<span class="comment">// 尾部追加1</span></span><br><span class="line">		nums = <span class="built_in">append</span>(nums, <span class="number">1</span>)</span><br><span class="line">		<span class="comment">// 倒序计算杨辉三角当前行</span></span><br><span class="line">		<span class="keyword">for</span> j:=i<span class="number">-1</span>;j&gt;<span class="number">0</span>;j--&#123;</span><br><span class="line">			nums[j]+=nums[j<span class="number">-1</span>]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> nums</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="九、反转一个单链表。"><a href="#九、反转一个单链表。" class="headerlink" title="九、反转一个单链表。"></a>九、反转一个单链表。</h1><p><strong>示例:</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>-&gt;<span class="number">5</span>-&gt;NULL</span><br><span class="line">输出: <span class="number">5</span>-&gt;<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>-&gt;NULL</span><br></pre></td></tr></table></figure>
+<p><strong>进阶:</strong><br><del>你可以迭代或递归地反转链表。你能否用两种方法解决这道题？</del><br>~~<br><strong>答案</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverseList</span><span class="params">(head *ListNode)</span> *<span class="title">ListNode</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> head==<span class="literal">nil</span> || head.Next==<span class="literal">nil</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> head</span><br><span class="line">	&#125;</span><br><span class="line">	p := reverseList(head.Next)</span><br><span class="line">	head.Next.Next = head</span><br><span class="line">	head.Next = <span class="literal">nil</span></span><br><span class="line">	<span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十、斐波那契"><a href="#十、斐波那契" class="headerlink" title="十、斐波那契"></a>十、斐波那契</h1><p><strong>斐波那契数</strong>，通常用 <code>F(n)</code> 表示，形成的序列称为<strong>斐波那契数列</strong>。该数列由 <code>0</code> 和 <code>1</code> 开始，后面的每一项数字都是前面两项数字的和。也就是：<br>F(0) = 0,   F(1) = 1<br>F(N) = F(N - 1) + F(N - 2), 其中 N &gt; 1.<br>给定 <code>N</code>，计算 <code>F(N)</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">1</span>：</span><br><span class="line">输入：<span class="number">2</span></span><br><span class="line">输出：<span class="number">1</span></span><br><span class="line">解释：F(<span class="number">2</span>) = F(<span class="number">1</span>) + F(<span class="number">0</span>) = <span class="number">1</span> + <span class="number">0</span> = <span class="number">1.</span></span><br><span class="line">示例 <span class="number">2</span>：</span><br><span class="line">输入：<span class="number">3</span></span><br><span class="line">输出：<span class="number">2</span></span><br><span class="line">解释：F(<span class="number">3</span>) = F(<span class="number">2</span>) + F(<span class="number">1</span>) = <span class="number">1</span> + <span class="number">1</span> = <span class="number">2.</span></span><br><span class="line">示例 <span class="number">3</span>：</span><br><span class="line">输入：<span class="number">4</span></span><br><span class="line">输出：<span class="number">3</span></span><br><span class="line">解释：F(<span class="number">4</span>) = F(<span class="number">3</span>) + F(<span class="number">2</span>) = <span class="number">2</span> + <span class="number">1</span> = <span class="number">3.</span></span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li>0 ≤ <code>N</code> ≤ 30</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cache <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span> = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>,<span class="number">100</span>)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fib</span><span class="params">(N <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> reault <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">if</span> cache[N]!= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> cache[N]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> N&lt;<span class="number">2</span>&#123;</span><br><span class="line">		reault = N</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		reault = fib(N<span class="number">-1</span>)+fib(N<span class="number">-2</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	cache[N]=reault</span><br><span class="line">	<span class="keyword">return</span> reault</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十一、爬楼梯"><a href="#十一、爬楼梯" class="headerlink" title="十一、爬楼梯"></a>十一、爬楼梯</h1><p>假设你正在爬楼梯。需要 _n_ 阶你才能到达楼顶。<br>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？<br><strong>注意：</strong>给定 _n_ 是一个正整数。<br><strong>示例 1：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入： <span class="number">2</span></span><br><span class="line">输出： <span class="number">2</span></span><br><span class="line">解释： 有两种方法可以爬到楼顶。</span><br><span class="line"><span class="number">1.</span>  <span class="number">1</span> 阶 + <span class="number">1</span> 阶</span><br><span class="line"><span class="number">2.</span>  <span class="number">2</span> 阶</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入： <span class="number">3</span></span><br><span class="line">输出： <span class="number">3</span></span><br><span class="line">解释： 有三种方法可以爬到楼顶。</span><br><span class="line"><span class="number">1.</span>  <span class="number">1</span> 阶 + <span class="number">1</span> 阶 + <span class="number">1</span> 阶</span><br><span class="line"><span class="number">2.</span>  <span class="number">1</span> 阶 + <span class="number">2</span> 阶</span><br><span class="line"><span class="number">3.</span>  <span class="number">2</span> 阶 + <span class="number">1</span> 阶</span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#动态规划</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">climbStairs</span><span class="params">(n <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	dp:= []<span class="keyword">int</span>&#123;<span class="number">0</span>&#125;</span><br><span class="line">	dp=<span class="built_in">append</span>(dp,<span class="number">1</span>)</span><br><span class="line">	dp=<span class="built_in">append</span>(dp,<span class="number">2</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">3</span>;i&lt;=n;i++&#123;</span><br><span class="line">		dp = <span class="built_in">append</span>(dp,dp[i<span class="number">-1</span>]+dp[i<span class="number">-2</span>])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> dp[n]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十二、第二高的薪水-MYSQL"><a href="#十二、第二高的薪水-MYSQL" class="headerlink" title="十二、第二高的薪水(MYSQL)"></a>十二、第二高的薪水(MYSQL)</h1><p>编写一个 SQL 查询，获取 <code>Employee</code> 表中第二高的薪水（Salary） 。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+--------+</span><br><span class="line">| Id | Salary |</span><br><span class="line">+----+--------+</span><br><span class="line">| <span class="number">1</span>  | <span class="number">100</span>    |</span><br><span class="line">| <span class="number">2</span>  | <span class="number">200</span>    |</span><br><span class="line">| <span class="number">3</span>  | <span class="number">300</span>    |</span><br><span class="line">+----+--------+</span><br></pre></td></tr></table></figure>
+<p>例如上述 <code>Employee</code> 表，SQL 查询应该返回 <code>200</code> 作为第二高的薪水。如果不存在第二高的薪水，那么查询应返回 <code>null</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+---------------------+</span><br><span class="line">| SecondHighestSalary |</span><br><span class="line">+---------------------+</span><br><span class="line">| <span class="number">200</span>                 |</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
+<p>答案</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> (<span class="keyword">select</span> <span class="keyword">distinct</span> Salary <span class="keyword">from</span> Employee <span class="keyword">order</span> <span class="keyword">by</span> Salary <span class="keyword">desc</span> <span class="keyword">limit</span> <span class="number">1</span> <span class="keyword">offset</span> <span class="number">1</span> )<span class="keyword">as</span> SecondHighestSalary</span><br></pre></td></tr></table></figure>
+<h1 id="十三、打印从-1-到最大的-n-位数"><a href="#十三、打印从-1-到最大的-n-位数" class="headerlink" title="十三、打印从 1 到最大的 n 位数"></a>十三、<a href="https://leetcode-cn.com/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/" target="_blank" rel="noopener">打印从 1 到最大的 n 位数</a></h1><p>输入数字  <code>n</code>，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。</p>
+<p><strong>输入:</strong> n = 1<br><strong>输出:</strong> [1,2,3,4,5,6,7,8,9]</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printNumbers</span><span class="params">(n <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> w []<span class="keyword">int</span></span><br><span class="line">	qq := math.Pow10(n)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="keyword">int</span>(qq); i++ &#123;</span><br><span class="line">		w = <span class="built_in">append</span>(w, i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> w</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十四、统计位数为偶数的数字"><a href="#十四、统计位数为偶数的数字" class="headerlink" title="十四、统计位数为偶数的数字"></a>十四、<a href="https://leetcode-cn.com/problems/find-numbers-with-even-number-of-digits/" target="_blank" rel="noopener">统计位数为偶数的数字</a></h1><p>给你一个整数数组  nums，请你返回其中位数为   偶数   的数字的个数。</p>
+<p>示例 1：</p>
+<p>输入：nums = [12,345,2,6,7896]<br>输出：2<br>解释：<br>12 是 2 位数字（位数为偶数）<br>345 是 3 位数字（位数为奇数）<br>2 是 1 位数字（位数为奇数）<br>6 是 1 位数字 位数为奇数）<br>7896 是 4 位数字（位数为偶数）<br>因此只有 12 和 7896 是位数为偶数的数字<br>示例 2：</p>
+<p>输入：nums = [555,901,482,1771]<br>输出：1<br>解释：<br>只有 1771 是位数为偶数的数字。</p>
+<p>提示：</p>
+<p>1 &lt;= nums.length &lt;= 500<br>1 &lt;= nums[i] &lt;= 10^5</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findNumbers</span><span class="params">(nums []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    w:=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _,v:=<span class="keyword">range</span> nums&#123;</span><br><span class="line">        <span class="keyword">if</span> (v&gt;<span class="number">9</span>&amp;&amp;v&lt;<span class="number">100</span>) ||(v&gt;<span class="number">999</span>&amp;&amp;v&lt;<span class="number">10000</span>)&#123;</span><br><span class="line">            w=w+<span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> w</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十五、统计有序矩阵中的负数"><a href="#十五、统计有序矩阵中的负数" class="headerlink" title="十五、统计有序矩阵中的负数"></a>十五、<a href="https://leetcode-cn.com/problems/count-negative-numbers-in-a-sorted-matrix/" target="_blank" rel="noopener">统计有序矩阵中的负数</a></h1><p>给你一个  m * n  的矩阵  grid，矩阵中的元素无论是按行还是按列，都以非递增顺序排列。</p>
+<p>请你统计并返回  grid  中 负数 的数目。<br>示例 1：<br>输入：grid = [[4,3,2,-1],[3,2,1,-1],[1,1,-1,-2],[-1,-1,-2,-3]]<br>输出：8<br>解释：矩阵中共有 8 个负数。<br>示例 2：<br>输入：grid = [[3,2],[1,0]]<br>输出：0<br>示例 3：<br>输入：grid = [[1,-1],[-1,-1]]<br>输出：3<br>示例 4：<br>输入：grid = [[-1]]<br>输出：1</p>
+<p>提示：<br>m == grid.length<br>n == grid[i].length<br>1 &lt;= m, n &lt;= 100<br>-100 &lt;= grid[i][j] &lt;= 100</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">countNegatives</span><span class="params">(grid [][]<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    w:=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _,v:=<span class="keyword">range</span>(grid)&#123;</span><br><span class="line">        <span class="keyword">for</span> _,j:=<span class="keyword">range</span>(v)&#123;</span><br><span class="line">            <span class="keyword">if</span> j&lt;<span class="number">0</span> &#123;</span><br><span class="line">                w+=<span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> w</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#</p>
+<h1 id="十六、IP-地址无效化"><a href="#十六、IP-地址无效化" class="headerlink" title="十六、IP 地址无效化"></a>十六、<a href="https://leetcode-cn.com/problems/defanging-an-ip-address/" target="_blank" rel="noopener">IP 地址无效化</a></h1><p>给你一个有效的 IPv4 地址  address，返回这个 IP 地址的无效化版本。</p>
+<p>所谓无效化  IP 地址，其实就是用  “[.]”  代替了每个 “.”。</p>
+<p>示例 1：<br>输入：address = “1.1.1.1”<br>输出：”1[.]1[.]1[.]1”<br>示例 2：<br>输入：address = “255.100.50.0”<br>输出：”255[.]100[.]50[.]0”<br>提示：</p>
+<p>给出的  address  是一个有效的 IPv4 地址<br>答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">defangIPaddr</span><span class="params">(address <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> strings.Replace(address,<span class="string">"."</span>,<span class="string">"[.]"</span>,<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">defangIPaddr</span><span class="params">(address <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    a := strings.Split(address,<span class="string">"."</span>)</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>]+<span class="string">"[.]"</span>+a[<span class="number">1</span>]+<span class="string">"[.]"</span>+a[<span class="number">2</span>]+<span class="string">"[.]"</span>+a[<span class="number">3</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十七、替换空格"><a href="#十七、替换空格" class="headerlink" title="十七、替换空格"></a>十七、<a href="https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/" target="_blank" rel="noopener">替换空格</a></h1><p>请实现一个函数，把字符串 s 中的每个空格替换成”%20”。</p>
+<p>示例 1：</p>
+<p>输入：s = “We are happy.”<br>输出：”We%20are%20happy.”</p>
+<p>限制：<br>0 &lt;= s 的长度 &lt;= 10000<br>！有点投机取巧</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">replaceSpace</span><span class="params">(s <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> strings.Replace(s,<span class="string">" "</span>,<span class="string">"%20"</span>,<span class="number">10000</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#</p>
+<h1 id="十八、位-1-的个数"><a href="#十八、位-1-的个数" class="headerlink" title="十八、位 1 的个数"></a>十八、<a href="https://leetcode-cn.com/problems/number-of-1-bits/" target="_blank" rel="noopener">位 1 的个数</a></h1><p>编写一个函数，输入是一个无符号整数，返回其二进制表达式中数字位数为 ‘1’  的个数（也被称为汉明重量）。</p>
+<p>示例 1：</p>
+<p>输入：00000000000000000000000000001011<br>输出：3<br>解释：输入的二进制串 00000000000000000000000000001011  中，共有三位为 ‘1’。<br>示例 2：</p>
+<p>输入：00000000000000000000000010000000<br>输出：1<br>解释：输入的二进制串 00000000000000000000000010000000  中，共有一位为 ‘1’。<br>示例 3：</p>
+<p>输入：11111111111111111111111111111101<br>输出：31<br>解释：输入的二进制串 11111111111111111111111111111101 中，共有 31 位为 ‘1’。</p>
+<p>提示：</p>
+<p>请注意，在某些语言（如 Java）中，没有无符号整数类型。在这种情况下，输入和输出都将被指定为有符号整数类型，并且不应影响您的实现，因为无论整数是有符号的还是无符号的，其内部的二进制表示形式都是相同的。<br>在 Java 中，编译器使用二进制补码记法来表示有符号整数。因此，在上面的   示例 3  中，输入表示有符号整数 -3。</p>
+<p>进阶:<br>如果多次调用这个函数，你将如何优化你的算法？</p>
+<p>low 答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hammingWeight</span><span class="params">(num <span class="keyword">uint32</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	nums := fmt.Sprintf(<span class="string">"%b"</span>, num)</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(strings.Replace(nums, <span class="string">"0"</span>, <span class="string">""</span>, <span class="number">32</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>high 答案</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hammingWeight</span><span class="params">(num <span class="keyword">uint32</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	res:=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        num&amp;=num<span class="number">-1</span></span><br><span class="line">        res+=<span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="十九、大的国家"><a href="#十九、大的国家" class="headerlink" title="十九、大的国家"></a>十九、<a href="https://leetcode-cn.com/problems/big-countries/" target="_blank" rel="noopener">大的国家</a></h1><p>这里有张  World 表</p>
+<p>+—————–+————+————+————–+—————+<br>| name            | continent  | area       | population   | gdp           |<br>+—————–+————+————+————–+—————+<br>| Afghanistan     | Asia       | 652230     | 25500100     | 20343000      |<br>| Albania         | Europe     | 28748      | 2831741      | 12960000      |<br>| Algeria         | Africa     | 2381741    | 37100000     | 188681000     |<br>| Andorra         | Europe     | 468        | 78115        | 3712000       |<br>| Angola          | Africa     | 1246700    | 20609294     | 100990000     |<br>+—————–+————+————+————–+—————+<br>如果一个国家的面积超过 300 万平方公里，或者人口超过 2500 万，那么这个国家就是大国家。</p>
+<p>编写一个 SQL 查询，输出表中所有大国家的名称、人口和面积。</p>
+<p>例如，根据上表，我们应该输出:</p>
+<p>+————–+————-+————–+<br>| name         | population  | area         |<br>+————–+————-+————–+<br>| Afghanistan  | 25500100    | 652230       |<br>| Algeria      | 37100000    | 2381741      |<br>+————–+————-+————–+</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name,population,area from World Where area&gt;<span class="number">3000000</span> OR population&gt; <span class="number">25000000</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="二十、解压缩编码列表"><a href="#二十、解压缩编码列表" class="headerlink" title="二十、解压缩编码列表"></a>二十、<a href="https://leetcode-cn.com/problems/decompress-run-length-encoded-list/" target="_blank" rel="noopener">解压缩编码列表</a></h1><p>给你一个以行程长度编码压缩的整数列表  nums 。</p>
+<p>考虑每对相邻的两个元素 [a, b] = [nums[2<em>i], nums[2</em>i+1]] （其中  i &gt;= 0 ），每一对都表示解压后有 a  个值为  b  的元素。</p>
+<p>请你返回解压后的列表。</p>
+<p>示例：</p>
+<p>输入：nums = [1,2,3,4]<br>输出：[2,4,4,4]<br>解释：第一对 [1,2] 代表着 2 的出现频次为 1，所以生成数组 [2]。<br>第二对 [3,4] 代表着 4 的出现频次为 3，所以生成数组 [4,4,4]。<br>最后将它们串联到一起 [2] + [4,4,4] = [2,4,4,4]。</p>
+<p>提示：</p>
+<p>2 &lt;= nums.length &lt;= 100<br>nums.length % 2 == 0<br>1 &lt;= nums[i] &lt;= 100</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">decompressRLElist</span><span class="params">(nums []<span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> res []<span class="keyword">int</span> = []<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums); i = i + <span class="number">2</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; nums[i]; j++ &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, nums[i+<span class="number">1</span>])</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#</p>
+<h1 id="二十一、判定字符是否唯一"><a href="#二十一、判定字符是否唯一" class="headerlink" title="二十一、判定字符是否唯一"></a>二十一、<a href="https://leetcode-cn.com/problems/is-unique-lcci/" target="_blank" rel="noopener">判定字符是否唯一</a></h1><p>实现一个算法，确定一个字符串 s 的所有字符是否全都不同。</p>
+<p>示例 1：</p>
+<p>输入: s = “leetcode”<br>输出: false<br>示例 2：</p>
+<p>输入: s = “abc”<br>输出: true<br>限制：</p>
+<p>0 &lt;= len(s) &lt;= 100<br>如果你不使用额外的数据结构，会很加分。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isUnique</span><span class="params">(astr <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(astr)</span><br><span class="line">	<span class="keyword">var</span> m <span class="keyword">map</span>[<span class="keyword">byte</span>]<span class="keyword">int</span> = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">byte</span>]<span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		m[astr[i]] = <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n == <span class="built_in">len</span>(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="二十二、URL-化"><a href="#二十二、URL-化" class="headerlink" title="二十二、URL 化"></a>二十二、<a href="https://leetcode-cn.com/problems/string-to-url-lcci/" target="_blank" rel="noopener">URL 化</a></h1><p>URL 化。编写一种方法，将字符串中的空格全部替换为%20。假定该字符串尾部有足够的空间存放新增字符，并且知道字符串的“真实”长度。（注：用 Java 实现的话，请使用字符数组实现，以便直接在数组上操作。）</p>
+<p>示例 1:</p>
+<p>输入：”Mr John Smith    “, 13<br>输出：”Mr%20John%20Smith”<br>示例 2:</p>
+<p>输入：”               “, 5<br>输出：”%20%20%20%20%20”<br>提示：</p>
+<p>字符串长度在[0, 500000]范围内。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">replaceSpaces</span><span class="params">(S <span class="keyword">string</span>, length <span class="keyword">int</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> w []<span class="keyword">byte</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; length; i++ &#123;</span><br><span class="line">		w = <span class="built_in">append</span>(w, S[i])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> strings.Replace(<span class="keyword">string</span>(w), <span class="string">" "</span>, <span class="string">"%20"</span>, length)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/21/yuque/leetcode （20-easy，10-middle，2-hard)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/2020-2025" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/18/yuque/2020-2025/">2020-2025</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/18/yuque/2020-2025/" class="archive-article-date">
+  	<time datetime="2020-01-18T15:12:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>5 年目标：</p>
+<ol>
+<li>自我总资产百万</li>
+<li>技术希望在中国互联网上有一席之地。（小小网红那种就成）</li>
+<li>希望 2025 年底前进入阿里巴巴</li>
+<li>有自己的稳定的副业。副业超过主业的收入。</li>
+<li>不偷奸不耍滑，勤勤恳恳，不整快钱。</li>
+</ol>
+<p>2020 年 1.找到那个合适的人。（重要不紧急） 2.整个副业，不必多、第一年年入 2 万即可。（紧急不重要-&gt;（钱不重要）） 3.技术上面有突破、独当一面（后端服务设计、代码质量提高），2020 年至少 30 篇技术文章。（长期）</p>
+<p>计划 2021 年 1.年底前结婚。<br>…….这里待完善</p>
+<p>2021 年</p>
+<p>2022 年</p>
+<p>2023 年</p>
+<p>2024 年</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/18/yuque/2020-2025/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/人生的前0.25再见，你好第二个25年" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -972,155 +1262,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/GO(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/20/yuque/GO(一)/">GO(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/20/yuque/GO(一)/" class="archive-article-date">
-  	<time datetime="2019-10-20T06:28:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文确保你一定安装了 brew 包管理器<br>macOS 安装 Golang 过程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">mkdir ~/go_work</span><br><span class="line">mkdir ~/go_work/bin</span><br><span class="line">mkdir ~/go_work/pkg</span><br><span class="line">mkdir ~/go_work/src</span><br><span class="line"></span><br><span class="line">echo "export GOROOT=/usr/local/opt/go/libexec" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOPATH=~/go_work" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOBIN=~/go_work/bin" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export PATH=$PATH:$GOROOT/bin:$GOPATH:$GOBIN" &gt;&gt; ~.zshrc</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/20/yuque/GO(一)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/佛系提升macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">佛系提升macOS Catalina &amp;amp;&amp;amp; iPad&amp;amp;iphone 使用体验</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/" class="archive-article-date">
-  	<time datetime="2019-10-19T13:32:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>截止 2019 年 10 月 20 日<br>佛系 如果您是个安卓用户 or 微软，这篇文章所讲到的东西不太适合您，您可以关闭这个浏览器了。<br>我希望您是拥有 apple 全家桶（iphone ipad mac homepod airpods tv 等）或者半全家桶的用户（mac iphone( ipad)）。最好同时订阅了 iCloud 云盘（付费的用户），系统升级到最新版。</p>
-<h1 id="设备设置"><a href="#设备设置" class="headerlink" title="设备设置"></a>设备设置</h1><p>iPhone/iPad 设置手机/pad 的快捷词典<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571549151848-69c96297-b09e-40bb-a01d-03f3cc044d12.gif#align=left&amp;display=inline&amp;height=811&amp;name=%E8%AF%8D%E5%85%B8%E8%AE%BE%E7%BD%AE.gif&amp;originHeight=1884&amp;originWidth=876&amp;size=1601331&amp;status=done&amp;style=none&amp;width=377" alt="词典设置.gif"><br>关闭不必要的系统服务定位等请求<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571550969787-78548879-7fb7-45f1-80b2-a241531b204f.gif#align=left&amp;display=inline&amp;height=827&amp;name=%E9%9A%90%E7%A7%81.gif&amp;originHeight=1886&amp;originWidth=876&amp;size=9642136&amp;status=done&amp;style=none&amp;width=384" alt="隐私.gif"><br>Mac 一些简单配置<br>巧用聚焦功能 command+空格 我们打开的样子可能不太一样，但是一样用。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571551104475-324a473a-53f3-441a-a853-44c6d5b6acf1.png#align=left&amp;display=inline&amp;height=798&amp;name=image.png&amp;originHeight=1596&amp;originWidth=2544&amp;size=5263723&amp;status=done&amp;style=none&amp;width=1272" alt="image.png"><br>聚焦搜索 终端 回车 在黑框里输入 这样桌面上就有了一个 home 的快捷方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s ~/ ~/Desktop/</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571506927854-255f5dff-5422-4a8d-9768-7fee0c951968.png#align=left&amp;display=inline&amp;height=579&amp;name=image.png&amp;originHeight=1158&amp;originWidth=2552&amp;size=2637727&amp;status=done&amp;style=none&amp;width=1276" alt="image.png"></p>
-<h1 id="软件套件"><a href="#软件套件" class="headerlink" title="软件套件"></a>软件套件</h1><h2 id="iBook"><a href="#iBook" class="headerlink" title="iBook"></a>iBook</h2><p>无论 PC 端 还是 iPad 或者 iPhone 这三者体验舒服的一点是<br>三者协作，配合支持 apple pencil 的 ipad 的可以进行勾勾画画，增强阅读体验。也可以长按进行标注，将数据进行导出。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571551387316-2489b7db-c7ab-4108-8b22-b1d07579fe86.png#align=left&amp;display=inline&amp;height=784&amp;name=image.png&amp;originHeight=1568&amp;originWidth=2368&amp;size=1431443&amp;status=done&amp;style=none&amp;width=1184" alt="image.png"></p>
-<h2 id="iPhoto"><a href="#iPhoto" class="headerlink" title="iPhoto"></a>iPhoto</h2><p>无论 iOS 上，还是 mac 上。iphoto 现在支持强大的 P 图功能，以及视频剪辑功能。这个我不太在行。但知道有这么个东西很好用。</p>
-<h3 id="备忘录"><a href="#备忘录" class="headerlink" title="备忘录"></a>备忘录</h3><p>apple 的备忘录用户体验很舒服，记小笔记、感受都在上面整理。备忘录 macOS Mojave 时，苹果完善了 mac 版的备忘录生态支持，当 ipad 开始支持 apple pencil 的时候，可以将一些你的想法实时的记录到你的电子笔记中。它支持表格，一个被苹果调教的高清扫描仪备忘录。手头需要扫描文件，没扫描仪的你，用它刚刚好。当然它还可以在里面记录一些代办事宜。（这些功能手机，PAD，电脑上都可以触发这些操作 ）</p>
-<p>catalina，苹果再一次体现了它强大的软硬生态。通过苹果电脑版备忘录直接调用与你同一个账户下里你比较近的设备的摄像头，屏幕作为你的输入工具。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507229158-a3ab24c5-23e6-47a6-9e77-6401ca20bb15.png#align=left&amp;display=inline&amp;height=666&amp;name=image.png&amp;originHeight=1332&amp;originWidth=2000&amp;size=1716966&amp;status=done&amp;style=none&amp;width=1000" alt="image.png"></p>
-<h2 id="提醒事项"><a href="#提醒事项" class="headerlink" title="提醒事项"></a>提醒事项</h2><p>你出设置全家桶联动。</p>
-<h2 id="日历"><a href="#日历" class="headerlink" title="日历"></a>日历</h2><p>套用老罗的一句话来说，这可能是全世界最好的日历，没有什么花里胡哨的东西。可以帮助你做好时间规划。打印。ios 设备上支持拖拽调整。在设置日程时，注意勾画地点。这样的 iphone 等设备更加了解你。调用地图等应用，辅助帮你计算一个预估时间。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507523007-6c96e338-c29d-4fa1-8912-dd18d5f8d7fd.png#align=left&amp;display=inline&amp;height=893&amp;name=image.png&amp;originHeight=1786&amp;originWidth=2614&amp;size=1762426&amp;status=done&amp;style=none&amp;width=1307" alt="image.png"></p>
-<h2 id="捷径（快捷指令）"><a href="#捷径（快捷指令）" class="headerlink" title="捷径（快捷指令）"></a>捷径（快捷指令）</h2><p>这个主要是一些自动话的编辑，可以帮助你简化操作。例如 一键 XX 打卡，一键蚂蚁森林收集能量等。<br>这个网站应该会对你的生活有所帮助@ <a href="https://jiejinghe.com" target="_blank" rel="noopener">https://jiejinghe.com</a>  里面都是别人编辑好的小捷径<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507592657-304edc33-4439-4515-839c-fc3064cafaf6.png#align=left&amp;display=inline&amp;height=684&amp;name=IMG_1104.png&amp;originHeight=2436&amp;originWidth=1125&amp;size=2146673&amp;status=done&amp;style=none&amp;width=316" alt="IMG_1104.png"></p>
-<h2 id="SIRI"><a href="#SIRI" class="headerlink" title="SIRI"></a>SIRI</h2><p>当年苹果率先推出来的智能语音助理，他可以帮助你干很多事情。例如 嘿 siri，一键 XX 打卡，一键 XX 收能量，一键添加日程等，所有你能想到的都可以让他帮助你做。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571508014353-d2590f67-97f1-486e-a8fa-1e400745765f.jpeg#align=left&amp;display=inline&amp;height=708&amp;name=IMG_1107.jpg&amp;originHeight=2436&amp;originWidth=1125&amp;size=225218&amp;status=done&amp;style=none&amp;width=327" alt="IMG_1107.jpg"></p>
-<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><p>防丢神器，查找你的设备或你的家人。（前提你的设备都用同一个 icloud 以及配置你们的 icloud 家庭）<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571508177161-0f9aeb33-21aa-4b37-8e86-e5d3242b01bf.jpeg#align=left&amp;display=inline&amp;height=706&amp;name=IMG_1105.jpg&amp;originHeight=2436&amp;originWidth=1125&amp;size=206420&amp;status=done&amp;style=none&amp;width=326" alt="IMG_1105.jpg"></p>
-<h2 id="此处针对-iPad"><a href="#此处针对-iPad" class="headerlink" title="此处针对 iPad"></a>此处针对 iPad</h2><p>推荐几个 APP</p>
-<h3 id="OneNote"><a href="#OneNote" class="headerlink" title="OneNote"></a>OneNote</h3><p>这里有个不错的憧憬，将会议文档导入 iPad，同时用 Apple pencil 对会议文档进行标注，oneNote 录音功能,帮你不要错过某些人重要的讲话。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571509331143-e426eb26-73e6-4b8c-b5d1-465c5f8b5fc6.jpeg#align=left&amp;display=inline&amp;height=1536&amp;name=IMG_853CBB8E0F1B-1.jpeg&amp;originHeight=1536&amp;originWidth=2048&amp;size=341340&amp;status=done&amp;style=none&amp;width=2048" alt="IMG_853CBB8E0F1B-1.jpeg"></p>
-<h3 id="Notability"><a href="#Notability" class="headerlink" title="Notability"></a>Notability</h3><p>纯笔记，pencil 记录感觉比较爽（个人觉得其实备忘录已经完全可以全面代替这个 app）。</p>
-<h2 id="此处针对-MAC"><a href="#此处针对-MAC" class="headerlink" title="此处针对 MAC"></a>此处针对 MAC</h2><h3 id="mac-快捷键"><a href="#mac-快捷键" class="headerlink" title="mac 快捷键"></a>mac 快捷键</h3><p>按住 command 展示该应用快捷键（这个没法截图）但是可以帮你看到很多快捷键。安装完成软件后，先去小火箭里面打开一下软件。<br><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571510645903-0d11c265-b855-437a-a887-b3f3f7ab95ca.zip?_lake_card=%7B%22uid%22%3A%221571510644092-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571510645903-0d11c265-b855-437a-a887-b3f3f7ab95ca.zip%22%2C%22name%22%3A%22cheatsheet133.zip%22%2C%22size%22%3A2601048%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22ZVMtL%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">cheatsheet133.zip</a></p>
-<h3 id="airplayer"><a href="#airplayer" class="headerlink" title="airplayer"></a>airplayer</h3><p><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571508903683-55eca691-963d-44bb-9855-de8dac0d1e32.zip?_lake_card=%7B%22uid%22%3A%221571508896788-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571508903683-55eca691-963d-44bb-9855-de8dac0d1e32.zip%22%2C%22name%22%3A%22AirServer.zip%22%2C%22size%22%3A11115174%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22ZrGUd%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">AirServer.zip</a><br>投屏应用，苹果投苹果。开会演示利器。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508971204-2aea3a61-acd6-4d29-90d8-e03719a6b2fe.png#align=left&amp;display=inline&amp;height=1027&amp;name=image.png&amp;originHeight=2054&amp;originWidth=3288&amp;size=3205619&amp;status=done&amp;style=none&amp;width=1644" alt="image.png"></p>
-<h3 id="腾讯柠檬"><a href="#腾讯柠檬" class="headerlink" title="腾讯柠檬"></a>腾讯柠檬</h3><h5 id="https-mac-gj-qq-com"><a href="#https-mac-gj-qq-com" class="headerlink" title="https://mac.gj.qq.com/"></a><a href="https://mac.gj.qq.com/" target="_blank" rel="noopener">https://mac.gj.qq.com/</a></h5><p>这个软件我陪伴他迭代一年之久。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508527907-6526b168-aecd-48d9-8ea8-aed2818ceebe.png#align=left&amp;display=inline&amp;height=27&amp;name=image.png&amp;originHeight=54&amp;originWidth=472&amp;size=34589&amp;status=done&amp;style=none&amp;width=236" alt="image.png"><br>垃圾清除软件，可以查看网速 cpu 温度，风扇转速等<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508554616-3ecc52f4-7f5c-4e07-aad3-816a817f4cda.png#align=left&amp;display=inline&amp;height=618&amp;name=image.png&amp;originHeight=1236&amp;originWidth=2000&amp;size=549941&amp;status=done&amp;style=none&amp;width=1000" alt="image.png"></p>
-<h3 id="超级剪贴板"><a href="#超级剪贴板" class="headerlink" title="超级剪贴板"></a>超级剪贴板</h3><p>这个剪贴板很神奇，他可以帮你记录你所有苹果设备（跨设备的复制记录保存）上的复制操作。可以保存历史记录。以及一些常用网页的快捷方式。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571510793477-48c84978-1593-4fbe-8d95-f5896dbbde99.png#align=left&amp;display=inline&amp;height=453&amp;name=image.png&amp;originHeight=2100&amp;originWidth=3360&amp;size=2343326&amp;status=done&amp;style=none&amp;width=724" alt="image.png"><br>（我为了记录自己复制粘贴习惯，成为了美帝的走 🐶，付了款）<br>这里提供一个 macos10.14 上验证过的破解版供大家享用<br><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip?_lake_card=%7B%22uid%22%3A%221571510955366-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip%22%2C%22name%22%3A%22Paste%281%29.zip%22%2C%22size%22%3A10809335%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22xZqUn%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">Paste(1).zip</a></p>
-<h3 id="随航"><a href="#随航" class="headerlink" title="随航"></a>随航</h3><p>macOS 版本新更新出来的功能，很实用。 macOS 有线/无线第二屏幕，发布会上的 Adobe ipad 版本的 PS 新版本还没出来，但是可以预见未来其强大的生产力。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>自己最近也在思考，那些可以帮助提高生产力的苹果软件间的一些协作关系，还有一些自己没有来验证它是否真的好用，在这里就先不一一列举出来了，当然您如果发现了好用的协作软件，欢迎您在下方评论区与我分享。<br>自己用 mac 的时间也不是太长，大概也就有 3 年的样子。从早期的黑果，到白果懵懵懂懂，现在也是一知半解，可能安利的这些软件，对您的生活以及工作没多大用，您忽略就好。自己也是也是一名学习者，文章中可能有很多晦涩的地方，欢迎您提出宝贵的意见及建议，批评与指正。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -1238,10 +1379,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -1251,6 +1388,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
             
             <div class="clearfix"></div>

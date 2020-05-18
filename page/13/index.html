@@ -181,6 +181,383 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/网络知识个人总结（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/25/yuque/网络知识个人总结（一）/">网络知识个人总结（一）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/25/yuque/网络知识个人总结（一）/" class="archive-article-date">
+  	<time datetime="2018-10-25T12:42:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>经典协议</p>
+<table>
+<thead>
+<tr>
+<th>7 层网络协议 osi</th>
+<th>功能</th>
+<th>TCP/IP 协议族</th>
+<th>5 层网络协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理层</td>
+<td>以二进制数据在物理媒体上传输数据</td>
+<td>ISO2110，IEEE802，IEEE802.2……….</td>
+<td>物理层</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>传输地址的帧以及错误检测功能</td>
+<td>SLIP,CSLIP,PPP,MTU,ARP,RARP</td>
+<td>数据链路层</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>为数据包选择路由</td>
+<td>IP,ICMP,OSPF,BGP,IGM,ARP,RARP</td>
+<td>网络层</td>
+</tr>
+<tr>
+<td>交换层（传输）</td>
+<td>提供端到端的接口</td>
+<td>TCP,UDP</td>
+<td>交换层</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>解除或简历与别的接点的联系</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>数据格式转换，代码转化，数据加密</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>文件传输，电子邮件，文件服务，虚拟终端</td>
+<td>TFTP,HTTP,SNMP,FTP,SMTP,DNS,RIP,Telnet</td>
+<td>应用层</td>
+</tr>
+</tbody>
+</table>
+<h2 id="状态码："><a href="#状态码：" class="headerlink" title="状态码："></a>状态码：</h2><table>
+<thead>
+<tr>
+<th>1XX</th>
+<th>2XX</th>
+<th>3XX 重定向</th>
+<th>4XX 客户端</th>
+<th>5XX 服务器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接状态信息</td>
+<td>200 连接 ok</td>
+<td>301 永久重定向</td>
+<td>400 错误请求</td>
+<td>500 服务器遇到了一个未曾预料的状况</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>302 临时重定向</td>
+<td>401 访问代码存在异常，身份验证错误</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>303 临时重定向</td>
+<td>403 服务被拒绝</td>
+<td>503 服务器正忙，无资源</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>304 特定条件下临时重定向</td>
+<td>404 未找到</td>
+<td>504 网关超时</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>307 临时重定向（POST 方法）</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="VPN-全称为-Virtual-Private-Network"><a href="#VPN-全称为-Virtual-Private-Network" class="headerlink" title="VPN 全称为 Virtual Private Network"></a>VPN 全称为 Virtual Private Network</h2><p>VPN 工作在第二层第三层上，第二层是<a href="https://baike.baidu.com/item/PPTP" target="_blank" rel="noopener">PPTP</a>（TCP1723）、<a href="https://baike.baidu.com/item/L2TP" target="_blank" rel="noopener">L2TP</a>（UDP:500 (isakmp)，UDP:4500 (nat-t)<br>UDP:1701 (l2tp)）第三层是<a href="https://baike.baidu.com/item/IPSec" target="_blank" rel="noopener">IPSec</a>（UDP:500 (isakmp)，UDP:4500 (nat-t)）<br>有 NAT 是 500 无 NAT 是 4500</p>
+<h2 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h2><p>A 类地址的第一组数字为 1 ～ 126。注意，数字 0 和 127 不作为 A 类地址，数字 127 保留给内部回送函数，而数字 0 则表示该地址是本地宿主机，不能传送。</p>
+<p>范围：1.0.0.1 到 126.255.255.254</p>
+<p>B 类地址的第一组数字为 128 ～ 191。</p>
+<p>范围：128.0.0.1 到 191.255.255.254</p>
+<p>C 类地址的第一组数字为 192 ～ 223。</p>
+<p>范围：192.0.0.1 到 223.255.255.254</p>
+<p>0.0.0.0 是 默认 ip 地址，是缺省 ip 127.0.0.x 是回环地址</p>
+<h4 id="私有-IP-地址分类及范围。"><a href="#私有-IP-地址分类及范围。" class="headerlink" title="私有 IP 地址分类及范围。"></a>私有 IP 地址分类及范围。</h4><p>A 类：10.0.0.1 – 10.255.255.254</p>
+<p>B 类：172.16.0.1 – 172.31.255.254</p>
+<p>C 类：192.168.0.1 – 192.168.255.25</p>
+<h2 id="DHCP-动态主机配置协议（网络层）"><a href="#DHCP-动态主机配置协议（网络层）" class="headerlink" title="DHCP 动态主机配置协议（网络层）"></a>DHCP 动态主机配置协议（网络层）</h2><p>DHCP 的端口号为 67 UDP<br>DHCP 主要组成是由 3 个东东组成，第一个是 DHCP 服务器，第二个是 DHCP 客户端 第三个 DHCP 中继器。<br>配置：ip，子网掩码，网关。<br>DHCP 未分配地址是 169.254.x.x</p>
+<h2 id="VLAN-虚拟局域网"><a href="#VLAN-虚拟局域网" class="headerlink" title="VLAN 虚拟局域网"></a>VLAN 虚拟局域网</h2><p>逻辑划分网络<br>根据端口换分静态，根据 ip 划分，根据 mac 地址划分动态的</p>
+<h2 id="DNS-域名系统"><a href="#DNS-域名系统" class="headerlink" title="DNS 域名系统"></a>DNS 域名系统</h2><p>DNS 查询方式：递归，非递归，迭代</p>
+<p><a href="https://www.baidu.com/s?wd=%E9%A1%B6%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">顶级域名</a>：又叫<a href="https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">一级域名</a>，一串字符串中间一个点隔开，例如 baidu.com，这里说明一下，<a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 不是<a href="https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">一级域名</a>！！而是<a href="https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">二级域名</a>！<br><a href="https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">二级域名</a>：实际上就是一个<a href="https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">一级域名</a>以下的主机名，一串字符串中间两个“.”隔开，例如 pan.baidu.com（”pan”就是主机名）。<br><a href="https://www.baidu.com/s?wd=%E4%B8%89%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">三级域名</a>：<a href="https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">二级域名</a>的<a href="https://www.baidu.com/s?wd=%E5%AD%90%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">子域名</a>，特征是包含三个“.”，一般来说<a href="https://www.baidu.com/s?wd=%E4%B8%89%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">三级域名</a>都是免费的。</p>
+<p>FTP 文件传输系统 利用 21,20 端口<br>SFTP 基于 SSH 的文件传输端口 利用 22 端口<br>HTTP 版本分为 1.0/1.1(添加流水线解决并发)/2.0 只用于 HTTPS，加密</p>
+<p>在 DNS 中，主机名又称主机名.域名</p>
+<h2 id="TCP-IP-协议"><a href="#TCP-IP-协议" class="headerlink" title="TCP/IP 协议"></a><strong>TCP/IP 协议</strong></h2><p>可以让不同主机，不同架构，不同系统之间互相通信</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/25/yuque/网络知识个人总结（一）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/数据库封锁知识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/24/yuque/数据库封锁知识/">数据库封锁知识</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/24/yuque/数据库封锁知识/" class="archive-article-date">
+  	<time datetime="2018-10-24T15:17:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天写代码的时候突然发自己对数据库封锁相关概念有些模糊，现在整理一下。<br>封锁协议是为了解决数据库数据更新的时候三个问题，1 丢失更新，2 读脏数据，3 不可重复读这三个概念。</p>
+<h2 id="造成原因"><a href="#造成原因" class="headerlink" title="造成原因"></a>造成原因</h2><p>1.丢失更新，一个事务更新覆盖了另一个事务的结果。<br>例如： 用户 A 将数据从 100 改为 99，而用户 B 将数据从 99 改成 100，这样用户 A 的数据操作丢失了。</p>
+<p>2.读脏数据，事务 T1 修改某一数据，将其写回磁盘，事务 T2 读取同一数据后，由于某一原因，事务 T1 要求回滚，这时，T1 数据被恢复成原来的数据，而 T2 读取到的数据与数据库中的数据不一致，是错误数据，又称脏数据。 3.不可重复读，事务 T1 读取数据后，事务 T2 执行了更新操作，T1 使用的仍是更新前的数据，造成了数据不一致性。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>封锁技术：<br>这里的锁分两种，一种是排他锁（X 锁），一种是共享锁（S 锁）。<br>排他锁：<strong>只</strong>允许事务 T 对数据对象 A 进行读/写操作。<br>共享锁：允许所有事务对数据进行读，不允许写操作。</p>
+<p>封锁协议：<br>一级封锁协议，事务在修改数据 A 之前必须对其加 X 锁，直到结束才释放。一级封锁协议解决了数据更新丢失问题。<br>二级封锁协议，在一级封锁协议上，加上事务 T 在读取数据 A 之前必须加 S 锁，读完后释放 S 锁，二级封锁协议解决读脏数据问题。<br>三级封锁协议，在一级封锁协议上，加上事务 T 在读取数据 A 之前必须加 S 锁，<strong>直到事务结束</strong>才释放 S 锁，三级封锁协议解决读脏数据问题，而且防止不可重复读的问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/24/yuque/数据库封锁知识/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/1024 节日快乐" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/24/yuque/1024 节日快乐/">1024 节日快乐</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/24/yuque/1024 节日快乐/" class="archive-article-date">
+  	<time datetime="2018-10-24T10:06:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2018/png/190217/1540376483514-ff9ce0d7-4d04-49a8-8847-85c765aadf1b.png#width=547" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/24/yuque/1024 节日快乐/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Java 集锦" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/18/yuque/Java 集锦/">Java 集锦</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/18/yuque/Java 集锦/" class="archive-article-date">
+  	<time datetime="2018-10-18T07:50:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="String-StringBuffer-StringBuilder-区别"><a href="#String-StringBuffer-StringBuilder-区别" class="headerlink" title="String StringBuffer StringBuilder 区别"></a>String StringBuffer StringBuilder 区别</h3><p>String 是不可修改的（开发常用）因为不可更改，所以效率高<br>StringBuffer 是线程安全的有 synchronized 关键字（字符变化比较频繁，使用）<br>StringBuilder 不是线程安全的</p>
+<h3 id="Runtime-单例设计模式"><a href="#Runtime-单例设计模式" class="headerlink" title="Runtime 单例设计模式"></a>Runtime 单例设计模式</h3><p>具体查看文档，同 getRuntime（）<br>Runtime 是一个私有方法，每一个程序在运行时都会自动启动它，当程序内产生垃圾后，会调用 Runtime 中 gc（） 类，用来回收内存。（该方法是不定期调用的）</p>
+<h3 id="System-类"><a href="#System-类" class="headerlink" title="System 类"></a>System 类</h3><p>System 中有 gc 方法，从源码上看是调用 Runtime 的 gc 方法；<br>final ， finally ，finalize 却别<br>Final 是一个关键字，用于定义不能被继承的父类，和不能重写的方法<br>Finally 是一个异常处理的统一处出口。<br>Finalize 是一个 Object 调用 finalize 来做类似于 C++析构函数的作用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/18/yuque/Java 集锦/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Java (二)探 多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

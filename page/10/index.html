@@ -181,6 +181,628 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 小抄（三）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/06/yuque/Java 小抄（三）/">Java 小抄（三）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/06/yuque/Java 小抄（三）/" class="archive-article-date">
+  	<time datetime="2019-03-06T01:50:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h3><h4 id="1-JDK-和-JRE-有什么区别？"><a href="#1-JDK-和-JRE-有什么区别？" class="headerlink" title="1.JDK 和 JRE 有什么区别？"></a>1.JDK 和 JRE 有什么区别？</h4><ul>
+<li>JDK：Java Development Kit 的简称，java 开发工具包，提供了 java 的开发环境和运行环境。</li>
+<li>JRE：Java Runtime Environment 的简称，java 运行环境，为 java 的运行提供了所需环境。</li>
+</ul>
+<p>具体来说 JDK 其实包含了 JRE，同时还包含了编译 java 源码的编译器 javac，还包含了很多 java 程序调试和分析的工具。简单来说：如果你需要运行 java 程序，只需安装 JRE 就可以了，如果你需要编写 java 程序，需要安装 JDK。</p>
+<h4 id="2-和-equals-的区别是什么？"><a href="#2-和-equals-的区别是什么？" class="headerlink" title="2.== 和 equals 的区别是什么？"></a>2.== 和 equals 的区别是什么？</h4><p><strong>== 解读</strong><br>对于基本类型和引用类型 == 的作用效果是不同的，如下所示：</p>
+<ul>
+<li>基本类型：比较的是值是否相同；</li>
+<li>引用类型：比较的是引用是否相同；</li>
+</ul>
+<p>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String x = &quot;string&quot;;</span><br><span class="line">String y = &quot;string&quot;;</span><br><span class="line">String z = new String(&quot;string&quot;);</span><br><span class="line">System.out.println(x==y); // true</span><br><span class="line">System.out.println(x==z); // false</span><br><span class="line">System.out.println(x.equals(y)); // true</span><br><span class="line">System.out.println(x.equals(z)); // true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>代码解读：因为 x 和 y 指向的是同一个引用，所以 == 也是 true，而 new String()方法则重写开辟了内存空间，所以 == 结果为 false，而 equals 比较的一直是值，所以结果都为 true。<br><strong>equals 解读</strong><br>equals 本质上就是 ==，只不过 String 和 Integer 等重写了 equals 方法，把它变成了值比较。看下面的代码就明白了。<br>首先来看默认情况下 equals 比较一个有相同值的对象，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Cat &#123;</span><br><span class="line">    public Cat(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    private String name;</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat c1 = new Cat(&quot;王磊&quot;);</span><br><span class="line">Cat c2 = new Cat(&quot;王磊&quot;);</span><br><span class="line">System.out.println(c1.equals(c2)); // false</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>输出结果出乎我们的意料，竟然是 false？这是怎么回事，看了 equals 源码就知道了，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">		return (this == obj);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>原来 equals 本质上就是 ==。<br>那问题来了，两个相同值的 String 对象，为什么返回的是 true？代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 = new String(&quot;老王&quot;);</span><br><span class="line">String s2 = new String(&quot;老王&quot;);</span><br><span class="line">System.out.println(s1.equals(s2)); // true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>同样的，当我们进入 String 的 equals 方法，找到了答案，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object anObject) &#123;</span><br><span class="line">    if (this == anObject) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    if (anObject instanceof String) &#123;</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line">        int n = value.length;</span><br><span class="line">        if (n == anotherString.value.length) &#123;</span><br><span class="line">            char v1[] = value;</span><br><span class="line">            char v2[] = anotherString.value;</span><br><span class="line">            int i = 0;</span><br><span class="line">            while (n-- != 0) &#123;</span><br><span class="line">                if (v1[i] != v2[i])</span><br><span class="line">                    return false;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>原来是 String 重写了 Object 的 equals 方法，把引用比较改成了值比较。<br><strong>总结</strong> ：== 对于基本类型来说是值比较，对于引用类型来说是比较的是引用；而 equals 默认情况下是引用比较，只是很多类重新了 equals 方法，比如 String、Integer 等把它变成了值比较，所以一般情况下 equals 比较的是值是否相等。</p>
+<h4 id="3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？"><a href="#3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？" class="headerlink" title="3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？"></a>3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？</h4><p>不对，两个对象的 hashCode()相同，equals()不一定 true。<br>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;通话&quot;;</span><br><span class="line">String str2 = &quot;重地&quot;;</span><br><span class="line">System.out.println(String.format(&quot;str1：%d | str2：%d&quot;,  str1.hashCode(),str2.hashCode()));</span><br><span class="line">System.out.println(str1.equals(str2));</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>执行的结果：<br>str1：1179395 | str2：1179395<br>false<br>代码解读：很显然“通话”和“重地”的 hashCode() 相同，然而 equals() 则为 false，因为在散列表中，hashCode()相等即两个键值对的哈希值相等，然而哈希值相等，并不一定能得出键值对相等。</p>
+<h4 id="4-final-在-java-中有什么作用？"><a href="#4-final-在-java-中有什么作用？" class="headerlink" title="4.final 在 java 中有什么作用？"></a>4.final 在 java 中有什么作用？</h4><ul>
+<li>final 修饰的类叫最终类，该类不能被继承。</li>
+<li>final 修饰的方法不能被重写。</li>
+<li>final 修饰的变量叫常量，常量必须初始化，初始化之后值就不能被修改。</li>
+</ul>
+<h4 id="5-java-中的-Math-round-1-5-等于多少？"><a href="#5-java-中的-Math-round-1-5-等于多少？" class="headerlink" title="5.java 中的 Math.round(-1.5) 等于多少？"></a>5.java 中的 Math.round(-1.5) 等于多少？</h4><p>等于 -1，因为在数轴上取值时，中间值（0.5）向右取整，所以正 0.5 是往上取整，负 0.5 是直接舍弃。</p>
+<h4 id="6-String-属于基础的数据类型吗？"><a href="#6-String-属于基础的数据类型吗？" class="headerlink" title="6.String 属于基础的数据类型吗？"></a>6.String 属于基础的数据类型吗？</h4><p>String 不属于基础类型，基础类型有 8 种：byte、boolean、char、short、int、float、long、double，而 String 属于对象。</p>
+<h4 id="7-java-中操作字符串都有哪些类？它们之间有什么区别？"><a href="#7-java-中操作字符串都有哪些类？它们之间有什么区别？" class="headerlink" title="7.java 中操作字符串都有哪些类？它们之间有什么区别？"></a>7.java 中操作字符串都有哪些类？它们之间有什么区别？</h4><p>操作字符串的类有：String、StringBuffer、StringBuilder。<br>String 和 StringBuffer、StringBuilder 的区别在于 String 声明的是不可变的对象，每次操作都会生成新的 String 对象，然后将指针指向新的 String 对象，而 StringBuffer、StringBuilder 可以在原有对象的基础上进行操作，所以在经常改变字符串内容的情况下最好不要使用 String。<br>StringBuffer 和 StringBuilder 最大的区别在于，StringBuffer 是线程安全的，而 StringBuilder 是非线程安全的，但 StringBuilder 的性能却高于 StringBuffer，所以在单线程环境下推荐使用 StringBuilder，多线程环境下推荐使用 StringBuffer。</p>
+<h4 id="8-String-str-”i”与-String-str-new-String-“i”-一样吗？"><a href="#8-String-str-”i”与-String-str-new-String-“i”-一样吗？" class="headerlink" title="8.String str=”i”与 String str=new String(“i”)一样吗？"></a>8.String str=”i”与 String str=new String(“i”)一样吗？</h4><p>不一样，因为内存的分配方式不一样。String str=”i”的方式，java 虚拟机会将其分配到常量池中；而 String str=new String(“i”) 则会被分到堆内存中。</p>
+<h4 id="9-如何将字符串反转？"><a href="#9-如何将字符串反转？" class="headerlink" title="9.如何将字符串反转？"></a>9.如何将字符串反转？</h4><p>使用 StringBuilder 或者 stringBuffer 的 reverse() 方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// StringBuffer reverse</span><br><span class="line">StringBuffer stringBuffer = new StringBuffer();</span><br><span class="line">stringBuffer.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuffer.reverse()); // gfedcba</span><br><span class="line">// StringBuilder reverse</span><br><span class="line">StringBuilder stringBuilder = new StringBuilder();</span><br><span class="line">stringBuilder.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuilder.reverse()); // gfedcba</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<h4 id="10-String-类的常用方法都有那些？"><a href="#10-String-类的常用方法都有那些？" class="headerlink" title="10.String 类的常用方法都有那些？"></a>10.String 类的常用方法都有那些？</h4><ul>
+<li>indexOf()：返回指定字符的索引。</li>
+<li>charAt()：返回指定索引处的字符。</li>
+<li>replace()：字符串替换。</li>
+<li>trim()：去除字符串两端空白。</li>
+<li>split()：分割字符串，返回一个分割后的字符串数组。</li>
+<li>getBytes()：返回字符串的 byte 类型数组。</li>
+<li>length()：返回字符串长度。</li>
+<li>toLowerCase()：将字符串转成小写字母。</li>
+<li>toUpperCase()：将字符串转成大写字符。</li>
+<li>substring()：截取字符串。</li>
+<li>equals()：字符串比较。</li>
+</ul>
+<h4 id="11-抽象类必须要有抽象方法吗？"><a href="#11-抽象类必须要有抽象方法吗？" class="headerlink" title="11.抽象类必须要有抽象方法吗？"></a>11.抽象类必须要有抽象方法吗？</h4><p>不需要，抽象类不一定非要有抽象方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">abstract class Cat &#123;</span><br><span class="line">    public static void sayHi() &#123;</span><br><span class="line">        System.out.println(&quot;hi~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>上面代码，抽象类并没有抽象方法但完全可以正常运行。</p>
+<h4 id="12-普通类和抽象类有哪些区别？"><a href="#12-普通类和抽象类有哪些区别？" class="headerlink" title="12.普通类和抽象类有哪些区别？"></a>12.普通类和抽象类有哪些区别？</h4><ul>
+<li>普通类不能包含抽象方法，抽象类可以包含抽象方法。</li>
+<li>抽象类不能直接实例化，普通类可以直接实例化。</li>
+</ul>
+<h4 id="13-抽象类能使用-final-修饰吗？"><a href="#13-抽象类能使用-final-修饰吗？" class="headerlink" title="13.抽象类能使用 final 修饰吗？"></a>13.抽象类能使用 final 修饰吗？</h4><p>不能，定义抽象类就是让其他类继承的，如果定义为 final 该类就不能被继承，这样彼此就会产生矛盾，所以 final 不能修饰抽象类，如下图所示，编辑器也会提示错误信息：</p>
+<h4 id="14-接口和抽象类有什么区别？"><a href="#14-接口和抽象类有什么区别？" class="headerlink" title="14.接口和抽象类有什么区别？"></a>14.接口和抽象类有什么区别？</h4><ul>
+<li>实现：抽象类的子类使用 extends 来继承；接口必须使用 implements 来实现接口。</li>
+<li>构造函数：抽象类可以有构造函数；接口不能有。</li>
+<li>main 方法：抽象类可以有 main 方法，并且我们能运行它；接口不能有 main 方法。</li>
+<li>实现数量：类可以实现很多个接口；但是只能继承一个抽象类。</li>
+<li>访问修饰符：接口中的方法默认使用 public 修饰；抽象类中的方法可以是任意访问修饰符。</li>
+</ul>
+<h4 id="15-java-中-IO-流分为几种？"><a href="#15-java-中-IO-流分为几种？" class="headerlink" title="15.java 中 IO 流分为几种？"></a>15.java 中 IO 流分为几种？</h4><p>按功能来分：输入流（input）、输出流（output）。<br>按类型来分：字节流和字符流。<br>字节流和字符流的区别是：字节流按 8 位传输以字节为单位输入输出数据，字符流按 16 位传输以字符为单位输入输出数据。</p>
+<h4 id="16-BIO、NIO、AIO-有什么区别？"><a href="#16-BIO、NIO、AIO-有什么区别？" class="headerlink" title="16.BIO、NIO、AIO 有什么区别？"></a>16.BIO、NIO、AIO 有什么区别？</h4><ul>
+<li>BIO：Block IO 同步阻塞式 IO，就是我们平常使用的传统 IO，它的特点是模式简单使用方便，并发处理能力低。</li>
+<li>NIO：New IO 同步非阻塞 IO，是传统 IO 的升级，客户端和服务器端通过 Channel（通道）通讯，实现了多路复用。</li>
+<li>AIO：Asynchronous IO 是 NIO 的升级，也叫 NIO2，实现了异步非堵塞 IO ，异步 IO 的操作基于事件和回调机制。</li>
+</ul>
+<h4 id="17-Files-的常用方法都有哪些？"><a href="#17-Files-的常用方法都有哪些？" class="headerlink" title="17.Files 的常用方法都有哪些？"></a>17.Files 的常用方法都有哪些？</h4><ul>
+<li>Files.exists()：检测文件路径是否存在。</li>
+<li>Files.createFile()：创建文件。</li>
+<li>Files.createDirectory()：创建文件夹。</li>
+<li>Files.delete()：删除一个文件或目录。</li>
+<li>Files.copy()：复制文件。</li>
+<li>Files.move()：移动文件。</li>
+<li>Files.size()：查看文件个数。</li>
+<li>Files.read()：读取文件。</li>
+<li>Files.write()：写入文件。</li>
+</ul>
+<p>作者：王磊的博客<br>链接：<a href="https://juejin.im/post/5c7cfdef6fb9a049f746ed47" target="_blank" rel="noopener">https://juejin.im/post/5c7cfdef6fb9a049f746ed47</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/06/yuque/Java 小抄（三）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/mybait xml 配置谨记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/05/yuque/mybait xml 配置谨记/">mybait xml 配置谨记</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/05/yuque/mybait xml 配置谨记/" class="archive-article-date">
+  	<time datetime="2019-03-05T03:13:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>select<em> from table where ‘字段 1’&gt;=10 怎么表示，那么问题来啦<br>xml 转义可以使用<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1551755611316-53cb3fe4-54c4-4a18-89c7-611a8b9f7746.png#align=left&amp;display=inline&amp;height=253&amp;originHeight=265&amp;originWidth=781&amp;size=0&amp;status=done&amp;width=746" alt><br>根据这个规则上面的 sql 写法应该变成<br>select </em>from table where ‘字段 1’&gt; =10</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/05/yuque/mybait xml 配置谨记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何写一个优雅的文档" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/18/yuque/如何写一个优雅的文档/">如何写一个优雅的文档</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/18/yuque/如何写一个优雅的文档/" class="archive-article-date">
+  	<time datetime="2019-02-18T01:26:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-文档体系"><a href="#1-文档体系" class="headerlink" title="1. 文档体系"></a>1. 文档体系</h1><h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>软件手册是一部完整的书，建议采用下面的结构。</p>
+<ul>
+<li><p><strong>简介</strong>（Introduction）： [必备][文件] 提供对产品和文档本身的总体的、扼要的说明</p>
+</li>
+<li><p><strong>快速上手</strong>（Getting Started）：[可选][文件] 如何最快速地使用产品</p>
+</li>
+<li><p><strong>入门篇</strong>（Basics）： [必备][目录] 又称”使用篇“，提供初级的使用教程</p>
+<ul>
+<li><p><strong>环境准备</strong>（Prerequisite）：[必备][文件] 软件使用需要满足的前置条件</p>
+</li>
+<li><p><strong>安装</strong>（Installation）：[可选][文件] 软件的安装方法</p>
+</li>
+<li><p><strong>设置</strong>（Configuration）：[必备][文件] 软件的设置</p>
+</li>
+</ul>
+</li>
+<li><p><strong>进阶篇</strong>（Advanced)：[可选][目录] 又称”开发篇“，提供中高级的开发教程</p>
+</li>
+<li><p><strong>API</strong>（Reference）：[可选][目录|文件] 软件 API 的逐一介绍</p>
+</li>
+<li><p><strong>FAQ</strong>：[可选][文件] 常见问题解答</p>
+</li>
+<li><p><strong>附录</strong>（Appendix）：[可选][目录] 不属于教程本身、但对阅读教程有帮助的内容</p>
+<ul>
+<li><p><strong>Glossary</strong>：[可选][文件] 名词解释</p>
+</li>
+<li><p><strong>Recipes</strong>：[可选][文件] 最佳实践</p>
+</li>
+<li><p><strong>Troubleshooting</strong>：[可选][文件] 故障处理</p>
+</li>
+<li><p><strong>ChangeLog</strong>：[可选][文件] 版本说明</p>
+</li>
+<li><p><strong>Feedback</strong>：[可选][文件] 反馈方式</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>下面是两个真实范例，可参考。</p>
+<ul>
+<li><p><a href="http://redux.js.org/index.html" target="_blank" rel="noopener">Redux 手册</a></p>
+</li>
+<li><p><a href="http://flight-manual.atom.io/" target="_blank" rel="noopener">Atom 手册</a></p>
+</li>
+</ul>
+<h2 id="文件名"><a href="#文件名" class="headerlink" title="文件名"></a>文件名</h2><p>文档的文件名不得含有空格。</p>
+<p>文件名必须使用半角字符，不得使用全角字符。这也意味着，中文不能用于文件名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误： 名词解释.md</span><br><span class="line">正确： glossary.md</span><br></pre></td></tr></table></figure>
+<p>文件名建议只使用小写字母，不使用大写字母。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：TroubleShooting.md</span><br><span class="line">正确：troubleshooting.md</span><br></pre></td></tr></table></figure>
+<p>为了醒目，某些说明文件的文件名，可以使用大写字母，比如<code>README</code>、<code>LICENSE</code>。</p>
+<p>文件名包含多个单词时，单词之间建议使用半角的连词线（<code>-</code>）分隔。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">不佳：advanced_usage.md</span><br><span class="line">正确：advanced-usage.md</span><br></pre></td></tr></table></figure>
+<h1 id="2-标题"><a href="#2-标题" class="headerlink" title="2. 标题"></a>2. 标题</h1><h2 id="层级"><a href="#层级" class="headerlink" title="层级"></a>层级</h2><p>标题分为四级。</p>
+<ul>
+<li><p>一级标题：文章的标题</p>
+</li>
+<li><p>二级标题：文章主要部分的大标题</p>
+</li>
+<li><p>三级标题：二级标题下面一级的小标题</p>
+</li>
+<li><p>四级标题：三级标题下面某一方面的小标题</p>
+</li>
+</ul>
+<p>下面是示例。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 二级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 四级标题</span></span><br></pre></td></tr></table></figure>
+<h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><p>（1）一级标题下，不能直接出现三级标题。</p>
+<p>示例：下面的文章结构，缺少二级标题。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题</span></span><br></pre></td></tr></table></figure>
+<p>（2）标题要避免孤立编号（即同级标题只有一个）。</p>
+<p>示例：下面的文章结构，<code>二级标题 A</code>只包含一个三级标题，完全可以省略<code>三级标题 A</code>。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 二级标题 A</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题 A</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 二级标题 B</span></span><br></pre></td></tr></table></figure>
+<p>（3）下级标题不重复上一级标题的名字。</p>
+<p>示例：下面的文章结构，二级标题与下属的三级标题同名，建议避免。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 概述</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 概述</span></span><br></pre></td></tr></table></figure>
+<p>（4）谨慎使用四级标题，尽量避免出现，保持层级的简单，防止出现过于复杂的章节。</p>
+<p>如果三级标题下有并列性的内容，建议只使用项目列表（Item list）。</p>
+<p>示例：下面的结构二要好于结构一。后者适用的场景，主要是较长篇幅的内容。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">结构一</span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 四级标题 A</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 四级标题 B</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 四级标题 C</span></span><br><span class="line"></span><br><span class="line">结构二</span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**（1）A**</span></span><br><span class="line"><span class="strong">**（2）B**</span></span><br><span class="line"><span class="strong">**（3）C**</span></span><br></pre></td></tr></table></figure>
+<h1 id="3-文本"><a href="#3-文本" class="headerlink" title="3. 文本"></a>3. 文本</h1><h2 id="字间距"><a href="#字间距" class="headerlink" title="字间距"></a>字间距</h2><p>全角中文字符与半角英文字符之间，应有一个半角空格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：本文介绍如何快速启动Windows系统。</span><br><span class="line">正确：本文介绍如何快速启动 Windows 系统。</span><br></pre></td></tr></table></figure>
+<p>全角中文字符与半角阿拉伯数字之间，有没有半角空格都可，但必须保证风格统一，不能两种风格混杂。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正确：2011年5月15日，我订购了5台笔记本电脑与10台平板电脑。</span><br><span class="line">正确：2011 年 5 月 15 日，我订购了 5 台笔记本电脑与 10 台平板电脑。</span><br></pre></td></tr></table></figure>
+<p>半角的百分号，视同阿拉伯数字。</p>
+<p>英文单位若不翻译，单位前的阿拉伯数字与单位间不留空格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：一部容量为 16 GB 的智能手机</span><br><span class="line">正确：一部容量为 16GB 的智能手机</span><br></pre></td></tr></table></figure>
+<p>半角英文字符和半角阿拉伯数字，与全角标点符号之间不留空格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：他的电脑是 MacBook Air 。</span><br><span class="line">正确：他的电脑是 MacBook Air。</span><br></pre></td></tr></table></figure>
+<h2 id="句子"><a href="#句子" class="headerlink" title="句子"></a>句子</h2><ul>
+<li><p>避免使用长句。句子内部不使用逗号时，总长度不应该超过 40 个字；使用逗号时，总长度不应该超过 100 字或者正文的 3 行。</p>
+</li>
+<li><p>尽量使用简单句和并列句，避免使用复合句。</p>
+</li>
+</ul>
+<h2 id="写作风格"><a href="#写作风格" class="headerlink" title="写作风格"></a>写作风格</h2><p>1、尽量不使用被动语态，改为使用主动语态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：假如此软件尚未被安装，</span><br><span class="line">正确：假如尚未安装这个软件，</span><br></pre></td></tr></table></figure>
+<p>2、不使用非正式的语言风格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：Lady Gaga 的演唱会真是酷毙了，从没看过这么给力的表演！！！</span><br><span class="line">正确：无法参加本次活动，我深感遗憾。</span><br></pre></td></tr></table></figure>
+<p>3、不使用冷僻、生造或者文言文的词语，而要使用现代汉语的常用表达方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：这是唯二的快速启动的方法。</span><br><span class="line">正确：这是仅有的两种快速启动的方法。</span><br></pre></td></tr></table></figure>
+<p>4、用对“的”、“地”、“得”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">她露出了开心的笑容。</span><br><span class="line">（形容词＋的＋名词）</span><br><span class="line">她开心地笑了。</span><br><span class="line">（副词＋地＋动词）</span><br><span class="line">她笑得很开心。</span><br><span class="line">（动词＋得＋副词）</span><br></pre></td></tr></table></figure>
+<p>5、使用代词时（比如“其”、“该”、“此”、“这”等词），必须明确指代的内容，保证只有一个含义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：从管理系统可以监视中继系统和受其直接控制的分配系统。</span><br><span class="line">正确：从管理系统可以监视两个系统：中继系统和受中继系统直接控制的分配系统。</span><br></pre></td></tr></table></figure>
+<p>6、名词前不要使用过多的形容词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：此设备的使用必须在接受过本公司举办的正式的设备培训的技师的指导下进行。</span><br><span class="line">正确：此设备必须在技师的指导下使用，且指导技师必须接受过由本公司举办的正式设备培训。</span><br></pre></td></tr></table></figure>
+<p>7、不包含任何标点符号的单个句子，或者以逗号分隔的句子构件，长度尽量保持在 20 个字以内；20 ～ 29 个字的句子，可以接受；30 ～ 39 个字的句子，语义必须明确，才能接受；多于 40 个字的句子，在任何情况下都不能接受。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：本产品适用于从由一台服务器进行动作控制的单一节点结构到由多台服务器进行动作控制的并行处理程序结构等多种体系结构。</span><br><span class="line">正确：本产品适用于多种体系结构。无论是由一台服务器（单一节点结构），还是由多台服务器（并行处理结构）进行动作控制，均可以使用本产品。</span><br></pre></td></tr></table></figure>
+<p>8、同样一个意思，尽量使用肯定句表达，不使用否定句表达。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：请确认没有接通装置的电源。</span><br><span class="line">正确：请确认装置的电源已关闭。</span><br></pre></td></tr></table></figure>
+<p>9、避免使用双重否定句。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：没有删除权限的用户，不能删除此文件。</span><br><span class="line">正确：用户必须拥有删除权限，才能删除此文件。</span><br></pre></td></tr></table></figure>
+<h2 id="英文处理"><a href="#英文处理" class="headerlink" title="英文处理"></a>英文处理</h2><p>英文原文如果使用了复数形式，翻译成中文时，应该将其还原为单数形式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文：⋯information stored in random access memory (RAMs)⋯</span><br><span class="line">中文：……存储在随机存取存储器（RAM）里的信息……</span><br></pre></td></tr></table></figure>
+<p>外文缩写可以使用半角圆点(<code>.</code>)表示缩写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">U.S.A.</span><br><span class="line">Apple, Inc.</span><br></pre></td></tr></table></figure>
+<p>表示中文时，英文省略号（<code>⋯</code>）应改为中文省略号（<code>……</code>）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文：5 minutes later⋯</span><br><span class="line">中文：5 分钟过去了⋯⋯</span><br></pre></td></tr></table></figure>
+<p>英文书名或电影名改用中文表达时，双引号应改为书名号。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文：He published an article entitled &quot;The Future of the Aviation&quot;.</span><br><span class="line">中文：他发表了一篇名为《航空业的未来》的文章。</span><br></pre></td></tr></table></figure>
+<p>第一次出现英文词汇时，在括号中给出中文标注。此后再次出现时，直接使用英文缩写即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IOC（International Olympic Committee，国际奥林匹克委员会）。这样定义后，便可以直接使用“IOC”了。</span><br></pre></td></tr></table></figure>
+<p>专有名词中每个词第一个字母均应大写，非专有名词则不需要大写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">“American Association of Physicists in Medicine”（美国医学物理学家协会）是专有名词，需要大写。</span><br><span class="line">“online transaction processing”（在线事务处理）不是专有名词，不应大写。</span><br></pre></td></tr></table></figure>
+<h1 id="4-段落"><a href="#4-段落" class="headerlink" title="4. 段落"></a>4. 段落</h1><h2 id="原则-1"><a href="#原则-1" class="headerlink" title="原则"></a>原则</h2><ul>
+<li><p>一个段落只能有一个主题，或一个中心句子。</p>
+</li>
+<li><p>段落的中心句子放在段首，对全段内容进行概述。后面陈述的句子为核心句服务。</p>
+</li>
+<li><p>一个段落的长度不能超过七行，最佳段落长度小于等于四行。</p>
+</li>
+<li><p>段落的句子语气要使用陈述和肯定语气，避免使用感叹语气。</p>
+</li>
+<li><p>段落之间使用一个空行隔开。</p>
+</li>
+<li><p>段落开头不要留出空白字符。</p>
+</li>
+</ul>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>引用第三方内容时，应注明出处。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">One man’s constant is another man’s variable. — Alan Perlis</span><br></pre></td></tr></table></figure>
+<p>如果是全篇转载，请在全文开头显著位置注明作者和出处，并链接至原文。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">本文转载自 WikiQuote</span><br></pre></td></tr></table></figure>
+<p>使用外部图片时，必须在图片下方或文末标明来源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">本文部分图片来自 Wikipedia</span><br></pre></td></tr></table></figure>
+<h1 id="5-数值"><a href="#5-数值" class="headerlink" title="5. 数值"></a>5. 数值</h1><h2 id="半角数字"><a href="#半角数字" class="headerlink" title="半角数字"></a>半角数字</h2><p>数字一律使用半角形式，不得使用全角形式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误： 这件商品的价格是１０００元。</span><br><span class="line">正确： 这件商品的价格是 1000 元。</span><br></pre></td></tr></table></figure>
+<h2 id="千分号"><a href="#千分号" class="headerlink" title="千分号"></a>千分号</h2><p>数值为千位以上，应添加千分号（半角逗号）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XXX 公司的实收资本为 RMB1,258,000。</span><br></pre></td></tr></table></figure>
+<p>对于 4 ～ 6 位的数值，千分号是选用的，比如<code>1000</code>和<code>1,000</code>都可以接受。对于 7 位及以上的数值，千分号是必须的。</p>
+<p>多位小数要从小数点后从左向右添加千分号，比如<code>4.234,345</code>。</p>
+<h2 id="货币"><a href="#货币" class="headerlink" title="货币"></a>货币</h2><p>货币应为阿拉伯数字，并在数字前写出货币符号，或在数字后写出货币中文名称。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$1,000</span><br><span class="line">1,000 美元</span><br></pre></td></tr></table></figure>
+<h2 id="数值范围"><a href="#数值范围" class="headerlink" title="数值范围"></a>数值范围</h2><p>表示数值范围时，用<code>～</code>连接。参见《标点符号》一节的“连接号”部分。</p>
+<p>带有单位或百分号时，两个数字都要加上单位或百分号，不能只加后面一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">错误：132～234kg</span><br><span class="line">正确：132kg～234kg</span><br><span class="line">错误：67～89%</span><br><span class="line">正确：67%～89%</span><br></pre></td></tr></table></figure>
+<h2 id="变化程度的表示法"><a href="#变化程度的表示法" class="headerlink" title="变化程度的表示法"></a>变化程度的表示法</h2><p>数字的增加要使用“增加了”、“增加到”。“了”表示增量，“到”表示定量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">增加到过去的两倍</span><br><span class="line">（过去为一，现在为二）</span><br><span class="line">增加了两倍</span><br><span class="line">（过去为一，现在为三）</span><br></pre></td></tr></table></figure>
+<p>数字的减少要使用“降低了”、“降低到”。“了”表示增量，“到”表示定量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">降低到百分之八十</span><br><span class="line">（定额是一百，现在是八十）</span><br><span class="line">降低了百分之八十</span><br><span class="line">（原来是一百，现在是二十）</span><br></pre></td></tr></table></figure>
+<p>不能用“降低 N 倍”或“减少 N 倍”的表示法，要用“降低百分之几”或“减少百分之几”。因为减少（或降低）一倍表示数值原来为一百，现在等于零。</p>
+<h1 id="6-标点符号"><a href="#6-标点符号" class="headerlink" title="6. 标点符号"></a>6. 标点符号</h1><h2 id="原则-2"><a href="#原则-2" class="headerlink" title="原则"></a>原则</h2><ul>
+<li><p>中文语句的标点符号，均应该采取全角符号，这样可以保证视觉的一致。</p>
+</li>
+<li><p>如果整句为英文，则该句使用英文/半角标点。</p>
+</li>
+<li><p>句号、问号、叹号、逗号、顿号、分号和冒号不得出现在一行之首。</p>
+</li>
+</ul>
+<h2 id="句号"><a href="#句号" class="headerlink" title="句号"></a>句号</h2><p>中文语句中的结尾处应该用全角句号（<code>。</code>）。</p>
+<p>句子末尾用括号加注时，句号应在括号之外。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：关于文件的输出，请参照第 1.3 节（见第 26 页。）</span><br><span class="line">正确：关于文件的输出，请参照第 1.3 节（见第 26 页）。</span><br></pre></td></tr></table></figure>
+<h2 id="逗号"><a href="#逗号" class="headerlink" title="逗号"></a>逗号</h2><p>逗号<code>，</code>表示句子内部的一般性停顿。</p>
+<p>注意避免“一逗到底”，即整个段落除了结尾，全部停顿都使用逗号。</p>
+<h2 id="顿号"><a href="#顿号" class="headerlink" title="顿号"></a>顿号</h2><p>句子内部的并列词，应该用全角顿号(<code>、</code>) 分隔，而不用逗号，即使并列词是英语也是如此。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：我最欣赏的科技公司有 Google, Facebook, 腾讯, 阿里和百度等。</span><br><span class="line">正确：我最欣赏的科技公司有 Google、Facebook、腾讯、阿里和百度等。</span><br></pre></td></tr></table></figure>
+<p>英文句子中，并列词语之间使用半角逗号（<code>,</code>）分隔。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：Microsoft Office includes Word, Excel, PowerPoint, Outlook and other components.</span><br></pre></td></tr></table></figure>
+<h2 id="分号"><a href="#分号" class="headerlink" title="分号"></a>分号</h2><p>分号<code>；</code>表示复句内部并列分句之间的停顿。</p>
+<h2 id="引号"><a href="#引号" class="headerlink" title="引号"></a>引号</h2><p>引用时，应该使用全角双引号（<code>“ ”</code>），注意前后双引号不同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：许多人都认为客户服务的核心是“友好”和“专业”。</span><br></pre></td></tr></table></figure>
+<p>引号里面还要用引号时，外面一层用双引号，里面一层用单引号（<code>‘ ’</code>），注意前后单引号不同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：鲍勃解释道：“我要放音乐，可萨利说，‘不行！’。”</span><br></pre></td></tr></table></figure>
+<h2 id="圆括号"><a href="#圆括号" class="headerlink" title="圆括号"></a>圆括号</h2><p>补充说明时，使用全角圆括号<code>（）</code>，括号前后不加空格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：请确认所有的连接（电缆和接插件）均安装牢固。</span><br></pre></td></tr></table></figure>
+<h2 id="冒号"><a href="#冒号" class="headerlink" title="冒号"></a>冒号</h2><p>全角冒号（<code>：</code>）常用在需要解释的词语后边，引出解释和说明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：请确认以下几项内容：时间、地点、活动名称，以及来宾数量。</span><br></pre></td></tr></table></figure>
+<p>表示时间时，应使用半角冒号（<code>:</code>）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：早上 8:00</span><br></pre></td></tr></table></figure>
+<h2 id="省略号"><a href="#省略号" class="headerlink" title="省略号"></a>省略号</h2><p>省略号<code>……</code>表示语句未完、或者语气的不连续。它占两个汉字空间、包含六个省略点，不要使用<code>。。。</code>或<code>...</code>等非标准形式。</p>
+<p>省略号不应与“等”这个词一起使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">错误：我们为会餐准备了香蕉、苹果、梨…等各色水果。</span><br><span class="line">正确：我们为会餐准备了各色水果，有香蕉、苹果、梨……</span><br><span class="line">正确：我们为会餐准备了香蕉、苹果、梨等各色水果。</span><br></pre></td></tr></table></figure>
+<h2 id="感叹号"><a href="#感叹号" class="headerlink" title="感叹号"></a>感叹号</h2><p>应该使用平静的语气叙述，尽量避免使用感叹号<code>！</code>。</p>
+<p>不得多个感叹号连用，比如<code>！！</code>和<code>!!!</code>。</p>
+<h2 id="破折号"><a href="#破折号" class="headerlink" title="破折号"></a>破折号</h2><p>破折号<code>————</code>一般用于进一步解释。</p>
+<p>破折号应占两个汉字的位置。如果破折号本身只占一个汉字的位置，那么前后应该留出一个半角空格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">例句：直觉————尽管它并不总是可靠的————告诉我，这事可能出了些问题。</span><br><span class="line">例句：直觉 —— 尽管它并不总是可靠的 —— 告诉我，这事可能出了些问题。</span><br></pre></td></tr></table></figure>
+<h2 id="连接号"><a href="#连接号" class="headerlink" title="连接号"></a>连接号</h2><p>连接号用于连接两个类似的词。</p>
+<p>以下场合应该使用直线连接号（<code>-</code>），占一个半角字符的位置。</p>
+<ul>
+<li><p>两个名词的复合</p>
+</li>
+<li><p>图表编号</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">例句：氧化-还原反应</span><br><span class="line">例句：图 1-1</span><br></pre></td></tr></table></figure>
+<p>以下场合应该使用波浪连接号（<code>～</code>），占一个全角字符的位置。</p>
+<ul>
+<li>数值范围（例如日期、时间或数字）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：2009 年～2011 年</span><br></pre></td></tr></table></figure>
+<p>注意，波浪连接号前后两个值都应该加上单位。</p>
+<p>波浪连接号也可以用汉字“至”代替。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例句：周围温度：-20°C 至 -10°C</span><br></pre></td></tr></table></figure>
+<h1 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h1><ul>
+<li><p><a href="https://github.com/ruanyf/document-style-guide" target="_blank" rel="noopener">中文技术文档的协作规范</a>, by 阮一峰</p>
+</li>
+<li><p><a href="http://wenku.baidu.com/view/23cc1a6527d3240c8447efbf.html" target="_blank" rel="noopener">产品手册中文写作规范</a>, by 华为</p>
+</li>
+<li><p><a href="http://docs.daocloud.io/write-docs/format" target="_blank" rel="noopener">写作规范和格式规范</a>, by DaoCloud</p>
+</li>
+<li><p><a href="http://www.hitachi-tc.co.jp/company/thesis/thesis.pdf" target="_blank" rel="noopener">技术写作技巧在日汉翻译中的应用</a>, by 刘方</p>
+</li>
+<li><p><a href="https://www.lengoo.de/documents/styleguides/lengoo_styleguide_ZH.pdf" target="_blank" rel="noopener">简体中文规范指南</a>, by lengoo</p>
+</li>
+<li><p><a href="https://open.leancloud.cn/copywriting-style-guide.html" target="_blank" rel="noopener">文档风格指南</a>, by LeanCloud</p>
+</li>
+<li><p><a href="https://docs.google.com/document/d/1R8lMCPf6zCD5KEA8ekZ5knK77iw9J-vJ6vEopPemqZM/edit" target="_blank" rel="noopener">豌豆荚文案风格指南</a>, by 豌豆荚</p>
+</li>
+<li><p><a href="https://github.com/sparanoid/chinese-copywriting-guidelines" target="_blank" rel="noopener">中文文案排版指北</a>, by sparanoid</p>
+</li>
+<li><p><a href="http://w3c.github.io/clreq/" target="_blank" rel="noopener">中文排版需求</a>, by W3C</p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2017/02/filename-should-be-lowercase.html" target="_blank" rel="noopener">为什么文件名要小写？</a>, by 阮一峰</p>
+</li>
+<li><p><a href="https://developers.google.com/style/" target="_blank" rel="noopener">Google Developer Documentation Style Guide</a>, by Google</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/18/yuque/如何写一个优雅的文档/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何写一个优雅的 PPT" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/18/yuque/如何写一个优雅的 PPT/">如何写一个优雅的 PPT</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/18/yuque/如何写一个优雅的 PPT/" class="archive-article-date">
+  	<time datetime="2019-02-18T01:25:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104642-03ea5f42-081a-4a7f-aea3-1e2c04fb2474.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104651-97919a2a-4eb1-4ee3-a4ea-4ec9884a9703.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104663-d96fa507-f703-4652-a0ea-877f1e7d51d2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104618-acf7d654-0691-4bcb-be22-adda8ff27800.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104663-53986226-874e-431f-a495-3de097f8668d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104676-ff53e4fa-20f4-4381-bbd0-0143dd18f2ce.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104639-9d800044-c2a0-45c9-bc5d-3e2d6ba51b7b.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104679-85a19489-5a27-47d6-84f4-2c00eed77bc7.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104660-1ae5f2b6-13cd-40e6-ac73-35cba2613312.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104692-83313fc3-f6ec-4cc0-be90-af364e9a37d0.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104647-c940000b-848f-4ccc-9b25-5aae62dadf8c.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104677-e4bb2c5b-b6e3-4f5a-8596-ff2420e1e94f.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104648-05d7e183-1b1a-4311-99a0-bd9218f5f240.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104680-99d1c3f2-accd-49c0-ba57-99367a908336.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104728-adc44371-62bf-47eb-8a1d-aeafdf6f35d2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104699-573d66ca-39a6-4eeb-b379-8b8bc1536aa6.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104689-bbca0130-93a1-4558-83e0-361f2bb9183f.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104681-4af0d5d5-e63c-48ce-8e12-7989363a5a28.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104704-273237b1-3e0c-47ab-a232-81340ed84578.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104704-496d2260-dc3b-4e59-8709-7e4d681dbfd8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104740-2152de6c-bc0f-4090-908e-c8e9f2c06003.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104754-4dfc1298-01ac-4bd1-9c91-97a2a49ad440.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104719-58143ceb-227a-4089-9549-2c00c76baf56.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104724-0fa4ec5b-cc82-402a-b937-777b294d2342.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104746-358c0174-ea5f-4657-bb26-e510f9c52c46.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104726-0f7248b8-063f-4f47-9b6e-98e8400f66fb.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104754-65eff5ad-440d-4bce-b01f-01f5aa8f0de4.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104789-a4e1c1b3-10ef-486d-a0b6-125e1451e98d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104782-d6e490e2-4b1d-4343-a99a-50b8f01917db.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104793-25bb309f-cabb-4aa4-bec2-698dbccf5406.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104758-9ad06da8-f5f7-4824-a973-e3be53fda1bb.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104710-c556c477-68b8-48e2-9831-41b095b6de70.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104729-ed2bbc1d-8fbe-4003-bbfd-2cdc977d8143.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104794-00b8bc22-3e78-4bb2-98a9-f6899212cd19.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104782-abdd446a-ee9b-47ff-9e6e-cd60d2cd7460.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104787-01c36fa7-87f6-4a07-b449-04fbb8ec4985.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104744-e2d7a7de-7087-4046-a6df-350c4db5504d.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104783-0740f0ae-64c1-4460-8dda-c1e95896a2b4.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104805-e0630a78-16db-4bbf-8742-0f69d1de73df.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104801-aaef6f5c-cb96-4caa-8a31-503afc8d0414.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104780-f00ceccf-7405-46b1-b8cd-bef32e464cca.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104791-b70b3203-e3bb-41f3-9583-b618b2a11ff2.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104788-12c7f3f5-0c1e-4735-93c2-aa452044f23b.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104793-7c07b7ce-b329-4874-9f46-262153932d01.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104848-4a8221ab-7f8b-464f-896a-ce677f3cf103.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104804-aaf7ad20-2c75-4ab1-a4fc-36dd22f8668c.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104800-4a098d61-fe9c-4c8b-9c31-2a8e8bc8fce9.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104703-7985867c-e1a3-4a4b-a70a-c060138a66f8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104831-e2b5d0b7-2495-44b7-94a1-908fa37f6e50.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104860-4708d102-bc79-4eb1-ba28-ea867df46edf.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104849-30edf516-d51b-4147-8926-295c7864e5fc.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104851-51da22c5-a803-40d9-9620-0a6bc0b944db.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104739-8c6dc67c-0b65-4f33-907d-41d6e69167a6.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104746-10e0bb86-d64e-441c-9016-c83fb5a75c97.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104749-f3c70d86-f991-4d82-8f19-ec45222bfe2e.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1550453104894-9ad5afc1-ab3d-43dc-bc00-6b89db668cb8.jpeg#align=left&amp;display=inline&amp;height=337&amp;originHeight=337&amp;originWidth=600&amp;size=0&amp;width=600" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/18/yuque/如何写一个优雅的 PPT/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/个人网站开站了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -580,287 +1202,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/12/yuque/docker 目录挂载踩坑记录/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/小网站计划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/08/yuque/小网站计划/">小网站计划</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/08/yuque/小网站计划/" class="archive-article-date">
-  	<time datetime="2019-01-08T19:20:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>小计 2019.1.1<br>这个想法从 2018 年九月份就开始有了，一直没有付出实施，真的真的快毕业了（其实是为了给这四年大学生活添加点乐趣），自己做一个小网站。也是为了巩固自己所学的知识，目前自己购买了一台腾讯云的服务器 1U1G1M 的配置，买的腾讯域名一口气买了 3 年的<br>2018 年 11 月某天，依托自己的服务本地主机群晖，以及自己的域名，搭建了邮件系统。<br>2018 年 12 月某天，依托本地主机，搭建了 maridb,以及两台 rdeis 服务器（尚未进行鉴权，主从操作）<br>2018 年 12.27 进行备案<br>2019.1.5 增加一台阿里云，1U2G1M<br>2019.1.8 备案下来了。<br>目前强制所有请求地址为 HTTPS，为了防止中间人获取 2019.1.9 将自己的简历通过反向代理的方式将数据转发到云端，发现一个严重的问题，自己的贷款太小了。（目前主要业务还没有，先不考虑进行 cdn 加速操作）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/08/yuque/小网站计划/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/《代码整洁之道》读后感" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/yuque/《代码整洁之道》读后感/">《代码整洁之道》读后感</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/21/yuque/《代码整洁之道》读后感/" class="archive-article-date">
-  	<time datetime="2018-12-21T12:32:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。"><a href="#代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。" class="headerlink" title="代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。"></a>代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。</h3><h3 id="代码整洁之道前-14-章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如-P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。"><a href="#代码整洁之道前-14-章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如-P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。" class="headerlink" title="代码整洁之道前 14 章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如 P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。"></a>代码整洁之道前 14 章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如 P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。</h3><h3 id="例如：代码整洁，整洁的是什么。"><a href="#例如：代码整洁，整洁的是什么。" class="headerlink" title="例如：代码整洁，整洁的是什么。"></a>例如：代码整洁，整洁的是什么。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1.尽量减少依赖关系，便于项目管理与维护。</span><br><span class="line">2.简单直接，将大段if控制语句改写成短小的函数，让代码可读性增加。</span><br><span class="line">3.要有单元测试（这个spring的不太会写），下周好好琢磨一下。</span><br><span class="line">4.降低重复代码，提取公共方法和公共类。</span><br><span class="line">5.有意义的命名（这很重要）</span><br><span class="line">6.不要吝啬注视</span><br><span class="line">7.代码的长度尽量的短（20行以内）</span><br><span class="line">8.连缀少用</span><br><span class="line">9.null值回传小心。</span><br><span class="line">10.map方法不宜回传</span><br><span class="line">11.减少方法数量</span><br><span class="line">12.理论上将try/catch少用。</span><br><span class="line">13.方法传参数应该尽量短少</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">read</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读//" class="article-tag-list-link color2">读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读/书//" class="article-tag-list-link color2">书</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/21/yuque/《代码整洁之道》读后感/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/你好2019，再见2018" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/14/yuque/你好2019，再见2018/">你好2019，再见2018</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/14/yuque/你好2019，再见2018/" class="archive-article-date">
-  	<time datetime="2018-12-14T08:50:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2018/png/190217/1546259203220-3f77596b-cba1-41f5-858c-aa79b74147d1.png#width=809" alt></p>
-<h1 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h1><p>时间过的真快，短短 4 年的大学生活基本上接近尾声了。回顾这一年，自己的迷茫，这一年自己感受很多。2018 年的世界杯，冷门法国夺冠。中国女排夺冠，电子竞技进入亚运会，P2P 暴雷，凉了比特币但活了背后的区块链。人工智能被应用到各行各业，自己对人工智能也有了一些自己的理解。</p>
-<h1 id="想法"><a href="#想法" class="headerlink" title="想法"></a>想法</h1><p>不积跬步无以至千里，自己思维有许多幼稚的想法，感谢这一年很多人的包容与理解，是你们让我成长。2018 年自己去实践的自己的知识，我承认自己的进步很慢。自己很懒散，浪费时间的事情自己做了不少。18 年，自己实践的东西太少了。自己的思维太过于分散了，专注度欠缺。自己相对同龄人自己不足的地方，勤奋，时间的把控，以及自己对机会的把控能力。</p>
-<h1 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h1><p>19 年自己该踏实的做事，改掉自己懒散的毛病，规划自己的时间。2019 年，自己多做一些帮助家里的事情。不能满足现在的生活。让自己的颗粒度编的更加小，让自己成为一颗完美的螺丝钉。立个 flag，19 年自己要读 20 本以上的书，用知识武装自己。多拿出一点时间来学习，拥抱变化，19 年每周至少来写一篇自己的成长。</p>
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>故事还长，写的不好，条理性欠缺，不过没关系，2019 加油！😄</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/14/yuque/你好2019，再见2018/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/整洁测试模型原则 F.I.R.S.T." class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/14/yuque/整洁测试模型原则 F.I.R.S.T./">整洁测试模型原则 F.I.R.S.T.</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/14/yuque/整洁测试模型原则 F.I.R.S.T./" class="archive-article-date">
-  	<time datetime="2018-12-14T08:41:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="快速-（Fast）测试应该够快。"><a href="#快速-（Fast）测试应该够快。" class="headerlink" title="快速 （Fast）测试应该够快。"></a>快速 （Fast）测试应该够快。</h2><h2 id="独立-（Independent）测试应该足够独立"><a href="#独立-（Independent）测试应该足够独立" class="headerlink" title="独立 （Independent）测试应该足够独立"></a>独立 （Independent）测试应该足够独立</h2><h2 id="可重复-（Repeatable）测试环境应该可以在任何环境中复线"><a href="#可重复-（Repeatable）测试环境应该可以在任何环境中复线" class="headerlink" title="可重复 （Repeatable）测试环境应该可以在任何环境中复线"></a>可重复 （Repeatable）测试环境应该可以在任何环境中复线</h2><h2 id="自足验证性-（Self-Validating）测试应当有布尔值输出"><a href="#自足验证性-（Self-Validating）测试应当有布尔值输出" class="headerlink" title="自足验证性 （Self-Validating）测试应当有布尔值输出"></a>自足验证性 （Self-Validating）测试应当有布尔值输出</h2><h2 id="及时（Timely）测试应及时编写。"><a href="#及时（Timely）测试应及时编写。" class="headerlink" title="及时（Timely）测试应及时编写。"></a>及时（Timely）测试应及时编写。</h2>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/14/yuque/整洁测试模型原则 F.I.R.S.T./">展开全文 >></a>
         </p>
       
 

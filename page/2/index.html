@@ -181,26 +181,40 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+<<<<<<< HEAD
     <article id="post-yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/RPC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/12/yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？/">如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/RPC/">RPC</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/12/yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？/" class="archive-article-date">
   	<time datetime="2020-05-12T07:52:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+=======
+        <a href="/2020/05/04/yuque/RPC/" class="archive-article-date">
+  	<time datetime="2020-05-04T16:27:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>##</p>
 <h2 id="这个是肯定的，用-MQ-有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。"><a href="#这个是肯定的，用-MQ-有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。" class="headerlink" title="这个是肯定的，用 MQ 有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。"></a>这个是肯定的，用 MQ 有个基本原则，就是<strong>数据不能多一条，也不能少一条</strong>，不能多，就是前面说的<a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed" target="_blank" rel="noopener">重复消费和幂等性问题</a>。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。</h2><p>如果说你这个是用 MQ 来传递非常核心的消息，比如说计费、扣费的一些消息，那必须确保这个 MQ 传递过程中<strong>绝对不会把计费消息给弄丢</strong>。</p>
 <h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90" target="_blank" rel="noopener">面试题剖析</a></h2><p>数据的丢失问题，可能出现在生产者、MQ、消费者中，咱们从 RabbitMQ 和 Kafka 分别来分析一下吧。</p>
@@ -230,6 +244,9 @@ var _hmt = _hmt || [];
 <h4 id="生产者会不会弄丢数据？"><a href="#生产者会不会弄丢数据？" class="headerlink" title="生产者会不会弄丢数据？"></a><a href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e7%94%9f%e4%ba%a7%e8%80%85%e4%bc%9a%e4%b8%8d%e4%bc%9a%e5%bc%84%e4%b8%a2%e6%95%b0%e6%8d%ae%ef%bc%9f" target="_blank" rel="noopener">生产者会不会弄丢数据？</a></h4><p>如果按照上述的思路设置了 <code>acks=all</code> ，一定不会丢，要求是，你的 leader 接收到消息，所有的 follower 都同步到了消息之后，才认为本次写成功了。如果没满足这个条件，生产者会自动不断的重试，重试无限次。</p>
 <p><a href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed" target="_blank" rel="noopener"> 上一篇</a></p>
 
+=======
+        
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
       
 
       
@@ -241,7 +258,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/12/yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/RPC/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -271,26 +292,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/如何保证消息队列的高可用？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/MQ" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/12/yuque/如何保证消息队列的高可用？/">如何保证消息队列的高可用？</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/MQ/">MQ</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/12/yuque/如何保证消息队列的高可用？/" class="archive-article-date">
   	<time datetime="2020-05-12T07:30:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+=======
+        <a href="/2020/05/04/yuque/MQ/" class="archive-article-date">
+  	<time datetime="2020-05-04T16:27:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>如果有人问到你 MQ 的知识，<strong>高可用是必问的</strong>。<a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/why-mq" target="_blank" rel="noopener">上一讲</a>提到，MQ 会导致<strong>系统可用性降低</strong>。所以只要你用了 MQ，接下来问的一些要点肯定就是围绕着 MQ 的那些缺点怎么来解决了。<br>要是你傻乎乎的就干用了一个 MQ，各种问题从来没考虑过，那你就杯具了，面试官对你的感觉就是，只会简单使用一些技术，没任何思考，马上对你的印象就不太好了。这样的同学招进来要是做个 20k 薪资以内的普通小弟还凑合，要是做薪资 20k+ 的高工，那就惨了，让你设计个系统，里面肯定一堆坑，出了事故公司受损失，团队一起背锅。</p>
 <h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-high-availability-of-message-queues?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90" target="_blank" rel="noopener">面试题剖析</a></h2><p>这个问题这么问是很好的，因为不能问你 Kafka 的高可用性怎么保证？ActiveMQ 的高可用性怎么保证？一个面试官要是这么问就显得很没水平，人家可能用的就是 RabbitMQ，没用过 Kafka，你上来问人家 Kafka 干什么？这不是摆明了刁难人么。<br>所以有水平的面试官，问的是 MQ 的高可用性怎么保证？这样就是你用过哪个 MQ，你就说说你对那个 MQ 的高可用性的理解。</p>
 <h3 id="RabbitMQ-的高可用性"><a href="#RabbitMQ-的高可用性" class="headerlink" title="RabbitMQ 的高可用性"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-high-availability-of-message-queues?id=rabbitmq-%e7%9a%84%e9%ab%98%e5%8f%af%e7%94%a8%e6%80%a7" target="_blank" rel="noopener">RabbitMQ 的高可用性</a></h3><p>RabbitMQ 是比较有代表性的，因为是<strong>基于主从</strong>（非分布式）做高可用性的，我们就以 RabbitMQ 为例子讲解第一种 MQ 的高可用性怎么实现。<br>RabbitMQ 有三种模式：单机模式、普通集群模式、镜像集群模式。</p>
@@ -299,6 +334,9 @@ var _hmt = _hmt || [];
 <h4 id="镜像集群模式（高可用性）"><a href="#镜像集群模式（高可用性）" class="headerlink" title="镜像集群模式（高可用性）"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-high-availability-of-message-queues?id=%e9%95%9c%e5%83%8f%e9%9b%86%e7%be%a4%e6%a8%a1%e5%bc%8f%ef%bc%88%e9%ab%98%e5%8f%af%e7%94%a8%e6%80%a7%ef%bc%89" target="_blank" rel="noopener">镜像集群模式（高可用性）</a></h4><p>这种模式，才是所谓的 RabbitMQ 的高可用模式。跟普通集群模式不一样的是，在镜像集群模式下，你创建的 queue，无论元数据还是 queue 里的消息都会<strong>存在于多个实例上</strong>，就是说，每个 RabbitMQ 节点都有这个 queue 的一个<strong>完整镜像</strong>，包含 queue 的全部数据的意思。然后每次你写消息到 queue 的时候，都会自动把<strong>消息同步</strong>到多个实例的 queue 上。<br><img src="https://doocs.github.io/advanced-java/docs/high-concurrency/images/mq-8.png#align=left&amp;display=inline&amp;message=%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%E5%A4%B1%E8%B4%A5%EF%BC%8C%E8%AF%B7%E9%87%8D%E8%AF%95&amp;percent=0&amp;status=uploading" alt><br>那么<strong>如何开启这个镜像集群模式</strong>呢？其实很简单，RabbitMQ 有很好的管理控制台，就是在后台新增一个策略，这个策略是<strong>镜像集群模式的策略</strong>，指定的时候是可以要求数据同步到所有节点的，也可以要求同步到指定数量的节点，再次创建 queue 的时候，应用这个策略，就会自动将数据同步到其他的节点上去了。<br>这样的话，好处在于，你任何一个机器宕机了，没事儿，其它机器（节点）还包含了这个 queue 的完整数据，别的 consumer 都可以到其它节点上去消费数据。坏处在于，第一，这个性能开销也太大了吧，消息需要同步到所有机器上，导致网络带宽压力和消耗很重！第二，这么玩儿，不是分布式的，就<strong>没有扩展性可言</strong>了，如果某个 queue 负载很重，你加机器，新增的机器也包含了这个 queue 的所有数据，并<strong>没有办法线性扩展</strong>你的 queue。你想，如果这个 queue 的数据量很大，大到这个机器上的容量无法容纳了，此时该怎么办呢？</p>
 <h3 id="Kafka-的高可用性"><a href="#Kafka-的高可用性" class="headerlink" title="Kafka 的高可用性"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-high-availability-of-message-queues?id=kafka-%e7%9a%84%e9%ab%98%e5%8f%af%e7%94%a8%e6%80%a7" target="_blank" rel="noopener">Kafka 的高可用性</a></h3><p>Kafka 一个最基本的架构认识：由多个 broker 组成，每个 broker 是一个节点；你创建一个 topic，这个 topic 可以划分为多个 partition，每个 partition 可以存在于不同的 broker 上，每个 partition 就放一部分数据。<br>这就是<strong>天然的分布式消息队列</strong>，就是说一个 topic 的数据，是<strong>分散放在多个机器上的，每个机器就放一部分数据</strong>。<br>实际上 RabbitMQ 之类的，并不是分布式消息队列，它就是传统的消息队列，只不过提供了一些集群、HA(High Availability, 高可用性) 的机制而已，因为无论怎么玩儿，RabbitMQ 一个 queue 的数据都是放在一个节点里的，镜像集群下，也是每个节点都放这个 queue 的完整数据。<br>Kafka 0.8 以前，是没有 HA 机制的，就是任何一个 broker 宕机了，那个 broker 上的 partition 就废了，没法写也没法读，没有什么高可用性可言。<br>比如说，我们假设创建了一个 topic，指定其 partition 数量是 3 个，分别在三台机器上。但是，如果第二台机器宕机了，会导致这个 topic 的 1/3 的数据就丢了，因此这个是做不到高可用的。<br><img src="https://doocs.github.io/advanced-java/docs/high-concurrency/images/kafka-before.png#align=left&amp;display=inline&amp;message=%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%E5%A4%B1%E8%B4%A5%EF%BC%8C%E8%AF%B7%E9%87%8D%E8%AF%95&amp;percent=0&amp;status=uploading" alt><br>Kafka 0.8 以后，提供了 HA 机制，就是 replica（复制品） 副本机制。每个 partition 的数据都会同步到其它机器上，形成自己的多个 replica 副本。所有 replica 会选举一个 leader 出来，那么生产和消费都跟这个 leader 打交道，然后其他 replica 就是 follower。写的时候，leader 会负责把数据同步到所有 follower 上去，读的时候就直接读 leader 上的数据即可。只能读写 leader？很简单，<strong>要是你可以随意读写每个 follower，那么就要 care 数据一致性的问题</strong>，系统复杂度太高，很容易出问题。Kafka 会均匀地将一个 partition 的所有 replica 分布在不同的机器上，这样才可以提高容错性。<br><img src="https://doocs.github.io/advanced-java/docs/high-concurrency/images/kafka-after.png#align=left&amp;display=inline&amp;message=%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%E5%A4%B1%E8%B4%A5%EF%BC%8C%E8%AF%B7%E9%87%8D%E8%AF%95&amp;percent=0&amp;status=uploading" alt><br>这么搞，就有所谓的<strong>高可用性</strong>了，因为如果某个 broker 宕机了，没事儿，那个 broker 上面的 partition 在其他机器上都有副本的。如果这个宕机的 broker 上面有某个 partition 的 leader，那么此时会从 follower 中<strong>重新选举</strong>一个新的 leader 出来，大家继续读写那个新的 leader 即可。这就有所谓的高可用性了。<br><strong>写数据</strong>的时候，生产者就写 leader，然后 leader 将数据落地写本地磁盘，接着其他 follower 自己主动从 leader 来 pull 数据。一旦所有 follower 同步好数据了，就会发送 ack 给 leader，leader 收到所有 follower 的 ack 之后，就会返回写成功的消息给生产者。（当然，这只是其中一种模式，还可以适当调整这个行为）<br><strong>消费</strong>的时候，只会从 leader 去读，但是只有当一个消息已经被所有 follower 都同步成功返回 ack 的时候，这个消息才会被消费者读到。<br>看到这里，相信你大致明白了 Kafka 是如何保证高可用机制的了，对吧？不至于一无所知，现场还能给面试官画画图。要是遇上面试官确实是 Kafka 高手，深挖了问，那你只能说不好意思，太深入的你没研究过。</p>
 
+=======
+        
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
       
 
       
@@ -310,7 +348,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/12/yuque/如何保证消息队列的高可用？/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/MQ/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -340,26 +382,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/Mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/">如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/Mysql/">Mysql</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/" class="archive-article-date">
   	<time datetime="2020-05-12T07:09:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+=======
+        <a href="/2020/05/04/yuque/Mysql/" class="archive-article-date">
+  	<time datetime="2020-05-04T16:26:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>##</p>
 <p>其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你<strong>使用消息队列如何保证幂等性</strong>，这个是你架构里要考虑的一个问题。</p>
 <h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90" target="_blank" rel="noopener">面试题剖析</a></h2><p>回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你<strong>先大概说一说可能会有哪些重复消费的问题</strong>。<br>首先，比如 RabbitMQ、RocketMQ、Kafka，都有可能会出现消息重复消费的问题，正常。因为这问题通常不是 MQ 自己保证的，是由我们开发来保证的。挑一个 Kafka 来举个例子，说说怎么重复消费吧。<br>Kafka 实际上有个 offset 的概念，就是每个消息写进去，都有一个 offset，代表消息的序号，然后 consumer 消费了数据之后，<strong>每隔一段时间</strong>（定时定期），会把自己消费过的消息的 offset 提交一下，表示“我已经消费过了，下次我要是重启啥的，你就让我继续从上次消费到的 offset 来继续消费吧”。<br>但是凡事总有意外，比如我们之前生产经常遇到的，就是你有时候重启系统，看你怎么重启了，如果碰到点着急的，直接 kill 进程了，再重启。这会导致 consumer 有些消息处理了，但是没来得及提交 offset，尴尬了。重启之后，少数消息会再次消费一次。<br>举个栗子。<br>有这么个场景。数据 1/2/3 依次进入 kafka，kafka 会给这三条数据每条分配一个 offset，代表这条数据的序号，我们就假设分配的 offset 依次是 152/153/154。消费者从 kafka 去消费的时候，也是按照这个顺序去消费。假如当消费者消费了 <code>offset=153</code> 的这条数据，刚准备去提交 offset 到 zookeeper，此时消费者进程被重启了。那么此时消费过的数据 1/2 的 offset 并没有提交，kafka 也就不知道你已经消费了 <code>offset=153</code> 这条数据。那么重启之后，消费者会找 kafka 说，嘿，哥儿们，你给我接着把上次我消费到的那个地方后面的数据继续给我传递过来。由于之前的 offset 没有提交成功，那么数据 1/2 会再次传过来，如果此时消费者没有去重的话，那么就会导致重复消费。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267373953-13528044-a9d5-460d-9423-6bd54673a916.png#align=left&amp;display=inline&amp;height=454&amp;margin=%5Bobject%20Object%5D&amp;originHeight=454&amp;originWidth=568&amp;size=0&amp;status=done&amp;style=none&amp;width=568" alt><br>如果消费者干的事儿是拿一条数据就往数据库里写一条，会导致说，你可能就把数据 1/2 在数据库里插入了 2 次，那么数据就错啦。<br>其实重复消费不可怕，可怕的是你没考虑到重复消费之后，<strong>怎么保证幂等性</strong>。<br>举个例子吧。假设你有个系统，消费一条消息就往数据库里插入一条数据，要是你一个消息重复两次，你不就插入了两条，这数据不就错了？但是你要是消费到第二次的时候，自己判断一下是否已经消费过了，若是就直接扔了，这样不就保留了一条数据，从而保证了数据的正确性。<br>一条数据重复出现两次，数据库里就只有一条数据，这就保证了系统的幂等性。<br>幂等性，通俗点说，就一个数据，或者一个请求，给你重复来多次，你得确保对应的数据是不会改变的，<strong>不能出错</strong>。<br>所以第二个问题来了，怎么保证消息队列消费的幂等性？<br>其实还是得结合业务来思考，我这里给几个思路：</p>
@@ -370,6 +426,18 @@ var _hmt = _hmt || [];
 <li>比如基于数据库的唯一键来保证重复数据不会重复插入多条。因为有唯一键约束了，重复数据插入只会报错，不会导致数据库中出现脏数据。</li>
 </ul>
 <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267376202-9923a8ef-e923-4b8b-953c-fe9723c70f08.png#align=left&amp;display=inline&amp;height=371&amp;margin=%5Bobject%20Object%5D&amp;originHeight=371&amp;originWidth=401&amp;size=0&amp;status=done&amp;style=none&amp;width=401" alt><br>当然，如何保证 MQ 的消费是幂等性的，需要结合具体的业务来看。</p>
+=======
+        <p>&lt;!doctype html&gt;<div class="lake-content-editor-core lake-engine lake-typography-traditional" data-lake-element="root"><div data-card-type="block" data-lake-card="localdoc" id="WvOwa" class>&lt;a href=”<a href="https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609611227-c8c36a37-f1d4-4189-801b-45040e2ad4e4.mindnode.zip&quot;" target="_blank" rel="noopener">https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609611227-c8c36a37-f1d4-4189-801b-45040e2ad4e4.mindnode.zip&quot;</a> style=”</div></div></p>
+<pre><code>word-wrap: break-word;
+color: #096DD9;
+touch-action: manipulation;
+background-color: rgba(0,0,0,0);
+text-decoration: none;
+outline: none;
+cursor: pointer;
+transition: color .3s;
+</code></pre><p>“&gt;MySQL.mindnode.zip</p>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -382,7 +450,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/12/yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/Mysql/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -412,27 +484,53 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/高并发和高性能系统中锁的影响与解决办法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/Java 基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/">高并发和高性能系统中锁的影响与解决办法</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/Java 基础/">Java 基础</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/" class="archive-article-date">
   	<time datetime="2020-05-12T02:54:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+=======
+        <a href="/2020/05/04/yuque/Java 基础/" class="archive-article-date">
+  	<time datetime="2020-05-04T16:23:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>【为什么需要锁呢？】<br>在单核时代，在不需要并行运算的情况下，锁确实是不需要的。<br>那么多核并行运算的时候，为什么需要锁呢？<br>我们先来看一个例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061637-5225bbd9-5dcf-48c4-ab60-b2ad0a339133.jpeg#align=left&amp;display=inline&amp;height=240&amp;margin=%5Bobject%20Object%5D&amp;originHeight=240&amp;originWidth=420&amp;size=0&amp;status=done&amp;style=none&amp;width=420" alt><br>古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。<br>而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。<br>这一天，来了两个客户，客户 A 找伙计 A 存 50 两银子，客户 B 找伙计 B 取 50 两银子。<br>伙计 A 和伙计 B 在自己的账本上分别记录上自己操作的这笔业务，然后同时去看了一下总账户余额是 1200 两。<br>伙计 A 算了下，1200+50=1250 两，于是把 1250 更新为总账户余额了。<br>伙计 B 算了下，1200-50=1150 两，于是把 1150 更新为总账户余额了。<br>大家是不是发现问题了，两笔业务，一个+50，一个-50，最后应该是不变，但是在伙计 B 更新完成后，总账户余额却少了 50 两。<br>上面就是因为并行运算导致数据更新异常的情况。<br>要怎么解决这个问题呢？<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061663-8cf8685c-47e7-4ff9-856f-e4f456b2d2b8.jpeg#align=left&amp;display=inline&amp;height=145&amp;margin=%5Bobject%20Object%5D&amp;originHeight=145&amp;originWidth=348&amp;size=0&amp;status=done&amp;style=none&amp;width=348" alt><br>掌柜给总账户余额的本子上面加了一个锁。谁要看和写总账户余额之前都需要上锁，操作完成之后再解开锁。<br>于是上面的两个业务操作就有些变化了。如下：<br>伙计 A 去看查看总账户余额，先上锁，看到余额是 1200，然后回来计算下 1200+50=1250，把 1250 更新为总账户余额，然后解开锁。<br>伙计 B 也来查看总账户余额，一看上锁了，就只好先等着，等锁解开了，他才能去看余额是 1250，回来计算下 1250-50=1200，把 1200 更新为总账户余额，然后解开锁。<br>这样，数据更新也就安全了。<br>锁，是为了解决并行运算时，数据并发读写的安全性问题。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061867-9962de26-59d5-496e-ad5b-c8635318c5da.jpeg#align=left&amp;display=inline&amp;height=225&amp;margin=%5Bobject%20Object%5D&amp;originHeight=225&amp;originWidth=225&amp;size=0&amp;status=done&amp;style=none&amp;width=225" alt><br>【增加锁的操作，带来的影响】<br>首先，增加锁的操作，伙计的工作流程中多了上锁解锁，虽然这个上锁解锁的速度很快，但毕竟是增加了操作和开销。<br>另外，伙计 B 看到已经上锁，意味着有冲突时，需要增加额外的等待，对总账户余额的更新变成串行化。<br>从上面可以看出来，如果工作流程中，有一个大循环，循环里面不断有对数据操作，大量的上锁解锁，也是很影响性能。<br>如果不只 2 个伙计，如果是 20 个伙计，非常频繁的去更新总账户余额，冲突太频繁，伙计的工作效率会急剧下降。<br>所以，我们知道了，在并发编程中，锁带来了安全性，同时也带来了性能瓶颈。<br>锁和并发，貌似有一种相克相生的关系。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061669-f8c74302-0830-4e1b-9173-bad1886a452b.jpeg#align=left&amp;display=inline&amp;height=446&amp;margin=%5Bobject%20Object%5D&amp;originHeight=446&amp;originWidth=700&amp;size=0&amp;status=done&amp;style=none&amp;width=700" alt><br>【怎么减少锁的负面影响，同时保证数据安全呢】<br>下面几种方法大家可以考虑：<br>方法 1：<br>对单个数据的更新，可以使用 CAS（Compare-and-Swap）指令。<br>伙计们的操作变成下面这个过程：<br>伙计 A 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200+50=1250，回去修改，一看总账户余额还是 1200，于是成功修改为 1250；<br>伙计 B 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200-50=1150，回去修改，一看总账户余额是 1250，不是原来的 1200，说明数据被修改了，需要重新计算，于是记住新的值 1250，回去重新计算 1250-50=1200，在回去修改，一看总账户余额是 1250，于是成功修改为 1200。<br>上面的操作过程就是运用了 CAS 指令，修改之前先对比，数据没变化说明没有被修改过，这时候才能进行更新。<br>但是 CAS 操作时，还有一个 ABA 的问题。<br>例如：伙计 A 动作很快，改了一笔 1200-&gt;1250，又改了一笔 1250-&gt;1200；这时候伙计 B 回来改，看到的 1200 虽然数量没变，但是已经被改动两次了。<br>虽然上面的这种情况 ABA 问题不会有什么影响，但是有时候还是会出问题。<br>例如：总账户余额是每天记录一个数。<br>伙计 A 在今天的总账户余额上面改了一笔 1200-&gt;1250，掌柜过来翻了一下总账户，翻到了昨天那页，而那页的总账户余额刚好是 1200；<br>伙计 B 过来更新数据，一看还是 1200，就改成了 1150，这个改动是有问题的，因为伙计 B 改的是昨天的总账户余额。<br>要怎么解决这种 ABA 问题呢？<br>只需要在之前的数据基础上，再增加一个日期数据，检查的时候，需要同时检查总账户余额的数据和日期的数据，都没有变化才可以成功更新。<br>方法 2：<br>引入队列，让一个任务专门来做数据的更新，避免并行运算。<br>这时候，就是让掌柜一个人来更新总账户余额，伙计们只需要把自己的每一笔业务结果记录在总账户下面。<br>伙计 A 有一笔业务是存 50 两，则在总账户下面记录上+50；<br>伙计 B 有一笔业务是取 50 两，则在总账户下面记录上-50；<br>而掌柜只需要从总账户里面，顺序的把+50，-50 的操作更新到总账户余额就可以了。<br>这种方法的好处是，避免伙计并行更新总账户余额，发生冲突时的等待，既提高了伙计的效率也保证了数据更新的安全。<br>方法 3：<br>还是需要有锁的操作，但是让运算的过程更快，减少锁冲突的频率和时间。<br>前面是伙计先上锁，然后看总账户余额，再回去运算，再回来更新和解锁。<br>把这个过程改一下，伙计带着算盘过来，先上锁，然后现场运算，更新后解锁，再回去。<br>这样一来，整个的读写时间变短了，锁的冲突时间也就减少了，效率和性能也就能有所提高。<br>方法 4：<br>能否进一步减少锁的冲突时间，比如：将读、写的锁分开考虑，毕竟大部分业务中读的次数会远多于写的次数。<br>A 使用读写锁而不是互斥锁，可以提高并发读的效率，减少读时候的锁冲突。<br>例如：大量的业务都需要查看总账余额才可以做决定，那么就会有大量的读需求。而多个人一起读不冲突，只是在需要写的时候才独占总账余额的锁。<br>B 将大的数据分拆为多段的小数据，这样通过多个锁分别作用在小数据上，避免一个锁作用在大的数据中，减少冲突的概率。<br>例如：对总账余额的每一位设置单独的锁，而不是对整个数设置一个锁。这样的话，+50 只需要得到十位数的锁，-3 只需要得到个位的锁，如果是+55 则要个位和十位两个锁。<br>C 读的时候不需要锁，而写入的时候串行化同时只能一个人更新<br>例如：总账余额对所有人公开的，大家可以随便看，但是修改的时候，只能由掌柜来操作。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061690-5f577fc5-e07e-4d32-9921-c04cd2804080.jpeg#align=left&amp;display=inline&amp;height=305&amp;margin=%5Bobject%20Object%5D&amp;originHeight=305&amp;originWidth=310&amp;size=0&amp;status=done&amp;style=none&amp;width=310" alt><br>【死锁是怎么造成的？怎么避免？】<br>锁有两个操作，一个是加锁，一个是解锁。<br>锁冲突的时候，所有需要加锁的人就要等待，而无限等待就是死锁的状态。<br>造成的情况有下面 2 种：<br>1 如果伙计 A 对总账余额加锁，但是被客户叫走了，就会导致伙计 B 陷入死锁，一直等待。<br>这种情况就是伙计 A 出现了异常，没能及时的操作完，进行解锁。<br>2 如果伙计 A 对今天的总账余额加锁，同时伙计 B 对昨天的总账余额加锁，然后伙计 A 又想要获取昨天总账余额的锁，同时伙计 B 要今天的总账余额锁。<br>那这个时候，伙计 A、B 就会因为今天、昨天的总账余额两个锁互相依赖，都无法成功完成操作，造成死锁。<br>要怎么避免呢？<br>针对情况 1，就需要对异常情况做更周密的考虑，增加超时处理，锁占用时间最多 1 分钟，超时就自动解锁。<br>针对情况 2，可以考虑把锁的粒度设置粗一些，锁的效率低些总比造成死锁的情况要好很多。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061632-0175b53e-9417-4c3e-b83d-7ae1ff262ffc.jpeg#align=left&amp;display=inline&amp;height=481&amp;margin=%5Bobject%20Object%5D&amp;originHeight=481&amp;originWidth=500&amp;size=0&amp;status=done&amp;style=none&amp;width=500" alt><br>【单机的锁是怎么实现的？】<br>锁总线，只能有一个 CPU 核心可以通过数据总线访问主存，其他 CPU 等待，保证多 CPU 并行时数据读写的一致性。效率低，CPU 闲置。<br>缓存锁，针对单个缓存行中的数据地址，缓存读写只能发生在一个 CPU 核心，其他 CPU 缓存全部失效。数据少，只能是一个缓存行的数据。<br>因此，只对一个变量做更新的时候，能用缓存锁就尽量不要使用锁总线的方式。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061850-c6a67064-0a63-4cb6-80ac-033ac735d3e0.jpeg#align=left&amp;display=inline&amp;height=375&amp;margin=%5Bobject%20Object%5D&amp;originHeight=375&amp;originWidth=750&amp;size=0&amp;status=done&amp;style=none&amp;width=750" alt><br>【分布式锁的实现】<br>多服务器多进程之间需要做到数据安全更新的时候，就需要用到分布式锁。<br>而分布式锁的实现，还是需要有独立的线程安全的服务来提供锁的实现。<br>比如：<br>redis，实现简单，吞吐量十分可观，对于高并发情况应付自如，自带超时保护，对于网络抖动的情况也可以利用超时删除策略保证不会阻塞所有流程。<br>zookeeper，实现分布式锁虽然是比较重量级的，但实现的锁功能十分健全，由于 Zookeeper 本身需要维护自己的一致性，所以性能上较 Redis 还是有一定差距的。<br>【写在最后】<br>并发编程是非常复杂，充满挑战的一项工作，可为什么大部分感觉不到它的难点呢？<br>互联网应用、Web 应用，都是并发编程的典型应用，大家写着业务代码，却体会不到其中的难点呢？<br>我个人理解，是不是以为工作任务只是测试通过，功能跑通而已呢？<br>是不是以为几次几十次的操作，数据写入成功，返回正常就可以呢？<br>是不是以为偶尔出个错，排查后修正解决了就完事了呢？<br>我们的应用如果是作为一个系统，那么就不能是片面去看待和思考它，要有系统化的思维，从很小的点开始，认真面对这一切。</p>
+=======
+        <p>&lt;!doctype html&gt;<div class="lake-content-editor-core lake-engine lake-typography-traditional" data-lake-element="root"><div data-card-type="block" data-lake-card="localdoc" id="uu10J" class>&lt;a href=”<a href="https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609420143-b2cad930-c7f2-4368-a053-13774403bbe3.mindnode.zip&quot;" target="_blank" rel="noopener">https://www.yuque.com/office/yuque/0/2020/mindnode.zip/190217/1588609420143-b2cad930-c7f2-4368-a053-13774403bbe3.mindnode.zip&quot;</a> style=”</div></div></p>
+<pre><code>word-wrap: break-word;
+color: #096DD9;
+touch-action: manipulation;
+background-color: rgba(0,0,0,0);
+text-decoration: none;
+outline: none;
+cursor: pointer;
+transition: color .3s;
+</code></pre><p>“&gt;Java 基础.mindnode.zip</p>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -445,7 +543,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/12/yuque/高并发和高性能系统中锁的影响与解决办法/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/Java 基础/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -475,26 +577,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/并发编程与锁的底层原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/memcache" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/12/yuque/并发编程与锁的底层原理/">并发编程与锁的底层原理</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/memcache/">memcache</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/12/yuque/并发编程与锁的底层原理/" class="archive-article-date">
   	<time datetime="2020-05-12T02:52:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+=======
+        <a href="/2020/05/04/yuque/memcache/" class="archive-article-date">
+  	<time datetime="2020-05-04T15:40:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>##</p>
 <h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。</span><br></pre></td></tr></table></figure>
 <h2 id="大纲："><a href="#大纲：" class="headerlink" title="大纲："></a>大纲：</h2><ul>
@@ -596,6 +712,10 @@ var _hmt = _hmt || [];
 <li>4 runtime_SemacquireMutex 锁请求失败,进入休眠状态,等待信号唤醒后重新开始循环；</li>
 <li>5 m.state 等待队列长度（复用的 int32 位数字，第一位是锁的状态，后 31 位是锁的等待队列长度计数器）；</li>
 </ul>
+=======
+        <p><img src="https://cdn.nlark.com/yuque/0/2020/svg/190217/1588608394667-351ac965-90f6-4e8b-b593-401a5b8d8ed7.svg" alt><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">适合存储的数据</span><br><span class="line">① 访问比较频繁的数据，安全性差的数据，丢失无所谓的数据。</span><br><span class="line">② 数据更新，比较频繁的数据，比如用户的在线状态。</span><br><span class="line">③ 数据的单个键值不能太大，不要超过 1Mb 数据</span><br></pre></td></tr></table></figure></p>
+<p><code>`</code></p>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -608,7 +728,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/12/yuque/并发编程与锁的底层原理/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/memcache/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -638,26 +762,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/Redis 雪崩击穿" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/Redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/10/yuque/Redis 雪崩击穿/">Redis 雪崩击穿</a>
+=======
+      <a class="article-title" href="/2020/05/04/yuque/Redis/">Redis</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/10/yuque/Redis 雪崩击穿/" class="archive-article-date">
   	<time datetime="2020-05-10T18:05:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+=======
+        <a href="/2020/05/04/yuque/Redis/" class="archive-article-date">
+  	<time datetime="2020-05-04T14:54:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在我们日常的开发中，无不都是使用数据库来进行数据的存储，由于一般的系统任务中通常不会存在高并发的情况，所以这样看起来并没有什么问题，可是一旦涉及大数据量的需求，比如一些商品抢购的情景，或者是主页访问量瞬间较大的时候，单一使用数据库来保存数据的系统会因为面向磁盘，磁盘读/写速度比较慢的问题而存在严重的性能弊端，一瞬间成千上万的请求到来，需要系统在极短的时间内完成成千上万次的读/写操作，这个时候往往不是数据库能够承受的，极其容易造成数据库系统瘫痪，最终导致服务宕机的严重生产问题。<br>为了克服上述的问题，项目通常会引入 NoSQL 技术，这是一种基于内存的数据库，并且提供一定的持久化功能。<br>redis 技术就是 NoSQL 技术中的一种，但是引入 redis 又有可能出现缓存穿透，缓存击穿，缓存雪崩等问题。本文就对这三种问题进行较深入剖析。</p>
 <h3 id="二、初认识"><a href="#二、初认识" class="headerlink" title="二、初认识"></a>二、初认识</h3><ul>
 <li>缓存穿透：key 对应的数据在数据源并不存在，每次针对此 key 的请求从缓存获取不到，请求都会到数据源，从而可能压垮数据源。比如用一个不存在的用户 id 获取用户信息，不论缓存还是数据库都没有，若黑客利用此漏洞进行攻击可能压垮数据库。</li>
@@ -682,6 +820,9 @@ var _hmt = _hmt || [];
 </ul>
 <p>关于缓存崩溃的解决方法，这里提出了三种方案：使用锁或队列、设置过期标志更新缓存、为 key 设置不同的缓存失效时间，还有一种被称为“二级缓存”的解决方法。</p>
 <h3 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h3><p>针对业务系统，永远都是具体情况具体分析，没有最好，只有最合适。<br>于缓存其它问题，缓存满了和数据丢失等问题，大伙可自行学习。最后也提一下三个词 LRU、RDB、AOF，通常我们采用 LRU 策略处理溢出，Redis 的 RDB 和 AOF 持久化策略来保证一定情况下的数据安全。</p>
+=======
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br></pre></td><td class="code"><pre><span class="line">redis</span><br><span class="line">	数据类型</span><br><span class="line">		string</span><br><span class="line">			最基本类型，做简单的kv缓存</span><br><span class="line">		hash</span><br><span class="line">			类似map的结构，比如一个对象给缓存在redis里，每次读写的时候可以操作对象里的某个属性</span><br><span class="line">		list</span><br><span class="line">			有序列表，例如：微博某个大V的粉丝，就可以以list的格式放在redis里去缓存</span><br><span class="line">			通过list存储一些列表型的数据结构，类似粉丝列表了、文章的评论列表了之类的东西</span><br><span class="line">			通过lrange命令，就是从某个元素开始读取多少个元素，可以基于list实现分页查询</span><br><span class="line">			可以搞个简单的消息队列，从list头怼进去，从list尾巴那里弄出来</span><br><span class="line">		set</span><br><span class="line">			无序集合，自动去重</span><br><span class="line">			可以基于set玩儿交集、并集、差集的操作，比如交集吧，可以把两个人的粉丝列表整一个交集，看看俩人的共同好友是谁</span><br><span class="line">		sorted set</span><br><span class="line">			排序的set，去重但是可以排序</span><br><span class="line">			比如说你要是想根据时间对数据排序，那么可以写入进去的时候用某个时间作为分数，人家自动给你按照时间排序了</span><br><span class="line">	数据分布算法</span><br><span class="line">		解决把整个数据集按照分区的规则映射到多个节点的问题。即把数据划分到多个节点上，每个节点负责整体数据的一个子集</span><br><span class="line">		哈希分区</span><br><span class="line">			使用特定的数据（包括redis的键或用户ID），再根据节点数量N，使用公式：hash(key)%N计算出一个0~（N-1）值，用来决定数据映射到哪一个节点上。即哈希值对节点总数取余。余数x，表示这条数据存放在第（x+1）个节点上</span><br><span class="line">			优点</span><br><span class="line">				简单</span><br><span class="line">			缺点</span><br><span class="line">				当节点数量N变化时（扩容或者收缩），数据和节点之间的映射关系需要重新计算，这样的话，按照新的规则映射，要么之前存储的数据找不到，要么之前数据被重新映射到新的节点（导致以前存储的数据发生数据迁移）。这是难以接受的</span><br><span class="line">		一致性哈希分区</span><br><span class="line">			把所有的数据包括节点数据都放在一个哈希环上，我们除了需要计算要存储的数据的key的hash之外，还要计算节点的hash，然后在存储时，选择一个跟key的hash最接近的节点（顺时针找到第一个大于等于该哈希值的节点），存储进去</span><br><span class="line">			优点</span><br><span class="line">				加入和删除节点只影响哈希环中相邻的节点，对其他的节点无影响</span><br><span class="line">			缺点</span><br><span class="line">				加减节点，会造成哈希环中部分数据无法命中，需要手动处理或者忽略这部分数据，因此一致性哈希常用于缓存场景</span><br><span class="line">				当使用少量节点时，节点变化将大范围影响哈希环中数据映射，因此这种方式不适合少量数据节点的分布式方案</span><br><span class="line">				普通的一致性哈希分区在增加节点时需要增加一倍或减去一半节点才能保证数据和负载的均衡</span><br><span class="line">		虚拟槽分区</span><br><span class="line">			虚拟槽分区就是为了解决一致性哈希分区的不足而被创造的。虚拟槽分区巧妙地使用了哈希空间，使用分散度良好的哈希函数把所有的数据映射到一个固定范围的整数集合中，整数定义为槽（slot）。这个范围一般远远大于节点数，比如redis Cluster槽的范围是0-16383，一共16384个槽。槽是集群内数据管理和迁移的基本单位。采用大范围槽的主要目的是为了方便数据拆分和集群扩展。每个节点会负责一定数量的槽（虚拟节点），之前我们在介绍一致性哈希的时候，是将物理节点直接通过哈希运算得到其hash值，而后数据的key计算出来之后，与节点的哈希进行比较，决定存放在哪个节点中．而现在，我们用几个槽（虚拟节点）代表一个物理节点．不同槽（虚拟节点）的hash是通过不同的哈希函数计算出来的。以redis为例子，假设现在我们有5个节点，一共分配16384个槽（虚拟节点）</span><br><span class="line">		redis把数据分布到不同节点带来集群功能的限制</span><br><span class="line">			key批量操作支持有限</span><br><span class="line">				如mset，mget,目前只支持 具有相同slot值得key执行批量操作。对于映射为不同slot值得key由于执行mset,mget等操作可能存在于多个节点上因此不被支持</span><br><span class="line">			key事物操作支持有限</span><br><span class="line">				同理只支持多个key在同一个节点上的事物操作，当多个key分布在不同的节点上时无法使用事物功能</span><br><span class="line">			key作为数据分区的最小粒度</span><br><span class="line">				因此不能将一个大的键值对象如hash,list等映射到不同的节点</span><br><span class="line">			不支持多数据库空间</span><br><span class="line">				单机下的redis可以支持16个数据库，集群模式下只能使用一个数据空间，即db 0</span><br><span class="line">			复制结构只支持一层</span><br><span class="line">				从节点只能复制主节点，不支持嵌套树状复制结构</span><br><span class="line">	线程模型</span><br><span class="line">		文件事件处理器</span><br><span class="line">			Redis基于Reactor模式开发了网络事件处理器，这个处理器被称为文件事件处理器。它的组成结构为4部分：多个套接字、IO多路复用程序、文件事件分派器、事件处理器。因为文件事件分派器队列的消费是单线程的，所以Redis才叫单线程模型</span><br><span class="line">			文件事件处理器是单线程模式运行的，但是通过IO多路复用机制监听多个socket，可以实现高性能的网络通信模型，又可以跟内部其他单线程的模块进行对接，保证了redis内部的线程模型的简单性</span><br><span class="line">			多个socket可能并发的产生不同的操作，每个操作对应不同的文件事件，但是IO多路复用程序会监听多个socket，但是会将socket放入一个队列中排队，每次从队列中取出一个socket给事件分派器，事件分派器把socket给对应的事件处理器，然后一个socket的事件处理完之后，IO多路复用程序才会将队列中的下一个socket给事件分派器。文件事件分派器会根据每个socket当前产生的事件，来选择对应的事件处理器来处理</span><br><span class="line">			如果是客户端要连接redis，那么会为socket关联连接应答处理器 如果是客户端要写数据到redis，那么会为socket关联命令请求处理器</span><br><span class="line">			如果是客户端要从redis读数据，那么会为socket关联命令回复处理器</span><br><span class="line">		文件事件</span><br><span class="line">			AE_READABLE</span><br><span class="line">				当socket变得可读时（比如客户端对redis执行write操作，或者close操作），或者有新的可以应答的socket出现时（客户端对redis执行connect操作），socket就会产生一个AE_READABLE事件</span><br><span class="line">			AE_WRITABLE</span><br><span class="line">				当socket变得可写的时候（客户端对redis执行read操作），socket会产生一个AE_WRITABLE事件</span><br><span class="line">			IO多路复用程序可以同时监听AE_REABLE和AE_WRITABLE两种事件，要是一个socket同时产生了AE_READABLE和AE_WRITABLE两种事件，那么文件事件分派器优先处理AE_READABLE事件，然后才是AE_WRITABLE事件</span><br><span class="line">		客户端与redis通信的一次流程</span><br><span class="line">			在redis启动初始化的时候，redis会将连接应答处理器跟AE_READABLE事件关联起来，接着如果一个客户端跟redis发起连接，此时会产生一个AE_READABLE事件，然后由连接应答处理器来处理跟客户端建立连接，创建客户端对应的socket，同时将这个socket的AE_READABLE事件跟命令请求处理器关联起来</span><br><span class="line">			当客户端向redis发起请求的时候（不管是读请求还是写请求，都一样），首先就会在socket产生一个AE_READABLE事件，然后由对应的命令请求处理器来处理。这个命令请求处理器就会从socket中读取请求相关数据，然后进行执行和处理</span><br><span class="line">			接着redis这边准备好了给客户端的响应数据之后，就会将socket的AE_WRITABLE事件跟命令回复处理器关联起来，当客户端这边准备好读取响应数据时，就会在socket上产生一个AE_WRITABLE事件，会由对应的命令回复处理器来处理，就是将准备好的响应数据写入socket，供客户端来读取</span><br><span class="line">			命令回复处理器写完之后，就会删除这个socket的AE_WRITABLE事件和命令回复处理器的关联关系</span><br><span class="line">		为啥单线程模型效率也能那么高</span><br><span class="line">			纯内存操作</span><br><span class="line">			核心基于非阻塞IO多路复用机制</span><br><span class="line">			单线程避免了多线程的频繁上下文切换问题</span><br><span class="line">	缓存过期策略</span><br><span class="line">		定时删除</span><br><span class="line">			在设置key的过期时间的同时，创建一个定时器(timer)，让定时器在key的过期时间来临时，立即执行对key的删除操作</span><br><span class="line">			优点</span><br><span class="line">				对内存友好，保证内存被尽快释放</span><br><span class="line">			缺点</span><br><span class="line">				对CPU时间最不友好。若过期key过多时，删除过期key会占用很多的CPU时间，（当内存不紧张而CPU紧张时）会对服务器的响应时间和吞吐量造成影响</span><br><span class="line">		惰性删除</span><br><span class="line">			放任key过期不管，但是每次去数据库获取key的时候去检查是否过期，若过期，则删除，返回null.</span><br><span class="line">			优点</span><br><span class="line">				对CPU时间友好。程序只会在取key的时候对key进行过期检查，这可以保证删除过期key的操作只会在非做不可的情况下进行（如果此时还不删除的话，我们就会获取到了已经过期的key)，并且删除的目标仅限于当前处理的key</span><br><span class="line">			缺点</span><br><span class="line">				若大量的过期的key没有再次被访问，从而不会被清除，这样会占用大量内存，而且服务器不会自己去释放它们</span><br><span class="line">		定期删除</span><br><span class="line">			每隔一段时间，程序就对数据库进行一次检查，删除里面过期的key</span><br><span class="line">			优点</span><br><span class="line">				定时删除占用太多CPU时间，影响服务器的响应时间和吞吐量</span><br><span class="line">				惰性删除浪费太多内存，有内存泄漏的危险</span><br><span class="line">				定期删除就是前两种策略的折中。</span><br><span class="line">				服务器必须根据情况，合理地设置删除操作的执行时长和执行频率。</span><br><span class="line">	淘汰策略</span><br><span class="line">		noeviction</span><br><span class="line">			不删除策略, 达到最大内存限制时, 如果需要更多内存, 直接返回错误信息。 大多数写命令都会导致占用更多的内存(有极少数会例外, 如 DEL )</span><br><span class="line">		allkeys-lru</span><br><span class="line">			所有key通用; 优先删除最近最少使用(less recently used ,LRU) 的 key</span><br><span class="line">		allkeys-random</span><br><span class="line">			所有key通用; 随机删除一部分 key</span><br><span class="line">		volatile-lru</span><br><span class="line">			只限于设置了 expire 的部分; 优先删除最近最少使用(less recently used ,LRU) 的 key</span><br><span class="line">		volatile-random</span><br><span class="line">			只限于设置了 expire 的部分; 随机删除一部分 key</span><br><span class="line">		volatile-ttl</span><br><span class="line">			只限于设置了 expire 的部分; 优先删除剩余时间(time to live,TTL) 短的key</span><br><span class="line">	持久化</span><br><span class="line">		持久化意义</span><br><span class="line">			主要是做灾难恢复，数据恢复，防止数据丢失</span><br><span class="line">		RDB</span><br><span class="line">			工作原理</span><br><span class="line">				对redis中的数据执行周期性的持久化，生成redis内存中的数据的一份完整快照</span><br><span class="line">			优点</span><br><span class="line">				RDB会生成多个数据文件，每个数据文件都代表了某一个时刻中redis的数据，这种多个数据文件的方式，非常适合做冷备</span><br><span class="line">				RDB对redis对外提供的读写服务，影响非常小，可以让redis保持高性能，因为redis主进程只需要fork一个子进程，让子 进程执行磁盘IO操作来进行RDB持久化即可</span><br><span class="line">				相对于AOF持久化机制来说，直接基于RDB数据文件来重启和恢复redis进程，更加快速</span><br><span class="line">			缺点</span><br><span class="line">				如果想要在redis故障时，尽可能少的丢失数据，那么RDB没有AOF好。一般来说，RDB数据快照文件，都是每隔5分钟， 或者更长时间生成一次，这个时候就得接受一旦redis进程宕机，那么会丢失最近5分钟的数据</span><br><span class="line">				RDB每次在fork子进程来执行RDB快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒</span><br><span class="line">		AOF</span><br><span class="line">			工作原理</span><br><span class="line">				对每条写入命令作为日志，以append-only的模式写入一个日志文件中，在redis重启 的时候，可以通过回放AOF日志中的写入指令来重新构建整个数据集</span><br><span class="line">			优点</span><br><span class="line">				AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据</span><br><span class="line">				AOF日志文件以append-only模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复</span><br><span class="line">				AOF日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。因为在rewrite log的时候，会对其中的指导进行压缩，创建出一份需要恢复数据的最小日志出来。再创建新日志文件的时候，老的日志文件还是照常写入。当新的merge后的日志文件ready的时候，再交换新老日志文件即可</span><br><span class="line">				AOF日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用flushall命令清空了所有数据， 只要这个时候后台rewrite还没有发生，那么就可以立即拷贝AOF文件，将最后一条flushall命令给删了，然后再将该AOF文件放回去，就可以通过恢复机制，自动恢复所有数据</span><br><span class="line">			缺点</span><br><span class="line">				对于同一份数据来说，AOF日志文件通常比RDB数据快照文件更大</span><br><span class="line">				AOF开启后，支持的写QPS会比RDB支持的写QPS低，因为AOF一般会配置成每秒fsync一次日志文件，当然，每秒一次fsync，性能也还是很高的</span><br><span class="line">				以前AOF发生过bug，就是通过AOF记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似AOF这种较为复杂的基于命令日志/merge/回放的方式，比基于RDB每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有bug。不过AOF就是为了避免rewrite过程导致的bug，因此每次rewrite并不是基于旧的指令日志进行merge的，而是基于当时内存中的数据进行指令的重新构建，这样健壮性会好很多</span><br><span class="line">		RDB与AOF如何选择</span><br><span class="line">			1、不要仅仅使用RDB，因为那样会导致你丢失很多数据</span><br><span class="line">			2、也不要仅仅使用AOF，因为那样有两个问题，第一，你通过AOF做冷备，没有RDB做冷备，来的恢复速度更快; 第二，RDB每次简单粗暴生成数据快照，更加健壮，可以避免AOF这种复杂的备份和恢复机制的bug</span><br><span class="line">			3、综合使用AOF和RDB两种持久化机制，用AOF来保证数据不丢失，作为数据恢复的第一选择; 用RDB来做不同程度的冷备，在AOF文件都丢失或损坏不可用的时候，还可以使用RDB来进行快速的数据恢复</span><br><span class="line">			4、如果同时使用RDB和AOF两种持久化机制，那么在redis重启的时候，会使用AOF来重新构建数据，因为AOF中的数据更加完整</span><br><span class="line">	redis实现高并发</span><br><span class="line">		读写分离</span><br><span class="line">			一主多从，主负责写，从负责读，从节点可以进行水平扩容实现高并发</span><br><span class="line">		主从架构</span><br><span class="line">			redis replication基本原理</span><br><span class="line">				redis replication --&gt; 主从架构 --&gt; 读写分离架构 --&gt; 水平扩容支撑读高并发架构</span><br><span class="line">			redis replication核心机制</span><br><span class="line">				redis通过异步方式将数据复制到slave</span><br><span class="line">				一个master配置多个slave,slave做复制的时候，不阻塞master node正常工作，不会阻塞自己的查询操作</span><br><span class="line">				slave node用来横向扩容，做读写分离，扩容的slave node可以提供读的吞吐量</span><br><span class="line">			主从复制核心原理</span><br><span class="line">				启动一个slave node的时候，它会发送一个PSYNC命令给master node 如果是slave重连master，master仅仅会复制slave部分缺少的数据</span><br><span class="line">				如果是第一次连接，那么会触发master的full resynchronization全量同步</span><br><span class="line">				全量复制</span><br><span class="line">					master执行bgsave，在本地生成一份rdb快照文件</span><br><span class="line">					master node将rdb快照文件发送给slave node，如果rdb复制时间超过60秒（repl-timeout）,那么slave node就会认为复制失败，可以适当调大这个参数</span><br><span class="line">					master node在生成rdb时，会将所有新的写命令缓存在内存中，在salve node保存了rdb之后，再将新的写命令复制给salve node</span><br><span class="line">					client-output-buffer-limit slave 256MB 64MB 60，如果在复制期间，内存缓冲区持续消耗超过64MB，或者一次性超过256MB，那么停止复制，复制失败</span><br><span class="line">					slave node接收到rdb之后，清空自己的旧数据，然后重新加载rdb到自己的内存中，同时基于旧的数据版本对外提供服务</span><br><span class="line">					如果slave node开启了AOF，那么会立即执行BGREWRITEAOF，重写AOF</span><br><span class="line">				增量复制</span><br><span class="line">					如果全量复制过程中，master-slave网络连接断掉，那么salve重新连接master时，会触发增量复制</span><br><span class="line">					master直接从自己的backlog中获取部分丢失的数据，发送给slave node，默认backlog就是1MB</span><br><span class="line">					msater就是根据slave发送的psync中的offset来从backlog中获取数据的</span><br><span class="line">				数据同步机制</span><br><span class="line">					master和slave都维护一个offset</span><br><span class="line">						master会在自身不断累加offset，slave也会在自身不断累加offset slave每秒都会上报自己的offset给master，同时master也会保存每个slave的offset</span><br><span class="line">						通过master和slave中的offset的差异性，才能知道数据不一致的情况</span><br><span class="line">					backlog</span><br><span class="line">						master node有一个backlog，默认1MB大小 master node给slave node复制数据时，也会将数据在backlog中同步一份</span><br><span class="line">						backlog主要是用来做全量复制中断后的增量复制</span><br><span class="line">					master run id</span><br><span class="line">						info server命令，可以看到master run id 根据host+ip定位master node不靠谱，如果master node重启或者数据发生了变化，slave node应该根据run id来区分，run id 不同就做全量复制</span><br><span class="line">					psync</span><br><span class="line">						从节点使用psync从master node进行复制，psync runid offset master node会根据自身的情况返回响应信息，可能是FULLRESYNC runid offset触发全量复制，可能是CONTINUE触发增量复制</span><br><span class="line">				断点续传</span><br><span class="line">					master node会在内存中维护一个backlog，master和slave都会保存一个replica offset还有一个master id，replica offset保存在backlog中，如果master和slave连接中断，恢复网络后，slave会让master从上一次的replica offset开始继续复制，如果找不到对应的offset，那么就会执行一次full resynchronization</span><br><span class="line">	redis实现高可用</span><br><span class="line">		redis哨兵架构</span><br><span class="line">			哨兵</span><br><span class="line">				redis高可用架构，叫做故障转移，failover，也可以叫做主备切换</span><br><span class="line">				主要功能</span><br><span class="line">					集群监控，负责监控redis master和slave进程是否工作</span><br><span class="line">					消息通知，如果某个redis实例有故障，那么哨兵负责发送消息作为报警通知给管理员</span><br><span class="line">					故障转移，如果master node挂掉了，那么会自动转移到slave node上</span><br><span class="line">					配置中心，如果故障转移发生了，通知client新的master地址</span><br><span class="line">				哨兵集群</span><br><span class="line">					故障转移时，判断一个master node是宕机了，需要大部分的哨兵都同意才行，涉及到了分布式选举的问题</span><br><span class="line">					即使部分哨兵节点挂掉了，哨兵集群还是能正常工作的，因为如果一个作为高可用机制重要组成部分的故障转移系统本身是单点的，那就很坑爹了</span><br><span class="line">				核心知识</span><br><span class="line">					哨兵至少需要3个实例，来保证自己的健壮性</span><br><span class="line">					哨兵 + redis主从的部署架构，是不会保证数据零丢失的，只能保证redis集群的高可用性</span><br><span class="line">					对于哨兵 + redis主从这种复杂的部署架构，尽量在测试环境和生产环境，都进行充足的测试和演练</span><br><span class="line">				为什么哨兵集群只有2个节点无法正常工作？</span><br><span class="line">					如果哨兵集群仅仅部署了个2个哨兵实例，quorum=1</span><br><span class="line">					master宕机，s1和s2中只要有1个哨兵认为master宕机就可以执行切换，同时s1和s2中会选举出一个哨兵来执行故障转移</span><br><span class="line">					同时这个时候，需要majority，也就是大多数哨兵都是运行的，2个哨兵的majority就是2，2个哨兵都运行着，就可以允许执行故障转移</span><br><span class="line">					但是如果整个M1和S1运行的机器宕机了，那么哨兵只有1个了，此时就没有majority来允许执行故障转移，虽然另外一台机器还有一个R1，但是故障转移不会执行</span><br><span class="line">				3节点哨兵集群</span><br><span class="line">					如果M1所在机器宕机了，那么三个哨兵还剩下2个，S2和S3可以一致认为master宕机，然后选举出一个来执行故障转移</span><br><span class="line">					同时3个哨兵的majority是2，所以还剩下的2个哨兵运行着，就可以允许执行故障转移</span><br><span class="line">			哨兵主备切换数据丢失问题</span><br><span class="line">				异步复制导致数据丢失</span><br><span class="line">					master -&gt; slave的复制是异步的，所以可能有部分数据还没复制到slave，master就宕机了，此时这些部分数据就丢失了</span><br><span class="line">				脑裂导致的数据丢失</span><br><span class="line">					脑裂：某个master所在机器突然脱离了正常的网络，跟其他slave机器不能连接，但是实际上master还运行着 此时哨兵可能就会认为master宕机了，然后开启选举，将其他slave切换成了master</span><br><span class="line">					这个时候，集群里就会有两个master，也就是所谓的脑裂</span><br><span class="line">					虽然某个slave被切换成了master，但是可能client还没来得及切换到新的master，还继续写向旧master的数据可能也丢失了 因此旧master再次恢复的时候，会被作为一个slave挂到新的master上去，自己的数据会清空，重新从新的master复制数据</span><br><span class="line">				数据丢失处理方式</span><br><span class="line">					配置参数：要求至少有1个slave，数据复制和同步的延迟不能超过10秒 min-slaves-to-write 1</span><br><span class="line">					min-slaves-max-lag 10</span><br><span class="line">					数据复制和同步的延迟都超过了10秒钟，那么这个时候，master就不会再接收任何请求了</span><br><span class="line">					减少异步复制的数据丢失</span><br><span class="line">						有了min-slaves-max-lag这个配置，就可以确保说，一旦slave复制数据和ack延时太长，就认为可能master宕机后损失的数据太多了， 那么就拒绝写请求，这样可以把master宕机时由于部分数据未同步到slave导致的数据丢失降低的可控范围内</span><br><span class="line">					减少脑裂的数据丢失</span><br><span class="line">						如果一个master出现了脑裂，跟其他slave丢了连接，那么上面两个配置可以确保说，如果不能继续给指定数量的slave发送数据， 而且slave超过10秒没有给自己ack消息，那么就直接拒绝客户端的写请求</span><br><span class="line">			哨兵底层原理</span><br><span class="line">				sdown和odown转换机制</span><br><span class="line">					sdown和odown两种失败状态 sdown是主观宕机，就一个哨兵如果自己觉得一个master宕机了，那么就是主观宕机</span><br><span class="line">					odown是客观宕机，如果quorum数量的哨兵都觉得一个master宕机了，那么就是客观宕机</span><br><span class="line">					sdown达成的条件很简单，如果一个哨兵ping一个master，超过了is-master-down-after-milliseconds指定的毫秒数之后，就主观认为master宕机</span><br><span class="line">					sdown到odown转换的条件很简单，如果一个哨兵在指定时间内，收到了quorum指定数量的其他哨兵也认为那个master是sdown了，那么就认为是odown了，客观认为master宕机</span><br><span class="line">				哨兵集群的自动发现机制</span><br><span class="line">					哨兵互相之间的发现，是通过redis的pub/sub系统实现的，每个哨兵都会往__sentinel__:hello这个channel里发送一个消息，这时候所有其他哨兵都可以消费到这个消息，并感知到其他的哨兵的存在 每隔两秒钟，每个哨兵都会往自己监控的某个master+slaves对应的__sentinel__:hello channel里发送一个消息，内容是自己的host、ip和runid还有对这个master的监控配置</span><br><span class="line">					每个哨兵也会去监听自己监控的每个master+slaves对应的__sentinel__:hello channel，然后去感知到同样在监听这个master+slaves的其他哨兵的存在</span><br><span class="line">					每个哨兵还会跟其他哨兵交换对master的监控配置，互相进行监控配置的同步</span><br><span class="line">				slave配置的自动纠正</span><br><span class="line">					哨兵会负责自动纠正slave的一些配置，比如slave如果要成为潜在的master候选人，哨兵会确保slave在复制现有master的数据; 如果slave连接到了一个错误的master上，比如故障转移之后，那么哨兵会确保它们连接到正确的master上</span><br><span class="line">				slave-&gt;master选举算法</span><br><span class="line">					如果一个master被认为odown了，而且majority哨兵都允许了主备切换，那么某个哨兵就会执行主备切换操作，此时首先要选举一个slave来</span><br><span class="line">					考虑slave的一些信息</span><br><span class="line">						跟master断开连接的时长</span><br><span class="line">						slave优先级</span><br><span class="line">						复制offset</span><br><span class="line">						run id</span><br><span class="line">					对slave进行排序</span><br><span class="line">						按照slave优先级进行排序，slave priority越低，优先级就越高</span><br><span class="line">						）如果slave priority相同，那么看replica offset，哪个slave复制了越多的数据，offset越靠后，优先级就越高</span><br><span class="line">						如果上面两个条件都相同，那么选择一个run id比较小的那个slave</span><br><span class="line">				quorum和majority</span><br><span class="line">					每次一个哨兵要做主备切换，首先需要quorum数量的哨兵认为odown，然后选举出一个哨兵来做切换，这个哨兵还得得到majority哨兵的授权，才能正式执行切换 如果quorum &lt; majority，比如5个哨兵，majority就是3，quorum设置为2，那么就3个哨兵授权就可以执行切换</span><br><span class="line">					但是如果quorum &gt;= majority，那么必须quorum数量的哨兵都授权，比如5个哨兵，quorum是5，那么必须5个哨兵都同意授权，才能执行切换</span><br><span class="line">				configuration epoch</span><br><span class="line">					哨兵会对一套redis master+slave进行监控，有相应的监控的配置 执行切换的那个哨兵，会从要切换到的新master（salve-&gt;master）那里得到一个configuration epoch，这就是一个version号，每次切换的version号都必须是唯一的</span><br><span class="line">					如果第一个选举出的哨兵切换失败了，那么其他哨兵，会等待failover-timeout时间，然后接替继续执行切换，此时会重新获取一个新的configuration epoch，作为新的version号</span><br><span class="line">				configuraiton传播</span><br><span class="line">					哨兵完成切换之后，会在自己本地更新生成最新的master配置，然后同步给其他的哨兵，就是通过之前说的pub/sub消息机制 这里之前的version号就很重要了，因为各种消息都是通过一个channel去发布和监听的，所以一个哨兵完成一次新的切换之后，新的master配置是跟着新的version号的</span><br><span class="line">					其他的哨兵都是根据版本号的大小来更新自己的master配置的</span><br><span class="line">		redis cluster集群模式</span><br><span class="line">			集群架构模式</span><br><span class="line">				支撑N个redis master node，每个master node都可以挂载多个slave node</span><br><span class="line">				读写分离的架构，对于每个master来说，写就写到master，然后读就从mater对应的slave去读</span><br><span class="line">				高可用，因为每个master都有salve节点，那么如果mater挂掉，redis cluster这套机制，就会自动将某个slave切换成master</span><br><span class="line">				多master + 读写分离 + 高可用</span><br><span class="line">			与redis replication+哨兵对比</span><br><span class="line">				数据量很少，主要是承载高并发高性能的场景，比如你的缓存一般就几个G，单机足够了</span><br><span class="line">				replication，一个mater，多个slave，要几个slave跟你的要求的读吞吐量有关系，然后自己搭建一个sentinal集群，去保证redis主从架构的高可用性</span><br><span class="line">				redis cluster，主要是针对海量数据+高并发+高可用的场景，海量数据，如果你的数据量很大，那么建议就用redis cluster</span><br><span class="line">			核心原理</span><br><span class="line">				节点间的内部通信机制</span><br><span class="line">					基础通信原理</span><br><span class="line">						redis cluster节点间采取gossip协议进行通信 跟集中式不同，不是将集群元数据（节点信息，故障，等等）集中存储在某个节点上，而是互相之间不断通信，保持整个集群所有节点的数据是完整的</span><br><span class="line">						维护集群的元数据用得，集中式，一种叫做gossip</span><br><span class="line">						集中式：好处在于，元数据的更新和读取，时效性非常好，一旦元数据出现了变更，立即就更新到集中式的存储中，其他节点读取的时候立即就可以感知到; 不好在于，所有的元数据的跟新压力全部集中在一个地方，可能会导致元数据的存储有压力</span><br><span class="line">						gossip：好处在于，元数据的更新比较分散，不是集中在一个地方，更新请求会陆陆续续，打到所有节点上去更新，有一定的延时，降低了压力; 缺点，元数据更新有延时，可能导致集群的一些操作会有一些滞后</span><br><span class="line">						我们刚才做reshard，去做另外一个操作，会发现说，configuration error，达成一致</span><br><span class="line">						10000端口</span><br><span class="line">						每个节点都有一个专门用于节点间通信的端口，就是自己提供服务的端口号+10000，比如7001，那么用于节点间通信的就是17001端口</span><br><span class="line">						每隔节点每隔一段时间都会往另外几个节点发送ping消息，同时其他几点接收到ping之后返回pong</span><br><span class="line">						交换的信息</span><br><span class="line">						故障信息，节点的增加和移除，hash slot信息，等等</span><br><span class="line">					gossip协议</span><br><span class="line">						gossip协议包含多种消息，包括ping，pong，meet，fail，等等 meet: 某个节点发送meet给新加入的节点，让新节点加入集群中，然后新节点就会开始与其他节点进行通信</span><br><span class="line">						redis-trib.rb add-node</span><br><span class="line">						其实内部就是发送了一个gossip meet消息，给新加入的节点，通知那个节点去加入我们的集群</span><br><span class="line">						ping: 每个节点都会频繁给其他节点发送ping，其中包含自己的状态还有自己维护的集群元数据，互相通过ping交换元数据</span><br><span class="line">						每个节点每秒都会频繁发送ping给其他的集群，ping，频繁的互相之间交换数据，互相进行元数据的更新</span><br><span class="line">						pong: 返回ping和meet，包含自己的状态和其他信息，也可以用于信息广播和更新</span><br><span class="line">						fail: 某个节点判断另一个节点fail之后，就发送fail给其他节点，通知其他节点，指定的节点宕机了</span><br><span class="line">					ping消息深入</span><br><span class="line">						ping很频繁，而且要携带一些元数据，所以可能会加重网络负担 每个节点每秒会执行10次ping，每次会选择5个最久没有通信的其他节点</span><br><span class="line">						当然如果发现某个节点通信延时达到了cluster_node_timeout / 2，那么立即发送ping，避免数据交换延时过长，落后的时间太长了</span><br><span class="line">						比如说，两个节点之间都10分钟没有交换数据了，那么整个集群处于严重的元数据不一致的情况，就会有问题</span><br><span class="line">						所以cluster_node_timeout可以调节，如果调节比较大，那么会降低发送的频率</span><br><span class="line">						每次ping，一个是带上自己节点的信息，还有就是带上1/10其他节点的信息，发送出去，进行数据交换</span><br><span class="line">						至少包含3个其他节点的信息，最多包含总节点-2个其他节点的信息</span><br><span class="line">				高可用性与主备切换原理</span><br><span class="line">					判断节点宕机</span><br><span class="line">						如果一个节点认为另外一个节点宕机，那么就是pfail，主观宕机 如果多个节点都认为另外一个节点宕机了，那么就是fail，客观宕机，跟哨兵的原理几乎一样，sdown，odown</span><br><span class="line">						在cluster-node-timeout内，某个节点一直没有返回pong，那么就被认为pfail</span><br><span class="line">						如果一个节点认为某个节点pfail了，那么会在gossip ping消息中，ping给其他节点，如果超过半数的节点都认为pfail了，那么就会变成fail</span><br><span class="line">					从节点过滤</span><br><span class="line">						对宕机的master node，从其所有的slave node中，选择一个切换成master node 检查每个slave node与master node断开连接的时间，如果超过了cluster-node-timeout * cluster-slave-validity-factor，那么就没有资格切换成master</span><br><span class="line">						这个也是跟哨兵是一样的，从节点超时过滤的步骤</span><br><span class="line">					从节点选举</span><br><span class="line">						哨兵：对所有从节点进行排序，slave priority，offset，run id 每个从节点，都根据自己对master复制数据的offset，来设置一个选举时间，offset越大（复制数据越多）的从节点，选举时间越靠前，优先进行选举</span><br><span class="line">						所有的master node开始slave选举投票，给要进行选举的slave进行投票，如果大部分master node（N/2 + 1）都投票给了某个从节点，那么选举通过，那个从节点可以切换成master</span><br><span class="line">						从节点执行主备切换，从节点切换为主节点</span><br><span class="line">					与哨兵比较</span><br><span class="line">						整个流程跟哨兵相比，非常类似，所以说，redis cluster功能强大，直接集成了replication和sentinal的功能</span><br><span class="line">	缓存带来的问题</span><br><span class="line">		缓存与数据库双写不一致</span><br><span class="line">		缓存血崩</span><br><span class="line">			描述</span><br><span class="line">				缓存层由于某些原因整体崩溃掉，导致大量请求到达后端数据库，从而导致数据库崩溃，整个系统崩溃</span><br><span class="line">			发生的原因</span><br><span class="line">				 Redis服务器宕机，所有的请求都走存储层</span><br><span class="line">				 对设置过期时间的数据，在某段时间内大量的数据同时失效。对于这种情况可以在缓存的时候加上一个随机值，这样会大幅度减少缓存在同一时间过期</span><br><span class="line">			解决方法</span><br><span class="line">				保证缓存层服务高可用性。如主从架构、Sentinel或者Redis Cluster都实现了高可用</span><br><span class="line">				降级、熔断和限流</span><br><span class="line">				 降级：服务降级是当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。</span><br><span class="line">				   限流：限流可以认为服务降级的一种，限流就是限制系统的输入和输出流量已达到保护系统的目的。一般来说系统的吞吐量是可以被测算的，为了保证系统的稳定运行，一旦达到的需要限制的阈值，就需要限制流量并采取一些措施以完成限制流量的目的。比如：延迟处理，拒绝处理，或者部分拒绝处理等等。</span><br><span class="line">				   熔断：一般是指软件系统中，由于某些原因使得服务出现了过载现象，为防止造成整个系统故障，从而采用的一种保护措施，所以很多地方把熔断亦称为过载保护。很多时候刚开始可能只是系统出现了局部的、小规模的故障，然而由于种种原因，故障影响的范围越来越大，最终导致了全局性的后果</span><br><span class="line">		缓存穿透</span><br><span class="line">			描述</span><br><span class="line">				查询一个一定不存在的数据，由于缓存是不命中时需要从数据库查询，查不到数据则不写入缓存，这将导致不存在的数据每次请求都要到数据库去查询，失去了缓存保护后端存储的意义</span><br><span class="line">			解决方法</span><br><span class="line">				 缓存空对象</span><br><span class="line">					 如果一个查询返回的数据为空，就将这个空结果进行缓存，设置5分钟的过期时间</span><br><span class="line">					 缓存空对象的存在的问题：</span><br><span class="line">					   (1) 空值做了缓存，意味着缓存层中存了更多的键，需要更多的内存空间（如果是攻击，问题更严重），比较有效的方法就是针对这类数据设置一个较短的过期时间，让其自动剔除。</span><br><span class="line">					   (2) 缓存层和存储层会有一段时间窗口的不一致，可能对业务有一定的影响。可以通过设置过期时间或者利用消息系统清除缓存中的空对象</span><br><span class="line">				布隆过滤器</span><br><span class="line">					描述</span><br><span class="line">						在访问缓存层和存储层之前，将存在的key用布隆过滤器提前保存起来，做第一层拦截。如果一个要查询的key在布隆过滤器中判断肯定不存在，则不会查询直接返回</span><br><span class="line">					基本原理及要点</span><br><span class="line">						位数组+k个独立的hash函数， 一个值通过多个哈希函数计算得到在数组中对应的位，并将该位的标识改为1。如果请求查询一个数，先通过哈希函数计算，如果得到的位存在标识有0，说明这个值肯定不存在，这样可以避免不必要的数据库查询。</span><br><span class="line">						适用：利用布隆过滤器减少磁盘IO或网络请求，因为一旦一个值必定不存在的话，就可以不用进行后续昂贵的查询操作。</span><br><span class="line">						优点：查询快，占用空间小。</span><br><span class="line">						缺点：存在误判，删除困难</span><br><span class="line">						如何减少布隆过滤器的误判：增大位数组的长度，增加哈希函数的数量</span><br><span class="line"></span><br><span class="line">		redis并发竞争问题</span><br></pre></td></tr></table></figure>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -694,7 +835,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/10/yuque/Redis 雪崩击穿/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/05/04/yuque/Redis/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -724,26 +869,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/Map" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/Goroutine与Channel锁之外的另一种同步机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/10/yuque/Map/">Map</a>
+=======
+      <a class="article-title" href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/">Goroutine与Channel锁之外的另一种同步机制</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/10/yuque/Map/" class="archive-article-date">
   	<time datetime="2020-05-10T17:21:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+=======
+        <a href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/" class="archive-article-date">
+  	<time datetime="2020-04-26T19:14:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-26</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <h4 id="开篇语"><a href="#开篇语" class="headerlink" title="开篇语"></a>开篇语</h4><blockquote>
 <p>Map 是一种常用的 kv 数据结构，程序设计中经常使用，且作为一种最基础的数据结构，很多编程语言本身提供的 api 都会有实现，Go 也不例外，今天我们将从一下三个方面为大家分析 Go 中的 Map。</p>
 <ul>
@@ -811,6 +970,15 @@ var _hmt = _hmt || [];
 <p>go 的 map 存储源码如下，省略了一些无关紧要的代码</p>
 </blockquote>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mapassign</span><span class="params">(t *maptype, h *hmap, key unsafe.Pointer)</span> <span class="title">unsafe</span>.<span class="title">Pointer</span></span> &#123;</span><br><span class="line">    <span class="comment">//获取hash算法</span></span><br><span class="line">    alg := t.key.alg</span><br><span class="line">    <span class="comment">//计算hash值</span></span><br><span class="line">    hash := alg.hash(key, <span class="keyword">uintptr</span>(h.hash0))</span><br><span class="line">    <span class="comment">//如果bucket数组一开始为空，则初始化</span></span><br><span class="line">    <span class="keyword">if</span> h.buckets == <span class="literal">nil</span> &#123;</span><br><span class="line">        h.buckets = newobject(t.bucket) <span class="comment">// newarray(t.bucket, 1)</span></span><br><span class="line">    &#125;</span><br><span class="line">again:</span><br><span class="line">    <span class="comment">// 定位存储在哪一个bucket中</span></span><br><span class="line">    bucket := hash &amp; bucketMask(h.B)</span><br><span class="line">    <span class="comment">//得到bucket的结构体</span></span><br><span class="line">    b := (*bmap)(unsafe.Pointer(<span class="keyword">uintptr</span>(h.buckets) +bucket*<span class="keyword">uintptr</span>(t.bucketsize)))</span><br><span class="line">    <span class="comment">//获取高八位hash值</span></span><br><span class="line">    top := tophash(hash)</span><br><span class="line">    <span class="keyword">var</span> inserti *<span class="keyword">uint8</span></span><br><span class="line">    <span class="keyword">var</span> insertk unsafe.Pointer</span><br><span class="line">    <span class="keyword">var</span> val unsafe.Pointer</span><br><span class="line">bucketloop:</span><br><span class="line">    <span class="comment">//死循环</span></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="comment">//循环bucket中的tophash数组</span></span><br><span class="line">        <span class="keyword">for</span> i := <span class="keyword">uintptr</span>(<span class="number">0</span>); i &lt; bucketCnt; i++ &#123;</span><br><span class="line">            <span class="comment">//如果hash不相等</span></span><br><span class="line">            <span class="keyword">if</span> b.tophash[i] != top &#123;</span><br><span class="line">             <span class="comment">//判断是否为空，为空则插入</span></span><br><span class="line">                <span class="keyword">if</span> isEmpty(b.tophash[i]) &amp;&amp; inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">                    inserti = &amp;b.tophash[i]</span><br><span class="line">                    insertk = add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">                    val = add( unsafe.Pointer(b),</span><br><span class="line">                    dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize) )</span><br><span class="line">                &#125;</span><br><span class="line">              <span class="comment">//插入成功，终止最外层循环</span></span><br><span class="line">                <span class="keyword">if</span> b.tophash[i] == emptyRest &#123;</span><br><span class="line">                    <span class="keyword">break</span> bucketloop</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//到这里说明高八位hash一样，获取已存在的key</span></span><br><span class="line">            k := add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">            <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">                k = *((*unsafe.Pointer)(k))</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//判断两个key是否相等，不相等就循环下一个</span></span><br><span class="line">            <span class="keyword">if</span> !alg.equal(key, k) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果相等则更新</span></span><br><span class="line">            <span class="keyword">if</span> t.needkeyupdate() &#123;</span><br><span class="line">                typedmemmove(t.key, k, key)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//获取已存在的value</span></span><br><span class="line">            val = add(unsafe.Pointer(b), dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize))</span><br><span class="line">            <span class="keyword">goto</span> done</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果上一个bucket没能插入，则通过overflow获取链表上的下一个bucket</span></span><br><span class="line">        ovf := b.overflow(t)</span><br><span class="line">        <span class="keyword">if</span> ovf == <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        b = ovf</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// all current buckets are full, allocate a new one.</span></span><br><span class="line">        newb := h.newoverflow(t, b)</span><br><span class="line">        inserti = &amp;newb.tophash[<span class="number">0</span>]</span><br><span class="line">        insertk = add(unsafe.Pointer(newb), dataOffset)</span><br><span class="line">        val = add(insertk, bucketCnt*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// store new key/value at insert position</span></span><br><span class="line">    <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">        kmem := newobject(t.key)</span><br><span class="line">        *(*unsafe.Pointer)(insertk) = kmem</span><br><span class="line">        insertk = kmem</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> t.indirectvalue() &#123;</span><br><span class="line">        vmem := newobject(t.elem)</span><br><span class="line">        *(*unsafe.Pointer)(val) = vmem</span><br><span class="line">    &#125;</span><br><span class="line">    typedmemmove(t.key, insertk, key)</span><br><span class="line">    <span class="comment">//将高八位hash值存储</span></span><br><span class="line">    *inserti = top</span><br><span class="line">    h.count++</span><br><span class="line">    <span class="keyword">return</span> val</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+=======
+        <h3 id="Goroutine-与-Channel-锁之外的另一种同步机制"><a href="#Goroutine-与-Channel-锁之外的另一种同步机制" class="headerlink" title="Goroutine 与 Channel: 锁之外的另一种同步机制"></a>Goroutine 与 Channel: 锁之外的另一种同步机制</h3><p>在主流的编程语言中为了保证多线程之间共享数据安全性和一致性，都会提供一套基本的同步工具集，如锁，条件变量，原子操作等等。Go 语言标准库也毫不意外的提供了这些同步机制，使用方式也和其他语言也差不多。</p>
+<p>除了这些基本的同步手段，Go 语言还提供了一种新的同步机制: Channel，它在 Go 语言中是一个像 int, float32 等的基本类型，一个 channel 可以认为是一个能够在多个 Goroutine 之间传递某一类型的数据的管道。Go 中的 channel 无论是实现机制还是使用场景都和 Java 中的 BlockingQueue 很接近。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明channel变量</span></span><br><span class="line"><span class="keyword">var</span> syncChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)  <span class="comment">// 无缓冲channel，主要用于两个Goroutine之间建立同步点</span></span><br><span class="line"><span class="keyword">var</span> cacheChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)  <span class="comment">// 缓冲channel</span></span><br><span class="line"><span class="comment">// 向channel中写入数据</span></span><br><span class="line">syncChan &lt;- <span class="number">1</span></span><br><span class="line">cacheChan &lt;- <span class="number">1</span></span><br><span class="line"><span class="comment">// 从channel读取数据</span></span><br><span class="line"><span class="keyword">var</span> i = &lt;-syncChan</span><br><span class="line"><span class="keyword">var</span> j = &lt;-cacheChan</span><br></pre></td></tr></table></figure>
+<p>几乎等价于的 Java 中的操作:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TransferQueue&lt;Integer&gt; syncQueue = <span class="keyword">new</span> LinkedTransferQueue&lt;Integer&gt;();</span><br><span class="line">BlockingQueue&lt;Integer&gt; cacheQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Integer&gt;(<span class="number">10</span>);</span><br><span class="line">syncQueue.transfer(<span class="number">1</span>);</span><br><span class="line">cacheQueue.put(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> i = syncQueue.take();</span><br><span class="line"><span class="keyword">int</span> j = cacheQueu.take();</span><br></pre></td></tr></table></figure>
+<p>a. 与 Java 的 BlockingQueue 一样用在需要生产者消费者模型的并发环境中。</p>
+<p>b. 锁同步场景下一种替代方案。在 Go 的并发编程中有一句很经典的话：<a href="https://golang.org/doc/effective_go.html#concurrency" target="_blank" rel="noopener">不要以共享内存的方式去通信，而要以通信的方式去共享内存</a>。在 Go 语言中并不鼓励用锁保护共享状态的方式在不同的 Goroutine 中分享信息(以共享内存的方式去通信)。而是鼓励通过 channel 将共享状态或共享状态的变化在各个 Goroutine 之间传递（以通信的方式去共享内存），这样同样能像用锁一样保证在同一的时间只有一个 Goroutine 访问共享状态。但这的确需要转换以前用锁做并发同步的思维方式，大家觉得那种适合自己和自己的使用场景就用哪种好了，并不能很简单、绝对地说哪种方式更好，更高效。</p>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -823,7 +991,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/10/yuque/Map/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/04/26/yuque/Goroutine与Channel锁之外的另一种同步机制/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -853,27 +1025,59 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/Docker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/切片数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/10/yuque/Docker/">Docker</a>
+=======
+      <a class="article-title" href="/2020/03/25/yuque/切片数组/">切片数组</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/10/yuque/Docker/" class="archive-article-date">
   	<time datetime="2020-05-10T08:19:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+=======
+        <a href="/2020/03/25/yuque/切片数组/" class="archive-article-date">
+  	<time datetime="2020-03-25T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>Jinshu <a href="https://www.jianshu.com/p/41bee79b6cbc" target="_blank" rel="noopener">https://www.jianshu.com/p/41bee79b6cbc</a></p>
+=======
+        <p>数组是值拷贝<br>切片是引用传递</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.数组是多个相同类型数据的组合,一个数组一旦声明/定义了,其长度是固定的, 不能动态变化</p>
+<p>2.数组中的元素可以是任何数据类型，包括值类型和引用类型，但是不能混用。</p>
+<p>3.数组创建后，如果没有赋值，有默认值(零值)</p>
+<p>4.数组的下标是从 0 开始的</p>
+<p>5.数组下标必须在指定范围内使用，否则报 panic:数组越界，比如</p>
+<p>6.数组默认是值传递，因此值会进行拷贝。数组间不会相互影响 7.长度是数组类型的一部分，在传递函数参数时 需要考虑数组的长度</p>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>1.切片的英文是 slice 2.切片是数组的一个引用，因此切片是引用类型，在进行传递时，遵守引用传递的机制。</p>
+<p>3.切片的使用和数组类似，遍历切片、访问切片的元素和求切片长度 len(slice)都一样。</p>
+<p>4.切片的长度是可以变化的，因此切片是一个可以动态变化数组。 5.通过 make 方式创建切片可以指定切片的大小和容量 6.通过 make 方式创建的切片对应的数组是由 make 底层维护，对外不可见，即只能通过 slice 去访问各个元素.<br>切片的数据类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer</span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩容</p>
+<ul>
+<li>当需要的容量超过原切片容量的两倍时，会使用需要的容量作为新容量。</li>
+<li>当原切片长度小于 1024 时，新切片的容量会直接翻倍。而当原切片的容量大于等于 1024 时，会反复地增加 25%，直到新容量超过所需要的容量。</li>
+</ul>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -886,7 +1090,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/10/yuque/Docker/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/03/25/yuque/切片数组/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -916,26 +1124,40 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/go 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/常见算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/09/yuque/go 锁/">go 锁</a>
+=======
+      <a class="article-title" href="/2020/03/25/yuque/常见算法/">常见算法</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/09/yuque/go 锁/" class="archive-article-date">
   	<time datetime="2020-05-09T13:47:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-09</time>
+=======
+        <a href="/2020/03/25/yuque/常见算法/" class="archive-article-date">
+  	<time datetime="2020-03-25T06:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <ul>
 <li>读写锁中的可读锁（<code>sync.RWMutex</code> 的 <code>RLock()</code>）可以嵌套使用的。</li>
 <li>互斥锁（<code>sync.Mutex</code> 和 <code>sync.RWMutex</code> 的 <code>Lock()</code>）是不可以互相嵌套的，且不可以与可读锁嵌套。<blockquote>
@@ -956,6 +1178,11 @@ var _hmt = _hmt || [];
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func lockAndLock() &#123; // 全局锁内使用全局锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br><span class="line">func lockAndRead() &#123; // 全局锁内使用可读锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock() // 由于 defer 是栈式执行，所以这两个锁是嵌套结构</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">&#125;</span><br><span class="line">func readAndLock() &#123; // 可读锁内使用全局锁</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <p>注： 在 goroutine 中的 panic 不会影响主程序，所以在测试时要注意并不是没有 panic 输出就一定是没发生。</p>
+=======
+        <p>快排 1.选取基准值<code>tag</code>：选取第一个元素为基准值（<code>每次递归调用的基准值不等</code>） 2.从 0 向后查找到比 tag 大的数，否则 i++ 3.从 n 向前查找到比 tag 小的数，否则 j– 4.交换两个数 5.全部交换后此时 i==j,递归调用，继续比较<code>i</code>位置两侧位置</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方式，递归传入分割后的数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(s)&lt;=<span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[<span class="number">0</span>]</span><br><span class="line">    i:=<span class="number">0</span></span><br><span class="line">    j:=<span class="built_in">len</span>(s)<span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s[:i])</span><br><span class="line">    quicksort(s[i+<span class="number">1</span>:])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第二种方式，递归传入原数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>,start <span class="keyword">int</span>,end <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> start &gt;=end&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[start]</span><br><span class="line">    i:=start</span><br><span class="line">    j:=end</span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s,start,i<span class="number">-1</span>)</span><br><span class="line">    quicksort(s,i+<span class="number">1</span>,end)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -968,7 +1195,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/09/yuque/go 锁/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/03/25/yuque/常见算法/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -998,27 +1229,1454 @@ var _hmt = _hmt || [];
 
 
   
+<<<<<<< HEAD
     <article id="post-yuque/PMG 模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+=======
+    <article id="post-yuque/MySQL 优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
+<<<<<<< HEAD
       <a class="article-title" href="/2020/05/07/yuque/PMG 模型/">PMG 模型</a>
+=======
+      <a class="article-title" href="/2020/03/20/yuque/MySQL 优化/">MySQL 优化</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
+<<<<<<< HEAD
         <a href="/2020/05/07/yuque/PMG 模型/" class="archive-article-date">
   	<time datetime="2020-05-07T04:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-07</time>
+=======
+        <a href="/2020/03/20/yuque/MySQL 优化/" class="archive-article-date">
+  	<time datetime="2020-03-20T04:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-20</time>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+<<<<<<< HEAD
         <p>坦白讲 PMG 模型就是<br>本质是 任务分配到携程任务本地队列，携程放到携程处理器，携程处理器再放到物理线程中执行<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1588826204460-b7d21bad-8e06-4888-93df-01fda825b495.png#align=left&amp;display=inline&amp;height=370&amp;margin=%5Bobject%20Object%5D&amp;name=%E6%88%AA%E5%B1%8F2020-05-07%20%E4%B8%8B%E5%8D%8812.36.41.png&amp;originHeight=367&amp;originWidth=666&amp;size=77722&amp;status=done&amp;style=none&amp;width=671" alt="截屏2020-05-07 下午12.36.41.png"></p>
+=======
+        <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1584679992912-4486c17e-a23b-4ca9-a6d1-4f0b8dc32584.png#align=left&amp;display=inline&amp;height=3361&amp;name=image.png&amp;originHeight=4319&amp;originWidth=1452&amp;size=1167457&amp;status=done&amp;style=none&amp;width=1130" alt="image.png"></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="为什么要优化"><a href="#为什么要优化" class="headerlink" title="为什么要优化"></a>为什么要优化</h2><ul>
+<li>系统的吞吐量瓶颈往往出现在数据库的访问速度上</li>
+<li>随着应用程序的运行，数据库的中的数据会越来越多，处理时间会相应变慢</li>
+<li>数据是存放在磁盘上的，读写速度无法和内存相比</li>
+</ul>
+<h2 id="如何优化"><a href="#如何优化" class="headerlink" title="如何优化"></a>如何优化</h2><ul>
+<li>设计数据库时：数据库表、字段的设计，存储引擎</li>
+<li>利用好 MySQL 自身提供的功能，如索引等</li>
+<li>横向扩展：MySQL 集群、负载均衡、读写分离</li>
+<li>SQL 语句的优化（收效甚微）</li>
+</ul>
+<h1 id="字段设计"><a href="#字段设计" class="headerlink" title="字段设计"></a>字段设计</h1><blockquote>
+<p>字段类型的选择，设计规范，范式，常见设计案例</p>
+</blockquote>
+<h2 id="原则：尽量使用整型表示字符串"><a href="#原则：尽量使用整型表示字符串" class="headerlink" title="原则：尽量使用整型表示字符串"></a>原则：尽量使用整型表示字符串</h2><h3 id="存储-IP"><a href="#存储-IP" class="headerlink" title="存储 IP"></a>存储 IP</h3><p><code>INET_ATON(str)</code>，address to number<br><code>INET_NTOA(number)</code>，number to address</p>
+<h3 id="MySQL-内部的枚举类型（单选）和集合（多选）类型"><a href="#MySQL-内部的枚举类型（单选）和集合（多选）类型" class="headerlink" title="MySQL 内部的枚举类型（单选）和集合（多选）类型"></a>MySQL 内部的枚举类型（单选）和集合（多选）类型</h3><p>但是因为维护成本较高因此不常使用，使用<strong>关联表</strong>的方式来替代<code>enum</code></p>
+<h2 id="原则：定长和非定长数据类型的选择"><a href="#原则：定长和非定长数据类型的选择" class="headerlink" title="原则：定长和非定长数据类型的选择"></a>原则：定长和非定长数据类型的选择</h2><blockquote>
+<p>decimal 不会损失精度，存储空间会随数据的增大而增大。double 占用固定空间，较大数的存储会损失精度。非定长的还有 varchar、text</p>
+</blockquote>
+<h3 id="金额"><a href="#金额" class="headerlink" title="金额"></a>金额</h3><blockquote>
+<p>对数据的精度要求较高，小数的运算和存储存在精度问题（不能将所有小数转换成二进制）</p>
+</blockquote>
+<h3 id="定点数-decimal"><a href="#定点数-decimal" class="headerlink" title="定点数 decimal"></a>定点数 decimal</h3><p><code>price decimal(8,2)</code>有 2 位小数的定点数，定点数支持很大的数（甚至是超过<code>int,bigint</code>存储范围的数）</p>
+<h3 id="小单位大数额避免出现小数"><a href="#小单位大数额避免出现小数" class="headerlink" title="小单位大数额避免出现小数"></a>小单位大数额避免出现小数</h3><p>元-&gt;分</p>
+<h3 id="字符串存储"><a href="#字符串存储" class="headerlink" title="字符串存储"></a>字符串存储</h3><p>定长<code>char</code>，非定长<code>varchar、text</code>（上限 65535，其中<code>varchar</code>还会消耗 1-3 字节记录长度，而<code>text</code>使用额外空间记录长度）</p>
+<h2 id="原则：尽可能选择小的数据类型和指定短的长度"><a href="#原则：尽可能选择小的数据类型和指定短的长度" class="headerlink" title="原则：尽可能选择小的数据类型和指定短的长度"></a>原则：尽可能选择小的数据类型和指定短的长度</h2><h2 id="原则：尽可能使用-not-null"><a href="#原则：尽可能使用-not-null" class="headerlink" title="原则：尽可能使用 not null"></a>原则：尽可能使用 not null</h2><p>非<code>null</code>字段的处理要比<code>null</code>字段的处理高效些！且不需要判断是否为<code>null</code>。<br><code>null</code>在 MySQL 中，不好处理，存储需要额外空间，运算也需要特殊的运算符。如<code>select null = null</code>和<code>select null &lt;&gt; null</code>（<code>&lt;&gt;</code>为不等号）有着同样的结果，只能通过<code>is null</code>和<code>is not null</code>来判断字段是否为<code>null</code>。<br>如何存储？MySQL 中每条记录都需要额外的存储空间，表示每个字段是否为<code>null</code>。因此通常使用特殊的数据进行占位，比如<code>int not null default 0</code>、<code>string not null default ‘’</code></p>
+<h2 id="原则：字段注释要完整，见名知意"><a href="#原则：字段注释要完整，见名知意" class="headerlink" title="原则：字段注释要完整，见名知意"></a>原则：字段注释要完整，见名知意</h2><h2 id="原则：单表字段不宜过多"><a href="#原则：单表字段不宜过多" class="headerlink" title="原则：单表字段不宜过多"></a>原则：单表字段不宜过多</h2><p>二三十个就极限了</p>
+<h2 id="原则：可以预留字段"><a href="#原则：可以预留字段" class="headerlink" title="原则：可以预留字段"></a>原则：可以预留字段</h2><blockquote>
+<p>在使用以上原则之前首先要满足业务需求</p>
+</blockquote>
+<h1 id="关联表的设计"><a href="#关联表的设计" class="headerlink" title="关联表的设计"></a>关联表的设计</h1><blockquote>
+<p>外键<code>foreign key</code>只能实现一对一或一对多的映射</p>
+</blockquote>
+<h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>使用外键</p>
+<h2 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h2><p>单独新建一张表将多对多拆分成两个一对多</p>
+<h2 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h2><p>如商品的基本信息（<code>item</code>）和商品的详细信息（<code>item_intro</code>），通常使用相同的主键或者增加一个外键字段（<code>item_id</code>）</p>
+<h1 id="范式-Normal-Format"><a href="#范式-Normal-Format" class="headerlink" title="范式 Normal Format"></a>范式 Normal Format</h1><blockquote>
+<p>数据表的设计规范，一套越来越严格的规范体系（如果需要满足 N 范式，首先要满足 N-1 范式）。N</p>
+</blockquote>
+<h2 id="第一范式-1NF：字段原子性"><a href="#第一范式-1NF：字段原子性" class="headerlink" title="第一范式 1NF：字段原子性"></a>第一范式 1NF：字段原子性</h2><p>字段原子性，字段不可再分割。</p>
+<blockquote>
+<p>关系型数据库，默认满足第一范式</p>
+</blockquote>
+<p>注意比较容易出错的一点，在一对多的设计中使用逗号分隔多个外键，这种方法虽然存储方便，但不利于维护和索引（比如查找带标签<code>java</code>的文章）</p>
+<h2 id="第二范式：消除对主键的部分依赖"><a href="#第二范式：消除对主键的部分依赖" class="headerlink" title="第二范式：消除对主键的部分依赖"></a>第二范式：消除对主键的部分依赖</h2><blockquote>
+<p>即在表中加上一个与业务逻辑无关的字段作为主键</p>
+</blockquote>
+<p>主键：可以唯一标识记录的字段或者字段集合。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">course_name</th>
+<th style="text-align:left">course_class</th>
+<th style="text-align:left">weekday（周几）</th>
+<th style="text-align:left">course_teacher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">MySQL</td>
+<td style="text-align:left">教育大楼 1525</td>
+<td style="text-align:left">周一</td>
+<td style="text-align:left">张三</td>
+</tr>
+<tr>
+<td style="text-align:left">Java</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">周三</td>
+<td style="text-align:left">李四</td>
+</tr>
+<tr>
+<td style="text-align:left">MySQL</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">周五</td>
+<td style="text-align:left">张三</td>
+</tr>
+</tbody>
+</table>
+<p>依赖：A 字段可以确定 B 字段，则 B 字段依赖 A 字段。比如知道了下一节课是数学课，就能确定任课老师是谁。于是<strong>周几</strong>和<strong>下一节课</strong>和就能构成复合主键，能够确定去哪个教室上课，任课老师是谁等。但我们常常增加一个<code>id</code>作为主键，而消除对主键的部分依赖。<br>对主键的部分依赖：某个字段依赖复合主键中的一部分。<br>解决方案：新增一个独立字段作为主键。</p>
+<h2 id="第三范式：消除对主键的传递依赖"><a href="#第三范式：消除对主键的传递依赖" class="headerlink" title="第三范式：消除对主键的传递依赖"></a>第三范式：消除对主键的传递依赖</h2><p>传递依赖：B 字段依赖于 A，C 字段又依赖于 B。比如上例中，任课老师是谁取决于是什么课，是什么课又取决于主键<code>id</code>。因此需要将此表拆分为两张表日程表和课程表（独立数据独立建表）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">weekday</th>
+<th style="text-align:left">course_class</th>
+<th style="text-align:left">course_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1001</td>
+<td style="text-align:left">周一</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">3546</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">course_id</th>
+<th style="text-align:left">course_name</th>
+<th style="text-align:left">course_teacher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">3546</td>
+<td style="text-align:left">Java</td>
+<td style="text-align:left">张三</td>
+</tr>
+</tbody>
+</table>
+<p>这样就减少了数据的冗余（即使周一至周日每天都有 Java 课，也只是<code>course_id:3546</code>出现了 7 次）</p>
+<h1 id="存储引擎选择"><a href="#存储引擎选择" class="headerlink" title="存储引擎选择"></a>存储引擎选择</h1><blockquote>
+<p>早期问题：如何选择 MyISAM 和 Innodb？<br>现在不存在这个问题了，Innodb 不断完善，从各个方面赶超 MyISAM，也是 MySQL 默认使用的。</p>
+</blockquote>
+<p>存储引擎 Storage engine：MySQL 中的数据、索引以及其他对象是如何存储的，是一套文件系统的实现。</p>
+<h2 id="功能差异"><a href="#功能差异" class="headerlink" title="功能差异"></a>功能差异</h2><p><code>show engines</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Engine</th>
+<th style="text-align:left">Support</th>
+<th style="text-align:left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">InnoDB</td>
+<td style="text-align:left">DEFAULT</td>
+<td style="text-align:left"><strong>Supports transactions, row-level locking, and foreign keys</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">MyISAM</td>
+<td style="text-align:left">YES</td>
+<td style="text-align:left"><strong>MyISAM storage engine</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="存储差异"><a href="#存储差异" class="headerlink" title="存储差异"></a>存储差异</h2><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">MyISAM</th>
+<th style="text-align:left">Innodb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">文件格式</td>
+<td style="text-align:left">数据和索引是分别存储的，数据<code>.MYD</code>，索引<code>.MYI</code></td>
+<td style="text-align:left">数据和索引是集中存储的，<code>.ibd</code></td>
+</tr>
+<tr>
+<td style="text-align:left">文件能否移动</td>
+<td style="text-align:left">能，一张表就对应<code>.frm</code>、<code>MYD</code>、<code>MYI</code>3 个文件</td>
+<td style="text-align:left">否，因为关联的还有<code>data</code>下的其它文件</td>
+</tr>
+<tr>
+<td style="text-align:left">记录存储顺序</td>
+<td style="text-align:left">按记录插入顺序保存</td>
+<td style="text-align:left">按主键大小有序插入</td>
+</tr>
+<tr>
+<td style="text-align:left">空间碎片（删除记录并<code>flush table 表名</code>之后，表文件大小不变）</td>
+<td style="text-align:left">产生。定时整理：使用命令<code>optimize table 表名</code>实现</td>
+<td style="text-align:left">不产生</td>
+</tr>
+<tr>
+<td style="text-align:left">事务</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left">外键</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left">锁支持（锁是避免资源争用的一个机制，MySQL 锁对用户几乎是透明的）</td>
+<td style="text-align:left">表级锁定</td>
+<td style="text-align:left">行级锁定、表级锁定，锁定力度小并发能力高</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>锁扩展<br>表级锁（<code>table-level lock</code>）：<code>lock tables &lt;table_name1&gt;,&lt;table_name2&gt;... read/write</code>，<code>unlock tables &lt;table_name1&gt;,&lt;table_name2&gt;...</code>。其中<code>read</code>是共享锁，一旦锁定任何客户端都不可读；<code>write</code>是独占/写锁，只有加锁的客户端可读可写，其他客户端既不可读也不可写。锁定的是一张表或几张表。<br>行级锁（<code>row-level lock</code>）：锁定的是一行或几行记录。共享锁：<code>select * from &lt;table_name&gt; where &lt;条件&gt; LOCK IN SHARE MODE;</code>，对查询的记录增加共享锁；<code>select * from &lt;table_name&gt; where &lt;条件&gt; FOR UPDATE;</code>，对查询的记录增加排他锁。这里<strong>值得注意</strong>的是：<code>innodb</code>的行锁，其实是一个子范围锁，依据条件锁定部分范围，而不是就映射到具体的行上，因此还有一个学名：间隙锁。比如<code>select * from stu where id &lt; 20 LOCK IN SHARE MODE</code>会锁定<code>id</code>在<code>20</code>左右以下的范围，你可能无法插入<code>id</code>为<code>18</code>或<code>22</code>的一条新纪录。</p>
+</blockquote>
+<h2 id="选择依据"><a href="#选择依据" class="headerlink" title="选择依据"></a>选择依据</h2><p>如果没有特别的需求，使用默认的<code>Innodb</code>即可。<br>MyISAM：以读写插入为主的应用程序，比如博客系统、新闻门户网站。<br>Innodb：更新（删除）操作频率也高，或者要保证数据的完整性；并发量高，支持事务和外键保证数据完整性。比如 OA 自动化办公系统。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
+<p>关键字与数据的映射关系称为索引（==包含关键字和对应的记录在磁盘中的地址==）。关键字是从数据当中提取的用于标识、检索数据的特定内容。</p>
+</blockquote>
+<h2 id="索引检索为什么快？"><a href="#索引检索为什么快？" class="headerlink" title="索引检索为什么快？"></a>索引检索为什么快？</h2><ul>
+<li>关键字相对于数据本身，==数据量小==</li>
+<li>关键字是==有序==的，二分查找可快速确定位置</li>
+</ul>
+<p>图书馆为每本书都加了索引号（类别-楼层-书架）、字典为词语解释按字母顺序编写目录等都用到了索引。</p>
+<h2 id="MySQL-中索引类型"><a href="#MySQL-中索引类型" class="headerlink" title="MySQL 中索引类型"></a>MySQL 中索引类型</h2><blockquote>
+<p><strong>普通索引</strong>（<code>key</code>），<strong>唯一索引</strong>（<code>unique key</code>），<strong>主键索引</strong>（<code>primary key</code>），<strong>全文索引</strong>（<code>fulltext key</code>）</p>
+</blockquote>
+<p>三种索引的索引方式是一样的，只不过对索引的关键字有不同的限制：</p>
+<ul>
+<li>普通索引：对关键字没有限制</li>
+<li>唯一索引：要求记录提供的关键字不能重复</li>
+<li>主键索引：要求关键字唯一且不为 null</li>
+</ul>
+<h2 id="索引管理语法"><a href="#索引管理语法" class="headerlink" title="索引管理语法"></a>索引管理语法</h2><h3 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h3><p><code>show create table 表名</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927865-da69443b-00c9-45ad-8ba3-e9547a864cff.jpeg#align=left&amp;display=inline&amp;height=251&amp;originHeight=251&amp;originWidth=485&amp;size=0&amp;status=done&amp;style=none&amp;width=485" alt><br><code>desc 表名</code><br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927826-47d86b0b-3e67-456d-a859-89d6ff0b775f.jpeg#align=left&amp;display=inline&amp;height=233&amp;originHeight=233&amp;originWidth=271&amp;size=0&amp;status=done&amp;style=none&amp;width=271" alt></p>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><h4 id="创建表之后建立索引"><a href="#创建表之后建立索引" class="headerlink" title="创建表之后建立索引"></a>创建表之后建立索引</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516</th>
+<th style="text-align:left">create TABLE user_index( id int auto_increment primary key, first_name varchar(16), last_name VARCHAR(16), id_card VARCHAR(18), information text);– 更改表结构 alter table user_index– 创建一个 first_name 和 last_name 的复合索引，并命名为 nameadd key name (first_name,last_name),– 创建一个 id_card 的唯一索引，默认以字段名作为索引名 add UNIQUE KEY (id_card),– 鸡肋，全文索引不支持中文 add FULLTEXT KEY (information);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>show create table user_index</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927859-dda40fab-124d-491e-9093-97fc706e55a9.jpeg#align=left&amp;display=inline&amp;height=261&amp;originHeight=261&amp;originWidth=452&amp;size=0&amp;status=done&amp;style=none&amp;width=452" alt></p>
+<h4 id="创建表时指定索引"><a href="#创建表时指定索引" class="headerlink" title="创建表时指定索引"></a>创建表时指定索引</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">CREATE TABLE user_index2 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p>根据索引名删除普通索引、唯一索引、全文索引：<code>alter table 表名 drop KEY 索引名</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">alter table user_index drop KEY name;alter table user_index drop KEY id_card;alter table user_index drop KEY information;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>删除主键索引：<code>alter table 表名 drop primary key</code>（因为主键只有一个）。这里值得注意的是，如果主键自增长，那么不能直接执行此操作（自增长依赖于主键索引）：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927835-f9c05ca6-4ef4-4945-b7f8-f81b8df37904.jpeg#align=left&amp;display=inline&amp;height=143&amp;originHeight=143&amp;originWidth=649&amp;size=0&amp;status=done&amp;style=none&amp;width=649" alt><br>需要取消自增长再行删除：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">alter table user_index– 重新定义字段 MODIFY id int,drop PRIMARY KEY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>但通常不会删除主键，因为设计主键一定与业务逻辑无关。</p>
+<h2 id="执行计划-explain"><a href="#执行计划-explain" class="headerlink" title="执行计划 explain"></a>执行计划 explain</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011</th>
+<th style="text-align:left">CREATE TABLE innodb1 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));insert into innodb1 (first_name,last_name,id_card,information) values (‘张’,’三’,’1001’,’华山派’);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>我们可以通过<code>explain selelct</code>来分析 SQL 语句执行前的执行计划：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927854-46126c59-e2f9-4b67-a921-063abf78127b.jpeg#align=left&amp;display=inline&amp;height=132&amp;originHeight=132&amp;originWidth=633&amp;size=0&amp;status=done&amp;style=none&amp;width=633" alt><br>由上图可看出此 SQL 语句是按照主键索引来检索的。<br>执行计划是：当执行 SQL 语句时，首先会分析、优化，形成执行计划，在按照执行计划执行。</p>
+<h2 id="索引使用场景（重点）"><a href="#索引使用场景（重点）" class="headerlink" title="索引使用场景（重点）"></a>索引使用场景（重点）</h2><h3 id="where"><a href="#where" class="headerlink" title="where"></a>where</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927831-b3c86b4c-86dc-4e85-94af-95fff3dd469d.jpeg#align=left&amp;display=inline&amp;height=134&amp;originHeight=134&amp;originWidth=525&amp;size=0&amp;status=done&amp;style=none&amp;width=525" alt><br>上图中，根据<code>id</code>查询记录，因为<code>id</code>字段仅建立了主键索引，因此此 SQL 执行可选的索引只有主键索引，如果有多个，最终会选一个较优的作为检索的依据。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">– 增加一个没有建立索引的字段 alter table innodb1 add sex char(1);– 按 sex 检索时可选的索引为 nullEXPLAIN SELECT * from innodb1 where sex=’男’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927864-a2b3a030-44e7-44b2-b715-015802054933.jpeg#align=left&amp;display=inline&amp;height=140&amp;originHeight=140&amp;originWidth=541&amp;size=0&amp;status=done&amp;style=none&amp;width=541" alt></p>
+<blockquote>
+<p>可以尝试在一个字段未建立索引时，根据该字段查询的效率，然后对该字段建立索引（<code>alter table 表名 add index(字段名)</code>），同样的 SQL 执行的效率，你会发现查询效率会有明显的提升（数据量越大越明显）。</p>
+</blockquote>
+<h3 id="order-by"><a href="#order-by" class="headerlink" title="order by"></a>order by</h3><p>当我们使用<code>order by</code>将查询结果按照某个字段排序时，如果该字段没有建立索引，那么执行计划会将查询出的所有数据使用外部排序（将数据从硬盘分批读取到内存使用内部排序，最后合并排序结果），这个操作是很影响性能的，因为需要将查询涉及到的所有数据从磁盘中读到内存（如果单条数据过大或者数据量过多都会降低效率），更无论读到内存之后的排序了。<br>但是如果我们对该字段建立索引<code>alter table 表名 add index(字段名)</code>，那么由于索引本身是有序的，因此直接按照索引的顺序和映射关系逐条取出数据即可。而且如果分页的，那么只用<strong>取出索引表某个范围内的索引对应的数据</strong>，而不用像上述那<strong>取出所有数据</strong>进行排序再返回某个范围内的数据。（从磁盘取数据是最影响性能的）</p>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><blockquote>
+<p>对<code>join</code>语句匹配关系（<code>on</code>）涉及的字段建立索引能够提高效率</p>
+</blockquote>
+<h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>如果要查询的字段都建立过索引，那么引擎会直接在索引表中查询而不会访问原始数据（否则只要有一个字段没有建立索引就会做全表扫描），这叫索引覆盖。因此我们需要尽可能的在<code>select</code>后==只写必要的查询字段==，以增加索引覆盖的几率。<br>这里值得注意的是不要想着为每个字段建立索引，因为优先使用索引的优势就在于其体积小。</p>
+<h2 id="语法细节（要点）"><a href="#语法细节（要点）" class="headerlink" title="语法细节（要点）"></a>语法细节（要点）</h2><blockquote>
+<p>在满足索引使用的场景下（<code>where/order by/join on</code>或索引覆盖），索引也不一定被使用</p>
+</blockquote>
+<h3 id="字段要独立出现"><a href="#字段要独立出现" class="headerlink" title="字段要独立出现"></a>字段要独立出现</h3><p>比如下面两条 SQL 语句在语义上相同，但是第一条会使用主键索引而第二条不会。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">select _ from user where id = 20-1;select _ from user where id+1 = 20;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="like查询，不能以通配符开头"><a href="#like查询，不能以通配符开头" class="headerlink" title="like查询，不能以通配符开头"></a><code>like</code>查询，不能以通配符开头</h3><p>比如搜索标题包含<code>mysql</code>的文章：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">select * from article where title like ‘%mysql%’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>这种 SQL 的执行计划用不了索引（<code>like</code>语句匹配表达式以通配符开头），因此只能做全表扫描，效率极低，在实际工程中几乎不被采用。而一般会使用第三方提供的支持中文的全文索引来做。<br>但是 <strong>关键字查询</strong> 热搜提醒功能还是可以做的，比如键入<code>mysql</code>之后提醒<code>mysql 教程</code>、<code>mysql 下载</code>、<code>mysql 安装步骤</code>等。用到的语句是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">select * from article where title like ‘mysql%’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>这种<code>like</code>是可以利用索引的（当然前提是<code>title</code>字段建立过索引）。</p>
+<h3 id="复合索引只对第一个字段有效"><a href="#复合索引只对第一个字段有效" class="headerlink" title="复合索引只对第一个字段有效"></a>复合索引只对第一个字段有效</h3><p>建立复合索引：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table person add index(first_name,last_name);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>其原理就是将索引先按照从<code>first_name</code>中提取的关键字排序，如果无法确定先后再按照从<code>last_name</code>提取的关键字排序，也就是说该索引表只是按照记录的<code>first_name</code>字段值有序。<br>因此<code>select * from person where first_name = ?</code>是可以利用索引的，而<code>select * from person where last_name = ?</code>无法利用索引。</p>
+<blockquote>
+<p>那么该复合索引的应用场景是什么？==组合查询==</p>
+</blockquote>
+<p>比如对于<code>select * person from first_name = ? and last_name = ?</code>，复合索引就比对<code>first_name</code>和<code>last_name</code>单独建立索引要高效些。很好理解，复合索引首先二分查找与<code>first_name = ?</code>匹配的记录，再在这些记录中二分查找与<code>last_name</code>匹配的记录，只涉及到一张索引表。而分别单独建立索引则是在<code>first_name</code>索引表中二分找出与<code>first_name = ?</code>匹配的记录，再在<code>last_name</code>索引表中二分找出与<code>last_name = ?</code>的记录，两者取交集。</p>
+<h3 id="or，两边条件都有索引可用"><a href="#or，两边条件都有索引可用" class="headerlink" title="or，两边条件都有索引可用"></a>or，两边条件都有索引可用</h3><blockquote>
+<p>一但有一边无索引可用就会导致整个 SQL 语句的全表扫描</p>
+</blockquote>
+<h3 id="状态值，不容易使用到索引"><a href="#状态值，不容易使用到索引" class="headerlink" title="状态值，不容易使用到索引"></a>状态值，不容易使用到索引</h3><p>如性别、支付状态等状态值字段往往只有极少的几种取值可能，这种字段即使建立索引，也往往利用不上。这是因为，一个状态值可能匹配大量的记录，这种情况 MySQL 会认为利用索引比全表扫描的效率低，从而弃用索引。索引是随机访问磁盘，而全表扫描是顺序访问磁盘，这就好比有一栋 20 层楼的写字楼，楼底下的索引牌上写着某个公司对应不相邻的几层楼，你去公司找人，与其按照索引牌的提示去其中一层楼没找到再下来看索引牌再上楼，不如从 1 楼挨个往上找到顶楼。</p>
+<h2 id="如何创建索引"><a href="#如何创建索引" class="headerlink" title="如何创建索引"></a>如何创建索引</h2><ul>
+<li>建立基础索引：在<code>where、order by、join</code>字段上建立索引。</li>
+<li>优化，组合索引：基于业务逻辑<ul>
+<li>如果条件经常性出现在一起，那么可以考虑将多字段索引升级为==复合索引==</li>
+<li>如果通过增加个别字段的索引，就可以出现==索引覆盖==，那么可以考虑为该字段建立索引</li>
+<li>查询时，不常用到的索引，应该删除掉</li>
+</ul>
+</li>
+</ul>
+<h2 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h2><p>语法：<code>index(field(10))</code>，使用字段值的前 10 个字符建立索引，默认是使用字段的全部内容建立索引。<br>前提：前缀的标识度高。比如密码就适合建立前缀索引，因为密码几乎各不相同。<br>==实操的难度==：在于前缀截取的长度。<br>我们可以利用<code>select count(*)/count(distinct left(password,prefixLen));</code>，通过从调整<code>prefixLen</code>的值（从 1 自增）查看不同前缀长度的一个平均匹配度，接近 1 时就可以了（表示一个密码的前<code>prefixLen</code>个字符几乎能确定唯一一条记录）</p>
+<h2 id="索引的存储结构"><a href="#索引的存储结构" class="headerlink" title="索引的存储结构"></a>索引的存储结构</h2><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p>btree（多路平衡查找树）是一种广泛应用于==磁盘上实现索引功能==的一种数据结构，也是大多数数据库索引表的实现。<br>以<code>add index(first_name,last_name)</code>为例：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927862-90c43fe4-bd10-4cd5-a2a2-a788fd8e54a2.jpeg#align=left&amp;display=inline&amp;height=356&amp;originHeight=356&amp;originWidth=809&amp;size=0&amp;status=done&amp;style=none&amp;width=809" alt><br>BTree 的一个 node 可以存储多个关键字，node 的大小取决于计算机的文件系统，因此我们可以通过减小索引字段的长度使结点存储更多的关键字。如果 node 中的关键字已满，那么可以通过每个关键字之间的子节点指针来拓展索引表，但是不能破坏结构的有序性，比如按照<code>first_name</code>第一有序、<code>last_name</code>第二有序的规则，新添加的<code>韩香</code>就可以插到<code>韩康</code>之后。<code>白起 &lt; 韩飞 &lt; 韩康 &lt; 李世民 &lt; 赵奢 &lt; 李寻欢 &lt; 王语嫣 &lt; 杨不悔</code>。这与二叉搜索树的思想是一样的，只不过二叉搜索树的查找效率是<code>log(2,N)</code>（以 2 为底 N 的对数），而 BTree 的查找效率是<code>log(x,N)</code>（其中 x 为 node 的关键字数量，可以达到 1000 以上）。<br>从<code>log(1000+,N)</code>可以看出，少量的磁盘读取即可做到大量数据的遍历，这也是 btree 的设计目的。</p>
+<h3 id="B-Tree-聚簇结构"><a href="#B-Tree-聚簇结构" class="headerlink" title="B+Tree 聚簇结构"></a>B+Tree 聚簇结构</h3><p>聚簇结构（也是在 BTree 上升级改造的）中，关键字和记录是存放在一起的。<br>在 MySQL 中，仅仅只有<code>Innodb</code>的==主键索引为聚簇结构==，其它的索引包括<code>Innodb</code>的非主键索引都是典型的 BTree 结构。</p>
+<h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a>哈希索引</h3><p>在索引被载入内存时，使用哈希结构来存储。</p>
+<h1 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h1><blockquote>
+<p>缓存<code>select</code>语句的查询结果</p>
+</blockquote>
+<h2 id="在配置文件中开启缓存"><a href="#在配置文件中开启缓存" class="headerlink" title="在配置文件中开启缓存"></a>在配置文件中开启缓存</h2><p>windows 上是<code>my.ini</code>，linux 上是<code>my.cnf</code><br>在<code>[mysqld]</code>段中配置<code>query_cache_type</code>：</p>
+<ul>
+<li>0：不开启</li>
+<li>1：开启，默认缓存所有，需要在 SQL 语句中增加<code>select sql-no-cache</code>提示来放弃缓存</li>
+<li>2：开启，默认都不缓存，需要在 SQL 语句中增加<code>select sql-cache</code>来主动缓存（==常用==）</li>
+</ul>
+<p>更改配置后需要重启以使配置生效，重启后可通过<code>show variables like ‘query_cache_type’;</code>来查看：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">show variables like ‘query_cache_type’;query_cache_type DEMAND</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="在客户端设置缓存大小"><a href="#在客户端设置缓存大小" class="headerlink" title="在客户端设置缓存大小"></a>在客户端设置缓存大小</h2><p>通过配置项<code>query_cache_size</code>来设置：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">show variables like ‘query_cache_size’;query_cache_size 0set global query_cache_size=64<em>1024</em>1024;show variables like ‘query_cache_size’;query_cache_size 67108864</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="将查询结果缓存"><a href="#将查询结果缓存" class="headerlink" title="将查询结果缓存"></a>将查询结果缓存</h2><p><code>select sql_cache * from user;</code></p>
+<h2 id="重置缓存"><a href="#重置缓存" class="headerlink" title="重置缓存"></a>重置缓存</h2><p><code>reset query cache;</code></p>
+<h2 id="缓存失效问题（大问题）"><a href="#缓存失效问题（大问题）" class="headerlink" title="缓存失效问题（大问题）"></a>缓存失效问题（大问题）</h2><p>当数据表改动时，基于该数据表的任何缓存都会被删除。（表层面的管理，不是记录层面的管理，因此失效率较高）</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>应用程序，不应该关心<code>query cache</code>的使用情况。可以尝试使用，但不能由<code>query cache</code>决定业务逻辑，因为<code>query cache</code>由 DBA 来管理。</li>
+<li>缓存是以 SQL 语句为 key 存储的，因此即使 SQL 语句功能相同，但如果多了一个空格或者大小写有差异都会导致匹配不到缓存。</li>
+</ol>
+<h1 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h1><p>一般情况下我们创建的表对应一组存储文件，使用<code>MyISAM</code>存储引擎时是一个<code>.MYI</code>和<code>.MYD</code>文件，使用<code>Innodb</code>存储引擎时是一个<code>.ibd</code>和<code>.frm</code>（表结构）文件。<br>当数据量较大时（一般千万条记录级别以上），MySQL 的性能就会开始下降，这时我们就需要将数据分散到多组存储文件，==保证其单个文件的执行效率==。<br>最常见的分区方案是按<code>id</code>分区，如下将<code>id</code>的哈希值对 10 取模将数据均匀分散到 10 个<code>.ibd</code>存储文件中：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left">create table article( id int auto_increment PRIMARY KEY, title varchar(64), content text)PARTITION by HASH(id) PARTITIONS 10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>data</code>目录：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927931-b383f719-aa95-43a4-a25b-a705ec669101.jpeg#align=left&amp;display=inline&amp;height=234&amp;originHeight=234&amp;originWidth=268&amp;size=0&amp;status=done&amp;style=none&amp;width=268" alt></p>
+<blockquote>
+<p>==服务端的表分区对于客户端是透明的==，客户端还是照常插入数据，但服务端会按照分区算法分散存储数据。</p>
+</blockquote>
+<h2 id="MySQL-提供的分区算法"><a href="#MySQL-提供的分区算法" class="headerlink" title="MySQL 提供的分区算法"></a>MySQL 提供的分区算法</h2><blockquote>
+<p>==分区依据的字段必须是主键的一部分==，分区是为了快速定位数据，因此该字段的搜索频次较高应作为强检索字段，否则依照该字段分区毫无意义</p>
+</blockquote>
+<h3 id="hash-field"><a href="#hash-field" class="headerlink" title="hash(field)"></a>hash(field)</h3><p>相同的输入得到相同的输出。输出的结果跟输入是否具有规律无关。==仅适用于整型字段==</p>
+<h3 id="key-field"><a href="#key-field" class="headerlink" title="key(field)"></a>key(field)</h3><p>和<code>hash(field)</code>的性质一样，只不过<code>key</code>是==处理字符串==的，比<code>hash()</code>多了一步从字符串中计算出一个整型在做取模操作。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">create table article_key( id int auto_increment, title varchar(64), content text, PRIMARY KEY (id,title) – 要求分区依据字段必须是主键的一部分)PARTITION by KEY(title) PARTITIONS 10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="range-算法"><a href="#range-算法" class="headerlink" title="range 算法"></a>range 算法</h3><p>是一种==条件分区==算法，按照数据大小范围分区（将数据使用某种条件，分散到不同的分区中）。<br>如下，按文章的发布时间将数据按照 2018 年 8 月、9 月、10 月分区存放：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112</th>
+<th style="text-align:left">create table article_range( id int auto_increment, title varchar(64), content text, created_time int, – 发布时间到 1970-1-1 的毫秒数 PRIMARY KEY (id,created_time) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY RANGE(created_time)( PARTITION p201808 VALUES less than (1535731199), – select UNIX_TIMESTAMP(‘2018-8-31 23:59:59’) PARTITION p201809 VALUES less than (1538323199), – 2018-9-30 23:59:59 PARTITION p201810 VALUES less than (1541001599) – 2018-10-31 23:59:59);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927898-404e6b0b-312f-4864-96d8-534ff680f052.jpeg#align=left&amp;display=inline&amp;height=89&amp;originHeight=89&amp;originWidth=339&amp;size=0&amp;status=done&amp;style=none&amp;width=339" alt><br>注意：条件运算符只能使用==less than==，这以为着较小的范围要放在前面，比如上述<code>p201808,p201819,p201810</code>分区的定义顺序依照<code>created_time</code>数值范围从小到大，不能颠倒。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">insert into article_range values(null,’MySQL 优化’,’内容示例’,1535731180);flush tables; – 使操作立即刷新到磁盘文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-35852910-8a70-4728-bd2a-a2b666843d62.jpeg#align=left&amp;display=inline&amp;height=98&amp;originHeight=98&amp;originWidth=419&amp;size=0&amp;status=done&amp;style=none&amp;width=419" alt><br>由于插入的文章的发布时间<code>1535731180</code>小于<code>1535731199</code>（<code>2018-8-31 23:59:59</code>），因此被存储到<code>p201808</code>分区中，这种算法的存储到哪个分区取决于数据状况。</p>
+<h3 id="list-算法"><a href="#list-算法" class="headerlink" title="list 算法"></a>list 算法</h3><p>也是一种条件分区，按照列表值分区（<code>in (值列表)</code>）。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011</th>
+<th style="text-align:left">create table article_list( id int auto_increment, title varchar(64), content text, status TINYINT(1), – 文章状态：0-草稿，1-完成但未发布，2-已发布 PRIMARY KEY (id,status) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY list(status)( PARTITION writing values in(0,1), – 未发布的放在一个分区 PARTITION published values in (2) – 已发布的放在一个分区);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">insert into article_list values(null,’mysql 优化’,’内容示例’,0);flush tables;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-a52d8533-1ef8-4eb8-a4a8-5de6aa2658f6.jpeg#align=left&amp;display=inline&amp;height=47&amp;originHeight=47&amp;originWidth=429&amp;size=0&amp;status=done&amp;style=none&amp;width=429" alt></p>
+<h2 id="分区管理语法"><a href="#分区管理语法" class="headerlink" title="分区管理语法"></a>分区管理语法</h2><h3 id="range-list"><a href="#range-list" class="headerlink" title="range/list"></a>range/list</h3><h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><p>前文中我们尝试使用<code>range</code>对文章按照月份归档，随着时间的增加，我们需要增加一个月份：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">alter table article_range add partition( partition p201811 values less than (1543593599) – select UNIX_TIMESTAMP(‘2018-11-30 23:59:59’) – more);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927903-cad12e9f-5d3a-4036-8b81-d32a0cb2b1b9.jpeg#align=left&amp;display=inline&amp;height=94&amp;originHeight=94&amp;originWidth=403&amp;size=0&amp;status=done&amp;style=none&amp;width=403" alt></p>
+<h4 id="删除分区"><a href="#删除分区" class="headerlink" title="删除分区"></a>删除分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_range drop PARTITION p201808</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>注意：==删除分区后，分区中原有的数据也会随之删除！==</p>
+<h3 id="key-hash"><a href="#key-hash" class="headerlink" title="key/hash"></a>key/hash</h3><h4 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_key add partition partitions 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927940-f4a47b32-d956-427c-ac70-3b90843ef58c.jpeg#align=left&amp;display=inline&amp;height=297&amp;originHeight=297&amp;originWidth=232&amp;size=0&amp;status=done&amp;style=none&amp;width=232" alt></p>
+<h4 id="销毁分区"><a href="#销毁分区" class="headerlink" title="销毁分区"></a>销毁分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_key coalesce partition 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>key/hash</code>分区的管理不会删除数据，但是每一次调整（新增或销毁分区）都会将所有的数据重写分配到新的分区上。==效率极低==，最好在设计阶段就考虑好分区策略。</p>
+<h2 id="分区的使用"><a href="#分区的使用" class="headerlink" title="分区的使用"></a>分区的使用</h2><p>当数据表中的数据量很大时，分区带来的效率提升才会显现出来。<br>只有检索字段为分区字段时，分区带来的效率提升才会比较明显。因此，==分区字段的选择很重要==，并且==业务逻辑要尽可能地根据分区字段做相应调整==（尽量使用分区字段作为查询条件）。</p>
+<h1 id="水平分割和垂直分割"><a href="#水平分割和垂直分割" class="headerlink" title="水平分割和垂直分割"></a>水平分割和垂直分割</h1><blockquote>
+<p>水平分割：通过建立结构相同的几张表分别存储数据<br>垂直分割：将经常一起使用的字段放在一个单独的表中，分割后的表记录之间是一一对应关系。</p>
+</blockquote>
+<h2 id="分表原因"><a href="#分表原因" class="headerlink" title="分表原因"></a>分表原因</h2><ul>
+<li>为数据库减压</li>
+<li>分区算法局限</li>
+<li>数据库支持不完善（<code>5.1</code>之后<code>mysql</code>才支持分区操作）</li>
+</ul>
+<h2 id="id-重复的解决方案"><a href="#id-重复的解决方案" class="headerlink" title="id 重复的解决方案"></a>id 重复的解决方案</h2><ul>
+<li>借用第三方应用如<code>memcache、redis</code>的<code>id</code>自增器</li>
+<li>单独建一张只包含<code>id</code>一个字段的表，每次自增该字段作为数据记录的<code>id</code></li>
+</ul>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><blockquote>
+<p>横向扩展：从根本上（单机的硬件处理能力有限）提升数据库性能 。由此而生的相关技术：==读写分离、负载均衡==</p>
+</blockquote>
+<h2 id="安装和配置主从复制"><a href="#安装和配置主从复制" class="headerlink" title="安装和配置主从复制"></a>安装和配置主从复制</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li><code>Red Hat Enterprise Linux Server release 7.0 (Maipo)</code>（虚拟机）</li>
+<li><code>mysql5.7</code>（<a href="https://mirrors.163.com/mysql/Downloads/MySQL-5.7/mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz" target="_blank" rel="noopener">下载地址</a>）</li>
+</ul>
+<h3 id="安装和配置"><a href="#安装和配置" class="headerlink" title="安装和配置"></a>安装和配置</h3><p>解压到对外提供的服务的目录（我自己专门创建了一个<code>/export/server</code>来存放）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">tar xzvf mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz -C /export/servercd /export/servermv mysql-5.7.23-linux-glibc2.12-x86_64 mysql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>添加<code>mysql</code>目录的所属组和所属者：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left">groupadd mysqluseradd -r -g mysql mysqlcd /export/serverchown -R mysql:mysql mysql/chmod -R 755 mysql/</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>创建<code>mysql</code>数据存放目录（其中<code>/export/data</code>是我创建专门用来为各种服务存放数据的目录）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">mkdir /export/data/mysql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>初始化<code>mysql</code>服务</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">cd /export/server/mysql./bin/mysqld –basedir=/export/server/mysql –datadir=/export/data/mysql –user=mysql –pid-file=/export/data/mysql/mysql.pid –initialize</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果成功会显示<code>mysql</code>的<code>root</code>账户的初始密码，记下来以备后续登录。如果报错缺少依赖，则使用<code>yum instally</code>依次安装即可</p>
+</blockquote>
+<p>配置<code>my.cnf</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324</th>
+<th style="text-align:left">vim /etc/my.cnf[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10 # 服务 id，在集群时必须唯一，建议设置为 IP 的第四段 port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a href="http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##" target="_blank" rel="noopener">http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##</a> include all files from the config directory#!includedir /etc/my.cnf.d</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>将服务添加到开机自动启动</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">cp /export/server/mysql/support-files/mysql.server /etc/init.d/mysqld</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>启动服务</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">service mysqld start</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>配置环境变量，在<code>/etc/profile</code>中添加如下内容</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left"># mysql envMYSQL_HOME=/export/server/mysqlMYSQL_PATH=$MYSQL_HOME/binPATH=$PATH:\$MYSQL_PATHexport PATH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>使配置即可生效</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">source /etc/profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>使用<code>root</code>登录</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql -uroot -p# 这里填写之前初始化服务时提供的密码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>登录上去之后，更改<code>root</code>账户密码（我为了方便将密码改为 root），否则操作数据库会报错</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">set password=password(‘root’);flush privileges;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>设置服务可被所有远程客户端访问</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">use mysql;update user set host=’%’ where user=’root’;flush privileges;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这样就可以在宿主机使用<code>navicat</code>远程连接虚拟机 linux 上的 mysql 了</p>
+</blockquote>
+<h3 id="配置主从节点"><a href="#配置主从节点" class="headerlink" title="配置主从节点"></a>配置主从节点</h3><h4 id="配置-master"><a href="#配置-master" class="headerlink" title="配置 master"></a>配置 master</h4><p>以<code>linux</code>（<code>192.168.10.10</code>）上的<code>mysql</code>为<code>master</code>，宿主机（<code>192.168.10.1</code>）上的<code>mysql</code>为<code>slave</code>配置主从复制。<br>修改<code>master</code>的<code>my.cnf</code>如下</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930</th>
+<th style="text-align:left">[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a href="http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin" target="_blank" rel="noopener">http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin</a> # 开启二进制日志 expire-logs-days=7 # 设置日志过期时间，避免占满磁盘 binlog-ignore-db=mysql # 不使用主从复制的数据库 binlog-ignore-db=information_schemabinlog-ignore-db=performation_schemabinlog-ignore-db=sysbinlog-do-db=test #使用主从复制的数据库[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid## include all files from the config directory#!includedir /etc/my.cnf.d</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>重启<code>master</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">service mysqld restart</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>登录<code>master</code>查看配置是否生效（<code>ON</code>即为开启，默认为<code>OFF</code>）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">mysql&gt; show variables like ‘log_bin’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>log_bin</th>
+<th>ON</th>
+<th>+—————+——-+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>在<code>master</code>的数据库中建立备份账号：<code>backup</code>为用户名，<code>%</code>表示任何远程地址，用户<code>back</code>可以使用密码<code>1234</code>通过任何远程客户端连接<code>master</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">grant replication slave on _._ to ‘backup‘@’%’ identified by ‘1234’</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>user</code>表可以看到我们刚创建的用户：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">mysql&gt; use mysqlmysql&gt; select user,authentication_string,host from user;+—————+——————————————-+———–+</th>
+<th>user</th>
+<th>authentication_string</th>
+<th>host</th>
+<th>+—————+——————————————-+———–+</th>
+<th>root</th>
+<th>*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B</th>
+<th>%</th>
+<th></th>
+<th>mysql.session</th>
+<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
+<th>localhost</th>
+<th></th>
+<th>mysql.sys</th>
+<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
+<th>localhost</th>
+<th></th>
+<th>backup</th>
+<th>*A4B6157319038724E3560894F7F932C8886EBFCF</th>
+<th>%</th>
+<th>+—————+——————————————-+———–+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>新建<code>test</code>数据库，创建一个<code>article</code>表以备后续测试</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">CREATE TABLE <code>article</code> ( <code>id</code> int(11) NOT NULL AUTO_INCREMENT, <code>title</code> varchar(64) DEFAULT NULL, <code>content</code> text, PRIMARY KEY (<code>id</code>)) CHARSET=utf8;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>重启服务并刷新数据库状态到存储文件中（<code>with read lock</code>表示在此过程中，客户端只能读数据，以便获得一个一致性的快照）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">[root@zhenganwen ~]# service mysqld restartShutting down MySQL…. SUCCESS! Starting MySQL. SUCCESS! [root@zhenganwen mysql]# mysql -uroot -prootmysql&gt; flush tables with read lock;Query OK, 0 rows affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>master</code>上当前的二进制日志和偏移量（记一下其中的<code>File</code>和<code>Position</code>）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">mysql&gt; show master status \G<strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> 1. row <strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> File: mysql-bin.000002 Position: 154 Binlog_Do_DB: test Binlog_Ignore_DB: mysql,information_schema,performation_schema,sysExecuted_Gtid_Set: 1 row in set (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927887-fe132421-1993-434b-ac15-571876568a61.jpeg#align=left&amp;display=inline&amp;height=335&amp;originHeight=335&amp;originWidth=484&amp;size=0&amp;status=done&amp;style=none&amp;width=484" alt><br><code>File</code>表示实现复制功能的日志，即上图中的<code>Binary log</code>；<code>Position</code>则表示<code>Binary log</code>日志文件的偏移量之后的都会同步到<code>slave</code>中，那么在偏移量之前的则需要我们手动导入。<br>主服务器上面的任何修改都会保存在二进制日志 Binary log 里面，从服务器上面启动一个 I/O thread（实际上就是一个主服务器的客户端进程），连接到主服务器上面请求读取二进制日志，然后把读取到的二进制日志写到本地的一个 Realy log 里面。从服务器上面开启一个 SQL thread 定时检查 Realy log，如果发现有更改立即把更改的内容在本机上面执行一遍。<br>如果一主多从的话，这时主库既要负责写又要负责为几个从库提供二进制日志。此时可以稍做调整，将二进制日志只给某一从，这一从再开启二进制日志并将自己的二进制日志再发给其它从。或者是干脆这个从不记录只负责将二进制日志转发给其它从，这样架构起来性能可能要好得多，而且数据之间的延时应该也稍微要好一些<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927893-e6c726f1-1ca7-461e-b5e2-54613c741e61.jpeg#align=left&amp;display=inline&amp;height=307&amp;originHeight=307&amp;originWidth=660&amp;size=0&amp;status=done&amp;style=none&amp;width=660" alt><br>手动导入，从<code>master</code>中导出数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">mysqldump -uroot -proot -hlocalhost test &gt; /export/data/test.sql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>将<code>test.sql</code>中的内容在<code>slave</code>上执行一遍。</p>
+<h4 id="配置-slave"><a href="#配置-slave" class="headerlink" title="配置 slave"></a>配置 slave</h4><p>修改<code>slave</code>的<code>my.ini</code>文件中的<code>[mysqld]</code>部分</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">log-bin=mysqlserver-id=1 #192.168.10.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>保存修改后重启<code>slave</code>，<code>WIN+R</code>-&gt;<code>services.msc</code>-&gt;<code>MySQL5.7</code>-&gt;重新启动<br>登录<code>slave</code>检查<code>log_bin</code>是否以被开启：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">show VARIABLES like ‘log_bin’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>配置与<code>master</code>的同步复制：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567</th>
+<th style="text-align:left">stop slave;change master to master_host=’192.168.10.10’, – master 的 IP master_user=’backup’, – 之前在 master 上创建的用户 master_password=’1234’, master_log_file=’mysql-bin.000002’, – master 上 show master status \G 提供的信息 master_log_pos=154;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>启用<code>slave</code>节点并查看状态</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061</th>
+<th style="text-align:left">mysql&gt; start slave;mysql&gt; show slave status \G<strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> 1. row <strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> Slave_IO_State: Waiting for master to send event Master_Host: 192.168.10.10 Master_User: backup Master_Port: 3306 Connect_Retry: 60 Master_Log_File: mysql-bin.000002 Read_Master_Log_Pos: 154 Relay_Log_File: DESKTOP-KUBSPE0-relay-bin.000002 Relay_Log_Pos: 320 Relay_Master_Log_File: mysql-bin.000002 Slave_IO_Running: Yes Slave_SQL_Running: Yes Replicate_Do_DB: Replicate_Ignore_DB: Replicate_Do_Table: Replicate_Ignore_Table: Replicate_Wild_Do_Table: Replicate_Wild_Ignore_Table: Last_Errno: 0 Last_Error: Skip_Counter: 0 Exec_Master_Log_Pos: 154 Relay_Log_Space: 537 Until_Condition: None Until_Log_File: Until_Log_Pos: 0 Master_SSL_Allowed: No Master_SSL_CA_File: Master_SSL_CA_Path: Master_SSL_Cert: Master_SSL_Cipher: Master_SSL_Key: Seconds_Behind_Master: 0Master_SSL_Verify_Server_Cert: No Last_IO_Errno: 0 Last_IO_Error: Last_SQL_Errno: 0 Last_SQL_Error: Replicate_Ignore_Server_Ids: Master_Server_Id: 10 Master_UUID: f68774b7-0b28-11e9-a925-000c290abe05 Master_Info_File: C:\ProgramData\MySQL\MySQL Server 5.7\Data\master.info SQL_Delay: 0 SQL_Remaining_Delay: NULL Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates Master_Retry_Count: 86400 Master_Bind: Last_IO_Error_Timestamp: Last_SQL_Error_Timestamp: Master_SSL_Crl: Master_SSL_Crlpath: Retrieved_Gtid_Set: Executed_Gtid_Set: Auto_Position: 0 Replicate_Rewrite_DB: Channel_Name: Master_TLS_Version:1 row in set (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意查看第 4、14、15 三行，若与我一致，表示<code>slave</code>配置成功</p>
+</blockquote>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>关闭<code>master</code>的读取锁定</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql&gt; unlock tables;Query OK, 0 rows affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>向<code>master</code>中插入一条数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">mysql&gt; use testmysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>slave</code>是否自动同步了数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>至此，主从复制的配置成功！：)<br><a href="https://blog.csdn.net/xlgen157387/article/details/52452394" target="_blank" rel="noopener">使用 mysqlreplicate 命令快速搭建 Mysql 主从复制</a></p>
+<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><p>读写分离是依赖于主从复制，而主从复制又是为读写分离服务的。因为主从复制要求<code>slave</code>不能写只能读（如果对<code>slave</code>执行写操作，那么<code>show slave status</code>将会呈现<code>Slave_SQL_Running=NO</code>，此时你需要按照前面提到的手动同步一下<code>slave</code>）。</p>
+<h3 id="方案一、定义两种连接"><a href="#方案一、定义两种连接" class="headerlink" title="方案一、定义两种连接"></a>方案一、定义两种连接</h3><p>就像我们在学 JDBC 时定义的<code>DataBase</code>一样，我们可以抽取出<code>ReadDataBase,WriteDataBase implements DataBase</code>，但是这种方式无法利用优秀的线程池技术如<code>DruidDataSource</code>帮我们管理连接，也无法利用<code>Spring AOP</code>让连接对<code>DAO</code>层透明。</p>
+<h3 id="方案二、使用-Spring-AOP"><a href="#方案二、使用-Spring-AOP" class="headerlink" title="方案二、使用 Spring AOP"></a>方案二、使用 Spring AOP</h3><p>如果能够使用<code>Spring AOP</code>解决数据源切换的问题，那么就可以和<code>Mybatis</code>、<code>Druid</code>整合到一起了。<br>我们在整合<code>Spring1</code>和<code>Mybatis</code>时，我们只需写 DAO 接口和对应的<code>SQL</code>语句，那么 DAO 实例是由谁创建的呢？实际上就是<code>Spring</code>帮我们创建的，它通过我们注入的数据源，帮我们完成从中获取数据库连接、使用连接执行 <code>SQL</code> 语句的过程以及最后归还连接给数据源的过程。<br>如果我们能在调用 DAO 接口时根据接口方法命名规范（增<code>addXXX/createXXX</code>、删<code>deleteXX/removeXXX</code>、改<code>updateXXXX</code>、查<code>selectXX/findXXX/getXX/queryXXX</code>）动态地选择数据源（读数据源对应连接<code>master</code>而写数据源对应连接<code>slave</code>），那么就可以做到读写分离了。</p>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927934-ae443fd0-1934-4076-b2a5-aed058579a5f.jpeg#align=left&amp;display=inline&amp;height=421&amp;originHeight=421&amp;originWidth=316&amp;size=0&amp;status=done&amp;style=none&amp;width=316" alt></p>
+<h4 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h4><p>其中，为了方便访问数据库引入了<code>mybatis</code>和<code>druid</code>，实现数据源动态切换主要依赖<code>spring-aop</code>和<code>spring-aspects</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465</th>
+<th style="text-align:left"><dependencies> <dependency> <groupid>org.mybatis</groupid> <artifactid>mybatis-spring</artifactid> <version>1.3.2</version> </dependency> <dependency> <groupid>org.mybatis</groupid> <artifactid>mybatis</artifactid> <version>3.4.6</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-core</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-aop</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-jdbc</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>com.alibaba</groupid> <artifactid>druid</artifactid> <version>1.1.6</version> </dependency> <dependency> <groupid>mysql</groupid> <artifactid>mysql-connector-java</artifactid> <version>6.0.2</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-context</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-aspects</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.projectlombok</groupid> <artifactid>lombok</artifactid> <version>1.16.22</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-test</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>junit</groupid> <artifactid>junit</artifactid> <version>4.12</version> </dependency></dependencies></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="数据类"><a href="#数据类" class="headerlink" title="数据类"></a>数据类</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.entity;import lombok.AllArgsConstructor;import lombok.Data;import lombok.NoArgsConstructor;@Data@AllArgsConstructor@NoArgsConstructorpublic class Article { private int id; private String title; private String content;}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="spring-配置文件"><a href="#spring-配置文件" class="headerlink" title="spring 配置文件"></a>spring 配置文件</h4><p>其中<code>RoutingDataSourceImpl</code>是实现动态切换功能的核心类，稍后介绍。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemalocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> &lt;context:property-placeholder location=”db.properties”&gt;&lt;/context:property-placeholder&gt; &lt;context:component-scan base-package=”top.zhenganwen.mysqloptimize”/&gt; <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"> <property name="url" value="${master.db.url}"></property> <property name="username" value="${master.db.username}"></property> <property name="password" value="${master.db.password}"></property> </property></bean> <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"> <property name="url" value="${slave.db.url}"></property> <property name="username" value="${slave.db.username}"></property> <property name="password" value="${slave.db.password}"></property> </property></bean> <bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"> <entry key="write" value-ref="masterDataSource"> </entry></entry></map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"> </entry></map> </property> </bean> <!-- Mybatis文件 --> <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> <property name="configLocation" value="classpath:mybatis-config.xml"> <property name="dataSource" ref="dataSourceRouting"> <property name="mapperLocations" value="mapper/*.xml"> </property></property></property></bean> <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> <property name="basePackage" value="top.zhenganwen.mysqloptimize.mapper"> <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"> </property></property></bean></beans></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>dp.properties</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">master.db.url=jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCmaster.db.username=rootmaster.db.password=rootslave.db.url=jdbc:mysql://192.168.10.10:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCslave.db.username=rootslave.db.password=rootdb.driverClass=com.mysql.jdbc.Driver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>mybatis-config.xml</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;&lt;!DOCTYPE configuration        PUBLIC “-//mybatis.org//DTD Config 3.0//EN”        “<a href="http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;" target="_blank" rel="noopener">http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;</a><configuration> <typealiases> <typealias type="top.zhenganwen.mysqloptimize.entity.Article" alias="Article"> </typealias></typealiases></configuration></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="mapper-接口和配置文件"><a href="#mapper-接口和配置文件" class="headerlink" title="mapper 接口和配置文件"></a>mapper 接口和配置文件</h4><p><code>ArticleMapper.java</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.mapper;import org.springframework.stereotype.Repository;import top.zhenganwen.mysqloptimize.entity.Article;import java.util.List;@Repositorypublic interface ArticleMapper { List<article> findAll(); void add(Article article); void delete(int id);}</article></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>ArticleMapper.xml</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8” ?&gt;&lt;!DOCTYPE mapper PUBLIC “-//mybatis.org//DTD Mapper 3.0//EN” “<a href="http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;" target="_blank" rel="noopener">http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</a> &gt;<mapper namespace="top.zhenganwen.mysqloptimize.mapper.ArticleMapper"> <select id="findAll" resulttype="Article"> select * from article </select> <insert id="add" parametertype="Article"> insert into article (title,content) values (#{title},#{content}) </insert> <delete id="delete" parametertype="int"> delete from article where id=#{id} </delete></mapper></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="核心类"><a href="#核心类" class="headerlink" title="核心类"></a>核心类</h4><h5 id="RoutingDataSourceImpl"><a href="#RoutingDataSourceImpl" class="headerlink" title="RoutingDataSourceImpl"></a>RoutingDataSourceImpl</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930313233343536373839404142</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;import java.util._;/** _ RoutingDataSourceImpl class _ 数据源路由 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 _/public class RoutingDataSourceImpl extends AbstractRoutingDataSource { /** _ key 为 read 或 write _ value 为 DAO 方法的前缀 _ 什么前缀开头的方法使用读数据员，什么开头的方法使用写数据源 _/ public static final Map&lt;String, List<string>&gt; METHOD_TYPE_MAP = new HashMap&lt;String, List<string>&gt;(); /** _ 由我们指定数据源的 id，由 Spring 切换数据源 * _ @return _/ @Override protected Object determineCurrentLookupKey() { System.out.println(“数据源为：”+DataSourceHandler.getDataSource()); return DataSourceHandler.getDataSource(); } public void setMethodType(Map&lt;String, String&gt; map) { for (String type : map.keySet()) { String methodPrefixList = map.get(type); if (methodPrefixList != null) { METHOD_TYPE_MAP.put(type, Arrays.asList(methodPrefixList.split(“,”))); } } }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>它的主要功能是，本来我们只配置一个数据源，因此<code>Spring</code>动态代理 DAO 接口时直接使用该数据源，现在我们有了读、写两个数据源，我们需要加入一些自己的逻辑来告诉调用哪个接口使用哪个数据源（读数据的接口使用<code>slave</code>，写数据的接口使用<code>master</code>。这个告诉<code>Spring</code>该使用哪个数据源的类就是<code>AbstractRoutingDataSource</code>，必须重写的方法<code>determineCurrentLookupKey</code>返回数据源的标识，结合<code>spring</code>配置文件（下段代码的 5，6 两行）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left"><bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"> <entry key="write" value-ref="masterDataSource"> </entry></entry></map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"> </entry></map> </property></bean></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>如果<code>determineCurrentLookupKey</code>返回<code>read</code>那么使用<code>slaveDataSource</code>，如果返回<code>write</code>就使用<code>masterDataSource</code>。</p>
+<h5 id="DataSourceHandler"><a href="#DataSourceHandler" class="headerlink" title="DataSourceHandler"></a>DataSourceHandler</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;/<strong> _ DataSourceHandler class _ <p> _ 将数据源与线程绑定，需要时根据线程获取 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 */public class DataSourceHandler { /</p></strong> _ 绑定的是 read 或 write，表示使用读或写数据源 _/ private static final ThreadLocal<string> holder = new ThreadLocal<string>(); public static void setDataSource(String dataSource) { System.out.println(Thread.currentThread().getName()+”设置了数据源类型”); holder.set(dataSource); } public static String getDataSource() { System.out.println(Thread.currentThread().getName()+”获取了数据源类型”); return holder.get(); }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h5 id="DataSourceAspect"><a href="#DataSourceAspect" class="headerlink" title="DataSourceAspect"></a>DataSourceAspect</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.aspectj.lang.JoinPoint;import org.aspectj.lang.annotation.Aspect;import org.aspectj.lang.annotation.Before;import org.aspectj.lang.annotation.Pointcut;import org.springframework.context.annotation.EnableAspectJAutoProxy;import org.springframework.stereotype.Component;import java.util.List;import java.util.Set;import static top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl.METHOD_TYPE_MAP;/<strong> _ DataSourceAspect class _ _ 配置切面，根据方法前缀设置读、写数据源 _ 项目启动时会加载该 bean，并按照配置的切面（哪些切入点、如何增强）确定动态代理逻辑 _ @author zhenganwen,blog:zhenganwen.top _ @date 2018/12/29 */@Component//声明这是一个切面，这样 Spring 才会做相应的配置，否则只会当做简单的 bean 注入@Aspect@EnableAspectJAutoProxypublic class DataSourceAspect { /</strong> _ 配置切入点：DAO 包下的所有类的所有方法 <em>/ @Pointcut(“execution(</em> top.zhenganwen.mysqloptimize.mapper._._(..))”) public void aspect() { } /** _ 配置前置增强，对象是 aspect()方法上配置的切入点 */ @Before(“aspect()”) public void before(JoinPoint point) { String className = point.getTarget().getClass().getName(); String invokedMethod = point.getSignature().getName(); System.out.println(“对 “+className+”\$”+invokedMethod+” 做了前置增强，确定了要使用的数据源类型”); Set<string> dataSourceType = METHOD_TYPE_MAP.keySet(); for (String type : dataSourceType) { List<string> prefixList = METHOD_TYPE_MAP.get(type); for (String prefix : prefixList) { if (invokedMethod.startsWith(prefix)) { DataSourceHandler.setDataSource(type); System.out.println(“数据源为：”+type); return; } } } }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="测试读写分离"><a href="#测试读写分离" class="headerlink" title="测试读写分离"></a>测试读写分离</h4><blockquote>
+<p>如何测试读是从<code>slave</code>中读的呢？可以将写后复制到<code>slave</code>中的数据更改，再读该数据就知道是从<code>slave</code>中读了。==注意==，一但对<code>slave</code>做了写操作就要重新手动将<code>slave</code>与<code>master</code>同步一下，否则主从复制就会失效。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930313233</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.junit.Test;import org.junit.runner.RunWith;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.test.context.ContextConfiguration;import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;import top.zhenganwen.mysqloptimize.entity.Article;import top.zhenganwen.mysqloptimize.mapper.ArticleMapper;@RunWith(SpringJUnit4ClassRunner.class)@ContextConfiguration(locations = “classpath:spring-mybatis.xml”)public class RoutingDataSourceTest { @Autowired ArticleMapper articleMapper; @Test public void testRead() { System.out.println(articleMapper.findAll()); } @Test public void testAdd() { Article article = new Article(0, “我是新插入的文章”, “测试是否能够写到 master 并且复制到 slave 中”); articleMapper.add(article); } @Test public void testDelete() { articleMapper.delete(2); }}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
+<li>轮询</li>
+<li>加权轮询：按照处理能力来加权</li>
+<li>负载分配：依据当前的空闲状态（但是测试每个节点的内存使用率、CPU 利用率等，再做比较选出最闲的那个，效率太低）</li>
+</ul>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>在服务器架构时，为了保证服务器 7x24 不宕机在线状态，需要为每台单点服务器（由一台服务器提供服务的服务器，如写服务器、数据库中间件）提供冗余机。<br>对于写服务器来说，需要提供一台同样的写-冗余服务器，当写服务器健康时（写-冗余通过心跳检测），写-冗余作为一个从机的角色复制写服务器的内容与其做一个同步；当写服务器宕机时，写-冗余服务器便顶上来作为写服务器继续提供服务。对外界来说这个处理过程是透明的，即外界仅通过一个 IP 访问服务。</p>
+<h1 id="典型-SQL"><a href="#典型-SQL" class="headerlink" title="典型 SQL"></a>典型 SQL</h1><h2 id="线上-DDL"><a href="#线上-DDL" class="headerlink" title="线上 DDL"></a>线上 DDL</h2><p>DDL(Database Definition Language)是指数据库表结构的定义（<code>create table</code>）和维护（<code>alter table</code>）的语言。在线上执行 DDL，在低于<code>MySQL5.6</code>版本时会导致全表被独占锁定，此时表处于维护、不可操作状态，这会导致该期间对该表的所有访问无法响应。但是在<code>MySQL5.6</code>之后，支持<code>Online DDL</code>，大大缩短了锁定时间。<br>优化技巧是采用的维护表结构的 DDL（比如增加一列，或者增加一个索引），是==copy==策略。思路：创建一个满足新结构的新表，将旧表数据==逐条==导入（复制）到新表中，以保证==一次性锁定的内容少==（锁定的是正在导入的数据），同时旧表上可以执行其他任务。导入的过程中，将对旧表的所有操作以日志的形式记录下来，导入完毕后，将更新日志在新表上再执行一遍（确保一致性）。最后，新表替换旧表（在应用程序中完成，或者是数据库的 rename，视图完成）。<br>但随着 MySQL 的升级，这个问题几乎淡化了。</p>
+<h2 id="数据库导入语句"><a href="#数据库导入语句" class="headerlink" title="数据库导入语句"></a>数据库导入语句</h2><p>在恢复数据时，可能会导入大量的数据。此时为了快速导入，需要掌握一些技巧：</p>
+<ol>
+<li>导入时==先禁用索引和约束==：<br>| 1 | alter table table-name disable keys |<br>| :— | :— |</li>
+</ol>
+<p>待数据导入完成之后，再开启索引和约束，一次性创建索引</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table table-name enable keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>数据库如果使用的引擎是<code>Innodb</code>，那么它==默认会给每条写指令加上事务==（这也会消耗一定的时间），因此建议先手动开启事务，再执行一定量的批量导入，最后手动提交事务。</li>
+<li>如果批量导入的 SQL 指令格式相同只是数据不同，那么你应该先<code>prepare</code>==预编译==一下，这样也能节省很多重复编译的时间。</li>
+</ol>
+<h2 id="limit-offset-rows"><a href="#limit-offset-rows" class="headerlink" title="limit offset,rows"></a>limit offset,rows</h2><p>尽量保证不要出现大的<code>offset</code>，比如<code>limit 10000,10</code>相当于对已查询出来的行数弃掉前<code>10000</code>行后再取<code>10</code>行，完全可以加一些条件过滤一下（完成筛选），而不应该使用<code>limit</code>跳过已查询到的数据。这是一个==<code>offset</code>做无用功==的问题。对应实际工程中，要避免出现大页码的情况，尽量引导用户做条件过滤。</p>
+<h2 id="select-要少用"><a href="#select-要少用" class="headerlink" title="select * 要少用"></a>select * 要少用</h2><p>即尽量选择自己需要的字段<code>select</code>，但这个影响不是很大，因为网络传输多了几十上百字节也没多少延时，并且现在流行的 ORM 框架都是用的<code>select *</code>，只是我们在设计表的时候注意将大数据量的字段分离，比如商品详情可以单独抽离出一张商品详情表，这样在查看商品简略页面时的加载速度就不会有影响了。</p>
+<h2 id="order-by-rand-不要用"><a href="#order-by-rand-不要用" class="headerlink" title="order by rand()不要用"></a>order by rand()不要用</h2><p>它的逻辑就是随机排序（为每条数据生成一个随机数，然后根据随机数大小进行排序）。如<code>select * from student order by rand() limit 5</code>的执行效率就很低，因为它为表中的每条数据都生成随机数并进行排序，而我们只要前 5 条。<br>解决思路：在应用程序中，将随机的主键生成好，去数据库中利用主键检索。</p>
+<h2 id="单表和多表查询"><a href="#单表和多表查询" class="headerlink" title="单表和多表查询"></a>单表和多表查询</h2><p>多表查询：<code>join</code>、子查询都是涉及到多表的查询。如果你使用<code>explain</code>分析执行计划你会发现多表查询也是一个表一个表的处理，最后合并结果。因此可以说单表查询将计算压力放在了应用程序上，而多表查询将计算压力放在了数据库上。<br>现在有 ORM 框架帮我们解决了单表查询带来的对象映射问题（查询单表时，如果发现有外键自动再去查询关联表，是一个表一个表查的）。</p>
+<h2 id="count"><a href="#count" class="headerlink" title="count(*)"></a>count(*)</h2><p>在<code>MyISAM</code>存储引擎中，会自动记录表的行数，因此使用<code>count(*)</code>能够快速返回。而<code>Innodb</code>内部没有这样一个计数器，需要我们手动统计记录数量，解决思路就是单独使用一张表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">student</td>
+<td style="text-align:left">100</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limit-1"><a href="#limit-1" class="headerlink" title="limit 1"></a>limit 1</h2><p>如果可以确定仅仅检索一条，建议加上<code>limit 1</code>，其实 ORM 框架帮我们做到了这一点（查询单条的操作都会自动加上<code>limit 1</code>）。</p>
+<h1 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h1><blockquote>
+<p>用于记录执行时间超过某个临界值的 SQL 日志，用于快速定位慢查询，为我们的优化做参考。</p>
+</blockquote>
+<h2 id="开启慢查询日志"><a href="#开启慢查询日志" class="headerlink" title="开启慢查询日志"></a>开启慢查询日志</h2><p>配置项：<code>slow_query_log</code><br>可以使用<code>show variables like ‘slov_query_log’</code>查看是否开启，如果状态值为<code>OFF</code>，可以使用<code>set GLOBAL slow_query_log = on</code>来开启，它会在<code>datadir</code>下产生一个<code>xxx-slow.log</code>的文件。</p>
+<h2 id="设置临界时间"><a href="#设置临界时间" class="headerlink" title="设置临界时间"></a>设置临界时间</h2><p>配置项：<code>long_query_time</code><br>查看：<code>show VARIABLES like &#39;long_query_time&#39;</code>，单位秒<br>设置：<code>set long_query_time=0.5</code><br>实操时应该从长时间设置到短的时间，即将最慢的 SQL 优化掉</p>
+<h2 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h2><p>一旦 SQL 超过了我们设置的临界时间就会被记录到<code>xxx-slow.log</code>中</p>
+<h1 id="profile-信息"><a href="#profile-信息" class="headerlink" title="profile 信息"></a>profile 信息</h1><p>配置项：<code>profiling</code></p>
+<h2 id="开启-profile"><a href="#开启-profile" class="headerlink" title="开启 profile"></a>开启 profile</h2><p><code>set profiling=on</code><br>开启后，所有的 SQL 执行的详细信息都会被自动记录下来</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>profiling</th>
+<th>OFF</th>
+<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; set profiling=on;Query OK, 0 rows affected, 1 warning (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="查看-profile-信息"><a href="#查看-profile-信息" class="headerlink" title="查看 profile 信息"></a>查看 profile 信息</h2><p><code>show profiles</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718</th>
+<th style="text-align:left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>profiling</th>
+<th>ON</th>
+<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; insert into article values (null,’test profile’,’:)’);Query OK, 1 row affected (0.15 sec)mysql&gt; show profiles;+———-+————+——————————————————-+</th>
+<th>Query_ID</th>
+<th>Duration</th>
+<th>Query</th>
+<th>+———-+————+——————————————————-+</th>
+<th>1</th>
+<th>0.00086150</th>
+<th>show variables like ‘profiling’</th>
+<th></th>
+<th>2</th>
+<th>0.15027550</th>
+<th>insert into article values (null,’test profile’,’:)’)</th>
+<th>+———-+————+——————————————————-+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="通过-Query-ID-查看某条-SQL-所有详细步骤的时间"><a href="#通过-Query-ID-查看某条-SQL-所有详细步骤的时间" class="headerlink" title="通过 Query_ID 查看某条 SQL 所有详细步骤的时间"></a>通过 Query_ID 查看某条 SQL 所有详细步骤的时间</h2><p><code>show profile for query Query_ID</code><br>上面<code>show profiles</code>的结果中，每个 SQL 有一个<code>Query_ID</code>，可以通过它查看执行该 SQL 经过了哪些步骤，各消耗了多场时间</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h1 id="典型的服务器配置"><a href="#典型的服务器配置" class="headerlink" title="典型的服务器配置"></a>典型的服务器配置</h1><blockquote>
+<p>以下的配置全都取决于实际的运行环境</p>
+</blockquote>
+<ul>
+<li><code>max_connections</code>，最大客户端连接数<br>| 123456 | mysql&gt; show variables like ‘max_connections’;+—————–+——-+| Variable_name | Value |+—————–+——-+| max_connections | 151 |+—————–+——-+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>table_open_cache</code>，表文件句柄缓存（表数据是存储在磁盘上的，缓存磁盘文件的句柄方便打开文件读取数据）<br>| 123456 | mysql&gt; show variables like ‘table_open_cache’;+——————+——-+| Variable_name | Value |+——————+——-+| table_open_cache | 2000 |+——————+——-+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>key_buffer_size</code>，索引缓存大小（将从磁盘上读取的索引缓存到内存，可以设置大一些，有利于快速检索）<br>| 123456 | mysql&gt; show variables like ‘key_buffer_size’;+—————–+———+| Variable_name | Value |+—————–+———+| key_buffer_size | 8388608 |+—————–+———+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>innodb_buffer_pool_size</code>，<code>Innodb</code>存储引擎缓存池大小（对于<code>Innodb</code>来说最重要的一个配置，如果所有的表用的都是<code>Innodb</code>，那么甚至建议将该值设置到物理内存的 80%，<code>Innodb</code>的很多性能提升如索引都是依靠这个）<br>| 123456 | mysql&gt; show variables like ‘innodb_buffer_pool_size’;+————————-+———+| Variable_name | Value |+————————-+———+| innodb_buffer_pool_size | 8388608 |+————————-+———+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>innodb_file_per_table</code>（<code>innodb</code>中，表数据存放在<code>.ibd</code>文件中，如果将该配置项设置为<code>ON</code>，那么一个表对应一个<code>ibd</code>文件，否则所有<code>innodb</code>共享表空间）</li>
+</ul>
+<h1 id="压测工具-mysqlslap"><a href="#压测工具-mysqlslap" class="headerlink" title="压测工具 mysqlslap"></a>压测工具 mysqlslap</h1><p>安装 MySQL 时附带了一个压力测试工具<code>mysqlslap</code>（位于<code>bin</code>目录下）</p>
+<h2 id="自动生成-sql-测试"><a href="#自动生成-sql-测试" class="headerlink" title="自动生成 sql 测试"></a>自动生成 sql 测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 1.219 seconds Minimum number of seconds to run all queries: 1.219 seconds Maximum number of seconds to run all queries: 1.219 seconds Number of clients running queries: 1 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="并发测试"><a href="#并发测试" class="headerlink" title="并发测试"></a>并发测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=100 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 3.578 seconds Minimum number of seconds to run all queries: 3.578 seconds Maximum number of seconds to run all queries: 3.578 seconds Number of clients running queries: 100 Average number of queries per client: 0C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.718 seconds Minimum number of seconds to run all queries: 5.718 seconds Maximum number of seconds to run all queries: 5.718 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="多轮测试"><a href="#多轮测试" class="headerlink" title="多轮测试"></a>多轮测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=10 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.398 seconds Minimum number of seconds to run all queries: 4.313 seconds Maximum number of seconds to run all queries: 6.265 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="存储引擎测试"><a href="#存储引擎测试" class="headerlink" title="存储引擎测试"></a>存储引擎测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=innodb -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine innodb Average number of seconds to run all queries: 5.911 seconds Minimum number of seconds to run all queries: 5.485 seconds Maximum number of seconds to run all queries: 6.703 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=myisam -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine myisam Average number of seconds to run all queries: 53.104 seconds Minimum number of seconds to run all queries: 46.843 seconds Maximum number of seconds to run all queries: 60.781 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1031,7 +2689,11 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
+<<<<<<< HEAD
           <a class="article-more-a" href="/2020/05/07/yuque/PMG 模型/">展开全文 >></a>
+=======
+          <a class="article-more-a" href="/2020/03/20/yuque/MySQL 优化/">展开全文 >></a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1063,7 +2725,11 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
+<<<<<<< HEAD
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+=======
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </nav>
   
 
@@ -1178,6 +2844,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+<<<<<<< HEAD
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -1191,6 +2858,21 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+=======
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">read</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+>>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
               </li>
             
             <div class="clearfix"></div>

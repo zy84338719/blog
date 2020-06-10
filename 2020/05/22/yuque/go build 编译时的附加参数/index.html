@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>Golang 系统保留关键字与预定义标识符 | Murphy Yi site</title>
+  <title>go build 编译时的附加参数 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="系统保留关键字break   //退出循环default  //选择结构默认项（switch、select）func   //定义函数interface //定义接口select  //channelcase   //选择结构标签chan   //定义 channelconst   //常量continue  //跳过本次循环defer   //延迟执行内容（收尾工作）go   //并发执行map">
+  <meta name="description" content="go build 编译时的附加参数go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。 go build 编译时的附加参数    附加参数 备   注     -v 编译时显示包名   -p n 开启并发编译，默认情况下该值为 CPU 逻辑核数   -a 强制重新构建   -n 打印编译时会用到的所有命令，但不真正执行   -x 打印编译时会用到的所有命令   -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Golang 系统保留关键字与预定义标识符">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/index.html">
+<meta property="og:title" content="go build 编译时的附加参数">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/22/yuque/go build 编译时的附加参数/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="系统保留关键字break   //退出循环default  //选择结构默认项（switch、select）func   //定义函数interface //定义接口select  //channelcase   //选择结构标签chan   //定义 channelconst   //常量continue  //跳过本次循环defer   //延迟执行内容（收尾工作）go   //并发执行map">
+<meta property="og:description" content="go build 编译时的附加参数go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。 go build 编译时的附加参数    附加参数 备   注     -v 编译时显示包名   -p n 开启并发编译，默认情况下该值为 CPU 逻辑核数   -a 强制重新构建   -n 打印编译时会用到的所有命令，但不真正执行   -x 打印编译时会用到的所有命令   -">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-06-10T09:51:29.305Z">
+<meta property="og:updated_time" content="2020-06-10T09:51:31.621Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Golang 系统保留关键字与预定义标识符">
-<meta name="twitter:description" content="系统保留关键字break   //退出循环default  //选择结构默认项（switch、select）func   //定义函数interface //定义接口select  //channelcase   //选择结构标签chan   //定义 channelconst   //常量continue  //跳过本次循环defer   //延迟执行内容（收尾工作）go   //并发执行map">
+<meta name="twitter:title" content="go build 编译时的附加参数">
+<meta name="twitter:description" content="go build 编译时的附加参数go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。 go build 编译时的附加参数    附加参数 备   注     -v 编译时显示包名   -p n 开启并发编译，默认情况下该值为 CPU 逻辑核数   -a 强制重新构建   -n 打印编译时会用到的所有命令，但不真正执行   -x 打印编译时会用到的所有命令   -">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
   
@@ -180,85 +180,59 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/Golang 系统保留关键字与预定义标识符" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/go build 编译时的附加参数" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Golang 系统保留关键字与预定义标识符
+      go build 编译时的附加参数
     </h1>
   
 
         
-        <a href="/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/" class="archive-article-date">
-  	<time datetime="2020-02-17T12:53:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+        <a href="/2020/05/22/yuque/go build 编译时的附加参数/" class="archive-article-date">
+  	<time datetime="2020-05-22T05:22:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="系统保留关键字"><a href="#系统保留关键字" class="headerlink" title="系统保留关键字"></a>系统保留关键字</h1><p>break   //退出循环<br>default  //选择结构默认项（switch、select）<br>func   //定义函数<br>interface //定义接口<br>select  //channel<br>case   //选择结构标签<br>chan   //定义 channel<br>const   //常量<br>continue  //跳过本次循环<br>defer   //延迟执行内容（收尾工作）<br>go   //并发执行<br>map   //map 类型<br>struct  //定义结构体<br>else   //选择结构<br>goto   //跳转语句<br>package  //包<br>switch  //选择结构<br>fallthrough  //switch 中 继续向下执行<br>if   //选择结构<br>range   //从 slice、map 等结构中取元素<br>type  //定义类型<br>for   //循环<br>import   //导入包<br>return   //返回<br>var  //定义变量</p>
-<h1 id="预定义标识符"><a href="#预定义标识符" class="headerlink" title="预定义标识符"></a>预定义标识符</h1><table>
+        <h2 id="go-build-编译时的附加参数"><a href="#go-build-编译时的附加参数" class="headerlink" title="go build 编译时的附加参数"></a>go build 编译时的附加参数</h2><p>go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。</p>
+<p>go build 编译时的附加参数</p>
+<table>
 <thead>
 <tr>
-<th style="text-align:center">append</th>
-<th style="text-align:center">bool</th>
-<th style="text-align:center">byte</th>
-<th style="text-align:center">cap</th>
-<th style="text-align:center">close</th>
+<th>附加参数</th>
+<th>备   注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">complex</td>
-<td style="text-align:center">complex64</td>
-<td style="text-align:center">complex128</td>
-<td style="text-align:center">uint16</td>
-<td style="text-align:center">copy</td>
+<td>-v</td>
+<td>编译时显示包名</td>
 </tr>
 <tr>
-<td style="text-align:center">false</td>
-<td style="text-align:center">float32</td>
-<td style="text-align:center">float64</td>
-<td style="text-align:center">imag</td>
-<td style="text-align:center">int</td>
+<td>-p n</td>
+<td>开启并发编译，默认情况下该值为 CPU 逻辑核数</td>
 </tr>
 <tr>
-<td style="text-align:center">int8</td>
-<td style="text-align:center">int16</td>
-<td style="text-align:center">uint32</td>
-<td style="text-align:center">int32</td>
-<td style="text-align:center">int64</td>
+<td>-a</td>
+<td>强制重新构建</td>
 </tr>
 <tr>
-<td style="text-align:center">iota</td>
-<td style="text-align:center">len</td>
-<td style="text-align:center">make</td>
-<td style="text-align:center">new</td>
-<td style="text-align:center">nil</td>
+<td>-n</td>
+<td>打印编译时会用到的所有命令，但不真正执行</td>
 </tr>
 <tr>
-<td style="text-align:center">panic</td>
-<td style="text-align:center">uint64</td>
-<td style="text-align:center">print</td>
-<td style="text-align:center">println</td>
-<td style="text-align:center">real</td>
+<td>-x</td>
+<td>打印编译时会用到的所有命令</td>
 </tr>
 <tr>
-<td style="text-align:center">recover</td>
-<td style="text-align:center">string</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">uint</td>
-<td style="text-align:center">uint8</td>
-</tr>
-<tr>
-<td style="text-align:center">uintptr</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
+<td>-race</td>
+<td>开启竞态检测</td>
 </tr>
 </tbody>
 </table>
@@ -351,7 +325,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2020/05/22/yuque/go build 编译时的附加参数/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -365,18 +339,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2020/02/18/yuque/Golang 程序流程控制/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Golang 程序流程控制
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/02/17/yuque/Golang 指针/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Golang 指针</div>
+    <a href="/2020/05/18/yuque/go 面试题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">go 面试题</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -415,7 +380,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'Golang 系统保留关键字与预定义标识符',
+  id: 'go build 编译时的附加参数',
   owner: 'zy84338719',
   repo: 'zy84338719.github.io',
   oauth: {

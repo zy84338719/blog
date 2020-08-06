@@ -181,6 +181,87 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Spring IOC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/05/yuque/Spring IOC/">Spring IOC</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/05/yuque/Spring IOC/" class="archive-article-date">
+  	<time datetime="2018-12-05T06:30:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-1-IoC-是什么"><a href="#1-1-IoC-是什么" class="headerlink" title="1.1  IoC 是什么"></a>1.1  IoC 是什么</h3><p>Ioc—Inversion of Control，即“控制反转”，不是什么技术，而是一种设计思想。在 Java 开发中，Ioc 意味着将你设计好的对象交给容器控制，而不是传统的在你的对象内部直接控制。如何理解好 Ioc 呢？理解好 Ioc 的关键是要明确“谁控制谁，控制什么，为何是反转（有反转就应该有正转了），哪些方面反转了”，那我们来深入分析一下：</p>
+<p>●<strong>谁控制谁，控制什么：</strong>传统 Java SE 程序设计，我们直接在对象内部通过 new 进行创建对象，是程序主动去创建依赖对象；而 IoC 是有专门一个容器来创建这些对象，即由 Ioc 容器来控制对象的创建；谁控制谁？当然是 IoC 容器控制了对象；控制什么？那就是主要控制了外部资源获取（不只是对象包括比如文件等）。</p>
+<p>●<strong>为何是反转，哪些方面反转了：</strong>有反转就有正转，传统应用程序是由我们自己在对象中主动控制去直接获取依赖对象，也就是正转；而反转则是由容器来帮忙创建及注入依赖对象；为何是反转？因为由容器帮我们查找及注入依赖对象，对象只是被动的接受依赖对象，所以是反转；哪些方面反转了？依赖对象的获取被反转了。</p>
+<p>用图例说明一下，传统程序设计如图 2-1，都是主动去创建相关对象然后再组合起来：</p>
+<p><img src="http://sishuok.com/forum/upload/2012/2/19/a02c1e3154ef4be3f15fb91275a26494__1.JPG#width=" alt></p>
+<p>图 2-1 传统应用程序示意图</p>
+<p>当有了 IoC/DI 的容器后，在客户端类中不再主动去创建这些对象了，如图 2-2 所示:</p>
+<p><img src="http://sishuok.com/forum/upload/2012/2/19/6fdf1048726cc2edcac4fca685f050ac__2.JPG#width=" alt></p>
+<p>图 2-2 有 IoC/DI 容器后程序结构示意图</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h3 id="1-2-IoC-能做什么"><a href="#1-2-IoC-能做什么" class="headerlink" title="1.2  IoC 能做什么"></a>1.2  IoC 能做什么</h3><p>IoC 不是一种技术，只是一种思想，一个重要的面向对象编程的法则，它能指导我们如何设计出松耦合、更优良的程序。传统应用程序都是由我们在类内部主动创建依赖对象，从而导致类与类之间高耦合，难于测试；有了 IoC 容器后，把创建和查找依赖对象的控制权交给了容器，由容器进行注入组合对象，所以对象与对象之间是松散耦合，这样也方便测试，利于功能复用，更重要的是使得程序的整个体系结构变得非常灵活。</p>
+<p>其实 IoC 对编程带来的最大改变不是从代码上，而是从思想上，发生了“主从换位”的变化。应用程序原本是老大，要获取什么资源都是主动出击，但是在 IoC/DI 思想中，应用程序就变成被动的了，被动的等待 IoC 容器来创建并注入它所需要的资源了。</p>
+<p>IoC 很好的体现了面向对象设计法则之一—— 好莱坞法则：“别找我们，我们找你”；即由 IoC 容器帮对象找相应的依赖对象并注入，而不是由对象主动去找。</p>
+<h3 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h3><h3 id="1-3-IoC-和-DI"><a href="#1-3-IoC-和-DI" class="headerlink" title="1.3  IoC 和 DI"></a>1.3  IoC 和 DI</h3><p>DI—Dependency Injection，即“依赖注入”：是组件之间依赖关系由容器在运行期决定，形象的说，即由容器动态的将某个依赖关系注入到组件之中。依赖注入的目的并非为软件系统带来更多功能，而是为了提升组件重用的频率，并为系统搭建一个灵活、可扩展的平台。通过依赖注入机制，我们只需要通过简单的配置，而无需任何代码就可指定目标需要的资源，完成自身的业务逻辑，而不需要关心具体的资源来自何处，由谁实现。</p>
+<p>理解 DI 的关键是：“谁依赖谁，为什么需要依赖，谁注入谁，注入了什么”，那我们来深入分析一下：</p>
+<p>●<strong>谁依赖于谁：</strong>当然是某个容器管理对象依赖于 IoC 容器；“被注入对象的对象”依赖于“依赖对象”；</p>
+<p>●<strong>为什么需要依赖：</strong>容器管理对象需要 IoC 容器来提供对象需要的外部资源；</p>
+<p>●<strong>谁注入谁：</strong>很明显是 IoC 容器注入某个对象，也就是注入“依赖对象”；</p>
+<p><strong>● 注入了什么：</strong>就是注入某个对象所需要的外部资源（包括对象、资源、常量数据）。</p>
+<p>IoC 和 DI 由什么关系呢？其实它们是同一个概念的不同角度描述，由于控制反转概念比较含糊（可能只是理解为容器控制对象这一个层面，很难让人想到谁来维护对象关系），所以 2004 年大师级人物 Martin Fowler 又给出了一个新的名字：“依赖注入”，相对 IoC 而言，<strong>“依赖注入”明确描述了“被注入对象依赖 IoC 容器配置依赖对象”。</strong></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/05/yuque/Spring IOC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/分享Bromon的blog上对IoC与DI浅显易懂的讲解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1040,76 +1121,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Java 小抄（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/05/yuque/Java 小抄（一）/">Java 小抄（一）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/05/yuque/Java 小抄（一）/" class="archive-article-date">
-  	<time datetime="2018-11-05T12:24:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之所以把这个文档叫做小抄的原因，是因为这个文档很杂碎，很小的知识点。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#今天看到个东西，🤦‍♂️</span><br><span class="line">System.cout.println();</span><br><span class="line">#注意这是cout。报错没有这个方法</span><br><span class="line">String st = <span class="string">" world"</span>;</span><br><span class="line">st.concat(<span class="string">"hello"</span>);</span><br><span class="line">#注意这个方法返回的是concat会创建一个新的对象，新对象的内容是"hello world";</span><br><span class="line">System.out.println(st);</span><br><span class="line">#结果是 world</span><br></pre></td></tr></table></figure>
-<p>做题做到了这个题，虽然自己知道结果是什么但是忽然想到{}代码块的时候输出顺序是什么！</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> B();</span><br><span class="line">        a=<span class="keyword">new</span> B();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"1"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"a"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;<span class="comment">//静态语块</span></span><br><span class="line">        System.out.println(<span class="string">"2"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;<span class="comment">//构造函数</span></span><br><span class="line">        System.out.println(<span class="string">"B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;<span class="comment">//构造语块</span></span><br><span class="line">        System.out.println(<span class="string">"b"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>虽然这个题很无聊，但是自己还是做的含糊不清。尤其是第二次 a = new B()的时候；发现自己对于这里掌握不是很好。查了一下需要有很多改进的地方。第一静态变量只会加载一次 仅仅是静态加载一次。<br>class B extends A 优先加载两个方法中的静态方法，然后加载静态代码块。<br>总结是优先级：1.静态语块（从父到子）。2.构造语块。3.构造函数</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/05/yuque/Java 小抄（一）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
     </nav>
   
 

@@ -181,6 +181,102 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Mysql 中对 date datetime time timestamp 区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">Mysql 中对 date datetime time timestamp 区别</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/" class="archive-article-date">
+  	<time datetime="2019-04-22T11:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中对于时间的存储自己见表的时候都是设置的 varchar 类型的，感觉挺方便的。<br>昨天拿别人建好的表写代码，发现这张表中时间类型为 datetime 的，凭感觉试了一下不行，网上查了刚开始试了好几个都是不对的，一脸懵逼。</p>
+<hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#align=left&amp;display=inline&amp;height=469&amp;originHeight=634&amp;originWidth=1009&amp;size=0&amp;status=done&amp;width=746" alt></p>
+<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。</p>
+<p>用 navicat 找了一张表添加了一个 timestamp 的字段，如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#align=left&amp;display=inline&amp;height=211&amp;originHeight=211&amp;originWidth=654&amp;size=0&amp;status=done&amp;width=654" alt></p>
+<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,</p>
+<p>言归正传，本次数据库中用的是 datetime 类型的，在 java 中生成可以存储的时间数据方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Date date = new Date();</span><br><span class="line"></span><br><span class="line">Timestamp timeStamep = new Timestamp(date.getTime());</span><br><span class="line"></span><br><span class="line">System.out.println(timeStamep);</span><br><span class="line"></span><br><span class="line">//输出结果： 2016-09-22 10:38:14.964</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Mysql 中对 date datetime time timestamp 区别/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2173,77 +2269,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">mysql 的 服务层和存储引擎层</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/" class="archive-article-date">
-  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
-<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
-<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
-<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
     </nav>
   
 

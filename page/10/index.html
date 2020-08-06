@@ -181,6 +181,74 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">mysql 的 服务层和存储引擎层</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/" class="archive-article-date">
+  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
+<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
+<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
+<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/JDK11新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1290,78 +1358,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Resource    autowired区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/16/yuque/Resource    autowired区别/">Resource    autowired区别</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/16/yuque/Resource    autowired区别/" class="archive-article-date">
-  	<time datetime="2019-01-16T14:18:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>@Resources 是 jdk 的，而@Autowired 的，使用@Resources 解耦。<br>@Resource 的作用相当于@Autowired，只不过@Autowired 按 byType 自动注入，而@Resource 默认按 byName 自动注入罢了。@Resource 有两个属性是比较重要的，分是 name 和 type，Spring 将@Resource 注解的 name 属性解析为 bean 的名字，而 type 属性则解析为 bean 的类型。所以如果使用 name 属性，则使用 byName 的自动注入策略，而使用 type 属性时则使用 byType 自动注入策略。如果既不指定 name 也不指定 type 属性，这时将通过反射机制使用 byName 自动注入策略。<br>@Resource 装配顺序</p>
-<ol>
-<li>如果同时指定了 name 和 type，则从 Spring 上下文中找到唯一匹配的 bean 进行装配，找不到则抛出异常</li>
-<li>如果指定了 name，则从上下文中查找名称（id）匹配的 bean 进行装配，找不到则抛出异常</li>
-<li>如果指定了 type，则从上下文中找到类型匹配的唯一 bean 进行装配，找不到或者找到多个，都会抛出异常</li>
-<li>如果既没有指定 name，又没有指定 type，则自动按照 byName 方式进行装配；如果没有匹配，则回退为一个原始类型进行匹配，如果匹配则自动装配；</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/16/yuque/Resource    autowired区别/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
     </nav>
   
 

@@ -181,6 +181,88 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/go 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/09/yuque/go 锁/">go 锁</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/09/yuque/go 锁/" class="archive-article-date">
+  	<time datetime="2020-05-09T13:47:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>读写锁中的可读锁（<code>sync.RWMutex</code> 的 <code>RLock()</code>）可以嵌套使用的。</li>
+<li>互斥锁（<code>sync.Mutex</code> 和 <code>sync.RWMutex</code> 的 <code>Lock()</code>）是不可以互相嵌套的，且不可以与可读锁嵌套。<blockquote>
+<p>之前我在读写锁和互斥锁上理解有偏差，认为读写锁与互斥锁是完全独立且相互对应的关系。现在理解为 <code>互斥</code> 只是一种特性。而把 <code>sync.Mutex</code> 叫作 <strong>全局锁</strong>， <code>sync.RWMutex</code> 叫作 <strong>读写锁</strong>。<br>全局锁 <code>sync.Mutex</code>，是同一时刻某一资源只能上一个锁，此锁具有排他性，上锁后只能被此线程使用，直至解锁。加锁后即不能读也不能写。全局锁是互斥锁，即 <code>sync.Mutex</code> 是个互斥锁。<br>读写锁 <code>sync.RWMutex</code> ，将使用者分为读者和写者两个概念，支持同时多个读者一起读共享资源，但写时只能有一个，并且在写时不可以读。理论上来说，<code>sync.RWMutex</code> 的 <code>Lock()</code> 也是个互斥锁。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="踩坑点"><a href="#踩坑点" class="headerlink" title="踩坑点"></a>踩坑点</h3><p>将上面的结论展开一下，更清晰得说（为避免理解偏差宁可唠叨一些）：</p>
+<ul>
+<li><code>sync.Mutex</code> 的锁是不可以嵌套使用的。</li>
+<li><code>sync.RWMutex</code> 的 <code>mu.Lock()</code> 是不可以嵌套的。</li>
+<li><code>sync.RWMutex</code> 的 <code>mu.Lock()</code> 中不可以嵌套 <code>mu.RLock()</code>。（这是个注意的地方）</li>
+</ul>
+<p>否则，会 panic <code>fatal error: all goroutines are asleep - deadlock!</code></p>
+<h3 id="实例说明"><a href="#实例说明" class="headerlink" title="实例说明"></a>实例说明</h3><p>所以以下函数不会造成 panic：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var l sync.RWMutex</span><br><span class="line">func readAndRead() &#123; // 可读锁内使用可读锁</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">    lockAndRead()</span><br><span class="line">    time.Sleep(5 * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而将 <code>readAndRead</code> 换为以下三种函数均会造成 panic：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func lockAndLock() &#123; // 全局锁内使用全局锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br><span class="line">func lockAndRead() &#123; // 全局锁内使用可读锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock() // 由于 defer 是栈式执行，所以这两个锁是嵌套结构</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">&#125;</span><br><span class="line">func readAndLock() &#123; // 可读锁内使用全局锁</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>注： 在 goroutine 中的 panic 不会影响主程序，所以在测试时要注意并不是没有 panic 输出就一定是没发生。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/09/yuque/go 锁/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/PMG 模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -824,96 +906,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Mysql 创建索引方法及类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql 创建索引方法及类型/">Mysql 创建索引方法及类型</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql 创建索引方法及类型/" class="archive-article-date">
-  	<time datetime="2020-05-04T22:54:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>类型 4 种<br>1。普通索引 index<br>2。唯一索引 unique<br>3。全文索引 fulltext 不支持中文<br>4。多列值索引  index</p>
-<h3 id="1-1-新建表中添加索引"><a href="#1-1-新建表中添加索引" class="headerlink" title="1.1 新建表中添加索引"></a>1.1 新建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>index index_no(no)<br>) |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>unique index index_no(no)<br>） |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>fulltext index index_no(no) |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>key index_no_name(no,name)<br>) |<br>| — | — |</p>
-<h3 id="1-2-在已建表中添加索引"><a href="#1-2-在已建表中添加索引" class="headerlink" title="1.2 在已建表中添加索引"></a>1.2 在已建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | create index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | create unique index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | create fulltext index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | create index index_name_no<br>on t_dept(name,no) |<br>| — | — |</p>
-<h3 id="1-3-以修改表的方式添加索引"><a href="#1-3-以修改表的方式添加索引" class="headerlink" title="1.3 以修改表的方式添加索引"></a>1.3 以修改表的方式添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add unique index index_name(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add fulltext index_name(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name_no(name,no); |<br>| — | — |</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql 创建索引方法及类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 

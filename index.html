@@ -181,6 +181,168 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/06/yuque/Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~/">Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/06/yuque/Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~/" class="archive-article-date">
+  	<time datetime="2020-08-06T15:42:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="成本-0-元-30-元每年"><a href="#成本-0-元-30-元每年" class="headerlink" title="成本 0 元 / 30 元每年"></a>成本 0 元 / 30 元每年</h4><p>腾讯云/阿里云域名 30 元<br>腾讯云/阿里云云函数<br>hexo 站点工程<br>github 账户<br>语雀</p>
+<p>成果：<br>主站：<a href="https://blog.murphyyi.com/" target="_blank" rel="noopener">https://blog.murphyyi.com/</a><br>github：构建地址<a href="https://github.com/zy84338719/hexo/actions" target="_blank" rel="noopener">https://github.com/zy84338719/hexo/actions</a><br>仓库地址：</p>
+<h1 id="一、Hexo-Github-的痛点"><a href="#一、Hexo-Github-的痛点" class="headerlink" title="一、Hexo+Github 的痛点"></a>一、Hexo+Github 的痛点</h1><h3 id="1-为啥要用-hexo-github？"><a href="#1-为啥要用-hexo-github？" class="headerlink" title="1.为啥要用 hexo+github？"></a>1.为啥要用 hexo+github？</h3><p>作为一个程序猿，博客肯定是必须要有的拉，github 也是必须要混的拉~所以:</p>
+<ul>
+<li>hexo + github = 高大上</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/155457/1546857679810-d82e3d46-e960-419c-a715-0a82c48a2fd6.jpeg#align=left&amp;display=inline&amp;height=225&amp;margin=%5Bobject%20Object%5D&amp;name=image.jpeg&amp;originHeight=225&amp;originWidth=225&amp;size=6267&amp;status=done&amp;style=none&amp;width=225" alt="image.jpeg"></p>
+<h3 id="2-蛋疼的写作体验"><a href="#2-蛋疼的写作体验" class="headerlink" title="2.蛋疼的写作体验"></a>2.蛋疼的写作体验</h3><p>使用 hexo，会面临如下问题：</p>
+<ul>
+<li>博客源码怎么管理？</li>
+<li>图片存在哪？</li>
+<li>如何编写 markdown 文件？</li>
+</ul>
+<p>相信很多人都在使用本地编辑器来写博客，那体验，真心蛋疼，比如说 vscode，可视化插件一般般，图片还不能复制黏贴，想插入个图片还要先保存成文件放在本地，然后再引用，啥？你说七牛云存储？哪有复制黏贴爽呀~<br>当然，博客源码可以使用 github-action 来做持续集成，想写博客或者换个电脑，clone 一下源仓库，写完 push 一下，就可以不用管了。but，比起独立站点的博客，如 wordpress，还是觉得写作体验有点不爽。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/155457/1546858156666-f3f7ae20-c7f8-49b9-849d-b4364f3685f7.jpeg#align=left&amp;display=inline&amp;height=213&amp;margin=%5Bobject%20Object%5D&amp;name=image.jpeg&amp;originHeight=213&amp;originWidth=237&amp;size=5810&amp;status=done&amp;style=none&amp;width=237" alt="image.jpeg"></p>
+<h1 id="二、具体流程"><a href="#二、具体流程" class="headerlink" title="二、具体流程"></a>二、具体流程</h1><ol>
+<li>Hexo 博客搭建好，将源码上传到 Github，私有还是公有库都可以</li>
+<li>在 Github 中开启 Github Actions 服务，配置 yaml 格式的 deploy 脚本</li>
+<li>注册语雀，创建知识库并发布一篇文章，必须发布过文章，因为 yuque-hexo 会删除 _posts 文件夹</li>
+<li>编写 serverless 函数，测试可以触发 Github Actions，获取触发地址</li>
+<li>配置语雀的 webhook，使其可调用 serverless 函数</li>
+<li>语雀编写文章后触发 Github Actions 实现 Hexo 的自动部署，生成静态文件并发布</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596732283938-9607a4cf-1d21-4585-9952-7103b5956b83.png#align=left&amp;display=inline&amp;height=130&amp;margin=%5Bobject%20Object%5D&amp;originHeight=130&amp;originWidth=722&amp;size=0&amp;status=done&amp;style=none&amp;width=722" alt><br><strong>下面以 Github Actions 将 Hexo 生成的静态页面推送到 Github Pages 举例</strong></p>
+<h3 id="创建-Github-Pages"><a href="#创建-Github-Pages" class="headerlink" title="创建 Github Pages"></a>创建 Github Pages</h3><ol>
+<li>登录 github</li>
+<li>创建项目，项目名字<code>username.github.io</code>，必须为公开库</li>
+</ol>
+<h3 id="创建-Hexo-博客并配置"><a href="#创建-Hexo-博客并配置" class="headerlink" title="创建 Hexo 博客并配置"></a>创建 Hexo 博客并配置</h3><p>可参考：</p>
+<ul>
+<li><a href="https://www.zhwei.cn/go.html?u=aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAxNzk4Njc5NA==" target="_blank" rel="noopener">超详细 Hexo+Github Page 搭建技术博客教程【持续更新】</a></li>
+<li>教程非常多，善用搜索</li>
+</ul>
+<p>配置完成，本地预览达到自己满意，编写文章发布一切搞定后就能继续了。</p>
+<p>搭建完成效果：<a href="https://github.com/zy84338719/blog" target="_blank" rel="noopener">https://github.com/zy84338719/blog</a><br>页面地址：<a href="https://blog.murphyyi.com/" target="_blank" rel="noopener">https://blog.murphyyi.com</a></p>
+<h1 id="三、配置-Github-Actions-脚本"><a href="#三、配置-Github-Actions-脚本" class="headerlink" title="三、配置 Github Actions 脚本"></a>三、配置 Github Actions 脚本</h1><p>两种方法配置，内容一样</p>
+<ol>
+<li>在 Hexo 源码仓库的页面选择 Actions–&gt;Set up a workflow yourself，进行网页编写</li>
+<li>在本地环境根目录创建.github/workflows 文件夹，里面放写好的 yaml 脚本</li>
+</ol>
+<p>脚本我以一种举例，其他方法同样可以实现，请查看<a href="http://blog.murphyyi.com" target="_blank" rel="noopener">我的博客</a><br>如：<a href="xo/blob/master/.github/workflows/main.yml">我的例子</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># workflow name</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">To</span> <span class="string">Github</span> <span class="string">Pages</span></span><br><span class="line"><span class="comment"># 当有 push 到仓库和外部触发的时候就运行</span></span><br><span class="line"><span class="attr">on:</span> <span class="string">[push,</span> <span class="string">repository_dispatch]</span></span><br><span class="line"><span class="comment"># YUQUE_TOKEN</span></span><br><span class="line"><span class="comment"># Github_SSH_PRIVATE_KEY</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">Hexo</span> <span class="string">Public</span> <span class="string">To</span> <span class="string">Pages</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="comment"># check it to your workflow can access it</span></span><br><span class="line">    <span class="comment"># from: https://github.com/actions/checkout</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">Repository</span> <span class="string">master</span> <span class="string">branch</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/checkout@master</span></span><br><span class="line">    <span class="comment"># from: https://github.com/actions/setup-node</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Node.js</span> <span class="number">10.</span><span class="string">x</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-node@master</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">node-version:</span> <span class="string">"10.x"</span></span><br><span class="line">    <span class="comment"># from https://github.com/x-cold/yuque-hexo</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Hexo</span> <span class="string">Dependencies</span> <span class="string">and</span> <span class="string">Generate</span> <span class="string">Public</span> <span class="string">Files</span></span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="attr">YUQUE_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.YUQUE_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-cli</span> <span class="string">-g</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span> <span class="string">yuque-hexo</span> <span class="string">-g</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">run</span> <span class="string">start</span></span><br><span class="line">    <span class="comment"># from https://github.com/peaceiris/actions-gh-pages</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">deploy_key:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.Github_SSH_PRIVATE_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">external_repository:</span> <span class="string">用户名/仓库</span></span><br><span class="line">          <span class="attr">publish_branch:</span> <span class="string">master</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./public</span></span><br><span class="line">          <span class="attr">commit_message:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.event.head_commit.message</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这个脚本实现了发布 Hexo 的 Public 到 Pages，这只是一种方法，你也可以使用 hexo d 、API、github-pages-deploy-action 等形式进行发布。<br>但是现在你还不能运行，因为里面的隐藏参数还没有设置<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596732133070-ccd4c30e-b0e9-4bdf-96e5-972d059d3f45.png#align=left&amp;display=inline&amp;height=868&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1736&amp;originWidth=2692&amp;size=896243&amp;status=done&amp;style=none&amp;width=1346" alt="image.png"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">YUQUE_TOKEN_INFO</td>
+<td style="text-align:left">从语雀获取的 TOKEN，语雀上点击个人头像 –&gt; 设置 –&gt; Token 即可获取，要在 Hexo 源仓库的 Settings–&gt;Secrets 中进行添加，对重要信息进行保密</td>
+</tr>
+<tr>
+<td style="text-align:left">ACCESS_TOKEN</td>
+<td style="text-align:left">是<code>SSH-Key</code>密钥中的私钥，需要在<code>Secrets</code>中进行添加，公钥（.pub）已经存储在 Github 中</td>
+</tr>
+</tbody>
+</table>
+<p>##</p>
+<h1 id="四、配置腾讯-serverless-云函数"><a href="#四、配置腾讯-serverless-云函数" class="headerlink" title="四、配置腾讯 serverless 云函数"></a>四、配置腾讯 serverless 云函数</h1><pre><code>1. 登录腾讯云，搜索云函数，创建
+1. 选择 `python`，2.7 和 3.6 都行，空白函数
+1. 运行角色，`SCF_QcsRole`即可
+1. 注意执行方法，有强制要求
+</code></pre><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384266-b3f5c22e-ac6a-4543-8ecd-2915bcdc7282.png#align=left&amp;display=inline&amp;height=482&amp;margin=%5Bobject%20Object%5D&amp;originHeight=482&amp;originWidth=889&amp;size=0&amp;status=done&amp;style=none&amp;width=889" alt></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384296-c85b1249-e902-4edf-9ab1-fb93d0626d01.png#align=left&amp;display=inline&amp;height=696&amp;margin=%5Bobject%20Object%5D&amp;originHeight=696&amp;originWidth=892&amp;size=0&amp;status=done&amp;style=none&amp;width=892" alt><br>这里我使用的是 python 2.7</p>
+<p>python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main_handler</span><span class="params">(event, context)</span>:</span></span><br><span class="line">    r = requests.post(<span class="string">"https://api.github.com/repos/用户名/仓库名/dispatches"</span>,</span><br><span class="line">    json = &#123;<span class="string">"event_type"</span>: <span class="string">"start"</span>&#125;,</span><br><span class="line">    headers = &#123;<span class="string">"User-Agent"</span>:<span class="string">'curl/7.52.1'</span>,</span><br><span class="line">              <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</span><br><span class="line">              <span class="string">'Accept'</span>: <span class="string">'application/vnd.github.everest-preview+json'</span>,</span><br><span class="line">              <span class="string">'Authorization'</span>: <span class="string">'token Github访问Token'</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> r.status_code == <span class="number">204</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"This's OK!"</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> r.status_code</span><br></pre></td></tr></table></figure>
+<p>在函数代码中测试一下，如果 Actions 正常触发，大功告成</p>
+<pre><code>1. 配置触发方式，保存，获取到 访问路径，后面要用到
+- 触发方式：API 网关触发器
+- API 服务类型：新建 API 服务
+- API 服务：SCF_API_SERVICE
+- 请求方法：ANY
+- 发布环境：发布
+- 鉴权方法：免鉴权
+- 启动集成响应：未启用
+</code></pre><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384298-e0fe2aa7-3059-44b2-bea3-4692d0a11861.png#align=left&amp;display=inline&amp;height=661&amp;margin=%5Bobject%20Object%5D&amp;originHeight=661&amp;originWidth=903&amp;size=0&amp;status=done&amp;style=none&amp;width=903" alt></p>
+<h1 id="五、配置语雀"><a href="#五、配置语雀" class="headerlink" title="五、配置语雀"></a>五、配置语雀</h1><ol>
+<li>注册，登录<ol>
+<li>创建知识库–&gt;文档知识库–&gt;可见范围为互联网可见</li>
+<li>工作台–&gt;知识库–&gt;找到新创建的知识库，管理–&gt;设置–&gt;路径进行自定义，后面有用</li>
+</ol>
+</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729378392-5d23999e-99e3-40ea-b9d5-c8a287f28460.png#align=left&amp;display=inline&amp;height=694&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1388&amp;originWidth=2080&amp;size=239330&amp;status=done&amp;style=none&amp;width=1040" alt="image.png"></p>
+<pre><code>1. 工作台–&gt;知识库–&gt;找到新创建的知识库，管理–&gt;设置–&gt;开发者–&gt;名称任意。URL 为云函数的地址，即上面获取到的 **访问路径**
+</code></pre><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729424249-b1cba960-3f4c-4ea2-8b0e-9438f5fb15ff.png#align=left&amp;display=inline&amp;height=756&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1512&amp;originWidth=2332&amp;size=380511&amp;status=done&amp;style=none&amp;width=1166" alt="image.png"><br>权限建议选择</p>
+<pre><code>- 仅主动推送更新触发（强烈建议）
+- 发布文档
+- 更新文档
+- 删除文档
+</code></pre><p>可本地更新后 push 或者直接在 github 网页修改<br>先安装 <a href="https://www.zhwei.cn/go.html?u=aHR0cHM6Ly9naXRodWIuY29tL3gtY29sZC95dXF1ZS1oZXhv" target="_blank" rel="noopener">yuque-hexo</a></p>
+<p>bash</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install yuque-hexo --save</span><br></pre></td></tr></table></figure>
+<p>编辑 package.json 文件，添加以下内容<br>Npm 脚本 “start” 和 “yuqueConfig”，将操作命令合并为一个脚本，只需要执行 npm run start 即可完成语雀的同步和 Hexo 的清理和静态文件生成</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "start": "yuque-hexo clean &amp;&amp; yuque-hexo sync &amp;&amp; hexo clean &amp;&amp; hexo generate",</span><br><span class="line">    "build": "hexo generate",</span><br><span class="line">    "clean": "hexo clean",</span><br><span class="line">    "deploy": "hexo deploy",</span><br><span class="line">    "server": "hexo server"</span><br><span class="line">  &#125;,</span><br><span class="line"> ...</span><br><span class="line">  "yuqueConfig": &#123;</span><br><span class="line">    "baseUrl": "https://www.yuque.com/api/v2",</span><br><span class="line">    "login": "语雀个人路径",</span><br><span class="line">    "repo": "知识库名称",</span><br><span class="line">    "mdNameFormat": "title",</span><br><span class="line">    "postPath": "source/_posts",</span><br><span class="line">    "onlyPublished": false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例子：<a href="https://github.com/zy84338719/hexo/blob/master/package.json" target="_blank" rel="noopener">https://github.com/zy84338719/hexo/blob/master/package.json</a></p>
+<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/06/yuque/Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/go build 编译时的附加参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -3080,120 +3242,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/计算机操作系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/yuque/计算机操作系统/">计算机操作系统</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/15/yuque/计算机操作系统/" class="archive-article-date">
-  	<time datetime="2020-05-15T15:29:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="基本特征"><a href="#基本特征" class="headerlink" title="基本特征"></a>基本特征</h1><h2 id="1-并发"><a href="#1-并发" class="headerlink" title="1. 并发"></a>1. 并发</h2><p>并发是指宏观上在一段时间内能同时运行多个程序，而并行则指同一时刻能运行多个指令。<br>并行需要硬件支持，如多流水线、多核处理器或者分布式计算系统。<br>操作系统通过引入进程和线程，使得程序能够并发运行。</p>
-<h2 id="2-共享"><a href="#2-共享" class="headerlink" title="2. 共享"></a>2. 共享</h2><p>共享是指系统中的资源可以被多个并发进程共同使用。<br>有两种共享方式：互斥共享和同时共享。<br>互斥共享的资源称为临界资源，例如打印机等，在同一时刻只允许一个进程访问，需要用同步机制来实现互斥访问。</p>
-<h2 id="3-虚拟"><a href="#3-虚拟" class="headerlink" title="3. 虚拟"></a>3. 虚拟</h2><p>虚拟技术把一个物理实体转换为多个逻辑实体。<br>主要有两种虚拟技术：时（时间）分复用技术和空（空间）分复用技术。<br>多个进程能在同一个处理器上并发执行使用了时分复用技术，让每个进程轮流占用处理器，每次只执行一小个时间片并快速切换。<br>虚拟内存使用了空分复用技术，它将物理内存抽象为地址空间，每个进程都有各自的地址空间。地址空间的页被映射到物理内存，地址空间的页并不需要全部在物理内存中，当使用到一个没有在物理内存的页时，执行页面置换算法，将该页置换到内存中。</p>
-<h2 id="4-异步"><a href="#4-异步" class="headerlink" title="4. 异步"></a>4. 异步</h2><p>异步指进程不是一次性执行完毕，而是走走停停，以不可知的速度向前推进。</p>
-<h1 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h1><h2 id="1-进程管理"><a href="#1-进程管理" class="headerlink" title="1. 进程管理"></a>1. 进程管理</h2><p>进程控制、进程同步、进程通信、死锁处理、处理机调度等。</p>
-<h2 id="2-内存管理"><a href="#2-内存管理" class="headerlink" title="2. 内存管理"></a>2. 内存管理</h2><p>内存分配、地址映射、内存保护与共享、虚拟内存等。</p>
-<h2 id="3-文件管理"><a href="#3-文件管理" class="headerlink" title="3. 文件管理"></a>3. 文件管理</h2><p>文件存储空间的管理、目录管理、文件读写管理和保护等。</p>
-<h2 id="4-设备管理"><a href="#4-设备管理" class="headerlink" title="4. 设备管理"></a>4. 设备管理</h2><p>完成用户的 I/O 请求，方便用户使用各种设备，并提高设备的利用率。<br>主要包括缓冲管理、设备分配、设备处理、虛拟设备等。</p>
-<h1 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h1><p>如果一个进程在用户态需要使用内核态的功能，就进行系统调用从而陷入内核，由操作系统代为完成。<br><a href="https://camo.githubusercontent.com/d7f2c82674fb1fc7c275a3777e267da74734ce4e/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f74475056302e706e67" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/d7f2c82674fb1fc7c275a3777e267da74734ce4e/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f74475056302e706e67#align=left&amp;display=inline&amp;height=462&amp;margin=%5Bobject%20Object%5D&amp;originHeight=462&amp;originWidth=753&amp;status=done&amp;style=none&amp;width=600" alt></a></p>
-<p>Linux 的系统调用主要有以下这些：</p>
-<table>
-<thead>
-<tr>
-<th>Task</th>
-<th>Commands</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>进程控制</td>
-<td>fork(); exit(); wait();</td>
-</tr>
-<tr>
-<td>进程通信</td>
-<td>pipe(); shmget(); mmap();</td>
-</tr>
-<tr>
-<td>文件操作</td>
-<td>open(); read(); write();</td>
-</tr>
-<tr>
-<td>设备操作</td>
-<td>ioctl(); read(); write();</td>
-</tr>
-<tr>
-<td>信息维护</td>
-<td>getpid(); alarm(); sleep();</td>
-</tr>
-<tr>
-<td>安全</td>
-<td>chmod(); umask(); chown();</td>
-</tr>
-</tbody>
-</table>
-<h1 id="大内核和微内核"><a href="#大内核和微内核" class="headerlink" title="大内核和微内核"></a>大内核和微内核</h1><h2 id="1-大内核"><a href="#1-大内核" class="headerlink" title="1. 大内核"></a>1. 大内核</h2><p>大内核是将操作系统功能作为一个紧密结合的整体放到内核。<br>由于各模块共享信息，因此有很高的性能。</p>
-<h2 id="2-微内核"><a href="#2-微内核" class="headerlink" title="2. 微内核"></a>2. 微内核</h2><p>由于操作系统不断复杂，因此将一部分操作系统功能移出内核，从而降低内核的复杂性。移出的部分根据分层的原则划分成若干服务，相互独立。<br>在微内核结构下，操作系统被划分成小的、定义良好的模块，只有微内核这一个模块运行在内核态，其余模块运行在用户态。<br>因为需要频繁地在用户态和核心态之间进行切换，所以会有一定的性能损失。<br><a href="https://camo.githubusercontent.com/c2721db9fbb427d810a78113af34ccfc6adf4bdd/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f325f31345f6d6963726f6b65726e656c4172636869746563747572652e6a7067" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/c2721db9fbb427d810a78113af34ccfc6adf4bdd/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f325f31345f6d6963726f6b65726e656c4172636869746563747572652e6a7067#align=left&amp;display=inline&amp;height=295&amp;margin=%5Bobject%20Object%5D&amp;originHeight=295&amp;originWidth=609&amp;status=done&amp;style=none&amp;width=609" alt></a></p>
-<h1 id="中断分类"><a href="#中断分类" class="headerlink" title="中断分类"></a>中断分类</h1><h2 id="1-外中断"><a href="#1-外中断" class="headerlink" title="1. 外中断"></a>1. 外中断</h2><p>由 CPU 执行指令以外的事件引起，如 I/O 完成中断，表示设备输入/输出处理已经完成，处理器能够发送下一个输入/输出请求。此外还有时钟中断、控制台中断等。</p>
-<h2 id="2-异常"><a href="#2-异常" class="headerlink" title="2. 异常"></a>2. 异常</h2><p>由 CPU 执行指令的内部事件引起，如非法操作码、地址越界、算术溢出等。</p>
-<h2 id="3-陷入"><a href="#3-陷入" class="headerlink" title="3. 陷入"></a>3. 陷入</h2><p>在用户程序中使用系统调用。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/15/yuque/计算机操作系统/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 

@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384298-e0fe2aa7-3059-44b2-bea3-4692d0a11861.png#align=left&display=inline&height=661&margin=%5Bobject%20Object%5D&originHeight=661&originWidth=903&size=0&status=done&style=none&width=903">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729378392-5d23999e-99e3-40ea-b9d5-c8a287f28460.png#align=left&display=inline&height=694&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1388&originWidth=2080&size=239330&status=done&style=none&width=1040">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729424249-b1cba960-3f4c-4ea2-8b0e-9438f5fb15ff.png#align=left&display=inline&height=756&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1512&originWidth=2332&size=380511&status=done&style=none&width=1166">
-<meta property="og:updated_time" content="2020-08-06T16:58:58.231Z">
+<meta property="og:updated_time" content="2020-08-07T07:04:28.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~">
 <meta name="twitter:description" content="成本 0 元 / 30 元每年腾讯云/阿里云域名 30 元腾讯云/阿里云云函数hexo 站点工程github 账户语雀 成果：主站：https://blog.murphyyi.com/github：构建地址https://github.com/zy84338719/hexo/actions仓库地址： 一、Hexo+Github 的痛点1.为啥要用 hexo+github？作为一个程序猿，博客肯定是">
@@ -271,7 +271,6 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
-<p>##</p>
 <h1 id="四、配置腾讯-serverless-云函数"><a href="#四、配置腾讯-serverless-云函数" class="headerlink" title="四、配置腾讯 serverless 云函数"></a>四、配置腾讯 serverless 云函数</h1><pre><code>1. 登录腾讯云，搜索云函数，创建
 1. 选择 `python`，2.7 和 3.6 都行，空白函数
 1. 运行角色，`SCF_QcsRole`即可
@@ -310,7 +309,8 @@ var _hmt = _hmt || [];
 <p>编辑 package.json 文件，添加以下内容<br>Npm 脚本 “start” 和 “yuqueConfig”，将操作命令合并为一个脚本，只需要执行 npm run start 即可完成语雀的同步和 Hexo 的清理和静态文件生成</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "start": "yuque-hexo clean &amp;&amp; yuque-hexo sync &amp;&amp; hexo clean &amp;&amp; hexo generate",</span><br><span class="line">    "build": "hexo generate",</span><br><span class="line">    "clean": "hexo clean",</span><br><span class="line">    "deploy": "hexo deploy",</span><br><span class="line">    "server": "hexo server"</span><br><span class="line">  &#125;,</span><br><span class="line"> ...</span><br><span class="line">  "yuqueConfig": &#123;</span><br><span class="line">    "baseUrl": "https://www.yuque.com/api/v2",</span><br><span class="line">    "login": "语雀个人路径",</span><br><span class="line">    "repo": "知识库名称",</span><br><span class="line">    "mdNameFormat": "title",</span><br><span class="line">    "postPath": "source/_posts",</span><br><span class="line">    "onlyPublished": false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>例子：<a href="https://github.com/zy84338719/hexo/blob/master/package.json" target="_blank" rel="noopener">https://github.com/zy84338719/hexo/blob/master/package.json</a></p>
-<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1>
+<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1><p>1</p>
+
       
 
       

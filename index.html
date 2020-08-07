@@ -262,7 +262,6 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
-<p>##</p>
 <h1 id="四、配置腾讯-serverless-云函数"><a href="#四、配置腾讯-serverless-云函数" class="headerlink" title="四、配置腾讯 serverless 云函数"></a>四、配置腾讯 serverless 云函数</h1><pre><code>1. 登录腾讯云，搜索云函数，创建
 1. 选择 `python`，2.7 和 3.6 都行，空白函数
 1. 运行角色，`SCF_QcsRole`即可
@@ -301,7 +300,8 @@ var _hmt = _hmt || [];
 <p>编辑 package.json 文件，添加以下内容<br>Npm 脚本 “start” 和 “yuqueConfig”，将操作命令合并为一个脚本，只需要执行 npm run start 即可完成语雀的同步和 Hexo 的清理和静态文件生成</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "start": "yuque-hexo clean &amp;&amp; yuque-hexo sync &amp;&amp; hexo clean &amp;&amp; hexo generate",</span><br><span class="line">    "build": "hexo generate",</span><br><span class="line">    "clean": "hexo clean",</span><br><span class="line">    "deploy": "hexo deploy",</span><br><span class="line">    "server": "hexo server"</span><br><span class="line">  &#125;,</span><br><span class="line"> ...</span><br><span class="line">  "yuqueConfig": &#123;</span><br><span class="line">    "baseUrl": "https://www.yuque.com/api/v2",</span><br><span class="line">    "login": "语雀个人路径",</span><br><span class="line">    "repo": "知识库名称",</span><br><span class="line">    "mdNameFormat": "title",</span><br><span class="line">    "postPath": "source/_posts",</span><br><span class="line">    "onlyPublished": false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>例子：<a href="https://github.com/zy84338719/hexo/blob/master/package.json" target="_blank" rel="noopener">https://github.com/zy84338719/hexo/blob/master/package.json</a></p>
-<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1>
+<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1><p>1</p>
+
       
 
       

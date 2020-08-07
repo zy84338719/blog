@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block7.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
 <meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block8.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
 <meta property="og:image" content="https://i6448038.github.io/img/channel/hchan_block9.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800">
-<meta property="og:updated_time" content="2020-05-18T12:34:06.289Z">
+<meta property="og:updated_time" content="2020-08-06T16:58:59.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="channel的整体结构图">
 <meta name="twitter:description" content="channel 的整体结构图简单说明：  buf是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表 sendx和recvx用于记录buf这个循环链表中的发送或者接收的 index lock是个互斥锁。 recvq和sendq分别是接收(&amp;lt;-channel)或者发送(channel &amp;lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向">

@@ -181,327 +181,51 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-<<<<<<< HEAD
-    <article id="post-yuque/GO(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+    <article id="post-yuque/《Murphy‘s Law》 墨菲定律" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2019/10/20/yuque/GO(一)/">GO(一)</a>
-=======
-      <a class="article-title" href="/2019/04/09/yuque/dockerfile 的学习/">dockerfile 的学习</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="article-title" href="/2019/10/26/yuque/《Murphy‘s Law》 墨菲定律/">《Murphy‘s Law》 墨菲定律</a>
     </h1>
   
 
         
-<<<<<<< HEAD
-        <a href="/2019/10/20/yuque/GO(一)/" class="archive-article-date">
-  	<time datetime="2019-10-20T06:28:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
-=======
-        <a href="/2019/04/09/yuque/dockerfile 的学习/" class="archive-article-date">
-  	<time datetime="2019-04-09T07:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+        <a href="/2019/10/26/yuque/《Murphy‘s Law》 墨菲定律/" class="archive-article-date">
+  	<time datetime="2019-10-26T10:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
-        <p>本文确保你一定安装了 brew 包管理器<br>macOS 安装 Golang 过程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">mkdir ~/go_work</span><br><span class="line">mkdir ~/go_work/bin</span><br><span class="line">mkdir ~/go_work/pkg</span><br><span class="line">mkdir ~/go_work/src</span><br><span class="line"></span><br><span class="line">echo "export GOROOT=/usr/local/opt/go/libexec" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOPATH=~/go_work" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOBIN=~/go_work/bin" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export PATH=$PATH:$GOROOT/bin:$GOPATH:$GOBIN" &gt;&gt; ~.zshrc</span><br></pre></td></tr></table></figure>
-=======
-        <p>在  <a href="https://mrbird.cc/Docker-Image-Container.html" target="_blank" rel="noopener">Docker 镜像与容器</a>  一节中我们通过 Dockerfile 构建了镜像，这节我们来了解下 Dockerfile 的语法。Dockerfile 包含了诸多关键字，所以要学习 Dockerfile 的用法，得先从这些关键字入手。</p>
-<h2 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h2><p>位于 Dockerfile 开头，表示基于什么镜像构建：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">12</th>
-<th style="text-align:left">FROM scratch # 制作 base imageFROM ubuntu:16.04 #使用 ubuntu:16.04 这个 image</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>出于安全考虑，最好使用官方的 image 作为 base image。</p>
-<h2 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h2><p>Dockerfile 的元数据，描述作用。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1</th>
-<th style="text-align:left">LABEL version=”1.0” author=”mrbird” description=”dockerfile demo”</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>Dockerfile 最好都要有元数据，这样更易于理解。</p>
-<h2 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h2><p>运行命令，每次 run 都会生成一个图层，所以最好将命令合并:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">FROM ubuntuRUN apt-get update \ &amp;&amp; apt-get install -y vim</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p><code>\</code>换行</p>
-<h2 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="WORKDIR"></a>WORKDIR</h2><p>用于指定工作目录，切换路径：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1234</th>
-<th style="text-align:left">FROM ubuntuWORKDIR /test # 没有则自动创建 test 目录 WORKDIR demoRUN pwd</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>输出 /test/demo。<br>最好不要用 RUN cd 来切换目录，而使用 WORKDIR，这样可以减少不必要的图层，尽量使用绝对目录。</p>
-<h2 id="ADD-amp-COPY"><a href="#ADD-amp-COPY" class="headerlink" title="ADD &amp; COPY"></a>ADD &amp; COPY</h2><p>ADD 和 COPY 都可以将构建环境中的文件或目录复制到镜像中，比如</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">12</th>
-<th style="text-align:left">WORKDIR /demoADD test test/</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">12</th>
-<th style="text-align:left">WORKDIR /demoCOPY test test/</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>最终都会将 test 文件添加到/demo/test/目录下。<br>区别：</p>
-<ol>
-<li><p>ADD 添加的文件是压缩文件的话，会自动解压。</p>
-</li>
-<li><p>COPY 只能复制构建目录下的文件，ADD 可以添加一个构建上下文中的文件或目录，也可以是一个 URL，如：</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1</th>
-<th style="text-align:left">ADD <a href="http://wordpress.org/latest.zip" target="_blank" rel="noopener">http://wordpress.org/latest.zip</a> /</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<h2 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h2><p>设置环境变量常量。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">12</th>
-<th style="text-align:left">ENV MYSQL_VERSION 5.7RUN apt-get install -y mysql-server=”\${MYSQL_VERSION}”</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>通过设定常量，可以提高可维护性。</p>
-<h2 id="VOLUME-amp-EXPOSE"><a href="#VOLUME-amp-EXPOSE" class="headerlink" title="VOLUME &amp; EXPOSE"></a>VOLUME &amp; EXPOSE</h2><p>存储和网络，这里先略，后面学习到这一块再说。</p>
-<h2 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h2><ol>
-<li><p>设置容器启动后默认执行的命令和参数。</p>
-</li>
-<li><p>docker run 指定了其他命令，CMD 命令会被忽略。</p>
-</li>
-<li><p>定义了多个 CMD，只有最后一个有效。</p>
-</li>
-</ol>
-<p>比如有如下 Dockerfile：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1234</th>
-<th style="text-align:left">FROM ubuntuENV name mrbirdCMD echo “hello docker”CMD echo “hello \$name”</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>构建镜像，运行：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1</th>
-<th style="text-align:left">docker run [image]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>输出 hello mrbird。<br>如果运行：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">1</th>
-<th style="text-align:left">docker run -it [image] /bin/bash</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>则没有输出。</p>
-<h2 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h2><ol>
-<li><p>设置容器启动时运行的命令。</p>
-</li>
-<li><p>不会被忽略，一定会执行。</p>
-</li>
-<li><p>一般写一个 shell 脚本作为 ENTRYPOINT。</p>
-</li>
-</ol>
-<p>比如 mongodb 官方 Dockerfile 末尾一段：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">12345</th>
-<th style="text-align:left">COPY docker-entrypoint.sh /usr/local/bin/ENTRYPOINT [“docker-entrypoint.sh”]EXPOSE 27017CMD [“mongod”]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>ENTRYPOINT 和 CMD 结合使用有一个技巧：<br>比如有如下一个 Dockerfile：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">FROM ubuntuENTRYPOINT [“/bin/ls”]CMD []</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>意思是在 ubuntu 这个镜像上构建，通过 ENTRYPOINT 运行/bin/ls 命令，然后<code>CMD []</code>这行可以介绍额外的参数选项。<br>通过这个 Dockerfile 构建镜像后(image id 为 95c35bb00761)，分别运行下面这些命令来创建容器：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554795567882-75cc977e-f3e2-447d-8969-f6feb955605d.png#align=left&amp;display=inline&amp;height=543&amp;originHeight=543&amp;originWidth=555&amp;size=0&amp;status=done&amp;width=555" alt>ker<br>可以看到我们通过相同的镜像构建出了不同的容器。</p>
-<h2 id="Shell-和-Exec-格式"><a href="#Shell-和-Exec-格式" class="headerlink" title="Shell 和 Exec 格式"></a>Shell 和 Exec 格式</h2><p>在 Dockerfile 中，命令的写法有 Shell 格式和 Exec 格式：<br>Shell 格式的 Dockerfile 如下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">RUN apt-get install -y vimCMD echo “hello world”ENTRYPOINTT echo “hello world”</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>Exec 格式如下所示:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">RUN [“apt-get”,”install”,”-y”,”vim”]CMD [“/bin/echo”,”hello world”]ENTRYPOINTT [“/bin/echo”,”hello world”]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>在使用 Exec 格式的时候需要注意和常量的搭配使用问题，比如在 Shell 格式下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">FROM ubuntuENV name mrbirdENTRYPOINTER echo “hello \$name”</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>创建镜像，运行容器后输出：hello mrbird。<br>但是在 Exec 格式下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/echo”,”hello $name”]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>创建镜像，运行容器后输出：hello \$name。<br>正确的写法是:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">123</th>
-<th style="text-align:left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/bash”,”-c”,”echo hello $name”]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>参考文档：<a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/</a></p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+        <h2 id="tags-read"><a href="#tags-read" class="headerlink" title="tags: [read]"></a>tags: [read]</h2><p>categories: 课外阅读</p>
+<hr>
+<h2 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h2><blockquote>
+</blockquote>
+<h4 id="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"><a href="#墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。" class="headerlink" title="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"></a>墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。</h4><blockquote>
+</blockquote>
+<h4 id="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"><a href="#墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。" class="headerlink" title="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"></a>墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。</h4><p>##</p>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="镜中我效应：突破思维界限，认识真实的自我"><a href="#镜中我效应：突破思维界限，认识真实的自我" class="headerlink" title="镜中我效应：突破思维界限，认识真实的自我"></a>镜中我效应：突破思维界限，认识真实的自我</h3><h4 id="镜中我效应：“镜中我”与“真实我”"><a href="#镜中我效应：“镜中我”与“真实我”" class="headerlink" title="镜中我效应：“镜中我”与“真实我”"></a>镜中我效应：“镜中我”与“真实我”</h4><h4 id="自我服务偏见：我很优秀，而你只是运气好。"><a href="#自我服务偏见：我很优秀，而你只是运气好。" class="headerlink" title="自我服务偏见：我很优秀，而你只是运气好。"></a>自我服务偏见：我很优秀，而你只是运气好。</h4><h4 id="沉锚效应：被沉锚带偏的“独立思考”"><a href="#沉锚效应：被沉锚带偏的“独立思考”" class="headerlink" title="沉锚效应：被沉锚带偏的“独立思考”"></a>沉锚效应：被沉锚带偏的“独立思考”</h4><h4 id="瓦达伦效应：越在意的，就越容易失去"><a href="#瓦达伦效应：越在意的，就越容易失去" class="headerlink" title="瓦达伦效应：越在意的，就越容易失去"></a>瓦达伦效应：越在意的，就越容易失去</h4><h4 id="库里肖夫效应：眼中世界，其实就是内心的世界"><a href="#库里肖夫效应：眼中世界，其实就是内心的世界" class="headerlink" title="库里肖夫效应：眼中世界，其实就是内心的世界"></a>库里肖夫效应：眼中世界，其实就是内心的世界</h4><h3 id="墨菲定律：如果有可能出错，就一定会出错"><a href="#墨菲定律：如果有可能出错，就一定会出错" class="headerlink" title="墨菲定律：如果有可能出错，就一定会出错"></a>墨菲定律：如果有可能出错，就一定会出错</h3><h4 id="墨菲定律：唯有计划周全，方能避免失误。"><a href="#墨菲定律：唯有计划周全，方能避免失误。" class="headerlink" title="墨菲定律：唯有计划周全，方能避免失误。"></a>墨菲定律：唯有计划周全，方能避免失误。</h4><h4 id="酝酿效应：“不思考”也是一种思考方式。"><a href="#酝酿效应：“不思考”也是一种思考方式。" class="headerlink" title="酝酿效应：“不思考”也是一种思考方式。"></a>酝酿效应：“不思考”也是一种思考方式。</h4><h4 id="控制错觉定律：相信直觉，但别迷信直觉。"><a href="#控制错觉定律：相信直觉，但别迷信直觉。" class="headerlink" title="控制错觉定律：相信直觉，但别迷信直觉。"></a>控制错觉定律：相信直觉，但别迷信直觉。</h4><h4 id="羊群效应：“从众”和”盲从”的临界点在哪里"><a href="#羊群效应：“从众”和”盲从”的临界点在哪里" class="headerlink" title="羊群效应：“从众”和”盲从”的临界点在哪里"></a>羊群效应：“从众”和”盲从”的临界点在哪里</h4><h4 id="巴纳姆效应：似是而非的“真理”一无是处"><a href="#巴纳姆效应：似是而非的“真理”一无是处" class="headerlink" title="巴纳姆效应：似是而非的“真理”一无是处"></a>巴纳姆效应：似是而非的“真理”一无是处</h4><h4 id="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"><a href="#奥卡姆剃刀原则：砍掉一些繁琐的旁技术" class="headerlink" title="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"></a>奥卡姆剃刀原则：砍掉一些繁琐的旁技术</h4><h3 id="踢猫效应：坏情绪会传染，但也可以被管理"><a href="#踢猫效应：坏情绪会传染，但也可以被管理" class="headerlink" title="踢猫效应：坏情绪会传染，但也可以被管理"></a>踢猫效应：坏情绪会传染，但也可以被管理</h3><h4 id="踢猫效应：坏情绪的连锁反应"><a href="#踢猫效应：坏情绪的连锁反应" class="headerlink" title="踢猫效应：坏情绪的连锁反应"></a>踢猫效应：坏情绪的连锁反应</h4><h4 id="野马的结局：愤怒是一种自我毁灭"><a href="#野马的结局：愤怒是一种自我毁灭" class="headerlink" title="野马的结局：愤怒是一种自我毁灭"></a>野马的结局：愤怒是一种自我毁灭</h4><h4 id="海格力斯效应：无视仇恨，仇恨也会无视你"><a href="#海格力斯效应：无视仇恨，仇恨也会无视你" class="headerlink" title="海格力斯效应：无视仇恨，仇恨也会无视你"></a>海格力斯效应：无视仇恨，仇恨也会无视你</h4><h4 id="霍桑效应：适度发泄，才能轻装上阵。"><a href="#霍桑效应：适度发泄，才能轻装上阵。" class="headerlink" title="霍桑效应：适度发泄，才能轻装上阵。"></a>霍桑效应：适度发泄，才能轻装上阵。</h4><h4 id="习得性无助：没有绝望的环境，只有绝望的心态"><a href="#习得性无助：没有绝望的环境，只有绝望的心态" class="headerlink" title="习得性无助：没有绝望的环境，只有绝望的心态"></a>习得性无助：没有绝望的环境，只有绝望的心态</h4><h4 id="卡瑞尔公式：接受最坏的，最求最好的"><a href="#卡瑞尔公式：接受最坏的，最求最好的" class="headerlink" title="卡瑞尔公式：接受最坏的，最求最好的"></a>卡瑞尔公式：接受最坏的，最求最好的</h4><h3 id="约拿情结：从自我提升到自我突破"><a href="#约拿情结：从自我提升到自我突破" class="headerlink" title="约拿情结：从自我提升到自我突破"></a>约拿情结：从自我提升到自我突破</h3><h4 id="约拿情结：不仅害怕失败，也害怕成功"><a href="#约拿情结：不仅害怕失败，也害怕成功" class="headerlink" title="约拿情结：不仅害怕失败，也害怕成功"></a>约拿情结：不仅害怕失败，也害怕成功</h4><h4 id="跳骚效应：不要轻易给自己的人生设限"><a href="#跳骚效应：不要轻易给自己的人生设限" class="headerlink" title="跳骚效应：不要轻易给自己的人生设限"></a>跳骚效应：不要轻易给自己的人生设限</h4><h4 id="洛克定律：合理的目标才是合适的目标"><a href="#洛克定律：合理的目标才是合适的目标" class="headerlink" title="洛克定律：合理的目标才是合适的目标"></a>洛克定律：合理的目标才是合适的目标</h4><h4 id="瓦拉赫效应：补足短板，还是经营优势"><a href="#瓦拉赫效应：补足短板，还是经营优势" class="headerlink" title="瓦拉赫效应：补足短板，还是经营优势"></a>瓦拉赫效应：补足短板，还是经营优势</h4><h4 id="内卷化效应：跑起来，别让生活原地打转"><a href="#内卷化效应：跑起来，别让生活原地打转" class="headerlink" title="内卷化效应：跑起来，别让生活原地打转"></a>内卷化效应：跑起来，别让生活原地打转</h4><h4 id="青蛙效应：无视危机才是真正的危机"><a href="#青蛙效应：无视危机才是真正的危机" class="headerlink" title="青蛙效应：无视危机才是真正的危机"></a>青蛙效应：无视危机才是真正的危机</h4><h3 id="马太效应：优秀源于一次次失措"><a href="#马太效应：优秀源于一次次失措" class="headerlink" title="马太效应：优秀源于一次次失措"></a>马太效应：优秀源于一次次失措</h3><h4 id="马太效应：成功是成功之母亲"><a href="#马太效应：成功是成功之母亲" class="headerlink" title="马太效应：成功是成功之母亲"></a>马太效应：成功是成功之母亲</h4><h4 id="安慰剂效应；暗示能带扭曲现实的力量"><a href="#安慰剂效应；暗示能带扭曲现实的力量" class="headerlink" title="安慰剂效应；暗示能带扭曲现实的力量"></a>安慰剂效应；暗示能带扭曲现实的力量</h4><h4 id="马蝇效应：如何把压力转换为动力"><a href="#马蝇效应：如何把压力转换为动力" class="headerlink" title="马蝇效应：如何把压力转换为动力"></a>马蝇效应：如何把压力转换为动力</h4><h4 id="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"><a href="#布里丹毛驴效应：选择之前不犹豫，选择之后不后悔" class="headerlink" title="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"></a>布里丹毛驴效应：选择之前不犹豫，选择之后不后悔</h4><h4 id="基利定理：成功的核心不在于被失败左右"><a href="#基利定理：成功的核心不在于被失败左右" class="headerlink" title="基利定理：成功的核心不在于被失败左右"></a>基利定理：成功的核心不在于被失败左右</h4><h4 id="贝尔纳效应：每一条路都必然通向一个终点"><a href="#贝尔纳效应：每一条路都必然通向一个终点" class="headerlink" title="贝尔纳效应：每一条路都必然通向一个终点"></a>贝尔纳效应：每一条路都必然通向一个终点</h4><h3 id="首因效应：人际交往中的心理学法则"><a href="#首因效应：人际交往中的心理学法则" class="headerlink" title="首因效应：人际交往中的心理学法则"></a>首因效应：人际交往中的心理学法则</h3><h4 id="首因效应：良好的印象是成功的一半"><a href="#首因效应：良好的印象是成功的一半" class="headerlink" title="首因效应：良好的印象是成功的一半"></a>首因效应：良好的印象是成功的一半</h4><h4 id="近因效应：留下最好的“最后印象“"><a href="#近因效应：留下最好的“最后印象“" class="headerlink" title="近因效应：留下最好的“最后印象“"></a>近因效应：留下最好的“最后印象“</h4><h4 id="晕轮效应：别被“光环”迷了慧眼"><a href="#晕轮效应：别被“光环”迷了慧眼" class="headerlink" title="晕轮效应：别被“光环”迷了慧眼"></a>晕轮效应：别被“光环”迷了慧眼</h4><h4 id="刻板印象：最不靠谱的“第-0-效应”"><a href="#刻板印象：最不靠谱的“第-0-效应”" class="headerlink" title="刻板印象：最不靠谱的“第 0 效应”"></a>刻板印象：最不靠谱的“第 0 效应”</h4><h4 id="曼狄诺定律：不懂社交技巧？那就微笑吧"><a href="#曼狄诺定律：不懂社交技巧？那就微笑吧" class="headerlink" title="曼狄诺定律：不懂社交技巧？那就微笑吧"></a>曼狄诺定律：不懂社交技巧？那就微笑吧</h4><h4 id="虚假同感偏差：换位思考，而不是以己度人"><a href="#虚假同感偏差：换位思考，而不是以己度人" class="headerlink" title="虚假同感偏差：换位思考，而不是以己度人"></a>虚假同感偏差：换位思考，而不是以己度人</h4><h3 id="自重感效应：成为社交达人的心理学技巧"><a href="#自重感效应：成为社交达人的心理学技巧" class="headerlink" title="自重感效应：成为社交达人的心理学技巧"></a>自重感效应：成为社交达人的心理学技巧</h3><h4 id="自重感效应：让人感觉自己重要，这很重要"><a href="#自重感效应：让人感觉自己重要，这很重要" class="headerlink" title="自重感效应：让人感觉自己重要，这很重要"></a>自重感效应：让人感觉自己重要，这很重要</h4><h4 id="相约法则：我喜欢你因为你喜欢我"><a href="#相约法则：我喜欢你因为你喜欢我" class="headerlink" title="相约法则：我喜欢你因为你喜欢我"></a>相约法则：我喜欢你因为你喜欢我</h4><h4 id="阿伦森效应：我们厌恶那些带给我挫败感的人"><a href="#阿伦森效应：我们厌恶那些带给我挫败感的人" class="headerlink" title="阿伦森效应：我们厌恶那些带给我挫败感的人"></a>阿伦森效应：我们厌恶那些带给我挫败感的人</h4><h4 id="多看效应：提高曝光度，提高好感度"><a href="#多看效应：提高曝光度，提高好感度" class="headerlink" title="多看效应：提高曝光度，提高好感度"></a>多看效应：提高曝光度，提高好感度</h4><h4 id="改宗效应：想讨好人喜欢？那就反驳他。"><a href="#改宗效应：想讨好人喜欢？那就反驳他。" class="headerlink" title="改宗效应：想讨好人喜欢？那就反驳他。"></a>改宗效应：想讨好人喜欢？那就反驳他。</h4><h4 id="出丑效应：做别人眼中的“不完美的人”"><a href="#出丑效应：做别人眼中的“不完美的人”" class="headerlink" title="出丑效应：做别人眼中的“不完美的人”"></a>出丑效应：做别人眼中的“不完美的人”</h4><h3 id="路西法效应：所谓“心术”，不过是人性的博弈"><a href="#路西法效应：所谓“心术”，不过是人性的博弈" class="headerlink" title="路西法效应：所谓“心术”，不过是人性的博弈"></a>路西法效应：所谓“心术”，不过是人性的博弈</h3><h4 id="路西法效应：好人真的好，坏人真的坏吗？"><a href="#路西法效应：好人真的好，坏人真的坏吗？" class="headerlink" title="路西法效应：好人真的好，坏人真的坏吗？"></a>路西法效应：好人真的好，坏人真的坏吗？</h4><h4 id="米尔路伦实验：所谓“良知”，底线到底有多坚固"><a href="#米尔路伦实验：所谓“良知”，底线到底有多坚固" class="headerlink" title="米尔路伦实验：所谓“良知”，底线到底有多坚固"></a>米尔路伦实验：所谓“良知”，底线到底有多坚固</h4><h4 id="破解囚徒困境：引入反复博弈，化被动为主动"><a href="#破解囚徒困境：引入反复博弈，化被动为主动" class="headerlink" title="破解囚徒困境：引入反复博弈，化被动为主动"></a>破解囚徒困境：引入反复博弈，化被动为主动</h4><h4 id="智猪博弈：多劳多得，少劳也不少得"><a href="#智猪博弈：多劳多得，少劳也不少得" class="headerlink" title="智猪博弈：多劳多得，少劳也不少得"></a>智猪博弈：多劳多得，少劳也不少得</h4><h4 id="斗鸡博弈：最坏的结果是两败俱伤"><a href="#斗鸡博弈：最坏的结果是两败俱伤" class="headerlink" title="斗鸡博弈：最坏的结果是两败俱伤"></a>斗鸡博弈：最坏的结果是两败俱伤</h4><h4 id="枪手博弈：决胜负不一定要靠实力"><a href="#枪手博弈：决胜负不一定要靠实力" class="headerlink" title="枪手博弈：决胜负不一定要靠实力"></a>枪手博弈：决胜负不一定要靠实力</h4><h3 id="互惠法则：如何让他人对自己言听计从"><a href="#互惠法则：如何让他人对自己言听计从" class="headerlink" title="互惠法则：如何让他人对自己言听计从"></a>互惠法则：如何让他人对自己言听计从</h3><h4 id="互惠法则：说服力不是说出来的，而是做出来的"><a href="#互惠法则：说服力不是说出来的，而是做出来的" class="headerlink" title="互惠法则：说服力不是说出来的，而是做出来的"></a>互惠法则：说服力不是说出来的，而是做出来的</h4><h4 id="承诺一致性原理：让对方自己说服自己"><a href="#承诺一致性原理：让对方自己说服自己" class="headerlink" title="承诺一致性原理：让对方自己说服自己"></a>承诺一致性原理：让对方自己说服自己</h4><h4 id="登门槛效应：步步为营，走进对方内心"><a href="#登门槛效应：步步为营，走进对方内心" class="headerlink" title="登门槛效应：步步为营，走进对方内心"></a>登门槛效应：步步为营，走进对方内心</h4><h4 id="门面效应：用不可能完成的任务给对手下套"><a href="#门面效应：用不可能完成的任务给对手下套" class="headerlink" title="门面效应：用不可能完成的任务给对手下套"></a>门面效应：用不可能完成的任务给对手下套</h4><h4 id="禁果效应：越“禁”越“诱惑”"><a href="#禁果效应：越“禁”越“诱惑”" class="headerlink" title="禁果效应：越“禁”越“诱惑”"></a>禁果效应：越“禁”越“诱惑”</h4><h4 id="超限效应：越说服，越反感"><a href="#超限效应：越说服，越反感" class="headerlink" title="超限效应：越说服，越反感"></a>超限效应：越说服，越反感</h4><h3 id="凡勃伦效应：避开投资、消费中的种种陷阱"><a href="#凡勃伦效应：避开投资、消费中的种种陷阱" class="headerlink" title="凡勃伦效应：避开投资、消费中的种种陷阱"></a>凡勃伦效应：避开投资、消费中的种种陷阱</h3><h4 id="凡勃伦效应：揭穿价格的定位陷阱"><a href="#凡勃伦效应：揭穿价格的定位陷阱" class="headerlink" title="凡勃伦效应：揭穿价格的定位陷阱"></a>凡勃伦效应：揭穿价格的定位陷阱</h4><h4 id="吉芬之谜：透过价格迷雾看清供需本质"><a href="#吉芬之谜：透过价格迷雾看清供需本质" class="headerlink" title="吉芬之谜：透过价格迷雾看清供需本质"></a>吉芬之谜：透过价格迷雾看清供需本质</h4><h4 id="消费者剩余：买得值不值，自己说了算"><a href="#消费者剩余：买得值不值，自己说了算" class="headerlink" title="消费者剩余：买得值不值，自己说了算"></a>消费者剩余：买得值不值，自己说了算</h4><h4 id="稀缺效应：“稀缺”是刻意营造的心理压迫"><a href="#稀缺效应：“稀缺”是刻意营造的心理压迫" class="headerlink" title="稀缺效应：“稀缺”是刻意营造的心理压迫"></a>稀缺效应：“稀缺”是刻意营造的心理压迫</h4><h4 id="折扣效应：被理性驱使的感性消费"><a href="#折扣效应：被理性驱使的感性消费" class="headerlink" title="折扣效应：被理性驱使的感性消费"></a>折扣效应：被理性驱使的感性消费</h4><h4 id="博傻理论：蠢不可怕，别做最蠢的那个就行"><a href="#博傻理论：蠢不可怕，别做最蠢的那个就行" class="headerlink" title="博傻理论：蠢不可怕，别做最蠢的那个就行"></a>博傻理论：蠢不可怕，别做最蠢的那个就行</h4><h3 id="路径依赖法则：到底是做事重要，还是做人重要"><a href="#路径依赖法则：到底是做事重要，还是做人重要" class="headerlink" title="路径依赖法则：到底是做事重要，还是做人重要"></a>路径依赖法则：到底是做事重要，还是做人重要</h3><h4 id="路径依赖法则：“第一份工作”是成功的一半"><a href="#路径依赖法则：“第一份工作”是成功的一半" class="headerlink" title="路径依赖法则：“第一份工作”是成功的一半"></a>路径依赖法则：“第一份工作”是成功的一半</h4><h4 id="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"><a href="#蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做" class="headerlink" title="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"></a>蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做</h4><h4 id="布利斯定理：计划越充分失败概率越小"><a href="#布利斯定理：计划越充分失败概率越小" class="headerlink" title="布利斯定理：计划越充分失败概率越小"></a>布利斯定理：计划越充分失败概率越小</h4><h4 id="权威效应：权威引出的决策的惰性"><a href="#权威效应：权威引出的决策的惰性" class="headerlink" title="权威效应：权威引出的决策的惰性"></a>权威效应：权威引出的决策的惰性</h4><h4 id="古德曼定律：没有恰当的沉默，就没有良好的沟通"><a href="#古德曼定律：没有恰当的沉默，就没有良好的沟通" class="headerlink" title="古德曼定律：没有恰当的沉默，就没有良好的沟通"></a>古德曼定律：没有恰当的沉默，就没有良好的沟通</h4><h4 id="工作成瘾综合征：“工作狂”是一种心理疾病"><a href="#工作成瘾综合征：“工作狂”是一种心理疾病" class="headerlink" title="工作成瘾综合征：“工作狂”是一种心理疾病"></a>工作成瘾综合征：“工作狂”是一种心理疾病</h4><h3 id="彼得原理：把恰当的人放在恰当的位置上"><a href="#彼得原理：把恰当的人放在恰当的位置上" class="headerlink" title="彼得原理：把恰当的人放在恰当的位置上"></a>彼得原理：把恰当的人放在恰当的位置上</h3><h4 id="彼得原理：给每个人找到合适的位置"><a href="#彼得原理：给每个人找到合适的位置" class="headerlink" title="彼得原理：给每个人找到合适的位置"></a>彼得原理：给每个人找到合适的位置</h4><h4 id="德西效应：挖掘真正的“内部动机”"><a href="#德西效应：挖掘真正的“内部动机”" class="headerlink" title="德西效应：挖掘真正的“内部动机”"></a>德西效应：挖掘真正的“内部动机”</h4><h4 id="不值得定律：“必须做”不如“值得做”"><a href="#不值得定律：“必须做”不如“值得做”" class="headerlink" title="不值得定律：“必须做”不如“值得做”"></a>不值得定律：“必须做”不如“值得做”</h4><h4 id="雷尼尔效应：用“心”留人，胜过用“薪”留人"><a href="#雷尼尔效应：用“心”留人，胜过用“薪”留人" class="headerlink" title="雷尼尔效应：用“心”留人，胜过用“薪”留人"></a>雷尼尔效应：用“心”留人，胜过用“薪”留人</h4><h4 id="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"><a href="#罗森塔尔效应：寄予什么样的期望，就会培养什么样的人" class="headerlink" title="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"></a>罗森塔尔效应：寄予什么样的期望，就会培养什么样的人</h4><h4 id="破窗效应：不要轻易打破任何一扇窗户"><a href="#破窗效应：不要轻易打破任何一扇窗户" class="headerlink" title="破窗效应：不要轻易打破任何一扇窗户"></a>破窗效应：不要轻易打破任何一扇窗户</h4><h3 id="史华兹论断：合适的选择，就是好的选择"><a href="#史华兹论断：合适的选择，就是好的选择" class="headerlink" title="史华兹论断：合适的选择，就是好的选择"></a>史华兹论断：合适的选择，就是好的选择</h3><h4 id="史华兹论断：“幸福”与“不幸”"><a href="#史华兹论断：“幸福”与“不幸”" class="headerlink" title="史华兹论断：“幸福”与“不幸”"></a>史华兹论断：“幸福”与“不幸”</h4><h4 id="贝勃定律：幸福本质上是种“敏感度”"><a href="#贝勃定律：幸福本质上是种“敏感度”" class="headerlink" title="贝勃定律：幸福本质上是种“敏感度”"></a>贝勃定律：幸福本质上是种“敏感度”</h4><h4 id="狄德罗效应：幸福来自给生活做减法"><a href="#狄德罗效应：幸福来自给生活做减法" class="headerlink" title="狄德罗效应：幸福来自给生活做减法"></a>狄德罗效应：幸福来自给生活做减法</h4><h4 id="鳄鱼法则：关键时刻的取舍之道"><a href="#鳄鱼法则：关键时刻的取舍之道" class="headerlink" title="鳄鱼法则：关键时刻的取舍之道"></a>鳄鱼法则：关键时刻的取舍之道</h4><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><blockquote>
+<p>最后，没有最后，也就是最后！！！<br>为什么越在意的，就越容易失去？</p>
+</blockquote>
+<blockquote>
+<p>为什么你不懂社交，保持微笑也好？</p>
+</blockquote>
+<blockquote>
+<p>为什么想讨好他人的喜欢，最好的方法是反驳他？</p>
+</blockquote>
+<blockquote>
+<p>为什么如果有可能出错，就一定会出错？</p>
+</blockquote>
+<blockquote>
+<p>为什眼中世界，其实就是内心世界？</p>
+</blockquote>
+<blockquote>
+<p>如果想知道答案——那就请读一下这本书吧！</p>
+</blockquote>
 
       
 
@@ -510,45 +234,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/20/yuque/GO(一)/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/09/yuque/dockerfile 的学习/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+          <a class="article-more-a" href="/2019/10/26/yuque/《Murphy‘s Law》 墨菲定律/">展开全文 >></a>
         </p>
       
 
@@ -578,40 +268,153 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
-    <article id="post-yuque/佛系提升macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/HTTP 状态码的完整列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+    <article id="post-yuque/Mac快捷键设置（大自然的搬运工）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">佛系提升macOS Catalina &amp;amp;&amp;amp; iPad&amp;amp;iphone 使用体验</a>
-=======
-      <a class="article-title" href="/2019/04/08/yuque/HTTP 状态码的完整列表/">HTTP 状态码的完整列表</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="article-title" href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/">Mac快捷键设置（大自然的搬运工）</a>
     </h1>
   
 
         
-<<<<<<< HEAD
-        <a href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/" class="archive-article-date">
-  	<time datetime="2019-10-19T13:32:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-19</time>
-=======
-        <a href="/2019/04/08/yuque/HTTP 状态码的完整列表/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:59:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+        <a href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/" class="archive-article-date">
+  	<time datetime="2019-10-23T04:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
+        <p><a href="https://www.bilibili.com/video/av44127555" target="_blank" rel="noopener">https://www.bilibili.com/video/av44127555</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/GO(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/20/yuque/GO(一)/">GO(一)</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/20/yuque/GO(一)/" class="archive-article-date">
+  	<time datetime="2019-10-20T06:28:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文确保你一定安装了 brew 包管理器<br>macOS 安装 Golang 过程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">mkdir ~/go_work</span><br><span class="line">mkdir ~/go_work/bin</span><br><span class="line">mkdir ~/go_work/pkg</span><br><span class="line">mkdir ~/go_work/src</span><br><span class="line"></span><br><span class="line">echo "export GOROOT=/usr/local/opt/go/libexec" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOPATH=~/go_work" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOBIN=~/go_work/bin" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export PATH=$PATH:$GOROOT/bin:$GOPATH:$GOBIN" &gt;&gt; ~.zshrc</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/20/yuque/GO(一)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/佛系提升macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">佛系提升macOS Catalina &amp;amp;&amp;amp; iPad&amp;amp;iphone 使用体验</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/" class="archive-article-date">
+  	<time datetime="2019-10-19T13:32:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
         <p>截止 2019 年 10 月 20 日<br>佛系 如果您是个安卓用户 or 微软，这篇文章所讲到的东西不太适合您，您可以关闭这个浏览器了。<br>我希望您是拥有 apple 全家桶（iphone ipad mac homepod airpods tv 等）或者半全家桶的用户（mac iphone( ipad)）。最好同时订阅了 iCloud 云盘（付费的用户），系统升级到最新版。</p>
 <h1 id="设备设置"><a href="#设备设置" class="headerlink" title="设备设置"></a>设备设置</h1><p>iPhone/iPad 设置手机/pad 的快捷词典<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571549151848-69c96297-b09e-40bb-a01d-03f3cc044d12.gif#align=left&amp;display=inline&amp;height=811&amp;name=%E8%AF%8D%E5%85%B8%E8%AE%BE%E7%BD%AE.gif&amp;originHeight=1884&amp;originWidth=876&amp;size=1601331&amp;status=done&amp;style=none&amp;width=377" alt="词典设置.gif"><br>关闭不必要的系统服务定位等请求<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571550969787-78548879-7fb7-45f1-80b2-a241531b204f.gif#align=left&amp;display=inline&amp;height=827&amp;name=%E9%9A%90%E7%A7%81.gif&amp;originHeight=1886&amp;originWidth=876&amp;size=9642136&amp;status=done&amp;style=none&amp;width=384" alt="隐私.gif"><br>Mac 一些简单配置<br>巧用聚焦功能 command+空格 我们打开的样子可能不太一样，但是一样用。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571551104475-324a473a-53f3-441a-a853-44c6d5b6acf1.png#align=left&amp;display=inline&amp;height=798&amp;name=image.png&amp;originHeight=1596&amp;originWidth=2544&amp;size=5263723&amp;status=done&amp;style=none&amp;width=1272" alt="image.png"><br>聚焦搜索 终端 回车 在黑框里输入 这样桌面上就有了一个 home 的快捷方式</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s ~/ ~/Desktop/</span><br></pre></td></tr></table></figure>
@@ -635,79 +438,6 @@ var _hmt = _hmt || [];
 <h3 id="超级剪贴板"><a href="#超级剪贴板" class="headerlink" title="超级剪贴板"></a>超级剪贴板</h3><p>这个剪贴板很神奇，他可以帮你记录你所有苹果设备（跨设备的复制记录保存）上的复制操作。可以保存历史记录。以及一些常用网页的快捷方式。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571510793477-48c84978-1593-4fbe-8d95-f5896dbbde99.png#align=left&amp;display=inline&amp;height=453&amp;name=image.png&amp;originHeight=2100&amp;originWidth=3360&amp;size=2343326&amp;status=done&amp;style=none&amp;width=724" alt="image.png"><br>（我为了记录自己复制粘贴习惯，成为了美帝的走 🐶，付了款）<br>这里提供一个 macos10.14 上验证过的破解版供大家享用<br><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip?_lake_card=%7B%22uid%22%3A%221571510955366-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip%22%2C%22name%22%3A%22Paste%281%29.zip%22%2C%22size%22%3A10809335%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22xZqUn%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">Paste(1).zip</a></p>
 <h3 id="随航"><a href="#随航" class="headerlink" title="随航"></a>随航</h3><p>macOS 版本新更新出来的功能，很实用。 macOS 有线/无线第二屏幕，发布会上的 Adobe ipad 版本的 PS 新版本还没出来，但是可以预见未来其强大的生产力。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>自己最近也在思考，那些可以帮助提高生产力的苹果软件间的一些协作关系，还有一些自己没有来验证它是否真的好用，在这里就先不一一列举出来了，当然您如果发现了好用的协作软件，欢迎您在下方评论区与我分享。<br>自己用 mac 的时间也不是太长，大概也就有 3 年的样子。从早期的黑果，到白果懵懵懂懂，现在也是一知半解，可能安利的这些软件，对您的生活以及工作没多大用，您忽略就好。自己也是也是一名学习者，文章中可能有很多晦涩的地方，欢迎您提出宝贵的意见及建议，批评与指正。</p>
-=======
-        <p>下面提供 HTTP 状态码的完整列表。点击链接可了解详情。您也可以访问  <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank" rel="noopener">HTTP 状态码上的 W3C 页获取更多信息</a>。<br>1xx（临时响应）<br>表示临时响应并需要请求者继续执行操作的状态码。</p>
-<table>
-<thead>
-<tr>
-<th>100（继续）</th>
-<th>请求者应当继续提出请求。服务器返回此代码表示已收到请求的第一部分，正在等待其余部分。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>101（切换协议）</td>
-<td>请求者已要求服务器切换协议，服务器已确认并准备切换。</td>
-</tr>
-</tbody>
-</table>
-<p>2xx （成功）<br>表示成功处理了请求的状态码。</p>
-<p>| 200（成功） | 服务器已成功处理了请求。通常，这表示服务器提供了请求的网页。如果是对您的<br>robots.txt 文件显示此状态码，则表示 Googlebot 已成功检索到该文件。 |<br>| — | — |<br>| 201（已创建） | 请求成功并且服务器创建了新的资源。 |<br>| 202（已接受） | 服务器已接受请求，但尚未处理。 |<br>| 203（非授权信息） | 服务器已成功处理了请求，但返回的信息可能来自另一来源。 |<br>| 204（无内容） | 服务器成功处理了请求，但没有返回任何内容。 |<br>| 205（重置内容） | 服务器成功处理了请求，但没有返回任何内容。与 204<br>响应不同，此响应要求请求者重置文档视图（例如，清除表单内容以输入新内容）。 |<br>| 206（部分内容） | 服务器成功处理了部分 GET 请求。 |</p>
-<p>3xx （重定向）<br>要完成请求，需要进一步操作。通常，这些状态码用来重定向。Google 建议您在每次请求中使用重定向不要超过 5 次。您可以使用网站管理员工具查看一下 Googlebot 在抓取重定向网页时是否遇到问题。诊断下的<a href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35156" target="_blank" rel="noopener">网络抓取</a>页列出了由于重定向错误导致 Googlebot 无法抓取的网址。</p>
-<p>| 300（多种选择） | 针对请求，服务器可执行多种操作。服务器可根据请求者 (user agent)<br>选择一项操作，或提供操作列表供请求者选择。 |<br>| — | — |<br>| 301（永久移动） | 请求的网页已永久移动到新位置。服务器返回此响应（对 GET 或 HEAD<br>请求的响应）时，会自动将请求者转到新位置。您应使用此代码告诉 Googlebot 某个网页或网站已永久移动到新位置。 |<br>| 302（临时移动） | 服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来响应以后的请求。此代码与响应<br>GET 和 HEAD 请求的 301 代码类似，会自动将请求者转到不同的位置，但您不应使用此代码来告诉 Googlebot 某个网页或网站已经移动，因为<br>Googlebot 会继续抓取原有位置并编制索引。 |<br>| 303（查看其他位置） | 请求者应当对不同的位置使用单独的 GET 请求来检索响应时，服务器返回此代码。对于除<br>HEAD 之外的所有请求，服务器会自动转到其他位置。 |<br>| 304（未修改） | 自从上次请求后，请求的网页未修改过。服务器返回此响应时，不会返回网页内容。<br>如果网页自请求者上次请求后再也没有更改过，您应将服务器配置为返回此响应（称为<br>If-Modified-Since HTTP 标头）。服务器可以告诉 Googlebot 自从上次抓取后网页没有变更，进而节省带宽和开销。 |<br>|<br>305（使用代理） | 请求者只能使用代理访问请求的网页。如果服务器返回此响应，还表示请求者应使用代理。 |<br>| 307（临时重定向） | 服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来响应以后的请求。此代码与响应<br>GET 和 HEAD 请求的 <a href="answer.py?answer=">301</a><br>代码类似，会自动将请求者转到不同的位置，但您不应使用此代码来告诉 Googlebot 某个页面或网站已经移动，因为 Googlebot<br>会继续抓取原有位置并编制索引。 |</p>
-<p>4xx（请求错误）</p>
-<p>这些状态码表示请求可能出错，妨碍了服务器的处理。</p>
-<table>
-<thead>
-<tr>
-<th>400（错误请求）</th>
-<th>服务器不理解请求的语法。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>401（未授权）</td>
-<td>请求要求身份验证。对于登录后请求的网页，服务器可能返回此响应。</td>
-</tr>
-<tr>
-<td>403（禁止）</td>
-<td>服务器拒绝请求。如果您在 Googlebot</td>
-</tr>
-</tbody>
-</table>
-<p>尝试抓取您网站上的有效网页时看到此状态码（您可以在 Google 网站管理员工具诊断下的网络抓取页面上看到此信息），可能是您的服务器或主机拒绝了<br>Googlebot 访问。 |<br>| 404（未找到） | 服务器找不到请求的网页。例如，对于服务器上不存在的网页经常会返回此代码。<br>如果您的网站上没有 robots.txt 文件，而您在<br>Google 网站管理员工具<a href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35237" target="_blank" rel="noopener">“诊断”标签的<br>robots.txt 页</a>上看到此状态码，则这是正确的状态码。但是，如果您有<br>robots.txt 文件而又看到此状态码，则说明您的 robots.txt 文件可能命名错误或位于错误的位置（该文件应当位于顶级域，名为<br>robots.txt）。<br>如果对于 Googlebot<br>抓取的网址看到此状态码（在”诊断”标签的  <a href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35122" target="_blank" rel="noopener">HTTP<br>错误页面</a>上），则表示 Googlebot<br>跟随的可能是另一个页面的无效链接（是旧链接或输入有误的链接）。 |<br>| 405（方法禁用） | 禁用请求中指定的方法。 |<br>| 406（不接受） | 无法使用请求的内容特性响应请求的网页。 |<br>| 407（需要代理授权） | 此状态码与 <a href="answer.py?answer=35128">401（未授权）</a>类似，但指定请求者应当授权使用代理。如果服务器返回此响应，还表示请求者应当使用代理。 |<br>| 408（请求超时） | 服务器等候请求时发生超时。 |<br>| 409（冲突） | 服务器在完成请求时发生冲突。服务器必须在响应中包含有关冲突的信息。服务器在响应与前一个请求相冲突的<br>PUT 请求时可能会返回此代码，以及两个请求的差异列表。 |<br>| 410（已删除） | 如果请求的资源已永久删除，服务器就会返回此响应。该代码与<br>404（未找到）代码类似，但在资源以前存在而现在不存在的情况下，有时会用来替代 404 代码。如果资源已永久移动，您应使用 301 指定资源的新位置。 |<br>| 411（需要有效长度） | 服务器不接受不含有效内容长度标头字段的请求。 |<br>| 412（未满足前提条件） | 服务器未满足请求者在请求中设置的其中一个前提条件。 |<br>| 413（请求实体过大） | 服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 |<br>| 414（请求的 URI 过长） | 请求的 URI（通常为网址）过长，服务器无法处理。 |<br>| 415（不支持的媒体类型） | 请求的格式不受请求页面的支持。 |<br>| 416（请求范围不符合要求） | 如果页面无法提供请求的范围，则服务器会返回此状态码。 |<br>| 417（未满足期望值） | 服务器未满足”期望”请求标头字段的要求。 |</p>
-<p>5xx（服务器错误）<br>这些状态码表示服务器在处理请求时发生内部错误。这些错误可能是服务器本身的错误，而不是请求出错。</p>
-<table>
-<thead>
-<tr>
-<th>500（服务器内部错误）</th>
-<th>服务器遇到错误，无法完成请求。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>501（尚未实施）</td>
-<td>服务器不具备完成请求的功能。例如，服务器无法识别请求方法时可能会返回此代码。</td>
-</tr>
-<tr>
-<td>502（错误网关）</td>
-<td>服务器作为网关或代理，从上游服务器收到无效响应。</td>
-</tr>
-<tr>
-<td>503（服务不可用）</td>
-<td>服务器目前无法使用（由于超载或停机维护）。通常，这只是暂时状态。</td>
-</tr>
-<tr>
-<td>504（网关超时）</td>
-<td>服务器作为网关或代理，但是没有及时从上游服务器收到请求。</td>
-</tr>
-<tr>
-<td>505（HTTP 版本不受支持）</td>
-<td>服务器不支持请求中所用的 HTTP 协议版本。</td>
-</tr>
-</tbody>
-</table>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -716,45 +446,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/HTTP 状态码的完整列表/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -784,40 +480,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/微信票据接入" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/能力提升——计算机基础知识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/10/18/yuque/微信票据接入/">微信票据接入</a>
-=======
-      <a class="article-title" href="/2019/04/08/yuque/能力提升——计算机基础知识/">能力提升——计算机基础知识</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/10/18/yuque/微信票据接入/" class="archive-article-date">
   	<time datetime="2019-10-18T03:26:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-18</time>
-=======
-        <a href="/2019/04/08/yuque/能力提升——计算机基础知识/" class="archive-article-date">
-  	<time datetime="2019-04-08T14:25:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！</p>
 <p>这是一个血淋淋的教训，自己开发完了。然后数据不及预期。从周五周六晚上排查 一共 10 个小时。</p>
 <p>票据接入方案 JAVA 版本</p>
@@ -827,41 +509,6 @@ var _hmt = _hmt || [];
 <p>VO</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTicketVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String ticket;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTokenVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String access_token;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Golang 方案待完成</p>
-=======
-        <p>访问地址：<a href="https://zy84338719.github.io/CS_Note">https://zy84338719.github.io/CS_Note</a></p>
-<h2 id="🎨-面向对象"><a href="#🎨-面向对象" class="headerlink" title="🎨 面向对象"></a><a href="https://zy84338719.github.io/CS_Note/#/README?id=%f0%9f%8e%a8-%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1">🎨 面向对象</a></h2><ul>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">设计模式</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3">面向对象思想</a></li>
-</ul>
-<h2 id="💾-数据库"><a href="#💾-数据库" class="headerlink" title="💾 数据库"></a><a href="https://zy84338719.github.io/CS_Note/#/README?id=%f0%9f%92%be-%e6%95%b0%e6%8d%ae%e5%ba%93">💾 数据库</a></h2><ul>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86">数据库系统原理</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/SQL">SQL</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Leetcode-Database%20%E9%A2%98%E8%A7%A3">Leetcode-Database 题解</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/MySQL">MySQL</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Redis">Redis</a></li>
-</ul>
-<h2 id="☕️-Java"><a href="#☕️-Java" class="headerlink" title="☕️ Java"></a><a href="https://zy84338719.github.io/CS_Note/#/README?id=%e2%98%95%ef%b8%8f-java">☕️ Java</a></h2><ul>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Java%20%E5%9F%BA%E7%A1%80">Java 基础</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Java%20%E5%AE%B9%E5%99%A8">Java 容器</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Java%20%E5%B9%B6%E5%8F%91">Java 并发</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA">Java 虚拟机</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Java%20IO">Java I/O</a></li>
-</ul>
-<h2 id="💡-系统设计"><a href="#💡-系统设计" class="headerlink" title="💡 系统设计"></a><a href="https://zy84338719.github.io/CS_Note/#/README?id=%f0%9f%92%a1-%e7%b3%bb%e7%bb%9f%e8%ae%be%e8%ae%a1">💡 系统设计</a></h2><ul>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80">系统设计基础</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E5%88%86%E5%B8%83%E5%BC%8F">分布式</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E9%9B%86%E7%BE%A4">集群</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF">攻击技术</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E7%BC%93%E5%AD%98">缓存</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">消息队列</a></li>
-</ul>
-<h2 id="🔧-工具"><a href="#🔧-工具" class="headerlink" title="🔧 工具"></a><a href="https://zy84338719.github.io/CS_Note/#/README?id=%f0%9f%94%a7-%e5%b7%a5%e5%85%b7">🔧 工具</a></h2><ul>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Git">Git</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/Docker">Docker</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">正则表达式</a></li>
-<li><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7">构建工具</a></li>
-</ul>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -874,11 +521,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2019/10/18/yuque/微信票据接入/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/04/08/yuque/能力提升——计算机基础知识/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -908,40 +551,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/一键来个热点 Linux 版本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/数据库相关" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/10/13/yuque/一键来个热点 Linux 版本/">一键来个热点 Linux 版本</a>
-=======
-      <a class="article-title" href="/2019/04/08/yuque/数据库相关/">数据库相关</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/10/13/yuque/一键来个热点 Linux 版本/" class="archive-article-date">
   	<time datetime="2019-10-13T16:41:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-13</time>
-=======
-        <a href="/2019/04/08/yuque/数据库相关/" class="archive-article-date">
-  	<time datetime="2019-04-08T08:53:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <h3 id="具体-API-信息"><a href="#具体-API-信息" class="headerlink" title="具体 API 信息"></a>具体 API 信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建WiFi热点使用的GitHub上一个开源项目：</span><br><span class="line">https://github.com/oblique/create_ap</span><br></pre></td></tr></table></figure>
 <h3 id="将代码-copy-到本地，安装"><a href="#将代码-copy-到本地，安装" class="headerlink" title="将代码 copy 到本地，安装"></a>将代码 copy 到本地，安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/oblique/create_ap</span><br><span class="line">cd create_ap</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 <p>#安装依赖的库</p>
@@ -954,627 +583,6 @@ var _hmt = _hmt || [];
 <p>保存退出，然后执行一下语句：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable create_ap.service</span><br><span class="line">systemctl start create_ap.service</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 <p>此时移动端可以看到热点创建成功！</p>
-=======
-        <h2 id="四大特性（原子，一致，持久，隔离）"><a href="#四大特性（原子，一致，持久，隔离）" class="headerlink" title="四大特性（原子，一致，持久，隔离）"></a>四大特性（原子，一致，持久，隔离）</h2><p>事务指的是满足 ACID 特性的一组操作，可以通过 Commit 提交一个事务，也可以使用 Rollback 进行回滚。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893194-a76164ff-1fa3-4a51-a2de-70888537f942.jpeg#align=left&amp;display=inline&amp;height=566&amp;originHeight=566&amp;originWidth=511&amp;size=0&amp;status=done&amp;width=511" alt></p>
-<h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=acid">ACID</a></h2><h3 id="1-原子性（Atomicity）"><a href="#1-原子性（Atomicity）" class="headerlink" title="1. 原子性（Atomicity）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e5%8e%9f%e5%ad%90%e6%80%a7%ef%bc%88atomicity%ef%bc%89">1. 原子性（Atomicity）</a></h3><p>事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。<br>回滚可以用回滚日志来实现，回滚日志记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。</p>
-<h3 id="2-一致性（Consistency）"><a href="#2-一致性（Consistency）" class="headerlink" title="2. 一致性（Consistency）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e4%b8%80%e8%87%b4%e6%80%a7%ef%bc%88consistency%ef%bc%89">2. 一致性（Consistency）</a></h3><p>数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。</p>
-<h3 id="3-隔离性（Isolation）"><a href="#3-隔离性（Isolation）" class="headerlink" title="3. 隔离性（Isolation）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_3-%e9%9a%94%e7%a6%bb%e6%80%a7%ef%bc%88isolation%ef%bc%89">3. 隔离性（Isolation）</a></h3><p>一个事务所做的修改在最终提交以前，对其它事务是不可见的。</p>
-<h3 id="4-持久性（Durability）"><a href="#4-持久性（Durability）" class="headerlink" title="4. 持久性（Durability）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_4-%e6%8c%81%e4%b9%85%e6%80%a7%ef%bc%88durability%ef%bc%89">4. 持久性（Durability）</a></h3><p>一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务执行的结果也不能丢失。<br>使用重做日志来保证持久性。</p>
-<hr>
-<p>事务的 ACID 特性概念简单，但不是很好理解，主要是因为这几个特性不是一种平级关系：</p>
-<ul>
-<li>只有满足一致性，事务的执行结果才是正确的。</li>
-<li>在无并发的情况下，事务串行执行，隔离性一定能够满足。此时只要能满足原子性，就一定能满足一致性。</li>
-<li>在并发的情况下，多个事务并行执行，事务不仅要满足原子性，还需要满足隔离性，才能满足一致性。</li>
-<li>事务满足持久化是为了能应对数据库崩溃的情况。</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893214-a83a48f7-1593-40c0-a50d-c3a76011d271.jpeg#align=left&amp;display=inline&amp;height=424&amp;originHeight=520&amp;originWidth=859&amp;size=0&amp;status=done&amp;width=700" alt></p>
-<h2 id="AUTOCOMMIT"><a href="#AUTOCOMMIT" class="headerlink" title="AUTOCOMMIT"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=autocommit">AUTOCOMMIT</a></h2><p>MySQL 默认采用自动提交模式。也就是说，如果不显式使用<code>START TRANSACTION</code>语句来开始一个事务，那么每个查询都会被当做一个事务自动提交。</p>
-<h1 id="二、并发一致性问题"><a href="#二、并发一致性问题" class="headerlink" title="二、并发一致性问题"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%ba%8c%e3%80%81%e5%b9%b6%e5%8f%91%e4%b8%80%e8%87%b4%e6%80%a7%e9%97%ae%e9%a2%98">二、并发一致性问题</a></h1><p>在并发环境下，事务的隔离性很难保证，因此会出现很多并发一致性问题。</p>
-<h2 id="丢失修改"><a href="#丢失修改" class="headerlink" title="丢失修改"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%a2%e5%a4%b1%e4%bf%ae%e6%94%b9">丢失修改</a></h2><p>T  和 T  两个事务都对一个数据进行修改，T  先修改，T  随后修改，T  的修改覆盖了 T  的修改。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893224-b1a8a9c4-c28b-40b6-9452-615698daa299.jpeg#align=left&amp;display=inline&amp;height=478&amp;originHeight=727&amp;originWidth=532&amp;size=0&amp;status=done&amp;width=350" alt></p>
-<h2 id="读脏数据"><a href="#读脏数据" class="headerlink" title="读脏数据"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e8%af%bb%e8%84%8f%e6%95%b0%e6%8d%ae">读脏数据</a></h2><p>T  修改一个数据，T  随后读取这个数据。如果 T  撤销了这次修改，那么 T  读取的数据是脏数据。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893220-4e334f24-90d7-4372-adf9-d00056a534a3.jpeg#align=left&amp;display=inline&amp;height=460&amp;originHeight=700&amp;originWidth=609&amp;size=0&amp;status=done&amp;width=400" alt></p>
-<h2 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%8d%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb">不可重复读</a></h2><p>T  读取一个数据，T  对该数据做了修改。如果 T  再次读取这个数据，此时读取的结果和第一次读取的结果不同。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893230-b77d7283-267a-4ad4-8018-78eff1600c97.jpeg#align=left&amp;display=inline&amp;height=486&amp;originHeight=722&amp;originWidth=594&amp;size=0&amp;status=done&amp;width=400" alt></p>
-<h2 id="幻影读"><a href="#幻影读" class="headerlink" title="幻影读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%b9%bb%e5%bd%b1%e8%af%bb">幻影读</a></h2><p>T  读取某个范围的数据，T  在这个范围内插入新的数据，T  再次读取这个范围的数据，此时读取的结果和和第一次读取的结果不同。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893250-caaa10fe-3466-4f11-88f6-e422d96af013.jpeg#align=left&amp;display=inline&amp;height=525&amp;originHeight=718&amp;originWidth=547&amp;size=0&amp;status=done&amp;width=400" alt></p>
-<hr>
-<p>产生并发不一致性问题主要原因是破坏了事务的隔离性，解决方法是通过并发控制来保证隔离性。并发控制可以通过封锁来实现，但是封锁操作需要用户自己控制，相当复杂。数据库管理系统提供了事务的隔离级别，让用户以一种更轻松的方式处理并发一致性问题。</p>
-<h1 id="三、封锁"><a href="#三、封锁" class="headerlink" title="三、封锁"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%89%e3%80%81%e5%b0%81%e9%94%81">三、封锁</a></h1><h2 id="封锁粒度"><a href="#封锁粒度" class="headerlink" title="封锁粒度"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%b0%81%e9%94%81%e7%b2%92%e5%ba%a6">封锁粒度</a></h2><p>MySQL 中提供了两种封锁粒度：行级锁以及表级锁。<br>应该尽量只锁定需要修改的那部分数据，而不是所有的资源。锁定的数据量越少，发生锁争用的可能就越小，系统的并发程度就越高。<br>但是加锁需要消耗资源，锁的各种操作（包括获取锁、释放锁、以及检查锁状态）都会增加系统开销。因此封锁粒度越小，系统开销就越大。<br>在选择封锁粒度时，需要在锁开销和并发程度之间做一个权衡。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893265-95f7528c-91e7-4233-b8a4-c134ff077ca2.jpeg#align=left&amp;display=inline&amp;height=240&amp;originHeight=346&amp;originWidth=432&amp;size=0&amp;status=done&amp;width=300" alt></p>
-<h2 id="封锁类型"><a href="#封锁类型" class="headerlink" title="封锁类型"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%b0%81%e9%94%81%e7%b1%bb%e5%9e%8b">封锁类型</a></h2><h3 id="1-读写锁"><a href="#1-读写锁" class="headerlink" title="1. 读写锁"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e8%af%bb%e5%86%99%e9%94%81">1. 读写锁</a></h3><ul>
-<li>排它锁（Exclusive），简写为 X 锁，又称写锁。</li>
-<li>共享锁（Shared），简写为 S 锁，又称读锁。</li>
-</ul>
-<p>有以下两个规定：</p>
-<ul>
-<li>一个事务对数据对象 A 加了 X 锁，就可以对 A 进行读取和更新。加锁期间其它事务不能对 A 加任何锁。</li>
-<li>一个事务对数据对象 A 加了 S 锁，可以对 A 进行读取操作，但是不能进行更新操作。加锁期间其它事务能对 A 加 S 锁，但是不能加 X 锁。</li>
-</ul>
-<p>锁的兼容关系如下：</p>
-<table>
-<thead>
-<tr>
-<th>-</th>
-<th>X</th>
-<th>S</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>X</td>
-<td>×</td>
-<td>×</td>
-</tr>
-<tr>
-<td>S</td>
-<td>×</td>
-<td>√</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-意向锁"><a href="#2-意向锁" class="headerlink" title="2. 意向锁"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e6%84%8f%e5%90%91%e9%94%81">2. 意向锁</a></h3><p>使用意向锁（Intention Locks）可以更容易地支持多粒度封锁。<br>在存在行级锁和表级锁的情况下，事务 T 想要对表 A 加 X 锁，就需要先检测是否有其它事务对表 A 或者表 A 中的任意一行加了锁，那么就需要对表 A 的每一行都检测一次，这是非常耗时的。<br>意向锁在原来的 X/S 锁之上引入了 IX/IS，IX/IS 都是表锁，用来表示一个事务想要在表中的某个数据行上加 X 锁或 S 锁。有以下两个规定：</p>
-<ul>
-<li>一个事务在获得某个数据行对象的 S 锁之前，必须先获得表的 IS 锁或者更强的锁；</li>
-<li>一个事务在获得某个数据行对象的 X 锁之前，必须先获得表的 IX 锁。</li>
-</ul>
-<p>通过引入意向锁，事务 T 想要对表 A 加 X 锁，只需要先检测是否有其它事务对表 A 加了 X/IX/S/IS 锁，如果加了就表示有其它事务正在使用这个表或者表中某一行的锁，因此事务 T 加 X 锁失败。<br>各种锁的兼容关系如下：</p>
-<table>
-<thead>
-<tr>
-<th>-</th>
-<th>X</th>
-<th>IX</th>
-<th>S</th>
-<th>IS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>X</td>
-<td>×</td>
-<td>×</td>
-<td>×</td>
-<td>×</td>
-</tr>
-<tr>
-<td>IX</td>
-<td>×</td>
-<td>√</td>
-<td>×</td>
-<td>√</td>
-</tr>
-<tr>
-<td>S</td>
-<td>×</td>
-<td>×</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>IS</td>
-<td>×</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-</tbody>
-</table>
-<p>解释如下：</p>
-<ul>
-<li>任意 IS/IX 锁之间都是兼容的，因为它们只是表示想要对表加锁，而不是真正加锁；</li>
-<li>S 锁只与 S 锁和 IS 锁兼容，也就是说事务 T 想要对数据行加 S 锁，其它事务可以已经获得对表或者表中的行的 S 锁。</li>
-</ul>
-<h2 id="封锁协议"><a href="#封锁协议" class="headerlink" title="封锁协议"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%b0%81%e9%94%81%e5%8d%8f%e8%ae%ae">封锁协议</a></h2><h3 id="1-三级封锁协议"><a href="#1-三级封锁协议" class="headerlink" title="1. 三级封锁协议"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e4%b8%89%e7%ba%a7%e5%b0%81%e9%94%81%e5%8d%8f%e8%ae%ae">1. 三级封锁协议</a></h3><p><strong>一级封锁协议</strong><br>事务 T 要修改数据 A 时必须加 X 锁，直到 T 结束才释放锁。<br>可以解决丢失修改问题，因为不能同时有两个事务对同一个数据进行修改，那么事务的修改就不会被覆盖。</p>
-<table>
-<thead>
-<tr>
-<th>T</th>
-<th>T</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>lock-x(A)</td>
-<td></td>
-</tr>
-<tr>
-<td>read A=20</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>lock-x(A)</td>
-</tr>
-<tr>
-<td></td>
-<td>wait</td>
-</tr>
-<tr>
-<td>write A=19</td>
-<td>.</td>
-</tr>
-<tr>
-<td>commit</td>
-<td>.</td>
-</tr>
-<tr>
-<td>unlock-x(A)</td>
-<td>.</td>
-</tr>
-<tr>
-<td></td>
-<td>obtain</td>
-</tr>
-<tr>
-<td></td>
-<td>read A=19</td>
-</tr>
-<tr>
-<td></td>
-<td>write A=21</td>
-</tr>
-<tr>
-<td></td>
-<td>commit</td>
-</tr>
-<tr>
-<td></td>
-<td>unlock-x(A)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>二级封锁协议</strong><br>在一级的基础上，要求读取数据 A 时必须加 S 锁，读取完马上释放 S 锁。<br>可以解决读脏数据问题，因为如果一个事务在对数据 A 进行修改，根据 1 级封锁协议，会加 X 锁，那么就不能再加 S 锁了，也就是不会读入数据。</p>
-<table>
-<thead>
-<tr>
-<th>T</th>
-<th>T</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>lock-x(A)</td>
-<td></td>
-</tr>
-<tr>
-<td>read A=20</td>
-<td></td>
-</tr>
-<tr>
-<td>write A=19</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>lock-s(A)</td>
-</tr>
-<tr>
-<td></td>
-<td>wait</td>
-</tr>
-<tr>
-<td>rollback</td>
-<td>.</td>
-</tr>
-<tr>
-<td>A=20</td>
-<td>.</td>
-</tr>
-<tr>
-<td>unlock-x(A)</td>
-<td>.</td>
-</tr>
-<tr>
-<td></td>
-<td>obtain</td>
-</tr>
-<tr>
-<td></td>
-<td>read A=20</td>
-</tr>
-<tr>
-<td></td>
-<td>unlock-s(A)</td>
-</tr>
-<tr>
-<td></td>
-<td>commit</td>
-</tr>
-</tbody>
-</table>
-<p><strong>三级封锁协议</strong><br>在二级的基础上，要求读取数据 A 时必须加 S 锁，直到事务结束了才能释放 S 锁。<br>可以解决不可重复读的问题，因为读 A 时，其它事务不能对 A 加 X 锁，从而避免了在读的期间数据发生改变。</p>
-<table>
-<thead>
-<tr>
-<th>T</th>
-<th>T</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>lock-s(A)</td>
-<td></td>
-</tr>
-<tr>
-<td>read A=20</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>lock-x(A)</td>
-</tr>
-<tr>
-<td></td>
-<td>wait</td>
-</tr>
-<tr>
-<td>read A=20</td>
-<td>.</td>
-</tr>
-<tr>
-<td>commit</td>
-<td>.</td>
-</tr>
-<tr>
-<td>unlock-s(A)</td>
-<td>.</td>
-</tr>
-<tr>
-<td></td>
-<td>obtain</td>
-</tr>
-<tr>
-<td></td>
-<td>read A=20</td>
-</tr>
-<tr>
-<td></td>
-<td>write A=19</td>
-</tr>
-<tr>
-<td></td>
-<td>commit</td>
-</tr>
-<tr>
-<td></td>
-<td>unlock-X(A)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-两段锁协议"><a href="#2-两段锁协议" class="headerlink" title="2. 两段锁协议"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e4%b8%a4%e6%ae%b5%e9%94%81%e5%8d%8f%e8%ae%ae">2. 两段锁协议</a></h3><p>加锁和解锁分为两个阶段进行。<br>可串行化调度是指，通过并发控制，使得并发执行的事务结果与某个串行执行的事务结果相同。<br>事务遵循两段锁协议是保证可串行化调度的充分条件。例如以下操作满足两段锁协议，它是可串行化调度。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...lock-s(B)...lock-s(C)...unlock(A)...unlock(C)...unlock(B)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<p>但不是必要条件，例如以下操作不满足两段锁协议，但是它还是可串行化调度。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...unlock(A)...lock-s(B)...unlock(B)...lock-s(C)...unlock(C)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h2 id="MySQL-隐式与显示锁定"><a href="#MySQL-隐式与显示锁定" class="headerlink" title="MySQL 隐式与显示锁定"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=mysql-%e9%9a%90%e5%bc%8f%e4%b8%8e%e6%98%be%e7%a4%ba%e9%94%81%e5%ae%9a">MySQL 隐式与显示锁定</a></h2><p>MySQL 的 InnoDB 存储引擎采用两段锁协议，会根据隔离级别在需要的时候自动加锁，并且所有的锁都是在同一时刻被释放，这被称为隐式锁定。<br>InnoDB 也可以使用特定的语句进行显示锁定：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... LOCK In SHARE MODE;</span><br><span class="line">SELECT ... FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h1 id="四、隔离级别"><a href="#四、隔离级别" class="headerlink" title="四、隔离级别"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%9b%9b%e3%80%81%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab">四、隔离级别</a></h1><h2 id="未提交读（READ-UNCOMMITTED）"><a href="#未提交读（READ-UNCOMMITTED）" class="headerlink" title="未提交读（READ UNCOMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%9c%aa%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-uncommitted%ef%bc%89">未提交读（READ UNCOMMITTED）</a></h2><p>事务中的修改，即使没有提交，对其它事务也是可见的。</p>
-<h2 id="提交读（READ-COMMITTED）"><a href="#提交读（READ-COMMITTED）" class="headerlink" title="提交读（READ COMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-committed%ef%bc%89">提交读（READ COMMITTED）</a></h2><p>一个事务只能读取已经提交的事务所做的修改。换句话说，一个事务所做的修改在提交之前对其它事务是不可见的。</p>
-<h2 id="可重复读（REPEATABLE-READ）"><a href="#可重复读（REPEATABLE-READ）" class="headerlink" title="可重复读（REPEATABLE READ）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb%ef%bc%88repeatable-read%ef%bc%89">可重复读（REPEATABLE READ）</a></h2><p>保证在同一个事务中多次读取同样数据的结果是一样的。</p>
-<h2 id="可串行化（SERIALIZABLE）"><a href="#可串行化（SERIALIZABLE）" class="headerlink" title="可串行化（SERIALIZABLE）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%8f%af%e4%b8%b2%e8%a1%8c%e5%8c%96%ef%bc%88serializable%ef%bc%89">可串行化（SERIALIZABLE）</a></h2><p>强制事务串行执行。</p>
-<hr>
-<table>
-<thead>
-<tr>
-<th>隔离级别</th>
-<th>脏读</th>
-<th>不可重复读</th>
-<th>幻影读</th>
-<th>加锁读</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>未提交读</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>×</td>
-</tr>
-<tr>
-<td>提交读</td>
-<td>×</td>
-<td>√</td>
-<td>√</td>
-<td>×</td>
-</tr>
-<tr>
-<td>可重复读</td>
-<td>×</td>
-<td>×</td>
-<td>√</td>
-<td>×</td>
-</tr>
-<tr>
-<td>可串行化</td>
-<td>×</td>
-<td>×</td>
-<td>×</td>
-<td>√</td>
-</tr>
-</tbody>
-</table>
-<h1 id="五、多版本并发控制"><a href="#五、多版本并发控制" class="headerlink" title="五、多版本并发控制"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%ba%94%e3%80%81%e5%a4%9a%e7%89%88%e6%9c%ac%e5%b9%b6%e5%8f%91%e6%8e%a7%e5%88%b6">五、多版本并发控制</a></h1><p>多版本并发控制（Multi-Version Concurrency Control, MVCC）是 MySQL 的 InnoDB 存储引擎实现隔离级别的一种具体方式，用于实现提交读和可重复读这两种隔离级别。而未提交读隔离级别总是读取最新的数据行，无需使用 MVCC。可串行化隔离级别需要对所有读取的行都加锁，单纯使用 MVCC 无法实现。</p>
-<h2 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e7%89%88%e6%9c%ac%e5%8f%b7">版本号</a></h2><ul>
-<li>系统版本号：是一个递增的数字，每开始一个新的事务，系统版本号就会自动递增。</li>
-<li>事务版本号：事务开始时的系统版本号。</li>
-</ul>
-<h2 id="隐藏的列"><a href="#隐藏的列" class="headerlink" title="隐藏的列"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e9%9a%90%e8%97%8f%e7%9a%84%e5%88%97">隐藏的列</a></h2><p>MVCC 在每行记录后面都保存着两个隐藏的列，用来存储两个版本号：</p>
-<ul>
-<li>创建版本号：指示创建一个数据行的快照时的系统版本号；</li>
-<li>删除版本号：如果该快照的删除版本号大于当前事务版本号表示该快照有效，否则表示该快照已经被删除了。</li>
-</ul>
-<h2 id="Undo-日志"><a href="#Undo-日志" class="headerlink" title="Undo 日志"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=undo-%e6%97%a5%e5%bf%97">Undo 日志</a></h2><p>MVCC 使用到的快照存储在 Undo 日志中，该日志通过回滚指针把一个数据行（Record）的所有快照连接起来。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893265-f2c3df8b-a9ae-4abc-aea6-4e4cb5e914e5.jpeg#align=left&amp;display=inline&amp;height=195&amp;originHeight=195&amp;originWidth=536&amp;size=0&amp;status=done&amp;width=536" alt></p>
-<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%ae%9e%e7%8e%b0%e8%bf%87%e7%a8%8b">实现过程</a></h2><p>以下实现过程针对可重复读隔离级别。<br>当开始新一个事务时，该事务的版本号肯定会大于当前所有数据行快照的创建版本号，理解这一点很关键。</p>
-<h3 id="1-SELECT"><a href="#1-SELECT" class="headerlink" title="1. SELECT"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-select">1. SELECT</a></h3><p>多个事务必须读取到同一个数据行的快照，并且这个快照是距离现在最近的一个有效快照。但是也有例外，如果有一个事务正在修改该数据行，那么它可以读取事务本身所做的修改，而不用和其它事务的读取结果一致。<br>把没有对一个数据行做修改的事务称为 T，T 所要读取的数据行快照的创建版本号必须小于 T 的版本号，因为如果大于或者等于 T 的版本号，那么表示该数据行快照是其它事务的最新修改，因此不能去读取它。除此之外，T 所要读取的数据行快照的删除版本号必须大于 T 的版本号，因为如果小于等于 T 的版本号，那么表示该数据行快照是已经被删除的，不应该去读取它。</p>
-<h3 id="2-INSERT"><a href="#2-INSERT" class="headerlink" title="2. INSERT"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-insert">2. INSERT</a></h3><p>将当前系统版本号作为数据行快照的创建版本号。</p>
-<h3 id="3-DELETE"><a href="#3-DELETE" class="headerlink" title="3. DELETE"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_3-delete">3. DELETE</a></h3><p>将当前系统版本号作为数据行快照的删除版本号。</p>
-<h3 id="4-UPDATE"><a href="#4-UPDATE" class="headerlink" title="4. UPDATE"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_4-update">4. UPDATE</a></h3><p>将当前系统版本号作为更新前的数据行快照的删除版本号，并将当前系统版本号作为更新后的数据行快照的创建版本号。可以理解为先执行 DELETE 后执行 INSERT。</p>
-<h2 id="快照读与当前读"><a href="#快照读与当前读" class="headerlink" title="快照读与当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bf%ab%e7%85%a7%e8%af%bb%e4%b8%8e%e5%bd%93%e5%89%8d%e8%af%bb">快照读与当前读</a></h2><h3 id="1-快照读"><a href="#1-快照读" class="headerlink" title="1. 快照读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e5%bf%ab%e7%85%a7%e8%af%bb">1. 快照读</a></h3><p>使用 MVCC 读取的是快照中的数据，这样可以减少加锁所带来的开销。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table ...;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h3 id="2-当前读"><a href="#2-当前读" class="headerlink" title="2. 当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e5%bd%93%e5%89%8d%e8%af%bb">2. 当前读</a></h3><p>读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where ? lock in share mode;</span><br><span class="line">select * from table where ? for update;</span><br><span class="line">insert;</span><br><span class="line">update;</span><br><span class="line">delete;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h1 id="六、Next-Key-Locks"><a href="#六、Next-Key-Locks" class="headerlink" title="六、Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%85%ad%e3%80%81next-key-locks">六、Next-Key Locks</a></h1><p>Next-Key Locks 是 MySQL 的 InnoDB 存储引擎的一种锁实现。<br>MVCC 不能解决幻读的问题，Next-Key Locks 就是为了解决这个问题而存在的。在可重复读（REPEATABLE READ）隔离级别下，使用 MVCC + Next-Key Locks 可以解决幻读问题。</p>
-<h2 id="Record-Locks"><a href="#Record-Locks" class="headerlink" title="Record Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=record-locks">Record Locks</a></h2><p>锁定一个记录上的索引，而不是记录本身。<br>如果表没有设置索引，InnoDB 会自动在主键上创建隐藏的聚簇索引，因此 Record Locks 依然可以使用。</p>
-<h2 id="Gap-Locks"><a href="#Gap-Locks" class="headerlink" title="Gap Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=gap-locks">Gap Locks</a></h2><p>锁定索引之间的间隙，但是不包含索引本身。例如当一个事务执行以下语句，其它事务就不能在 t.c 中插入 15。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT c FROM t WHERE c BETWEEN 10 and 20 FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h2 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=next-key-locks">Next-Key Locks</a></h2><p>它是 Record Locks 和 Gap Locks 的结合，不仅锁定一个记录上的索引，也锁定索引之间的间隙。例如一个索引包含以下值：10, 11, 13, and 20，那么就需要锁定以下区间：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(negative infinity, 10]</span><br><span class="line">(10, 11]</span><br><span class="line">(11, 13]</span><br><span class="line">(13, 20]</span><br><span class="line">(20, positive infinity)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h1 id="七、关系数据库设计理论"><a href="#七、关系数据库设计理论" class="headerlink" title="七、关系数据库设计理论"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%83%e3%80%81%e5%85%b3%e7%b3%bb%e6%95%b0%e6%8d%ae%e5%ba%93%e8%ae%be%e8%ae%a1%e7%90%86%e8%ae%ba">七、关系数据库设计理论</a></h1><h2 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%87%bd%e6%95%b0%e4%be%9d%e8%b5%96">函数依赖</a></h2><p>记 A-&gt;B 表示 A 函数决定 B，也可以说 B 函数依赖于 A。<br>如果 {A1，A2，… ，An} 是关系的一个或多个属性的集合，该集合函数决定了关系的其它所有属性并且是最小的，那么该集合就称为键码。<br>对于 A-&gt;B，如果能找到 A 的真子集 A’，使得 A’-&gt; B，那么 A-&gt;B 就是部分函数依赖，否则就是完全函数依赖。<br>对于 A-&gt;B，B-&gt;C，则 A-&gt;C 是一个传递函数依赖。</p>
-<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bc%82%e5%b8%b8">异常</a></h2><p>以下的学生课程关系的函数依赖为 Sno, Cname -&gt; Sname, Sdept, Mname, Grade，键码为 {Sno, Cname}。也就是说，确定学生和课程之后，就能确定其它信息。</p>
-<table>
-<thead>
-<tr>
-<th>Sno</th>
-<th>Sname</th>
-<th>Sdept</th>
-<th>Mname</th>
-<th>Cname</th>
-<th>Grade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>学生-1</td>
-<td>学院-1</td>
-<td>院长-1</td>
-<td>课程-1</td>
-<td>90</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-2</td>
-<td>80</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-1</td>
-<td>100</td>
-</tr>
-<tr>
-<td>3</td>
-<td>学生-3</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-2</td>
-<td>95</td>
-</tr>
-</tbody>
-</table>
-<p>不符合范式的关系，会产生很多异常，主要有以下四种异常：</p>
-<ul>
-<li>冗余数据：例如  <code>学生-2</code>  出现了两次。</li>
-<li>修改异常：修改了一个记录中的信息，但是另一个记录中相同的信息却没有被修改。</li>
-<li>删除异常：删除一个信息，那么也会丢失其它信息。例如删除了  <code>课程-1</code>  需要删除第一行和第三行，那么  <code>学生-1</code>  的信息就会丢失。</li>
-<li>插入异常：例如想要插入一个学生的信息，如果这个学生还没选课，那么就无法插入。</li>
-</ul>
-<h2 id="范式"><a href="#范式" class="headerlink" title="范式"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e8%8c%83%e5%bc%8f">范式</a></h2><p>范式理论是为了解决以上提到四种异常。<br>高级别范式的依赖于低级别的范式，1NF 是最低级别的范式。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554792893271-434ed3bb-c978-4569-8d5b-fa89099628cb.png#align=left&amp;display=inline&amp;height=251&amp;originHeight=395&amp;originWidth=472&amp;size=0&amp;status=done&amp;width=300" alt></p>
-<h3 id="1-第一范式-1NF"><a href="#1-第一范式-1NF" class="headerlink" title="1. 第一范式 (1NF)"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e7%ac%ac%e4%b8%80%e8%8c%83%e5%bc%8f-1nf">1. 第一范式 (1NF)</a></h3><p>属性不可分。</p>
-<h3 id="2-第二范式-2NF"><a href="#2-第二范式-2NF" class="headerlink" title="2. 第二范式 (2NF)"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e7%ac%ac%e4%ba%8c%e8%8c%83%e5%bc%8f-2nf">2. 第二范式 (2NF)</a></h3><p>每个非主属性完全函数依赖于键码。<br>可以通过分解来满足。<br><strong>分解前</strong></p>
-<table>
-<thead>
-<tr>
-<th>Sno</th>
-<th>Sname</th>
-<th>Sdept</th>
-<th>Mname</th>
-<th>Cname</th>
-<th>Grade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>学生-1</td>
-<td>学院-1</td>
-<td>院长-1</td>
-<td>课程-1</td>
-<td>90</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-2</td>
-<td>80</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-1</td>
-<td>100</td>
-</tr>
-<tr>
-<td>3</td>
-<td>学生-3</td>
-<td>学院-2</td>
-<td>院长-2</td>
-<td>课程-2</td>
-<td>95</td>
-</tr>
-</tbody>
-</table>
-<p>以上学生课程关系中，{Sno, Cname} 为键码，有如下函数依赖：</p>
-<ul>
-<li>Sno -&gt; Sname, Sdept</li>
-<li>Sdept -&gt; Mname</li>
-<li>Sno, Cname-&gt; Grade</li>
-</ul>
-<p>Grade 完全函数依赖于键码，它没有任何冗余数据，每个学生的每门课都有特定的成绩。<br>Sname, Sdept 和 Mname 都部分依赖于键码，当一个学生选修了多门课时，这些数据就会出现多次，造成大量冗余数据。<br><strong>分解后</strong><br>关系-1</p>
-<table>
-<thead>
-<tr>
-<th>Sno</th>
-<th>Sname</th>
-<th>Sdept</th>
-<th>Mname</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>学生-1</td>
-<td>学院-1</td>
-<td>院长-1</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-<td>院长-2</td>
-</tr>
-<tr>
-<td>3</td>
-<td>学生-3</td>
-<td>学院-2</td>
-<td>院长-2</td>
-</tr>
-</tbody>
-</table>
-<p>有以下函数依赖：</p>
-<ul>
-<li>Sno -&gt; Sname, Sdept</li>
-<li>Sdept -&gt; Mname</li>
-</ul>
-<p>关系-2</p>
-<table>
-<thead>
-<tr>
-<th>Sno</th>
-<th>Cname</th>
-<th>Grade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>课程-1</td>
-<td>90</td>
-</tr>
-<tr>
-<td>2</td>
-<td>课程-2</td>
-<td>80</td>
-</tr>
-<tr>
-<td>2</td>
-<td>课程-1</td>
-<td>100</td>
-</tr>
-<tr>
-<td>3</td>
-<td>课程-2</td>
-<td>95</td>
-</tr>
-</tbody>
-</table>
-<p>有以下函数依赖：</p>
-<ul>
-<li>Sno, Cname -&gt; Grade</li>
-</ul>
-<h3 id="3-第三范式-3NF"><a href="#3-第三范式-3NF" class="headerlink" title="3. 第三范式 (3NF)"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_3-%e7%ac%ac%e4%b8%89%e8%8c%83%e5%bc%8f-3nf">3. 第三范式 (3NF)</a></h3><p>非主属性不传递函数依赖于键码。<br>上面的 关系-1 中存在以下传递函数依赖：</p>
-<ul>
-<li>Sno -&gt; Sdept -&gt; Mname</li>
-</ul>
-<p>可以进行以下分解：<br>关系-11</p>
-<table>
-<thead>
-<tr>
-<th>Sno</th>
-<th>Sname</th>
-<th>Sdept</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>学生-1</td>
-<td>学院-1</td>
-</tr>
-<tr>
-<td>2</td>
-<td>学生-2</td>
-<td>学院-2</td>
-</tr>
-<tr>
-<td>3</td>
-<td>学生-3</td>
-<td>学院-2</td>
-</tr>
-</tbody>
-</table>
-<p>关系-12</p>
-<table>
-<thead>
-<tr>
-<th>Sdept</th>
-<th>Mname</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>学院-1</td>
-<td>院长-1</td>
-</tr>
-<tr>
-<td>学院-2</td>
-<td>院长-2</td>
-</tr>
-</tbody>
-</table>
-<h1 id="八、ER-图"><a href="#八、ER-图" class="headerlink" title="八、ER 图"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%85%ab%e3%80%81er-%e5%9b%be">八、ER 图</a></h1><p>Entity-Relationship，有三个组成部分：实体、属性、联系。<br>用来进行关系型数据库系统的概念设计。</p>
-<h2 id="实体的三种联系"><a href="#实体的三种联系" class="headerlink" title="实体的三种联系"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%ae%9e%e4%bd%93%e7%9a%84%e4%b8%89%e7%a7%8d%e8%81%94%e7%b3%bb">实体的三种联系</a></h2><p>包含一对一，一对多，多对多三种。</p>
-<ul>
-<li>如果 A 到 B 是一对多关系，那么画个带箭头的线段指向 B；</li>
-<li>如果是一对一，画两个带箭头的线段；</li>
-<li>如果是多对多，画两个不带箭头的线段。</li>
-</ul>
-<p>下图的 Course 和 Student 是一对多的关系。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893264-9c4fffaa-f7e5-430d-9aae-1be679a7aafd.jpeg#align=left&amp;display=inline&amp;height=59&amp;originHeight=59&amp;originWidth=413&amp;size=0&amp;status=done&amp;width=413" alt></p>
-<h2 id="表示出现多次的关系"><a href="#表示出现多次的关系" class="headerlink" title="表示出现多次的关系"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e8%a1%a8%e7%a4%ba%e5%87%ba%e7%8e%b0%e5%a4%9a%e6%ac%a1%e7%9a%84%e5%85%b3%e7%b3%bb">表示出现多次的关系</a></h2><p>一个实体在联系出现几次，就要用几条线连接。<br>下图表示一个课程的先修关系，先修关系出现两个 Course 实体，第一个是先修课程，后一个是后修课程，因此需要用两条线来表示这种关系。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893277-9457472b-ac5b-4b94-9343-642355dcb973.jpeg#align=left&amp;display=inline&amp;height=135&amp;originHeight=135&amp;originWidth=309&amp;size=0&amp;status=done&amp;width=309" alt></p>
-<h2 id="联系的多向性"><a href="#联系的多向性" class="headerlink" title="联系的多向性"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e8%81%94%e7%b3%bb%e7%9a%84%e5%a4%9a%e5%90%91%e6%80%a7">联系的多向性</a></h2><p>虽然老师可以开设多门课，并且可以教授多名学生，但是对于特定的学生和课程，只有一个老师教授，这就构成了一个三元联系。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554792893296-a49e65f5-92c2-4aef-a7ea-ea84184294c9.png#align=left&amp;display=inline&amp;height=112&amp;originHeight=112&amp;originWidth=436&amp;size=0&amp;status=done&amp;width=436" alt></p>
-<p>一般只使用二元联系，可以把多元联系转换为二元联系。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554792893305-04357923-d040-4233-8359-376bdad9fa07.png#align=left&amp;display=inline&amp;height=198&amp;originHeight=198&amp;originWidth=555&amp;size=0&amp;status=done&amp;width=555" alt></p>
-<h2 id="表示子类"><a href="#表示子类" class="headerlink" title="表示子类"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e8%a1%a8%e7%a4%ba%e5%ad%90%e7%b1%bb">表示子类</a></h2><p>用一个三角形和两条线来连接类和子类，与子类有关的属性和联系都连到子类上，而与父类和子类都有关的连到父类上。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893303-193c82f1-7176-4091-a915-6589cc4ea27f.jpeg#align=left&amp;display=inline&amp;height=217&amp;originHeight=217&amp;originWidth=501&amp;size=0&amp;status=done&amp;width=501" alt></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99">参考资料</a></h1><ul>
-<li>AbrahamSilberschatz, HenryF.Korth, S.Sudarshan, 等. 数据库系统概念 [M]. 机械工业出版社, 2006.</li>
-<li>施瓦茨. 高性能 MYSQL(第 3 版)[M]. 电子工业出版社, 2013.</li>
-<li>史嘉权. 数据库系统概论[M]. 清华大学出版社有限公司, 2006.</li>
-<li><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-storage-engine.html" target="_blank" rel="noopener">The InnoDB Storage Engine</a></li>
-<li><a href="https://www.slideshare.net/ErnestoHernandezRodriguez/transaction-isolation-levels" target="_blank" rel="noopener">Transaction isolation levels</a></li>
-<li><a href="http://scanftree.com/dbms/2-phase-locking-protocol" target="_blank" rel="noopener">Concurrency Control</a></li>
-<li><a href="https://www.slideshare.net/brshristov/the-nightmare-of-locking-blocking-and-isolation-levels-46391666" target="_blank" rel="noopener">The Nightmare of Locking, Blocking and Isolation Levels!</a></li>
-<li><a href="https://aksakalli.github.io/2012/03/12/database-normalization-and-normal-forms-with-an-example.html" target="_blank" rel="noopener">Database Normalization and Normal Forms with an Example</a></li>
-<li><a href="https://blog.jcole.us/2014/04/16/the-basics-of-the-innodb-undo-logging-and-history-system/" target="_blank" rel="noopener">The basics of the InnoDB undo logging and history system</a></li>
-<li><a href="https://www.brightbox.com/blog/2013/10/31/on-mysql-locks/" target="_blank" rel="noopener">MySQL locking for the busy web developer</a></li>
-<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="noopener">浅入浅出 MySQL 和 InnoDB</a></li>
-<li><a href="https://tech.meituan.com/2014/08/20/innodb-lock.html" target="_blank" rel="noopener">Innodb 中的事务隔离级别和锁的关系</a></li>
-</ul>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1583,45 +591,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/13/yuque/一键来个热点 Linux 版本/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/数据库相关/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1651,44 +625,27 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/项目-互联网公司筛选器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/能力提升——Linux!常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/09/28/yuque/项目-互联网公司筛选器/">项目-互联网公司筛选器</a>
-=======
-      <a class="article-title" href="/2019/04/04/yuque/能力提升——Linux!常用命令/">能力提升——Linux:常用命令</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/09/28/yuque/项目-互联网公司筛选器/" class="archive-article-date">
   	<time datetime="2019-09-28T16:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-28</time>
-=======
-        <a href="/2019/04/04/yuque/能力提升——Linux!常用命令/" class="archive-article-date">
-  	<time datetime="2019-04-04T08:02:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>多维度筛选<br>犀牛数据查投资信息<br>根各种维度信息<br>启信宝<br>查询企业负面信息<br>竞品信息<br>创投圈关注老牌创投-例如红杉资本，真格基金等投资动向<br>分析各家投资倾向<br>分析创投业的热点动向</p>
-=======
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line">Linux：免费开源，多用户多任务，衍生出很多附属版本，例如常用的RedHat。。。</span><br><span class="line"></span><br><span class="line">常用指令</span><br><span class="line">ls　　        显示文件或目录</span><br><span class="line">     -l           列出文件详细信息l(list)</span><br><span class="line">     -a          列出当前目录下所有文件及目录，包括隐藏的a(all)</span><br><span class="line">mkdir         创建目录</span><br><span class="line">     -p           创建目录，若无父目录，则创建p(parent)</span><br><span class="line"><span class="built_in">cd</span>               切换目录</span><br><span class="line">touch          创建空文件</span><br><span class="line"><span class="built_in">echo</span>            创建带有内容的文件。</span><br><span class="line">cat              查看文件内容</span><br><span class="line">cp                拷贝</span><br><span class="line">mv               移动或重命名</span><br><span class="line">rm               删除文件</span><br><span class="line">     -r            递归删除，可删除子目录及文件</span><br><span class="line">     -f            强制删除</span><br><span class="line">find              在文件系统中搜索某文件</span><br><span class="line">wc                统计文本中行数、字数、字符数</span><br><span class="line">grep             在文本文件中查找某个字符串</span><br><span class="line">rmdir           删除空目录</span><br><span class="line">tree             树形结构显示目录，需要安装tree包</span><br><span class="line"><span class="built_in">pwd</span>              显示当前目录</span><br><span class="line">ln                  创建链接文件</span><br><span class="line">more、less  分页显示文本文件内容</span><br><span class="line">head、tail    显示文件头、尾内容</span><br><span class="line">ctrl+alt+F1  命令行全屏模式</span><br><span class="line"></span><br><span class="line">系统管理命令</span><br><span class="line"><span class="built_in">stat</span>              显示指定文件的详细信息，比ls更详细</span><br><span class="line">who               显示在线登陆用户</span><br><span class="line">whoami          显示当前操作用户</span><br><span class="line">hostname      显示主机名</span><br><span class="line">uname           显示系统信息</span><br><span class="line">top                动态显示当前耗费资源最多进程信息</span><br><span class="line">ps                  显示瞬间进程状态 ps -aux</span><br><span class="line">du                  查看目录大小 du -h /home带有单位显示目录信息</span><br><span class="line">df                  查看磁盘大小 df -h 带有单位显示磁盘信息</span><br><span class="line">ifconfig          查看网络情况</span><br><span class="line">ping                测试网络连通</span><br><span class="line">netstat          显示网络状态信息</span><br><span class="line">man                命令不会用了，找男人  如：man ls</span><br><span class="line">clear              清屏</span><br><span class="line"><span class="built_in">alias</span>               对命令重命名 如：<span class="built_in">alias</span> showmeit=<span class="string">"ps -aux"</span> ，另外解除使用unaliax showmeit</span><br><span class="line"><span class="built_in">kill</span>                 杀死进程，可以先用ps 或 top命令查看进程的id，然后再用<span class="built_in">kill</span>命令杀死进程。</span><br><span class="line"></span><br><span class="line">打包压缩相关命令</span><br><span class="line">gzip：</span><br><span class="line">bzip2：</span><br><span class="line">tar:                打包压缩</span><br><span class="line">     -c              归档文件</span><br><span class="line">     -x              压缩文件</span><br><span class="line">     -z              gzip压缩文件</span><br><span class="line">     -j              bzip2压缩文件</span><br><span class="line">     -v              显示压缩或解压缩过程 v(view)</span><br><span class="line">     -f              使用档名</span><br><span class="line">例：</span><br><span class="line">tar -cvf /home/abc.tar /home/abc              只打包，不压缩</span><br><span class="line">tar -zcvf /home/abc.tar.gz /home/abc        打包，并用gzip压缩</span><br><span class="line">tar -jcvf /home/abc.tar.bz2 /home/abc      打包，并用bzip2压缩</span><br><span class="line">当然，如果想解压缩，就直接替换上面的命令  tar -cvf  / tar -zcvf  / tar -jcvf 中的“c” 换成“x” 就可以了。</span><br><span class="line"></span><br><span class="line">关机/重启机器</span><br><span class="line">shutdown</span><br><span class="line">     -r             关机重启</span><br><span class="line">     -h             关机不重启</span><br><span class="line">     now          立刻关机</span><br><span class="line">halt               关机</span><br><span class="line">reboot          重启</span><br><span class="line"></span><br><span class="line">Linux管道</span><br><span class="line">将一个命令的标准输出作为另一个命令的标准输入。也就是把几个命令组合起来使用，后一个命令除以前一个命令的结果。</span><br><span class="line">例：grep -r <span class="string">"close"</span> /home/* | more       在home目录下所有文件中查找，包括close的文件，并分页输出。</span><br><span class="line"></span><br><span class="line">Linux软件包管理</span><br><span class="line">dpkg (Debian Package)管理工具，软件包名以.deb后缀。这种方法适合系统不能联网的情况下。</span><br><span class="line">比如安装tree命令的安装包，先将tree.deb传到Linux系统中。再使用如下命令安装。</span><br><span class="line">sudo dpkg -i tree_1.5.3-1_i386.deb         安装软件</span><br><span class="line">sudo dpkg -r tree                                     卸载软件</span><br><span class="line"></span><br><span class="line">注：将tree.deb传到Linux系统中，有多种方式。VMwareTool，使用挂载方式；使用winSCP工具等；</span><br><span class="line">APT（Advanced Packaging Tool）高级软件工具。这种方法适合系统能够连接互联网的情况。</span><br><span class="line">依然以tree为例</span><br><span class="line">sudo apt-get install tree                         安装tree</span><br><span class="line">sudo apt-get remove tree                       卸载tree</span><br><span class="line">sudo apt-get update                                 更新软件</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line"></span><br><span class="line">将.rpm文件转为.deb文件</span><br><span class="line">.rpm为RedHat使用的软件格式。在Ubuntu下不能直接使用，所以需要转换一下。</span><br><span class="line">sudo alien abc.rpm</span><br><span class="line"></span><br><span class="line">vim使用</span><br><span class="line">vim三种模式：命令模式、插入模式、编辑模式。使用ESC或i或：来切换模式。</span><br><span class="line">命令模式下：</span><br><span class="line">:q                      退出</span><br><span class="line">:q!                     强制退出</span><br><span class="line">:wq                   保存并退出</span><br><span class="line">:<span class="built_in">set</span> number     显示行号</span><br><span class="line">:<span class="built_in">set</span> nonumber  隐藏行号</span><br><span class="line">/apache            在文档中查找apache 按n跳到下一个，<span class="built_in">shift</span>+n上一个</span><br><span class="line">yyp                   复制光标所在行，并粘贴</span><br><span class="line">h(左移一个字符←)、j(下一行↓)、k(上一行↑)、l(右移一个字符→)</span><br><span class="line"></span><br><span class="line">用户及用户组管理</span><br><span class="line">/etc/passwd    存储用户账号</span><br><span class="line">/etc/group       存储组账号</span><br><span class="line">/etc/shadow    存储用户账号的密码</span><br><span class="line">/etc/gshadow  存储用户组账号的密码</span><br><span class="line">useradd 用户名</span><br><span class="line">userdel 用户名</span><br><span class="line">adduser 用户名</span><br><span class="line">groupadd 组名</span><br><span class="line">groupdel 组名</span><br><span class="line">passwd root     给root设置密码</span><br><span class="line">su root</span><br><span class="line">su - root</span><br><span class="line">/etc/profile     系统环境变量</span><br><span class="line">bash_profile     用户环境变量</span><br><span class="line">.bashrc              用户环境变量</span><br><span class="line">su user              切换用户，加载配置文件.bashrc</span><br><span class="line">su - user            切换用户，加载配置文件/etc/profile ，加载bash_profile</span><br><span class="line">更改文件的用户及用户组</span><br><span class="line">sudo chown [-R] owner[:group] &#123;File|Directory&#125;</span><br><span class="line">例如：还以jdk-7u21-linux-i586.tar.gz为例。属于用户hadoop，组hadoop</span><br><span class="line">要想切换此文件所属的用户及组。可以使用命令。</span><br><span class="line">sudo chown root:root jdk-7u21-linux-i586.tar.gz</span><br><span class="line"></span><br><span class="line">文件权限管理</span><br><span class="line">三种基本权限</span><br><span class="line">R           读         数值表示为4</span><br><span class="line">W          写         数值表示为2</span><br><span class="line">X           可执行  数值表示为1</span><br><span class="line">如图所示，jdk-7u21-linux-i586.tar.gz文件的权限为-rw-rw-r--</span><br><span class="line">-rw-rw-r--一共十个字符，分成四段。</span><br><span class="line">第一个字符“-”表示普通文件；这个位置还可能会出现“l”链接；“d”表示目录</span><br><span class="line">第二三四个字符“rw-”表示当前所属用户的权限。   所以用数值表示为4+2=6</span><br><span class="line">第五六七个字符“rw-”表示当前所属组的权限。      所以用数值表示为4+2=6</span><br><span class="line">第八九十个字符“r--”表示其他用户权限。              所以用数值表示为2</span><br><span class="line">所以操作此文件的权限用数值表示为662</span><br><span class="line">更改权限</span><br><span class="line">sudo chmod [u所属用户  g所属组  o其他用户  a所有用户]  [+增加权限  -减少权限]  [r  w  x]   目录名</span><br><span class="line">例如：有一个文件filename，权限为“-rw-r----x” ,将权限值改为<span class="string">"-rwxrw-r-x"</span>，用数值表示为765</span><br><span class="line">sudo chmod u+x g+w o+r  filename</span><br><span class="line">上面的例子可以用数值表示</span><br><span class="line">sudo chmod 765 filename</span><br></pre></td></tr></table></figure>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1697,57 +654,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/28/yuque/项目-互联网公司筛选器/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l//" class="article-tag-list-link color2">l</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i//" class="article-tag-list-link color2">i</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n//" class="article-tag-list-link color2">n</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u//" class="article-tag-list-link color2">u</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/l/i/n/u/x//" class="article-tag-list-link color2">x</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/能力提升——Linux!常用命令/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1777,40 +688,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/tar 命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/能力提升——数据结构算法（可视化）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/09/24/yuque/tar 命令/">tar 命令</a>
-=======
-      <a class="article-title" href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/">能力提升——数据结构算法（可视化）</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/09/24/yuque/tar 命令/" class="archive-article-date">
   	<time datetime="2019-09-24T12:14:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
-=======
-        <a href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/" class="archive-article-date">
-  	<time datetime="2019-04-03T10:09:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-03</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>tar</p>
 <p>-c: 建立压缩档案<br>-x：解压<br>-t：查看内容<br>-r：向压缩归档文件末尾追加文件<br>-u：更新原压缩包中的文件</p>
 <p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
@@ -1892,96 +789,6 @@ var _hmt = _hmt || [];
 <p>–quoting-style 选项的有效参数为:</p>
 <p>literal<br>shell<br>shell-always<br>c<br>c-maybe<br>escape<br>locale<br>clocale</p>
 <p>此 tar 默认为:<br>–format=gnu -f- -b20 –quoting-style=escape –rmt-command=/usr/lib/tar/rmt<br>–rsh-command=/usr/bin/rsh</p>
-=======
-        <ul>
-<li>基本<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/StackArray.html" target="_blank" rel="noopener">堆栈：阵列实现</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/StackLL.html" target="_blank" rel="noopener">堆栈：链接列表实现</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/QueueArray.html" target="_blank" rel="noopener">队列：数组实现</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/QueueLL.html" target="_blank" rel="noopener">队列：链接列表实现</a></li>
-<li>列表：数组实现（以<a href="https://www.cs.usfca.edu/~galles/visualization/java/visualization.html" target="_blank" rel="noopener">java</a>版本提供）</li>
-<li>列表：链接列表实现（在<a href="https://www.cs.usfca.edu/~galles/visualization/java/visualization.html" target="_blank" rel="noopener">java</a>版本中可用）</li>
-</ul>
-</li>
-<li>递归<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RecFact.html" target="_blank" rel="noopener">阶乘</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RecReverse.html" target="_blank" rel="noopener">反转字符串</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RecQueens.html" target="_blank" rel="noopener">N-Queens 问题</a></li>
-</ul>
-</li>
-<li>索引<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Search.html" target="_blank" rel="noopener">二进制和线性搜索（排序列表）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BST.html" target="_blank" rel="noopener">二叉搜索树</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/AVLtree.html" target="_blank" rel="noopener">AVL 树（平衡二叉搜索树）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RedBlack.html" target="_blank" rel="noopener">红黑树</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/SplayTree.html" target="_blank" rel="noopener">戏剧树</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/OpenHash.html" target="_blank" rel="noopener">打开哈希表（封闭寻址）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ClosedHash.html" target="_blank" rel="noopener">封闭哈希表（开放寻址）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ClosedHashBucket.html" target="_blank" rel="noopener">使用存储桶关闭哈希表</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Trie.html" target="_blank" rel="noopener">Trie（前缀树，26-ary 树）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RadixTree.html" target="_blank" rel="noopener">基数树（Compact Trie）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/TST.html" target="_blank" rel="noopener">三元搜索树（Trie with BST of children）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BTree.html" target="_blank" rel="noopener">B 树</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html" target="_blank" rel="noopener">B +树</a></li>
-</ul>
-</li>
-<li>排序<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html" target="_blank" rel="noopener">比较排序</a><ul>
-<li>冒泡排序</li>
-<li>选择排序</li>
-<li>插入排序</li>
-<li>壳牌排序</li>
-<li>合并排序</li>
-<li>Quck 排序</li>
-</ul>
-</li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BucketSort.html" target="_blank" rel="noopener">铲斗排序</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/CountingSort.html" target="_blank" rel="noopener">计数排序</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RadixSort.html" target="_blank" rel="noopener">基数排序</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/HeapSort.html" target="_blank" rel="noopener">堆排序</a></li>
-</ul>
-</li>
-<li>堆状数据结构<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Heap.html" target="_blank" rel="noopener">堆</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BinomialQueue.html" target="_blank" rel="noopener">二项式队列</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/FibonacciHeap.html" target="_blank" rel="noopener">斐波纳契堆</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/LeftistHeap.html" target="_blank" rel="noopener">左派堆</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/SkewHeap.html" target="_blank" rel="noopener">歪堆</a></li>
-</ul>
-</li>
-<li>图算法<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/BFS.html" target="_blank" rel="noopener">广度优先搜索</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/DFS.html" target="_blank" rel="noopener">深度优先搜索</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ConnectedComponent.html" target="_blank" rel="noopener">连接组件</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Dijkstra.html" target="_blank" rel="noopener">Dijkstra 的最短路径</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Prim.html" target="_blank" rel="noopener">Prim 的最低成本生成树</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/TopoSortIndegree.html" target="_blank" rel="noopener">拓扑排序（使用 Indegree 数组）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/TopoSortDFS.html" target="_blank" rel="noopener">拓扑排序（使用 DFS）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Floyd.html" target="_blank" rel="noopener">Floyd-Warshall（所有对最短的路径）</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/Kruskal.html" target="_blank" rel="noopener">Kruskal 最小费用生成树算法</a></li>
-</ul>
-</li>
-<li>动态编程<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/DPFib.html" target="_blank" rel="noopener">计算第 n 个斐波那契数</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/DPChange.html" target="_blank" rel="noopener">改变</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/DPLCS.html" target="_blank" rel="noopener">最长的共同子序列</a></li>
-</ul>
-</li>
-<li>几何算法<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RotateScale2D.html" target="_blank" rel="noopener">2D 旋转和尺度矩阵</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RotateTranslate2D.html" target="_blank" rel="noopener">二维旋转和平移矩阵</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ChangingCoordinates2D.html" target="_blank" rel="noopener">2D 改变坐标系</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/RotateScale3D.html" target="_blank" rel="noopener">三维旋转和尺度矩阵</a></li>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/ChangingCoordinates3D.html" target="_blank" rel="noopener">3D 改变坐标系</a></li>
-</ul>
-</li>
-<li>其他 …<ul>
-<li><a href="https://www.cs.usfca.edu/~galles/visualization/DisjointSets.html" target="_blank" rel="noopener">不相交集</a></li>
-<li>霍夫曼编码（<a href="https://www.cs.usfca.edu/~galles/visualization/java/visualization.html" target="_blank" rel="noopener">java</a>版本）</li>
-</ul>
-</li>
-</ul>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1990,53 +797,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/24/yuque/tar 命令/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数//" class="article-tag-list-link color2">数</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据//" class="article-tag-list-link color2">据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结//" class="article-tag-list-link color2">结</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数/据/结/构//" class="article-tag-list-link color2">构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/03/yuque/能力提升——数据结构算法（可视化）/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -2066,40 +831,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/JAVA HttpURLConnection" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/09/16/yuque/K8S 应用篇/">K8S 应用篇</a>
-=======
-      <a class="article-title" href="/2019/03/30/yuque/JAVA HttpURLConnection/">JAVA HttpURLConnection</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/09/16/yuque/K8S 应用篇/" class="archive-article-date">
   	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
-=======
-        <a href="/2019/03/30/yuque/JAVA HttpURLConnection/" class="archive-article-date">
-  	<time datetime="2019-03-30T17:08:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>部署 dashboard</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta4/aio/deploy/recommended.yaml</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io/service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io/service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io/service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">====</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
@@ -2134,18 +885,6 @@ var _hmt = _hmt || [];
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
 <p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">// 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface=ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
-=======
-        <p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
-<p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
-<p>通过服务器返回的信息获取会话例程如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">"set-cookie"</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">";"</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">""</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">""</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中的 session 格式为:  JSESSIONID=XXXXXXXXX</p>
-<p>获取 session ID 之后需要在每次发送请求的同时设置请求参数才能保持会话，例程如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"http://adugiudadiugb"</span>);</span><br><span class="line"></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">this</span>.sessionID.equals(<span class="string">""</span>))&#123;<span class="comment">//如果sessionID存在，即存在会话</span></span><br><span class="line"></span><br><span class="line">	connection.setRequestProperty(<span class="string">"cookie"</span>, <span class="keyword">this</span>.sessionID);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>只要 session ID 不改变，相应的会话也就不会改变</p>
-<p>小结：利用 Java 的 HttpURLConnection 进行请求发送时，如果需要保持同服务器的会话，需要先通过连接服务器获取 session ID ，之后发送请求加入 session ID 到请求参数中就可以了。</p>
-<p>注意：此时的服务器后台需要支持会话，即 Java Web 后台实现了 session。</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -2154,53 +893,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/16/yuque/K8S 应用篇/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/J//" class="article-tag-list-link color2">J</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/J/a//" class="article-tag-list-link color2">a</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/J/a/v//" class="article-tag-list-link color2">v</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/J/a/v/a//" class="article-tag-list-link color2">a</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/yuque/JAVA HttpURLConnection/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -2230,60 +927,27 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Tool" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/《变量》金句摘要" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2019/09/10/yuque/Tool/">Tool</a>
-=======
-      <a class="article-title" href="/2019/03/30/yuque/《变量》金句摘要/">《变量》金句摘要</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2019/09/10/yuque/Tool/" class="archive-article-date">
   	<time datetime="2019-09-10T17:20:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
-=======
-        <a href="/2019/03/30/yuque/《变量》金句摘要/" class="archive-article-date">
-  	<time datetime="2019-03-30T17:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>谛听（数据爬虫）<br>哪吒（数据分析系统）<br>全球鹰（监控）<br>八爪鱼（运维机器人）</p>
-=======
-        <p>这是倒数第三十本。<br>献给未来的自己。</p>
-<h1 id="看见中国社会小趋势"><a href="#看见中国社会小趋势" class="headerlink" title="看见中国社会小趋势"></a>看见中国社会小趋势</h1><p>历史从来都是一个“反转大师”不要忽视那些看似微弱的亮光。</p>
-<h1 id="看点-01"><a href="#看点-01" class="headerlink" title="看点 01"></a>看点 01</h1><h3 id="历史感"><a href="#历史感" class="headerlink" title="历史感"></a>历史感</h3><p>我们比任何时候都更需要历史感。<br>历史感让我们感受到自己的命运和他人的命运息息相关。<br>和历史的进程息息相关、历史感能帮助我们更好的活在当下。</p>
-<h3 id="长河模式和大树模式"><a href="#长河模式和大树模式" class="headerlink" title="长河模式和大树模式"></a>长河模式和大树模式</h3><p>描述 30 年的叙事模式不应该是“长河模式”，即传统历史作家惯用的按照时间顺序的编年史写法，让历史像江河一样流淌，我们选择的叙事模式是“大树模式”，即通过观察嫩芽和新枝，并不断把目光拉回母体，去感知中国这课大树的母体的生命力。</p>
-<h3 id="5-个变量"><a href="#5-个变量" class="headerlink" title="5 个变量"></a>5 个变量</h3><p>在 2018 年观察到的 5 个变量是大国博弈、技术赋能、新旧融合、自下而上、重建社群。</p>
-<h3 id="30-年"><a href="#30-年" class="headerlink" title="30 年"></a>30 年</h3><p>未来 30 年是中国历史上最重要的一段时期。我们已经进入一片没有航海图的水域，一系列重大的变化将挑战我们的认知。</p>
-<h3 id="满变量和小趋势"><a href="#满变量和小趋势" class="headerlink" title="满变量和小趋势"></a>满变量和小趋势</h3><p>我们用来展现历史面貌的方法是从慢变量中寻找小趋势。慢变量才是牵引历史进程的火车头。未来的时代，小众才是主流。</p>
-<h1 id="看点-02"><a href="#看点-02" class="headerlink" title="看点 02"></a>看点 02</h1><h3 id="混搭"><a href="#混搭" class="headerlink" title="混搭"></a>混搭</h3><p>除了极少数石破天惊的突破性及时外，大部分技术都是一种“混搭”，也就是说，它们把已经存在的技术用一种别人未曾想到过的方式重新大件起来。</p>
-<h3 id="寻找边缘"><a href="#寻找边缘" class="headerlink" title="寻找边缘"></a>寻找边缘</h3><p>在少有人注意到的边缘地带，交叉地带往往更容易找到技术的应用场景。</p>
-<h3 id="“工程师红利”和“市场红利”"><a href="#“工程师红利”和“市场红利”" class="headerlink" title="“工程师红利”和“市场红利”"></a>“工程师红利”和“市场红利”</h3><p>中国已经不再具备廉价劳动力优势，但仍然拥有大量的工程是资源，适于开展“劳动力密集型的研究与开发”，中国同时具有巨大的国内市场，适于开展“市场引致型的研究与开发”。</p>
-<h3 id="“群众路线”"><a href="#“群众路线”" class="headerlink" title="“群众路线”"></a>“群众路线”</h3><p>“群众路线”是一种整合了“工程师红利”和“市场红利”，专注于应用技术的快速应用，再用应用技术反作用于核心技术，用强大的市场力量诱使核心技术与自己一起演进的战略。</p>
-<h3 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h3><p>每一种技术都有自己的性格，每一个市场也都有自己的性格，只有当技术和市场投缘时，才能檫出火花。</p>
-<h3 id="赋能"><a href="#赋能" class="headerlink" title="赋能"></a>赋能</h3><p>在无人地带，新技术能充分发挥自己的先进优势，掌握更多的信息，为更多的普通人赋能，并进一步创造出新的需求，直至重建一个更生机勃勃的生态系统。</p>
-<h1 id="看点-03"><a href="#看点-03" class="headerlink" title="看点 03"></a>看点 03</h1><h4 id="5-个变量-1"><a href="#5-个变量-1" class="headerlink" title="5 个变量"></a>5 个变量</h4><p>我们在 2018 年观察到的 5 个变量<br>大国博弈、技术赋能、新旧<br>自下而上、重建社群。</p>
-<h1 id="看点-04"><a href="#看点-04" class="headerlink" title="看点 04"></a>看点 04</h1><h4 id="重建社群"><a href="#重建社群" class="headerlink" title="重建社群"></a>重建社群</h4><p>重建社群背后的逻辑是，人是一种社会动物，只有重建了社群，我们才能更好的发现自我，人们只有在公共生活中学会如何彼此相处，一个社会才能更加平等和谐，我们观察到的小趋势是在某些地方不管是在城市还是乡村，由于条件的变化和核心人物的推动，出现了一种从云到雨的趋势，原本松散的社群开始自发组织生长，虽然重建社群的力量现在还很弱小，但假以时日这种力量将大大改善我们的社会道德公共秩序。<br>2018 年，我们听到了很多负面的社会新闻:米脂杀人、衡阳撞车、高铁霸座……这个社会变得越来越糟糕了吗？其实这是一种误解。虽然从表面上看，<br>有些人只关心自我私利，但大家对集体生活的向往并没有泯灭。<br>中国人已经意识到，只有重建集体生活，才能更好地发现自我。<br>我看到的第五个变量就是:重建社群。有哪些地方的人们正在“凝结”起来，形成新的社群？<br>这些新的社群只是孤岛，还是将成为群岛？培养孩子也需要一个社群。我会带你到一所偏僻的农村小学看看。<br>2018 年，我找到的中国教育理念最先进的小学不是北京或上海的名校，而是山区里的一所农村小学。你不必吃惊，社会发展的剧情经常会有令人意想不到的转变。</p>
-<h1 id="看点-05"><a href="#看点-05" class="headerlink" title="看点 05"></a>看点 05</h1><h4 id="30-年-1"><a href="#30-年-1" class="headerlink" title="30 年"></a>30 年</h4><p>未来 30 年是中国历史上最重要的一段时期，我们已经进入一个没有航海图的水域，一系列重大的变化，将挑战我们的认知。</p>
-<h1 id="看点-06"><a href="#看点-06" class="headerlink" title="看点 06"></a>看点 06</h1><h4 id="慢变量和小趋势。"><a href="#慢变量和小趋势。" class="headerlink" title="慢变量和小趋势。"></a>慢变量和小趋势。</h4><p>我用来展现历史面貌的方法是从慢变量中寻找小趋势慢变量才是牵引历史进程的火车头，未来的时代小众才是主流</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -2292,377 +956,11 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-<<<<<<< HEAD
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/10/yuque/Tool/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">read</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课//" class="article-tag-list-link color2">课</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外//" class="article-tag-list-link color2">外</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外/阅//" class="article-tag-list-link color2">阅</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外/阅/读//" class="article-tag-list-link color2">读</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/yuque/《变量》金句摘要/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-<<<<<<< HEAD
-    <article id="post-yuque/K8S 集群初步搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/yuque自动化构建部署到github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2019/09/09/yuque/K8S 集群初步搭建/">K8S 集群初步搭建</a>
-=======
-      <a class="article-title" href="/2019/03/29/yuque/yuque自动化构建部署到github/">yuque自动化构建部署到github</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-    </h1>
-  
-
-        
-<<<<<<< HEAD
-        <a href="/2019/09/09/yuque/K8S 集群初步搭建/" class="archive-article-date">
-  	<time datetime="2019-09-09T00:50:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-09</time>
-=======
-        <a href="/2019/03/29/yuque/yuque自动化构建部署到github/" class="archive-article-date">
-  	<time datetime="2019-03-29T16:10:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-29</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-<<<<<<< HEAD
-        <h2 id="K8S-搭建"><a href="#K8S-搭建" class="headerlink" title="K8S 搭建"></a>K8S 搭建</h2><p>搭建本 K8S 集群需要你预先准备好，可以连接到外网的 Fq 工具，并且设置局域网内所有主机都可以自动 fq。<br>这里我采用的是 ikuai 与 koolshare lede 双软路由解决方案。</p>
-<p>本文均采用 ubuntu 18.04LTS 版本系统<br>docker-ce 版本 18.09.9 k8s 15.3 版本最高依赖 docker-ce 18.09 再高就连接不到 docker 引擎了。</p>
-<h4 id="集群网络"><a href="#集群网络" class="headerlink" title="集群网络"></a>集群网络</h4><p>192.168.1.20 k8s-master    ubuntu-desktop 18.04.03 LTS<br>192.168.1.21 k8s-node-1    ubuntu-server 18.04.03 LTS<br>192.168.1.22 k8s-node-2    ubuntu-server 18.04.03 LTS</p>
-<p>修改对应服务器 hosts<br>关闭防火墙，关闭 swap 等<br>ubuntu 默认关闭防火墙，</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
-<h4 id="两个难点之一-，-安装-kubelet-kubeadm-kubectl"><a href="#两个难点之一-，-安装-kubelet-kubeadm-kubectl" class="headerlink" title="两个难点之一 ， 安装  kubelet kubeadm kubectl"></a>两个难点之一 ， 安装  kubelet kubeadm kubectl</h4><p>因为访问国外网络慢，所以需要修改 apt-get 的访问源</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list #添加deb 行 追加</span><br><span class="line">deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main</span><br><span class="line"><span class="meta">#</span><span class="bash">执行</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="meta">#</span><span class="bash">执行</span></span><br><span class="line">apt-get install -y kubelet kubeadm kubectl</span><br><span class="line"><span class="meta">#</span><span class="bash">需要 sudo 自己加</span></span><br><span class="line"><span class="meta">#</span><span class="bash">可能在 apt-get update 时会碰到  no pubkey ...</span></span><br><span class="line"><span class="meta">#</span><span class="bash">执行下面命令解决</span></span><br><span class="line">curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -</span><br><span class="line"></span><br><span class="line">kubelet kubeadm kubectl</span><br><span class="line"><span class="meta">#</span><span class="bash">安装好了，工作完成了 1/3. kubelet 是k8相关服务，kubectl 是k8s 管理客户端，kubeadm 是部署工具</span></span><br></pre></td></tr></table></figure>
-<p>###</p>
-<p>部署主（管理）节点<br>    本来是执行  kubeadm init –kubernetes-version=v1.15.0 –pod-network-cidr=10.10.0.0/16 –apiserver-advertise-address=192.168.1.20<br>  如果你可以 FQ 直接部署上面的命令即可<br>一步完成， 但是由于国内的网络环境，众所周知的原因，不得不绕弯。<br><strong>两难点之二</strong></p>
-<p>在执行 init 的时候 会向   k8s.gcr.io    获取   kube-apiserver:v1.15.0  等 docker 镜像， 但是  k8s.gcr.io 访问不通。<br>所以，我们要从拉取 别人的镜像， 然后改名， 再执行 kube init  .  <strong>注意，一定要版本一致，今天是 1.15, 明天可能是 16</strong> ，</p>
-<p>列出需要哪些镜像: command not found</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">murphyyi@k8s-master:~$ kubeadm config images list --kubernetes-version v1.15.0</span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.15.0</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.10</span><br><span class="line">k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>拉取镜像</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker pull mirrorgooglecontainers/kube-apiserver:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-controller-manager:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-scheduler:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-proxy:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/pause:3.1</span><br><span class="line">docker pull mirrorgooglecontainers/etcd:3.3.10</span><br><span class="line">docker pull coredns/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>改名</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker tag mirrorgooglecontainers/kube-apiserver:v1.15.0 k8s.gcr.io/kube-apiserver:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-controller-manager:v1.15.0 k8s.gcr.io/kube-controller-manager:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-scheduler:v1.15.0  k8s.gcr.io/kube-scheduler:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-proxy:v1.15.0  k8s.gcr.io/kube-proxy:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/pause:3.1  k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag mirrorgooglecontainers/etcd:3.3.10  k8s.gcr.io/etcd:3.3.10</span><br><span class="line">docker tag coredns/coredns:1.3.1  k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>拉取完成后，执行   kubeadm init<br>成功标志， 出现：</p>
-<p>kubeadm join 10.10.10.10:6443 –token kekvgu.nw1n76h84f4camj6 \</p>
-<p>–discovery-token-ca-cert-hash sha256:4ee74205227c78ca62f2d641635afa4d50e6634acfaa8291f28582c7e3b0e30e</p>
-<p>如果没有出现，就说明没成功，根据错误反复弄。  使用  <strong> kubeadm reset</strong>  清除  kubeadm init 生成的垃圾， 有些文件可以用 rm -rf  删除。<br>需要记录这行内容：   <strong> kubeadmin join  …… </strong><br>添加工作节点用到</p>
-<p>执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p $HOME/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br></pre></td></tr></table></figure>
-<p>执行后 kubectl 环境有了，可以执行 kubectl nodes 看看了。   2/3 的工作量完成了。</p>
-<p><strong>4. 主节点生效</strong><br>现在主节点还是没用，需要搭建一个网络给集群用。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-<p>执行上面的命令搭建   flannel ， k8s 有很多网络选择。 有兴趣的自己研究。<br>网络搭建完成后，执行刚才保存下来的<br>kubeadm join ………………..</p>
-<p>输入<br>kubectl get nodes</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE   VERSION</span><br><span class="line">k8s-master   Ready    master   28h   v1.15.3</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   27h   v1.15.3</span><br><span class="line">k8s-node2    Ready    &lt;none&gt;   27h   v1.15.3</span><br></pre></td></tr></table></figure>
-<h3 id="添加-node1-工作节点，"><a href="#添加-node1-工作节点，" class="headerlink" title="添加 node1 工作节点，"></a>添加 node1 工作节点，</h3><p>在   192.168.1.21 机器上 安装    kubelet kubeadm kubectl    执行   kubeadm  join …..<br>不需要执行   init  和网络<br>完成后 执行 kubectl get nodes 就能看到 上面这个图了。 <strong>恭喜，你的 k8s 集群就已经完成了</strong>，以后可以增加节点，减少节点。</p>
-<h2 id="创建一个-helloword-应用，看看效果"><a href="#创建一个-helloword-应用，看看效果" class="headerlink" title="创建一个   helloword 应用，看看效果"></a>创建一个   helloword 应用，看看效果</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create deployment nginx --image=nginx</span><br><span class="line">kubectl expose deployment nginx --port=80 --type=NodePort</span><br></pre></td></tr></table></figure>
-<p>用 kubectl 部署， 用 kubectl get nodes,        get pods   ,  get cs  查看集群服务状态</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ kubectl get pods</span><br><span class="line">NAME                     READY   STATUS    RESTARTS   AGE</span><br><span class="line">nginx-554b9c67f9-kldwg   1/1     Running   0          26s</span><br><span class="line">➜  ~ kubectl get cs</span><br><span class="line">NAME                 STATUS    MESSAGE             ERROR</span><br><span class="line">controller-manager   Healthy   ok</span><br><span class="line">scheduler            Healthy   ok</span><br><span class="line">etcd-0               Healthy   &#123;"health":"true"&#125;</span><br><span class="line">➜  ~ kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE   VERSION</span><br><span class="line">k8s-master   Ready    master   28h   v1.15.3</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   28h   v1.15.3</span><br><span class="line">k8s-node2    Ready    &lt;none&gt;   27h   v1.15.3</span><br></pre></td></tr></table></figure>
-<p>打开浏览器： 192.168.1.20：80  <strong>看你的 hello word  ， 大功告成。 </strong></p>
-<p>3/3 工作完成 文章完结 。</p>
-<h2 id="Docker-不输入-sudo-运行方案"><a href="#Docker-不输入-sudo-运行方案" class="headerlink" title="Docker 不输入 sudo 运行方案"></a>Docker 不输入 sudo 运行方案</h2><p>由于 docker daemon 需要绑定到主机的 Unix socket 而不是普通的 TCP 端口，而 Unix socket 的属主为 root 用户，所以其他用户只有在命令前添加 sudo 选项才能执行相关操作。<br>如果不想每次使用 docker 命令的时候还要额外的敲一下 sudo，可以按照下面的方法配置一下。</p>
-<ol>
-<li>创建一个 docker 组</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd docker</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>添加当前用户到 docker 组</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>登出，重新登录 shell</li>
-<li>验证 docker 命令是否可以运行</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
-<h2 id="遇到问题先查看日志"><a href="#遇到问题先查看日志" class="headerlink" title="遇到问题先查看日志"></a>遇到问题先查看日志</h2><p>查看 node kubelet 日志：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -f -u kubelet</span><br></pre></td></tr></table></figure>
-<h3 id="k8s-node-断电-重启"><a href="#k8s-node-断电-重启" class="headerlink" title="k8s node 断电/重启"></a>k8s node 断电/重启</h3><h4 id="kubernetes-断电重启-导致部分-pod-无法删除"><a href="#kubernetes-断电重启-导致部分-pod-无法删除" class="headerlink" title="kubernetes 断电重启 导致部分 pod 无法删除"></a>kubernetes 断电重启 导致部分 pod 无法删除</h4><h4 id="dashboard-上处于黄色"><a href="#dashboard-上处于黄色" class="headerlink" title="dashboard 上处于黄色"></a>dashboard 上处于黄色</h4><h4 id="kubectl-get-处于-terminate-状态"><a href="#kubectl-get-处于-terminate-状态" class="headerlink" title="kubectl get 处于 terminate 状态"></a>kubectl get 处于 terminate 状态</h4><h4 id="kubectl-delete-报错："><a href="#kubectl-delete-报错：" class="headerlink" title="kubectl delete 报错："></a>kubectl delete 报错：</h4><h5 id="An-error-occurred-while-waiting-for-the-object-to-be-deleted-too-old-resource-version"><a href="#An-error-occurred-while-waiting-for-the-object-to-be-deleted-too-old-resource-version" class="headerlink" title="An error occurred while waiting for the object to be deleted: too old resource version:"></a>An error occurred while waiting for the object to be deleted: too old resource version:</h5><h3 id="kubectl-get-nodes-发现-node-失联："><a href="#kubectl-get-nodes-发现-node-失联：" class="headerlink" title="kubectl get nodes 发现 node 失联："></a>kubectl get nodes 发现 node 失联：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo kubectl get nodes</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1568012262146-e0786567-6ab7-4907-a447-d63cf91f5209.png#align=left&amp;display=inline&amp;height=89&amp;originHeight=89&amp;originWidth=481&amp;size=0&amp;status=done&amp;width=481" alt><br>但是发现能 ssh 到失联的 node 上去，于是重启 kubelet</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart kubelet.service</span><br></pre></td></tr></table></figure>
-<h4 id="发现没用。于是关闭交换空间"><a href="#发现没用。于是关闭交换空间" class="headerlink" title="发现没用。于是关闭交换空间"></a>发现没用。于是关闭交换空间</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
-<h4 id="发现错误解决，node-恢复连接，删不掉的-pod-自动没有了"><a href="#发现错误解决，node-恢复连接，删不掉的-pod-自动没有了" class="headerlink" title="发现错误解决，node 恢复连接，删不掉的 pod 自动没有了"></a>发现错误解决，node 恢复连接，删不掉的 pod 自动没有了</h4><p>永久关闭 swap 缓存<br>找到/etc/fstb 下面 注释 swap 行 重启就好</p>
-=======
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><a href="https://www.yuque.com/" target="_blank" rel="noopener">语雀</a>  是一款非常好用的知识管理网站（类似 GitBook)，它的编辑器非常好用，而且支持导出 Markdown，这篇文章是教你如何使用语雀的编辑器写静态博客。这里的静态博客用了 Hexo，Jekyll 也是没有问题的。</p>
-<h2 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h2><p>已经有 Hexo 博客的可以跳过。如果你是 Jekyll ，也可以跳过。</p>
-<ul>
-<li>安装 Node.js</li>
-<li><p>安装 Hexo 脚手架<br>| 1 | npm install -g hexo-cli |<br>| — | — |</p>
-</li>
-<li><p>初始化一个博客<br>| 123 | hexo init <folder>cd <folder>npm install |<br>| — | — |</folder></folder></p>
-</li>
-<li><p>其他设置和命令见：<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
-</li>
-</ul>
-<h2 id="安装语雀文章下载插件"><a href="#安装语雀文章下载插件" class="headerlink" title="安装语雀文章下载插件"></a>安装语雀文章下载插件</h2><p><a href="https://github.com/x-cold/yuque-hexo/" target="_blank" rel="noopener">yuque-hexo</a>  是一个 Node.js 环境下的语雀下载器，使用 npm 安装</p>
-<ul>
-<li><p>安装 yuque-hexo<br>| 1 | npm i -g yuque-hexo |<br>| — | — |</p>
-</li>
-<li><p>注册语雀，创建知识库，获得你的个人路径和知识库的名字，比如我的博客的知识库是  <a href="https://www.yuque.com/page/zhangyi-ul3zj" target="_blank" rel="noopener">https://www.yuque.com/page/</a>zhangyi-ul3zj</p>
-</li>
-<li>在 Hexo 博客的目录下面的 package.json 中，进行下面的配置</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"your hexo project"</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">"yuqueConfig"</span>: &#123;</span><br><span class="line">                   <span class="string">"cachePath"</span>: <span class="string">"yuque.json"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"adapter"</span>: <span class="string">"hexo"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"concurrency"</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"baseUrl"</span>: <span class="string">"https://www.yuque.com/api/v2"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"login"</span>: <span class="string">"zhangyi-ul3zj"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"repo"</span>: <span class="string">"blog"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"mdNameFormat"</span>: <span class="string">"title"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"postPath"</span>: <span class="string">"source/_posts"</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
-<li>同步文章<br>| 1 | yuque-hexo sync |<br>| — | — |</li>
-</ul>
-<p>PS: 插件支持 Front-matter，在语雀写文章的时候直接写在前面，然后插入一条分割线即可，不写也没问题：</p>
-<table>
-<thead>
-<tr>
-<th>123</th>
-<th>tags: [Hexo]categories: 教程 date: 2018-10-05 10:43:50</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="手动启动-部署-Hexo-博客"><a href="#手动启动-部署-Hexo-博客" class="headerlink" title="手动启动/部署 Hexo 博客"></a>手动启动/部署 Hexo 博客</h2><ul>
-<li><p>本地启动（调试用）<br>| 1 | hexo s |<br>| — | — |</p>
-</li>
-<li><p>生成 html 不部署<br>| 1 | hexo g |<br>| — | — |</p>
-</li>
-<li><p>自动上传到服务器/静态空间/git （部署）</p>
-</li>
-</ul>
-<ol>
-<li><p>先找到一个部署插件</p>
-</li>
-<li><p>在配置文件中配置好相关的账号密码</p>
-</li>
-<li><p>在 hexo 中生成 HTML 并且部署</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo g -d</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="Travis-ci-severless"><a href="#Travis-ci-severless" class="headerlink" title="Travis-ci + severless"></a>Travis-ci + severless</h3><p>可以参考原文：<a href="https://segmentfault.com/a/1190000017797561" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017797561</a><br>Travis_ci 具体配置<br>可以参考：<a href="https://www.cnblogs.com/morang/p/7228488.html" target="_blank" rel="noopener">https://www.cnblogs.com/morang/p/7228488.html</a></p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-<<<<<<< HEAD
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/09/yuque/K8S 集群初步搭建/">展开全文 >></a>
-=======
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教//" class="article-tag-list-link color2">教</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教/程//" class="article-tag-list-link color2">程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/29/yuque/yuque自动化构建部署到github/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-<<<<<<< HEAD
-    <article id="post-yuque/《Redis深度历险（核心原理与应用实践）》" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2019/08/26/yuque/《Redis深度历险（核心原理与应用实践）》/">《Redis深度历险（核心原理与应用实践）》</a>
-=======
-      <a class="article-title" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">mysql 的 服务层和存储引擎层</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-    </h1>
-  
-
-        
-<<<<<<< HEAD
-        <a href="/2019/08/26/yuque/《Redis深度历险（核心原理与应用实践）》/" class="archive-article-date">
-  	<time datetime="2019-08-26T04:37:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-26</time>
-=======
-        <a href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/" class="archive-article-date">
-  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-<<<<<<< HEAD
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1566797188170-67afa1f0-a485-4332-9733-9e6ced71dae8.png" alt></p>
-=======
-        <ul>
-<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
-<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
-<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
-<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
-</ul>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-<<<<<<< HEAD
-          <a class="article-more-a" href="/2019/08/26/yuque/《Redis深度历险（核心原理与应用实践）》/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/03/28/yuque/mysql 的 服务层和存储引擎层/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -2694,11 +992,7 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
-<<<<<<< HEAD
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
-=======
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 
@@ -2813,7 +1107,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-<<<<<<< HEAD
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -2827,21 +1120,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-=======
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
               </li>
             
             <div class="clearfix"></div>

@@ -181,63 +181,1437 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-<<<<<<< HEAD
-    <article id="post-yuque/Golang 包使用的注意事项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/Mac快捷键设置（大自然的搬运工）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+    <article id="post-yuque/MySQL 优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2020/02/18/yuque/Golang 包使用的注意事项/">Golang 包使用的注意事项</a>
-=======
-      <a class="article-title" href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/">Mac快捷键设置（大自然的搬运工）</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="article-title" href="/2020/03/20/yuque/MySQL 优化/">MySQL 优化</a>
     </h1>
   
 
         
-<<<<<<< HEAD
-        <a href="/2020/02/18/yuque/Golang 包使用的注意事项/" class="archive-article-date">
-  	<time datetime="2020-02-18T12:18:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
-=======
-        <a href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/" class="archive-article-date">
-  	<time datetime="2019-10-23T04:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-23</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+        <a href="/2020/03/20/yuque/MySQL 优化/" class="archive-article-date">
+  	<time datetime="2020-03-20T04:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
-        <ol>
-<li><p>在给一个文件打包时，该包对应一个文件夹，比如这里的 utils 文件夹对应的包名就是 utils,<br>文件的包名通常和文件所在的文件夹名一致，一般为小写字母。</p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1584679992912-4486c17e-a23b-4ca9-a6d1-4f0b8dc32584.png#align=left&amp;display=inline&amp;height=3361&amp;name=image.png&amp;originHeight=4319&amp;originWidth=1452&amp;size=1167457&amp;status=done&amp;style=none&amp;width=1130" alt="image.png"></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="为什么要优化"><a href="#为什么要优化" class="headerlink" title="为什么要优化"></a>为什么要优化</h2><ul>
+<li>系统的吞吐量瓶颈往往出现在数据库的访问速度上</li>
+<li>随着应用程序的运行，数据库的中的数据会越来越多，处理时间会相应变慢</li>
+<li>数据是存放在磁盘上的，读写速度无法和内存相比</li>
+</ul>
+<h2 id="如何优化"><a href="#如何优化" class="headerlink" title="如何优化"></a>如何优化</h2><ul>
+<li>设计数据库时：数据库表、字段的设计，存储引擎</li>
+<li>利用好 MySQL 自身提供的功能，如索引等</li>
+<li>横向扩展：MySQL 集群、负载均衡、读写分离</li>
+<li>SQL 语句的优化（收效甚微）</li>
+</ul>
+<h1 id="字段设计"><a href="#字段设计" class="headerlink" title="字段设计"></a>字段设计</h1><blockquote>
+<p>字段类型的选择，设计规范，范式，常见设计案例</p>
+</blockquote>
+<h2 id="原则：尽量使用整型表示字符串"><a href="#原则：尽量使用整型表示字符串" class="headerlink" title="原则：尽量使用整型表示字符串"></a>原则：尽量使用整型表示字符串</h2><h3 id="存储-IP"><a href="#存储-IP" class="headerlink" title="存储 IP"></a>存储 IP</h3><p><code>INET_ATON(str)</code>，address to number<br><code>INET_NTOA(number)</code>，number to address</p>
+<h3 id="MySQL-内部的枚举类型（单选）和集合（多选）类型"><a href="#MySQL-内部的枚举类型（单选）和集合（多选）类型" class="headerlink" title="MySQL 内部的枚举类型（单选）和集合（多选）类型"></a>MySQL 内部的枚举类型（单选）和集合（多选）类型</h3><p>但是因为维护成本较高因此不常使用，使用<strong>关联表</strong>的方式来替代<code>enum</code></p>
+<h2 id="原则：定长和非定长数据类型的选择"><a href="#原则：定长和非定长数据类型的选择" class="headerlink" title="原则：定长和非定长数据类型的选择"></a>原则：定长和非定长数据类型的选择</h2><blockquote>
+<p>decimal 不会损失精度，存储空间会随数据的增大而增大。double 占用固定空间，较大数的存储会损失精度。非定长的还有 varchar、text</p>
+</blockquote>
+<h3 id="金额"><a href="#金额" class="headerlink" title="金额"></a>金额</h3><blockquote>
+<p>对数据的精度要求较高，小数的运算和存储存在精度问题（不能将所有小数转换成二进制）</p>
+</blockquote>
+<h3 id="定点数-decimal"><a href="#定点数-decimal" class="headerlink" title="定点数 decimal"></a>定点数 decimal</h3><p><code>price decimal(8,2)</code>有 2 位小数的定点数，定点数支持很大的数（甚至是超过<code>int,bigint</code>存储范围的数）</p>
+<h3 id="小单位大数额避免出现小数"><a href="#小单位大数额避免出现小数" class="headerlink" title="小单位大数额避免出现小数"></a>小单位大数额避免出现小数</h3><p>元-&gt;分</p>
+<h3 id="字符串存储"><a href="#字符串存储" class="headerlink" title="字符串存储"></a>字符串存储</h3><p>定长<code>char</code>，非定长<code>varchar、text</code>（上限 65535，其中<code>varchar</code>还会消耗 1-3 字节记录长度，而<code>text</code>使用额外空间记录长度）</p>
+<h2 id="原则：尽可能选择小的数据类型和指定短的长度"><a href="#原则：尽可能选择小的数据类型和指定短的长度" class="headerlink" title="原则：尽可能选择小的数据类型和指定短的长度"></a>原则：尽可能选择小的数据类型和指定短的长度</h2><h2 id="原则：尽可能使用-not-null"><a href="#原则：尽可能使用-not-null" class="headerlink" title="原则：尽可能使用 not null"></a>原则：尽可能使用 not null</h2><p>非<code>null</code>字段的处理要比<code>null</code>字段的处理高效些！且不需要判断是否为<code>null</code>。<br><code>null</code>在 MySQL 中，不好处理，存储需要额外空间，运算也需要特殊的运算符。如<code>select null = null</code>和<code>select null &lt;&gt; null</code>（<code>&lt;&gt;</code>为不等号）有着同样的结果，只能通过<code>is null</code>和<code>is not null</code>来判断字段是否为<code>null</code>。<br>如何存储？MySQL 中每条记录都需要额外的存储空间，表示每个字段是否为<code>null</code>。因此通常使用特殊的数据进行占位，比如<code>int not null default 0</code>、<code>string not null default ‘’</code></p>
+<h2 id="原则：字段注释要完整，见名知意"><a href="#原则：字段注释要完整，见名知意" class="headerlink" title="原则：字段注释要完整，见名知意"></a>原则：字段注释要完整，见名知意</h2><h2 id="原则：单表字段不宜过多"><a href="#原则：单表字段不宜过多" class="headerlink" title="原则：单表字段不宜过多"></a>原则：单表字段不宜过多</h2><p>二三十个就极限了</p>
+<h2 id="原则：可以预留字段"><a href="#原则：可以预留字段" class="headerlink" title="原则：可以预留字段"></a>原则：可以预留字段</h2><blockquote>
+<p>在使用以上原则之前首先要满足业务需求</p>
+</blockquote>
+<h1 id="关联表的设计"><a href="#关联表的设计" class="headerlink" title="关联表的设计"></a>关联表的设计</h1><blockquote>
+<p>外键<code>foreign key</code>只能实现一对一或一对多的映射</p>
+</blockquote>
+<h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>使用外键</p>
+<h2 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h2><p>单独新建一张表将多对多拆分成两个一对多</p>
+<h2 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h2><p>如商品的基本信息（<code>item</code>）和商品的详细信息（<code>item_intro</code>），通常使用相同的主键或者增加一个外键字段（<code>item_id</code>）</p>
+<h1 id="范式-Normal-Format"><a href="#范式-Normal-Format" class="headerlink" title="范式 Normal Format"></a>范式 Normal Format</h1><blockquote>
+<p>数据表的设计规范，一套越来越严格的规范体系（如果需要满足 N 范式，首先要满足 N-1 范式）。N</p>
+</blockquote>
+<h2 id="第一范式-1NF：字段原子性"><a href="#第一范式-1NF：字段原子性" class="headerlink" title="第一范式 1NF：字段原子性"></a>第一范式 1NF：字段原子性</h2><p>字段原子性，字段不可再分割。</p>
+<blockquote>
+<p>关系型数据库，默认满足第一范式</p>
+</blockquote>
+<p>注意比较容易出错的一点，在一对多的设计中使用逗号分隔多个外键，这种方法虽然存储方便，但不利于维护和索引（比如查找带标签<code>java</code>的文章）</p>
+<h2 id="第二范式：消除对主键的部分依赖"><a href="#第二范式：消除对主键的部分依赖" class="headerlink" title="第二范式：消除对主键的部分依赖"></a>第二范式：消除对主键的部分依赖</h2><blockquote>
+<p>即在表中加上一个与业务逻辑无关的字段作为主键</p>
+</blockquote>
+<p>主键：可以唯一标识记录的字段或者字段集合。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">course_name</th>
+<th style="text-align:left">course_class</th>
+<th style="text-align:left">weekday（周几）</th>
+<th style="text-align:left">course_teacher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">MySQL</td>
+<td style="text-align:left">教育大楼 1525</td>
+<td style="text-align:left">周一</td>
+<td style="text-align:left">张三</td>
+</tr>
+<tr>
+<td style="text-align:left">Java</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">周三</td>
+<td style="text-align:left">李四</td>
+</tr>
+<tr>
+<td style="text-align:left">MySQL</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">周五</td>
+<td style="text-align:left">张三</td>
+</tr>
+</tbody>
+</table>
+<p>依赖：A 字段可以确定 B 字段，则 B 字段依赖 A 字段。比如知道了下一节课是数学课，就能确定任课老师是谁。于是<strong>周几</strong>和<strong>下一节课</strong>和就能构成复合主键，能够确定去哪个教室上课，任课老师是谁等。但我们常常增加一个<code>id</code>作为主键，而消除对主键的部分依赖。<br>对主键的部分依赖：某个字段依赖复合主键中的一部分。<br>解决方案：新增一个独立字段作为主键。</p>
+<h2 id="第三范式：消除对主键的传递依赖"><a href="#第三范式：消除对主键的传递依赖" class="headerlink" title="第三范式：消除对主键的传递依赖"></a>第三范式：消除对主键的传递依赖</h2><p>传递依赖：B 字段依赖于 A，C 字段又依赖于 B。比如上例中，任课老师是谁取决于是什么课，是什么课又取决于主键<code>id</code>。因此需要将此表拆分为两张表日程表和课程表（独立数据独立建表）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">weekday</th>
+<th style="text-align:left">course_class</th>
+<th style="text-align:left">course_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1001</td>
+<td style="text-align:left">周一</td>
+<td style="text-align:left">教育大楼 1521</td>
+<td style="text-align:left">3546</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">course_id</th>
+<th style="text-align:left">course_name</th>
+<th style="text-align:left">course_teacher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">3546</td>
+<td style="text-align:left">Java</td>
+<td style="text-align:left">张三</td>
+</tr>
+</tbody>
+</table>
+<p>这样就减少了数据的冗余（即使周一至周日每天都有 Java 课，也只是<code>course_id:3546</code>出现了 7 次）</p>
+<h1 id="存储引擎选择"><a href="#存储引擎选择" class="headerlink" title="存储引擎选择"></a>存储引擎选择</h1><blockquote>
+<p>早期问题：如何选择 MyISAM 和 Innodb？<br>现在不存在这个问题了，Innodb 不断完善，从各个方面赶超 MyISAM，也是 MySQL 默认使用的。</p>
+</blockquote>
+<p>存储引擎 Storage engine：MySQL 中的数据、索引以及其他对象是如何存储的，是一套文件系统的实现。</p>
+<h2 id="功能差异"><a href="#功能差异" class="headerlink" title="功能差异"></a>功能差异</h2><p><code>show engines</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Engine</th>
+<th style="text-align:left">Support</th>
+<th style="text-align:left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">InnoDB</td>
+<td style="text-align:left">DEFAULT</td>
+<td style="text-align:left"><strong>Supports transactions, row-level locking, and foreign keys</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">MyISAM</td>
+<td style="text-align:left">YES</td>
+<td style="text-align:left"><strong>MyISAM storage engine</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="存储差异"><a href="#存储差异" class="headerlink" title="存储差异"></a>存储差异</h2><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">MyISAM</th>
+<th style="text-align:left">Innodb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">文件格式</td>
+<td style="text-align:left">数据和索引是分别存储的，数据<code>.MYD</code>，索引<code>.MYI</code></td>
+<td style="text-align:left">数据和索引是集中存储的，<code>.ibd</code></td>
+</tr>
+<tr>
+<td style="text-align:left">文件能否移动</td>
+<td style="text-align:left">能，一张表就对应<code>.frm</code>、<code>MYD</code>、<code>MYI</code>3 个文件</td>
+<td style="text-align:left">否，因为关联的还有<code>data</code>下的其它文件</td>
+</tr>
+<tr>
+<td style="text-align:left">记录存储顺序</td>
+<td style="text-align:left">按记录插入顺序保存</td>
+<td style="text-align:left">按主键大小有序插入</td>
+</tr>
+<tr>
+<td style="text-align:left">空间碎片（删除记录并<code>flush table 表名</code>之后，表文件大小不变）</td>
+<td style="text-align:left">产生。定时整理：使用命令<code>optimize table 表名</code>实现</td>
+<td style="text-align:left">不产生</td>
+</tr>
+<tr>
+<td style="text-align:left">事务</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left">外键</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left">锁支持（锁是避免资源争用的一个机制，MySQL 锁对用户几乎是透明的）</td>
+<td style="text-align:left">表级锁定</td>
+<td style="text-align:left">行级锁定、表级锁定，锁定力度小并发能力高</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>锁扩展<br>表级锁（<code>table-level lock</code>）：<code>lock tables &lt;table_name1&gt;,&lt;table_name2&gt;... read/write</code>，<code>unlock tables &lt;table_name1&gt;,&lt;table_name2&gt;...</code>。其中<code>read</code>是共享锁，一旦锁定任何客户端都不可读；<code>write</code>是独占/写锁，只有加锁的客户端可读可写，其他客户端既不可读也不可写。锁定的是一张表或几张表。<br>行级锁（<code>row-level lock</code>）：锁定的是一行或几行记录。共享锁：<code>select * from &lt;table_name&gt; where &lt;条件&gt; LOCK IN SHARE MODE;</code>，对查询的记录增加共享锁；<code>select * from &lt;table_name&gt; where &lt;条件&gt; FOR UPDATE;</code>，对查询的记录增加排他锁。这里<strong>值得注意</strong>的是：<code>innodb</code>的行锁，其实是一个子范围锁，依据条件锁定部分范围，而不是就映射到具体的行上，因此还有一个学名：间隙锁。比如<code>select * from stu where id &lt; 20 LOCK IN SHARE MODE</code>会锁定<code>id</code>在<code>20</code>左右以下的范围，你可能无法插入<code>id</code>为<code>18</code>或<code>22</code>的一条新纪录。</p>
+</blockquote>
+<h2 id="选择依据"><a href="#选择依据" class="headerlink" title="选择依据"></a>选择依据</h2><p>如果没有特别的需求，使用默认的<code>Innodb</code>即可。<br>MyISAM：以读写插入为主的应用程序，比如博客系统、新闻门户网站。<br>Innodb：更新（删除）操作频率也高，或者要保证数据的完整性；并发量高，支持事务和外键保证数据完整性。比如 OA 自动化办公系统。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
+<p>关键字与数据的映射关系称为索引（==包含关键字和对应的记录在磁盘中的地址==）。关键字是从数据当中提取的用于标识、检索数据的特定内容。</p>
+</blockquote>
+<h2 id="索引检索为什么快？"><a href="#索引检索为什么快？" class="headerlink" title="索引检索为什么快？"></a>索引检索为什么快？</h2><ul>
+<li>关键字相对于数据本身，==数据量小==</li>
+<li>关键字是==有序==的，二分查找可快速确定位置</li>
+</ul>
+<p>图书馆为每本书都加了索引号（类别-楼层-书架）、字典为词语解释按字母顺序编写目录等都用到了索引。</p>
+<h2 id="MySQL-中索引类型"><a href="#MySQL-中索引类型" class="headerlink" title="MySQL 中索引类型"></a>MySQL 中索引类型</h2><blockquote>
+<p><strong>普通索引</strong>（<code>key</code>），<strong>唯一索引</strong>（<code>unique key</code>），<strong>主键索引</strong>（<code>primary key</code>），<strong>全文索引</strong>（<code>fulltext key</code>）</p>
+</blockquote>
+<p>三种索引的索引方式是一样的，只不过对索引的关键字有不同的限制：</p>
+<ul>
+<li>普通索引：对关键字没有限制</li>
+<li>唯一索引：要求记录提供的关键字不能重复</li>
+<li>主键索引：要求关键字唯一且不为 null</li>
+</ul>
+<h2 id="索引管理语法"><a href="#索引管理语法" class="headerlink" title="索引管理语法"></a>索引管理语法</h2><h3 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h3><p><code>show create table 表名</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927865-da69443b-00c9-45ad-8ba3-e9547a864cff.jpeg#align=left&amp;display=inline&amp;height=251&amp;originHeight=251&amp;originWidth=485&amp;size=0&amp;status=done&amp;style=none&amp;width=485" alt><br><code>desc 表名</code><br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927826-47d86b0b-3e67-456d-a859-89d6ff0b775f.jpeg#align=left&amp;display=inline&amp;height=233&amp;originHeight=233&amp;originWidth=271&amp;size=0&amp;status=done&amp;style=none&amp;width=271" alt></p>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><h4 id="创建表之后建立索引"><a href="#创建表之后建立索引" class="headerlink" title="创建表之后建立索引"></a>创建表之后建立索引</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516</th>
+<th style="text-align:left">create TABLE user_index( id int auto_increment primary key, first_name varchar(16), last_name VARCHAR(16), id_card VARCHAR(18), information text);– 更改表结构 alter table user_index– 创建一个 first_name 和 last_name 的复合索引，并命名为 nameadd key name (first_name,last_name),– 创建一个 id_card 的唯一索引，默认以字段名作为索引名 add UNIQUE KEY (id_card),– 鸡肋，全文索引不支持中文 add FULLTEXT KEY (information);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>show create table user_index</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927859-dda40fab-124d-491e-9093-97fc706e55a9.jpeg#align=left&amp;display=inline&amp;height=261&amp;originHeight=261&amp;originWidth=452&amp;size=0&amp;status=done&amp;style=none&amp;width=452" alt></p>
+<h4 id="创建表时指定索引"><a href="#创建表时指定索引" class="headerlink" title="创建表时指定索引"></a>创建表时指定索引</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">CREATE TABLE user_index2 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p>根据索引名删除普通索引、唯一索引、全文索引：<code>alter table 表名 drop KEY 索引名</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">alter table user_index drop KEY name;alter table user_index drop KEY id_card;alter table user_index drop KEY information;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>删除主键索引：<code>alter table 表名 drop primary key</code>（因为主键只有一个）。这里值得注意的是，如果主键自增长，那么不能直接执行此操作（自增长依赖于主键索引）：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927835-f9c05ca6-4ef4-4945-b7f8-f81b8df37904.jpeg#align=left&amp;display=inline&amp;height=143&amp;originHeight=143&amp;originWidth=649&amp;size=0&amp;status=done&amp;style=none&amp;width=649" alt><br>需要取消自增长再行删除：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">alter table user_index– 重新定义字段 MODIFY id int,drop PRIMARY KEY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>但通常不会删除主键，因为设计主键一定与业务逻辑无关。</p>
+<h2 id="执行计划-explain"><a href="#执行计划-explain" class="headerlink" title="执行计划 explain"></a>执行计划 explain</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011</th>
+<th style="text-align:left">CREATE TABLE innodb1 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));insert into innodb1 (first_name,last_name,id_card,information) values (‘张’,’三’,’1001’,’华山派’);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>我们可以通过<code>explain selelct</code>来分析 SQL 语句执行前的执行计划：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927854-46126c59-e2f9-4b67-a921-063abf78127b.jpeg#align=left&amp;display=inline&amp;height=132&amp;originHeight=132&amp;originWidth=633&amp;size=0&amp;status=done&amp;style=none&amp;width=633" alt><br>由上图可看出此 SQL 语句是按照主键索引来检索的。<br>执行计划是：当执行 SQL 语句时，首先会分析、优化，形成执行计划，在按照执行计划执行。</p>
+<h2 id="索引使用场景（重点）"><a href="#索引使用场景（重点）" class="headerlink" title="索引使用场景（重点）"></a>索引使用场景（重点）</h2><h3 id="where"><a href="#where" class="headerlink" title="where"></a>where</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927831-b3c86b4c-86dc-4e85-94af-95fff3dd469d.jpeg#align=left&amp;display=inline&amp;height=134&amp;originHeight=134&amp;originWidth=525&amp;size=0&amp;status=done&amp;style=none&amp;width=525" alt><br>上图中，根据<code>id</code>查询记录，因为<code>id</code>字段仅建立了主键索引，因此此 SQL 执行可选的索引只有主键索引，如果有多个，最终会选一个较优的作为检索的依据。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">– 增加一个没有建立索引的字段 alter table innodb1 add sex char(1);– 按 sex 检索时可选的索引为 nullEXPLAIN SELECT * from innodb1 where sex=’男’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927864-a2b3a030-44e7-44b2-b715-015802054933.jpeg#align=left&amp;display=inline&amp;height=140&amp;originHeight=140&amp;originWidth=541&amp;size=0&amp;status=done&amp;style=none&amp;width=541" alt></p>
+<blockquote>
+<p>可以尝试在一个字段未建立索引时，根据该字段查询的效率，然后对该字段建立索引（<code>alter table 表名 add index(字段名)</code>），同样的 SQL 执行的效率，你会发现查询效率会有明显的提升（数据量越大越明显）。</p>
+</blockquote>
+<h3 id="order-by"><a href="#order-by" class="headerlink" title="order by"></a>order by</h3><p>当我们使用<code>order by</code>将查询结果按照某个字段排序时，如果该字段没有建立索引，那么执行计划会将查询出的所有数据使用外部排序（将数据从硬盘分批读取到内存使用内部排序，最后合并排序结果），这个操作是很影响性能的，因为需要将查询涉及到的所有数据从磁盘中读到内存（如果单条数据过大或者数据量过多都会降低效率），更无论读到内存之后的排序了。<br>但是如果我们对该字段建立索引<code>alter table 表名 add index(字段名)</code>，那么由于索引本身是有序的，因此直接按照索引的顺序和映射关系逐条取出数据即可。而且如果分页的，那么只用<strong>取出索引表某个范围内的索引对应的数据</strong>，而不用像上述那<strong>取出所有数据</strong>进行排序再返回某个范围内的数据。（从磁盘取数据是最影响性能的）</p>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><blockquote>
+<p>对<code>join</code>语句匹配关系（<code>on</code>）涉及的字段建立索引能够提高效率</p>
+</blockquote>
+<h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>如果要查询的字段都建立过索引，那么引擎会直接在索引表中查询而不会访问原始数据（否则只要有一个字段没有建立索引就会做全表扫描），这叫索引覆盖。因此我们需要尽可能的在<code>select</code>后==只写必要的查询字段==，以增加索引覆盖的几率。<br>这里值得注意的是不要想着为每个字段建立索引，因为优先使用索引的优势就在于其体积小。</p>
+<h2 id="语法细节（要点）"><a href="#语法细节（要点）" class="headerlink" title="语法细节（要点）"></a>语法细节（要点）</h2><blockquote>
+<p>在满足索引使用的场景下（<code>where/order by/join on</code>或索引覆盖），索引也不一定被使用</p>
+</blockquote>
+<h3 id="字段要独立出现"><a href="#字段要独立出现" class="headerlink" title="字段要独立出现"></a>字段要独立出现</h3><p>比如下面两条 SQL 语句在语义上相同，但是第一条会使用主键索引而第二条不会。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">select _ from user where id = 20-1;select _ from user where id+1 = 20;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="like查询，不能以通配符开头"><a href="#like查询，不能以通配符开头" class="headerlink" title="like查询，不能以通配符开头"></a><code>like</code>查询，不能以通配符开头</h3><p>比如搜索标题包含<code>mysql</code>的文章：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">select * from article where title like ‘%mysql%’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>这种 SQL 的执行计划用不了索引（<code>like</code>语句匹配表达式以通配符开头），因此只能做全表扫描，效率极低，在实际工程中几乎不被采用。而一般会使用第三方提供的支持中文的全文索引来做。<br>但是 <strong>关键字查询</strong> 热搜提醒功能还是可以做的，比如键入<code>mysql</code>之后提醒<code>mysql 教程</code>、<code>mysql 下载</code>、<code>mysql 安装步骤</code>等。用到的语句是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">select * from article where title like ‘mysql%’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>这种<code>like</code>是可以利用索引的（当然前提是<code>title</code>字段建立过索引）。</p>
+<h3 id="复合索引只对第一个字段有效"><a href="#复合索引只对第一个字段有效" class="headerlink" title="复合索引只对第一个字段有效"></a>复合索引只对第一个字段有效</h3><p>建立复合索引：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table person add index(first_name,last_name);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>其原理就是将索引先按照从<code>first_name</code>中提取的关键字排序，如果无法确定先后再按照从<code>last_name</code>提取的关键字排序，也就是说该索引表只是按照记录的<code>first_name</code>字段值有序。<br>因此<code>select * from person where first_name = ?</code>是可以利用索引的，而<code>select * from person where last_name = ?</code>无法利用索引。</p>
+<blockquote>
+<p>那么该复合索引的应用场景是什么？==组合查询==</p>
+</blockquote>
+<p>比如对于<code>select * person from first_name = ? and last_name = ?</code>，复合索引就比对<code>first_name</code>和<code>last_name</code>单独建立索引要高效些。很好理解，复合索引首先二分查找与<code>first_name = ?</code>匹配的记录，再在这些记录中二分查找与<code>last_name</code>匹配的记录，只涉及到一张索引表。而分别单独建立索引则是在<code>first_name</code>索引表中二分找出与<code>first_name = ?</code>匹配的记录，再在<code>last_name</code>索引表中二分找出与<code>last_name = ?</code>的记录，两者取交集。</p>
+<h3 id="or，两边条件都有索引可用"><a href="#or，两边条件都有索引可用" class="headerlink" title="or，两边条件都有索引可用"></a>or，两边条件都有索引可用</h3><blockquote>
+<p>一但有一边无索引可用就会导致整个 SQL 语句的全表扫描</p>
+</blockquote>
+<h3 id="状态值，不容易使用到索引"><a href="#状态值，不容易使用到索引" class="headerlink" title="状态值，不容易使用到索引"></a>状态值，不容易使用到索引</h3><p>如性别、支付状态等状态值字段往往只有极少的几种取值可能，这种字段即使建立索引，也往往利用不上。这是因为，一个状态值可能匹配大量的记录，这种情况 MySQL 会认为利用索引比全表扫描的效率低，从而弃用索引。索引是随机访问磁盘，而全表扫描是顺序访问磁盘，这就好比有一栋 20 层楼的写字楼，楼底下的索引牌上写着某个公司对应不相邻的几层楼，你去公司找人，与其按照索引牌的提示去其中一层楼没找到再下来看索引牌再上楼，不如从 1 楼挨个往上找到顶楼。</p>
+<h2 id="如何创建索引"><a href="#如何创建索引" class="headerlink" title="如何创建索引"></a>如何创建索引</h2><ul>
+<li>建立基础索引：在<code>where、order by、join</code>字段上建立索引。</li>
+<li>优化，组合索引：基于业务逻辑<ul>
+<li>如果条件经常性出现在一起，那么可以考虑将多字段索引升级为==复合索引==</li>
+<li>如果通过增加个别字段的索引，就可以出现==索引覆盖==，那么可以考虑为该字段建立索引</li>
+<li>查询时，不常用到的索引，应该删除掉</li>
+</ul>
 </li>
-<li><p>当一个文件要使用其它包函数或变量时，需要先引入对应的包<br> 引入方式 1:import “包名”</p>
-</li>
+</ul>
+<h2 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h2><p>语法：<code>index(field(10))</code>，使用字段值的前 10 个字符建立索引，默认是使用字段的全部内容建立索引。<br>前提：前缀的标识度高。比如密码就适合建立前缀索引，因为密码几乎各不相同。<br>==实操的难度==：在于前缀截取的长度。<br>我们可以利用<code>select count(*)/count(distinct left(password,prefixLen));</code>，通过从调整<code>prefixLen</code>的值（从 1 自增）查看不同前缀长度的一个平均匹配度，接近 1 时就可以了（表示一个密码的前<code>prefixLen</code>个字符几乎能确定唯一一条记录）</p>
+<h2 id="索引的存储结构"><a href="#索引的存储结构" class="headerlink" title="索引的存储结构"></a>索引的存储结构</h2><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p>btree（多路平衡查找树）是一种广泛应用于==磁盘上实现索引功能==的一种数据结构，也是大多数数据库索引表的实现。<br>以<code>add index(first_name,last_name)</code>为例：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927862-90c43fe4-bd10-4cd5-a2a2-a788fd8e54a2.jpeg#align=left&amp;display=inline&amp;height=356&amp;originHeight=356&amp;originWidth=809&amp;size=0&amp;status=done&amp;style=none&amp;width=809" alt><br>BTree 的一个 node 可以存储多个关键字，node 的大小取决于计算机的文件系统，因此我们可以通过减小索引字段的长度使结点存储更多的关键字。如果 node 中的关键字已满，那么可以通过每个关键字之间的子节点指针来拓展索引表，但是不能破坏结构的有序性，比如按照<code>first_name</code>第一有序、<code>last_name</code>第二有序的规则，新添加的<code>韩香</code>就可以插到<code>韩康</code>之后。<code>白起 &lt; 韩飞 &lt; 韩康 &lt; 李世民 &lt; 赵奢 &lt; 李寻欢 &lt; 王语嫣 &lt; 杨不悔</code>。这与二叉搜索树的思想是一样的，只不过二叉搜索树的查找效率是<code>log(2,N)</code>（以 2 为底 N 的对数），而 BTree 的查找效率是<code>log(x,N)</code>（其中 x 为 node 的关键字数量，可以达到 1000 以上）。<br>从<code>log(1000+,N)</code>可以看出，少量的磁盘读取即可做到大量数据的遍历，这也是 btree 的设计目的。</p>
+<h3 id="B-Tree-聚簇结构"><a href="#B-Tree-聚簇结构" class="headerlink" title="B+Tree 聚簇结构"></a>B+Tree 聚簇结构</h3><p>聚簇结构（也是在 BTree 上升级改造的）中，关键字和记录是存放在一起的。<br>在 MySQL 中，仅仅只有<code>Innodb</code>的==主键索引为聚簇结构==，其它的索引包括<code>Innodb</code>的非主键索引都是典型的 BTree 结构。</p>
+<h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a>哈希索引</h3><p>在索引被载入内存时，使用哈希结构来存储。</p>
+<h1 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h1><blockquote>
+<p>缓存<code>select</code>语句的查询结果</p>
+</blockquote>
+<h2 id="在配置文件中开启缓存"><a href="#在配置文件中开启缓存" class="headerlink" title="在配置文件中开启缓存"></a>在配置文件中开启缓存</h2><p>windows 上是<code>my.ini</code>，linux 上是<code>my.cnf</code><br>在<code>[mysqld]</code>段中配置<code>query_cache_type</code>：</p>
+<ul>
+<li>0：不开启</li>
+<li>1：开启，默认缓存所有，需要在 SQL 语句中增加<code>select sql-no-cache</code>提示来放弃缓存</li>
+<li>2：开启，默认都不缓存，需要在 SQL 语句中增加<code>select sql-cache</code>来主动缓存（==常用==）</li>
+</ul>
+<p>更改配置后需要重启以使配置生效，重启后可通过<code>show variables like ‘query_cache_type’;</code>来查看：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">show variables like ‘query_cache_type’;query_cache_type DEMAND</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="在客户端设置缓存大小"><a href="#在客户端设置缓存大小" class="headerlink" title="在客户端设置缓存大小"></a>在客户端设置缓存大小</h2><p>通过配置项<code>query_cache_size</code>来设置：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">show variables like ‘query_cache_size’;query_cache_size 0set global query_cache_size=64<em>1024</em>1024;show variables like ‘query_cache_size’;query_cache_size 67108864</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="将查询结果缓存"><a href="#将查询结果缓存" class="headerlink" title="将查询结果缓存"></a>将查询结果缓存</h2><p><code>select sql_cache * from user;</code></p>
+<h2 id="重置缓存"><a href="#重置缓存" class="headerlink" title="重置缓存"></a>重置缓存</h2><p><code>reset query cache;</code></p>
+<h2 id="缓存失效问题（大问题）"><a href="#缓存失效问题（大问题）" class="headerlink" title="缓存失效问题（大问题）"></a>缓存失效问题（大问题）</h2><p>当数据表改动时，基于该数据表的任何缓存都会被删除。（表层面的管理，不是记录层面的管理，因此失效率较高）</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>应用程序，不应该关心<code>query cache</code>的使用情况。可以尝试使用，但不能由<code>query cache</code>决定业务逻辑，因为<code>query cache</code>由 DBA 来管理。</li>
+<li>缓存是以 SQL 语句为 key 存储的，因此即使 SQL 语句功能相同，但如果多了一个空格或者大小写有差异都会导致匹配不到缓存。</li>
 </ol>
-<p>引入方式 2:</p>
-<p>import (</p>
-<p>“包名”</p>
-<p>“包名”</p>
-<p>)</p>
-<p>package 指令在 文件第一行，然后是 import 指令。</p>
-<p>在 import 包时，路径从 \$GOPATH 的 src 下开始，不用带 src , 编译器会自动从 src 下开始引入</p>
-<p>3.为了让其它包的文件，可以访问到本包的函数，则该函数名的首字母需要大写，类似其它语言<br>的 public ,这样才能跨包访问。比如 utils.go 的</p>
-<p>4.在访问其它包函数，变量时，其语法是 包名.函数名， 比如这里的 main.go 文件中</p>
-<ol start="5">
-<li>如果包名较长，Go 支持给包取别名， 注意细节:取别名后，原来的包名就不能使用了</li>
+<h1 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h1><p>一般情况下我们创建的表对应一组存储文件，使用<code>MyISAM</code>存储引擎时是一个<code>.MYI</code>和<code>.MYD</code>文件，使用<code>Innodb</code>存储引擎时是一个<code>.ibd</code>和<code>.frm</code>（表结构）文件。<br>当数据量较大时（一般千万条记录级别以上），MySQL 的性能就会开始下降，这时我们就需要将数据分散到多组存储文件，==保证其单个文件的执行效率==。<br>最常见的分区方案是按<code>id</code>分区，如下将<code>id</code>的哈希值对 10 取模将数据均匀分散到 10 个<code>.ibd</code>存储文件中：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left">create table article( id int auto_increment PRIMARY KEY, title varchar(64), content text)PARTITION by HASH(id) PARTITIONS 10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>data</code>目录：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927931-b383f719-aa95-43a4-a25b-a705ec669101.jpeg#align=left&amp;display=inline&amp;height=234&amp;originHeight=234&amp;originWidth=268&amp;size=0&amp;status=done&amp;style=none&amp;width=268" alt></p>
+<blockquote>
+<p>==服务端的表分区对于客户端是透明的==，客户端还是照常插入数据，但服务端会按照分区算法分散存储数据。</p>
+</blockquote>
+<h2 id="MySQL-提供的分区算法"><a href="#MySQL-提供的分区算法" class="headerlink" title="MySQL 提供的分区算法"></a>MySQL 提供的分区算法</h2><blockquote>
+<p>==分区依据的字段必须是主键的一部分==，分区是为了快速定位数据，因此该字段的搜索频次较高应作为强检索字段，否则依照该字段分区毫无意义</p>
+</blockquote>
+<h3 id="hash-field"><a href="#hash-field" class="headerlink" title="hash(field)"></a>hash(field)</h3><p>相同的输入得到相同的输出。输出的结果跟输入是否具有规律无关。==仅适用于整型字段==</p>
+<h3 id="key-field"><a href="#key-field" class="headerlink" title="key(field)"></a>key(field)</h3><p>和<code>hash(field)</code>的性质一样，只不过<code>key</code>是==处理字符串==的，比<code>hash()</code>多了一步从字符串中计算出一个整型在做取模操作。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">create table article_key( id int auto_increment, title varchar(64), content text, PRIMARY KEY (id,title) – 要求分区依据字段必须是主键的一部分)PARTITION by KEY(title) PARTITIONS 10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="range-算法"><a href="#range-算法" class="headerlink" title="range 算法"></a>range 算法</h3><p>是一种==条件分区==算法，按照数据大小范围分区（将数据使用某种条件，分散到不同的分区中）。<br>如下，按文章的发布时间将数据按照 2018 年 8 月、9 月、10 月分区存放：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112</th>
+<th style="text-align:left">create table article_range( id int auto_increment, title varchar(64), content text, created_time int, – 发布时间到 1970-1-1 的毫秒数 PRIMARY KEY (id,created_time) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY RANGE(created_time)( PARTITION p201808 VALUES less than (1535731199), – select UNIX_TIMESTAMP(‘2018-8-31 23:59:59’) PARTITION p201809 VALUES less than (1538323199), – 2018-9-30 23:59:59 PARTITION p201810 VALUES less than (1541001599) – 2018-10-31 23:59:59);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927898-404e6b0b-312f-4864-96d8-534ff680f052.jpeg#align=left&amp;display=inline&amp;height=89&amp;originHeight=89&amp;originWidth=339&amp;size=0&amp;status=done&amp;style=none&amp;width=339" alt><br>注意：条件运算符只能使用==less than==，这以为着较小的范围要放在前面，比如上述<code>p201808,p201819,p201810</code>分区的定义顺序依照<code>created_time</code>数值范围从小到大，不能颠倒。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">insert into article_range values(null,’MySQL 优化’,’内容示例’,1535731180);flush tables; – 使操作立即刷新到磁盘文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-35852910-8a70-4728-bd2a-a2b666843d62.jpeg#align=left&amp;display=inline&amp;height=98&amp;originHeight=98&amp;originWidth=419&amp;size=0&amp;status=done&amp;style=none&amp;width=419" alt><br>由于插入的文章的发布时间<code>1535731180</code>小于<code>1535731199</code>（<code>2018-8-31 23:59:59</code>），因此被存储到<code>p201808</code>分区中，这种算法的存储到哪个分区取决于数据状况。</p>
+<h3 id="list-算法"><a href="#list-算法" class="headerlink" title="list 算法"></a>list 算法</h3><p>也是一种条件分区，按照列表值分区（<code>in (值列表)</code>）。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011</th>
+<th style="text-align:left">create table article_list( id int auto_increment, title varchar(64), content text, status TINYINT(1), – 文章状态：0-草稿，1-完成但未发布，2-已发布 PRIMARY KEY (id,status) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY list(status)( PARTITION writing values in(0,1), – 未发布的放在一个分区 PARTITION published values in (2) – 已发布的放在一个分区);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">insert into article_list values(null,’mysql 优化’,’内容示例’,0);flush tables;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-a52d8533-1ef8-4eb8-a4a8-5de6aa2658f6.jpeg#align=left&amp;display=inline&amp;height=47&amp;originHeight=47&amp;originWidth=429&amp;size=0&amp;status=done&amp;style=none&amp;width=429" alt></p>
+<h2 id="分区管理语法"><a href="#分区管理语法" class="headerlink" title="分区管理语法"></a>分区管理语法</h2><h3 id="range-list"><a href="#range-list" class="headerlink" title="range/list"></a>range/list</h3><h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><p>前文中我们尝试使用<code>range</code>对文章按照月份归档，随着时间的增加，我们需要增加一个月份：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234</th>
+<th style="text-align:left">alter table article_range add partition( partition p201811 values less than (1543593599) – select UNIX_TIMESTAMP(‘2018-11-30 23:59:59’) – more);</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927903-cad12e9f-5d3a-4036-8b81-d32a0cb2b1b9.jpeg#align=left&amp;display=inline&amp;height=94&amp;originHeight=94&amp;originWidth=403&amp;size=0&amp;status=done&amp;style=none&amp;width=403" alt></p>
+<h4 id="删除分区"><a href="#删除分区" class="headerlink" title="删除分区"></a>删除分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_range drop PARTITION p201808</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>注意：==删除分区后，分区中原有的数据也会随之删除！==</p>
+<h3 id="key-hash"><a href="#key-hash" class="headerlink" title="key/hash"></a>key/hash</h3><h4 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_key add partition partitions 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927940-f4a47b32-d956-427c-ac70-3b90843ef58c.jpeg#align=left&amp;display=inline&amp;height=297&amp;originHeight=297&amp;originWidth=232&amp;size=0&amp;status=done&amp;style=none&amp;width=232" alt></p>
+<h4 id="销毁分区"><a href="#销毁分区" class="headerlink" title="销毁分区"></a>销毁分区</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table article_key coalesce partition 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>key/hash</code>分区的管理不会删除数据，但是每一次调整（新增或销毁分区）都会将所有的数据重写分配到新的分区上。==效率极低==，最好在设计阶段就考虑好分区策略。</p>
+<h2 id="分区的使用"><a href="#分区的使用" class="headerlink" title="分区的使用"></a>分区的使用</h2><p>当数据表中的数据量很大时，分区带来的效率提升才会显现出来。<br>只有检索字段为分区字段时，分区带来的效率提升才会比较明显。因此，==分区字段的选择很重要==，并且==业务逻辑要尽可能地根据分区字段做相应调整==（尽量使用分区字段作为查询条件）。</p>
+<h1 id="水平分割和垂直分割"><a href="#水平分割和垂直分割" class="headerlink" title="水平分割和垂直分割"></a>水平分割和垂直分割</h1><blockquote>
+<p>水平分割：通过建立结构相同的几张表分别存储数据<br>垂直分割：将经常一起使用的字段放在一个单独的表中，分割后的表记录之间是一一对应关系。</p>
+</blockquote>
+<h2 id="分表原因"><a href="#分表原因" class="headerlink" title="分表原因"></a>分表原因</h2><ul>
+<li>为数据库减压</li>
+<li>分区算法局限</li>
+<li>数据库支持不完善（<code>5.1</code>之后<code>mysql</code>才支持分区操作）</li>
+</ul>
+<h2 id="id-重复的解决方案"><a href="#id-重复的解决方案" class="headerlink" title="id 重复的解决方案"></a>id 重复的解决方案</h2><ul>
+<li>借用第三方应用如<code>memcache、redis</code>的<code>id</code>自增器</li>
+<li>单独建一张只包含<code>id</code>一个字段的表，每次自增该字段作为数据记录的<code>id</code></li>
+</ul>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><blockquote>
+<p>横向扩展：从根本上（单机的硬件处理能力有限）提升数据库性能 。由此而生的相关技术：==读写分离、负载均衡==</p>
+</blockquote>
+<h2 id="安装和配置主从复制"><a href="#安装和配置主从复制" class="headerlink" title="安装和配置主从复制"></a>安装和配置主从复制</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li><code>Red Hat Enterprise Linux Server release 7.0 (Maipo)</code>（虚拟机）</li>
+<li><code>mysql5.7</code>（<a href="https://mirrors.163.com/mysql/Downloads/MySQL-5.7/mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz" target="_blank" rel="noopener">下载地址</a>）</li>
+</ul>
+<h3 id="安装和配置"><a href="#安装和配置" class="headerlink" title="安装和配置"></a>安装和配置</h3><p>解压到对外提供的服务的目录（我自己专门创建了一个<code>/export/server</code>来存放）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">tar xzvf mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz -C /export/servercd /export/servermv mysql-5.7.23-linux-glibc2.12-x86_64 mysql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>添加<code>mysql</code>目录的所属组和所属者：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left">groupadd mysqluseradd -r -g mysql mysqlcd /export/serverchown -R mysql:mysql mysql/chmod -R 755 mysql/</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>创建<code>mysql</code>数据存放目录（其中<code>/export/data</code>是我创建专门用来为各种服务存放数据的目录）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">mkdir /export/data/mysql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>初始化<code>mysql</code>服务</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">cd /export/server/mysql./bin/mysqld –basedir=/export/server/mysql –datadir=/export/data/mysql –user=mysql –pid-file=/export/data/mysql/mysql.pid –initialize</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果成功会显示<code>mysql</code>的<code>root</code>账户的初始密码，记下来以备后续登录。如果报错缺少依赖，则使用<code>yum instally</code>依次安装即可</p>
+</blockquote>
+<p>配置<code>my.cnf</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324</th>
+<th style="text-align:left">vim /etc/my.cnf[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10 # 服务 id，在集群时必须唯一，建议设置为 IP 的第四段 port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a href="http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##" target="_blank" rel="noopener">http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##</a> include all files from the config directory#!includedir /etc/my.cnf.d</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>将服务添加到开机自动启动</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">cp /export/server/mysql/support-files/mysql.server /etc/init.d/mysqld</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>启动服务</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">service mysqld start</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>配置环境变量，在<code>/etc/profile</code>中添加如下内容</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345</th>
+<th style="text-align:left"># mysql envMYSQL_HOME=/export/server/mysqlMYSQL_PATH=$MYSQL_HOME/binPATH=$PATH:\$MYSQL_PATHexport PATH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>使配置即可生效</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">source /etc/profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>使用<code>root</code>登录</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql -uroot -p# 这里填写之前初始化服务时提供的密码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>登录上去之后，更改<code>root</code>账户密码（我为了方便将密码改为 root），否则操作数据库会报错</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">set password=password(‘root’);flush privileges;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>设置服务可被所有远程客户端访问</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">use mysql;update user set host=’%’ where user=’root’;flush privileges;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这样就可以在宿主机使用<code>navicat</code>远程连接虚拟机 linux 上的 mysql 了</p>
+</blockquote>
+<h3 id="配置主从节点"><a href="#配置主从节点" class="headerlink" title="配置主从节点"></a>配置主从节点</h3><h4 id="配置-master"><a href="#配置-master" class="headerlink" title="配置 master"></a>配置 master</h4><p>以<code>linux</code>（<code>192.168.10.10</code>）上的<code>mysql</code>为<code>master</code>，宿主机（<code>192.168.10.1</code>）上的<code>mysql</code>为<code>slave</code>配置主从复制。<br>修改<code>master</code>的<code>my.cnf</code>如下</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930</th>
+<th style="text-align:left">[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a href="http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin" target="_blank" rel="noopener">http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin</a> # 开启二进制日志 expire-logs-days=7 # 设置日志过期时间，避免占满磁盘 binlog-ignore-db=mysql # 不使用主从复制的数据库 binlog-ignore-db=information_schemabinlog-ignore-db=performation_schemabinlog-ignore-db=sysbinlog-do-db=test #使用主从复制的数据库[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid## include all files from the config directory#!includedir /etc/my.cnf.d</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>重启<code>master</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">service mysqld restart</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>登录<code>master</code>查看配置是否生效（<code>ON</code>即为开启，默认为<code>OFF</code>）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">mysql&gt; show variables like ‘log_bin’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>log_bin</th>
+<th>ON</th>
+<th>+—————+——-+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>在<code>master</code>的数据库中建立备份账号：<code>backup</code>为用户名，<code>%</code>表示任何远程地址，用户<code>back</code>可以使用密码<code>1234</code>通过任何远程客户端连接<code>master</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">grant replication slave on _._ to ‘backup‘@’%’ identified by ‘1234’</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>user</code>表可以看到我们刚创建的用户：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">mysql&gt; use mysqlmysql&gt; select user,authentication_string,host from user;+—————+——————————————-+———–+</th>
+<th>user</th>
+<th>authentication_string</th>
+<th>host</th>
+<th>+—————+——————————————-+———–+</th>
+<th>root</th>
+<th>*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B</th>
+<th>%</th>
+<th></th>
+<th>mysql.session</th>
+<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
+<th>localhost</th>
+<th></th>
+<th>mysql.sys</th>
+<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
+<th>localhost</th>
+<th></th>
+<th>backup</th>
+<th>*A4B6157319038724E3560894F7F932C8886EBFCF</th>
+<th>%</th>
+<th>+—————+——————————————-+———–+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>新建<code>test</code>数据库，创建一个<code>article</code>表以备后续测试</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">CREATE TABLE <code>article</code> ( <code>id</code> int(11) NOT NULL AUTO_INCREMENT, <code>title</code> varchar(64) DEFAULT NULL, <code>content</code> text, PRIMARY KEY (<code>id</code>)) CHARSET=utf8;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>重启服务并刷新数据库状态到存储文件中（<code>with read lock</code>表示在此过程中，客户端只能读数据，以便获得一个一致性的快照）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456</th>
+<th style="text-align:left">[root@zhenganwen ~]# service mysqld restartShutting down MySQL…. SUCCESS! Starting MySQL. SUCCESS! [root@zhenganwen mysql]# mysql -uroot -prootmysql&gt; flush tables with read lock;Query OK, 0 rows affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>master</code>上当前的二进制日志和偏移量（记一下其中的<code>File</code>和<code>Position</code>）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">mysql&gt; show master status \G<strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> 1. row <strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> File: mysql-bin.000002 Position: 154 Binlog_Do_DB: test Binlog_Ignore_DB: mysql,information_schema,performation_schema,sysExecuted_Gtid_Set: 1 row in set (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927887-fe132421-1993-434b-ac15-571876568a61.jpeg#align=left&amp;display=inline&amp;height=335&amp;originHeight=335&amp;originWidth=484&amp;size=0&amp;status=done&amp;style=none&amp;width=484" alt><br><code>File</code>表示实现复制功能的日志，即上图中的<code>Binary log</code>；<code>Position</code>则表示<code>Binary log</code>日志文件的偏移量之后的都会同步到<code>slave</code>中，那么在偏移量之前的则需要我们手动导入。<br>主服务器上面的任何修改都会保存在二进制日志 Binary log 里面，从服务器上面启动一个 I/O thread（实际上就是一个主服务器的客户端进程），连接到主服务器上面请求读取二进制日志，然后把读取到的二进制日志写到本地的一个 Realy log 里面。从服务器上面开启一个 SQL thread 定时检查 Realy log，如果发现有更改立即把更改的内容在本机上面执行一遍。<br>如果一主多从的话，这时主库既要负责写又要负责为几个从库提供二进制日志。此时可以稍做调整，将二进制日志只给某一从，这一从再开启二进制日志并将自己的二进制日志再发给其它从。或者是干脆这个从不记录只负责将二进制日志转发给其它从，这样架构起来性能可能要好得多，而且数据之间的延时应该也稍微要好一些<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927893-e6c726f1-1ca7-461e-b5e2-54613c741e61.jpeg#align=left&amp;display=inline&amp;height=307&amp;originHeight=307&amp;originWidth=660&amp;size=0&amp;status=done&amp;style=none&amp;width=660" alt><br>手动导入，从<code>master</code>中导出数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">mysqldump -uroot -proot -hlocalhost test &gt; /export/data/test.sql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>将<code>test.sql</code>中的内容在<code>slave</code>上执行一遍。</p>
+<h4 id="配置-slave"><a href="#配置-slave" class="headerlink" title="配置 slave"></a>配置 slave</h4><p>修改<code>slave</code>的<code>my.ini</code>文件中的<code>[mysqld]</code>部分</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">log-bin=mysqlserver-id=1 #192.168.10.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>保存修改后重启<code>slave</code>，<code>WIN+R</code>-&gt;<code>services.msc</code>-&gt;<code>MySQL5.7</code>-&gt;重新启动<br>登录<code>slave</code>检查<code>log_bin</code>是否以被开启：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">show VARIABLES like ‘log_bin’;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>配置与<code>master</code>的同步复制：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567</th>
+<th style="text-align:left">stop slave;change master to master_host=’192.168.10.10’, – master 的 IP master_user=’backup’, – 之前在 master 上创建的用户 master_password=’1234’, master_log_file=’mysql-bin.000002’, – master 上 show master status \G 提供的信息 master_log_pos=154;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>启用<code>slave</code>节点并查看状态</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061</th>
+<th style="text-align:left">mysql&gt; start slave;mysql&gt; show slave status \G<strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> 1. row <strong><strong><em>**</em></strong></strong>***<strong><strong><em>**</em></strong></strong> Slave_IO_State: Waiting for master to send event Master_Host: 192.168.10.10 Master_User: backup Master_Port: 3306 Connect_Retry: 60 Master_Log_File: mysql-bin.000002 Read_Master_Log_Pos: 154 Relay_Log_File: DESKTOP-KUBSPE0-relay-bin.000002 Relay_Log_Pos: 320 Relay_Master_Log_File: mysql-bin.000002 Slave_IO_Running: Yes Slave_SQL_Running: Yes Replicate_Do_DB: Replicate_Ignore_DB: Replicate_Do_Table: Replicate_Ignore_Table: Replicate_Wild_Do_Table: Replicate_Wild_Ignore_Table: Last_Errno: 0 Last_Error: Skip_Counter: 0 Exec_Master_Log_Pos: 154 Relay_Log_Space: 537 Until_Condition: None Until_Log_File: Until_Log_Pos: 0 Master_SSL_Allowed: No Master_SSL_CA_File: Master_SSL_CA_Path: Master_SSL_Cert: Master_SSL_Cipher: Master_SSL_Key: Seconds_Behind_Master: 0Master_SSL_Verify_Server_Cert: No Last_IO_Errno: 0 Last_IO_Error: Last_SQL_Errno: 0 Last_SQL_Error: Replicate_Ignore_Server_Ids: Master_Server_Id: 10 Master_UUID: f68774b7-0b28-11e9-a925-000c290abe05 Master_Info_File: C:\ProgramData\MySQL\MySQL Server 5.7\Data\master.info SQL_Delay: 0 SQL_Remaining_Delay: NULL Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates Master_Retry_Count: 86400 Master_Bind: Last_IO_Error_Timestamp: Last_SQL_Error_Timestamp: Master_SSL_Crl: Master_SSL_Crlpath: Retrieved_Gtid_Set: Executed_Gtid_Set: Auto_Position: 0 Replicate_Rewrite_DB: Channel_Name: Master_TLS_Version:1 row in set (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意查看第 4、14、15 三行，若与我一致，表示<code>slave</code>配置成功</p>
+</blockquote>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>关闭<code>master</code>的读取锁定</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql&gt; unlock tables;Query OK, 0 rows affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>向<code>master</code>中插入一条数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123</th>
+<th style="text-align:left">mysql&gt; use testmysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>查看<code>slave</code>是否自动同步了数据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left">mysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>至此，主从复制的配置成功！：)<br><a href="https://blog.csdn.net/xlgen157387/article/details/52452394" target="_blank" rel="noopener">使用 mysqlreplicate 命令快速搭建 Mysql 主从复制</a></p>
+<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><p>读写分离是依赖于主从复制，而主从复制又是为读写分离服务的。因为主从复制要求<code>slave</code>不能写只能读（如果对<code>slave</code>执行写操作，那么<code>show slave status</code>将会呈现<code>Slave_SQL_Running=NO</code>，此时你需要按照前面提到的手动同步一下<code>slave</code>）。</p>
+<h3 id="方案一、定义两种连接"><a href="#方案一、定义两种连接" class="headerlink" title="方案一、定义两种连接"></a>方案一、定义两种连接</h3><p>就像我们在学 JDBC 时定义的<code>DataBase</code>一样，我们可以抽取出<code>ReadDataBase,WriteDataBase implements DataBase</code>，但是这种方式无法利用优秀的线程池技术如<code>DruidDataSource</code>帮我们管理连接，也无法利用<code>Spring AOP</code>让连接对<code>DAO</code>层透明。</p>
+<h3 id="方案二、使用-Spring-AOP"><a href="#方案二、使用-Spring-AOP" class="headerlink" title="方案二、使用 Spring AOP"></a>方案二、使用 Spring AOP</h3><p>如果能够使用<code>Spring AOP</code>解决数据源切换的问题，那么就可以和<code>Mybatis</code>、<code>Druid</code>整合到一起了。<br>我们在整合<code>Spring1</code>和<code>Mybatis</code>时，我们只需写 DAO 接口和对应的<code>SQL</code>语句，那么 DAO 实例是由谁创建的呢？实际上就是<code>Spring</code>帮我们创建的，它通过我们注入的数据源，帮我们完成从中获取数据库连接、使用连接执行 <code>SQL</code> 语句的过程以及最后归还连接给数据源的过程。<br>如果我们能在调用 DAO 接口时根据接口方法命名规范（增<code>addXXX/createXXX</code>、删<code>deleteXX/removeXXX</code>、改<code>updateXXXX</code>、查<code>selectXX/findXXX/getXX/queryXXX</code>）动态地选择数据源（读数据源对应连接<code>master</code>而写数据源对应连接<code>slave</code>），那么就可以做到读写分离了。</p>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927934-ae443fd0-1934-4076-b2a5-aed058579a5f.jpeg#align=left&amp;display=inline&amp;height=421&amp;originHeight=421&amp;originWidth=316&amp;size=0&amp;status=done&amp;style=none&amp;width=316" alt></p>
+<h4 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h4><p>其中，为了方便访问数据库引入了<code>mybatis</code>和<code>druid</code>，实现数据源动态切换主要依赖<code>spring-aop</code>和<code>spring-aspects</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465</th>
+<th style="text-align:left"><dependencies> <dependency> <groupid>org.mybatis</groupid> <artifactid>mybatis-spring</artifactid> <version>1.3.2</version> </dependency> <dependency> <groupid>org.mybatis</groupid> <artifactid>mybatis</artifactid> <version>3.4.6</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-core</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-aop</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-jdbc</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>com.alibaba</groupid> <artifactid>druid</artifactid> <version>1.1.6</version> </dependency> <dependency> <groupid>mysql</groupid> <artifactid>mysql-connector-java</artifactid> <version>6.0.2</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-context</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-aspects</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>org.projectlombok</groupid> <artifactid>lombok</artifactid> <version>1.16.22</version> </dependency> <dependency> <groupid>org.springframework</groupid> <artifactid>spring-test</artifactid> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupid>junit</groupid> <artifactid>junit</artifactid> <version>4.12</version> </dependency></dependencies></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="数据类"><a href="#数据类" class="headerlink" title="数据类"></a>数据类</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.entity;import lombok.AllArgsConstructor;import lombok.Data;import lombok.NoArgsConstructor;@Data@AllArgsConstructor@NoArgsConstructorpublic class Article { private int id; private String title; private String content;}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="spring-配置文件"><a href="#spring-配置文件" class="headerlink" title="spring 配置文件"></a>spring 配置文件</h4><p>其中<code>RoutingDataSourceImpl</code>是实现动态切换功能的核心类，稍后介绍。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemalocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> &lt;context:property-placeholder location=”db.properties”&gt;&lt;/context:property-placeholder&gt; &lt;context:component-scan base-package=”top.zhenganwen.mysqloptimize”/&gt; <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"> <property name="url" value="${master.db.url}"></property> <property name="username" value="${master.db.username}"></property> <property name="password" value="${master.db.password}"></property> </property></bean> <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"> <property name="url" value="${slave.db.url}"></property> <property name="username" value="${slave.db.username}"></property> <property name="password" value="${slave.db.password}"></property> </property></bean> <bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"> <entry key="write" value-ref="masterDataSource"> </entry></entry></map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"> </entry></map> </property> </bean> <!-- Mybatis文件 --> <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> <property name="configLocation" value="classpath:mybatis-config.xml"> <property name="dataSource" ref="dataSourceRouting"> <property name="mapperLocations" value="mapper/*.xml"> </property></property></property></bean> <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> <property name="basePackage" value="top.zhenganwen.mysqloptimize.mapper"> <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"> </property></property></bean></beans></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>dp.properties</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">master.db.url=jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCmaster.db.username=rootmaster.db.password=rootslave.db.url=jdbc:mysql://192.168.10.10:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCslave.db.username=rootslave.db.password=rootdb.driverClass=com.mysql.jdbc.Driver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>mybatis-config.xml</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;&lt;!DOCTYPE configuration        PUBLIC “-//mybatis.org//DTD Config 3.0//EN”        “<a href="http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;" target="_blank" rel="noopener">http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;</a><configuration> <typealiases> <typealias type="top.zhenganwen.mysqloptimize.entity.Article" alias="Article"> </typealias></typealiases></configuration></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="mapper-接口和配置文件"><a href="#mapper-接口和配置文件" class="headerlink" title="mapper 接口和配置文件"></a>mapper 接口和配置文件</h4><p><code>ArticleMapper.java</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.mapper;import org.springframework.stereotype.Repository;import top.zhenganwen.mysqloptimize.entity.Article;import java.util.List;@Repositorypublic interface ArticleMapper { List<article> findAll(); void add(Article article); void delete(int id);}</article></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>ArticleMapper.xml</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left">&lt;?xml version=”1.0” encoding=”UTF-8” ?&gt;&lt;!DOCTYPE mapper PUBLIC “-//mybatis.org//DTD Mapper 3.0//EN” “<a href="http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;" target="_blank" rel="noopener">http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</a> &gt;<mapper namespace="top.zhenganwen.mysqloptimize.mapper.ArticleMapper"> <select id="findAll" resulttype="Article"> select * from article </select> <insert id="add" parametertype="Article"> insert into article (title,content) values (#{title},#{content}) </insert> <delete id="delete" parametertype="int"> delete from article where id=#{id} </delete></mapper></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="核心类"><a href="#核心类" class="headerlink" title="核心类"></a>核心类</h4><h5 id="RoutingDataSourceImpl"><a href="#RoutingDataSourceImpl" class="headerlink" title="RoutingDataSourceImpl"></a>RoutingDataSourceImpl</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930313233343536373839404142</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;import java.util._;/** _ RoutingDataSourceImpl class _ 数据源路由 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 _/public class RoutingDataSourceImpl extends AbstractRoutingDataSource { /** _ key 为 read 或 write _ value 为 DAO 方法的前缀 _ 什么前缀开头的方法使用读数据员，什么开头的方法使用写数据源 _/ public static final Map&lt;String, List<string>&gt; METHOD_TYPE_MAP = new HashMap&lt;String, List<string>&gt;(); /** _ 由我们指定数据源的 id，由 Spring 切换数据源 * _ @return _/ @Override protected Object determineCurrentLookupKey() { System.out.println(“数据源为：”+DataSourceHandler.getDataSource()); return DataSourceHandler.getDataSource(); } public void setMethodType(Map&lt;String, String&gt; map) { for (String type : map.keySet()) { String methodPrefixList = map.get(type); if (methodPrefixList != null) { METHOD_TYPE_MAP.put(type, Arrays.asList(methodPrefixList.split(“,”))); } } }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>它的主要功能是，本来我们只配置一个数据源，因此<code>Spring</code>动态代理 DAO 接口时直接使用该数据源，现在我们有了读、写两个数据源，我们需要加入一些自己的逻辑来告诉调用哪个接口使用哪个数据源（读数据的接口使用<code>slave</code>，写数据的接口使用<code>master</code>。这个告诉<code>Spring</code>该使用哪个数据源的类就是<code>AbstractRoutingDataSource</code>，必须重写的方法<code>determineCurrentLookupKey</code>返回数据源的标识，结合<code>spring</code>配置文件（下段代码的 5，6 两行）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415</th>
+<th style="text-align:left"><bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"> <entry key="write" value-ref="masterDataSource"> </entry></entry></map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"> </entry></map> </property></bean></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>如果<code>determineCurrentLookupKey</code>返回<code>read</code>那么使用<code>slaveDataSource</code>，如果返回<code>write</code>就使用<code>masterDataSource</code>。</p>
+<h5 id="DataSourceHandler"><a href="#DataSourceHandler" class="headerlink" title="DataSourceHandler"></a>DataSourceHandler</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;/<strong> _ DataSourceHandler class _ <p> _ 将数据源与线程绑定，需要时根据线程获取 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 */public class DataSourceHandler { /</p></strong> _ 绑定的是 read 或 write，表示使用读或写数据源 _/ private static final ThreadLocal<string> holder = new ThreadLocal<string>(); public static void setDataSource(String dataSource) { System.out.println(Thread.currentThread().getName()+”设置了数据源类型”); holder.set(dataSource); } public static String getDataSource() { System.out.println(Thread.currentThread().getName()+”获取了数据源类型”); return holder.get(); }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h5 id="DataSourceAspect"><a href="#DataSourceAspect" class="headerlink" title="DataSourceAspect"></a>DataSourceAspect</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.aspectj.lang.JoinPoint;import org.aspectj.lang.annotation.Aspect;import org.aspectj.lang.annotation.Before;import org.aspectj.lang.annotation.Pointcut;import org.springframework.context.annotation.EnableAspectJAutoProxy;import org.springframework.stereotype.Component;import java.util.List;import java.util.Set;import static top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl.METHOD_TYPE_MAP;/<strong> _ DataSourceAspect class _ _ 配置切面，根据方法前缀设置读、写数据源 _ 项目启动时会加载该 bean，并按照配置的切面（哪些切入点、如何增强）确定动态代理逻辑 _ @author zhenganwen,blog:zhenganwen.top _ @date 2018/12/29 */@Component//声明这是一个切面，这样 Spring 才会做相应的配置，否则只会当做简单的 bean 注入@Aspect@EnableAspectJAutoProxypublic class DataSourceAspect { /</strong> _ 配置切入点：DAO 包下的所有类的所有方法 <em>/ @Pointcut(“execution(</em> top.zhenganwen.mysqloptimize.mapper._._(..))”) public void aspect() { } /** _ 配置前置增强，对象是 aspect()方法上配置的切入点 */ @Before(“aspect()”) public void before(JoinPoint point) { String className = point.getTarget().getClass().getName(); String invokedMethod = point.getSignature().getName(); System.out.println(“对 “+className+”\$”+invokedMethod+” 做了前置增强，确定了要使用的数据源类型”); Set<string> dataSourceType = METHOD_TYPE_MAP.keySet(); for (String type : dataSourceType) { List<string> prefixList = METHOD_TYPE_MAP.get(type); for (String prefix : prefixList) { if (invokedMethod.startsWith(prefix)) { DataSourceHandler.setDataSource(type); System.out.println(“数据源为：”+type); return; } } } }}</string></string></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="测试读写分离"><a href="#测试读写分离" class="headerlink" title="测试读写分离"></a>测试读写分离</h4><blockquote>
+<p>如何测试读是从<code>slave</code>中读的呢？可以将写后复制到<code>slave</code>中的数据更改，再读该数据就知道是从<code>slave</code>中读了。==注意==，一但对<code>slave</code>做了写操作就要重新手动将<code>slave</code>与<code>master</code>同步一下，否则主从复制就会失效。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718192021222324252627282930313233</th>
+<th style="text-align:left">package top.zhenganwen.mysqloptimize.dataSource;import org.junit.Test;import org.junit.runner.RunWith;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.test.context.ContextConfiguration;import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;import top.zhenganwen.mysqloptimize.entity.Article;import top.zhenganwen.mysqloptimize.mapper.ArticleMapper;@RunWith(SpringJUnit4ClassRunner.class)@ContextConfiguration(locations = “classpath:spring-mybatis.xml”)public class RoutingDataSourceTest { @Autowired ArticleMapper articleMapper; @Test public void testRead() { System.out.println(articleMapper.findAll()); } @Test public void testAdd() { Article article = new Article(0, “我是新插入的文章”, “测试是否能够写到 master 并且复制到 slave 中”); articleMapper.add(article); } @Test public void testDelete() { articleMapper.delete(2); }}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
+<li>轮询</li>
+<li>加权轮询：按照处理能力来加权</li>
+<li>负载分配：依据当前的空闲状态（但是测试每个节点的内存使用率、CPU 利用率等，再做比较选出最闲的那个，效率太低）</li>
+</ul>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>在服务器架构时，为了保证服务器 7x24 不宕机在线状态，需要为每台单点服务器（由一台服务器提供服务的服务器，如写服务器、数据库中间件）提供冗余机。<br>对于写服务器来说，需要提供一台同样的写-冗余服务器，当写服务器健康时（写-冗余通过心跳检测），写-冗余作为一个从机的角色复制写服务器的内容与其做一个同步；当写服务器宕机时，写-冗余服务器便顶上来作为写服务器继续提供服务。对外界来说这个处理过程是透明的，即外界仅通过一个 IP 访问服务。</p>
+<h1 id="典型-SQL"><a href="#典型-SQL" class="headerlink" title="典型 SQL"></a>典型 SQL</h1><h2 id="线上-DDL"><a href="#线上-DDL" class="headerlink" title="线上 DDL"></a>线上 DDL</h2><p>DDL(Database Definition Language)是指数据库表结构的定义（<code>create table</code>）和维护（<code>alter table</code>）的语言。在线上执行 DDL，在低于<code>MySQL5.6</code>版本时会导致全表被独占锁定，此时表处于维护、不可操作状态，这会导致该期间对该表的所有访问无法响应。但是在<code>MySQL5.6</code>之后，支持<code>Online DDL</code>，大大缩短了锁定时间。<br>优化技巧是采用的维护表结构的 DDL（比如增加一列，或者增加一个索引），是==copy==策略。思路：创建一个满足新结构的新表，将旧表数据==逐条==导入（复制）到新表中，以保证==一次性锁定的内容少==（锁定的是正在导入的数据），同时旧表上可以执行其他任务。导入的过程中，将对旧表的所有操作以日志的形式记录下来，导入完毕后，将更新日志在新表上再执行一遍（确保一致性）。最后，新表替换旧表（在应用程序中完成，或者是数据库的 rename，视图完成）。<br>但随着 MySQL 的升级，这个问题几乎淡化了。</p>
+<h2 id="数据库导入语句"><a href="#数据库导入语句" class="headerlink" title="数据库导入语句"></a>数据库导入语句</h2><p>在恢复数据时，可能会导入大量的数据。此时为了快速导入，需要掌握一些技巧：</p>
+<ol>
+<li>导入时==先禁用索引和约束==：<br>| 1 | alter table table-name disable keys |<br>| :— | :— |</li>
 </ol>
-<p>说明: 如果给包取了别名，则需要使用别名来访问该包的函数和变量。 6.在同一包下，不能有相同的函数名(也不能有相同的全局变量名)，否则报重复定义</p>
-<p>7.如果你要编译成一个可执行程序文件，就需要将这个包声明为 main , 即 package main .这个就是一个语法规范，如果你是写一个库 ，包名可以自定义</p>
-=======
-        <p><a href="https://www.bilibili.com/video/av44127555" target="_blank" rel="noopener">https://www.bilibili.com/video/av44127555</a></p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+<p>待数据导入完成之后，再开启索引和约束，一次性创建索引</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1</th>
+<th style="text-align:left">alter table table-name enable keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>数据库如果使用的引擎是<code>Innodb</code>，那么它==默认会给每条写指令加上事务==（这也会消耗一定的时间），因此建议先手动开启事务，再执行一定量的批量导入，最后手动提交事务。</li>
+<li>如果批量导入的 SQL 指令格式相同只是数据不同，那么你应该先<code>prepare</code>==预编译==一下，这样也能节省很多重复编译的时间。</li>
+</ol>
+<h2 id="limit-offset-rows"><a href="#limit-offset-rows" class="headerlink" title="limit offset,rows"></a>limit offset,rows</h2><p>尽量保证不要出现大的<code>offset</code>，比如<code>limit 10000,10</code>相当于对已查询出来的行数弃掉前<code>10000</code>行后再取<code>10</code>行，完全可以加一些条件过滤一下（完成筛选），而不应该使用<code>limit</code>跳过已查询到的数据。这是一个==<code>offset</code>做无用功==的问题。对应实际工程中，要避免出现大页码的情况，尽量引导用户做条件过滤。</p>
+<h2 id="select-要少用"><a href="#select-要少用" class="headerlink" title="select * 要少用"></a>select * 要少用</h2><p>即尽量选择自己需要的字段<code>select</code>，但这个影响不是很大，因为网络传输多了几十上百字节也没多少延时，并且现在流行的 ORM 框架都是用的<code>select *</code>，只是我们在设计表的时候注意将大数据量的字段分离，比如商品详情可以单独抽离出一张商品详情表，这样在查看商品简略页面时的加载速度就不会有影响了。</p>
+<h2 id="order-by-rand-不要用"><a href="#order-by-rand-不要用" class="headerlink" title="order by rand()不要用"></a>order by rand()不要用</h2><p>它的逻辑就是随机排序（为每条数据生成一个随机数，然后根据随机数大小进行排序）。如<code>select * from student order by rand() limit 5</code>的执行效率就很低，因为它为表中的每条数据都生成随机数并进行排序，而我们只要前 5 条。<br>解决思路：在应用程序中，将随机的主键生成好，去数据库中利用主键检索。</p>
+<h2 id="单表和多表查询"><a href="#单表和多表查询" class="headerlink" title="单表和多表查询"></a>单表和多表查询</h2><p>多表查询：<code>join</code>、子查询都是涉及到多表的查询。如果你使用<code>explain</code>分析执行计划你会发现多表查询也是一个表一个表的处理，最后合并结果。因此可以说单表查询将计算压力放在了应用程序上，而多表查询将计算压力放在了数据库上。<br>现在有 ORM 框架帮我们解决了单表查询带来的对象映射问题（查询单表时，如果发现有外键自动再去查询关联表，是一个表一个表查的）。</p>
+<h2 id="count"><a href="#count" class="headerlink" title="count(*)"></a>count(*)</h2><p>在<code>MyISAM</code>存储引擎中，会自动记录表的行数，因此使用<code>count(*)</code>能够快速返回。而<code>Innodb</code>内部没有这样一个计数器，需要我们手动统计记录数量，解决思路就是单独使用一张表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">student</td>
+<td style="text-align:left">100</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limit-1"><a href="#limit-1" class="headerlink" title="limit 1"></a>limit 1</h2><p>如果可以确定仅仅检索一条，建议加上<code>limit 1</code>，其实 ORM 框架帮我们做到了这一点（查询单条的操作都会自动加上<code>limit 1</code>）。</p>
+<h1 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h1><blockquote>
+<p>用于记录执行时间超过某个临界值的 SQL 日志，用于快速定位慢查询，为我们的优化做参考。</p>
+</blockquote>
+<h2 id="开启慢查询日志"><a href="#开启慢查询日志" class="headerlink" title="开启慢查询日志"></a>开启慢查询日志</h2><p>配置项：<code>slow_query_log</code><br>可以使用<code>show variables like ‘slov_query_log’</code>查看是否开启，如果状态值为<code>OFF</code>，可以使用<code>set GLOBAL slow_query_log = on</code>来开启，它会在<code>datadir</code>下产生一个<code>xxx-slow.log</code>的文件。</p>
+<h2 id="设置临界时间"><a href="#设置临界时间" class="headerlink" title="设置临界时间"></a>设置临界时间</h2><p>配置项：<code>long_query_time</code><br>查看：<code>show VARIABLES like &#39;long_query_time&#39;</code>，单位秒<br>设置：<code>set long_query_time=0.5</code><br>实操时应该从长时间设置到短的时间，即将最慢的 SQL 优化掉</p>
+<h2 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h2><p>一旦 SQL 超过了我们设置的临界时间就会被记录到<code>xxx-slow.log</code>中</p>
+<h1 id="profile-信息"><a href="#profile-信息" class="headerlink" title="profile 信息"></a>profile 信息</h1><p>配置项：<code>profiling</code></p>
+<h2 id="开启-profile"><a href="#开启-profile" class="headerlink" title="开启 profile"></a>开启 profile</h2><p><code>set profiling=on</code><br>开启后，所有的 SQL 执行的详细信息都会被自动记录下来</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12345678910</th>
+<th style="text-align:left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>profiling</th>
+<th>OFF</th>
+<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; set profiling=on;Query OK, 0 rows affected, 1 warning (0.00 sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="查看-profile-信息"><a href="#查看-profile-信息" class="headerlink" title="查看 profile 信息"></a>查看 profile 信息</h2><p><code>show profiles</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789101112131415161718</th>
+<th style="text-align:left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
+<th>Variable_name</th>
+<th>Value</th>
+<th>+—————+——-+</th>
+<th>profiling</th>
+<th>ON</th>
+<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; insert into article values (null,’test profile’,’:)’);Query OK, 1 row affected (0.15 sec)mysql&gt; show profiles;+———-+————+——————————————————-+</th>
+<th>Query_ID</th>
+<th>Duration</th>
+<th>Query</th>
+<th>+———-+————+——————————————————-+</th>
+<th>1</th>
+<th>0.00086150</th>
+<th>show variables like ‘profiling’</th>
+<th></th>
+<th>2</th>
+<th>0.15027550</th>
+<th>insert into article values (null,’test profile’,’:)’)</th>
+<th>+———-+————+——————————————————-+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="通过-Query-ID-查看某条-SQL-所有详细步骤的时间"><a href="#通过-Query-ID-查看某条-SQL-所有详细步骤的时间" class="headerlink" title="通过 Query_ID 查看某条 SQL 所有详细步骤的时间"></a>通过 Query_ID 查看某条 SQL 所有详细步骤的时间</h2><p><code>show profile for query Query_ID</code><br>上面<code>show profiles</code>的结果中，每个 SQL 有一个<code>Query_ID</code>，可以通过它查看执行该 SQL 经过了哪些步骤，各消耗了多场时间</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">12</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h1 id="典型的服务器配置"><a href="#典型的服务器配置" class="headerlink" title="典型的服务器配置"></a>典型的服务器配置</h1><blockquote>
+<p>以下的配置全都取决于实际的运行环境</p>
+</blockquote>
+<ul>
+<li><code>max_connections</code>，最大客户端连接数<br>| 123456 | mysql&gt; show variables like ‘max_connections’;+—————–+——-+| Variable_name | Value |+—————–+——-+| max_connections | 151 |+—————–+——-+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>table_open_cache</code>，表文件句柄缓存（表数据是存储在磁盘上的，缓存磁盘文件的句柄方便打开文件读取数据）<br>| 123456 | mysql&gt; show variables like ‘table_open_cache’;+——————+——-+| Variable_name | Value |+——————+——-+| table_open_cache | 2000 |+——————+——-+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>key_buffer_size</code>，索引缓存大小（将从磁盘上读取的索引缓存到内存，可以设置大一些，有利于快速检索）<br>| 123456 | mysql&gt; show variables like ‘key_buffer_size’;+—————–+———+| Variable_name | Value |+—————–+———+| key_buffer_size | 8388608 |+—————–+———+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>innodb_buffer_pool_size</code>，<code>Innodb</code>存储引擎缓存池大小（对于<code>Innodb</code>来说最重要的一个配置，如果所有的表用的都是<code>Innodb</code>，那么甚至建议将该值设置到物理内存的 80%，<code>Innodb</code>的很多性能提升如索引都是依靠这个）<br>| 123456 | mysql&gt; show variables like ‘innodb_buffer_pool_size’;+————————-+———+| Variable_name | Value |+————————-+———+| innodb_buffer_pool_size | 8388608 |+————————-+———+ |<br>| :— | :— |</li>
+</ul>
+<p>-</p>
+<ul>
+<li><code>innodb_file_per_table</code>（<code>innodb</code>中，表数据存放在<code>.ibd</code>文件中，如果将该配置项设置为<code>ON</code>，那么一个表对应一个<code>ibd</code>文件，否则所有<code>innodb</code>共享表空间）</li>
+</ul>
+<h1 id="压测工具-mysqlslap"><a href="#压测工具-mysqlslap" class="headerlink" title="压测工具 mysqlslap"></a>压测工具 mysqlslap</h1><p>安装 MySQL 时附带了一个压力测试工具<code>mysqlslap</code>（位于<code>bin</code>目录下）</p>
+<h2 id="自动生成-sql-测试"><a href="#自动生成-sql-测试" class="headerlink" title="自动生成 sql 测试"></a>自动生成 sql 测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 1.219 seconds Minimum number of seconds to run all queries: 1.219 seconds Maximum number of seconds to run all queries: 1.219 seconds Number of clients running queries: 1 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="并发测试"><a href="#并发测试" class="headerlink" title="并发测试"></a>并发测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">1234567891011121314151617</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=100 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 3.578 seconds Minimum number of seconds to run all queries: 3.578 seconds Maximum number of seconds to run all queries: 3.578 seconds Number of clients running queries: 100 Average number of queries per client: 0C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.718 seconds Minimum number of seconds to run all queries: 5.718 seconds Maximum number of seconds to run all queries: 5.718 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="多轮测试"><a href="#多轮测试" class="headerlink" title="多轮测试"></a>多轮测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">12345678</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=10 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.398 seconds Minimum number of seconds to run all queries: 4.313 seconds Maximum number of seconds to run all queries: 6.265 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="存储引擎测试"><a href="#存储引擎测试" class="headerlink" title="存储引擎测试"></a>存储引擎测试</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=innodb -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine innodb Average number of seconds to run all queries: 5.911 seconds Minimum number of seconds to run all queries: 5.485 seconds Maximum number of seconds to run all queries: 6.703 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">123456789</th>
+<th style="text-align:left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=myisam -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine myisam Average number of seconds to run all queries: 53.104 seconds Minimum number of seconds to run all queries: 46.843 seconds Maximum number of seconds to run all queries: 60.781 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
 
       
 
@@ -250,11 +1624,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
-          <a class="article-more-a" href="/2020/02/18/yuque/Golang 包使用的注意事项/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/10/23/yuque/Mac快捷键设置（大自然的搬运工）/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+          <a class="article-more-a" href="/2020/03/20/yuque/MySQL 优化/">展开全文 >></a>
         </p>
       
 
@@ -284,40 +1654,213 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
-    <article id="post-yuque/Golang 程序流程控制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/GO(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+    <article id="post-yuque/Go Modules基本使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2020/02/18/yuque/Golang 程序流程控制/">Golang 程序流程控制</a>
-=======
-      <a class="article-title" href="/2019/10/20/yuque/GO(一)/">GO(一)</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="article-title" href="/2020/03/01/yuque/Go Modules基本使用/">Go Modules基本使用</a>
     </h1>
   
 
         
-<<<<<<< HEAD
-        <a href="/2020/02/18/yuque/Golang 程序流程控制/" class="archive-article-date">
-  	<time datetime="2020-02-18T09:25:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
-=======
-        <a href="/2019/10/20/yuque/GO(一)/" class="archive-article-date">
-  	<time datetime="2019-10-20T06:28:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+        <a href="/2020/03/01/yuque/Go Modules基本使用/" class="archive-article-date">
+  	<time datetime="2020-03-01T16:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
+        <h3 id="所提供的命令"><a href="#所提供的命令" class="headerlink" title="所提供的命令"></a>所提供的命令</h3><p>在 Go modules 中，我们能够使用如下命令进行操作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">go mod init</td>
+<td style="text-align:left">生成 go.mod 文件</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod download</td>
+<td style="text-align:left">下载 go.mod 文件中指明的所有依赖</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod tidy</td>
+<td style="text-align:left">整理现有的依赖</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod graph</td>
+<td style="text-align:left">查看现有的依赖结构</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod edit</td>
+<td style="text-align:left">编辑 go.mod 文件</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod vendor</td>
+<td style="text-align:left">导出项目所有的依赖到 vendor 目录</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod verify</td>
+<td style="text-align:left">校验一个模块是否被篡改过</td>
+</tr>
+<tr>
+<td style="text-align:left">go mod why</td>
+<td style="text-align:left">查看为什么需要依赖某模块</td>
+</tr>
+</tbody>
+</table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/01/yuque/Go Modules基本使用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 包使用的注意事项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/18/yuque/Golang 包使用的注意事项/">Golang 包使用的注意事项</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/18/yuque/Golang 包使用的注意事项/" class="archive-article-date">
+  	<time datetime="2020-02-18T12:18:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>在给一个文件打包时，该包对应一个文件夹，比如这里的 utils 文件夹对应的包名就是 utils,<br>文件的包名通常和文件所在的文件夹名一致，一般为小写字母。</p>
+</li>
+<li><p>当一个文件要使用其它包函数或变量时，需要先引入对应的包<br> 引入方式 1:import “包名”</p>
+</li>
+</ol>
+<p>引入方式 2:</p>
+<p>import (</p>
+<p>“包名”</p>
+<p>“包名”</p>
+<p>)</p>
+<p>package 指令在 文件第一行，然后是 import 指令。</p>
+<p>在 import 包时，路径从 \$GOPATH 的 src 下开始，不用带 src , 编译器会自动从 src 下开始引入</p>
+<p>3.为了让其它包的文件，可以访问到本包的函数，则该函数名的首字母需要大写，类似其它语言<br>的 public ,这样才能跨包访问。比如 utils.go 的</p>
+<p>4.在访问其它包函数，变量时，其语法是 包名.函数名， 比如这里的 main.go 文件中</p>
+<ol start="5">
+<li>如果包名较长，Go 支持给包取别名， 注意细节:取别名后，原来的包名就不能使用了</li>
+</ol>
+<p>说明: 如果给包取了别名，则需要使用别名来访问该包的函数和变量。 6.在同一包下，不能有相同的函数名(也不能有相同的全局变量名)，否则报重复定义</p>
+<p>7.如果你要编译成一个可执行程序文件，就需要将这个包声明为 main , 即 package main .这个就是一个语法规范，如果你是写一个库 ，包名可以自定义</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/18/yuque/Golang 包使用的注意事项/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 程序流程控制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/18/yuque/Golang 程序流程控制/">Golang 程序流程控制</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/18/yuque/Golang 程序流程控制/" class="archive-article-date">
+  	<time datetime="2020-02-18T09:25:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h2 id="if-与传统语言的区别"><a href="#if-与传统语言的区别" class="headerlink" title="if 与传统语言的区别"></a>if 与传统语言的区别</h2><p>判断条件不推荐 ➕（）<br>无论执行语句多简单，必须 ➕{}<br>大括号必须在判断条件后，不得换行</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> flag== <span class="literal">false</span> &#123; <span class="comment">//这里必须这样写 golang 语法强制要求</span></span><br><span class="line">    fmt.Println(<span class="string">"zzzzzz"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="switch-与传统语言区别很大"><a href="#switch-与传统语言区别很大" class="headerlink" title="switch 与传统语言区别很大"></a>switch 与传统语言区别很大</h2><p>1.匹配项后面也不需要再加 <strong>break
@@ -355,10 +1898,6 @@ var _hmt = _hmt || [];
 <p>对字符串的遍历是按照字节来遍历，而一个汉字在 utf8 编码是对应 <strong>3 </strong>个字节。</p>
 <p>如何解决 需要要将 str 转成 []rune 切片.</p>
 <p>对应 for-range 遍历方式而言，是按照字符方式遍历。因此如果有字符串有中文，也是 ok</p>
-=======
-        <p>本文确保你一定安装了 brew 包管理器<br>macOS 安装 Golang 过程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">mkdir ~/go_work</span><br><span class="line">mkdir ~/go_work/bin</span><br><span class="line">mkdir ~/go_work/pkg</span><br><span class="line">mkdir ~/go_work/src</span><br><span class="line"></span><br><span class="line">echo "export GOROOT=/usr/local/opt/go/libexec" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOPATH=~/go_work" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export GOBIN=~/go_work/bin" &gt;&gt; ~.zshrc</span><br><span class="line">echo "export PATH=$PATH:$GOROOT/bin:$GOPATH:$GOBIN" &gt;&gt; ~.zshrc</span><br></pre></td></tr></table></figure>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -371,11 +1910,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/18/yuque/Golang 程序流程控制/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/10/20/yuque/GO(一)/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -405,40 +1940,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Golang 系统保留关键字与预定义标识符" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/佛系提升macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/">Golang 系统保留关键字与预定义标识符</a>
-=======
-      <a class="article-title" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">佛系提升macOS Catalina &amp;amp;&amp;amp; iPad&amp;amp;iphone 使用体验</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/" class="archive-article-date">
   	<time datetime="2020-02-17T12:53:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/" class="archive-article-date">
-  	<time datetime="2019-10-19T13:32:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-19</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <h1 id="系统保留关键字"><a href="#系统保留关键字" class="headerlink" title="系统保留关键字"></a>系统保留关键字</h1><p>break   //退出循环<br>default  //选择结构默认项（switch、select）<br>func   //定义函数<br>interface //定义接口<br>select  //channel<br>case   //选择结构标签<br>chan   //定义 channel<br>const   //常量<br>continue  //跳过本次循环<br>defer   //延迟执行内容（收尾工作）<br>go   //并发执行<br>map   //map 类型<br>struct  //定义结构体<br>else   //选择结构<br>goto   //跳转语句<br>package  //包<br>switch  //选择结构<br>fallthrough  //switch 中 继续向下执行<br>if   //选择结构<br>range   //从 slice、map 等结构中取元素<br>type  //定义类型<br>for   //循环<br>import   //导入包<br>return   //返回<br>var  //定义变量</p>
 <h1 id="预定义标识符"><a href="#预定义标识符" class="headerlink" title="预定义标识符"></a>预定义标识符</h1><table>
 <thead>
@@ -501,31 +2022,6 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
-=======
-        <p>截止 2019 年 10 月 20 日<br>佛系 如果您是个安卓用户 or 微软，这篇文章所讲到的东西不太适合您，您可以关闭这个浏览器了。<br>我希望您是拥有 apple 全家桶（iphone ipad mac homepod airpods tv 等）或者半全家桶的用户（mac iphone( ipad)）。最好同时订阅了 iCloud 云盘（付费的用户），系统升级到最新版。</p>
-<h1 id="设备设置"><a href="#设备设置" class="headerlink" title="设备设置"></a>设备设置</h1><p>iPhone/iPad 设置手机/pad 的快捷词典<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571549151848-69c96297-b09e-40bb-a01d-03f3cc044d12.gif#align=left&amp;display=inline&amp;height=811&amp;name=%E8%AF%8D%E5%85%B8%E8%AE%BE%E7%BD%AE.gif&amp;originHeight=1884&amp;originWidth=876&amp;size=1601331&amp;status=done&amp;style=none&amp;width=377" alt="词典设置.gif"><br>关闭不必要的系统服务定位等请求<br><img src="https://cdn.nlark.com/yuque/0/2019/gif/190217/1571550969787-78548879-7fb7-45f1-80b2-a241531b204f.gif#align=left&amp;display=inline&amp;height=827&amp;name=%E9%9A%90%E7%A7%81.gif&amp;originHeight=1886&amp;originWidth=876&amp;size=9642136&amp;status=done&amp;style=none&amp;width=384" alt="隐私.gif"><br>Mac 一些简单配置<br>巧用聚焦功能 command+空格 我们打开的样子可能不太一样，但是一样用。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571551104475-324a473a-53f3-441a-a853-44c6d5b6acf1.png#align=left&amp;display=inline&amp;height=798&amp;name=image.png&amp;originHeight=1596&amp;originWidth=2544&amp;size=5263723&amp;status=done&amp;style=none&amp;width=1272" alt="image.png"><br>聚焦搜索 终端 回车 在黑框里输入 这样桌面上就有了一个 home 的快捷方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s ~/ ~/Desktop/</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571506927854-255f5dff-5422-4a8d-9768-7fee0c951968.png#align=left&amp;display=inline&amp;height=579&amp;name=image.png&amp;originHeight=1158&amp;originWidth=2552&amp;size=2637727&amp;status=done&amp;style=none&amp;width=1276" alt="image.png"></p>
-<h1 id="软件套件"><a href="#软件套件" class="headerlink" title="软件套件"></a>软件套件</h1><h2 id="iBook"><a href="#iBook" class="headerlink" title="iBook"></a>iBook</h2><p>无论 PC 端 还是 iPad 或者 iPhone 这三者体验舒服的一点是<br>三者协作，配合支持 apple pencil 的 ipad 的可以进行勾勾画画，增强阅读体验。也可以长按进行标注，将数据进行导出。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571551387316-2489b7db-c7ab-4108-8b22-b1d07579fe86.png#align=left&amp;display=inline&amp;height=784&amp;name=image.png&amp;originHeight=1568&amp;originWidth=2368&amp;size=1431443&amp;status=done&amp;style=none&amp;width=1184" alt="image.png"></p>
-<h2 id="iPhoto"><a href="#iPhoto" class="headerlink" title="iPhoto"></a>iPhoto</h2><p>无论 iOS 上，还是 mac 上。iphoto 现在支持强大的 P 图功能，以及视频剪辑功能。这个我不太在行。但知道有这么个东西很好用。</p>
-<h3 id="备忘录"><a href="#备忘录" class="headerlink" title="备忘录"></a>备忘录</h3><p>apple 的备忘录用户体验很舒服，记小笔记、感受都在上面整理。备忘录 macOS Mojave 时，苹果完善了 mac 版的备忘录生态支持，当 ipad 开始支持 apple pencil 的时候，可以将一些你的想法实时的记录到你的电子笔记中。它支持表格，一个被苹果调教的高清扫描仪备忘录。手头需要扫描文件，没扫描仪的你，用它刚刚好。当然它还可以在里面记录一些代办事宜。（这些功能手机，PAD，电脑上都可以触发这些操作 ）</p>
-<p>catalina，苹果再一次体现了它强大的软硬生态。通过苹果电脑版备忘录直接调用与你同一个账户下里你比较近的设备的摄像头，屏幕作为你的输入工具。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507229158-a3ab24c5-23e6-47a6-9e77-6401ca20bb15.png#align=left&amp;display=inline&amp;height=666&amp;name=image.png&amp;originHeight=1332&amp;originWidth=2000&amp;size=1716966&amp;status=done&amp;style=none&amp;width=1000" alt="image.png"></p>
-<h2 id="提醒事项"><a href="#提醒事项" class="headerlink" title="提醒事项"></a>提醒事项</h2><p>你出设置全家桶联动。</p>
-<h2 id="日历"><a href="#日历" class="headerlink" title="日历"></a>日历</h2><p>套用老罗的一句话来说，这可能是全世界最好的日历，没有什么花里胡哨的东西。可以帮助你做好时间规划。打印。ios 设备上支持拖拽调整。在设置日程时，注意勾画地点。这样的 iphone 等设备更加了解你。调用地图等应用，辅助帮你计算一个预估时间。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507523007-6c96e338-c29d-4fa1-8912-dd18d5f8d7fd.png#align=left&amp;display=inline&amp;height=893&amp;name=image.png&amp;originHeight=1786&amp;originWidth=2614&amp;size=1762426&amp;status=done&amp;style=none&amp;width=1307" alt="image.png"></p>
-<h2 id="捷径（快捷指令）"><a href="#捷径（快捷指令）" class="headerlink" title="捷径（快捷指令）"></a>捷径（快捷指令）</h2><p>这个主要是一些自动话的编辑，可以帮助你简化操作。例如 一键 XX 打卡，一键蚂蚁森林收集能量等。<br>这个网站应该会对你的生活有所帮助@ <a href="https://jiejinghe.com" target="_blank" rel="noopener">https://jiejinghe.com</a>  里面都是别人编辑好的小捷径<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571507592657-304edc33-4439-4515-839c-fc3064cafaf6.png#align=left&amp;display=inline&amp;height=684&amp;name=IMG_1104.png&amp;originHeight=2436&amp;originWidth=1125&amp;size=2146673&amp;status=done&amp;style=none&amp;width=316" alt="IMG_1104.png"></p>
-<h2 id="SIRI"><a href="#SIRI" class="headerlink" title="SIRI"></a>SIRI</h2><p>当年苹果率先推出来的智能语音助理，他可以帮助你干很多事情。例如 嘿 siri，一键 XX 打卡，一键 XX 收能量，一键添加日程等，所有你能想到的都可以让他帮助你做。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571508014353-d2590f67-97f1-486e-a8fa-1e400745765f.jpeg#align=left&amp;display=inline&amp;height=708&amp;name=IMG_1107.jpg&amp;originHeight=2436&amp;originWidth=1125&amp;size=225218&amp;status=done&amp;style=none&amp;width=327" alt="IMG_1107.jpg"></p>
-<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><p>防丢神器，查找你的设备或你的家人。（前提你的设备都用同一个 icloud 以及配置你们的 icloud 家庭）<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571508177161-0f9aeb33-21aa-4b37-8e86-e5d3242b01bf.jpeg#align=left&amp;display=inline&amp;height=706&amp;name=IMG_1105.jpg&amp;originHeight=2436&amp;originWidth=1125&amp;size=206420&amp;status=done&amp;style=none&amp;width=326" alt="IMG_1105.jpg"></p>
-<h2 id="此处针对-iPad"><a href="#此处针对-iPad" class="headerlink" title="此处针对 iPad"></a>此处针对 iPad</h2><p>推荐几个 APP</p>
-<h3 id="OneNote"><a href="#OneNote" class="headerlink" title="OneNote"></a>OneNote</h3><p>这里有个不错的憧憬，将会议文档导入 iPad，同时用 Apple pencil 对会议文档进行标注，oneNote 录音功能,帮你不要错过某些人重要的讲话。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1571509331143-e426eb26-73e6-4b8c-b5d1-465c5f8b5fc6.jpeg#align=left&amp;display=inline&amp;height=1536&amp;name=IMG_853CBB8E0F1B-1.jpeg&amp;originHeight=1536&amp;originWidth=2048&amp;size=341340&amp;status=done&amp;style=none&amp;width=2048" alt="IMG_853CBB8E0F1B-1.jpeg"></p>
-<h3 id="Notability"><a href="#Notability" class="headerlink" title="Notability"></a>Notability</h3><p>纯笔记，pencil 记录感觉比较爽（个人觉得其实备忘录已经完全可以全面代替这个 app）。</p>
-<h2 id="此处针对-MAC"><a href="#此处针对-MAC" class="headerlink" title="此处针对 MAC"></a>此处针对 MAC</h2><h3 id="mac-快捷键"><a href="#mac-快捷键" class="headerlink" title="mac 快捷键"></a>mac 快捷键</h3><p>按住 command 展示该应用快捷键（这个没法截图）但是可以帮你看到很多快捷键。安装完成软件后，先去小火箭里面打开一下软件。<br><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571510645903-0d11c265-b855-437a-a887-b3f3f7ab95ca.zip?_lake_card=%7B%22uid%22%3A%221571510644092-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571510645903-0d11c265-b855-437a-a887-b3f3f7ab95ca.zip%22%2C%22name%22%3A%22cheatsheet133.zip%22%2C%22size%22%3A2601048%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22ZVMtL%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">cheatsheet133.zip</a></p>
-<h3 id="airplayer"><a href="#airplayer" class="headerlink" title="airplayer"></a>airplayer</h3><p><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571508903683-55eca691-963d-44bb-9855-de8dac0d1e32.zip?_lake_card=%7B%22uid%22%3A%221571508896788-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571508903683-55eca691-963d-44bb-9855-de8dac0d1e32.zip%22%2C%22name%22%3A%22AirServer.zip%22%2C%22size%22%3A11115174%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22ZrGUd%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">AirServer.zip</a><br>投屏应用，苹果投苹果。开会演示利器。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508971204-2aea3a61-acd6-4d29-90d8-e03719a6b2fe.png#align=left&amp;display=inline&amp;height=1027&amp;name=image.png&amp;originHeight=2054&amp;originWidth=3288&amp;size=3205619&amp;status=done&amp;style=none&amp;width=1644" alt="image.png"></p>
-<h3 id="腾讯柠檬"><a href="#腾讯柠檬" class="headerlink" title="腾讯柠檬"></a>腾讯柠檬</h3><h5 id="https-mac-gj-qq-com"><a href="#https-mac-gj-qq-com" class="headerlink" title="https://mac.gj.qq.com/"></a><a href="https://mac.gj.qq.com/" target="_blank" rel="noopener">https://mac.gj.qq.com/</a></h5><p>这个软件我陪伴他迭代一年之久。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508527907-6526b168-aecd-48d9-8ea8-aed2818ceebe.png#align=left&amp;display=inline&amp;height=27&amp;name=image.png&amp;originHeight=54&amp;originWidth=472&amp;size=34589&amp;status=done&amp;style=none&amp;width=236" alt="image.png"><br>垃圾清除软件，可以查看网速 cpu 温度，风扇转速等<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571508554616-3ecc52f4-7f5c-4e07-aad3-816a817f4cda.png#align=left&amp;display=inline&amp;height=618&amp;name=image.png&amp;originHeight=1236&amp;originWidth=2000&amp;size=549941&amp;status=done&amp;style=none&amp;width=1000" alt="image.png"></p>
-<h3 id="超级剪贴板"><a href="#超级剪贴板" class="headerlink" title="超级剪贴板"></a>超级剪贴板</h3><p>这个剪贴板很神奇，他可以帮你记录你所有苹果设备（跨设备的复制记录保存）上的复制操作。可以保存历史记录。以及一些常用网页的快捷方式。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1571510793477-48c84978-1593-4fbe-8d95-f5896dbbde99.png#align=left&amp;display=inline&amp;height=453&amp;name=image.png&amp;originHeight=2100&amp;originWidth=3360&amp;size=2343326&amp;status=done&amp;style=none&amp;width=724" alt="image.png"><br>（我为了记录自己复制粘贴习惯，成为了美帝的走 🐶，付了款）<br>这里提供一个 macos10.14 上验证过的破解版供大家享用<br><a href="https://www.yuque.com/attachments/yuque/0/2019/zip/190217/1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip?_lake_card=%7B%22uid%22%3A%221571510955366-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2019%2Fzip%2F190217%2F1571510957732-a1722346-1f65-4b11-8975-78e8d9462e81.zip%22%2C%22name%22%3A%22Paste%281%29.zip%22%2C%22size%22%3A10809335%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A0%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22xZqUn%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">Paste(1).zip</a></p>
-<h3 id="随航"><a href="#随航" class="headerlink" title="随航"></a>随航</h3><p>macOS 版本新更新出来的功能，很实用。 macOS 有线/无线第二屏幕，发布会上的 Adobe ipad 版本的 PS 新版本还没出来，但是可以预见未来其强大的生产力。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>自己最近也在思考，那些可以帮助提高生产力的苹果软件间的一些协作关系，还有一些自己没有来验证它是否真的好用，在这里就先不一一列举出来了，当然您如果发现了好用的协作软件，欢迎您在下方评论区与我分享。<br>自己用 mac 的时间也不是太长，大概也就有 3 年的样子。从早期的黑果，到白果懵懵懂懂，现在也是一知半解，可能安利的这些软件，对您的生活以及工作没多大用，您忽略就好。自己也是也是一名学习者，文章中可能有很多晦涩的地方，欢迎您提出宝贵的意见及建议，批评与指正。</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -538,11 +2034,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 系统保留关键字与预定义标识符/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/10/19/yuque/佛系提升macOS Catalina && iPad&iphone 使用体验/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -572,40 +2064,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Golang 指针" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/微信票据接入" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Golang 指针/">Golang 指针</a>
-=======
-      <a class="article-title" href="/2019/10/18/yuque/微信票据接入/">微信票据接入</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Golang 指针/" class="archive-article-date">
   	<time datetime="2020-02-17T10:59:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/10/18/yuque/微信票据接入/" class="archive-article-date">
-  	<time datetime="2019-10-18T03:26:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-18</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ol>
 <li>基本数据类型，变量存的就是值，也叫值类型</li>
 <li>获取变量的地址，用&amp;，比如: var num int, 获取 num 的地址:#</li>
@@ -638,17 +2116,6 @@ var _hmt = _hmt || [];
 <ol start="3">
 <li>内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></li>
 </ol>
-=======
-        <p>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！</p>
-<p>这是一个血淋淋的教训，自己开发完了。然后数据不及预期。从周五周六晚上排查 一共 10 个小时。</p>
-<p>票据接入方案 JAVA 版本</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.manger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.murphyyi.wechat.bean.vo.WechatTicketVO;</span><br><span class="line"><span class="keyword">import</span> com.murphyyi.wechat.bean.vo.WechatTokenVO;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.redis.core.RedisTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> com.murphyyi.wechat.utils.RandomString.SHA1;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> com.murphyyi.wechat.utils.RandomString.getRandomStringByLength;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    RedisTemplate&lt;Object, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">jsAPI</span><span class="params">(String appId,String appSecret,String url)</span></span>&#123;</span><br><span class="line">        String noncestr = getRandomStringByLength(<span class="number">32</span>);</span><br><span class="line">        String jsapiTicket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            jsapiTicket = getJsapiTicket(appId,appSecret);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String timestamp = String.valueOf(System.currentTimeMillis()).substring(<span class="number">0</span>,<span class="number">10</span>);</span><br><span class="line">        String str = <span class="string">"jsapi_ticket="</span>+jsapiTicket+<span class="string">"&amp;noncestr="</span>+noncestr+<span class="string">"&amp;timestamp="</span>+timestamp+<span class="string">"&amp;url="</span>+url;</span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"appId"</span>,appId);</span><br><span class="line">        map.put(<span class="string">"timestamp"</span>,timestamp);</span><br><span class="line">        map.put(<span class="string">"nonceStr"</span>,noncestr);</span><br><span class="line">        map.put(<span class="string">"signature"</span>,SHA1(str));</span><br><span class="line">        map.put(<span class="string">"jsticket"</span>,jsapiTicket);</span><br><span class="line">        map.put(<span class="string">"url"</span>,url);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getJsapiTicket</span><span class="params">(String appId,String appSecret)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Object obj =redisTemplate.opsForValue().get(appId+appSecret+<span class="string">"TICKET"</span>);</span><br><span class="line">        String ticket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(obj!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            ticket = obj.toString();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">null</span> == ticket)&#123;</span><br><span class="line">            Map&lt;String, Object&gt; data = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            data.put(<span class="string">"access_token"</span>,getAccessToken(appId,appSecret));</span><br><span class="line">            data.put(<span class="string">"type"</span>,<span class="string">"jsapi"</span>);</span><br><span class="line">            String result = HttpUtil.get(<span class="string">"https://api.weixin.qq.com/cgi-bin/ticket/getticket"</span>,data);</span><br><span class="line">            WechatTicketVO wechatTicketVO = JSON.parseObject(result, WechatTicketVO<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">            <span class="keyword">if</span>(wechatTicketVO.getTicket()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                redisTemplate.opsForValue().set(appId+appSecret+<span class="string">"TICKET"</span>, wechatTicketVO.getTicket(), <span class="number">7200</span>, TimeUnit.SECONDS);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ticket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getAccessToken</span><span class="params">(String appId,String appSecret)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Object obj =redisTemplate.opsForValue().get(appId+appSecret+<span class="string">"TOKEN"</span>);</span><br><span class="line">        String token  = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(obj!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            token = obj.toString();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (token==<span class="keyword">null</span>)&#123;</span><br><span class="line">            Map&lt;String, Object&gt; data = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            data.put(<span class="string">"grant_type"</span>,<span class="string">"client_credential"</span>);</span><br><span class="line">            data.put(<span class="string">"appid"</span>,appId);</span><br><span class="line">            data.put(<span class="string">"secret"</span>,appSecret);</span><br><span class="line">            String result = HttpUtil.get(<span class="string">"https://api.weixin.qq.com/cgi-bin/token"</span>, data);</span><br><span class="line">            WechatTokenVO wechatTokenVO = JSON.parseObject(result, WechatTokenVO<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">            <span class="keyword">if</span>(wechatTokenVO.getAccess_token()!=<span class="keyword">null</span>) &#123;</span><br><span class="line">                token = wechatTokenVO.getAccess_token();</span><br><span class="line">                redisTemplate.opsForValue().set(appId + appSecret + <span class="string">"TOKEN"</span>, wechatTokenVO.getAccess_token(), <span class="number">7200</span>, TimeUnit.SECONDS);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>SHA1 加密</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.utils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomString</span> </span>&#123;</span><br><span class="line">    <span class="comment">//可以指定字符串的某个位置是什么范围的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getRandomStringByLength</span><span class="params">(<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        Random random=<span class="keyword">new</span> Random();</span><br><span class="line">        StringBuffer sb=<span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> number=random.nextInt(<span class="number">3</span>);</span><br><span class="line">            <span class="keyword">long</span> result=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">switch</span>(number)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                    result=Math.round(Math.random()*<span class="number">25</span>+<span class="number">65</span>);</span><br><span class="line">                    sb.append(String.valueOf((<span class="keyword">char</span>)result));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                    result=Math.round(Math.random()*<span class="number">25</span>+<span class="number">97</span>);</span><br><span class="line">                    sb.append(String.valueOf((<span class="keyword">char</span>)result));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                    sb.append(String.valueOf(<span class="keyword">new</span> Random().nextInt(<span class="number">10</span>)));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">SHA1</span><span class="params">(String decript)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            MessageDigest digest = java.security.MessageDigest.getInstance(<span class="string">"SHA-1"</span>);</span><br><span class="line">            digest.update(decript.getBytes());</span><br><span class="line">            <span class="keyword">byte</span> messageDigest[] = digest.digest();</span><br><span class="line">            <span class="comment">// Create Hex String</span></span><br><span class="line">            StringBuffer hexString = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">            <span class="comment">// 字节数组转换为 十六进制 数</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">byte</span> b : messageDigest) &#123;</span><br><span class="line">                String shaHex = Integer.toHexString(b &amp; <span class="number">0xFF</span>);</span><br><span class="line">                <span class="keyword">if</span> (shaHex.length() &lt; <span class="number">2</span>) &#123;</span><br><span class="line">                    hexString.append(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                hexString.append(shaHex);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> hexString.toString();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>VO</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTicketVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String ticket;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTokenVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String access_token;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Golang 方案待完成</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -661,11 +2128,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 指针/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/10/18/yuque/微信票据接入/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -695,40 +2158,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Golang 基础类型使用细节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/一键来个热点 Linux 版本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Golang 基础类型使用细节/">Golang 基础类型使用细节</a>
-=======
-      <a class="article-title" href="/2019/10/13/yuque/一键来个热点 Linux 版本/">一键来个热点 Linux 版本</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Golang 基础类型使用细节/" class="archive-article-date">
   	<time datetime="2020-02-17T08:39:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/10/13/yuque/一键来个热点 Linux 版本/" class="archive-article-date">
-  	<time datetime="2019-10-13T16:41:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-13</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><ol>
 <li><p>Golang 各整数类型分:有符号和无符号，int uint 的大小和系统有关。</p>
 </li>
@@ -828,20 +2277,6 @@ var _hmt = _hmt || [];
 </ol>
 <h3 id="string-转基本数据类型的注意事项"><a href="#string-转基本数据类型的注意事项" class="headerlink" title="string 转基本数据类型的注意事项"></a>string 转基本数据类型的注意事项</h3><p>在将 String 类型转成 基本数据类型时，要确保 <strong>String </strong>类型能够转成有效的数据，比如 我们可以<br>把 “123” , 转成一个整数，但是不能把 “hello” 转成一个整数，如果这样做，Golang 直接将其转成 0 ，<br>其它类型也是一样的道理. float =&gt; 0 bool =&gt; false</p>
 <p>type</p>
-=======
-        <h3 id="具体-API-信息"><a href="#具体-API-信息" class="headerlink" title="具体 API 信息"></a>具体 API 信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建WiFi热点使用的GitHub上一个开源项目：</span><br><span class="line">https://github.com/oblique/create_ap</span><br></pre></td></tr></table></figure>
-<h3 id="将代码-copy-到本地，安装"><a href="#将代码-copy-到本地，安装" class="headerlink" title="将代码 copy 到本地，安装"></a>将代码 copy 到本地，安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/oblique/create_ap</span><br><span class="line">cd create_ap</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-<p>#安装依赖的库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install util-linux procps hostapd iproute2 iw haveged dnsmasq</span><br></pre></td></tr></table></figure>
-<p>此时你可以创建热点，通过以下命令：<br>sudo create_ap wlan0 热点名 密码<br>此时即可用移动设备连接你创建的网络！</p>
-<p>方法实现了开机自启！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /usr/lib/systemd/system/create_ap.service /usr/lib/systemd/system/create_ap.service.bak</span><br><span class="line">sudo vim /usr/lib/systemd/system/create_ap.service</span><br></pre></td></tr></table></figure>
-<p>然后在最下方加上下面语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/bin/create_ap -n wlan0 热点名 密码</span><br></pre></td></tr></table></figure>
-<p>保存退出，然后执行一下语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable create_ap.service</span><br><span class="line">systemctl start create_ap.service</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
-<p>此时移动端可以看到热点创建成功！</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -854,11 +2289,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 基础类型使用细节/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/10/13/yuque/一键来个热点 Linux 版本/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -888,40 +2319,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Golang 基础数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/项目-互联网公司筛选器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Golang 基础数据类型/">Golang 基础数据类型</a>
-=======
-      <a class="article-title" href="/2019/09/28/yuque/项目-互联网公司筛选器/">项目-互联网公司筛选器</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Golang 基础数据类型/" class="archive-article-date">
   	<time datetime="2020-02-17T07:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/09/28/yuque/项目-互联网公司筛选器/" class="archive-article-date">
-  	<time datetime="2019-09-28T16:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-28</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <table>
 <thead>
 <tr>
@@ -1011,9 +2428,6 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
-=======
-        <p>多维度筛选<br>犀牛数据查投资信息<br>根各种维度信息<br>启信宝<br>查询企业负面信息<br>竞品信息<br>创投圈关注老牌创投-例如红杉资本，真格基金等投资动向<br>分析各家投资倾向<br>分析创投业的热点动向</p>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1026,11 +2440,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 基础数据类型/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/09/28/yuque/项目-互联网公司筛选器/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1060,40 +2470,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Golang 注释（comment）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/tar 命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Golang 注释（comment）/">Golang 注释（comment）</a>
-=======
-      <a class="article-title" href="/2019/09/24/yuque/tar 命令/">tar 命令</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Golang 注释（comment）/" class="archive-article-date">
   	<time datetime="2020-02-17T05:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/09/24/yuque/tar 命令/" class="archive-article-date">
-  	<time datetime="2019-09-24T12:14:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <h1 id="介绍注释"><a href="#介绍注释" class="headerlink" title="介绍注释"></a>介绍注释</h1><p>用于注解说明解释程序的文字就是注释，注释提高了代码的阅读性;<br>注释是一个程序员必须要具有的良好编程习惯。将自己的思想通过注释先整理出来，再用代码去<br>体现。</p>
 <p>#</p>
 <h1 id="在-Golang-中注释有两种形式"><a href="#在-Golang-中注释有两种形式" class="headerlink" title="在 Golang 中注释有两种形式"></a>在 Golang 中注释有两种形式</h1><h2 id="1-行注释（官方推荐）"><a href="#1-行注释（官方推荐）" class="headerlink" title="1) 行注释（官方推荐）"></a>1) 行注释（官方推荐）</h2><p>基本语法</p>
@@ -1105,90 +2501,6 @@ var _hmt = _hmt || [];
 <p>*/</p>
 <p>举例<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581918689210-538cf128-84ae-4e9e-af3c-1991e5bb9232.png#align=left&amp;display=inline&amp;height=118&amp;name=image.png&amp;originHeight=130&amp;originWidth=790&amp;size=103688&amp;status=done&amp;style=none&amp;width=715" alt="image.png"></p>
 <h2 id="使用细节"><a href="#使用细节" class="headerlink" title="使用细节"></a>使用细节</h2><h5 id="1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。"><a href="#1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。" class="headerlink" title="1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。"></a>1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。</h5><h5 id="2-块注释里面不允许有块注释嵌套-注意一下"><a href="#2-块注释里面不允许有块注释嵌套-注意一下" class="headerlink" title="2) 块注释里面不允许有块注释嵌套 [注意一下]"></a>2) 块注释里面不允许有块注释嵌套 [注意一下]</h5>
-=======
-        <p>tar</p>
-<p>-c: 建立压缩档案<br>-x：解压<br>-t：查看内容<br>-r：向压缩归档文件末尾追加文件<br>-u：更新原压缩包中的文件</p>
-<p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
-<p>-z：有 gzip 属性的<br>-j：有 bz2 属性的<br>-Z：有 compress 属性的<br>-v：显示所有过程<br>-O：将文件解开到标准输出</p>
-<p>下面的参数-f 是必须的</p>
-<p>-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</p>
-<h1 id="tar-cf-all-tar-jpg"><a href="#tar-cf-all-tar-jpg" class="headerlink" title="tar -cf all.tar *.jpg"></a>tar -cf all.tar *.jpg</h1><p>这条命令是将所有.jpg 的文件打成一个名为 all.tar 的包。-c 是表示产生新的包，-f 指定包的文件名。</p>
-<h1 id="tar-rf-all-tar-gif"><a href="#tar-rf-all-tar-gif" class="headerlink" title="tar -rf all.tar *.gif"></a>tar -rf all.tar *.gif</h1><p>这条命令是将所有.gif 的文件增加到 all.tar 的包里面去。-r 是表示增加文件的意思。</p>
-<h1 id="tar-uf-all-tar-logo-gif"><a href="#tar-uf-all-tar-logo-gif" class="headerlink" title="tar -uf all.tar logo.gif"></a>tar -uf all.tar logo.gif</h1><p>这条命令是更新原来 tar 包 all.tar 中 logo.gif 文件，-u 是表示更新文件的意思。</p>
-<h1 id="tar-tf-all-tar"><a href="#tar-tf-all-tar" class="headerlink" title="tar -tf all.tar"></a>tar -tf all.tar</h1><p>这条命令是列出 all.tar 包中所有文件，-t 是列出文件的意思</p>
-<h1 id="tar-xf-all-tar"><a href="#tar-xf-all-tar" class="headerlink" title="tar -xf all.tar"></a>tar -xf all.tar</h1><p>这条命令是解出 all.tar 包中所有文件，-t 是解开的意思</p>
-<p>压缩</p>
-<p>tar -cvf jpg.tar *.jpg <a href="//xn--jpgtar-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.jpg">//将目录里所有 jpg 文件打包成 tar.jpg</a></p>
-<p>tar -czf jpg.tar.gz *.jpg   <a href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 gzip 压缩，生成一个 gzip 压缩过的包，命名为 jpg.tar.gz</p>
-<p>tar -cjf jpg.tar.bz2 *.jpg <a href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 bzip2 压缩，生成一个 bzip2 压缩过的包，命名为 jpg.tar.bz2</p>
-<p>tar -cZf jpg.tar.Z *.jpg   <a href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 compress 压缩，生成一个 umcompress 压缩过的包，命名为 jpg.tar.Z</p>
-<p>rar a jpg.rar *.jpg //rar 格式的压缩，需要先下载 rar for linux</p>
-<p>zip jpg.zip *.jpg //zip 格式的压缩，需要先下载 zip for linux</p>
-<p>解压</p>
-<p>tar -xvf file.tar //解压 tar 包</p>
-<p>tar -xzvf file.tar.gz <a href="//xn--tar-vo3e979v.gz">//解压 tar.gz</a></p>
-<p>tar -xjvf file.tar.bz2   //解压 tar.bz2</p>
-<p>tar -xZvf file.tar.Z   <a href="//xn--tar-vo3e979v.Z">//解压 tar.Z</a></p>
-<p>unrar e file.rar //解压 rar</p>
-<p>unzip file.zip //解压 zip</p>
-<p>总结</p>
-<p>1、*.tar 用 tar -xvf 解压</p>
-<p>2、*.gz 用 gzip -d 或者 gunzip 解压</p>
-<p>3、<em>.tar.gz 和</em>.tgz 用 tar -xzf 解压</p>
-<p>4、*.bz2 用 bzip2 -d 或者用 bunzip2 解压</p>
-<p>5、*.tar.bz2 用 tar -xjf 解压</p>
-<p>6、*.Z 用 uncompress 解压</p>
-<p>7、*.tar.Z 用 tar -xZf 解压</p>
-<p>8、*.rar 用 unrar e 解压</p>
-<p>9、*.zip 用 unzip 解压</p>
-<p>解压 jdk 到指定文件夹：</p>
-<p>tar -xzvf jdk-8u131-linux-x64.tar.gz -C /usr/local/java</p>
-<p>root@ubuntu:~# tar –help<br>用法: tar [选项…][file]…<br>GNU ‘tar’ saves many files together into a single tape or disk archive, and can<br>restore individual files from the archive.</p>
-<p>Examples:<br>tar -cf archive.tar foo bar # Create archive.tar from files foo and bar.<br>tar -tvf archive.tar # List all files in archive.tar verbosely.<br>tar -xf archive.tar # Extract all files from archive.tar.</p>
-<p>主操作模式:</p>
-<p>-A, –catenate, –concatenate 追加 tar 文件至归档<br>-c, –create 创建一个新归档<br>-d, –diff, –compare 找出归档和文件系统的差异<br>–delete 从归档(非磁带！)中删除<br>-r, –append 追加文件至归档结尾<br>-t, –list 列出归档内容<br>–test-label 测试归档卷标并退出<br>-u, –update 仅追加比归档中副本更新的文件<br>-x, –extract, –get 从归档中解出文件</p>
-<p>操作修饰符:</p>
-<p>–check-device 当创建增量归档时检查设备号(默认)<br>-g, –listed-incremental=FILE 处理新式的 GNU 格式的增量备份<br>-G, –incremental 处理老式的 GNU 格式的增量备份<br>–ignore-failed-read<br>当遇上不可读文件时不要以非零值退出<br>–level=NUMBER 所创建的增量列表归档的输出级别<br>-n, –seek 归档可检索<br>–no-check-device 当创建增量归档时不要检查设备号<br>–no-seek 归档不可检索<br>–occurrence[=NUMBER] 仅处理归档中每个文件的第 NUMBER<br>个事件；仅当与以下子命令 –delete,<br>–diff, –extract 或是 –list<br>中的一个联合使用时，此选项才有效。而且不管文件列表是以命令行形式给出或是通过<br>-T 选项指定的；NUMBER 值默认为 1<br>–sparse-version=MAJOR[.MINOR]<br>设置所用的离散格式版本(隐含<br>–sparse)<br>-S, –sparse 高效处理离散文件</p>
-<p>重写控制:</p>
-<p>-k, –keep-old-files don’t replace existing files when extracting,<br>treat them as errors<br>–keep-directory-symlink preserve existing symlinks to directories when<br>extracting<br>–keep-newer-files<br>不要替换比归档中副本更新的已存在的文件<br>–no-overwrite-dir 保留已存在目录的元数据<br>–one-top-level[=DIR] create a subdirectory to avoid having loose files<br>extracted<br>–overwrite 解压时重写存在的文件<br>–overwrite-dir 解压时重写已存在目录的元数据(默认)</p>
-<p>–recursive-unlink 解压目录之前先清除目录层次<br>–remove-files 在添加文件至归档后删除它们<br>–skip-old-files don’t replace existing files when extracting,<br>silently skip over them<br>-U, –unlink-first 在解压要重写的文件之前先删除它们<br>-W, –verify 在写入以后尝试校验归档</p>
-<p>选择输出流:</p>
-<p>–ignore-command-error 忽略子进程的退出代码<br>–no-ignore-command-error<br>将子进程的非零退出代码认为发生错误<br>-O, –to-stdout 解压文件至标准输出<br>–to-command=COMMAND<br>将解压的文件通过管道传送至另一个程序</p>
-<p>操作文件属性:</p>
-<p>–atime-preserve[=METHOD]<br>在输出的文件上保留访问时间，要么通过在读取(默认<br>METHOD=‘replace’)后还原时间，要不就不要在第一次(METHOD=‘system’)设置时间<br>–clamp-mtime only set time when the file is more recent than<br>what was given with –mtime<br>–delay-directory-restore<br>直到解压结束才设置修改时间和所解目录的权限<br>–group=名称 强制将 NAME<br>作为所添加的文件的组所有者<br>–mode=CHANGES 强制将所添加的文件(符号)更改为权限<br>CHANGES<br>–mtime=DATE-OR-FILE 从 DATE-OR-FILE 中为添加的文件设置<br>mtime<br>-m, –touch 不要解压文件的修改时间<br>–no-delay-directory-restore<br>取消 –delay-directory-restore 选项的效果<br>–no-same-owner<br>将文件解压为您所有(普通用户默认此项)<br>–no-same-permissions<br>从归档中解压权限时使用用户的掩码位(默认为普通用户服务)<br>–numeric-owner 总是以数字代表用户/组的名称<br>–owner=名称 强制将 NAME<br>作为所添加的文件的所有者<br>-p, –preserve-permissions, –same-permissions<br>解压文件权限信息(默认只为超级用户服务)<br>–preserve 与 -p 和 -s 一样<br>–same-owner<br>尝试解压时保持所有者关系一致(超级用户默认此项)<br>-s, –preserve-order, –same-order<br>member arguments are listed in the same order as<br>the files in the archive<br>–sort=ORDER directory sorting order: none (default), name or<br>inode</p>
-<p>Handling of extended file attributes:</p>
-<p>–acls Enable the POSIX ACLs support<br>–no-acls Disable the POSIX ACLs support<br>–no-selinux Disable the SELinux context support<br>–no-xattrs Disable extended attributes support<br>–selinux Enable the SELinux context support<br>–xattrs Enable extended attributes support<br>–xattrs-exclude=MASK specify the exclude pattern for xattr keys<br>–xattrs-include=MASK specify the include pattern for xattr keys</p>
-<p>设备选择和切换:</p>
-<p>-f, –file=ARCHIVE 使用归档文件或 ARCHIVE 设备<br>–force-local<br>即使归档文件存在副本还是把它认为是本地归档<br>-F, –info-script=名称, –new-volume-script=名称<br>在每卷磁带最后运行脚本(隐含 -M)<br>-L, –tape-length=NUMBER 写入 NUMBER × 1024 字节后更换磁带<br>-M, –multi-volume 创建/列出/解压多卷归档文件<br>–rmt-command=COMMAND 使用指定的 rmt COMMAND 代替 rmt<br>–rsh-command=COMMAND 使用远程 COMMAND 代替 rsh<br>–volno-file=FILE 使用/更新 FILE 中的卷数</p>
-<p>设备分块:</p>
-<p>-b, –blocking-factor=BLOCKS 每个记录 BLOCKS x 512 字节<br>-B, –read-full-records 读取时重新分块(只对 4.2BSD 管道有效)<br>-i, –ignore-zeros 忽略归档中的零字节块(即文件结尾)<br>–record-size=NUMBER 每个记录的字节数 NUMBER，乘以 512</p>
-<p>选择归档格式:</p>
-<p>-H, –format=FORMAT 创建指定格式的归档</p>
-<p>FORMAT 是以下格式中的一种:</p>
-<p>gnu GNU tar 1.13.x 格式<br>oldgnu GNU 格式 as per tar &lt;= 1.12<br>pax POSIX 1003.1-2001 (pax) 格式<br>posix 等同于 pax<br>ustar POSIX 1003.1-1988 (ustar) 格式<br>v7 old V7 tar 格式</p>
-<p>–old-archive, –portability<br>等同于 –format=v7<br>–pax-option=关键字[[:]=值][,关键字[[:]=值]]…<br>控制 pax 关键字<br>–posix 等同于 –format=posix<br>-V, –label=TEXT 创建带有卷名 TEXT<br>的归档；在列出/解压时，使用 TEXT<br>作为卷名的模式串</p>
-<p>压缩选项:</p>
-<p>-a, –auto-compress 使用归档后缀名来决定压缩程序<br>-I, –use-compress-program=PROG<br>通过 PROG 过滤(必须是能接受 -d<br>选项的程序)<br>-j, –bzip2 通过 bzip2 过滤归档<br>-J, –xz 通过 xz 过滤归档<br>–lzip 通过 lzip 过滤归档<br>–lzma 通过 xz 过滤归档<br>–lzop 通过 xz 过滤归档<br>–no-auto-compress 不使用归档后缀名来决定压缩程序<br>-z, –gzip, –gunzip, –ungzip 通过 gzip 过滤归档<br>-Z, –compress, –uncompress 通过 compress 过滤归档</p>
-<p>本地文件选择:</p>
-<p>–add-file=FILE 添加指定的 FILE 至归档(如果名字以 -<br>开始会很有用的)<br>–backup[=CONTROL] 在删除前备份，选择 CONTROL 版本<br>-C, –directory=DIR 改变至目录 DIR<br>–exclude=PATTERN 排除以 PATTERN 指定的文件<br>–exclude-backups 排除备份和锁文件<br>–exclude-caches 除标识文件本身外，排除包含<br>CACHEDIR.TAG 的目录中的内容<br>–exclude-caches-all 排除包含 CACHEDIR.TAG 的目录<br>–exclude-caches-under 排除包含 CACHEDIR.TAG<br>的目录中所有内容<br>–exclude-ignore=FILE read exclude patterns for each directory from<br>FILE, if it exists<br>–exclude-ignore-recursive=FILE<br>read exclude patterns for each directory and its<br>subdirectories from FILE, if it exists<br>–exclude-tag=FILE 除 FILE 自身外，排除包含 FILE<br>的目录中的内容<br>–exclude-tag-all=FILE 排除包含 FILE 的目录<br>–exclude-tag-under=FILE 排除包含 FILE 的目录中的所有内容<br>–exclude-vcs 排除版本控制系统目录<br>–exclude-vcs-ignores read exclude patterns from the VCS ignore files<br>-h, –dereference<br>跟踪符号链接；将它们所指向的文件归档并输出<br>–hard-dereference<br>跟踪硬链接；将它们所指向的文件归档并输出<br>-K, –starting-file=MEMBER-NAME<br>begin at member MEMBER-NAME when reading the<br>archive<br>–newer-mtime=DATE 当只有数据改变时比较数据和时间<br>–no-null 禁用上一次的效果 –null 选项<br>–no-recursion 避免目录中的自动降级<br>–no-unquote do not unquote input file or member names<br>–null -T 读取以空终止的名字，-C 禁用<br>-N, –newer=DATE-OR-FILE, –after-date=DATE-OR-FILE<br>只保存比 DATE-OR-FILE 更新的文件<br>–one-file-system 创建归档时保存在本地文件系统中<br>-P, –absolute-names don’t strip leading ‘/‘s from file names<br>–recursion 目录递归(默认)<br>–suffix=STRING 在删除前备份，除非被环境变量<br>SIMPLE_BACKUP_SUFFIX<br>覆盖，否则覆盖常用后缀(‘’)<br>-T, –files-from=FILE 从 FILE<br>中获取文件名来解压或创建文件<br>–unquote unquote input file or member names (default)<br>-X, –exclude-from=FILE 排除 FILE 中列出的模式串</p>
-<p>文件名变换:</p>
-<p>–strip-components=NUMBER 解压时从文件名中清除 NUMBER<br>个引导部分<br>–transform=EXPRESSION, –xform=EXPRESSION<br>使用 sed 代替 EXPRESSION<br>来进行文件名变换</p>
-<p>文件名匹配选项(同时影响排除和包括模式串):</p>
-<p>–anchored 模式串匹配文件名头部<br>–ignore-case 忽略大小写<br>–no-anchored patterns match after any ‘/‘ (default for<br>exclusion)<br>–no-ignore-case 匹配大小写(默认)<br>–no-wildcards 逐字匹配字符串<br>–no-wildcards-match-slash wildcards do not match ‘/‘<br>–wildcards 使用通配符(默认对 exclusion )<br>–wildcards-match-slash wildcards match ‘/‘ (default for exclusion)</p>
-<p>提示性输出:</p>
-<p>–checkpoint[=NUMBER] 每隔 NUMBER<br>个记录显示进度信息(默认为 10 个)<br>–checkpoint-action=ACTION 在每个检查点上执行 ACTION<br>–full-time 按文件原本时间格式打印<br>–index-file=FILE 将详细输出发送至 FILE<br>-l, –check-links<br>只要不是所有链接都被输出就打印信息<br>–no-quote-chars=STRING 禁用来自 STRING 的字符引用<br>–quote-chars=STRING 来自 STRING 的额外的引用字符<br>–quoting-style=STYLE 设置名称引用风格；有效的 STYLE<br>值请参阅以下说明<br>-R, –block-number 每个信息都显示归档内的块数<br>–show-defaults 显示 tar 默认选项<br>–show-omitted-dirs<br>列表或解压时，列出每个不匹配查找标准的目录<br>–show-snapshot-field-ranges<br>show valid ranges for snapshot-file fields<br>–show-transformed-names, –show-stored-names<br>显示变换后的文件名或归档名<br>–totals[=SIGNAL] 处理归档后打印出总字节数；当此<br>SIGNAL 被触发时带参数 -<br>打印总字节数；允许的信号为:<br>SIGHUP，SIGQUIT，SIGINT，SIGUSR1 和<br>SIGUSR2；同时也接受不带 SIG<br>前缀的信号名称<br>–utc 以 UTC 格式打印文件修改时间<br>-v, –verbose 详细地列出处理的文件<br>–warning=KEYWORD 警告控制:<br>-w, –interactive, –confirmation<br>每次操作都要求确认</p>
-<p>兼容性选项:</p>
-<p>-o 创建归档时，相当于<br>–old-archive；展开归档时，相当于<br>–no-same-owner</p>
-<p>其它选项:</p>
-<p>-?, –help 显示此帮助列表<br>–restrict 禁用某些潜在的有危险的选项<br>–usage 显示简短的用法说明<br>–version 打印程序版本</p>
-<p>长选项和相应短选项具有相同的强制参数或可选参数。</p>
-<p>The backup suffix is ‘~’, unless set with –suffix or SIMPLE_BACKUP_SUFFIX.<br>The version control may be set with –backup or VERSION_CONTROL, values are:</p>
-<p>none, off never make backups<br>t, numbered make numbered backups<br>nil, existing numbered if numbered backups exist, simple otherwise<br>never, simple always make simple backups</p>
-<p>–quoting-style 选项的有效参数为:</p>
-<p>literal<br>shell<br>shell-always<br>c<br>c-maybe<br>escape<br>locale<br>clocale</p>
-<p>此 tar 默认为:<br>–format=gnu -f- -b20 –quoting-style=escape –rmt-command=/usr/lib/tar/rmt<br>–rsh-command=/usr/bin/rsh</p>
-
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
       
 
       
@@ -1200,11 +2512,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Golang 注释（comment）/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/09/24/yuque/tar 命令/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1234,40 +2542,26 @@ var _hmt = _hmt || [];
 
 
   
-<<<<<<< HEAD
     <article id="post-yuque/Go 转义字符(escape char)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-<<<<<<< HEAD
       <a class="article-title" href="/2020/02/17/yuque/Go 转义字符(escape char)/">Go 转义字符(escape char)</a>
-=======
-      <a class="article-title" href="/2019/09/16/yuque/K8S 应用篇/">K8S 应用篇</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
     </h1>
   
 
         
-<<<<<<< HEAD
         <a href="/2020/02/17/yuque/Go 转义字符(escape char)/" class="archive-article-date">
   	<time datetime="2020-02-17T05:25:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-=======
-        <a href="/2019/09/16/yuque/K8S 应用篇/" class="archive-article-date">
-  	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-<<<<<<< HEAD
         <p>说明:常用的转义字符有如下:</p>
 <ol>
 <li>\t : 表示一个制表符，通常使用它可以排版。</li>
@@ -1281,42 +2575,6 @@ var _hmt = _hmt || [];
 </ol>
 <p>2)                               \r :一个回车 fmt.Println(“天龙八部雪山飞狐\r 张飞”);</p>
 <p>例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581917830487-c1de47bc-10ca-4b90-be6b-7cf47283b297.png#align=left&amp;display=inline&amp;height=538&amp;name=image.png&amp;originHeight=870&amp;originWidth=924&amp;size=261317&amp;status=done&amp;style=none&amp;width=572" alt="image.png"></p>
-=======
-        <p>部署 dashboard</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta4/aio/deploy/recommended.yaml</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io/service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io/service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io/service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">====</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
-<p>部署</p>
-<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><ul>
-<li><a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a> users can use <code>brew install kubernetes-helm</code>.</li>
-<li><a href="https://chocolatey.org/" target="_blank" rel="noopener">Chocolatey</a> users can use <code>choco install kubernetes-helm</code>.</li>
-<li><a href="https://scoop.sh/" target="_blank" rel="noopener">Scoop</a> users can use <code>scoop install helm</code>.</li>
-<li><a href="https://gofi.sh/" target="_blank" rel="noopener">GoFish</a> users can use <code>gofish install helm</code>.</li>
-<li><a href="https://snapcraft.io/" target="_blank" rel="noopener">Snap</a> users can use <code>sudo snap install helm --classic</code>.</li>
-</ul>
-<p>k8s 升级以及容器版本升级</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get upgrade  kubeadm</span><br><span class="line">更新到1.13.0后，在master执行,执行一次</span><br><span class="line">kubeadm upgrade plan</span><br></pre></td></tr></table></figure>
-<p>docker 降级<br>打印可用版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache madison docker-ce</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-<p>安装指定版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce=&lt;VERSION&gt;</span><br></pre></td></tr></table></figure>
-<p>三、给 Tiller 授权<br>因为 Helm 的服务端 Tiller 是一个部署在 Kubernetes 中 Kube-System Namespace 下 的 Deployment，它会去连接 Kube-Api 在 Kubernetes 里创建和删除应用。</p>
-<p>而从 Kubernetes 1.6 版本开始，API Server 启用了 RBAC 授权。目前的 Tiller 部署时默认没有定义授权的 ServiceAccount，这会导致访问 API Server 时被拒绝。所以我们需要明确为 Tiller 部署添加授权。</p>
-<p>创建 Kubernetes 的服务帐号和绑定角色</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br></pre></td></tr></table></figure>
-<p>为 Tiller 设置帐号</p>
-<h1 id="使用-kubectl-patch-更新-API-对象"><a href="#使用-kubectl-patch-更新-API-对象" class="headerlink" title="使用 kubectl patch 更新 API 对象"></a>使用 kubectl patch 更新 API 对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p <span class="string">'&#123;"spec":&#123;"template":&#123;"spec":&#123;"serviceAccount":"tiller"&#125;&#125;&#125;&#125;'</span></span><br><span class="line">deployment.extensions <span class="string">"tiller-deploy"</span> patched</span><br></pre></td></tr></table></figure>
-<p>查看是否授权成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount</span><br><span class="line">serviceAccount: tiller</span><br><span class="line">serviceAccountName: tiller</span><br></pre></td></tr></table></figure>
-<p>四、验证 Tiller 是否安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n kube-system get pods|grep tiller</span><br><span class="line">tiller-deploy-6d68f5c78f-nql2z          1/1       Running   0          5m</span><br><span class="line">helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:<span class="string">"v2.9.1"</span>, GitCommit:<span class="string">"20adb27c7c5868466912eebdf6664e7390ebe710"</span>, GitTreeState:<span class="string">"clean"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="NFS-挂载失败"><a href="#NFS-挂载失败" class="headerlink" title="NFS 挂载失败"></a>NFS 挂载失败</h2><p>在一台机器上创建 Pod，挂载 nfs 失败。<br>然后在节点上尝试挂载，依然显示失败</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: mount point /nfs does not exist</span><br><span class="line">root@master:~# mkdir /nfs</span><br><span class="line">root@master:~# mount -t nfs 192.168.207.121:/nas/dg_vd /nfs</span><br><span class="line">mount: wrong fs type, bad option, bad superblock on 192.168.207.121:/nas/dg_vd,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a /sbin/mount.&lt;type&gt; helper program)</span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line">root@master:~# showmount -e 192.168.207.121</span><br><span class="line">The program &apos;showmount&apos; is currently not installed. You can install it by typing:</span><br><span class="line">apt install nfs-common</span><br></pre></td></tr></table></figure>
-<p>执行<code>apt install nfs-common</code>后可以本地挂载 nfs。<br>这是再创建 pod 成功</p>
-<h2 id="Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117"><a href="#Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117" class="headerlink" title="Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117."></a>Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.</h2><p>Calico 问题排障<br>// 错误信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
-<p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">// 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface=ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface=ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
 
       
 
@@ -1329,245 +2587,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-<<<<<<< HEAD
           <a class="article-more-a" href="/2020/02/17/yuque/Go 转义字符(escape char)/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/09/16/yuque/K8S 应用篇/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-<<<<<<< HEAD
-    <article id="post-yuque/Go语言特点" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/Tool" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2020/02/16/yuque/Go语言特点/">Go语言特点</a>
-=======
-      <a class="article-title" href="/2019/09/10/yuque/Tool/">Tool</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-    </h1>
-  
-
-        
-<<<<<<< HEAD
-        <a href="/2020/02/16/yuque/Go语言特点/" class="archive-article-date">
-  	<time datetime="2020-02-16T05:36:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-16</time>
-=======
-        <a href="/2019/09/10/yuque/Tool/" class="archive-article-date">
-  	<time datetime="2019-09-10T17:20:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-<<<<<<< HEAD
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介:"></a>简介:</h1><h5 id="Go-语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容-Go-语言-Go-C-Python-说明-Go-语言既有-C-静态语言程序的运行速度，又能达到-Python-动态语言的快速开发。"><a href="#Go-语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容-Go-语言-Go-C-Python-说明-Go-语言既有-C-静态语言程序的运行速度，又能达到-Python-动态语言的快速开发。" class="headerlink" title="Go 语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容 Go 语言:Go = C + Python , 说明 Go 语言既有 C 静态语言程序的运行速度，又能达到 Python 动态语言的快速开发。"></a>Go 语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容 Go 语言:Go = C + Python , 说明 Go 语言既有 C 静态语言程序的运行速度，又能达到 Python 动态语言的快速开发。</h5><h5 id="1-从-C-语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和-C-语言一样的编译执行方式及弱化的指针"><a href="#1-从-C-语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和-C-语言一样的编译执行方式及弱化的指针" class="headerlink" title="1) 从 C 语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和 C 语言一样的编译执行方式及弱化的指针"></a>1) 从 C 语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和 C 语言一样的编译执行方式及弱化的指针</h5><h5 id="举一个案例-体验-go-语言的指针的使用特点-体验"><a href="#举一个案例-体验-go-语言的指针的使用特点-体验" class="headerlink" title="举一个案例(体验)://go 语言的指针的使用特点(体验)"></a>举一个案例(体验)://go 语言的指针的使用特点(体验)</h5><h5 id="func-testPtr-num-int"><a href="#func-testPtr-num-int" class="headerlink" title="func testPtr(num *int) {"></a>func testPtr(num *int) {</h5><h5 id="num-20"><a href="#num-20" class="headerlink" title="*num = 20"></a>*num = 20</h5><h5 id><a href="#" class="headerlink" title="}"></a>}</h5><h5 id="2-引入包的概念，用于组织程序结构，Go-语言的一个文件都要归属于一个包，而不能单独存在。"><a href="#2-引入包的概念，用于组织程序结构，Go-语言的一个文件都要归属于一个包，而不能单独存在。" class="headerlink" title="2) 引入包的概念，用于组织程序结构，Go 语言的一个文件都要归属于一个包，而不能单独存在。"></a>2) 引入包的概念，用于组织程序结构，Go 语言的一个文件都要归属于一个包，而不能单独存在。</h5><h5 id="3-垃圾回收机制，内存自动回收，不需开发人员管理"><a href="#3-垃圾回收机制，内存自动回收，不需开发人员管理" class="headerlink" title="3) 垃圾回收机制，内存自动回收，不需开发人员管理"></a>3) 垃圾回收机制，内存自动回收，不需开发人员管理</h5><h5 id="4-天然并发-重要特点"><a href="#4-天然并发-重要特点" class="headerlink" title="4) 天然并发 (重要特点)"></a>4) 天然并发 (重要特点)</h5><h5 id="1-从语言层面支持并发，实现简单"><a href="#1-从语言层面支持并发，实现简单" class="headerlink" title="(1) 从语言层面支持并发，实现简单"></a>(1) 从语言层面支持并发，实现简单</h5><h5 id="2-goroutine，轻量级线程，可实现大并发处理，高效利用多核。"><a href="#2-goroutine，轻量级线程，可实现大并发处理，高效利用多核。" class="headerlink" title="(2) goroutine，轻量级线程，可实现大并发处理，高效利用多核。"></a>(2) goroutine，轻量级线程，可实现大并发处理，高效利用多核。</h5><h5 id="3-基于-CPS-并发模型-Communicating-Sequential-Processes-实现-5-吸收了管道通信机制，形成-Go-语言特有的管道-channel-通过管道-channel-可以实现不同的-goroute-之间的相互通信。"><a href="#3-基于-CPS-并发模型-Communicating-Sequential-Processes-实现-5-吸收了管道通信机制，形成-Go-语言特有的管道-channel-通过管道-channel-可以实现不同的-goroute-之间的相互通信。" class="headerlink" title="(3) 基于 CPS 并发模型(Communicating Sequential Processes )实现 5) 吸收了管道通信机制，形成 Go 语言特有的管道 channel 通过管道 channel , 可以实现不同的 goroute 之间的相互通信。"></a>(3) 基于 CPS 并发模型(Communicating Sequential Processes )实现 5) 吸收了管道通信机制，形成 Go 语言特有的管道 channel 通过管道 channel , 可以实现不同的 goroute 之间的相互通信。</h5><h5 id="6-函数可以返回多个值。举例"><a href="#6-函数可以返回多个值。举例" class="headerlink" title="6) 函数可以返回多个值。举例:"></a>6) 函数可以返回多个值。举例:</h5><p><strong>//</strong>写一个函数，实现同时返回 和，差</p>
-<p><strong>//go </strong>函数支持返回多个值</p>
-<p><strong>    func getSumAndSub(n1 int, n2 int) (int, int ) {
-</strong><br><strong>sum := n1 + n2 //go </strong>语句后面不要带分号<strong>.<br>sub := n1 - n2</strong><br><strong>return sum , sub
-</strong><br><strong>}
-</strong></p>
-<h5 id="7-新的创新-比如切片-slice、延时执行-defer"><a href="#7-新的创新-比如切片-slice、延时执行-defer" class="headerlink" title="7) 新的创新:比如切片 slice、延时执行 defer"></a>7) 新的创新:比如切片 slice、延时执行 defer</h5><h1 id="Golang-执行流程分析"><a href="#Golang-执行流程分析" class="headerlink" title="Golang 执行流程分析"></a>Golang 执行流程分析</h1><h5 id="如果是对源码编译后，再执行，Go-的执行流程如下图"><a href="#如果是对源码编译后，再执行，Go-的执行流程如下图" class="headerlink" title="如果是对源码编译后，再执行，Go 的执行流程如下图"></a>如果是对源码编译后，再执行，Go 的执行流程如下图</h5><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581916560309-2469e871-b794-41a9-97d1-68d61906df40.png#align=left&amp;display=inline&amp;height=153&amp;name=image.png&amp;originHeight=153&amp;originWidth=743&amp;size=133206&amp;status=done&amp;style=none&amp;width=743" alt="image.png"></p>
-<h5 id="如果我们是对源码直接-执行-go-run-源码，Go-的执行流程如下图"><a href="#如果我们是对源码直接-执行-go-run-源码，Go-的执行流程如下图" class="headerlink" title="如果我们是对源码直接 执行 go run 源码，Go 的执行流程如下图"></a>如果我们是对源码直接 执行 go run 源码，Go 的执行流程如下图</h5><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581916575614-992ef51f-84df-4e61-9ff6-f50c6df05604.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=596&amp;size=85386&amp;status=done&amp;style=none&amp;width=596" alt="image.png"></p>
-<h5 id="两种执行流程的方式区别-1-如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有-go-开发环境的机器上，仍然可以运行"><a href="#两种执行流程的方式区别-1-如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有-go-开发环境的机器上，仍然可以运行" class="headerlink" title="两种执行流程的方式区别      1) 如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有 go 开发环境的机器上，仍然可以运行"></a>两种执行流程的方式区别      1) 如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有 go 开发环境的机器上，仍然可以运行</h5><h5 id="2-如果我们是直接-go-run-go-源代码，那么如果要在另外一个机器上这么运行，也需要-go-开发环境，否则无法执行。"><a href="#2-如果我们是直接-go-run-go-源代码，那么如果要在另外一个机器上这么运行，也需要-go-开发环境，否则无法执行。" class="headerlink" title="2) 如果我们是直接 go run go 源代码，那么如果要在另外一个机器上这么运行，也需要 go 开发环境，否则无法执行。"></a>2) 如果我们是直接 go run go 源代码，那么如果要在另外一个机器上这么运行，也需要 go 开发环境，否则无法执行。</h5><h5 id="3-在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。"><a href="#3-在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。" class="headerlink" title="3) 在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。"></a>3) 在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。</h5>
-=======
-        <p>谛听（数据爬虫）<br>哪吒（数据分析系统）<br>全球鹰（监控）<br>八爪鱼（运维机器人）</p>
-
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-<<<<<<< HEAD
-          <a class="article-more-a" href="/2020/02/16/yuque/Go语言特点/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/09/10/yuque/Tool/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-<<<<<<< HEAD
-    <article id="post-yuque/如何快速的学习一门新技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-=======
-    <article id="post-yuque/K8S 集群初步搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-<<<<<<< HEAD
-      <a class="article-title" href="/2020/02/15/yuque/如何快速的学习一门新技术/">如何快速的学习一门新技术</a>
-=======
-      <a class="article-title" href="/2019/09/09/yuque/K8S 集群初步搭建/">K8S 集群初步搭建</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-    </h1>
-  
-
-        
-<<<<<<< HEAD
-        <a href="/2020/02/15/yuque/如何快速的学习一门新技术/" class="archive-article-date">
-  	<time datetime="2020-02-15T16:43:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-15</time>
-=======
-        <a href="/2019/09/09/yuque/K8S 集群初步搭建/" class="archive-article-date">
-  	<time datetime="2019-09-09T00:50:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-09</time>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-<<<<<<< HEAD
-        <h1 id="1-我们有一个需求"><a href="#1-我们有一个需求" class="headerlink" title="1.我们有一个需求"></a>1.我们有一个需求</h1><h2 id="项目开发时，我们需要解决某个问题（例如页面局部刷新）"><a href="#项目开发时，我们需要解决某个问题（例如页面局部刷新）" class="headerlink" title="项目开发时，我们需要解决某个问题（例如页面局部刷新）"></a>项目开发时，我们需要解决某个问题（例如页面局部刷新）</h2><h2 id="跳槽，学习新技术"><a href="#跳槽，学习新技术" class="headerlink" title="跳槽，学习新技术"></a>跳槽，学习新技术</h2><h1 id="2-我们先看看使用现有技术能否解决这个问题"><a href="#2-我们先看看使用现有技术能否解决这个问题" class="headerlink" title="2.我们先看看使用现有技术能否解决这个问题"></a>2.我们先看看使用现有技术能否解决这个问题</h1><h2 id="可以解决"><a href="#可以解决" class="headerlink" title="可以解决"></a>可以解决</h2><p>1.使用传统的方法 iframe<br>发现使用传统方法可以解决，但是不够好 2.使用新技术-&gt;axjx</p>
-<h1 id="3-学习一下新技术或者知识点的"><a href="#3-学习一下新技术或者知识点的" class="headerlink" title="3.学习一下新技术或者知识点的"></a>3.学习一下新技术或者知识点的</h1><p>1.原理 2.基本语法</p>
-<h1 id="4-快速入门案例"><a href="#4-快速入门案例" class="headerlink" title="4.快速入门案例"></a>4.快速入门案例</h1><p>1.简单<br>2 了解新技术或者知识点的基本使用<br>这里不需要设计技术细节</p>
-<h1 id="5-讨论这个新技术知识点的"><a href="#5-讨论这个新技术知识点的" class="headerlink" title="5.讨论这个新技术知识点的"></a>5.讨论这个新技术知识点的</h1><p>1.怎么规范使用 2.使用陷阱 3.需要使用时，注意什么</p>
-<h3 id="这里体现一个程序员的水平"><a href="#这里体现一个程序员的水平" class="headerlink" title="这里体现一个程序员的水平"></a>这里体现一个程序员的水平</h3><h1 id="1-gt-2-gt-3-gt-4-gt-5"><a href="#1-gt-2-gt-3-gt-4-gt-5" class="headerlink" title="1-&gt;2-&gt;3-&gt;4-&gt;5-|"></a>1-&gt;2-&gt;3-&gt;4-&gt;5-|</h1><h1 id="往复循环"><a href="#往复循环" class="headerlink" title="|      往复循环      |"></a>|      往复循环      |</h1><h1 id="lt-lt-lt-lt-lt-lt"><a href="#lt-lt-lt-lt-lt-lt" class="headerlink" title="| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |"></a>| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |</h1>
-=======
-        <h2 id="K8S-搭建"><a href="#K8S-搭建" class="headerlink" title="K8S 搭建"></a>K8S 搭建</h2><p>搭建本 K8S 集群需要你预先准备好，可以连接到外网的 Fq 工具，并且设置局域网内所有主机都可以自动 fq。<br>这里我采用的是 ikuai 与 koolshare lede 双软路由解决方案。</p>
-<p>本文均采用 ubuntu 18.04LTS 版本系统<br>docker-ce 版本 18.09.9 k8s 15.3 版本最高依赖 docker-ce 18.09 再高就连接不到 docker 引擎了。</p>
-<h4 id="集群网络"><a href="#集群网络" class="headerlink" title="集群网络"></a>集群网络</h4><p>192.168.1.20 k8s-master    ubuntu-desktop 18.04.03 LTS<br>192.168.1.21 k8s-node-1    ubuntu-server 18.04.03 LTS<br>192.168.1.22 k8s-node-2    ubuntu-server 18.04.03 LTS</p>
-<p>修改对应服务器 hosts<br>关闭防火墙，关闭 swap 等<br>ubuntu 默认关闭防火墙，</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
-<h4 id="两个难点之一-，-安装-kubelet-kubeadm-kubectl"><a href="#两个难点之一-，-安装-kubelet-kubeadm-kubectl" class="headerlink" title="两个难点之一 ， 安装  kubelet kubeadm kubectl"></a>两个难点之一 ， 安装  kubelet kubeadm kubectl</h4><p>因为访问国外网络慢，所以需要修改 apt-get 的访问源</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list #添加deb 行 追加</span><br><span class="line">deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main</span><br><span class="line"><span class="meta">#</span>执行</span><br><span class="line">apt-get update</span><br><span class="line"><span class="meta">#</span>执行</span><br><span class="line">apt-get install -y kubelet kubeadm kubectl</span><br><span class="line"><span class="meta">#</span>需要 sudo 自己加</span><br><span class="line"><span class="meta">#</span>可能在 apt-get update 时会碰到  no pubkey ...</span><br><span class="line"><span class="meta">#</span>执行下面命令解决</span><br><span class="line">curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -</span><br><span class="line"></span><br><span class="line">kubelet kubeadm kubectl</span><br><span class="line"><span class="meta">#</span>安装好了，工作完成了 1/3. kubelet 是k8相关服务，kubectl 是k8s 管理客户端，kubeadm 是部署工具</span><br></pre></td></tr></table></figure>
-<p>###</p>
-<p>部署主（管理）节点<br>    本来是执行  kubeadm init –kubernetes-version=v1.15.0 –pod-network-cidr=10.10.0.0/16 –apiserver-advertise-address=192.168.1.20<br>  如果你可以 FQ 直接部署上面的命令即可<br>一步完成， 但是由于国内的网络环境，众所周知的原因，不得不绕弯。<br><strong>两难点之二</strong></p>
-<p>在执行 init 的时候 会向   k8s.gcr.io    获取   kube-apiserver:v1.15.0  等 docker 镜像， 但是  k8s.gcr.io 访问不通。<br>所以，我们要从拉取 别人的镜像， 然后改名， 再执行 kube init  .  <strong>注意，一定要版本一致，今天是 1.15, 明天可能是 16</strong> ，</p>
-<p>列出需要哪些镜像: command not found</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">murphyyi@k8s-master:~$ kubeadm config images list --kubernetes-version v1.15.0</span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.15.0</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.15.0</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.10</span><br><span class="line">k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>拉取镜像</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker pull mirrorgooglecontainers/kube-apiserver:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-controller-manager:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-scheduler:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/kube-proxy:v1.15.0</span><br><span class="line">docker pull mirrorgooglecontainers/pause:3.1</span><br><span class="line">docker pull mirrorgooglecontainers/etcd:3.3.10</span><br><span class="line">docker pull coredns/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>改名</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker tag mirrorgooglecontainers/kube-apiserver:v1.15.0 k8s.gcr.io/kube-apiserver:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-controller-manager:v1.15.0 k8s.gcr.io/kube-controller-manager:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-scheduler:v1.15.0  k8s.gcr.io/kube-scheduler:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/kube-proxy:v1.15.0  k8s.gcr.io/kube-proxy:v1.15.0</span><br><span class="line">docker tag mirrorgooglecontainers/pause:3.1  k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag mirrorgooglecontainers/etcd:3.3.10  k8s.gcr.io/etcd:3.3.10</span><br><span class="line">docker tag coredns/coredns:1.3.1  k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<p>拉取完成后，执行   kubeadm init<br>成功标志， 出现：</p>
-<p>kubeadm join 10.10.10.10:6443 –token kekvgu.nw1n76h84f4camj6 \</p>
-<p>–discovery-token-ca-cert-hash sha256:4ee74205227c78ca62f2d641635afa4d50e6634acfaa8291f28582c7e3b0e30e</p>
-<p>如果没有出现，就说明没成功，根据错误反复弄。  使用  <strong> kubeadm reset</strong>  清除  kubeadm init 生成的垃圾， 有些文件可以用 rm -rf  删除。<br>需要记录这行内容：   <strong> kubeadmin join  …… </strong><br>添加工作节点用到</p>
-<p>执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p $HOME/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br></pre></td></tr></table></figure>
-<p>执行后 kubectl 环境有了，可以执行 kubectl nodes 看看了。   2/3 的工作量完成了。</p>
-<p><strong>4. 主节点生效</strong><br>现在主节点还是没用，需要搭建一个网络给集群用。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-<p>执行上面的命令搭建   flannel ， k8s 有很多网络选择。 有兴趣的自己研究。<br>网络搭建完成后，执行刚才保存下来的<br>kubeadm join ………………..</p>
-<p>输入<br>kubectl get nodes</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE   VERSION</span><br><span class="line">k8s-master   Ready    master   28h   v1.15.3</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   27h   v1.15.3</span><br><span class="line">k8s-node2    Ready    &lt;none&gt;   27h   v1.15.3</span><br></pre></td></tr></table></figure>
-<h3 id="添加-node1-工作节点，"><a href="#添加-node1-工作节点，" class="headerlink" title="添加 node1 工作节点，"></a>添加 node1 工作节点，</h3><p>在   192.168.1.21 机器上 安装    kubelet kubeadm kubectl    执行   kubeadm  join …..<br>不需要执行   init  和网络<br>完成后 执行 kubectl get nodes 就能看到 上面这个图了。 <strong>恭喜，你的 k8s 集群就已经完成了</strong>，以后可以增加节点，减少节点。</p>
-<h2 id="创建一个-helloword-应用，看看效果"><a href="#创建一个-helloword-应用，看看效果" class="headerlink" title="创建一个   helloword 应用，看看效果"></a>创建一个   helloword 应用，看看效果</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create deployment nginx --image=nginx</span><br><span class="line">kubectl expose deployment nginx --port=80 --type=NodePort</span><br></pre></td></tr></table></figure>
-<p>用 kubectl 部署， 用 kubectl get nodes,        get pods   ,  get cs  查看集群服务状态</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ kubectl get pods</span><br><span class="line">NAME                     READY   STATUS    RESTARTS   AGE</span><br><span class="line">nginx-554b9c67f9-kldwg   1/1     Running   0          26s</span><br><span class="line">➜  ~ kubectl get cs</span><br><span class="line">NAME                 STATUS    MESSAGE             ERROR</span><br><span class="line">controller-manager   Healthy   ok</span><br><span class="line">scheduler            Healthy   ok</span><br><span class="line">etcd-0               Healthy   &#123;"health":"true"&#125;</span><br><span class="line">➜  ~ kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE   VERSION</span><br><span class="line">k8s-master   Ready    master   28h   v1.15.3</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   28h   v1.15.3</span><br><span class="line">k8s-node2    Ready    &lt;none&gt;   27h   v1.15.3</span><br></pre></td></tr></table></figure>
-<p>打开浏览器： 192.168.1.20：80  <strong>看你的 hello word  ， 大功告成。 </strong></p>
-<p>3/3 工作完成 文章完结 。</p>
-<h2 id="Docker-不输入-sudo-运行方案"><a href="#Docker-不输入-sudo-运行方案" class="headerlink" title="Docker 不输入 sudo 运行方案"></a>Docker 不输入 sudo 运行方案</h2><p>由于 docker daemon 需要绑定到主机的 Unix socket 而不是普通的 TCP 端口，而 Unix socket 的属主为 root 用户，所以其他用户只有在命令前添加 sudo 选项才能执行相关操作。<br>如果不想每次使用 docker 命令的时候还要额外的敲一下 sudo，可以按照下面的方法配置一下。</p>
-<ol>
-<li>创建一个 docker 组</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd docker</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>添加当前用户到 docker 组</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>登出，重新登录 shell</li>
-<li>验证 docker 命令是否可以运行</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
-<h2 id="遇到问题先查看日志"><a href="#遇到问题先查看日志" class="headerlink" title="遇到问题先查看日志"></a>遇到问题先查看日志</h2><p>查看 node kubelet 日志：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -f -u kubelet</span><br></pre></td></tr></table></figure>
-<h3 id="k8s-node-断电-重启"><a href="#k8s-node-断电-重启" class="headerlink" title="k8s node 断电/重启"></a>k8s node 断电/重启</h3><h4 id="kubernetes-断电重启-导致部分-pod-无法删除"><a href="#kubernetes-断电重启-导致部分-pod-无法删除" class="headerlink" title="kubernetes 断电重启 导致部分 pod 无法删除"></a>kubernetes 断电重启 导致部分 pod 无法删除</h4><h4 id="dashboard-上处于黄色"><a href="#dashboard-上处于黄色" class="headerlink" title="dashboard 上处于黄色"></a>dashboard 上处于黄色</h4><h4 id="kubectl-get-处于-terminate-状态"><a href="#kubectl-get-处于-terminate-状态" class="headerlink" title="kubectl get 处于 terminate 状态"></a>kubectl get 处于 terminate 状态</h4><h4 id="kubectl-delete-报错："><a href="#kubectl-delete-报错：" class="headerlink" title="kubectl delete 报错："></a>kubectl delete 报错：</h4><h5 id="An-error-occurred-while-waiting-for-the-object-to-be-deleted-too-old-resource-version"><a href="#An-error-occurred-while-waiting-for-the-object-to-be-deleted-too-old-resource-version" class="headerlink" title="An error occurred while waiting for the object to be deleted: too old resource version:"></a>An error occurred while waiting for the object to be deleted: too old resource version:</h5><h3 id="kubectl-get-nodes-发现-node-失联："><a href="#kubectl-get-nodes-发现-node-失联：" class="headerlink" title="kubectl get nodes 发现 node 失联："></a>kubectl get nodes 发现 node 失联：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo kubectl get nodes</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1568012262146-e0786567-6ab7-4907-a447-d63cf91f5209.png#align=left&amp;display=inline&amp;height=89&amp;originHeight=89&amp;originWidth=481&amp;size=0&amp;status=done&amp;width=481" alt><br>但是发现能 ssh 到失联的 node 上去，于是重启 kubelet</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart kubelet.service</span><br></pre></td></tr></table></figure>
-<h4 id="发现没用。于是关闭交换空间"><a href="#发现没用。于是关闭交换空间" class="headerlink" title="发现没用。于是关闭交换空间"></a>发现没用。于是关闭交换空间</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
-<h4 id="发现错误解决，node-恢复连接，删不掉的-pod-自动没有了"><a href="#发现错误解决，node-恢复连接，删不掉的-pod-自动没有了" class="headerlink" title="发现错误解决，node 恢复连接，删不掉的 pod 自动没有了"></a>发现错误解决，node 恢复连接，删不掉的 pod 自动没有了</h4><p>永久关闭 swap 缓存<br>找到/etc/fstb 下面 注释 swap 行 重启就好</p>
-
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-<<<<<<< HEAD
-          <a class="article-more-a" href="/2020/02/15/yuque/如何快速的学习一门新技术/">展开全文 >></a>
-=======
-          <a class="article-more-a" href="/2019/09/09/yuque/K8S 集群初步搭建/">展开全文 >></a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
         </p>
       
 
@@ -1599,11 +2619,7 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
-<<<<<<< HEAD
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
-=======
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 
@@ -1718,7 +2734,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-<<<<<<< HEAD
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -1732,21 +2747,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-=======
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
->>>>>>> 8603c77bdcdb023ebe6d6034e97b90bddc02fe06
               </li>
             
             <div class="clearfix"></div>

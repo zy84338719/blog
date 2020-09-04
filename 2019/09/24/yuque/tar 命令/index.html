@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Murphy Yi site">
 <meta property="og:description" content="tar -c: 建立压缩档案-x：解压-t：查看内容-r：向压缩归档文件末尾追加文件-u：更新原压缩包中的文件 这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。 -z：有 gzip 属性的-j：有 bz2 属性的-Z：有 compress 属性的-v：显示所有过程-O：将文件解开到标准输出 下面的参数-f 是必须的 -">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-07T07:04:33.412Z">
+<meta property="og:updated_time" content="2020-09-04T10:15:54.755Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tar 命令">
 <meta name="twitter:description" content="tar -c: 建立压缩档案-x：解压-t：查看内容-r：向压缩归档文件末尾追加文件-u：更新原压缩包中的文件 这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。 -z：有 gzip 属性的-j：有 bz2 属性的-Z：有 compress 属性的-v：显示所有过程-O：将文件解开到标准输出 下面的参数-f 是必须的 -">
@@ -237,7 +237,7 @@ var _hmt = _hmt || [];
 <p>9、*.zip 用 unzip 解压</p>
 <p>解压 jdk 到指定文件夹：</p>
 <p>tar -xzvf jdk-8u131-linux-x64.tar.gz -C /usr/local/java</p>
-<p>root@ubuntu:~# tar –help<br>用法: tar [选项…][file]…<br>GNU ‘tar’ saves many files together into a single tape or disk archive, and can<br>restore individual files from the archive.</p>
+<p>root@ubuntu:~# tar –help<br>用法: tar [选项…] [FILE]…<br>GNU ‘tar’ saves many files together into a single tape or disk archive, and can<br>restore individual files from the archive.</p>
 <p>Examples:<br>tar -cf archive.tar foo bar # Create archive.tar from files foo and bar.<br>tar -tvf archive.tar # List all files in archive.tar verbosely.<br>tar -xf archive.tar # Extract all files from archive.tar.</p>
 <p>主操作模式:</p>
 <p>-A, –catenate, –concatenate 追加 tar 文件至归档<br>-c, –create 创建一个新归档<br>-d, –diff, –compare 找出归档和文件系统的差异<br>–delete 从归档(非磁带！)中删除<br>-r, –append 追加文件至归档结尾<br>-t, –list 列出归档内容<br>–test-label 测试归档卷标并退出<br>-u, –update 仅追加比归档中副本更新的文件<br>-x, –extract, –get 从归档中解出文件</p>

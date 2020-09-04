@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Murphy Yi site">
 <meta property="og:description" content="【初级】下面属于关键字的是（）A. funcB. defC. structD. class  参考答案：AC  【初级】定义一个包内全局字符串变量，下面语法正确的是（）A. var str stringB. str := “”C. str = “”D. var str = “”  参考答案：AD  【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）A. p.nameB. (">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-07T07:04:36.848Z">
+<meta property="og:updated_time" content="2020-09-04T10:15:57.447Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go 面试题">
 <meta name="twitter:description" content="【初级】下面属于关键字的是（）A. funcB. defC. structD. class  参考答案：AC  【初级】定义一个包内全局字符串变量，下面语法正确的是（）A. var str stringB. str := “”C. str = “”D. var str = “”  参考答案：AD  【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）A. p.nameB. (">
@@ -247,11 +247,7 @@ var _hmt = _hmt || [];
 <ol start="16">
 <li>【初级】关于类型转化，下面语法正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="16">
-<li>type MyInt int</li>
-<li>var i int = 1</li>
-</ol>
+<p>A. 16. type MyInt int 16. var i int = 1</p>
 <p>var jMyInt = i</p>
 <p>B.</p>
 <p>type MyIntint</p>
@@ -277,10 +273,7 @@ var _hmt = _hmt || [];
 <ol start="20">
 <li>【初级】关于 const 常量定义，下面正确的使用方式是（）</li>
 </ol>
-<p>A.</p>
-<ol start="20">
-<li>const Pi float64 = 3.14159265358979323846</li>
-</ol>
+<p>A. 20. const Pi float64 = 3.14159265358979323846</p>
 <p>const zero= 0.0</p>
 <p>B.</p>
 <p>const (</p>
@@ -376,21 +369,7 @@ var _hmt = _hmt || [];
 <ol start="38">
 <li>【中级】从切片中删除一个元素，下面的算法实现正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="38">
-<li>func (s *Slice)Remove(value interface{})error {</li>
-<li>for i, v := range *s {</li>
-<li>if isEqual(value, v) {</li>
-<li>if i== len(*s) - 1 {</li>
-<li>_s = (_s)[:i]</li>
-<li>}else {</li>
-<li>_s = append((_s)[:i],(*s)[i + 2:]…)</li>
-<li>}</li>
-<li>return nil</li>
-<li>}</li>
-<li>}</li>
-<li>return ERR_ELEM_NT_EXIST</li>
-</ol>
+<p>A. 38. func (s <em>Slice)Remove(value interface{})error { 38. for i, v := range </em>s { 38. if isEqual(value, v) { 38. if i== len(<em>s) - 1 { 38. _s = (_s)[:i] 38. }else { 38. _s = append((_s)[:i],(</em>s)[i + 2:]…) 38. } 38. return nil 38. } 38. } 38. return ERR_ELEM_NT_EXIST</p>
 <p>}</p>
 <p>B.</p>
 <p>func (s*Slice)Remove(value interface{}) error {</p>
@@ -426,12 +405,7 @@ var _hmt = _hmt || [];
 <ol start="51">
 <li>【初级】对于局部变量整型切片 x 的赋值，下面定义正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="51">
-<li>x := []int{</li>
-<li>1, 2, 3,</li>
-<li>4, 5, 6,</li>
-</ol>
+<p>A. 51. x := []int{ 51. 1, 2, 3, 51. 4, 5, 6,</p>
 <p>}</p>
 <p>B.</p>
 <p>x :=[]int{</p>
@@ -448,10 +422,7 @@ var _hmt = _hmt || [];
 <ol start="55">
 <li>【初级】关于变量的自增和自减操作，下面语句正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="55">
-<li>i := 1</li>
-</ol>
+<p>A. 55. i := 1</p>
 <p>i++</p>
 <p>B.</p>
 <p>i := 1</p>
@@ -630,10 +601,7 @@ var _hmt = _hmt || [];
 <ol start="91">
 <li>【中级】关于 slice 或 map 操作，下面正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="91">
-<li>var s []int</li>
-</ol>
+<p>A. 91. var s []int</p>
 <p>s =append(s,1)</p>
 <p>B.</p>
 <p>var mmap[string]int</p>
@@ -778,9 +746,17 @@ var _hmt = _hmt || [];
 <ol start="21">
 <li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
 <li>func main() {</li>
-<li>strs := []string{“one”,”two”, “three”}<br>24.</li>
+<li><p>strs := []string{“one”,”two”, “three”}<br>24.</p>
+</li>
+<li><p>for _, s := range strs {</p>
+</li>
+<li>go func() {</li>
+<li>time.Sleep(1 * time.Second)</li>
+<li>fmt.Printf(“%s “, s)</li>
+<li>}()</li>
+<li>}</li>
+<li>time.Sleep(3 * time.Second)</li>
 </ol>
-<p>21) for _, s := range strs {<br>22) go func() {<br>23) time.Sleep(1 * time.Second)<br>24) fmt.Printf(“%s “, s)<br>25) }()<br>26) }<br>27) time.Sleep(3 * time.Second)</p>
 <p>}</p>
 <p>参考答案：three threethree</p>
 <ol start="32">
@@ -1008,11 +984,21 @@ var _hmt = _hmt || [];
 <li>if err != nil {</li>
 <li>destroyResource1()</li>
 <li>}</li>
-<li>}()<br>64.</li>
-</ol>
-<p>53) err = createResource2()<br>54) if err != nil {<br>55) return ERR_CREATE_RESOURCE2_FAILED<br>56) }<br>57) defer func() {<br>58) if err != nil {<br>59) destroyResource2()<br>60) }<br>61) }()<br>62)</p>
-<ol start="53">
-<li>err = createResource3()</li>
+<li><p>}()<br>64.</p>
+</li>
+<li><p>err = createResource2()</p>
+</li>
+<li>if err != nil {</li>
+<li>return ERR_CREATE_RESOURCE2_FAILED</li>
+<li>}</li>
+<li>defer func() {</li>
+<li>if err != nil {</li>
+<li>destroyResource2()</li>
+<li>}</li>
+<li><p>}()<br>74.</p>
+</li>
+<li><p>err = createResource3()</p>
+</li>
 <li>if err != nil {</li>
 <li>return ERR_CREATE_RESOURCE3_FAILED</li>
 <li>}</li>

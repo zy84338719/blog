@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Murphy Yi site">
 <meta property="og:description" content="# 基础概念篇 Go 语言在多个工作区中查找依赖包的时候是以怎样的顺序进行的？答：你设置的环境变量 GOPATH 的值决定了这个顺序。如果你在 GOPATH 中设置了多个工作区，那么这种查找会以从左到右的顺序在这些工作区中进行。  你可以通过试验来确定这个问题的答案。例如：先在一个源码文件中导入一个在你的机器上并不存在的代码包，然后编译这个代码文件。最后，将输出的编译错误信息与 GOPATH 的值">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-07T07:04:37.560Z">
+<meta property="og:updated_time" content="2020-09-04T10:15:58.067Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go核心36讲中50个思考题">
 <meta name="twitter:description" content="# 基础概念篇 Go 语言在多个工作区中查找依赖包的时候是以怎样的顺序进行的？答：你设置的环境变量 GOPATH 的值决定了这个顺序。如果你在 GOPATH 中设置了多个工作区，那么这种查找会以从左到右的顺序在这些工作区中进行。  你可以通过试验来确定这个问题的答案。例如：先在一个源码文件中导入一个在你的机器上并不存在的代码包，然后编译这个代码文件。最后，将输出的编译错误信息与 GOPATH 的值">
@@ -264,7 +264,7 @@ var _hmt = _hmt || [];
 <ol start="23">
 <li>字面量 struct{}代表了什么？又有什么用处？<br>答：字面量 struct{}代表了空的结构体类型。这样的类型既不包含任何字段也没有任何方法。该类型的值所需的存储空间几乎可以忽略不计。</li>
 </ol>
-<p>因此，我们可以把这样的值作为占位值来使用。比如：在同一个应用场景下，map[int][int]bool 类型的值占用更少的存储空间。</p>
+<p>因此，我们可以把这样的值作为占位值来使用。比如：在同一个应用场景下，map[int] [int]bool 类型的值占用更少的存储空间。</p>
 <ol start="24">
 <li><p>如果我们把一个值为 nil 的某个实现类型的变量赋给了接口变量，那么在这个接口变量上仍然可以调用该接口的方法吗？如果可以，有哪些注意事项？如果不可以，原因是什么？<br>答：可以调用。但是请注意，这个被调用的方法在此时所持有的接收者的值是 nil。因此，如果该方法引用了其接收者的某个字段，那么就会引发 panic！</p>
 </li>

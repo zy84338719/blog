@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&display=inline&height=145&name=image.png&originHeight=145&originWidth=503&size=37505&status=done&style=none&width=503">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&display=inline&height=160&name=image.png&originHeight=160&originWidth=562&size=52567&status=done&style=none&width=562">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&display=inline&height=252&name=image.png&originHeight=252&originWidth=495&size=88687&status=done&style=none&width=495">
-<meta property="og:updated_time" content="2020-08-07T07:04:32.584Z">
+<meta property="og:updated_time" content="2020-09-04T10:15:53.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 指针">
 <meta name="twitter:description" content="基本用法 基本数据类型，变量存的就是值，也叫值类型 获取变量的地址，用&amp;amp;，比如: var num int, 获取 num 的地址:#  基本数据类型在内存的布局.   指针类型，指针变量存的是一个地址，这个地址指向的空间存的才是值比如:var ptr *int = #  指针在内存的布局.   获取指针类型所指向的值，使用:，比如:var ptr int, 使用*ptr 获取 ptr 指向">
@@ -222,24 +222,15 @@ var _hmt = _hmt || [];
 <ol start="4">
 <li>获取指针类型所指向的值，使用:<em>，比如:var ptr </em>int, 使用*ptr 获取 ptr 指向的值</li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"></p>
-<ol start="5">
-<li>一个案例再说明</li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"> 5) 一个案例再说明</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940101590-9e1e8b55-d19b-4526-ab55-6190aa74aca3.png#align=left&amp;display=inline&amp;height=185&amp;name=image.png&amp;originHeight=185&amp;originWidth=580&amp;size=67458&amp;status=done&amp;style=none&amp;width=580" alt="image.png"></p>
 <h2 id="值类型和引用类型的使用特点"><a href="#值类型和引用类型的使用特点" class="headerlink" title="值类型和引用类型的使用特点"></a>值类型和引用类型的使用特点</h2><ol>
 <li>值类型:变量直接存储值，内存通常在栈中分配<pre><code>值类型:基本数据类型 int 系列, float 系列, bool, string 、数组和结构体 struct
 </code></pre></li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"></p>
-<ol start="2">
-<li>引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"> 2) 引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</p>
 <p>引用类型:指针、slice 切片、map、管道 chan、interface 等都是引用类型</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"></p>
-<ol start="3">
-<li>内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"> 3) 内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></p>
 
       
 

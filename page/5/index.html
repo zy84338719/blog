@@ -2098,24 +2098,15 @@ var _hmt = _hmt || [];
 <ol start="4">
 <li>获取指针类型所指向的值，使用:<em>，比如:var ptr </em>int, 使用*ptr 获取 ptr 指向的值</li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"></p>
-<ol start="5">
-<li>一个案例再说明</li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&amp;display=inline&amp;height=321&amp;name=image.png&amp;originHeight=321&amp;originWidth=306&amp;size=128895&amp;status=done&amp;style=none&amp;width=306" alt="image.png"> 5) 一个案例再说明</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940101590-9e1e8b55-d19b-4526-ab55-6190aa74aca3.png#align=left&amp;display=inline&amp;height=185&amp;name=image.png&amp;originHeight=185&amp;originWidth=580&amp;size=67458&amp;status=done&amp;style=none&amp;width=580" alt="image.png"></p>
 <h2 id="值类型和引用类型的使用特点"><a href="#值类型和引用类型的使用特点" class="headerlink" title="值类型和引用类型的使用特点"></a>值类型和引用类型的使用特点</h2><ol>
 <li>值类型:变量直接存储值，内存通常在栈中分配<pre><code>值类型:基本数据类型 int 系列, float 系列, bool, string 、数组和结构体 struct
 </code></pre></li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"></p>
-<ol start="2">
-<li>引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&amp;display=inline&amp;height=145&amp;name=image.png&amp;originHeight=145&amp;originWidth=503&amp;size=37505&amp;status=done&amp;style=none&amp;width=503" alt="image.png"> 2) 引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</p>
 <p>引用类型:指针、slice 切片、map、管道 chan、interface 等都是引用类型</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"></p>
-<ol start="3">
-<li>内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&amp;display=inline&amp;height=160&amp;name=image.png&amp;originHeight=160&amp;originWidth=562&amp;size=52567&amp;status=done&amp;style=none&amp;width=562" alt="image.png"> 3) 内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&amp;display=inline&amp;height=252&amp;name=image.png&amp;originHeight=252&amp;originWidth=495&amp;size=88687&amp;status=done&amp;style=none&amp;width=495" alt="image.png"></p>
 
       
 
@@ -2215,10 +2206,7 @@ var _hmt = _hmt || [];
 </ol>
 <p>英文字母-1 个字节 汉字-3 个字节</p>
 <p>4) 在 Go 中，字符的本质是一个整数，直接输出时，是该字符对应的 UTF-8 编码的码值。</p>
-<p>5) 可以直接给某个变量赋一个数字，然后按格式化输出时%c，会输出该数字对应的 unicode 字符</p>
-<ol start="6">
-<li>字符类型是可以进行运算的，相当于一个整数，因为它都对应有 Unicode 码.</li>
-</ol>
+<p>5) 可以直接给某个变量赋一个数字，然后按格式化输出时%c，会输出该数字对应的 unicode 字符   6) 字符类型是可以进行运算的，相当于一个整数，因为它都对应有 Unicode 码.</p>
 <h2 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h2><p>bool 类型占 1 个字节。</p>
 <p>##</p>
 <h2 id="String-类型"><a href="#String-类型" class="headerlink" title="String 类型"></a>String 类型</h2><ol>
@@ -2271,10 +2259,7 @@ var _hmt = _hmt || [];
 <li><p>被转换的是变量存储的数据(即值)，变量本身的数据类型并没有变化!</p>
 </li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581934050310-0bededb8-ee62-4661-9c02-942813789f3c.png#align=left&amp;display=inline&amp;height=229&amp;name=image.png&amp;originHeight=229&amp;originWidth=514&amp;size=131565&amp;status=done&amp;style=none&amp;width=514" alt="image.png"></p>
-<ol start="3">
-<li>在转换中，比如将 int64 转成 int8 【-128—127】 ，编译时不会报错，只是转换的结果是按溢出处理，和我们希望的结果不一样。 因此在转换时，需要考虑范围.</li>
-</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581934050310-0bededb8-ee62-4661-9c02-942813789f3c.png#align=left&amp;display=inline&amp;height=229&amp;name=image.png&amp;originHeight=229&amp;originWidth=514&amp;size=131565&amp;status=done&amp;style=none&amp;width=514" alt="image.png"> 3) 在转换中，比如将 int64 转成 int8 【-128—127】 ，编译时不会报错，只是转换的结果是按溢出处理，和我们希望的结果不一样。 因此在转换时，需要考虑范围.</p>
 <h3 id="string-转基本数据类型的注意事项"><a href="#string-转基本数据类型的注意事项" class="headerlink" title="string 转基本数据类型的注意事项"></a>string 转基本数据类型的注意事项</h3><p>在将 String 类型转成 基本数据类型时，要确保 <strong>String </strong>类型能够转成有效的数据，比如 我们可以<br>把 “123” , 转成一个整数，但是不能把 “hello” 转成一个整数，如果这样做，Golang 直接将其转成 0 ，<br>其它类型也是一样的道理. float =&gt; 0 bool =&gt; false</p>
 <p>type</p>
 
@@ -2568,12 +2553,14 @@ var _hmt = _hmt || [];
 </ol>
 <ol start="2">
 <li>\n :换行符</li>
+<li>\ :一个\</li>
 </ol>
-<p>2)                               \ :一个\</p>
-<ol start="2">
+<ol start="4">
 <li>\” :一个”</li>
 </ol>
-<p>2)                               \r :一个回车 fmt.Println(“天龙八部雪山飞狐\r 张飞”);</p>
+<ol start="5">
+<li>\r :一个回车 fmt.Println(“天龙八部雪山飞狐\r 张飞”);</li>
+</ol>
 <p>例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581917830487-c1de47bc-10ca-4b90-be6b-7cf47283b297.png#align=left&amp;display=inline&amp;height=538&amp;name=image.png&amp;originHeight=870&amp;originWidth=924&amp;size=261317&amp;status=done&amp;style=none&amp;width=572" alt="image.png"></p>
 
       

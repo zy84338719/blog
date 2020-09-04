@@ -508,11 +508,7 @@ var _hmt = _hmt || [];
 <ol start="16">
 <li>【初级】关于类型转化，下面语法正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="16">
-<li>type MyInt int</li>
-<li>var i int = 1</li>
-</ol>
+<p>A. 16. type MyInt int 16. var i int = 1</p>
 <p>var jMyInt = i</p>
 <p>B.</p>
 <p>type MyIntint</p>
@@ -538,10 +534,7 @@ var _hmt = _hmt || [];
 <ol start="20">
 <li>【初级】关于 const 常量定义，下面正确的使用方式是（）</li>
 </ol>
-<p>A.</p>
-<ol start="20">
-<li>const Pi float64 = 3.14159265358979323846</li>
-</ol>
+<p>A. 20. const Pi float64 = 3.14159265358979323846</p>
 <p>const zero= 0.0</p>
 <p>B.</p>
 <p>const (</p>
@@ -637,21 +630,7 @@ var _hmt = _hmt || [];
 <ol start="38">
 <li>【中级】从切片中删除一个元素，下面的算法实现正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="38">
-<li>func (s *Slice)Remove(value interface{})error {</li>
-<li>for i, v := range *s {</li>
-<li>if isEqual(value, v) {</li>
-<li>if i== len(*s) - 1 {</li>
-<li>_s = (_s)[:i]</li>
-<li>}else {</li>
-<li>_s = append((_s)[:i],(*s)[i + 2:]…)</li>
-<li>}</li>
-<li>return nil</li>
-<li>}</li>
-<li>}</li>
-<li>return ERR_ELEM_NT_EXIST</li>
-</ol>
+<p>A. 38. func (s <em>Slice)Remove(value interface{})error { 38. for i, v := range </em>s { 38. if isEqual(value, v) { 38. if i== len(<em>s) - 1 { 38. _s = (_s)[:i] 38. }else { 38. _s = append((_s)[:i],(</em>s)[i + 2:]…) 38. } 38. return nil 38. } 38. } 38. return ERR_ELEM_NT_EXIST</p>
 <p>}</p>
 <p>B.</p>
 <p>func (s*Slice)Remove(value interface{}) error {</p>
@@ -687,12 +666,7 @@ var _hmt = _hmt || [];
 <ol start="51">
 <li>【初级】对于局部变量整型切片 x 的赋值，下面定义正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="51">
-<li>x := []int{</li>
-<li>1, 2, 3,</li>
-<li>4, 5, 6,</li>
-</ol>
+<p>A. 51. x := []int{ 51. 1, 2, 3, 51. 4, 5, 6,</p>
 <p>}</p>
 <p>B.</p>
 <p>x :=[]int{</p>
@@ -709,10 +683,7 @@ var _hmt = _hmt || [];
 <ol start="55">
 <li>【初级】关于变量的自增和自减操作，下面语句正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="55">
-<li>i := 1</li>
-</ol>
+<p>A. 55. i := 1</p>
 <p>i++</p>
 <p>B.</p>
 <p>i := 1</p>
@@ -891,10 +862,7 @@ var _hmt = _hmt || [];
 <ol start="91">
 <li>【中级】关于 slice 或 map 操作，下面正确的是（）</li>
 </ol>
-<p>A.</p>
-<ol start="91">
-<li>var s []int</li>
-</ol>
+<p>A. 91. var s []int</p>
 <p>s =append(s,1)</p>
 <p>B.</p>
 <p>var mmap[string]int</p>
@@ -1039,9 +1007,17 @@ var _hmt = _hmt || [];
 <ol start="21">
 <li>【中级】下面的程序的运行结果是<strong><strong>__</strong></strong></li>
 <li>func main() {</li>
-<li>strs := []string{“one”,”two”, “three”}<br>24.</li>
+<li><p>strs := []string{“one”,”two”, “three”}<br>24.</p>
+</li>
+<li><p>for _, s := range strs {</p>
+</li>
+<li>go func() {</li>
+<li>time.Sleep(1 * time.Second)</li>
+<li>fmt.Printf(“%s “, s)</li>
+<li>}()</li>
+<li>}</li>
+<li>time.Sleep(3 * time.Second)</li>
 </ol>
-<p>21) for _, s := range strs {<br>22) go func() {<br>23) time.Sleep(1 * time.Second)<br>24) fmt.Printf(“%s “, s)<br>25) }()<br>26) }<br>27) time.Sleep(3 * time.Second)</p>
 <p>}</p>
 <p>参考答案：three threethree</p>
 <ol start="32">
@@ -1269,11 +1245,21 @@ var _hmt = _hmt || [];
 <li>if err != nil {</li>
 <li>destroyResource1()</li>
 <li>}</li>
-<li>}()<br>64.</li>
-</ol>
-<p>53) err = createResource2()<br>54) if err != nil {<br>55) return ERR_CREATE_RESOURCE2_FAILED<br>56) }<br>57) defer func() {<br>58) if err != nil {<br>59) destroyResource2()<br>60) }<br>61) }()<br>62)</p>
-<ol start="53">
-<li>err = createResource3()</li>
+<li><p>}()<br>64.</p>
+</li>
+<li><p>err = createResource2()</p>
+</li>
+<li>if err != nil {</li>
+<li>return ERR_CREATE_RESOURCE2_FAILED</li>
+<li>}</li>
+<li>defer func() {</li>
+<li>if err != nil {</li>
+<li>destroyResource2()</li>
+<li>}</li>
+<li><p>}()<br>74.</p>
+</li>
+<li><p>err = createResource3()</p>
+</li>
 <li>if err != nil {</li>
 <li>return ERR_CREATE_RESOURCE3_FAILED</li>
 <li>}</li>
@@ -2345,7 +2331,7 @@ var _hmt = _hmt || [];
 <ol start="23">
 <li>字面量 struct{}代表了什么？又有什么用处？<br>答：字面量 struct{}代表了空的结构体类型。这样的类型既不包含任何字段也没有任何方法。该类型的值所需的存储空间几乎可以忽略不计。</li>
 </ol>
-<p>因此，我们可以把这样的值作为占位值来使用。比如：在同一个应用场景下，map[int][int]bool 类型的值占用更少的存储空间。</p>
+<p>因此，我们可以把这样的值作为占位值来使用。比如：在同一个应用场景下，map[int] [int]bool 类型的值占用更少的存储空间。</p>
 <ol start="24">
 <li><p>如果我们把一个值为 nil 的某个实现类型的变量赋给了接口变量，那么在这个接口变量上仍然可以调用该接口的方法吗？如果可以，有哪些注意事项？如果不可以，原因是什么？<br>答：可以调用。但是请注意，这个被调用的方法在此时所持有的接收者的值是 nil。因此，如果该方法引用了其接收者的某个字段，那么就会引发 panic！</p>
 </li>
@@ -2758,7 +2744,7 @@ var _hmt = _hmt || [];
 <h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2><p>可以将一组权限用数字来表示，此时一组权限的 3 个位当做二进制数字的位，从左到右每个位的权值为 4、2、1，即每个权限对应的数字权值为 r : 4、w : 2、x : 1。</p>
 <h1 id="chmod-R-xyz-dirname-filename"><a href="#chmod-R-xyz-dirname-filename" class="headerlink" title="chmod [-R] xyz dirname/filename"></a>chmod [-R] xyz dirname/filename</h1><p>示例：将 .bashrc 文件的权限修改为 -rwxr-xr–。</p>
 <h1 id="chmod-754-bashrc"><a href="#chmod-754-bashrc" class="headerlink" title="chmod 754 .bashrc"></a>chmod 754 .bashrc</h1><p>也可以使用符号来设定权限。</p>
-<h1 id="chmod-ugoa-rwx-dirname-filename"><a href="#chmod-ugoa-rwx-dirname-filename" class="headerlink" title="chmod [ugoa][+-=] [rwx] dirname/filename"></a>chmod [ugoa][+-=] [rwx] dirname/filename</h1><ul>
+<h1 id="chmod-ugoa-rwx-dirname-filename"><a href="#chmod-ugoa-rwx-dirname-filename" class="headerlink" title="chmod [ugoa]  [+-=] [rwx] dirname/filename"></a>chmod [ugoa]  [+-=] [rwx] dirname/filename</h1><ul>
 <li>u：拥有者</li>
 <li>g：所属群组</li>
 <li>o：其他人</li>
@@ -2794,7 +2780,7 @@ var _hmt = _hmt || [];
 <h1 id="whereis-bmsu-dirname-filename"><a href="#whereis-bmsu-dirname-filename" class="headerlink" title="whereis [-bmsu] dirname/filename"></a>whereis [-bmsu] dirname/filename</h1><h3 id="3-locate"><a href="#3-locate" class="headerlink" title="3. locate"></a>3. locate</h3><p>文件搜索。可以用关键字或者正则表达式进行搜索。<br>locate 使用 /var/lib/mlocate/ 这个数据库来进行搜索，它存储在内存中，并且每天更新一次，所以无法用 locate 搜索新建的文件。可以使用 updatedb 来立即更新数据库。</p>
 <h1 id="locate-ir-keyword"><a href="#locate-ir-keyword" class="headerlink" title="locate [-ir] keyword"></a>locate [-ir] keyword</h1><p>-r：正则表达式</p>
 <h3 id="4-find"><a href="#4-find" class="headerlink" title="4. find"></a>4. find</h3><p>文件搜索。可以使用文件的属性和权限进行搜索。</p>
-<h1 id="find-basedir-option"><a href="#find-basedir-option" class="headerlink" title="find [basedir][option]"></a>find [basedir][option]</h1><p>example: find . -name “shadow*“<br><strong>① 与时间有关的选项</strong><br>-mtime  n ：列出在 n 天前的那一天修改过内容的文件<br>-mtime +n ：列出在 n 天之前 (不含 n 天本身) 修改过内容的文件<br>-mtime -n ：列出在 n 天之内 (含 n 天本身) 修改过内容的文件<br>-newer file ： 列出比 file 更新的文件<br>+4、4 和 -4 的指示的时间范围如下：<br><a href="https://camo.githubusercontent.com/3cb29ecc46909bda3df311755be91fc8e113c509/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f36353866633565372d373963302d343234372d393434352d6436396266313934633533392e706e67" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/3cb29ecc46909bda3df311755be91fc8e113c509/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f36353866633565372d373963302d343234372d393434352d6436396266313934633533392e706e67#align=left&amp;display=inline&amp;height=162&amp;margin=%5Bobject%20Object%5D&amp;originHeight=162&amp;originWidth=524&amp;status=done&amp;style=none&amp;width=524" alt></a></p>
+<h1 id="find-basedir-option"><a href="#find-basedir-option" class="headerlink" title="find [basedir] [option]"></a>find [basedir] [option]</h1><p>example: find . -name “shadow*“<br><strong>① 与时间有关的选项</strong><br>-mtime  n ：列出在 n 天前的那一天修改过内容的文件<br>-mtime +n ：列出在 n 天之前 (不含 n 天本身) 修改过内容的文件<br>-mtime -n ：列出在 n 天之内 (含 n 天本身) 修改过内容的文件<br>-newer file ： 列出比 file 更新的文件<br>+4、4 和 -4 的指示的时间范围如下：<br><a href="https://camo.githubusercontent.com/3cb29ecc46909bda3df311755be91fc8e113c509/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f36353866633565372d373963302d343234372d393434352d6436396266313934633533392e706e67" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/3cb29ecc46909bda3df311755be91fc8e113c509/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f36353866633565372d373963302d343234372d393434352d6436396266313934633533392e706e67#align=left&amp;display=inline&amp;height=162&amp;margin=%5Bobject%20Object%5D&amp;originHeight=162&amp;originWidth=524&amp;status=done&amp;style=none&amp;width=524" alt></a></p>
 <p><strong>② 与文件拥有者和所属群组有关的选项</strong><br>-uid n<br>-gid n<br>-user name<br>-group name<br>-nouser ：搜索拥有者不存在 /etc/passwd 的文件<br>-nogroup：搜索所属群组不存在于 /etc/group 的文件<br><strong>③ 与文件权限和名称有关的选项</strong><br>-name filename<br>-size [+-]SIZE：搜寻比 SIZE 还要大 (+) 或小 (-) 的文件。这个 SIZE 的规格有：c: 代表 byte，k: 代表 1024bytes。所以，要找比 50KB 还要大的文件，就是 -size +50k<br>-type TYPE<br>-perm mode  ：搜索权限等于 mode 的文件<br>-perm -mode ：搜索权限包含 mode 的文件<br>-perm /mode ：搜索权限包含任一 mode 的文件</p>
 <h1 id="六、压缩与打包"><a href="#六、压缩与打包" class="headerlink" title="六、压缩与打包"></a>六、压缩与打包</h1><h2 id="压缩文件名"><a href="#压缩文件名" class="headerlink" title="压缩文件名"></a>压缩文件名</h2><p>Linux 底下有很多压缩文件名，常见的如下：</p>
 <table>
@@ -2846,7 +2832,7 @@ var _hmt = _hmt || [];
 <h2 id="压缩指令"><a href="#压缩指令" class="headerlink" title="压缩指令"></a>压缩指令</h2><h3 id="1-gzip"><a href="#1-gzip" class="headerlink" title="1. gzip"></a>1. gzip</h3><p>gzip 是 Linux 使用最广的压缩指令，可以解开 compress、zip 与 gzip 所压缩的文件。<br>经过 gzip 压缩过，源文件就不存在了。<br>有 9 个不同的压缩等级可以使用。<br>可以使用 zcat、zmore、zless 来读取压缩文件的内容。<br>\$ gzip [-cdtv#] filename<br>-c ：将压缩的数据输出到屏幕上<br>-d ：解压缩<br>-t ：检验压缩文件是否出错<br>-v ：显示压缩比等信息<br>-# ： # 为数字的意思，代表压缩等级，数字越大压缩比越高，默认为 6</p>
 <h3 id="2-bzip2"><a href="#2-bzip2" class="headerlink" title="2. bzip2"></a>2. bzip2</h3><p>提供比 gzip 更高的压缩比。<br>查看命令：bzcat、bzmore、bzless、bzgrep。<br>\$ bzip2 [-cdkzv#] filename<br>-k ：保留源文件</p>
 <h3 id="3-xz"><a href="#3-xz" class="headerlink" title="3. xz"></a>3. xz</h3><p>提供比 bzip2 更佳的压缩比。<br>可以看到，gzip、bzip2、xz 的压缩比不断优化。不过要注意的是，压缩比越高，压缩的时间也越长。<br>查看命令：xzcat、xzmore、xzless、xzgrep。<br>\$ xz [-dtlkc#] filename</p>
-<h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><p>压缩指令只能对一个文件进行压缩，而打包能够将多个文件打包成一个大文件。tar 不仅可以用于打包，也可以使用 gzip、bzip2、xz 将打包文件进行压缩。<br>$ tar [-z|-j|-J] [cv] [-f 新建的 tar 文件] filename…  ==打包压缩<br>$ tar [-z|-j|-J][tv] [-f 已有的 tar 文件]              ==查看<br>\$ tar [-z|-j|-J][xv] [-f 已有的 tar 文件][-c 目录]    ==解压缩<br>-z ：使用 zip；<br>-j ：使用 bzip2；<br>-J ：使用 xz；<br>-c ：新建打包文件；<br>-t ：查看打包文件里面有哪些文件；<br>-x ：解打包或解压缩的功能；<br>-v ：在压缩/解压缩的过程中，显示正在处理的文件名；<br>-f : filename：要处理的文件；<br>-C 目录 ： 在特定目录解压缩。</p>
+<h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><p>压缩指令只能对一个文件进行压缩，而打包能够将多个文件打包成一个大文件。tar 不仅可以用于打包，也可以使用 gzip、bzip2、xz 将打包文件进行压缩。<br>$ tar [-z|-j|-J] [cv] [-f 新建的 tar 文件] filename…  ==打包压缩<br>$ tar [-z|-j|-J] [tv] [-f 已有的 tar 文件]              ==查看<br>\$ tar [-z|-j|-J] [xv] [-f 已有的 tar 文件] [-C 目录]    ==解压缩<br>-z ：使用 zip；<br>-j ：使用 bzip2；<br>-J ：使用 xz；<br>-c ：新建打包文件；<br>-t ：查看打包文件里面有哪些文件；<br>-x ：解打包或解压缩的功能；<br>-v ：在压缩/解压缩的过程中，显示正在处理的文件名；<br>-f : filename：要处理的文件；<br>-C 目录 ： 在特定目录解压缩。</p>
 <table>
 <thead>
 <tr>

@@ -181,6 +181,157 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/mysql 范式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/mysql 范式/">mysql 范式</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/mysql 范式/" class="archive-article-date">
+  	<time datetime="2020-05-04T23:23:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>第一范式 原子性’不可再分<br>第二范式 消除部分码函数依赖<br>第三范式 完全消除函数依赖</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/mysql 范式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Mysql 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/Mysql 锁/">Mysql 锁</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/Mysql 锁/" class="archive-article-date">
+  	<time datetime="2020-05-04T23:23:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>加上一个版本控制即可</p>
+<p>##</p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>会话 0：<br>lock table tablelock read;<br>select * from tablelock; —读（查），可以（自己加了锁，自己可以读）<br>delete from tablelock where id=1; —写（增删改），不可以</p>
+<p>在当前会话中访问其他表（emp 表，未加锁）：<br>select * from emp; —读，不可以<br>delete from emp where eid = 1; —写，不可以</p>
+<p>结论 1：<br>—如果某一个会话，对 A 表加了锁，则该会话可以对 A 表进行读操作，不能进行写操作；且该会话不能对其他表进行读、写操作。<br>—即如果给 A 表加了读锁，则当前会话只能对 A 表进行读操作。</p>
+<p>会话 1（其他会话）：<br>select * from tablelock; –读（查），可以<br>delete from tablelock where id=1; —写，会“等待”会话 0 将锁释放</p>
+<p>select * from emp; –读（查），可以<br>delete from emp where eid=1; —写，可以</p>
+<p>结论 2：<br>会话 0 给 A 表加了锁：</p>
+<p>其他会话的操作：<br>a.可以对其他表（A 表以外的表）进行读、写操作<br>b.对 A 表：读–可以；写–需要等待释放锁</p>
+<p>加写锁：</p>
+<p>会话 0：<br>lock table tablelock write;<br>结论：当前会话（会话 0）可以对加了写锁的表进行任何操作（增删改查）；但是不能操作（增删改查）其他表</p>
+<p>其他会话：<br>对会话 0 中加写锁的表可以进行增删改查的前提是：等待会话 0 释放写锁</p>
+<p>MySQL 表级锁的锁模式：<br>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，<br>在执行更新操作（增删改（DML））前，会自动给涉及的表加写锁。</p>
+<p>所以对 MyISAM 表进行操作，会有以下情况：<br>a.对 MyISAM 表的读操作（如读锁），不会阻塞其他进程（会话）对同一表的读请求，但会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它进程的写操作。<br>b.对 MyISAM 表的写操作（加写锁），会阻塞其他进程（会话）对同一表的读和写操作，只有当写锁释放后，才会执行其他进程的读写操作。</p>
+<h2 id="行锁（InnoDB-需要命中索引，否则行锁无效）"><a href="#行锁（InnoDB-需要命中索引，否则行锁无效）" class="headerlink" title="行锁（InnoDB 需要命中索引，否则行锁无效）"></a>行锁（InnoDB 需要命中索引，否则行锁无效）</h2><p>创建行锁条件：</p>
+<p>1、表中创建索引， select 。。。 where   字段（必须是索引）   不然行锁就无效。</p>
+<p>2、必须要有事务，这样才是 行锁（排他锁）</p>
+<p>3、在 select   语句后面 加 上    FOR UPDATE；</p>
+<p>例子： 测试是否 加了锁，先执行 1 后执行 2</p>
+<p>查询 1</p>
+<p>START TRANSACTION;  #加事务</p>
+<p>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;  #加锁</p>
+<p>select SLEEP(5);  # 睡眠</p>
+<p>COMMIT; #提交</p>
+<p>查询 2 ：</p>
+<p>START TRANSACTION;<br>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;<br>COMMIT;</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/Mysql 锁/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mysql 创建索引方法及类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -732,152 +883,6 @@ transition: color .3s;
 
 
   
-    <article id="post-yuque/切片数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/25/yuque/切片数组/">切片数组</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/25/yuque/切片数组/" class="archive-article-date">
-  	<time datetime="2020-03-25T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>数组是值拷贝<br>切片是引用传递</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.数组是多个相同类型数据的组合,一个数组一旦声明/定义了,其长度是固定的, 不能动态变化</p>
-<p>2.数组中的元素可以是任何数据类型，包括值类型和引用类型，但是不能混用。</p>
-<p>3.数组创建后，如果没有赋值，有默认值(零值)</p>
-<p>4.数组的下标是从 0 开始的</p>
-<p>5.数组下标必须在指定范围内使用，否则报 panic:数组越界，比如</p>
-<p>6.数组默认是值传递，因此值会进行拷贝。数组间不会相互影响 7.长度是数组类型的一部分，在传递函数参数时 需要考虑数组的长度</p>
-<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>1.切片的英文是 slice 2.切片是数组的一个引用，因此切片是引用类型，在进行传递时，遵守引用传递的机制。</p>
-<p>3.切片的使用和数组类似，遍历切片、访问切片的元素和求切片长度 len(slice)都一样。</p>
-<p>4.切片的长度是可以变化的，因此切片是一个可以动态变化数组。 5.通过 make 方式创建切片可以指定切片的大小和容量 6.通过 make 方式创建的切片对应的数组是由 make 底层维护，对外不可见，即只能通过 slice 去访问各个元素.<br>切片的数据类型</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer</span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>扩容</p>
-<ul>
-<li>当需要的容量超过原切片容量的两倍时，会使用需要的容量作为新容量。</li>
-<li>当原切片长度小于 1024 时，新切片的容量会直接翻倍。而当原切片的容量大于等于 1024 时，会反复地增加 25%，直到新容量超过所需要的容量。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/25/yuque/切片数组/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/常见算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/25/yuque/常见算法/">常见算法</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/25/yuque/常见算法/" class="archive-article-date">
-  	<time datetime="2020-03-25T06:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1590125088066-d05512d0-944e-4e0e-9ea2-ad2a966456ee.png#align=left&amp;display=inline&amp;height=399&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=399&amp;originWidth=746&amp;size=163928&amp;status=done&amp;style=none&amp;width=746" alt="image.png"><br>快排 1.选取基准值<code>tag</code>：选取第一个元素为基准值（<code>每次递归调用的基准值不等</code>） 2.从 0 向后查找到比 tag 大的数，否则 i++ 3.从 n 向前查找到比 tag 小的数，否则 j– 4.交换两个数 5.全部交换后此时 i==j,递归调用，继续比较<code>i</code>位置两侧位置</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方式，递归传入分割后的数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(s)&lt;=<span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[<span class="number">0</span>]</span><br><span class="line">    i:=<span class="number">0</span></span><br><span class="line">    j:=<span class="built_in">len</span>(s)<span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s[:i])</span><br><span class="line">    quicksort(s[i+<span class="number">1</span>:])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第二种方式，递归传入原数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>,start <span class="keyword">int</span>,end <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> start &gt;=end&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[start]</span><br><span class="line">    i:=start</span><br><span class="line">    j:=end</span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s,start,i<span class="number">-1</span>)</span><br><span class="line">    quicksort(s,i+<span class="number">1</span>,end)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// QuickSort</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">swap</span><span class="params">(a <span class="keyword">int</span>, b <span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> b, a</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">partition</span><span class="params">(aris []<span class="keyword">int</span>, begin <span class="keyword">int</span>, end <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	pvalue := aris[begin]</span><br><span class="line">	i := begin</span><br><span class="line">	j := begin + <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> j &lt; end &#123;</span><br><span class="line">		<span class="keyword">if</span> aris[j] &lt; pvalue &#123;</span><br><span class="line">			i++</span><br><span class="line">			aris[i], aris[j] = swap(aris[i], aris[j])</span><br><span class="line">		&#125;</span><br><span class="line">		j++</span><br><span class="line">	&#125;</span><br><span class="line">	aris[i], aris[begin] = swap(aris[i], aris[begin])</span><br><span class="line">	<span class="keyword">return</span> i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quick_sort</span><span class="params">(aris []<span class="keyword">int</span>, begin <span class="keyword">int</span>, end <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> begin+<span class="number">1</span> &lt; end &#123;</span><br><span class="line">		mid := partition(aris, begin, end)</span><br><span class="line">		quick_sort(aris, begin, mid)</span><br><span class="line">		quick_sort(aris, mid+<span class="number">1</span>, end)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rand_array</span><span class="params">(aris []<span class="keyword">int</span>, lent <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; lent; i++ &#123;</span><br><span class="line">		r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line">		aris[i] = r.Intn(<span class="number">1000</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	intas := []<span class="keyword">int</span>&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">20</span>, <span class="number">4</span>, <span class="number">77</span>, <span class="number">1</span>, <span class="number">22</span>&#125;</span><br><span class="line">	rand_array(intas, <span class="number">10</span>)</span><br><span class="line">	fmt.Println(intas)</span><br><span class="line">	quick_sort(intas, <span class="number">0</span>, <span class="number">10</span>)</span><br><span class="line">	fmt.Println(intas)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>选择排序</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    numbers := []<span class="keyword">int</span>&#123;<span class="number">6</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line">    SelectSort(numbers)</span><br><span class="line"></span><br><span class="line">    fmt.Println(numbers)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SelectSort</span><span class="params">(values []<span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    length := <span class="built_in">len</span>(values)</span><br><span class="line">    <span class="keyword">if</span> length &lt;= <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; length; i++ &#123;</span><br><span class="line">        min := i <span class="comment">// 初始的最小值位置从0开始，依次向右</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从i右侧的所有元素中找出当前最小值所在的下标</span></span><br><span class="line">        <span class="keyword">for</span> j := length - <span class="number">1</span>; j &gt; i; j-- &#123;</span><br><span class="line">            <span class="keyword">if</span> values[j] &lt; values[min] &#123;</span><br><span class="line">                min = j</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//fmt.Printf("i:%d min:%d\n", i, min)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 把每次找出来的最小值与之前的最小值做交换</span></span><br><span class="line">        values[i], values[min] = values[min], values[i]</span><br><span class="line"></span><br><span class="line">        <span class="comment">//fmt.Println(values)</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/25/yuque/常见算法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -995,6 +1000,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -1004,10 +1013,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
             
             <div class="clearfix"></div>

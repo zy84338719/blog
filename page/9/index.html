@@ -181,6 +181,185 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Python 风靡的原因" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/02/yuque/Python 风靡的原因/">Python 风靡的原因</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/02/yuque/Python 风靡的原因/" class="archive-article-date">
+  	<time datetime="2019-05-02T06:50:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1556779808182-ca1fbf9b-5a67-445a-b0a0-e5f179fa1956.png#align=left&amp;display=inline&amp;height=313&amp;originHeight=313&amp;originWidth=500&amp;size=0&amp;status=done&amp;width=500" alt><br>Python 已经成为目前使用最广泛且用户增长最快的编程语言。它优雅简洁的语法、强大的第三方库支持等都是 Python 能够风靡各行各业的原因。然而，你或许不知道，Python 能够实现用户飞速增长，背后其实另有玄机。<br>就让大讲台老师从近年来大数据的兴起说起，为你娓娓道来 Python 火爆的真正原因。<br>Ruby 与 Python 的“Web 开发语言之争”<br>大讲台老师再往回讲讲，在大数据还没有真正风靡之前，Ruby 和 Python 曾在成为最受欢迎的“web 开发语言”上发生过激烈的争战。 两者都非常适合开发 Web 应用程序。 Ruby 的受欢迎程度与 Rails 框架密切相关。 在那个年代，大多数自称为“Ruby 程序员”其实更应该称自己为 “Rails 程序员”。 而 Python 在学术界和少数不同行业已经相当完善。 在 Python 中，与 Rails 最相近的是 Django，Django 尽管在 Rails 之前发布，但它的受欢迎程度似乎远远落后于 Rails。<br>很多人认为，Python 和 Ruby 的性能都很相似，最终只会有一种语言能够赢得“web 开发语言之战”。 但实际上，Ruby 的流行度与 Rails 密切相关，而 Django 只代表了一个已经很活跃的 Python 生态系统的一小部分。事实也证明，“Web 开发语言之战”的重要性远低于人们的预期。即便从很多层面来讲，Ruby 都凭借 Rails 赢得了这场争战，但这丝毫不影响 Python 成为当今最受欢迎的语言。这到底是为什么呢？</p>
+<h4 id="Oliphant-的大手笔"><a href="#Oliphant-的大手笔" class="headerlink" title="Oliphant 的大手笔"></a>Oliphant 的大手笔</h4><p>为了揭开这个谜团，大讲台老师就不得不提一下一位大佬了，他就是 Travis Oliphant。追溯到 2006 年。当时，Travis Oliphant 还是 BYU 的助理教授，他仍未创办 Anaconda（注：Anaconda 是一个完全以 Python 为基础的，目前最成功的商业数据科学平台之一）。 一年前，他参考科学计算库 Numeric 开发了 NumPy。 他后来又成为 SciPy 的创始人并兼任了 PSF 的主管。<br>在 2006 年，他与 Carl Banks 一起提交了 PEP 3118，这是 Python 的“缓冲区协议”的修订版。这为 Python 的兴起埋下了重要伏笔。<br>Python 的缓冲协议：Python 风靡全球的首要原因<br>缓冲器协议是一个极低级别的 API，被其他库用来直接操纵内存缓冲区。 这些是由解释器创建和使用的缓冲器，用于存储连续存储器中某些类型的数据。<br>提供这样一个 API 的主要动机是：消除在只读取时复制数据的必要性，澄清缓冲区的所有权转移语意，并将数据存储在连续的存储器中，其中读取访问速度非常快。 那些将使用该 API 的“其他库”一般都是用 C 写的，而且对性能十分敏感。 这一新协议意味着，如果我创建了一个 NumPy 的 int 数组，其他库可以直接访问底层内存缓冲区，而不是间接访问或者在使用该数据之前复制该数据。</p>
+<h4 id="现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？"><a href="#现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？" class="headerlink" title="现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？"></a>现在问题来了：什么类型的程序员会从快速、零拷贝的大量数据获取中受益呢？</h4><h4 id="当然是数据科学家了！"><a href="#当然是数据科学家了！" class="headerlink" title="当然是数据科学家了！"></a>当然是数据科学家了！</h4><p>让大讲台老师梳理一下事件的发展过程：<br>Oliphant 和 Banks 提出了 Python 的缓冲协议的修订，以简化对刚开始的 NumPy 项目工作所驱动的某些数据结构的底层内存的直接访问。<br>PEP 3118 提交，被认可，实施。<br>受益于 PEP 3118 的实现，Python 已悄然成为一个非常吸引人的编译语言。在此基础上，就有了很多基于 C 语言扩展的数字计算库被开发出来。<br>Python 和 Ruby 在网络上一决雌雄，大多数人认为“Web 开发语言之战”必有分晓。<br>随着磁存储设备价格暴跌，存储大量数据以供日后分析变得可行。<br>对新一代程序员的需求发生变化：具有统计学背景，最好还得有应用数学背景的，且先前有过一些编程经验的程序员开始被哄抢——数据科学家的时代来临了！<br>数据科学家们想寻找一种既具有表现力又快速的语言，所有的这些需求都指向于 Python。<br>后来，就如大家看到的那样，Python 受到万千宠爱，一跃成为了最受欢迎的编程语言。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/02/yuque/Python 风靡的原因/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Java 类加载机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/24/yuque/Java 类加载机制/">Java 类加载机制</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/24/yuque/Java 类加载机制/" class="archive-article-date">
+  	<time datetime="2019-04-24T06:42:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="什么是类加载机制"><a href="#什么是类加载机制" class="headerlink" title="什么是类加载机制"></a>什么是类加载机制</h3><p>众所周知我们编写的 Java 文件都是以.java 为后缀的文件，编译器会将我们编写的.java 的文件编译成.class 文件，简单来说类加载机制就是从文件系统将一系列的 class 文件读入 JVM 内存中为后续程序运行提供资源的动作。</p>
+<h3 id="类加载的流程"><a href="#类加载的流程" class="headerlink" title="类加载的流程"></a>类加载的流程</h3><p>我们先看下类加载的过程中有哪些阶段，后面再对其一一解释做了什么。<br><a href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader1.jpg" target="_blank" rel="noopener"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088172305-f0ac9a02-dc58-40ea-8956-5f2016e496d6.jpeg#align=left&amp;display=inline&amp;height=361&amp;originHeight=838&amp;originWidth=1730&amp;size=0&amp;status=done&amp;width=746" alt></a><br>简单画了一个图，从上图我们可以看出，类加载的整个过程有五个阶段，下面分别解释每个过程做了什么。</p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>通过一个类的完整路径查找此类字节码文件（class 文件即二进制文件）。将二进制文件的静态存储结构转化为方法区的运行时数据结构，并利用二进制流文件创建一个 Class 对象，存储在 Java 堆中用于对方法区的数据结构引用的入口；</p>
+<ol>
+<li><p>class 文件的来源：有一点需要注意的是类加载机制不仅可以从文件系统读取 class 文件，也可以通过网络获取，其他 jar 包或者其他程序生成，如 JSP 应用。</p>
+</li>
+<li><p>类加载器：讲到类加载不得不讲到类加载的顺序和类加载器。Java 中大概有四种类加载器，分别是：启动类加载器（Bootstrap ClassLoader），扩展类加载器（Extension ClassLoader），系统类加载器（System ClassLoader），自定义类加载器（Custom ClassLoader），依次属于继承关系（注意这里的继承不是 Java 类里面的 extends）</p>
+</li>
+</ol>
+<p><a href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader2.jpg" target="_blank" rel="noopener"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088171604-7777b8f7-0337-450a-8ff2-5e4e5bfb5a11.jpeg#align=left&amp;display=inline&amp;height=477&amp;originHeight=1084&amp;originWidth=1636&amp;size=0&amp;status=done&amp;width=720" alt></a></p>
+<ol start="3">
+<li><p>启动类加载器（Bootstrap ClassLoader）：主要负责加载存放在 Java_Home/jre/lib 下，或被-Xbootclasspath 参数指定的路径下的，并且能被虚拟机识别的类库（如 rt.jar，所有的 java.*开头的类均被 Bootstrap ClassLoader 加载），启动类加载器是无法被 Java 程序直接引用的。</p>
+</li>
+<li><p>扩展类加载器（Extension ClassLoader）：主要负责加载器由 sun.misc.Launcher\$ExtClassLoader 实现，它负责加载 Java_Home/jre/lib/ext 目录中，或者由 java.ext.dirs 系统变量指定的路径中的所有类库（如 javax.*开头的类），开发者可以直接使用扩展类加载器。</p>
+</li>
+<li><p>系统类加载器（System ClassLoader）：主要负责加载器由 sun.misc.Launcher\$AppClassLoader 来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
+</li>
+<li><p>自定义类加载器（Custom ClassLoader：自己开发的类加载器</p>
+</li>
+<li><p><strong>双亲委派原则</strong>：类加载器在加载 class 文件的时候，遵从双亲委派原则，意思是加载依次由父加载器先执行加载动作，只有当父加载器没有加载到 class 文件时才由子类加载器进行加载。这种机制很好的保证了 Java API 的安全性，使得 JDK 的代码不会被篡改。</p>
+</li>
+</ol>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证的过程只要是保证 class 文件的安全性和正确性，确保加载了该 class 文件不会导致 JVM 出现任何异常，不会危害 JVM 的自身安全。验证包括对文件格式的验证，元数据和字节码的验证。</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是为类变量进行内存分配和初始化零值的过程。注意这时候分配的是类变量的内存，这些内存会在方法区中分配。此时不会分配实例变量的内存，因为实例变量是在实例化对象时一起创建在 Java 堆中的。而且此时类变量是赋值为零值，即 int 类型的零值为 0，引用类型零值为 null，而不是代码中显示赋值的数值。</p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程。在 class 文件中常量池里面存放了字面量和符号引用，符号引用包括类和接口的全限定名以及字段和方法的名称与描述符。在 JVM 动态链接的时候需要根据这些符号引用来转换为直接引用存放内存使用。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>初始化的阶段是类加载的最后一步，这个阶段主要是执行 java 代码，进行相关初始化的动作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/24/yuque/Java 类加载机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mysql 中对 date datetime time timestamp 区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2000,275 +2179,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/《变量》金句摘要" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/yuque/《变量》金句摘要/">《变量》金句摘要</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/30/yuque/《变量》金句摘要/" class="archive-article-date">
-  	<time datetime="2019-03-30T17:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是倒数第三十本。<br>献给未来的自己。</p>
-<h1 id="看见中国社会小趋势"><a href="#看见中国社会小趋势" class="headerlink" title="看见中国社会小趋势"></a>看见中国社会小趋势</h1><p>历史从来都是一个“反转大师”不要忽视那些看似微弱的亮光。</p>
-<h1 id="看点-01"><a href="#看点-01" class="headerlink" title="看点 01"></a>看点 01</h1><h3 id="历史感"><a href="#历史感" class="headerlink" title="历史感"></a>历史感</h3><p>我们比任何时候都更需要历史感。<br>历史感让我们感受到自己的命运和他人的命运息息相关。<br>和历史的进程息息相关、历史感能帮助我们更好的活在当下。</p>
-<h3 id="长河模式和大树模式"><a href="#长河模式和大树模式" class="headerlink" title="长河模式和大树模式"></a>长河模式和大树模式</h3><p>描述 30 年的叙事模式不应该是“长河模式”，即传统历史作家惯用的按照时间顺序的编年史写法，让历史像江河一样流淌，我们选择的叙事模式是“大树模式”，即通过观察嫩芽和新枝，并不断把目光拉回母体，去感知中国这课大树的母体的生命力。</p>
-<h3 id="5-个变量"><a href="#5-个变量" class="headerlink" title="5 个变量"></a>5 个变量</h3><p>在 2018 年观察到的 5 个变量是大国博弈、技术赋能、新旧融合、自下而上、重建社群。</p>
-<h3 id="30-年"><a href="#30-年" class="headerlink" title="30 年"></a>30 年</h3><p>未来 30 年是中国历史上最重要的一段时期。我们已经进入一片没有航海图的水域，一系列重大的变化将挑战我们的认知。</p>
-<h3 id="满变量和小趋势"><a href="#满变量和小趋势" class="headerlink" title="满变量和小趋势"></a>满变量和小趋势</h3><p>我们用来展现历史面貌的方法是从慢变量中寻找小趋势。慢变量才是牵引历史进程的火车头。未来的时代，小众才是主流。</p>
-<h1 id="看点-02"><a href="#看点-02" class="headerlink" title="看点 02"></a>看点 02</h1><h3 id="混搭"><a href="#混搭" class="headerlink" title="混搭"></a>混搭</h3><p>除了极少数石破天惊的突破性及时外，大部分技术都是一种“混搭”，也就是说，它们把已经存在的技术用一种别人未曾想到过的方式重新大件起来。</p>
-<h3 id="寻找边缘"><a href="#寻找边缘" class="headerlink" title="寻找边缘"></a>寻找边缘</h3><p>在少有人注意到的边缘地带，交叉地带往往更容易找到技术的应用场景。</p>
-<h3 id="“工程师红利”和“市场红利”"><a href="#“工程师红利”和“市场红利”" class="headerlink" title="“工程师红利”和“市场红利”"></a>“工程师红利”和“市场红利”</h3><p>中国已经不再具备廉价劳动力优势，但仍然拥有大量的工程是资源，适于开展“劳动力密集型的研究与开发”，中国同时具有巨大的国内市场，适于开展“市场引致型的研究与开发”。</p>
-<h3 id="“群众路线”"><a href="#“群众路线”" class="headerlink" title="“群众路线”"></a>“群众路线”</h3><p>“群众路线”是一种整合了“工程师红利”和“市场红利”，专注于应用技术的快速应用，再用应用技术反作用于核心技术，用强大的市场力量诱使核心技术与自己一起演进的战略。</p>
-<h3 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h3><p>每一种技术都有自己的性格，每一个市场也都有自己的性格，只有当技术和市场投缘时，才能檫出火花。</p>
-<h3 id="赋能"><a href="#赋能" class="headerlink" title="赋能"></a>赋能</h3><p>在无人地带，新技术能充分发挥自己的先进优势，掌握更多的信息，为更多的普通人赋能，并进一步创造出新的需求，直至重建一个更生机勃勃的生态系统。</p>
-<h1 id="看点-03"><a href="#看点-03" class="headerlink" title="看点 03"></a>看点 03</h1><h4 id="5-个变量-1"><a href="#5-个变量-1" class="headerlink" title="5 个变量"></a>5 个变量</h4><p>我们在 2018 年观察到的 5 个变量<br>大国博弈、技术赋能、新旧<br>自下而上、重建社群。</p>
-<h1 id="看点-04"><a href="#看点-04" class="headerlink" title="看点 04"></a>看点 04</h1><h4 id="重建社群"><a href="#重建社群" class="headerlink" title="重建社群"></a>重建社群</h4><p>重建社群背后的逻辑是，人是一种社会动物，只有重建了社群，我们才能更好的发现自我，人们只有在公共生活中学会如何彼此相处，一个社会才能更加平等和谐，我们观察到的小趋势是在某些地方不管是在城市还是乡村，由于条件的变化和核心人物的推动，出现了一种从云到雨的趋势，原本松散的社群开始自发组织生长，虽然重建社群的力量现在还很弱小，但假以时日这种力量将大大改善我们的社会道德公共秩序。<br>2018 年，我们听到了很多负面的社会新闻:米脂杀人、衡阳撞车、高铁霸座……这个社会变得越来越糟糕了吗？其实这是一种误解。虽然从表面上看，<br>有些人只关心自我私利，但大家对集体生活的向往并没有泯灭。<br>中国人已经意识到，只有重建集体生活，才能更好地发现自我。<br>我看到的第五个变量就是:重建社群。有哪些地方的人们正在“凝结”起来，形成新的社群？<br>这些新的社群只是孤岛，还是将成为群岛？培养孩子也需要一个社群。我会带你到一所偏僻的农村小学看看。<br>2018 年，我找到的中国教育理念最先进的小学不是北京或上海的名校，而是山区里的一所农村小学。你不必吃惊，社会发展的剧情经常会有令人意想不到的转变。</p>
-<h1 id="看点-05"><a href="#看点-05" class="headerlink" title="看点 05"></a>看点 05</h1><h4 id="30-年-1"><a href="#30-年-1" class="headerlink" title="30 年"></a>30 年</h4><p>未来 30 年是中国历史上最重要的一段时期，我们已经进入一个没有航海图的水域，一系列重大的变化，将挑战我们的认知。</p>
-<h1 id="看点-06"><a href="#看点-06" class="headerlink" title="看点 06"></a>看点 06</h1><h4 id="慢变量和小趋势。"><a href="#慢变量和小趋势。" class="headerlink" title="慢变量和小趋势。"></a>慢变量和小趋势。</h4><p>我用来展现历史面貌的方法是从慢变量中寻找小趋势慢变量才是牵引历史进程的火车头，未来的时代小众才是主流</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">read</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课//" class="article-tag-list-link color2">课</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外//" class="article-tag-list-link color2">外</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外/阅//" class="article-tag-list-link color2">阅</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/课/外/阅/读//" class="article-tag-list-link color2">读</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/yuque/《变量》金句摘要/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/yuque自动化构建部署到github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/yuque/yuque自动化构建部署到github/">yuque自动化构建部署到github</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/29/yuque/yuque自动化构建部署到github/" class="archive-article-date">
-  	<time datetime="2019-03-29T16:10:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><a href="https://www.yuque.com/" target="_blank" rel="noopener">语雀</a>  是一款非常好用的知识管理网站（类似 GitBook)，它的编辑器非常好用，而且支持导出 Markdown，这篇文章是教你如何使用语雀的编辑器写静态博客。这里的静态博客用了 Hexo，Jekyll 也是没有问题的。</p>
-<h2 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h2><p>已经有 Hexo 博客的可以跳过。如果你是 Jekyll ，也可以跳过。</p>
-<ul>
-<li>安装 Node.js</li>
-<li><p>安装 Hexo 脚手架<br>| 1 | npm install -g hexo-cli |<br>| — | — |</p>
-</li>
-<li><p>初始化一个博客<br>| 123 | hexo init <folder>cd <folder>npm install |<br>| — | — |</folder></folder></p>
-</li>
-<li><p>其他设置和命令见：<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
-</li>
-</ul>
-<h2 id="安装语雀文章下载插件"><a href="#安装语雀文章下载插件" class="headerlink" title="安装语雀文章下载插件"></a>安装语雀文章下载插件</h2><p><a href="https://github.com/x-cold/yuque-hexo/" target="_blank" rel="noopener">yuque-hexo</a>  是一个 Node.js 环境下的语雀下载器，使用 npm 安装</p>
-<ul>
-<li><p>安装 yuque-hexo<br>| 1 | npm i -g yuque-hexo |<br>| — | — |</p>
-</li>
-<li><p>注册语雀，创建知识库，获得你的个人路径和知识库的名字，比如我的博客的知识库是  <a href="https://www.yuque.com/page/zhangyi-ul3zj" target="_blank" rel="noopener">https://www.yuque.com/page/</a>zhangyi-ul3zj</p>
-</li>
-<li>在 Hexo 博客的目录下面的 package.json 中，进行下面的配置</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"your hexo project"</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">"yuqueConfig"</span>: &#123;</span><br><span class="line">                   <span class="string">"cachePath"</span>: <span class="string">"yuque.json"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"adapter"</span>: <span class="string">"hexo"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"concurrency"</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"baseUrl"</span>: <span class="string">"https://www.yuque.com/api/v2"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"login"</span>: <span class="string">"zhangyi-ul3zj"</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">"repo"</span>: <span class="string">"blog"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"mdNameFormat"</span>: <span class="string">"title"</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">"postPath"</span>: <span class="string">"source/_posts"</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
-<li>同步文章<br>| 1 | yuque-hexo sync |<br>| — | — |</li>
-</ul>
-<p>PS: 插件支持 Front-matter，在语雀写文章的时候直接写在前面，然后插入一条分割线即可，不写也没问题：</p>
-<table>
-<thead>
-<tr>
-<th>123</th>
-<th>tags: [Hexo]categories: 教程 date: 2018-10-05 10:43:50</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="手动启动-部署-Hexo-博客"><a href="#手动启动-部署-Hexo-博客" class="headerlink" title="手动启动/部署 Hexo 博客"></a>手动启动/部署 Hexo 博客</h2><ul>
-<li><p>本地启动（调试用）<br>| 1 | hexo s |<br>| — | — |</p>
-</li>
-<li><p>生成 html 不部署<br>| 1 | hexo g |<br>| — | — |</p>
-</li>
-<li><p>自动上传到服务器/静态空间/git （部署）</p>
-</li>
-</ul>
-<ol>
-<li><p>先找到一个部署插件</p>
-</li>
-<li><p>在配置文件中配置好相关的账号密码</p>
-</li>
-<li><p>在 hexo 中生成 HTML 并且部署</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo g -d</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="Travis-ci-severless"><a href="#Travis-ci-severless" class="headerlink" title="Travis-ci + severless"></a>Travis-ci + severless</h3><p>可以参考原文：<a href="https://segmentfault.com/a/1190000017797561" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017797561</a><br>Travis_ci 具体配置<br>可以参考：<a href="https://www.cnblogs.com/morang/p/7228488.html" target="_blank" rel="noopener">https://www.cnblogs.com/morang/p/7228488.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教//" class="article-tag-list-link color2">教</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教/程//" class="article-tag-list-link color2">程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/29/yuque/yuque自动化构建部署到github/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
@@ -2386,6 +2296,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">read</a>
               </li>
              
@@ -2395,10 +2309,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
             
             <div class="clearfix"></div>

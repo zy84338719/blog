@@ -16,7 +16,7 @@
 <meta property="og:description" content="在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。 这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cook">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-03-30T17:08:23.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:27.871Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:08.988Z">
 <meta property="article:author" content="Murphy Yi">
 <meta property="article:tag" content="learn">
 <meta name="twitter:card" content="summary">
@@ -47,7 +47,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -201,9 +201,11 @@ var _hmt = _hmt || [];
 <p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
 <p>通过服务器返回的信息获取会话例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">&quot;set-cookie&quot;</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">&quot;;&quot;</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其中的 session 格式为:  JSESSIONID=XXXXXXXXX</p>
 <p>获取 session ID 之后需要在每次发送请求的同时设置请求参数才能保持会话，例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">&quot;http://adugiudadiugb&quot;</span>);</span><br><span class="line"></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">this</span>.sessionID.equals(<span class="string">&quot;&quot;</span>))&#123;<span class="comment">//如果sessionID存在，即存在会话</span></span><br><span class="line"></span><br><span class="line">	connection.setRequestProperty(<span class="string">&quot;cookie&quot;</span>, <span class="keyword">this</span>.sessionID);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>只要 session ID 不改变，相应的会话也就不会改变</p>
 <p>小结：利用 Java 的 HttpURLConnection 进行请求发送时，如果需要保持同服务器的会话，需要先通过连接服务器获取 session ID ，之后发送请求加入 session ID 到请求参数中就可以了。</p>
 <p>注意：此时的服务器后台需要支持会话，即 Java Web 后台实现了 session。</p>

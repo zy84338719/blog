@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
   <title>wireguard | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="配置1.WireGuard 的主端配置首先我们创建一个 WireGuard 配置文件 1vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf 12345678[Interface]ListenPort &#x3D; 8001PrivateKey &#x3D; 填写本机的 privatekey 内容[Peer]PublicKey &#x3D; 填写对端的 public">
+  <meta name="description" content="配置1.WireGuard 的主端配置首先我们创建一个 WireGuard 配置文件 1vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf  12345678[Interface]ListenPort &#x3D; 8001PrivateKey &#x3D; 填写本机的 privatekey 内容[Peer]PublicKey &#x3D; 填写对端的 publi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="wireguard">
 <meta property="og:url" content="http://zy84338719.github.io/blog/2021/02/15/yuque/wireguard/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="配置1.WireGuard 的主端配置首先我们创建一个 WireGuard 配置文件 1vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf 12345678[Interface]ListenPort &#x3D; 8001PrivateKey &#x3D; 填写本机的 privatekey 内容[Peer]PublicKey &#x3D; 填写对端的 public">
+<meta property="og:description" content="配置1.WireGuard 的主端配置首先我们创建一个 WireGuard 配置文件 1vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf  12345678[Interface]ListenPort &#x3D; 8001PrivateKey &#x3D; 填写本机的 privatekey 内容[Peer]PublicKey &#x3D; 填写对端的 publi">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-15T15:16:30.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:30.043Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:11.176Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -46,7 +46,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -198,45 +198,70 @@ var _hmt = _hmt || [];
       
         <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-WireGuard-的主端配置"><a href="#1-WireGuard-的主端配置" class="headerlink" title="1.WireGuard 的主端配置"></a>1.WireGuard 的主端配置</h3><p>首先我们创建一个 WireGuard 配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8001</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.12&#x2F;32,172.16.12.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8002</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
+
 <p>然后我们需要创建一个网卡配置文件（此配置等价于移动客户端的 Interface 配置）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.11</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
 <p>接着我们需要创建一个网卡路由文件（由于对方存在 172.16.12.0/24 这个 IP 地址段的前提下）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.12.0&#x2F;24 via 172.16.1.12 dev wg0</span><br></pre></td></tr></table></figure>
+
 <p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
 <h3 id="2-WireGuard-的对端配置"><a href="#2-WireGuard-的对端配置" class="headerlink" title="2.WireGuard 的对端配置"></a>2.WireGuard 的对端配置</h3><p>在对端设备，我们依然需要创建一个 WireGuard 配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32,172.16.11.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
+
 <p>然后我们需要创建一个网卡配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.12</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
 <p>接着我们需要创建一个网卡路由文件（假设对方存在 172.16.11.0/24 这个 IP 地址段的前提下）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.11.0&#x2F;24 via 172.16.1.11 dev wg0</span><br></pre></td></tr></table></figure>
+
 <p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br></pre></td></tr></table></figure>
+
 <h3 id="3-WireGuard-的自动启动"><a href="#3-WireGuard-的自动启动" class="headerlink" title="3.WireGuard 的自动启动"></a>3.WireGuard 的自动启动</h3><p>第一种方案你需要编辑并添加开机启动项（手动模式推荐）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line">wg setconf wg0 &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+
 <p>注意 CentOS7 默认此文件没有执行权限，你需要赋予执行权限</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
 <p>做完操作后你可以使用开机启动项的三条命令直接启用 WireGuard 进程<br>第二种方案则是需要在 Interface 里写入以下信息（注意替换 eth0 为你的互联网出口网卡，并且如果使用 wg-quick 则不需要本例 PostUp 和 PostDown 两个 iptables 命令）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
 <p>注意这样启动后网卡本身是没有防火墙区域的，你需要手动绑定一个区域</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;work --add-interface&#x3D;wg0 --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
 <p>然后设置 systemd 自动启动即可</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@wg0</span><br><span class="line">systemctl start wg-quick@wg0</span><br></pre></td></tr></table></figure>
+
 <h2 id="WireGuard-配置说明"><a href="#WireGuard-配置说明" class="headerlink" title="WireGuard 配置说明"></a>WireGuard 配置说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002  #本机监听 WireGuard 端口</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容  #本机加密私钥</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">#Table &#x3D; 100 #强制本机将注入系统的路由的 table 指定为 100 ( 系统默认为 255 和 254 )</span><br><span class="line">#PostUp &#x3D; ip rule add from 10.10.1.0&#x2F;24 table 100 ; ip rule add from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">#PreDown &#x3D; ip rule delete from 10.10.1.0&#x2F;24 table 100 ; ip rule delete from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容  #本机加密的对端公钥（加密后数据仅对端可以解密）</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32  #本机允许的对端设备的 IP 地址段，其实就是在本机中这个虚拟网卡对端都有哪些设备 IP 地址（多 peer 不可重复）</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001  #对端 WireGuard 的外部 IP（可以有一侧的 IP 地址是虚假的公网 IP）</span><br><span class="line">PersistentKeepalive &#x3D; 25   #当会话存在一端 IP 地址为 NAT 地址或虚假公网 IP 地址时，由该方阶段性每 25 秒发送 keepalive 报文保持会话的可用性，防止被设备终止。</span><br></pre></td></tr></table></figure>
+
 <p>在上方基础上，额外要注意的是<br>1、如果你存在多个 [Peer] ，则在下面直接增加一个新的 [Peer] 栏目<br>2、如果多个 Peer 存在不同的 IP，请不要让 AllowedIPs 存在重叠的 IP 地址段（比如配置多个相同/24 只有一个生效）<br>3、Endpoint 既支持以域名的方式访问，也支持以 IP 的方式访问。<br>4、会话链接的建立只要保证两端数据在一台设备上成功协商，即使有一端 IP 地址后期变更过也不会影响 VPN 的稳定性。<br>5、使用命令 wg 可以看到当前服务的运行情况。<br>6、如果你是本来打算连服务器的移动端，则在配置中你需要将移动端的 “AllowedIPs =” 补写一条内容 0.0.0.0/0,::0 以允许所有流量<br>7、前面标注 # 的三条内容，作为 iproute2 的使用方式，通过指定路由条目的 table 与 ip rule 联动控制策略流量转发。<br>8、PreUp，PostUp，PreDown，PostDown 这四个命令参数，是作为 wg-quick 快速设置/删除接口之前/之后由 bash（1）执行的四条命令，常用于配置自定义 DNS 或防火墙规则。 特殊字符串 ％i 作为变量替代所控制的 INTERFACE 配置名。 每个命令参数都支持多条命令，参数内的多条命令将按前后顺序依次执行。</p>
 <h2 id="WireGuard-的快速启动配置文件"><a href="#WireGuard-的快速启动配置文件" class="headerlink" title="WireGuard 的快速启动配置文件"></a>WireGuard 的快速启动配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;myserver.conf</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">#PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">#PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">ListenPort &#x3D; 8000</span><br><span class="line">PrivateKey &#x3D; 填写一份 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写一份 publicKey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.11.1&#x2F;32</span><br></pre></td></tr></table></figure>
+
 <p>此配置完毕后 配置文件名为 myserver ，可以直接输入 wg-quick up myserver 启动进程<br>（如果启动失败可以先 down 一次再 up 一次）<br>（如果你是 iptables 则使用两条 iptables 命令，去掉前面的＃并记得修改 eth0 为当前系统公网网卡即可）<br>然后将新设备绑定到指定区域中，并配置好地址转换</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;external --add-interface&#x3D;myserver --permanent</span><br><span class="line">firewall-cmd --zone&#x3D;external --add-masquerade --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
 <p>最后一样配置开机启动即可（注意命令加入的位置，在此将标准配置版的 WireGuard 进程予以注释，如果同时使用请删掉 # 字符。）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@myserver</span><br><span class="line">systemctl start wg-quick@myserver</span><br></pre></td></tr></table></figure>
+
       
 
       

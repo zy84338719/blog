@@ -44,7 +44,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -175,6 +175,432 @@ var _hmt = _hmt || [];
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">dockerfile 的学习</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2019-04-09T07:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在  <a target="_blank" rel="noopener" href="https://mrbird.cc/Docker-Image-Container.html">Docker 镜像与容器</a>  一节中我们通过 Dockerfile 构建了镜像，这节我们来了解下 Dockerfile 的语法。Dockerfile 包含了诸多关键字，所以要学习 Dockerfile 的用法，得先从这些关键字入手。</p>
+<h2 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h2><p>位于 Dockerfile 开头，表示基于什么镜像构建：</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">FROM scratch # 制作 base imageFROM ubuntu:16.04 #使用 ubuntu:16.04 这个 image</th>
+</tr>
+</thead>
+</table>
+<p>出于安全考虑，最好使用官方的 image 作为 base image。</p>
+<h2 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h2><p>Dockerfile 的元数据，描述作用。</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">LABEL version=”1.0” author=”mrbird” description=”dockerfile demo”</th>
+</tr>
+</thead>
+</table>
+<p>Dockerfile 最好都要有元数据，这样更易于理解。</p>
+<h2 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h2><p>运行命令，每次 run 都会生成一个图层，所以最好将命令合并:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuRUN apt-get update \ &amp;&amp; apt-get install -y vim</th>
+</tr>
+</thead>
+</table>
+<p><code>\</code>换行</p>
+<h2 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="WORKDIR"></a>WORKDIR</h2><p>用于指定工作目录，切换路径：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1234</th>
+<th align="left">FROM ubuntuWORKDIR /test # 没有则自动创建 test 目录 WORKDIR demoRUN pwd</th>
+</tr>
+</thead>
+</table>
+<p>输出 /test/demo。<br>最好不要用 RUN cd 来切换目录，而使用 WORKDIR，这样可以减少不必要的图层，尽量使用绝对目录。</p>
+<h2 id="ADD-amp-COPY"><a href="#ADD-amp-COPY" class="headerlink" title="ADD &amp; COPY"></a>ADD &amp; COPY</h2><p>ADD 和 COPY 都可以将构建环境中的文件或目录复制到镜像中，比如</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">WORKDIR /demoADD test test/</th>
+</tr>
+</thead>
+</table>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">WORKDIR /demoCOPY test test/</th>
+</tr>
+</thead>
+</table>
+<p>最终都会将 test 文件添加到/demo/test/目录下。<br>区别：</p>
+<ol>
+<li><p>ADD 添加的文件是压缩文件的话，会自动解压。</p>
+</li>
+<li><p>COPY 只能复制构建目录下的文件，ADD 可以添加一个构建上下文中的文件或目录，也可以是一个 URL，如：</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">ADD <a target="_blank" rel="noopener" href="http://wordpress.org/latest.zip">http://wordpress.org/latest.zip</a> /</th>
+</tr>
+</thead>
+</table>
+<h2 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h2><p>设置环境变量常量。</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">ENV MYSQL_VERSION 5.7RUN apt-get install -y mysql-server=”${MYSQL_VERSION}”</th>
+</tr>
+</thead>
+</table>
+<p>通过设定常量，可以提高可维护性。</p>
+<h2 id="VOLUME-amp-EXPOSE"><a href="#VOLUME-amp-EXPOSE" class="headerlink" title="VOLUME &amp; EXPOSE"></a>VOLUME &amp; EXPOSE</h2><p>存储和网络，这里先略，后面学习到这一块再说。</p>
+<h2 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h2><ol>
+<li><p>设置容器启动后默认执行的命令和参数。</p>
+</li>
+<li><p>docker run 指定了其他命令，CMD 命令会被忽略。</p>
+</li>
+<li><p>定义了多个 CMD，只有最后一个有效。</p>
+</li>
+</ol>
+<p>比如有如下 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1234</th>
+<th align="left">FROM ubuntuENV name mrbirdCMD echo “hello docker”CMD echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>构建镜像，运行：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">docker run [image]</th>
+</tr>
+</thead>
+</table>
+<p>输出 hello mrbird。<br>如果运行：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">docker run -it [image] /bin/bash</th>
+</tr>
+</thead>
+</table>
+<p>则没有输出。</p>
+<h2 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h2><ol>
+<li><p>设置容器启动时运行的命令。</p>
+</li>
+<li><p>不会被忽略，一定会执行。</p>
+</li>
+<li><p>一般写一个 shell 脚本作为 ENTRYPOINT。</p>
+</li>
+</ol>
+<p>比如 mongodb 官方 Dockerfile 末尾一段：</p>
+<table>
+<thead>
+<tr>
+<th align="left">12345</th>
+<th align="left">COPY docker-entrypoint.sh /usr/local/bin/ENTRYPOINT [“docker-entrypoint.sh”]EXPOSE 27017CMD [“mongod”]</th>
+</tr>
+</thead>
+</table>
+<p>ENTRYPOINT 和 CMD 结合使用有一个技巧：<br>比如有如下一个 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENTRYPOINT [“/bin/ls”]CMD []</th>
+</tr>
+</thead>
+</table>
+<p>意思是在 ubuntu 这个镜像上构建，通过 ENTRYPOINT 运行/bin/ls 命令，然后<code>CMD []</code>这行可以介绍额外的参数选项。<br>通过这个 Dockerfile 构建镜像后(image id 为 95c35bb00761)，分别运行下面这些命令来创建容器：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554795567882-75cc977e-f3e2-447d-8969-f6feb955605d.png#align=left&display=inline&height=543&originHeight=543&originWidth=555&size=0&status=done&width=555">ker<br>可以看到我们通过相同的镜像构建出了不同的容器。</p>
+<h2 id="Shell-和-Exec-格式"><a href="#Shell-和-Exec-格式" class="headerlink" title="Shell 和 Exec 格式"></a>Shell 和 Exec 格式</h2><p>在 Dockerfile 中，命令的写法有 Shell 格式和 Exec 格式：<br>Shell 格式的 Dockerfile 如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">RUN apt-get install -y vimCMD echo “hello world”ENTRYPOINTT echo “hello world”</th>
+</tr>
+</thead>
+</table>
+<p>Exec 格式如下所示:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">RUN [“apt-get”,”install”,”-y”,”vim”]CMD [“/bin/echo”,”hello world”]ENTRYPOINTT [“/bin/echo”,”hello world”]</th>
+</tr>
+</thead>
+</table>
+<p>在使用 Exec 格式的时候需要注意和常量的搭配使用问题，比如在 Shell 格式下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello mrbird。<br>但是在 Exec 格式下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/echo”,”hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello $name。<br>正确的写法是:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/bash”,”-c”,”echo hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技术//" class="article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/HTTP 状态码的完整列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/yuque/HTTP%20%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E5%AE%8C%E6%95%B4%E5%88%97%E8%A1%A8/">HTTP 状态码的完整列表</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/yuque/HTTP%20%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E5%AE%8C%E6%95%B4%E5%88%97%E8%A1%A8/" class="archive-article-date">
+  	<time datetime="2019-04-08T14:59:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>下面提供 HTTP 状态码的完整列表。点击链接可了解详情。您也可以访问  <a target="_blank" rel="noopener" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP 状态码上的 W3C 页获取更多信息</a>。<br>1xx（临时响应）<br>表示临时响应并需要请求者继续执行操作的状态码。</p>
+<table>
+<thead>
+<tr>
+<th>100（继续）</th>
+<th>请求者应当继续提出请求。服务器返回此代码表示已收到请求的第一部分，正在等待其余部分。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>101（切换协议）</td>
+<td>请求者已要求服务器切换协议，服务器已确认并准备切换。</td>
+</tr>
+</tbody></table>
+<p>2xx （成功）<br>表示成功处理了请求的状态码。</p>
+<p>| 200（成功） | 服务器已成功处理了请求。通常，这表示服务器提供了请求的网页。如果是对您的<br>robots.txt 文件显示此状态码，则表示 Googlebot 已成功检索到该文件。 |<br>| — | — |<br>| 201（已创建） | 请求成功并且服务器创建了新的资源。 |<br>| 202（已接受） | 服务器已接受请求，但尚未处理。 |<br>| 203（非授权信息） | 服务器已成功处理了请求，但返回的信息可能来自另一来源。 |<br>| 204（无内容） | 服务器成功处理了请求，但没有返回任何内容。 |<br>| 205（重置内容） | 服务器成功处理了请求，但没有返回任何内容。与 204<br>响应不同，此响应要求请求者重置文档视图（例如，清除表单内容以输入新内容）。 |<br>| 206（部分内容） | 服务器成功处理了部分 GET 请求。 |</p>
+<p>3xx （重定向）<br>要完成请求，需要进一步操作。通常，这些状态码用来重定向。Google 建议您在每次请求中使用重定向不要超过 5 次。您可以使用网站管理员工具查看一下 Googlebot 在抓取重定向网页时是否遇到问题。诊断下的<a target="_blank" rel="noopener" href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35156">网络抓取</a>页列出了由于重定向错误导致 Googlebot 无法抓取的网址。</p>
+<p>| 300（多种选择） | 针对请求，服务器可执行多种操作。服务器可根据请求者 (user agent)<br>选择一项操作，或提供操作列表供请求者选择。 |<br>| — | — |<br>| 301（永久移动） | 请求的网页已永久移动到新位置。服务器返回此响应（对 GET 或 HEAD<br>请求的响应）时，会自动将请求者转到新位置。您应使用此代码告诉 Googlebot 某个网页或网站已永久移动到新位置。 |<br>| 302（临时移动） | 服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来响应以后的请求。此代码与响应<br>GET 和 HEAD 请求的 301 代码类似，会自动将请求者转到不同的位置，但您不应使用此代码来告诉 Googlebot 某个网页或网站已经移动，因为<br>Googlebot 会继续抓取原有位置并编制索引。 |<br>| 303（查看其他位置） | 请求者应当对不同的位置使用单独的 GET 请求来检索响应时，服务器返回此代码。对于除<br>HEAD 之外的所有请求，服务器会自动转到其他位置。 |<br>| 304（未修改） | 自从上次请求后，请求的网页未修改过。服务器返回此响应时，不会返回网页内容。<br>如果网页自请求者上次请求后再也没有更改过，您应将服务器配置为返回此响应（称为<br>If-Modified-Since HTTP 标头）。服务器可以告诉 Googlebot 自从上次抓取后网页没有变更，进而节省带宽和开销。 |<br>|  <br>305（使用代理） | 请求者只能使用代理访问请求的网页。如果服务器返回此响应，还表示请求者应使用代理。 |<br>| 307（临时重定向） | 服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来响应以后的请求。此代码与响应<br>GET 和 HEAD 请求的 &lt;a href=answer.py?answer=&gt;301</a><br>代码类似，会自动将请求者转到不同的位置，但您不应使用此代码来告诉 Googlebot 某个页面或网站已经移动，因为 Googlebot<br>会继续抓取原有位置并编制索引。 |</p>
+<p>4xx（请求错误）</p>
+<p>这些状态码表示请求可能出错，妨碍了服务器的处理。</p>
+<table>
+<thead>
+<tr>
+<th>400（错误请求）</th>
+<th>服务器不理解请求的语法。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>401（未授权）</td>
+<td>请求要求身份验证。对于登录后请求的网页，服务器可能返回此响应。</td>
+</tr>
+<tr>
+<td>403（禁止）</td>
+<td>服务器拒绝请求。如果您在 Googlebot</td>
+</tr>
+</tbody></table>
+<p>尝试抓取您网站上的有效网页时看到此状态码（您可以在 Google 网站管理员工具诊断下的网络抓取页面上看到此信息），可能是您的服务器或主机拒绝了<br>Googlebot 访问。 |<br>| 404（未找到） | 服务器找不到请求的网页。例如，对于服务器上不存在的网页经常会返回此代码。<br>如果您的网站上没有 robots.txt 文件，而您在<br>Google 网站管理员工具<a target="_blank" rel="noopener" href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35237">“诊断”标签的<br>robots.txt 页</a>上看到此状态码，则这是正确的状态码。但是，如果您有<br>robots.txt 文件而又看到此状态码，则说明您的 robots.txt 文件可能命名错误或位于错误的位置（该文件应当位于顶级域，名为<br>robots.txt）。<br>如果对于 Googlebot<br>抓取的网址看到此状态码（在”诊断”标签的  <a target="_blank" rel="noopener" href="http://www.google.cn/support/webmasters/bin/answer.py?answer=35122">HTTP<br>错误页面</a>上），则表示 Googlebot<br>跟随的可能是另一个页面的无效链接（是旧链接或输入有误的链接）。 |<br>| 405（方法禁用） | 禁用请求中指定的方法。 |<br>| 406（不接受） | 无法使用请求的内容特性响应请求的网页。 |<br>| 407（需要代理授权） | 此状态码与 &lt;a<br>href=answer.py?answer=35128&gt;401（未授权）</a>类似，但指定请求者应当授权使用代理。如果服务器返回此响应，还表示请求者应当使用代理。 |<br>| 408（请求超时） | 服务器等候请求时发生超时。 |<br>| 409（冲突） | 服务器在完成请求时发生冲突。服务器必须在响应中包含有关冲突的信息。服务器在响应与前一个请求相冲突的<br>PUT 请求时可能会返回此代码，以及两个请求的差异列表。 |<br>| 410（已删除） | 如果请求的资源已永久删除，服务器就会返回此响应。该代码与<br>404（未找到）代码类似，但在资源以前存在而现在不存在的情况下，有时会用来替代 404 代码。如果资源已永久移动，您应使用 301 指定资源的新位置。 |<br>| 411（需要有效长度） | 服务器不接受不含有效内容长度标头字段的请求。 |<br>| 412（未满足前提条件） | 服务器未满足请求者在请求中设置的其中一个前提条件。 |<br>| 413（请求实体过大） | 服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 |<br>| 414（请求的 URI 过长） | 请求的 URI（通常为网址）过长，服务器无法处理。 |<br>| 415（不支持的媒体类型） | 请求的格式不受请求页面的支持。 |<br>| 416（请求范围不符合要求） | 如果页面无法提供请求的范围，则服务器会返回此状态码。 |<br>| 417（未满足期望值） | 服务器未满足”期望”请求标头字段的要求。 |</p>
+<p>5xx（服务器错误）<br>这些状态码表示服务器在处理请求时发生内部错误。这些错误可能是服务器本身的错误，而不是请求出错。</p>
+<table>
+<thead>
+<tr>
+<th>500（服务器内部错误）</th>
+<th>服务器遇到错误，无法完成请求。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>501（尚未实施）</td>
+<td>服务器不具备完成请求的功能。例如，服务器无法识别请求方法时可能会返回此代码。</td>
+</tr>
+<tr>
+<td>502（错误网关）</td>
+<td>服务器作为网关或代理，从上游服务器收到无效响应。</td>
+</tr>
+<tr>
+<td>503（服务不可用）</td>
+<td>服务器目前无法使用（由于超载或停机维护）。通常，这只是暂时状态。</td>
+</tr>
+<tr>
+<td>504（网关超时）</td>
+<td>服务器作为网关或代理，但是没有及时从上游服务器收到请求。</td>
+</tr>
+<tr>
+<td>505（HTTP 版本不受支持）</td>
+<td>服务器不支持请求中所用的 HTTP 协议版本。</td>
+</tr>
+</tbody></table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技术//" class="article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/08/yuque/HTTP%20%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E5%AE%8C%E6%95%B4%E5%88%97%E8%A1%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-yuque/能力提升——计算机基础知识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -566,10 +992,13 @@ var _hmt = _hmt || [];
 </tbody></table>
 <h3 id="2-两段锁协议"><a href="#2-两段锁协议" class="headerlink" title="2. 两段锁协议"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e4%b8%a4%e6%ae%b5%e9%94%81%e5%8d%8f%e8%ae%ae">2. 两段锁协议</a></h3><p>加锁和解锁分为两个阶段进行。<br>可串行化调度是指，通过并发控制，使得并发执行的事务结果与某个串行执行的事务结果相同。<br>事务遵循两段锁协议是保证可串行化调度的充分条件。例如以下操作满足两段锁协议，它是可串行化调度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...lock-s(B)...lock-s(C)...unlock(A)...unlock(C)...unlock(B)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <p>但不是必要条件，例如以下操作不满足两段锁协议，但是它还是可串行化调度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock-x(A)...unlock(A)...lock-s(B)...unlock(B)...lock-s(C)...unlock(C)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h2 id="MySQL-隐式与显示锁定"><a href="#MySQL-隐式与显示锁定" class="headerlink" title="MySQL 隐式与显示锁定"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=mysql-%e9%9a%90%e5%bc%8f%e4%b8%8e%e6%98%be%e7%a4%ba%e9%94%81%e5%ae%9a">MySQL 隐式与显示锁定</a></h2><p>MySQL 的 InnoDB 存储引擎采用两段锁协议，会根据隔离级别在需要的时候自动加锁，并且所有的锁都是在同一时刻被释放，这被称为隐式锁定。<br>InnoDB 也可以使用特定的语句进行显示锁定：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... LOCK In SHARE MODE;</span><br><span class="line">SELECT ... FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="四、隔离级别"><a href="#四、隔离级别" class="headerlink" title="四、隔离级别"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%9b%9b%e3%80%81%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab">四、隔离级别</a></h1><h2 id="未提交读（READ-UNCOMMITTED）"><a href="#未提交读（READ-UNCOMMITTED）" class="headerlink" title="未提交读（READ UNCOMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%9c%aa%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-uncommitted%ef%bc%89">未提交读（READ UNCOMMITTED）</a></h2><p>事务中的修改，即使没有提交，对其它事务也是可见的。</p>
 <h2 id="提交读（READ-COMMITTED）"><a href="#提交读（READ-COMMITTED）" class="headerlink" title="提交读（READ COMMITTED）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e6%8f%90%e4%ba%a4%e8%af%bb%ef%bc%88read-committed%ef%bc%89">提交读（READ COMMITTED）</a></h2><p>一个事务只能读取已经提交的事务所做的修改。换句话说，一个事务所做的修改在提交之前对其它事务是不可见的。</p>
 <h2 id="可重复读（REPEATABLE-READ）"><a href="#可重复读（REPEATABLE-READ）" class="headerlink" title="可重复读（REPEATABLE READ）"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb%ef%bc%88repeatable-read%ef%bc%89">可重复读（REPEATABLE READ）</a></h2><p>保证在同一个事务中多次读取同样数据的结果是一样的。</p>
@@ -632,14 +1061,18 @@ var _hmt = _hmt || [];
 <h3 id="4-UPDATE"><a href="#4-UPDATE" class="headerlink" title="4. UPDATE"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_4-update">4. UPDATE</a></h3><p>将当前系统版本号作为更新前的数据行快照的删除版本号，并将当前系统版本号作为更新后的数据行快照的创建版本号。可以理解为先执行 DELETE 后执行 INSERT。</p>
 <h2 id="快照读与当前读"><a href="#快照读与当前读" class="headerlink" title="快照读与当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bf%ab%e7%85%a7%e8%af%bb%e4%b8%8e%e5%bd%93%e5%89%8d%e8%af%bb">快照读与当前读</a></h2><h3 id="1-快照读"><a href="#1-快照读" class="headerlink" title="1. 快照读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_1-%e5%bf%ab%e7%85%a7%e8%af%bb">1. 快照读</a></h3><p>使用 MVCC 读取的是快照中的数据，这样可以减少加锁所带来的开销。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table ...;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h3 id="2-当前读"><a href="#2-当前读" class="headerlink" title="2. 当前读"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=_2-%e5%bd%93%e5%89%8d%e8%af%bb">2. 当前读</a></h3><p>读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where ? lock in share mode;</span><br><span class="line">select * from table where ? for update;</span><br><span class="line">insert;</span><br><span class="line">update;</span><br><span class="line">delete;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="六、Next-Key-Locks"><a href="#六、Next-Key-Locks" class="headerlink" title="六、Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%85%ad%e3%80%81next-key-locks">六、Next-Key Locks</a></h1><p>Next-Key Locks 是 MySQL 的 InnoDB 存储引擎的一种锁实现。<br>MVCC 不能解决幻读的问题，Next-Key Locks 就是为了解决这个问题而存在的。在可重复读（REPEATABLE READ）隔离级别下，使用 MVCC + Next-Key Locks 可以解决幻读问题。</p>
 <h2 id="Record-Locks"><a href="#Record-Locks" class="headerlink" title="Record Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=record-locks">Record Locks</a></h2><p>锁定一个记录上的索引，而不是记录本身。<br>如果表没有设置索引，InnoDB 会自动在主键上创建隐藏的聚簇索引，因此 Record Locks 依然可以使用。</p>
 <h2 id="Gap-Locks"><a href="#Gap-Locks" class="headerlink" title="Gap Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=gap-locks">Gap Locks</a></h2><p>锁定索引之间的间隙，但是不包含索引本身。例如当一个事务执行以下语句，其它事务就不能在 t.c 中插入 15。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT c FROM t WHERE c BETWEEN 10 and 20 FOR UPDATE;Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h2 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=next-key-locks">Next-Key Locks</a></h2><p>它是 Record Locks 和 Gap Locks 的结合，不仅锁定一个记录上的索引，也锁定索引之间的间隙。例如一个索引包含以下值：10, 11, 13, and 20，那么就需要锁定以下区间：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(negative infinity, 10]</span><br><span class="line">(10, 11]</span><br><span class="line">(11, 13]</span><br><span class="line">(13, 20]</span><br><span class="line">(20, positive infinity)Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
 <h1 id="七、关系数据库设计理论"><a href="#七、关系数据库设计理论" class="headerlink" title="七、关系数据库设计理论"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e4%b8%83%e3%80%81%e5%85%b3%e7%b3%bb%e6%95%b0%e6%8d%ae%e5%ba%93%e8%ae%be%e8%ae%a1%e7%90%86%e8%ae%ba">七、关系数据库设计理论</a></h1><h2 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%87%bd%e6%95%b0%e4%be%9d%e8%b5%96">函数依赖</a></h2><p>记 A-&gt;B 表示 A 函数决定 B，也可以说 B 函数依赖于 A。<br>如果 {A1，A2，… ，An} 是关系的一个或多个属性的集合，该集合函数决定了关系的其它所有属性并且是最小的，那么该集合就称为键码。<br>对于 A-&gt;B，如果能找到 A 的真子集 A’，使得 A’-&gt; B，那么 A-&gt;B 就是部分函数依赖，否则就是完全函数依赖。<br>对于 A-&gt;B，B-&gt;C，则 A-&gt;C 是一个传递函数依赖。</p>
 <h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a><a href="https://zy84338719.github.io/CS_Note/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86?id=%e5%bc%82%e5%b8%b8">异常</a></h2><p>以下的学生课程关系的函数依赖为 Sno, Cname -&gt; Sname, Sdept, Mname, Grade，键码为 {Sno, Cname}。也就是说，确定学生和课程之后，就能确定其它信息。</p>
 <table>
@@ -971,6 +1404,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line">Linux：免费开源，多用户多任务，衍生出很多附属版本，例如常用的RedHat。。。</span><br><span class="line"></span><br><span class="line">常用指令</span><br><span class="line">ls　　        显示文件或目录</span><br><span class="line">     -l           列出文件详细信息l(list)</span><br><span class="line">     -a          列出当前目录下所有文件及目录，包括隐藏的a(all)</span><br><span class="line">mkdir         创建目录</span><br><span class="line">     -p           创建目录，若无父目录，则创建p(parent)</span><br><span class="line"><span class="built_in">cd</span>               切换目录</span><br><span class="line">touch          创建空文件</span><br><span class="line"><span class="built_in">echo</span>            创建带有内容的文件。</span><br><span class="line">cat              查看文件内容</span><br><span class="line">cp                拷贝</span><br><span class="line">mv               移动或重命名</span><br><span class="line">rm               删除文件</span><br><span class="line">     -r            递归删除，可删除子目录及文件</span><br><span class="line">     -f            强制删除</span><br><span class="line">find              在文件系统中搜索某文件</span><br><span class="line">wc                统计文本中行数、字数、字符数</span><br><span class="line">grep             在文本文件中查找某个字符串</span><br><span class="line">rmdir           删除空目录</span><br><span class="line">tree             树形结构显示目录，需要安装tree包</span><br><span class="line"><span class="built_in">pwd</span>              显示当前目录</span><br><span class="line">ln                  创建链接文件</span><br><span class="line">more、less  分页显示文本文件内容</span><br><span class="line">head、tail    显示文件头、尾内容</span><br><span class="line">ctrl+alt+F1  命令行全屏模式</span><br><span class="line"></span><br><span class="line">系统管理命令</span><br><span class="line"><span class="built_in">stat</span>              显示指定文件的详细信息，比ls更详细</span><br><span class="line">who               显示在线登陆用户</span><br><span class="line">whoami          显示当前操作用户</span><br><span class="line">hostname      显示主机名</span><br><span class="line">uname           显示系统信息</span><br><span class="line">top                动态显示当前耗费资源最多进程信息</span><br><span class="line">ps                  显示瞬间进程状态 ps -aux</span><br><span class="line">du                  查看目录大小 du -h /home带有单位显示目录信息</span><br><span class="line">df                  查看磁盘大小 df -h 带有单位显示磁盘信息</span><br><span class="line">ifconfig          查看网络情况</span><br><span class="line">ping                测试网络连通</span><br><span class="line">netstat          显示网络状态信息</span><br><span class="line">man                命令不会用了，找男人  如：man ls</span><br><span class="line">clear              清屏</span><br><span class="line"><span class="built_in">alias</span>               对命令重命名 如：<span class="built_in">alias</span> showmeit=<span class="string">&quot;ps -aux&quot;</span> ，另外解除使用unaliax showmeit</span><br><span class="line"><span class="built_in">kill</span>                 杀死进程，可以先用ps 或 top命令查看进程的id，然后再用<span class="built_in">kill</span>命令杀死进程。</span><br><span class="line"></span><br><span class="line">打包压缩相关命令</span><br><span class="line">gzip：</span><br><span class="line">bzip2：</span><br><span class="line">tar:                打包压缩</span><br><span class="line">     -c              归档文件</span><br><span class="line">     -x              压缩文件</span><br><span class="line">     -z              gzip压缩文件</span><br><span class="line">     -j              bzip2压缩文件</span><br><span class="line">     -v              显示压缩或解压缩过程 v(view)</span><br><span class="line">     -f              使用档名</span><br><span class="line">例：</span><br><span class="line">tar -cvf /home/abc.tar /home/abc              只打包，不压缩</span><br><span class="line">tar -zcvf /home/abc.tar.gz /home/abc        打包，并用gzip压缩</span><br><span class="line">tar -jcvf /home/abc.tar.bz2 /home/abc      打包，并用bzip2压缩</span><br><span class="line">当然，如果想解压缩，就直接替换上面的命令  tar -cvf  / tar -zcvf  / tar -jcvf 中的“c” 换成“x” 就可以了。</span><br><span class="line"></span><br><span class="line">关机/重启机器</span><br><span class="line">shutdown</span><br><span class="line">     -r             关机重启</span><br><span class="line">     -h             关机不重启</span><br><span class="line">     now          立刻关机</span><br><span class="line">halt               关机</span><br><span class="line">reboot          重启</span><br><span class="line"></span><br><span class="line">Linux管道</span><br><span class="line">将一个命令的标准输出作为另一个命令的标准输入。也就是把几个命令组合起来使用，后一个命令除以前一个命令的结果。</span><br><span class="line">例：grep -r <span class="string">&quot;close&quot;</span> /home/* | more       在home目录下所有文件中查找，包括close的文件，并分页输出。</span><br><span class="line"></span><br><span class="line">Linux软件包管理</span><br><span class="line">dpkg (Debian Package)管理工具，软件包名以.deb后缀。这种方法适合系统不能联网的情况下。</span><br><span class="line">比如安装tree命令的安装包，先将tree.deb传到Linux系统中。再使用如下命令安装。</span><br><span class="line">sudo dpkg -i tree_1.5.3-1_i386.deb         安装软件</span><br><span class="line">sudo dpkg -r tree                                     卸载软件</span><br><span class="line"></span><br><span class="line">注：将tree.deb传到Linux系统中，有多种方式。VMwareTool，使用挂载方式；使用winSCP工具等；</span><br><span class="line">APT（Advanced Packaging Tool）高级软件工具。这种方法适合系统能够连接互联网的情况。</span><br><span class="line">依然以tree为例</span><br><span class="line">sudo apt-get install tree                         安装tree</span><br><span class="line">sudo apt-get remove tree                       卸载tree</span><br><span class="line">sudo apt-get update                                 更新软件</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line"></span><br><span class="line">将.rpm文件转为.deb文件</span><br><span class="line">.rpm为RedHat使用的软件格式。在Ubuntu下不能直接使用，所以需要转换一下。</span><br><span class="line">sudo alien abc.rpm</span><br><span class="line"></span><br><span class="line">vim使用</span><br><span class="line">vim三种模式：命令模式、插入模式、编辑模式。使用ESC或i或：来切换模式。</span><br><span class="line">命令模式下：</span><br><span class="line">:q                      退出</span><br><span class="line">:q!                     强制退出</span><br><span class="line">:wq                   保存并退出</span><br><span class="line">:<span class="built_in">set</span> number     显示行号</span><br><span class="line">:<span class="built_in">set</span> nonumber  隐藏行号</span><br><span class="line">/apache            在文档中查找apache 按n跳到下一个，<span class="built_in">shift</span>+n上一个</span><br><span class="line">yyp                   复制光标所在行，并粘贴</span><br><span class="line">h(左移一个字符←)、j(下一行↓)、k(上一行↑)、l(右移一个字符→)</span><br><span class="line"></span><br><span class="line">用户及用户组管理</span><br><span class="line">/etc/passwd    存储用户账号</span><br><span class="line">/etc/group       存储组账号</span><br><span class="line">/etc/shadow    存储用户账号的密码</span><br><span class="line">/etc/gshadow  存储用户组账号的密码</span><br><span class="line">useradd 用户名</span><br><span class="line">userdel 用户名</span><br><span class="line">adduser 用户名</span><br><span class="line">groupadd 组名</span><br><span class="line">groupdel 组名</span><br><span class="line">passwd root     给root设置密码</span><br><span class="line">su root</span><br><span class="line">su - root</span><br><span class="line">/etc/profile     系统环境变量</span><br><span class="line">bash_profile     用户环境变量</span><br><span class="line">.bashrc              用户环境变量</span><br><span class="line">su user              切换用户，加载配置文件.bashrc</span><br><span class="line">su - user            切换用户，加载配置文件/etc/profile ，加载bash_profile</span><br><span class="line">更改文件的用户及用户组</span><br><span class="line">sudo chown [-R] owner[:group] &#123;File|Directory&#125;</span><br><span class="line">例如：还以jdk-7u21-linux-i586.tar.gz为例。属于用户hadoop，组hadoop</span><br><span class="line">要想切换此文件所属的用户及组。可以使用命令。</span><br><span class="line">sudo chown root:root jdk-7u21-linux-i586.tar.gz</span><br><span class="line"></span><br><span class="line">文件权限管理</span><br><span class="line">三种基本权限</span><br><span class="line">R           读         数值表示为4</span><br><span class="line">W          写         数值表示为2</span><br><span class="line">X           可执行  数值表示为1</span><br><span class="line">如图所示，jdk-7u21-linux-i586.tar.gz文件的权限为-rw-rw-r--</span><br><span class="line">-rw-rw-r--一共十个字符，分成四段。</span><br><span class="line">第一个字符“-”表示普通文件；这个位置还可能会出现“l”链接；“d”表示目录</span><br><span class="line">第二三四个字符“rw-”表示当前所属用户的权限。   所以用数值表示为4+2=6</span><br><span class="line">第五六七个字符“rw-”表示当前所属组的权限。      所以用数值表示为4+2=6</span><br><span class="line">第八九十个字符“r--”表示其他用户权限。              所以用数值表示为2</span><br><span class="line">所以操作此文件的权限用数值表示为662</span><br><span class="line">更改权限</span><br><span class="line">sudo chmod [u所属用户  g所属组  o其他用户  a所有用户]  [+增加权限  -减少权限]  [r  w  x]   目录名</span><br><span class="line">例如：有一个文件filename，权限为“-rw-r----x” ,将权限值改为<span class="string">&quot;-rwxrw-r-x&quot;</span>，用数值表示为765</span><br><span class="line">sudo chmod u+x g+w o+r  filename</span><br><span class="line">上面的例子可以用数值表示</span><br><span class="line">sudo chmod 765 filename</span><br></pre></td></tr></table></figure>
+
       
 
       
@@ -1230,9 +1664,11 @@ var _hmt = _hmt || [];
 <p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
 <p>通过服务器返回的信息获取会话例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">&quot;set-cookie&quot;</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">&quot;;&quot;</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其中的 session 格式为:  JSESSIONID=XXXXXXXXX</p>
 <p>获取 session ID 之后需要在每次发送请求的同时设置请求参数才能保持会话，例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">&quot;http://adugiudadiugb&quot;</span>);</span><br><span class="line"></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">this</span>.sessionID.equals(<span class="string">&quot;&quot;</span>))&#123;<span class="comment">//如果sessionID存在，即存在会话</span></span><br><span class="line"></span><br><span class="line">	connection.setRequestProperty(<span class="string">&quot;cookie&quot;</span>, <span class="keyword">this</span>.sessionID);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>只要 session ID 不改变，相应的会话也就不会改变</p>
 <p>小结：利用 Java 的 HttpURLConnection 进行请求发送时，如果需要保持同服务器的会话，需要先通过连接服务器获取 session ID ，之后发送请求加入 session ID 到请求参数中就可以了。</p>
 <p>注意：此时的服务器后台需要支持会话，即 Java Web 后台实现了 session。</p>
@@ -1467,6 +1903,7 @@ var _hmt = _hmt || [];
 </li>
 </ul>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;your hexo project&quot;</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">&quot;yuqueConfig&quot;</span>: &#123;</span><br><span class="line">                   <span class="string">&quot;cachePath&quot;</span>: <span class="string">&quot;yuque.json&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;adapter&quot;</span>: <span class="string">&quot;hexo&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;concurrency&quot;</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;baseUrl&quot;</span>: <span class="string">&quot;https://www.yuque.com/api/v2&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;login&quot;</span>: <span class="string">&quot;zhangyi-ul3zj&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;repo&quot;</span>: <span class="string">&quot;blog&quot;</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">&quot;mdNameFormat&quot;</span>: <span class="string">&quot;title&quot;</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">&quot;postPath&quot;</span>: <span class="string">&quot;source/_posts&quot;</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
 <li>同步文章<table>
@@ -1632,298 +2069,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/28/yuque/mysql%20%E7%9A%84%20%E6%9C%8D%E5%8A%A1%E5%B1%82%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/JDK11新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/">JDK11新特性</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2019-03-25T05:28:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="一、JDK11-新特性一览"><a href="#一、JDK11-新特性一览" class="headerlink" title="一、JDK11 新特性一览"></a>一、JDK11 新特性一览</h1><ul>
-<li>181: Nest-Based Access Control</li>
-<li>309: Dynamic Class-File Constants</li>
-<li>315: Improve Aarch64 Intrinsics</li>
-<li>318: Epsilon: A No-Op Garbage Collector</li>
-<li>320: Remove the Java EE and CORBA Modules</li>
-<li>321: HTTP Client (Standard)</li>
-<li>323: Local-Variable Syntax for Lambda Parameters</li>
-<li>324: Key Agreement with Curve25519 and Curve448</li>
-<li>327: Unicode 10</li>
-<li>328: Flight Recorder</li>
-<li>329: ChaCha20 and Poly1305 Cryptographic Algorithms</li>
-<li>330: Launch Single-File Source-Code Programs</li>
-<li>331: Low-Overhead Heap Profiling</li>
-<li>332: Transport Layer Security (TLS) 1.3</li>
-<li>333: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</li>
-<li>335: Deprecate the Nashorn JavaScript Engine</li>
-<li>336: Deprecate the Pack200 Tools and API</li>
-</ul>
-<h1 id="二、JDK11-发布计划"><a href="#二、JDK11-发布计划" class="headerlink" title="二、JDK11 发布计划"></a>二、JDK11 发布计划</h1><table>
-<thead>
-<tr>
-<th>日期</th>
-<th>阶段</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2018/06/28</td>
-<td>Rampdown Phase One (fork from main line)</td>
-<td>对进入 Rampdown 阶段的变化会应用越来越严格的审查。在阶段 1 中，只能修复 P1-P3 错误。</td>
-</tr>
-<tr>
-<td>2018/07/26</td>
-<td>Rampdown Phase Two</td>
-<td>在阶段 2 中，只能修复 showstopper 错误</td>
-</tr>
-<tr>
-<td>2018/08/16</td>
-<td>Initial Release Candidate</td>
-<td></td>
-</tr>
-<tr>
-<td>2018/08/30</td>
-<td>Final Release Candidate</td>
-<td>在此阶段必须宣布最终候选版的发布日期并提交以进行测试</td>
-</tr>
-<tr>
-<td>2018/09/25</td>
-<td>General Availability</td>
-<td>最终版本，可在生产环境正式使用</td>
-</tr>
-</tbody></table>
-<h1 id="三、JDK11-特性解读"><a href="#三、JDK11-特性解读" class="headerlink" title="三、JDK11 特性解读"></a>三、JDK11 特性解读</h1><h2 id="JEP-181-Nest-Based-Access-Control（基于嵌套的访问控制）"><a href="#JEP-181-Nest-Based-Access-Control（基于嵌套的访问控制）" class="headerlink" title="JEP 181: Nest-Based Access Control（基于嵌套的访问控制）"></a>JEP 181: Nest-Based Access Control（基于嵌套的访问控制）</h2><h2 id="JEP-309-Dynamic-Class-File-Constants（动态类文件常量）"><a href="#JEP-309-Dynamic-Class-File-Constants（动态类文件常量）" class="headerlink" title="JEP 309: Dynamic Class-File Constants（动态类文件常量）"></a>JEP 309: Dynamic Class-File Constants（动态类文件常量）</h2><p>Java 的类型文件格式将被拓展，支持一种新的常量池格式：CONSTANT_Dynamic，加载 CONSTANT_Dynamic 会将创建委托给 bootstrap 方法。</p>
-<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>其目标是降低开发新形式的可实现类文件约束带来的成本和干扰。</p>
-<h2 id="JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）"><a href="#JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）" class="headerlink" title="JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）"></a>JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）</h2><h2 id="JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）"><a href="#JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）" class="headerlink" title="JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）"></a>JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）</h2><p>JDK 上对这个特性的描述是：开发一个处理内存分配但不实现任何实际内存回收机制的 GC，一旦可用堆内存用完，JVM 就会退出。<br>如果有 System.gc()的调用，实际上什么也不会发生（这种场景下和-XX:+DisableExplicitGC 效果一样），因为没有内存回收，这个实现可能会警告用户尝试强制 GC 是徒劳。<br>用法非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseEpsilonGC。</span><br></pre></td></tr></table></figure>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>提供完全被动的 GC 实现，具有有限的分配限制和尽可能低的延迟开销，但代价是内存占用和内存吞吐量。<br>众所周知，Java 实现可广泛选择高度可配置的 GC 实现。 各种可用的收集器最终满足不同的需求，即使它们的可配置性使它们的功能相交。 有时更容易维护单独的实现，而不是在现有 GC 实现上堆积另一个配置选项。<br>它的主要用途如下：</p>
-<ul>
-<li>性能测试（它可以帮助过滤掉 GC 引起的性能假象）；</li>
-<li>内存压力测试（例如，知道测试用例应该分配不超过 1 GB 的内存，我们可以使用-Xmx1g 配置-XX:+UseEpsilonGC，如果违反了该约束，则会 heap dump 并崩溃）；</li>
-<li>非常短的 JOB 任务（对于这种任务，接受 GC 清理堆那都是浪费空间）；</li>
-<li>VM 接口测试；</li>
-<li>Last-drop 延迟&amp;吞吐改进；</li>
-</ul>
-<h2 id="JEP-320-Remove-the-Java-EE-and-CORBA-Modules（删除-Java-EE-和-CORBA-模块）"><a href="#JEP-320-Remove-the-Java-EE-and-CORBA-Modules（删除-Java-EE-和-CORBA-模块）" class="headerlink" title="JEP 320: Remove the Java EE and CORBA Modules（删除 Java EE 和 CORBA 模块）"></a>JEP 320: Remove the Java EE and CORBA Modules（删除 Java EE 和 CORBA 模块）</h2><p>Java EE 和 CORBA 两个模块在 JDK9 中已经标记”deprecated”，在 JDK11 中正式移除。JDK 中 deprecated 的意思是在不建议使用，在未来的 release 版本会被删除。</p>
-<h3 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h3><p>JavaEE 由 4 部分组成：</p>
-<ul>
-<li>JAX-WS (Java API for XML-Based Web Services),</li>
-<li>JAXB (Java Architecture for XML Binding)</li>
-<li>JAF (the JavaBeans Activation Framework)</li>
-<li>Common Annotations.</li>
-</ul>
-<p>但是这个特性和 JavaSE 关系不大。并且 JavaEE 被维护在 Github（<a target="_blank" rel="noopener" href="https://github.com/javaee">https://github.com/javaee</a>）中，版本同步造成维护困难。最后，JavaEE 可以单独引用，maven 中心仓库也提供了 JavaEE（<a target="_blank" rel="noopener" href="http://mvnrepository.com/artifact/javax/javaee-api/8.0">http://mvnrepository.com/artifact/javax/javaee-api/8.0</a>），所以没必要把 JavaEE 包含到 JavaSE 中。<br>至于 CORBA，使用 Java 中的 CORBA 开发程序没有太大的兴趣。因此，在 JavaEE 就把 CORBA 标记为”Proposed Optional”，这就表明将来可能会放弃对这些技术的必要支持。</p>
-<h2 id="JEP-321-HTTP-Client-Standard-（标准-HTTP-客户端）"><a href="#JEP-321-HTTP-Client-Standard-（标准-HTTP-客户端）" class="headerlink" title="JEP 321: HTTP Client (Standard)（标准 HTTP 客户端）"></a>JEP 321: HTTP Client (Standard)（标准 HTTP 客户端）</h2><p>将 JDK9 引进并孵化的 HTTP 客户端 API 作为标准，即 HTTP/2 Client。它定义了一个全新的实现了 HTTP/2 和 WebSocket 的 HTTP 客户端 API，并且可以取代 HttpURLConnection。<br>动机<br>已经存在的 HttpURLConnection 有如下问题:</p>
-<ul>
-<li>在设计时考虑了多种协议，但是现在几乎所有协议现已不存在。</li>
-<li>API 早于 HTTP/1.1 并且太抽象；</li>
-<li>使用很不友好；</li>
-<li>只能以阻塞模式工作；</li>
-<li>非常难维护；</li>
-</ul>
-<h2 id="JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）"><a href="#JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）" class="headerlink" title="JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）"></a>JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）</h2><p>在声明隐式类型的 lambda 表达式的形参时允许使用 var。</p>
-<h3 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h3><p>lamdba 表达式可能是隐式类型的，它形参的所有类型全部靠推到出来的。隐式类型 lambda 表达式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x, y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-<p>Java SE 10 让隐式类型变量可用于本地变量:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo &#x3D; new Foo();</span><br><span class="line">for (var foo : foos) &#123; ... &#125;</span><br><span class="line">try (var foo &#x3D; ...) &#123; ... &#125; catch ...</span><br></pre></td></tr></table></figure>
-<p>为了和本地变量保持一致，我们希望允许 var 作为隐式类型 lambda 表达式的形参：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(var x, var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-<p>统一格式的一个好处就是 modifiers 和 notably 注解能被加在本地变量和 lambda 表达式的形参上，并且不会丢失简洁性：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Nonnull var x &#x3D; new Foo();</span><br><span class="line">(@Nonnull var x, @Nullable var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-<h2 id="JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）"><a href="#JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）" class="headerlink" title="JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）"></a>JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）</h2><p>用 RFC 7748 中描述到的 Curve25519 和 Curve448 实现秘钥协议。RFC 7748 定义的秘钥协商方案更高效，更安全。这个 JEP 的主要目标就是为这个标准定义 API 和实现。</p>
-<h3 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h3><p>密码学要求使用 Curve25519 和 Curve448 是因为它们的安全性和性能。JDK 会增加两个新的接口 XECPublicKey 和 XECPrivateKey，示例代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">KeyPairGenerator kpg &#x3D; KeyPairGenerator.getInstance(&quot;XDH&quot;);</span><br><span class="line">NamedParameterSpec paramSpec &#x3D; new NamedParameterSpec(&quot;X25519&quot;);</span><br><span class="line">kpg.initialize(paramSpec); &#x2F;&#x2F; equivalent to kpg.initialize(255)</span><br><span class="line">&#x2F;&#x2F; alternatively: kpg &#x3D; KeyPairGenerator.getInstance(&quot;X25519&quot;)</span><br><span class="line">KeyPair kp &#x3D; kpg.generateKeyPair();</span><br><span class="line">KeyFactory kf &#x3D; KeyFactory.getInstance(&quot;XDH&quot;);</span><br><span class="line">BigInteger u &#x3D; ...</span><br><span class="line">XECPublicKeySpec pubSpec &#x3D; new XECPublicKeySpec(paramSpec, u);</span><br><span class="line">PublicKey pubKey &#x3D; kf.generatePublic(pubSpec);</span><br><span class="line">KeyAgreement ka &#x3D; KeyAgreement.getInstance(&quot;XDH&quot;);</span><br><span class="line">ka.init(kp.getPrivate());</span><br><span class="line">ka.doPhase(pubKey, true);</span><br><span class="line">byte[] secret &#x3D; ka.generateSecret();</span><br></pre></td></tr></table></figure>
-<h2 id="JEP-327-Unicode-10"><a href="#JEP-327-Unicode-10" class="headerlink" title="JEP 327: Unicode 10"></a>JEP 327: Unicode 10</h2><p>更新平台 API 支持 Unicode 10.0 版本（Unicode 10.0 概述：Unicode 10.0 增加了 8518 个字符, 总计达到了 136,690 个字符. 并且增加了 4 个脚本, 总结 139 个脚本, 同时还有 56 个新的 emoji 表情符号。参考：<a target="_blank" rel="noopener" href="http://unicode.org/versions/Unicode10.0.0/">http://unicode.org/versions/Unicode10.0.0/</a>）。</p>
-<h3 id="动机-4"><a href="#动机-4" class="headerlink" title="动机"></a>动机</h3><p>Unicode 是一个不断进化的工业标准，因此必须不断保持 Java 和 Unicode 最新版本同步。</p>
-<h2 id="JEP-328-Flight-Recorder（飞行记录器）"><a href="#JEP-328-Flight-Recorder（飞行记录器）" class="headerlink" title="JEP 328: Flight Recorder（飞行记录器）"></a>JEP 328: Flight Recorder（飞行记录器）</h2><p>提供一个低开销的，为了排错 Java 应用问题，以及 JVM 问题的数据收集框架，希望达到的目标如下：</p>
-<ul>
-<li>提供用于生产和消费数据作为事件的 API；</li>
-<li>提供缓存机制和二进制数据格式；</li>
-<li>允许事件配置和事件过滤；</li>
-<li>提供 OS，JVM 和 JDK 库的事件；</li>
-</ul>
-<h3 id="动机-5"><a href="#动机-5" class="headerlink" title="动机"></a>动机</h3><p>排错，监控，性能分析是整个开发生命周期必不可少的一部分，但是某些问题只会在大量真实数据压力下才会发生在生产环境。<br>Flight Recorder 记录源自应用程序，JVM 和 OS 的事件。 事件存储在一个文件中，该文件可以附加到错误报告中并由支持工程师进行检查，允许事后分析导致问题的时期内的问题。工具可以使用 API 从记录文件中提取信息。</p>
-<h2 id="JEP-329-ChaCha20-and-Poly1305-Cryptographic-Algorithms（ChaCha20-和-Poly1305-加密算法）"><a href="#JEP-329-ChaCha20-and-Poly1305-Cryptographic-Algorithms（ChaCha20-和-Poly1305-加密算法）" class="headerlink" title="JEP 329: ChaCha20 and Poly1305 Cryptographic Algorithms（ChaCha20 和 Poly1305 加密算法）"></a>JEP 329: ChaCha20 and Poly1305 Cryptographic Algorithms（ChaCha20 和 Poly1305 加密算法）</h2><p>实现 RFC 7539 中指定的 ChaCha20 和 ChaCha20-Poly1305 两种加密算法。</p>
-<h3 id="动机-6"><a href="#动机-6" class="headerlink" title="动机"></a>动机</h3><p>唯一一个其他广泛采用的 RC4 长期以来一直被认为是不安全的，业界一致认为当下 ChaCha20-Poly1305 是安全的。</p>
-<h2 id="JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）"><a href="#JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）" class="headerlink" title="JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）"></a>JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）</h2><p>增强 Java 启动器支持运行单个 Java 源代码文件的程序。</p>
-<h3 id="动机-7"><a href="#动机-7" class="headerlink" title="动机"></a>动机</h3><p>单文件程序是指整个程序只有一个源码文件，通常是早期学习 Java 阶段，或者写一个小型工具类。以 HelloWorld.java 为例，运行它之前需要先编译。我们希望 Java 启动器能直接运行这个源码级的程序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java HelloWorld.java</span><br></pre></td></tr></table></figure>
-<p>等价于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; HelloWorld.java</span><br><span class="line">java -cp &lt;memory&gt; helloWorld</span><br><span class="line">java Factorial.java 3 4 5</span><br></pre></td></tr></table></figure>
-<p>等价于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; Factorial.java</span><br><span class="line">java -cp &lt;memory&gt; Factorial 3 4 5</span><br></pre></td></tr></table></figure>
-<p>到 JDK10 为止，Java 启动器能以三种方式运行：</p>
-<ol>
-<li>启动一个 class 文件；</li>
-<li>启动一个 JAR 中的 main 方法类；</li>
-<li>启动一个模块中的 main 方法类；</li>
-</ol>
-<p>JDK11 再加一个，即第四种方式：启动一个源文件申明的类。</p>
-<h2 id="JEP-331-Low-Overhead-Heap-Profiling（低开销的-Heap-Profiling）"><a href="#JEP-331-Low-Overhead-Heap-Profiling（低开销的-Heap-Profiling）" class="headerlink" title="JEP 331: Low-Overhead Heap Profiling（低开销的 Heap Profiling）"></a>JEP 331: Low-Overhead Heap Profiling（低开销的 Heap Profiling）</h2><p>提供一种低开销的 Java 堆分配采样方法，得到堆分配的 Java 对象信息，可通过 JVMTI 访问。希望达到的目标如下：</p>
-<ul>
-<li>足够低的开销，可以默认且一直开启；</li>
-<li>能通过定义好的程序接口访问；</li>
-<li>能采样所有分配；</li>
-<li>能给出生存和死亡的 Java 对象信息；</li>
-<li>动机</li>
-</ul>
-<p>对用户来说，了解它们堆里的内存是很重要的需求。目前有一些已经开发的工具，允许用户窥探它们的堆，比如：Java Flight Recorder, jmap, YourKit, 以及 VisualVM tools.。但是这工具都有一个很大的缺点：无法得到对象的分配位置。headp dump 以及 heap histo 都没有这个信息，但是这个信息对于调试内存问题至关重要。因为它能告诉开发者，他们的代码发生（尤其是坏的）分配的确切位置。</p>
-<h2 id="JEP-332-Transport-Layer-Security-TLS-1-3（支持-TLS-1-3）"><a href="#JEP-332-Transport-Layer-Security-TLS-1-3（支持-TLS-1-3）" class="headerlink" title="JEP 332: Transport Layer Security (TLS) 1.3（支持 TLS 1.3）"></a>JEP 332: Transport Layer Security (TLS) 1.3（支持 TLS 1.3）</h2><p>实现 TLS 协议 1.3 版本。（TLS 允许客户端和服务端通过互联网以一种防止窃听，篡改以及消息伪造的方式进行通信）。</p>
-<h3 id="动机-8"><a href="#动机-8" class="headerlink" title="动机"></a>动机</h3><p>TLS 1.3 是 TLS 协议的重大改进，与以前的版本相比，它提供了显着的安全性和性能改进。其他供应商的几个早期实现已经可用。我们需要支持 TLS 1.3 以保持竞争力并与最新标准保持同步。这个特性的实现动机和 Unicode 10 一样，也是紧跟历史潮流。</p>
-<h2 id="JEP-333-ZGC-A-Scalable-Low-Latency-Garbage-Collector-可伸缩低延迟垃圾收集器"><a href="#JEP-333-ZGC-A-Scalable-Low-Latency-Garbage-Collector-可伸缩低延迟垃圾收集器" class="headerlink" title="JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (可伸缩低延迟垃圾收集器)"></a>JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (可伸缩低延迟垃圾收集器)</h2><p>ZGC：这应该是 JDK11 最为瞩目的特性，没有之一。但是后面带了 Experimental，说明还不建议用到生产环境。看看官方对这个特性的目标描述：</p>
-<ul>
-<li>GC 暂停时间不会超过 10ms；</li>
-<li>即能处理几百兆小堆，也能处理几个 T 的大堆（OMG）；</li>
-<li>和 G1 相比，应用吞吐能力不会下降超过 15%；</li>
-<li>为未来的 GC 功能和利用 colord 指针以及 Load barriers 优化奠定基础；</li>
-<li>初始只支持 64 位系统；</li>
-</ul>
-<h3 id="动机-9"><a href="#动机-9" class="headerlink" title="动机"></a>动机</h3><p>GC 是 Java 主要优势之一。然而，当 GC 停顿太长，就会开始影响应用的响应时间。消除或者减少 GC 停顿时长，Java 将对更广泛的应用场景是一个更有吸引力的平台。此外，现代系统中可用内存不断增长， 用户和程序员希望 JVM 能够以高效的方式充分利用这些内存，并且无需长时间的 GC 暂停时间。<br>ZGC 一个并发，基于 region，压缩型的垃圾收集器，只有 root 扫描阶段会 STW，因此 GC 停顿时间不会随着堆的增长和存活对象的增长而变长。<br>ZGC 和 G1 停顿时间比较：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ZGC</span><br><span class="line">                avg: 1.091ms (+&#x2F;-0.215ms)</span><br><span class="line">    95th percentile: 1.380ms</span><br><span class="line">    99th percentile: 1.512ms</span><br><span class="line">  99.9th percentile: 1.663ms</span><br><span class="line"> 99.99th percentile: 1.681ms</span><br><span class="line">                max: 1.681ms</span><br><span class="line">G1</span><br><span class="line">                avg: 156.806ms (+&#x2F;-71.126ms)</span><br><span class="line">    95th percentile: 316.672ms</span><br><span class="line">    99th percentile: 428.095ms</span><br><span class="line">  99.9th percentile: 543.846ms</span><br><span class="line"> 99.99th percentile: 543.846ms</span><br><span class="line">                max: 543.846ms</span><br></pre></td></tr></table></figure>
-<p>用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</span><br></pre></td></tr></table></figure>
-<p>因为 ZGC 还处于实验阶段，所以需要通过 JVM 参数 UnlockExperimentalVMOptions 来解锁这个特性。</p>
-<h2 id="JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）"><a href="#JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）" class="headerlink" title="JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）"></a>JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）</h2><h2 id="JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）"><a href="#JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）" class="headerlink" title="JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）"></a>JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）</h2><blockquote>
-<p>参考:<a target="_blank" rel="noopener" href="http://openjdk.java.net/projects/jdk/11/">http://openjdk.java.net/projects/jdk/11/</a></p>
-</blockquote>
-<p>作者：IT4Life<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ae60abb6752d">https://www.jianshu.com/p/ae60abb6752d</a><br>来源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/JDK12新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/">JDK12新特性</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2019-03-25T04:44:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：</p>
-<ul>
-<li><p>189: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/189">Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)</a> ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。</p>
-</li>
-<li><p>230: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/230">Microbenchmark Suite</a>：新增一套微基准测试，使开发者能够基于现有的 Java Microbenchmark Harness（JMH）轻松测试 JDK 的性能，并创建新的基准测试。</p>
-</li>
-<li><p>325: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/325">Switch Expressions (Preview)</a> ：对 switch 语句进行扩展，使其可以用作语句或表达式，简化日常代码。</p>
-</li>
-<li><p>334: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/334">JVM Constants API</a> ：引入一个 API 来对关键类文件 (key class-file) 和运行时工件的名义描述（nominal descriptions）进行建模，特别是那些可从常量池加载的常量。</p>
-</li>
-<li><p>340: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/340">One AArch64 Port, Not Two</a> ：删除与 arm64 端口相关的所有源码，保留 32 位 ARM 移植和 64 位 aarch64 移植。</p>
-</li>
-<li><p>341: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/341">Default CDS Archives</a> ：默认生成类数据共享（CDS）存档。</p>
-</li>
-<li><p>344: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/344">Abortable Mixed Collections for G1</a> ：当 G1 垃圾回收器的回收超过暂停目标，则能中止垃圾回收过程。</p>
-</li>
-<li><p>346: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/346">Promptly Return Unused Committed Memory from G1</a> ：改进 G1 垃圾回收器，以便在空闲时自动将 Java 堆内存返回给操作系统。</p>
-</li>
-</ul>
-<p>总结<br>1.JDK12 新增了一个垃圾回收器 2.新增一套微基准测试，方便测试 JDK 性能 3.对 switch 进行扩展，使其可以作语句的表达式。 4.新增一个 API 来对关键类和运行时共建进行建模 5.删除 arm64 源码，保留 arm64 和 aarch64 移植 6.默认生成类数据共享存档 7.当 G1 垃圾回收超过暂停目标，则能终止垃圾回收过程 8.改进 G1 垃圾回收机制，以便在空闲时自动将 JAVA 堆内存韩会给操作系统</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/">展开全文 >></a>
         </p>
       
 

@@ -16,7 +16,7 @@
 <meta property="og:description" content="读写锁中的可读锁（sync.RWMutex 的 RLock()）可以嵌套使用的。 互斥锁（sync.Mutex 和 sync.RWMutex 的 Lock()）是不可以互相嵌套的，且不可以与可读锁嵌套。 之前我在读写锁和互斥锁上理解有偏差，认为读写锁与互斥锁是完全独立且相互对应的关系。现在理解为 互斥 只是一种特性。而把 sync.Mutex 叫作 全局锁， sync.RWMutex 叫作 读写">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-09T13:47:56.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:32.627Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:13.884Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -46,7 +46,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -212,8 +212,10 @@ var _hmt = _hmt || [];
 <p>否则，会 panic <code>fatal error: all goroutines are asleep - deadlock!</code></p>
 <h3 id="实例说明"><a href="#实例说明" class="headerlink" title="实例说明"></a>实例说明</h3><p>所以以下函数不会造成 panic：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var l sync.RWMutex</span><br><span class="line">func readAndRead() &#123; &#x2F;&#x2F; 可读锁内使用可读锁</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">    lockAndRead()</span><br><span class="line">    time.Sleep(5 * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>而将 <code>readAndRead</code> 换为以下三种函数均会造成 panic：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func lockAndLock() &#123; &#x2F;&#x2F; 全局锁内使用全局锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br><span class="line">func lockAndRead() &#123; &#x2F;&#x2F; 全局锁内使用可读锁</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock() &#x2F;&#x2F; 由于 defer 是栈式执行，所以这两个锁是嵌套结构</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">&#125;</span><br><span class="line">func readAndLock() &#123; &#x2F;&#x2F; 可读锁内使用全局锁</span><br><span class="line">    l.RLock()</span><br><span class="line">    defer l.RUnlock()</span><br><span class="line">    l.Lock()</span><br><span class="line">    defer l.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <hr>
 <p>注： 在 goroutine 中的 panic 不会影响主程序，所以在测试时要注意并不是没有 panic 输出就一定是没发生。</p>
 

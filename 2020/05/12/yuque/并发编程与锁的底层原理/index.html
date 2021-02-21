@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
   <title>并发编程与锁的底层原理 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景：1并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。 大纲： 1.并发编程与锁 2.缓存和一致性协议 MESI 3.CPU&#x2F;缓存与锁 4.常见锁总结  1 并发编程与锁12我们写的各种应用系统，像网络编程，基本">
+  <meta name="description" content="背景：1并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。  大纲： 1.并发编程与锁 2.缓存和一致性协议 MESI 3.CPU&#x2F;缓存与锁 4.常见锁总结  1 并发编程与锁12我们写的各种应用系统，像网络编程，基">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并发编程与锁的底层原理">
 <meta property="og:url" content="http://zy84338719.github.io/blog/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="背景：1并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。 大纲： 1.并发编程与锁 2.缓存和一致性协议 MESI 3.CPU&#x2F;缓存与锁 4.常见锁总结  1 并发编程与锁12我们写的各种应用系统，像网络编程，基本">
+<meta property="og:description" content="背景：1并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。  大纲： 1.并发编程与锁 2.缓存和一致性协议 MESI 3.CPU&#x2F;缓存与锁 4.常见锁总结  1 并发编程与锁12我们写的各种应用系统，像网络编程，基">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://img.mukewang.com/5c8e21170001caa703400439.jpg#align=left&display=inline&height=439&margin=%5Bobject%20Object%5D&originHeight=439&originWidth=340&status=done&style=none&width=340">
 <meta property="og:image" content="http://img.mukewang.com/5c8e213d00019ed603890438.jpg#align=left&display=inline&height=438&margin=%5Bobject%20Object%5D&originHeight=438&originWidth=389&status=done&style=none&width=389">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://img.mukewang.com/5c8e229900014e2106810486.jpg#align=left&display=inline&height=486&margin=%5Bobject%20Object%5D&originHeight=486&originWidth=681&status=done&style=none&width=681">
 <meta property="og:image" content="http://img.mukewang.com/5c8e22a70001b37305270491.jpg#align=left&display=inline&height=491&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=527&status=done&style=none&width=527">
 <meta property="article:published_time" content="2020-05-12T02:52:00.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:32.495Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:13.744Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://img.mukewang.com/5c8e21170001caa703400439.jpg#align=left&display=inline&height=439&margin=%5Bobject%20Object%5D&originHeight=439&originWidth=340&status=done&style=none&width=340">
@@ -71,7 +71,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -222,6 +222,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。</span><br></pre></td></tr></table></figure>
+
 <h2 id="大纲："><a href="#大纲：" class="headerlink" title="大纲："></a>大纲：</h2><ul>
 <li>1.并发编程与锁</li>
 <li>2.缓存和一致性协议 MESI</li>
@@ -229,6 +230,7 @@ var _hmt = _hmt || [];
 <li>4.常见锁总结</li>
 </ul>
 <h1 id="1-并发编程与锁"><a href="#1-并发编程与锁" class="headerlink" title="1 并发编程与锁"></a>1 并发编程与锁</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我们写的各种应用系统，像网络编程，基本上都是并发编程，不论是多进程还是多线程，亦或是协程、队列的方式，也都是并发编程的范畴。并发编程中，在多核操作系统中，多线程的时候，就会出现**线程安全性**问题，有的也说**并发安全性**问题。这种问题，都是因为对共享变量的并发读写引起的数据不一致问题。所以，在并发编程中，就会经常用到锁，当然也可能使用队列或者单线程的方式来处理共享数据。</span><br><span class="line">我们先来还原一下具体的问题，然后再用不同的方法来处理它们。</span><br></pre></td></tr></table></figure>
+
 <h2 id="线程安全性问题-1"><a href="#线程安全性问题-1" class="headerlink" title="线程安全性问题 1"></a>线程安全性问题 1</h2><p><img src="//img.mukewang.com/5c8e21170001caa703400439.jpg#align=left&display=inline&height=439&margin=%5Bobject%20Object%5D&originHeight=439&originWidth=340&status=done&style=none&width=340"><br>代码中共享变量 num 是一个简单的计数器，main 主线程启动了两个协程，分别循环一万次对 num 进行递增操作。正常情况下，预期的结果应该是 1w+1w=2w，但是，在并发执行的情况下，最终的结果只有 10891，离 2w 差的好多。<br><strong>典型应用场景：</strong></p>
 <ul>
 <li>1 库存数量扣减</li>
@@ -260,6 +262,7 @@ var _hmt = _hmt || [];
 <li>多核、分布式运算、并发执行，才会需要锁。</li>
 </ul>
 <h2 id="不用锁，也可以实现同样效果？"><a href="#不用锁，也可以实现同样效果？" class="headerlink" title="不用锁，也可以实现同样效果？"></a>不用锁，也可以实现同样效果？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单线程串行化执行，队列式，CAS。</span><br><span class="line">——不要通过共享内存来通信，而应该通过通信来共享内存</span><br></pre></td></tr></table></figure>
+
 <h2 id="锁的底层实现类型"><a href="#锁的底层实现类型" class="headerlink" title="锁的底层实现类型"></a>锁的底层实现类型</h2><ul>
 <li>1 <strong>锁内存总线</strong>，针对内存的读写操作，在总线上控制，限制程序的内存访问</li>
 <li>2 <strong>锁缓存行</strong>，同一个缓存行的内容读写操作，CPU 内部的高速缓存保证一致性</li>
@@ -267,6 +270,7 @@ var _hmt = _hmt || [];
 <p><strong>锁</strong>，作用在一个对象或者变量上。现代 CPU 会优先在高速缓存查找，如果存在这个对象、变量的缓存行数据，会使用锁缓存行的方式。否则，才使用锁总线的方式。</p>
 <p><strong>速度</strong>，加锁、解锁的速度，理论上就是高速缓存、内存总线的读写速度，它的效率是非常高的。而出现效率问题，是在产生冲突时的串行化等待时间，再加上线程的上下文切换，让多核的并发能力直线下降。</p>
 <h1 id="2-缓存和一致性协议-MESI"><a href="#2-缓存和一致性协议-MESI" class="headerlink" title="2 缓存和一致性协议 MESI"></a>2 缓存和一致性协议 MESI</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文首字母缩写，也就是英文环境下的术语、俚语、成语，新人理解和学习有难度，但是，掌握好了既可以省事，又可以缩小文化差距。</span><br><span class="line">另外就是对英文的异形化，也类似汉字的变形体，“表酱紫”，“蓝瘦香菇”，老外是很难懂得，反之一样。</span><br></pre></td></tr></table></figure>
+
 <h2 id="MESI“生老病死”缓存行的四种状态"><a href="#MESI“生老病死”缓存行的四种状态" class="headerlink" title="MESI“生老病死”缓存行的四种状态"></a>MESI“生老病死”缓存行的四种状态</h2><ul>
 <li>M: modify 被修改，数据有效，cache 和内存不一致</li>
 <li>E: exclusive 独享，数据有效，cache 与内存一致</li>
@@ -305,13 +309,16 @@ var _hmt = _hmt || [];
 <li>冲突时的任务等待队列</li>
 </ul>
 <h1 id="4-常见锁总结"><a href="#4-常见锁总结" class="headerlink" title="4 常见锁总结"></a>4 常见锁总结</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最后，我们一起来看看常见的自旋锁、互斥锁、条件锁、读写锁的实现逻辑，以及在Go源码中，是如何来实现的CAS&#x2F;atomic.AddInt64和Mutext.Lock方法的。</span><br></pre></td></tr></table></figure>
+
 <h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p><img src="//img.mukewang.com/5c8e222e00014be702420057.jpg#align=left&display=inline&height=57&margin=%5Bobject%20Object%5D&originHeight=57&originWidth=242&status=done&style=none&width=242"><br>只要没有锁上，就不断重试。<br>如果别的线程长期持有该锁，那么你这个线程就一直在 while while while 地检查是否能够加锁，浪费 CPU 做无用功。<br>优点：不切换上下文；<br>不足：烧 CPU；<br><strong>适用场景：冲突不多，等待时间不长的情况下，或者少次数的尝试自旋。</strong></p>
 <h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p><img src="//img.mukewang.com/5c8e223d00014cce04080066.jpg#align=left&display=inline&height=66&margin=%5Bobject%20Object%5D&originHeight=66&originWidth=408&status=done&style=none&width=408"><br>操作系统负责线程调度，为了实现「锁的状态发生改变时再唤醒」就需要把锁也交给操作系统管理。<br>所以互斥器的加锁操作通常都需要涉及到上下文切换，操作花销也就会比自旋锁要大。<br>优点：简单高效；<br>不足：冲突等待时的上下文切换；<br><strong>适用场景：绝大部分情况下都可以直接使用互斥锁。</strong></p>
 <h2 id="条件锁"><a href="#条件锁" class="headerlink" title="条件锁"></a>条件锁</h2><p><img src="//img.mukewang.com/5c8e224a0001b66704220239.jpg#align=left&display=inline&height=239&margin=%5Bobject%20Object%5D&originHeight=239&originWidth=422&status=done&style=none&width=422"><br><strong>它解决的问题不是「互斥」，而是「等待」。</strong><br>消息队列的消费者程序，在队列为空的时候休息，数据不为空的时候（条件改变）启动消费任务。<br>条件锁的业务针对性更强。</p>
 <h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><img src="//img.mukewang.com/5c8e225e00013ff603010540.jpg#align=left&display=inline&height=540&margin=%5Bobject%20Object%5D&originHeight=540&originWidth=301&status=done&style=none&width=301"><br>内部有两个锁，一个是读的锁，一个是写的锁。<br>如果只有一个读者、一个写者，那么等价于直接使用互斥锁。<br>不过由于读写锁需要额外记录读者数量，花销要大一点。<br>也可以认为读写锁是针对某种特定情景（读多写少）的「优化」。<br>但个人还是建议忘掉读写锁，直接用互斥器。<br><strong>试用场景：读多写少，而且读的过程时间较长，可以通过读写锁，减少读冲突时的等待。</strong></p>
 <h2 id="无锁操作-CAS"><a href="#无锁操作-CAS" class="headerlink" title="无锁操作 CAS"></a>无锁操作 CAS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Compare And Swap 比较并交换，类似于将 num+ + 的三个指令合并成一个指令 CMPXCHG，保证了操作的原子性。</span><br></pre></td></tr></table></figure>
+
 <p>为了保证顺序一致性和数据强一致性，还需要有一个 LOCK 指令。<br>源码，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e22740001717005300300.jpg#align=left&display=inline&height=300&margin=%5Bobject%20Object%5D&originHeight=300&originWidth=530&status=done&style=none&width=530"><br>LOCK 指令的作用就是禁止编译器优化，同时加上内存全屏障，可以保证<strong>LOCK 指令之后的一个指令</strong>执行时的数据强一致性和可见性。</p>
 <h2 id="数字的原子递增操作-atomic-AddInt64"><a href="#数字的原子递增操作-atomic-AddInt64" class="headerlink" title="数字的原子递增操作 atomic.AddInt64"></a>数字的原子递增操作 atomic.AddInt64</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在原始指针数字的基础上，原子性递增 delta 数值，并且返回递增后的结果值。</span><br><span class="line">源码1，参见 sync&#x2F;atomic&#x2F;asm.s</span><br></pre></td></tr></table></figure>
+
 <p><img src="//img.mukewang.com/5c8e22820001444204150046.jpg#align=left&display=inline&height=46&margin=%5Bobject%20Object%5D&originHeight=46&originWidth=415&status=done&style=none&width=415"><br>XADDQ 数据交换，数值相加，写入目标数据<br>ADDQ 数值相加，写入目标数据<br>在 XADDQ 之前加上 LOCK 指令，保证这个指令执行时的数据强一致性和可见性。<br>源码 2，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e228d0001572105570185.jpg#align=left&display=inline&height=185&margin=%5Bobject%20Object%5D&originHeight=185&originWidth=557&status=done&style=none&width=557"></p>
 <h2 id="互斥锁操作-sync-Mutex-Lock"><a href="#互斥锁操作-sync-Mutex-Lock" class="headerlink" title="互斥锁操作 sync.Mutex.Lock"></a>互斥锁操作 sync.Mutex.Lock</h2><p><img src="//img.mukewang.com/5c8e229900014e2106810486.jpg#align=left&display=inline&height=486&margin=%5Bobject%20Object%5D&originHeight=486&originWidth=681&status=done&style=none&width=681"><br><img src="//img.mukewang.com/5c8e22a70001b37305270491.jpg#align=left&display=inline&height=491&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=527&status=done&style=none&width=527"><br>源码，参见 sync/mutex.go<br><strong>大概的源码处理逻辑如下：</strong></p>
 <ul>

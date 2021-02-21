@@ -16,7 +16,7 @@
 <meta property="og:description" content="一、JDK11 新特性一览 181: Nest-Based Access Control 309: Dynamic Class-File Constants 315: Improve Aarch64 Intrinsics 318: Epsilon: A No-Op Garbage Collector 320: Remove the Java EE and CORBA Modules 321: HT">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-03-25T05:28:09.000Z">
-<meta property="article:modified_time" content="2021-02-15T21:55:28.075Z">
+<meta property="article:modified_time" content="2021-02-21T16:29:09.168Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -46,7 +46,7 @@ var _hmt = _hmt || [];
 </script>
 
 
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -253,6 +253,7 @@ var _hmt = _hmt || [];
 <h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>其目标是降低开发新形式的可实现类文件约束带来的成本和干扰。</p>
 <h2 id="JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）"><a href="#JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）" class="headerlink" title="JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）"></a>JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）</h2><h2 id="JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）"><a href="#JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）" class="headerlink" title="JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）"></a>JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）</h2><p>JDK 上对这个特性的描述是：开发一个处理内存分配但不实现任何实际内存回收机制的 GC，一旦可用堆内存用完，JVM 就会退出。<br>如果有 System.gc()的调用，实际上什么也不会发生（这种场景下和-XX:+DisableExplicitGC 效果一样），因为没有内存回收，这个实现可能会警告用户尝试强制 GC 是徒劳。<br>用法非常简单：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseEpsilonGC。</span><br></pre></td></tr></table></figure>
+
 <h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>提供完全被动的 GC 实现，具有有限的分配限制和尽可能低的延迟开销，但代价是内存占用和内存吞吐量。<br>众所周知，Java 实现可广泛选择高度可配置的 GC 实现。 各种可用的收集器最终满足不同的需求，即使它们的可配置性使它们的功能相交。 有时更容易维护单独的实现，而不是在现有 GC 实现上堆积另一个配置选项。<br>它的主要用途如下：</p>
 <ul>
 <li>性能测试（它可以帮助过滤掉 GC 引起的性能假象）；</li>
@@ -281,15 +282,20 @@ var _hmt = _hmt || [];
 <h2 id="JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）"><a href="#JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）" class="headerlink" title="JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）"></a>JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）</h2><p>在声明隐式类型的 lambda 表达式的形参时允许使用 var。</p>
 <h3 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h3><p>lamdba 表达式可能是隐式类型的，它形参的所有类型全部靠推到出来的。隐式类型 lambda 表达式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x, y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
+
 <p>Java SE 10 让隐式类型变量可用于本地变量:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo &#x3D; new Foo();</span><br><span class="line">for (var foo : foos) &#123; ... &#125;</span><br><span class="line">try (var foo &#x3D; ...) &#123; ... &#125; catch ...</span><br></pre></td></tr></table></figure>
+
 <p>为了和本地变量保持一致，我们希望允许 var 作为隐式类型 lambda 表达式的形参：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(var x, var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
+
 <p>统一格式的一个好处就是 modifiers 和 notably 注解能被加在本地变量和 lambda 表达式的形参上，并且不会丢失简洁性：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Nonnull var x &#x3D; new Foo();</span><br><span class="line">(@Nonnull var x, @Nullable var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
+
 <h2 id="JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）"><a href="#JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）" class="headerlink" title="JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）"></a>JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）</h2><p>用 RFC 7748 中描述到的 Curve25519 和 Curve448 实现秘钥协议。RFC 7748 定义的秘钥协商方案更高效，更安全。这个 JEP 的主要目标就是为这个标准定义 API 和实现。</p>
 <h3 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h3><p>密码学要求使用 Curve25519 和 Curve448 是因为它们的安全性和性能。JDK 会增加两个新的接口 XECPublicKey 和 XECPrivateKey，示例代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">KeyPairGenerator kpg &#x3D; KeyPairGenerator.getInstance(&quot;XDH&quot;);</span><br><span class="line">NamedParameterSpec paramSpec &#x3D; new NamedParameterSpec(&quot;X25519&quot;);</span><br><span class="line">kpg.initialize(paramSpec); &#x2F;&#x2F; equivalent to kpg.initialize(255)</span><br><span class="line">&#x2F;&#x2F; alternatively: kpg &#x3D; KeyPairGenerator.getInstance(&quot;X25519&quot;)</span><br><span class="line">KeyPair kp &#x3D; kpg.generateKeyPair();</span><br><span class="line">KeyFactory kf &#x3D; KeyFactory.getInstance(&quot;XDH&quot;);</span><br><span class="line">BigInteger u &#x3D; ...</span><br><span class="line">XECPublicKeySpec pubSpec &#x3D; new XECPublicKeySpec(paramSpec, u);</span><br><span class="line">PublicKey pubKey &#x3D; kf.generatePublic(pubSpec);</span><br><span class="line">KeyAgreement ka &#x3D; KeyAgreement.getInstance(&quot;XDH&quot;);</span><br><span class="line">ka.init(kp.getPrivate());</span><br><span class="line">ka.doPhase(pubKey, true);</span><br><span class="line">byte[] secret &#x3D; ka.generateSecret();</span><br></pre></td></tr></table></figure>
+
 <h2 id="JEP-327-Unicode-10"><a href="#JEP-327-Unicode-10" class="headerlink" title="JEP 327: Unicode 10"></a>JEP 327: Unicode 10</h2><p>更新平台 API 支持 Unicode 10.0 版本（Unicode 10.0 概述：Unicode 10.0 增加了 8518 个字符, 总计达到了 136,690 个字符. 并且增加了 4 个脚本, 总结 139 个脚本, 同时还有 56 个新的 emoji 表情符号。参考：<a target="_blank" rel="noopener" href="http://unicode.org/versions/Unicode10.0.0/">http://unicode.org/versions/Unicode10.0.0/</a>）。</p>
 <h3 id="动机-4"><a href="#动机-4" class="headerlink" title="动机"></a>动机</h3><p>Unicode 是一个不断进化的工业标准，因此必须不断保持 Java 和 Unicode 最新版本同步。</p>
 <h2 id="JEP-328-Flight-Recorder（飞行记录器）"><a href="#JEP-328-Flight-Recorder（飞行记录器）" class="headerlink" title="JEP 328: Flight Recorder（飞行记录器）"></a>JEP 328: Flight Recorder（飞行记录器）</h2><p>提供一个低开销的，为了排错 Java 应用问题，以及 JVM 问题的数据收集框架，希望达到的目标如下：</p>
@@ -305,10 +311,13 @@ var _hmt = _hmt || [];
 <h2 id="JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）"><a href="#JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）" class="headerlink" title="JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）"></a>JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）</h2><p>增强 Java 启动器支持运行单个 Java 源代码文件的程序。</p>
 <h3 id="动机-7"><a href="#动机-7" class="headerlink" title="动机"></a>动机</h3><p>单文件程序是指整个程序只有一个源码文件，通常是早期学习 Java 阶段，或者写一个小型工具类。以 HelloWorld.java 为例，运行它之前需要先编译。我们希望 Java 启动器能直接运行这个源码级的程序：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java HelloWorld.java</span><br></pre></td></tr></table></figure>
+
 <p>等价于：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; HelloWorld.java</span><br><span class="line">java -cp &lt;memory&gt; helloWorld</span><br><span class="line">java Factorial.java 3 4 5</span><br></pre></td></tr></table></figure>
+
 <p>等价于：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; Factorial.java</span><br><span class="line">java -cp &lt;memory&gt; Factorial 3 4 5</span><br></pre></td></tr></table></figure>
+
 <p>到 JDK10 为止，Java 启动器能以三种方式运行：</p>
 <ol>
 <li>启动一个 class 文件；</li>
@@ -337,8 +346,10 @@ var _hmt = _hmt || [];
 </ul>
 <h3 id="动机-9"><a href="#动机-9" class="headerlink" title="动机"></a>动机</h3><p>GC 是 Java 主要优势之一。然而，当 GC 停顿太长，就会开始影响应用的响应时间。消除或者减少 GC 停顿时长，Java 将对更广泛的应用场景是一个更有吸引力的平台。此外，现代系统中可用内存不断增长， 用户和程序员希望 JVM 能够以高效的方式充分利用这些内存，并且无需长时间的 GC 暂停时间。<br>ZGC 一个并发，基于 region，压缩型的垃圾收集器，只有 root 扫描阶段会 STW，因此 GC 停顿时间不会随着堆的增长和存活对象的增长而变长。<br>ZGC 和 G1 停顿时间比较：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ZGC</span><br><span class="line">                avg: 1.091ms (+&#x2F;-0.215ms)</span><br><span class="line">    95th percentile: 1.380ms</span><br><span class="line">    99th percentile: 1.512ms</span><br><span class="line">  99.9th percentile: 1.663ms</span><br><span class="line"> 99.99th percentile: 1.681ms</span><br><span class="line">                max: 1.681ms</span><br><span class="line">G1</span><br><span class="line">                avg: 156.806ms (+&#x2F;-71.126ms)</span><br><span class="line">    95th percentile: 316.672ms</span><br><span class="line">    99th percentile: 428.095ms</span><br><span class="line">  99.9th percentile: 543.846ms</span><br><span class="line"> 99.99th percentile: 543.846ms</span><br><span class="line">                max: 543.846ms</span><br></pre></td></tr></table></figure>
+
 <p>用法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</span><br></pre></td></tr></table></figure>
+
 <p>因为 ZGC 还处于实验阶段，所以需要通过 JVM 参数 UnlockExperimentalVMOptions 来解锁这个特性。</p>
 <h2 id="JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）"><a href="#JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）" class="headerlink" title="JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）"></a>JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）</h2><h2 id="JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）"><a href="#JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）" class="headerlink" title="JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）"></a>JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）</h2><blockquote>
 <p>参考:<a target="_blank" rel="noopener" href="http://openjdk.java.net/projects/jdk/11/">http://openjdk.java.net/projects/jdk/11/</a></p>

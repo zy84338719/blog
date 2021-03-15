@@ -176,6 +176,156 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/mysql 范式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">mysql 范式</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2020-05-04T23:23:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>第一范式 原子性’不可再分<br>第二范式 消除部分码函数依赖<br>第三范式 完全消除函数依赖</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Mysql 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">Mysql 锁</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/04/yuque/Mysql%20%E9%94%81/" class="archive-article-date">
+  	<time datetime="2020-05-04T23:23:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>加上一个版本控制即可</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>会话 0：<br>lock table tablelock read;<br>select * from tablelock; —读（查），可以（自己加了锁，自己可以读）<br>delete from tablelock where id=1; —写（增删改），不可以</p>
+<p>在当前会话中访问其他表（emp 表，未加锁）：<br>select * from emp; —读，不可以<br>delete from emp where eid = 1; —写，不可以</p>
+<p>结论 1：<br>—如果某一个会话，对 A 表加了锁，则该会话可以对 A 表进行读操作，不能进行写操作；且该会话不能对其他表进行读、写操作。<br>—即如果给 A 表加了读锁，则当前会话只能对 A 表进行读操作。</p>
+<p>会话 1（其他会话）：<br>select * from tablelock; –读（查），可以<br>delete from tablelock where id=1; —写，会“等待”会话 0 将锁释放</p>
+<p>select * from emp; –读（查），可以<br>delete from emp where eid=1; —写，可以</p>
+<p>结论 2：<br>会话 0 给 A 表加了锁：</p>
+<p>其他会话的操作：<br>a.可以对其他表（A 表以外的表）进行读、写操作<br>b.对 A 表：读–可以；写–需要等待释放锁</p>
+<p>加写锁：</p>
+<p>会话 0：<br>lock table tablelock write;<br>结论：当前会话（会话 0）可以对加了写锁的表进行任何操作（增删改查）；但是不能操作（增删改查）其他表</p>
+<p>其他会话：<br>对会话 0 中加写锁的表可以进行增删改查的前提是：等待会话 0 释放写锁</p>
+<p>MySQL 表级锁的锁模式：<br>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，<br>在执行更新操作（增删改（DML））前，会自动给涉及的表加写锁。</p>
+<p>所以对 MyISAM 表进行操作，会有以下情况：<br>a.对 MyISAM 表的读操作（如读锁），不会阻塞其他进程（会话）对同一表的读请求，但会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它进程的写操作。<br>b.对 MyISAM 表的写操作（加写锁），会阻塞其他进程（会话）对同一表的读和写操作，只有当写锁释放后，才会执行其他进程的读写操作。</p>
+<h2 id="行锁（InnoDB-需要命中索引，否则行锁无效）"><a href="#行锁（InnoDB-需要命中索引，否则行锁无效）" class="headerlink" title="行锁（InnoDB 需要命中索引，否则行锁无效）"></a>行锁（InnoDB 需要命中索引，否则行锁无效）</h2><p>创建行锁条件：</p>
+<p>1、表中创建索引， select 。。。 where   字段（必须是索引）   不然行锁就无效。</p>
+<p>2、必须要有事务，这样才是 行锁（排他锁）</p>
+<p>3、在 select   语句后面 加 上    FOR UPDATE；</p>
+<p>例子： 测试是否 加了锁，先执行 1 后执行 2</p>
+<p>查询 1</p>
+<p>START TRANSACTION;  #加事务</p>
+<p>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;  #加锁</p>
+<p>select SLEEP(5);  # 睡眠</p>
+<p>COMMIT; #提交</p>
+<p>查询 2 ：</p>
+<p>START TRANSACTION; <br>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;<br>COMMIT;</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mysql 创建索引方法及类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -735,1226 +885,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/MySQL 优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/20/yuque/MySQL%20%E4%BC%98%E5%8C%96/">MySQL 优化</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/20/yuque/MySQL%20%E4%BC%98%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2020-03-20T04:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1584679992912-4486c17e-a23b-4ca9-a6d1-4f0b8dc32584.png#align=left&display=inline&height=3361&name=image.png&originHeight=4319&originWidth=1452&size=1167457&status=done&style=none&width=1130" alt="image.png"></p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="为什么要优化"><a href="#为什么要优化" class="headerlink" title="为什么要优化"></a>为什么要优化</h2><ul>
-<li>系统的吞吐量瓶颈往往出现在数据库的访问速度上</li>
-<li>随着应用程序的运行，数据库的中的数据会越来越多，处理时间会相应变慢</li>
-<li>数据是存放在磁盘上的，读写速度无法和内存相比</li>
-</ul>
-<h2 id="如何优化"><a href="#如何优化" class="headerlink" title="如何优化"></a>如何优化</h2><ul>
-<li>设计数据库时：数据库表、字段的设计，存储引擎</li>
-<li>利用好 MySQL 自身提供的功能，如索引等</li>
-<li>横向扩展：MySQL 集群、负载均衡、读写分离</li>
-<li>SQL 语句的优化（收效甚微）</li>
-</ul>
-<h1 id="字段设计"><a href="#字段设计" class="headerlink" title="字段设计"></a>字段设计</h1><blockquote>
-<p>字段类型的选择，设计规范，范式，常见设计案例</p>
-</blockquote>
-<h2 id="原则：尽量使用整型表示字符串"><a href="#原则：尽量使用整型表示字符串" class="headerlink" title="原则：尽量使用整型表示字符串"></a>原则：尽量使用整型表示字符串</h2><h3 id="存储-IP"><a href="#存储-IP" class="headerlink" title="存储 IP"></a>存储 IP</h3><p><code>INET_ATON(str)</code>，address to number<br><code>INET_NTOA(number)</code>，number to address</p>
-<h3 id="MySQL-内部的枚举类型（单选）和集合（多选）类型"><a href="#MySQL-内部的枚举类型（单选）和集合（多选）类型" class="headerlink" title="MySQL 内部的枚举类型（单选）和集合（多选）类型"></a>MySQL 内部的枚举类型（单选）和集合（多选）类型</h3><p>但是因为维护成本较高因此不常使用，使用<strong>关联表</strong>的方式来替代<code>enum</code></p>
-<h2 id="原则：定长和非定长数据类型的选择"><a href="#原则：定长和非定长数据类型的选择" class="headerlink" title="原则：定长和非定长数据类型的选择"></a>原则：定长和非定长数据类型的选择</h2><blockquote>
-<p>decimal 不会损失精度，存储空间会随数据的增大而增大。double 占用固定空间，较大数的存储会损失精度。非定长的还有 varchar、text</p>
-</blockquote>
-<h3 id="金额"><a href="#金额" class="headerlink" title="金额"></a>金额</h3><blockquote>
-<p>对数据的精度要求较高，小数的运算和存储存在精度问题（不能将所有小数转换成二进制）</p>
-</blockquote>
-<h3 id="定点数-decimal"><a href="#定点数-decimal" class="headerlink" title="定点数 decimal"></a>定点数 decimal</h3><p><code>price decimal(8,2)</code>有 2 位小数的定点数，定点数支持很大的数（甚至是超过<code>int,bigint</code>存储范围的数）</p>
-<h3 id="小单位大数额避免出现小数"><a href="#小单位大数额避免出现小数" class="headerlink" title="小单位大数额避免出现小数"></a>小单位大数额避免出现小数</h3><p>元-&gt;分</p>
-<h3 id="字符串存储"><a href="#字符串存储" class="headerlink" title="字符串存储"></a>字符串存储</h3><p>定长<code>char</code>，非定长<code>varchar、text</code>（上限 65535，其中<code>varchar</code>还会消耗 1-3 字节记录长度，而<code>text</code>使用额外空间记录长度）</p>
-<h2 id="原则：尽可能选择小的数据类型和指定短的长度"><a href="#原则：尽可能选择小的数据类型和指定短的长度" class="headerlink" title="原则：尽可能选择小的数据类型和指定短的长度"></a>原则：尽可能选择小的数据类型和指定短的长度</h2><h2 id="原则：尽可能使用-not-null"><a href="#原则：尽可能使用-not-null" class="headerlink" title="原则：尽可能使用 not null"></a>原则：尽可能使用 not null</h2><p>非<code>null</code>字段的处理要比<code>null</code>字段的处理高效些！且不需要判断是否为<code>null</code>。<br><code>null</code>在 MySQL 中，不好处理，存储需要额外空间，运算也需要特殊的运算符。如<code>select null = null</code>和<code>select null &lt;&gt; null</code>（<code>&lt;&gt;</code>为不等号）有着同样的结果，只能通过<code>is null</code>和<code>is not null</code>来判断字段是否为<code>null</code>。<br>如何存储？MySQL 中每条记录都需要额外的存储空间，表示每个字段是否为<code>null</code>。因此通常使用特殊的数据进行占位，比如<code>int not null default 0</code>、<code>string not null default ‘’</code></p>
-<h2 id="原则：字段注释要完整，见名知意"><a href="#原则：字段注释要完整，见名知意" class="headerlink" title="原则：字段注释要完整，见名知意"></a>原则：字段注释要完整，见名知意</h2><h2 id="原则：单表字段不宜过多"><a href="#原则：单表字段不宜过多" class="headerlink" title="原则：单表字段不宜过多"></a>原则：单表字段不宜过多</h2><p>二三十个就极限了</p>
-<h2 id="原则：可以预留字段"><a href="#原则：可以预留字段" class="headerlink" title="原则：可以预留字段"></a>原则：可以预留字段</h2><blockquote>
-<p>在使用以上原则之前首先要满足业务需求</p>
-</blockquote>
-<h1 id="关联表的设计"><a href="#关联表的设计" class="headerlink" title="关联表的设计"></a>关联表的设计</h1><blockquote>
-<p>外键<code>foreign key</code>只能实现一对一或一对多的映射</p>
-</blockquote>
-<h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>使用外键</p>
-<h2 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h2><p>单独新建一张表将多对多拆分成两个一对多</p>
-<h2 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h2><p>如商品的基本信息（<code>item</code>）和商品的详细信息（<code>item_intro</code>），通常使用相同的主键或者增加一个外键字段（<code>item_id</code>）</p>
-<h1 id="范式-Normal-Format"><a href="#范式-Normal-Format" class="headerlink" title="范式 Normal Format"></a>范式 Normal Format</h1><blockquote>
-<p>数据表的设计规范，一套越来越严格的规范体系（如果需要满足 N 范式，首先要满足 N-1 范式）。N</p>
-</blockquote>
-<h2 id="第一范式-1NF：字段原子性"><a href="#第一范式-1NF：字段原子性" class="headerlink" title="第一范式 1NF：字段原子性"></a>第一范式 1NF：字段原子性</h2><p>字段原子性，字段不可再分割。</p>
-<blockquote>
-<p>关系型数据库，默认满足第一范式</p>
-</blockquote>
-<p>注意比较容易出错的一点，在一对多的设计中使用逗号分隔多个外键，这种方法虽然存储方便，但不利于维护和索引（比如查找带标签<code>java</code>的文章）</p>
-<h2 id="第二范式：消除对主键的部分依赖"><a href="#第二范式：消除对主键的部分依赖" class="headerlink" title="第二范式：消除对主键的部分依赖"></a>第二范式：消除对主键的部分依赖</h2><blockquote>
-<p>即在表中加上一个与业务逻辑无关的字段作为主键</p>
-</blockquote>
-<p>主键：可以唯一标识记录的字段或者字段集合。</p>
-<table>
-<thead>
-<tr>
-<th align="left">course_name</th>
-<th align="left">course_class</th>
-<th align="left">weekday（周几）</th>
-<th align="left">course_teacher</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">MySQL</td>
-<td align="left">教育大楼 1525</td>
-<td align="left">周一</td>
-<td align="left">张三</td>
-</tr>
-<tr>
-<td align="left">Java</td>
-<td align="left">教育大楼 1521</td>
-<td align="left">周三</td>
-<td align="left">李四</td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td align="left">教育大楼 1521</td>
-<td align="left">周五</td>
-<td align="left">张三</td>
-</tr>
-</tbody></table>
-<p>依赖：A 字段可以确定 B 字段，则 B 字段依赖 A 字段。比如知道了下一节课是数学课，就能确定任课老师是谁。于是<strong>周几</strong>和<strong>下一节课</strong>和就能构成复合主键，能够确定去哪个教室上课，任课老师是谁等。但我们常常增加一个<code>id</code>作为主键，而消除对主键的部分依赖。<br>对主键的部分依赖：某个字段依赖复合主键中的一部分。<br>解决方案：新增一个独立字段作为主键。</p>
-<h2 id="第三范式：消除对主键的传递依赖"><a href="#第三范式：消除对主键的传递依赖" class="headerlink" title="第三范式：消除对主键的传递依赖"></a>第三范式：消除对主键的传递依赖</h2><p>传递依赖：B 字段依赖于 A，C 字段又依赖于 B。比如上例中，任课老师是谁取决于是什么课，是什么课又取决于主键<code>id</code>。因此需要将此表拆分为两张表日程表和课程表（独立数据独立建表）：</p>
-<table>
-<thead>
-<tr>
-<th align="left">id</th>
-<th align="left">weekday</th>
-<th align="left">course_class</th>
-<th align="left">course_id</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">1001</td>
-<td align="left">周一</td>
-<td align="left">教育大楼 1521</td>
-<td align="left">3546</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="left">course_id</th>
-<th align="left">course_name</th>
-<th align="left">course_teacher</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">3546</td>
-<td align="left">Java</td>
-<td align="left">张三</td>
-</tr>
-</tbody></table>
-<p>这样就减少了数据的冗余（即使周一至周日每天都有 Java 课，也只是<code>course_id:3546</code>出现了 7 次）</p>
-<h1 id="存储引擎选择"><a href="#存储引擎选择" class="headerlink" title="存储引擎选择"></a>存储引擎选择</h1><blockquote>
-<p>早期问题：如何选择 MyISAM 和 Innodb？<br>现在不存在这个问题了，Innodb 不断完善，从各个方面赶超 MyISAM，也是 MySQL 默认使用的。</p>
-</blockquote>
-<p>存储引擎 Storage engine：MySQL 中的数据、索引以及其他对象是如何存储的，是一套文件系统的实现。</p>
-<h2 id="功能差异"><a href="#功能差异" class="headerlink" title="功能差异"></a>功能差异</h2><p><code>show engines</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">Engine</th>
-<th align="left">Support</th>
-<th align="left">Comment</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">InnoDB</td>
-<td align="left">DEFAULT</td>
-<td align="left"><strong>Supports transactions, row-level locking, and foreign keys</strong></td>
-</tr>
-<tr>
-<td align="left">MyISAM</td>
-<td align="left">YES</td>
-<td align="left"><strong>MyISAM storage engine</strong></td>
-</tr>
-</tbody></table>
-<h2 id="存储差异"><a href="#存储差异" class="headerlink" title="存储差异"></a>存储差异</h2><table>
-<thead>
-<tr>
-<th align="left"></th>
-<th align="left">MyISAM</th>
-<th align="left">Innodb</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">文件格式</td>
-<td align="left">数据和索引是分别存储的，数据<code>.MYD</code>，索引<code>.MYI</code></td>
-<td align="left">数据和索引是集中存储的，<code>.ibd</code></td>
-</tr>
-<tr>
-<td align="left">文件能否移动</td>
-<td align="left">能，一张表就对应<code>.frm</code>、<code>MYD</code>、<code>MYI</code>3 个文件</td>
-<td align="left">否，因为关联的还有<code>data</code>下的其它文件</td>
-</tr>
-<tr>
-<td align="left">记录存储顺序</td>
-<td align="left">按记录插入顺序保存</td>
-<td align="left">按主键大小有序插入</td>
-</tr>
-<tr>
-<td align="left">空间碎片（删除记录并<code>flush table 表名</code>之后，表文件大小不变）</td>
-<td align="left">产生。定时整理：使用命令<code>optimize table 表名</code>实现</td>
-<td align="left">不产生</td>
-</tr>
-<tr>
-<td align="left">事务</td>
-<td align="left">不支持</td>
-<td align="left">支持</td>
-</tr>
-<tr>
-<td align="left">外键</td>
-<td align="left">不支持</td>
-<td align="left">支持</td>
-</tr>
-<tr>
-<td align="left">锁支持（锁是避免资源争用的一个机制，MySQL 锁对用户几乎是透明的）</td>
-<td align="left">表级锁定</td>
-<td align="left">行级锁定、表级锁定，锁定力度小并发能力高</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>锁扩展<br>表级锁（<code>table-level lock</code>）：<code>lock tables &lt;table_name1&gt;,&lt;table_name2&gt;... read/write</code>，<code>unlock tables &lt;table_name1&gt;,&lt;table_name2&gt;...</code>。其中<code>read</code>是共享锁，一旦锁定任何客户端都不可读；<code>write</code>是独占/写锁，只有加锁的客户端可读可写，其他客户端既不可读也不可写。锁定的是一张表或几张表。<br>行级锁（<code>row-level lock</code>）：锁定的是一行或几行记录。共享锁：<code>select * from &lt;table_name&gt; where &lt;条件&gt; LOCK IN SHARE MODE;</code>，对查询的记录增加共享锁；<code>select * from &lt;table_name&gt; where &lt;条件&gt; FOR UPDATE;</code>，对查询的记录增加排他锁。这里<strong>值得注意</strong>的是：<code>innodb</code>的行锁，其实是一个子范围锁，依据条件锁定部分范围，而不是就映射到具体的行上，因此还有一个学名：间隙锁。比如<code>select * from stu where id &lt; 20 LOCK IN SHARE MODE</code>会锁定<code>id</code>在<code>20</code>左右以下的范围，你可能无法插入<code>id</code>为<code>18</code>或<code>22</code>的一条新纪录。</p>
-</blockquote>
-<h2 id="选择依据"><a href="#选择依据" class="headerlink" title="选择依据"></a>选择依据</h2><p>如果没有特别的需求，使用默认的<code>Innodb</code>即可。<br>MyISAM：以读写插入为主的应用程序，比如博客系统、新闻门户网站。<br>Innodb：更新（删除）操作频率也高，或者要保证数据的完整性；并发量高，支持事务和外键保证数据完整性。比如 OA 自动化办公系统。</p>
-<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
-<p>关键字与数据的映射关系称为索引（==包含关键字和对应的记录在磁盘中的地址==）。关键字是从数据当中提取的用于标识、检索数据的特定内容。</p>
-</blockquote>
-<h2 id="索引检索为什么快？"><a href="#索引检索为什么快？" class="headerlink" title="索引检索为什么快？"></a>索引检索为什么快？</h2><ul>
-<li>关键字相对于数据本身，==数据量小==</li>
-<li>关键字是==有序==的，二分查找可快速确定位置</li>
-</ul>
-<p>图书馆为每本书都加了索引号（类别-楼层-书架）、字典为词语解释按字母顺序编写目录等都用到了索引。</p>
-<h2 id="MySQL-中索引类型"><a href="#MySQL-中索引类型" class="headerlink" title="MySQL 中索引类型"></a>MySQL 中索引类型</h2><blockquote>
-<p><strong>普通索引</strong>（<code>key</code>），<strong>唯一索引</strong>（<code>unique key</code>），<strong>主键索引</strong>（<code>primary key</code>），<strong>全文索引</strong>（<code>fulltext key</code>）</p>
-</blockquote>
-<p>三种索引的索引方式是一样的，只不过对索引的关键字有不同的限制：</p>
-<ul>
-<li>普通索引：对关键字没有限制</li>
-<li>唯一索引：要求记录提供的关键字不能重复</li>
-<li>主键索引：要求关键字唯一且不为 null</li>
-</ul>
-<h2 id="索引管理语法"><a href="#索引管理语法" class="headerlink" title="索引管理语法"></a>索引管理语法</h2><h3 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h3><p><code>show create table 表名</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927865-da69443b-00c9-45ad-8ba3-e9547a864cff.jpeg#align=left&display=inline&height=251&originHeight=251&originWidth=485&size=0&status=done&style=none&width=485"><br><code>desc 表名</code><br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927826-47d86b0b-3e67-456d-a859-89d6ff0b775f.jpeg#align=left&display=inline&height=233&originHeight=233&originWidth=271&size=0&status=done&style=none&width=271"></p>
-<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><h4 id="创建表之后建立索引"><a href="#创建表之后建立索引" class="headerlink" title="创建表之后建立索引"></a>创建表之后建立索引</h4><table>
-<thead>
-<tr>
-<th align="left">12345678910111213141516</th>
-<th align="left">create TABLE user_index( id int auto_increment primary key, first_name varchar(16), last_name VARCHAR(16), id_card VARCHAR(18), information text);– 更改表结构 alter table user_index– 创建一个 first_name 和 last_name 的复合索引，并命名为 nameadd key name (first_name,last_name),– 创建一个 id_card 的唯一索引，默认以字段名作为索引名 add UNIQUE KEY (id_card),– 鸡肋，全文索引不支持中文 add FULLTEXT KEY (information);</th>
-</tr>
-</thead>
-</table>
-<p><code>show create table user_index</code>：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927859-dda40fab-124d-491e-9093-97fc706e55a9.jpeg#align=left&display=inline&height=261&originHeight=261&originWidth=452&size=0&status=done&style=none&width=452"></p>
-<h4 id="创建表时指定索引"><a href="#创建表时指定索引" class="headerlink" title="创建表时指定索引"></a>创建表时指定索引</h4><table>
-<thead>
-<tr>
-<th align="left">12345678910</th>
-<th align="left">CREATE TABLE user_index2 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));</th>
-</tr>
-</thead>
-</table>
-<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p>根据索引名删除普通索引、唯一索引、全文索引：<code>alter table 表名 drop KEY 索引名</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123</th>
-<th align="left">alter table user_index drop KEY name;alter table user_index drop KEY id_card;alter table user_index drop KEY information;</th>
-</tr>
-</thead>
-</table>
-<p>删除主键索引：<code>alter table 表名 drop primary key</code>（因为主键只有一个）。这里值得注意的是，如果主键自增长，那么不能直接执行此操作（自增长依赖于主键索引）：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927835-f9c05ca6-4ef4-4945-b7f8-f81b8df37904.jpeg#align=left&display=inline&height=143&originHeight=143&originWidth=649&size=0&status=done&style=none&width=649"><br>需要取消自增长再行删除：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1234</th>
-<th align="left">alter table user_index– 重新定义字段 MODIFY id int,drop PRIMARY KEY</th>
-</tr>
-</thead>
-</table>
-<p>但通常不会删除主键，因为设计主键一定与业务逻辑无关。</p>
-<h2 id="执行计划-explain"><a href="#执行计划-explain" class="headerlink" title="执行计划 explain"></a>执行计划 explain</h2><table>
-<thead>
-<tr>
-<th align="left">1234567891011</th>
-<th align="left">CREATE TABLE innodb1 ( id INT auto_increment PRIMARY KEY, first_name VARCHAR (16), last_name VARCHAR (16), id_card VARCHAR (18), information text, KEY name (first_name, last_name), FULLTEXT KEY (information), UNIQUE KEY (id_card));insert into innodb1 (first_name,last_name,id_card,information) values (‘张’,’三’,’1001’,’华山派’);</th>
-</tr>
-</thead>
-</table>
-<p>我们可以通过<code>explain selelct</code>来分析 SQL 语句执行前的执行计划：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927854-46126c59-e2f9-4b67-a921-063abf78127b.jpeg#align=left&display=inline&height=132&originHeight=132&originWidth=633&size=0&status=done&style=none&width=633"><br>由上图可看出此 SQL 语句是按照主键索引来检索的。<br>执行计划是：当执行 SQL 语句时，首先会分析、优化，形成执行计划，在按照执行计划执行。</p>
-<h2 id="索引使用场景（重点）"><a href="#索引使用场景（重点）" class="headerlink" title="索引使用场景（重点）"></a>索引使用场景（重点）</h2><h3 id="where"><a href="#where" class="headerlink" title="where"></a>where</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927831-b3c86b4c-86dc-4e85-94af-95fff3dd469d.jpeg#align=left&display=inline&height=134&originHeight=134&originWidth=525&size=0&status=done&style=none&width=525"><br>上图中，根据<code>id</code>查询记录，因为<code>id</code>字段仅建立了主键索引，因此此 SQL 执行可选的索引只有主键索引，如果有多个，最终会选一个较优的作为检索的依据。</p>
-<table>
-<thead>
-<tr>
-<th align="left">1234</th>
-<th align="left">– 增加一个没有建立索引的字段 alter table innodb1 add sex char(1);– 按 sex 检索时可选的索引为 nullEXPLAIN SELECT * from innodb1 where sex=’男’;</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927864-a2b3a030-44e7-44b2-b715-015802054933.jpeg#align=left&display=inline&height=140&originHeight=140&originWidth=541&size=0&status=done&style=none&width=541"></p>
-<blockquote>
-<p>可以尝试在一个字段未建立索引时，根据该字段查询的效率，然后对该字段建立索引（<code>alter table 表名 add index(字段名)</code>），同样的 SQL 执行的效率，你会发现查询效率会有明显的提升（数据量越大越明显）。</p>
-</blockquote>
-<h3 id="order-by"><a href="#order-by" class="headerlink" title="order by"></a>order by</h3><p>当我们使用<code>order by</code>将查询结果按照某个字段排序时，如果该字段没有建立索引，那么执行计划会将查询出的所有数据使用外部排序（将数据从硬盘分批读取到内存使用内部排序，最后合并排序结果），这个操作是很影响性能的，因为需要将查询涉及到的所有数据从磁盘中读到内存（如果单条数据过大或者数据量过多都会降低效率），更无论读到内存之后的排序了。<br>但是如果我们对该字段建立索引<code>alter table 表名 add index(字段名)</code>，那么由于索引本身是有序的，因此直接按照索引的顺序和映射关系逐条取出数据即可。而且如果分页的，那么只用<strong>取出索引表某个范围内的索引对应的数据</strong>，而不用像上述那<strong>取出所有数据</strong>进行排序再返回某个范围内的数据。（从磁盘取数据是最影响性能的）</p>
-<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><blockquote>
-<p>对<code>join</code>语句匹配关系（<code>on</code>）涉及的字段建立索引能够提高效率</p>
-</blockquote>
-<h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>如果要查询的字段都建立过索引，那么引擎会直接在索引表中查询而不会访问原始数据（否则只要有一个字段没有建立索引就会做全表扫描），这叫索引覆盖。因此我们需要尽可能的在<code>select</code>后==只写必要的查询字段==，以增加索引覆盖的几率。<br>这里值得注意的是不要想着为每个字段建立索引，因为优先使用索引的优势就在于其体积小。</p>
-<h2 id="语法细节（要点）"><a href="#语法细节（要点）" class="headerlink" title="语法细节（要点）"></a>语法细节（要点）</h2><blockquote>
-<p>在满足索引使用的场景下（<code>where/order by/join on</code>或索引覆盖），索引也不一定被使用</p>
-</blockquote>
-<h3 id="字段要独立出现"><a href="#字段要独立出现" class="headerlink" title="字段要独立出现"></a>字段要独立出现</h3><p>比如下面两条 SQL 语句在语义上相同，但是第一条会使用主键索引而第二条不会。</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">select _ from user where id = 20-1;select _ from user where id+1 = 20;</th>
-</tr>
-</thead>
-</table>
-<h3 id="like查询，不能以通配符开头"><a href="#like查询，不能以通配符开头" class="headerlink" title="like查询，不能以通配符开头"></a><code>like</code>查询，不能以通配符开头</h3><p>比如搜索标题包含<code>mysql</code>的文章：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">select * from article where title like ‘%mysql%’;</th>
-</tr>
-</thead>
-</table>
-<p>这种 SQL 的执行计划用不了索引（<code>like</code>语句匹配表达式以通配符开头），因此只能做全表扫描，效率极低，在实际工程中几乎不被采用。而一般会使用第三方提供的支持中文的全文索引来做。<br>但是 <strong>关键字查询</strong> 热搜提醒功能还是可以做的，比如键入<code>mysql</code>之后提醒<code>mysql 教程</code>、<code>mysql 下载</code>、<code>mysql 安装步骤</code>等。用到的语句是：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">select * from article where title like ‘mysql%’;</th>
-</tr>
-</thead>
-</table>
-<p>这种<code>like</code>是可以利用索引的（当然前提是<code>title</code>字段建立过索引）。</p>
-<h3 id="复合索引只对第一个字段有效"><a href="#复合索引只对第一个字段有效" class="headerlink" title="复合索引只对第一个字段有效"></a>复合索引只对第一个字段有效</h3><p>建立复合索引：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table person add index(first_name,last_name);</th>
-</tr>
-</thead>
-</table>
-<p>其原理就是将索引先按照从<code>first_name</code>中提取的关键字排序，如果无法确定先后再按照从<code>last_name</code>提取的关键字排序，也就是说该索引表只是按照记录的<code>first_name</code>字段值有序。<br>因此<code>select * from person where first_name = ?</code>是可以利用索引的，而<code>select * from person where last_name = ?</code>无法利用索引。</p>
-<blockquote>
-<p>那么该复合索引的应用场景是什么？==组合查询==</p>
-</blockquote>
-<p>比如对于<code>select * person from first_name = ? and last_name = ?</code>，复合索引就比对<code>first_name</code>和<code>last_name</code>单独建立索引要高效些。很好理解，复合索引首先二分查找与<code>first_name = ?</code>匹配的记录，再在这些记录中二分查找与<code>last_name</code>匹配的记录，只涉及到一张索引表。而分别单独建立索引则是在<code>first_name</code>索引表中二分找出与<code>first_name = ?</code>匹配的记录，再在<code>last_name</code>索引表中二分找出与<code>last_name = ?</code>的记录，两者取交集。</p>
-<h3 id="or，两边条件都有索引可用"><a href="#or，两边条件都有索引可用" class="headerlink" title="or，两边条件都有索引可用"></a>or，两边条件都有索引可用</h3><blockquote>
-<p>一但有一边无索引可用就会导致整个 SQL 语句的全表扫描</p>
-</blockquote>
-<h3 id="状态值，不容易使用到索引"><a href="#状态值，不容易使用到索引" class="headerlink" title="状态值，不容易使用到索引"></a>状态值，不容易使用到索引</h3><p>如性别、支付状态等状态值字段往往只有极少的几种取值可能，这种字段即使建立索引，也往往利用不上。这是因为，一个状态值可能匹配大量的记录，这种情况 MySQL 会认为利用索引比全表扫描的效率低，从而弃用索引。索引是随机访问磁盘，而全表扫描是顺序访问磁盘，这就好比有一栋 20 层楼的写字楼，楼底下的索引牌上写着某个公司对应不相邻的几层楼，你去公司找人，与其按照索引牌的提示去其中一层楼没找到再下来看索引牌再上楼，不如从 1 楼挨个往上找到顶楼。</p>
-<h2 id="如何创建索引"><a href="#如何创建索引" class="headerlink" title="如何创建索引"></a>如何创建索引</h2><ul>
-<li>建立基础索引：在<code>where、order by、join</code>字段上建立索引。</li>
-<li>优化，组合索引：基于业务逻辑<ul>
-<li>如果条件经常性出现在一起，那么可以考虑将多字段索引升级为==复合索引==</li>
-<li>如果通过增加个别字段的索引，就可以出现==索引覆盖==，那么可以考虑为该字段建立索引</li>
-<li>查询时，不常用到的索引，应该删除掉</li>
-</ul>
-</li>
-</ul>
-<h2 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h2><p>语法：<code>index(field(10))</code>，使用字段值的前 10 个字符建立索引，默认是使用字段的全部内容建立索引。<br>前提：前缀的标识度高。比如密码就适合建立前缀索引，因为密码几乎各不相同。<br>==实操的难度==：在于前缀截取的长度。<br>我们可以利用<code>select count(*)/count(distinct left(password,prefixLen));</code>，通过从调整<code>prefixLen</code>的值（从 1 自增）查看不同前缀长度的一个平均匹配度，接近 1 时就可以了（表示一个密码的前<code>prefixLen</code>个字符几乎能确定唯一一条记录）</p>
-<h2 id="索引的存储结构"><a href="#索引的存储结构" class="headerlink" title="索引的存储结构"></a>索引的存储结构</h2><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p>btree（多路平衡查找树）是一种广泛应用于==磁盘上实现索引功能==的一种数据结构，也是大多数数据库索引表的实现。<br>以<code>add index(first_name,last_name)</code>为例：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927862-90c43fe4-bd10-4cd5-a2a2-a788fd8e54a2.jpeg#align=left&display=inline&height=356&originHeight=356&originWidth=809&size=0&status=done&style=none&width=809"><br>BTree 的一个 node 可以存储多个关键字，node 的大小取决于计算机的文件系统，因此我们可以通过减小索引字段的长度使结点存储更多的关键字。如果 node 中的关键字已满，那么可以通过每个关键字之间的子节点指针来拓展索引表，但是不能破坏结构的有序性，比如按照<code>first_name</code>第一有序、<code>last_name</code>第二有序的规则，新添加的<code>韩香</code>就可以插到<code>韩康</code>之后。<code>白起 &lt; 韩飞 &lt; 韩康 &lt; 李世民 &lt; 赵奢 &lt; 李寻欢 &lt; 王语嫣 &lt; 杨不悔</code>。这与二叉搜索树的思想是一样的，只不过二叉搜索树的查找效率是<code>log(2,N)</code>（以 2 为底 N 的对数），而 BTree 的查找效率是<code>log(x,N)</code>（其中 x 为 node 的关键字数量，可以达到 1000 以上）。<br>从<code>log(1000+,N)</code>可以看出，少量的磁盘读取即可做到大量数据的遍历，这也是 btree 的设计目的。</p>
-<h3 id="B-Tree-聚簇结构"><a href="#B-Tree-聚簇结构" class="headerlink" title="B+Tree 聚簇结构"></a>B+Tree 聚簇结构</h3><p>聚簇结构（也是在 BTree 上升级改造的）中，关键字和记录是存放在一起的。<br>在 MySQL 中，仅仅只有<code>Innodb</code>的==主键索引为聚簇结构==，其它的索引包括<code>Innodb</code>的非主键索引都是典型的 BTree 结构。</p>
-<h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a>哈希索引</h3><p>在索引被载入内存时，使用哈希结构来存储。</p>
-<h1 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h1><blockquote>
-<p>缓存<code>select</code>语句的查询结果</p>
-</blockquote>
-<h2 id="在配置文件中开启缓存"><a href="#在配置文件中开启缓存" class="headerlink" title="在配置文件中开启缓存"></a>在配置文件中开启缓存</h2><p>windows 上是<code>my.ini</code>，linux 上是<code>my.cnf</code><br>在<code>[mysqld]</code>段中配置<code>query_cache_type</code>：</p>
-<ul>
-<li>0：不开启</li>
-<li>1：开启，默认缓存所有，需要在 SQL 语句中增加<code>select sql-no-cache</code>提示来放弃缓存</li>
-<li>2：开启，默认都不缓存，需要在 SQL 语句中增加<code>select sql-cache</code>来主动缓存（==常用==）</li>
-</ul>
-<p>更改配置后需要重启以使配置生效，重启后可通过<code>show variables like ‘query_cache_type’;</code>来查看：</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">show variables like ‘query_cache_type’;query_cache_type DEMAND</th>
-</tr>
-</thead>
-</table>
-<h2 id="在客户端设置缓存大小"><a href="#在客户端设置缓存大小" class="headerlink" title="在客户端设置缓存大小"></a>在客户端设置缓存大小</h2><p>通过配置项<code>query_cache_size</code>来设置：</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456</th>
-<th align="left">show variables like ‘query_cache_size’;query_cache_size 0set global query_cache_size=64<em>1024</em>1024;show variables like ‘query_cache_size’;query_cache_size 67108864</th>
-</tr>
-</thead>
-</table>
-<h2 id="将查询结果缓存"><a href="#将查询结果缓存" class="headerlink" title="将查询结果缓存"></a>将查询结果缓存</h2><p><code>select sql_cache * from user;</code></p>
-<h2 id="重置缓存"><a href="#重置缓存" class="headerlink" title="重置缓存"></a>重置缓存</h2><p><code>reset query cache;</code></p>
-<h2 id="缓存失效问题（大问题）"><a href="#缓存失效问题（大问题）" class="headerlink" title="缓存失效问题（大问题）"></a>缓存失效问题（大问题）</h2><p>当数据表改动时，基于该数据表的任何缓存都会被删除。（表层面的管理，不是记录层面的管理，因此失效率较高）</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li>应用程序，不应该关心<code>query cache</code>的使用情况。可以尝试使用，但不能由<code>query cache</code>决定业务逻辑，因为<code>query cache</code>由 DBA 来管理。</li>
-<li>缓存是以 SQL 语句为 key 存储的，因此即使 SQL 语句功能相同，但如果多了一个空格或者大小写有差异都会导致匹配不到缓存。</li>
-</ol>
-<h1 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h1><p>一般情况下我们创建的表对应一组存储文件，使用<code>MyISAM</code>存储引擎时是一个<code>.MYI</code>和<code>.MYD</code>文件，使用<code>Innodb</code>存储引擎时是一个<code>.ibd</code>和<code>.frm</code>（表结构）文件。<br>当数据量较大时（一般千万条记录级别以上），MySQL 的性能就会开始下降，这时我们就需要将数据分散到多组存储文件，==保证其单个文件的执行效率==。<br>最常见的分区方案是按<code>id</code>分区，如下将<code>id</code>的哈希值对 10 取模将数据均匀分散到 10 个<code>.ibd</code>存储文件中：</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345</th>
-<th align="left">create table article( id int auto_increment PRIMARY KEY, title varchar(64), content text)PARTITION by HASH(id) PARTITIONS 10</th>
-</tr>
-</thead>
-</table>
-<p>查看<code>data</code>目录：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927931-b383f719-aa95-43a4-a25b-a705ec669101.jpeg#align=left&display=inline&height=234&originHeight=234&originWidth=268&size=0&status=done&style=none&width=268"></p>
-<blockquote>
-<p>==服务端的表分区对于客户端是透明的==，客户端还是照常插入数据，但服务端会按照分区算法分散存储数据。</p>
-</blockquote>
-<h2 id="MySQL-提供的分区算法"><a href="#MySQL-提供的分区算法" class="headerlink" title="MySQL 提供的分区算法"></a>MySQL 提供的分区算法</h2><blockquote>
-<p>==分区依据的字段必须是主键的一部分==，分区是为了快速定位数据，因此该字段的搜索频次较高应作为强检索字段，否则依照该字段分区毫无意义</p>
-</blockquote>
-<h3 id="hash-field"><a href="#hash-field" class="headerlink" title="hash(field)"></a>hash(field)</h3><p>相同的输入得到相同的输出。输出的结果跟输入是否具有规律无关。==仅适用于整型字段==</p>
-<h3 id="key-field"><a href="#key-field" class="headerlink" title="key(field)"></a>key(field)</h3><p>和<code>hash(field)</code>的性质一样，只不过<code>key</code>是==处理字符串==的，比<code>hash()</code>多了一步从字符串中计算出一个整型在做取模操作。</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456</th>
-<th align="left">create table article_key( id int auto_increment, title varchar(64), content text, PRIMARY KEY (id,title) – 要求分区依据字段必须是主键的一部分)PARTITION by KEY(title) PARTITIONS 10</th>
-</tr>
-</thead>
-</table>
-<h3 id="range-算法"><a href="#range-算法" class="headerlink" title="range 算法"></a>range 算法</h3><p>是一种==条件分区==算法，按照数据大小范围分区（将数据使用某种条件，分散到不同的分区中）。<br>如下，按文章的发布时间将数据按照 2018 年 8 月、9 月、10 月分区存放：</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112</th>
-<th align="left">create table article_range( id int auto_increment, title varchar(64), content text, created_time int, – 发布时间到 1970-1-1 的毫秒数 PRIMARY KEY (id,created_time) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY RANGE(created_time)( PARTITION p201808 VALUES less than (1535731199), – select UNIX_TIMESTAMP(‘2018-8-31 23:59:59’) PARTITION p201809 VALUES less than (1538323199), – 2018-9-30 23:59:59 PARTITION p201810 VALUES less than (1541001599) – 2018-10-31 23:59:59);</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927898-404e6b0b-312f-4864-96d8-534ff680f052.jpeg#align=left&display=inline&height=89&originHeight=89&originWidth=339&size=0&status=done&style=none&width=339"><br>注意：条件运算符只能使用==less than==，这以为着较小的范围要放在前面，比如上述<code>p201808,p201819,p201810</code>分区的定义顺序依照<code>created_time</code>数值范围从小到大，不能颠倒。</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">insert into article_range values(null,’MySQL 优化’,’内容示例’,1535731180);flush tables; – 使操作立即刷新到磁盘文件</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-35852910-8a70-4728-bd2a-a2b666843d62.jpeg#align=left&display=inline&height=98&originHeight=98&originWidth=419&size=0&status=done&style=none&width=419"><br>由于插入的文章的发布时间<code>1535731180</code>小于<code>1535731199</code>（<code>2018-8-31 23:59:59</code>），因此被存储到<code>p201808</code>分区中，这种算法的存储到哪个分区取决于数据状况。</p>
-<h3 id="list-算法"><a href="#list-算法" class="headerlink" title="list 算法"></a>list 算法</h3><p>也是一种条件分区，按照列表值分区（<code>in (值列表)</code>）。</p>
-<table>
-<thead>
-<tr>
-<th align="left">1234567891011</th>
-<th align="left">create table article_list( id int auto_increment, title varchar(64), content text, status TINYINT(1), – 文章状态：0-草稿，1-完成但未发布，2-已发布 PRIMARY KEY (id,status) – 要求分区依据字段必须是主键的一部分)charset=utf8PARTITION BY list(status)( PARTITION writing values in(0,1), – 未发布的放在一个分区 PARTITION published values in (2) – 已发布的放在一个分区);</th>
-</tr>
-</thead>
-</table>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">insert into article_list values(null,’mysql 优化’,’内容示例’,0);flush tables;</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927906-a52d8533-1ef8-4eb8-a4a8-5de6aa2658f6.jpeg#align=left&display=inline&height=47&originHeight=47&originWidth=429&size=0&status=done&style=none&width=429"></p>
-<h2 id="分区管理语法"><a href="#分区管理语法" class="headerlink" title="分区管理语法"></a>分区管理语法</h2><h3 id="range-list"><a href="#range-list" class="headerlink" title="range/list"></a>range/list</h3><h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><p>前文中我们尝试使用<code>range</code>对文章按照月份归档，随着时间的增加，我们需要增加一个月份：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1234</th>
-<th align="left">alter table article_range add partition( partition p201811 values less than (1543593599) – select UNIX_TIMESTAMP(‘2018-11-30 23:59:59’) – more);</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927903-cad12e9f-5d3a-4036-8b81-d32a0cb2b1b9.jpeg#align=left&display=inline&height=94&originHeight=94&originWidth=403&size=0&status=done&style=none&width=403"></p>
-<h4 id="删除分区"><a href="#删除分区" class="headerlink" title="删除分区"></a>删除分区</h4><table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table article_range drop PARTITION p201808</th>
-</tr>
-</thead>
-</table>
-<p>注意：==删除分区后，分区中原有的数据也会随之删除！==</p>
-<h3 id="key-hash"><a href="#key-hash" class="headerlink" title="key/hash"></a>key/hash</h3><h4 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h4><table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table article_key add partition partitions 4</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927940-f4a47b32-d956-427c-ac70-3b90843ef58c.jpeg#align=left&display=inline&height=297&originHeight=297&originWidth=232&size=0&status=done&style=none&width=232"></p>
-<h4 id="销毁分区"><a href="#销毁分区" class="headerlink" title="销毁分区"></a>销毁分区</h4><table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table article_key coalesce partition 6</th>
-</tr>
-</thead>
-</table>
-<p><code>key/hash</code>分区的管理不会删除数据，但是每一次调整（新增或销毁分区）都会将所有的数据重写分配到新的分区上。==效率极低==，最好在设计阶段就考虑好分区策略。</p>
-<h2 id="分区的使用"><a href="#分区的使用" class="headerlink" title="分区的使用"></a>分区的使用</h2><p>当数据表中的数据量很大时，分区带来的效率提升才会显现出来。<br>只有检索字段为分区字段时，分区带来的效率提升才会比较明显。因此，==分区字段的选择很重要==，并且==业务逻辑要尽可能地根据分区字段做相应调整==（尽量使用分区字段作为查询条件）。</p>
-<h1 id="水平分割和垂直分割"><a href="#水平分割和垂直分割" class="headerlink" title="水平分割和垂直分割"></a>水平分割和垂直分割</h1><blockquote>
-<p>水平分割：通过建立结构相同的几张表分别存储数据<br>垂直分割：将经常一起使用的字段放在一个单独的表中，分割后的表记录之间是一一对应关系。</p>
-</blockquote>
-<h2 id="分表原因"><a href="#分表原因" class="headerlink" title="分表原因"></a>分表原因</h2><ul>
-<li>为数据库减压</li>
-<li>分区算法局限</li>
-<li>数据库支持不完善（<code>5.1</code>之后<code>mysql</code>才支持分区操作）</li>
-</ul>
-<h2 id="id-重复的解决方案"><a href="#id-重复的解决方案" class="headerlink" title="id 重复的解决方案"></a>id 重复的解决方案</h2><ul>
-<li>借用第三方应用如<code>memcache、redis</code>的<code>id</code>自增器</li>
-<li>单独建一张只包含<code>id</code>一个字段的表，每次自增该字段作为数据记录的<code>id</code></li>
-</ul>
-<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><blockquote>
-<p>横向扩展：从根本上（单机的硬件处理能力有限）提升数据库性能 。由此而生的相关技术：==读写分离、负载均衡==</p>
-</blockquote>
-<h2 id="安装和配置主从复制"><a href="#安装和配置主从复制" class="headerlink" title="安装和配置主从复制"></a>安装和配置主从复制</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li><code>Red Hat Enterprise Linux Server release 7.0 (Maipo)</code>（虚拟机）</li>
-<li><code>mysql5.7</code>（<a target="_blank" rel="noopener" href="https://mirrors.163.com/mysql/Downloads/MySQL-5.7/mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz">下载地址</a>）</li>
-</ul>
-<h3 id="安装和配置"><a href="#安装和配置" class="headerlink" title="安装和配置"></a>安装和配置</h3><p>解压到对外提供的服务的目录（我自己专门创建了一个<code>/export/server</code>来存放）</p>
-<table>
-<thead>
-<tr>
-<th align="left">123</th>
-<th align="left">tar xzvf mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz -C /export/servercd /export/servermv mysql-5.7.23-linux-glibc2.12-x86_64 mysql</th>
-</tr>
-</thead>
-</table>
-<p>添加<code>mysql</code>目录的所属组和所属者：</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345</th>
-<th align="left">groupadd mysqluseradd -r -g mysql mysqlcd /export/serverchown -R mysql:mysql mysql/chmod -R 755 mysql/</th>
-</tr>
-</thead>
-</table>
-<p>创建<code>mysql</code>数据存放目录（其中<code>/export/data</code>是我创建专门用来为各种服务存放数据的目录）</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">mkdir /export/data/mysql</th>
-</tr>
-</thead>
-</table>
-<p>初始化<code>mysql</code>服务</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">cd /export/server/mysql./bin/mysqld –basedir=/export/server/mysql –datadir=/export/data/mysql –user=mysql –pid-file=/export/data/mysql/mysql.pid –initialize</th>
-</tr>
-</thead>
-</table>
-<blockquote>
-<p>如果成功会显示<code>mysql</code>的<code>root</code>账户的初始密码，记下来以备后续登录。如果报错缺少依赖，则使用<code>yum instally</code>依次安装即可</p>
-</blockquote>
-<p>配置<code>my.cnf</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718192021222324</th>
-<th align="left">vim /etc/my.cnf[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10 # 服务 id，在集群时必须唯一，建议设置为 IP 的第四段 port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a target="_blank" rel="noopener" href="http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##">http://fedoraproject.org/wiki/Systemd[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid##</a> include all files from the config directory#!includedir /etc/my.cnf.d</th>
-</tr>
-</thead>
-</table>
-<p>将服务添加到开机自动启动</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">cp /export/server/mysql/support-files/mysql.server /etc/init.d/mysqld</th>
-</tr>
-</thead>
-</table>
-<p>启动服务</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">service mysqld start</th>
-</tr>
-</thead>
-</table>
-<p>配置环境变量，在<code>/etc/profile</code>中添加如下内容</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345</th>
-<th align="left"># mysql envMYSQL_HOME=/export/server/mysqlMYSQL_PATH=$MYSQL_HOME/binPATH=$PATH:$MYSQL_PATHexport PATH</th>
-</tr>
-</thead>
-</table>
-<p>使配置即可生效</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">source /etc/profile</th>
-</tr>
-</thead>
-</table>
-<p>使用<code>root</code>登录</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">mysql -uroot -p# 这里填写之前初始化服务时提供的密码</th>
-</tr>
-</thead>
-</table>
-<p>登录上去之后，更改<code>root</code>账户密码（我为了方便将密码改为 root），否则操作数据库会报错</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">set password=password(‘root’);flush privileges;</th>
-</tr>
-</thead>
-</table>
-<p>设置服务可被所有远程客户端访问</p>
-<table>
-<thead>
-<tr>
-<th align="left">123</th>
-<th align="left">use mysql;update user set host=’%’ where user=’root’;flush privileges;</th>
-</tr>
-</thead>
-</table>
-<blockquote>
-<p>这样就可以在宿主机使用<code>navicat</code>远程连接虚拟机 linux 上的 mysql 了</p>
-</blockquote>
-<h3 id="配置主从节点"><a href="#配置主从节点" class="headerlink" title="配置主从节点"></a>配置主从节点</h3><h4 id="配置-master"><a href="#配置-master" class="headerlink" title="配置 master"></a>配置 master</h4><p>以<code>linux</code>（<code>192.168.10.10</code>）上的<code>mysql</code>为<code>master</code>，宿主机（<code>192.168.10.1</code>）上的<code>mysql</code>为<code>slave</code>配置主从复制。<br>修改<code>master</code>的<code>my.cnf</code>如下</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718192021222324252627282930</th>
-<th align="left">[mysqld]basedir=/export/server/mysqldatadir=/export/data/mysqlsocket=/tmp/mysql.sockuser=mysqlserver-id=10port=3306# Disabling symbolic-links is recommended to prevent assorted security riskssymbolic-links=0# Settings user and group are ignored when systemd is used.# If you need to run mysqld under a different user or group,# customize your systemd unit file for mariadb according to the# instructions in <a target="_blank" rel="noopener" href="http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin">http://fedoraproject.org/wiki/Systemdlog-bin=mysql-bin</a> # 开启二进制日志 expire-logs-days=7 # 设置日志过期时间，避免占满磁盘 binlog-ignore-db=mysql # 不使用主从复制的数据库 binlog-ignore-db=information_schemabinlog-ignore-db=performation_schemabinlog-ignore-db=sysbinlog-do-db=test #使用主从复制的数据库[mysqld_safe]log-error=/export/data/mysql/error.logpid-file=/export/data/mysql/mysql.pid## include all files from the config directory#!includedir /etc/my.cnf.d</th>
-</tr>
-</thead>
-</table>
-<p>重启<code>master</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">service mysqld restart</th>
-</tr>
-</thead>
-</table>
-<p>登录<code>master</code>查看配置是否生效（<code>ON</code>即为开启，默认为<code>OFF</code>）：</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456</th>
-<th align="left">mysql&gt; show variables like ‘log_bin’;+—————+——-+</th>
-<th>Variable_name</th>
-<th>Value</th>
-<th>+—————+——-+</th>
-<th>log_bin</th>
-<th>ON</th>
-<th>+—————+——-+</th>
-</tr>
-</thead>
-</table>
-<p>在<code>master</code>的数据库中建立备份账号：<code>backup</code>为用户名，<code>%</code>表示任何远程地址，用户<code>back</code>可以使用密码<code>1234</code>通过任何远程客户端连接<code>master</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">grant replication slave on <em>.</em> to ‘backup’@’%’ identified by ‘1234’</th>
-</tr>
-</thead>
-</table>
-<p>查看<code>user</code>表可以看到我们刚创建的用户：</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345678910</th>
-<th align="left">mysql&gt; use mysqlmysql&gt; select user,authentication_string,host from user;+—————+——————————————-+———–+</th>
-<th>user</th>
-<th>authentication_string</th>
-<th>host</th>
-<th>+—————+——————————————-+———–+</th>
-<th>root</th>
-<th>*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B</th>
-<th>%</th>
-<th></th>
-<th>mysql.session</th>
-<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
-<th>localhost</th>
-<th></th>
-<th>mysql.sys</th>
-<th>*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE</th>
-<th>localhost</th>
-<th></th>
-<th>backup</th>
-<th>*A4B6157319038724E3560894F7F932C8886EBFCF</th>
-<th>%</th>
-<th>+—————+——————————————-+———–+</th>
-</tr>
-</thead>
-</table>
-<p>新建<code>test</code>数据库，创建一个<code>article</code>表以备后续测试</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456</th>
-<th align="left">CREATE TABLE <code>article</code> ( <code>id</code> int(11) NOT NULL AUTO_INCREMENT, <code>title</code> varchar(64) DEFAULT NULL, <code>content</code> text, PRIMARY KEY (<code>id</code>)) CHARSET=utf8;</th>
-</tr>
-</thead>
-</table>
-<p>重启服务并刷新数据库状态到存储文件中（<code>with read lock</code>表示在此过程中，客户端只能读数据，以便获得一个一致性的快照）</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456</th>
-<th align="left">[root@zhenganwen ~]# service mysqld restartShutting down MySQL…. SUCCESS! Starting MySQL. SUCCESS! [root@zhenganwen mysql]# mysql -uroot -prootmysql&gt; flush tables with read lock;Query OK, 0 rows affected (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<p>查看<code>master</code>上当前的二进制日志和偏移量（记一下其中的<code>File</code>和<code>Position</code>）</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345678</th>
-<th align="left">mysql&gt; show master status \G*<strong><strong><strong><strong><strong><em>\</em>****</strong></strong></strong></strong></strong> 1. row <strong><strong>****</strong></strong>***<strong><strong>****</strong></strong> File: mysql-bin.000002 Position: 154 Binlog_Do_DB: test Binlog_Ignore_DB: mysql,information_schema,performation_schema,sysExecuted_Gtid_Set: 1 row in set (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927887-fe132421-1993-434b-ac15-571876568a61.jpeg#align=left&display=inline&height=335&originHeight=335&originWidth=484&size=0&status=done&style=none&width=484"><br><code>File</code>表示实现复制功能的日志，即上图中的<code>Binary log</code>；<code>Position</code>则表示<code>Binary log</code>日志文件的偏移量之后的都会同步到<code>slave</code>中，那么在偏移量之前的则需要我们手动导入。<br>主服务器上面的任何修改都会保存在二进制日志 Binary log 里面，从服务器上面启动一个 I/O thread（实际上就是一个主服务器的客户端进程），连接到主服务器上面请求读取二进制日志，然后把读取到的二进制日志写到本地的一个 Realy log 里面。从服务器上面开启一个 SQL thread 定时检查 Realy log，如果发现有更改立即把更改的内容在本机上面执行一遍。<br>如果一主多从的话，这时主库既要负责写又要负责为几个从库提供二进制日志。此时可以稍做调整，将二进制日志只给某一从，这一从再开启二进制日志并将自己的二进制日志再发给其它从。或者是干脆这个从不记录只负责将二进制日志转发给其它从，这样架构起来性能可能要好得多，而且数据之间的延时应该也稍微要好一些<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927893-e6c726f1-1ca7-461e-b5e2-54613c741e61.jpeg#align=left&display=inline&height=307&originHeight=307&originWidth=660&size=0&status=done&style=none&width=660"><br>手动导入，从<code>master</code>中导出数据</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">mysqldump -uroot -proot -hlocalhost test &gt; /export/data/test.sql</th>
-</tr>
-</thead>
-</table>
-<p>将<code>test.sql</code>中的内容在<code>slave</code>上执行一遍。</p>
-<h4 id="配置-slave"><a href="#配置-slave" class="headerlink" title="配置 slave"></a>配置 slave</h4><p>修改<code>slave</code>的<code>my.ini</code>文件中的<code>[mysqld]</code>部分</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">log-bin=mysqlserver-id=1 #192.168.10.1</th>
-</tr>
-</thead>
-</table>
-<p>保存修改后重启<code>slave</code>，<code>WIN+R</code>-&gt;<code>services.msc</code>-&gt;<code>MySQL5.7</code>-&gt;重新启动<br>登录<code>slave</code>检查<code>log_bin</code>是否以被开启：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">show VARIABLES like ‘log_bin’;</th>
-</tr>
-</thead>
-</table>
-<p>配置与<code>master</code>的同步复制：</p>
-<table>
-<thead>
-<tr>
-<th align="left">1234567</th>
-<th align="left">stop slave;change master to master_host=’192.168.10.10’, – master 的 IP master_user=’backup’, – 之前在 master 上创建的用户 master_password=’1234’, master_log_file=’mysql-bin.000002’, – master 上 show master status \G 提供的信息 master_log_pos=154;</th>
-</tr>
-</thead>
-</table>
-<p>启用<code>slave</code>节点并查看状态</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061</th>
-<th align="left">mysql&gt; start slave;mysql&gt; show slave status \G*<strong><strong><strong><strong><strong><em>\</em>****</strong></strong></strong></strong></strong> 1. row <strong><strong>****</strong></strong>***<strong><strong>****</strong></strong> Slave_IO_State: Waiting for master to send event Master_Host: 192.168.10.10 Master_User: backup Master_Port: 3306 Connect_Retry: 60 Master_Log_File: mysql-bin.000002 Read_Master_Log_Pos: 154 Relay_Log_File: DESKTOP-KUBSPE0-relay-bin.000002 Relay_Log_Pos: 320 Relay_Master_Log_File: mysql-bin.000002 Slave_IO_Running: Yes Slave_SQL_Running: Yes Replicate_Do_DB: Replicate_Ignore_DB: Replicate_Do_Table: Replicate_Ignore_Table: Replicate_Wild_Do_Table: Replicate_Wild_Ignore_Table: Last_Errno: 0 Last_Error: Skip_Counter: 0 Exec_Master_Log_Pos: 154 Relay_Log_Space: 537 Until_Condition: None Until_Log_File: Until_Log_Pos: 0 Master_SSL_Allowed: No Master_SSL_CA_File: Master_SSL_CA_Path: Master_SSL_Cert: Master_SSL_Cipher: Master_SSL_Key: Seconds_Behind_Master: 0Master_SSL_Verify_Server_Cert: No Last_IO_Errno: 0 Last_IO_Error: Last_SQL_Errno: 0 Last_SQL_Error: Replicate_Ignore_Server_Ids: Master_Server_Id: 10 Master_UUID: f68774b7-0b28-11e9-a925-000c290abe05 Master_Info_File: C:\ProgramData\MySQL\MySQL Server 5.7\Data\master.info SQL_Delay: 0 SQL_Remaining_Delay: NULL Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates Master_Retry_Count: 86400 Master_Bind: Last_IO_Error_Timestamp: Last_SQL_Error_Timestamp: Master_SSL_Crl: Master_SSL_Crlpath: Retrieved_Gtid_Set: Executed_Gtid_Set: Auto_Position: 0 Replicate_Rewrite_DB: Channel_Name: Master_TLS_Version:1 row in set (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<blockquote>
-<p>注意查看第 4、14、15 三行，若与我一致，表示<code>slave</code>配置成功</p>
-</blockquote>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>关闭<code>master</code>的读取锁定</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">mysql&gt; unlock tables;Query OK, 0 rows affected (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<p>向<code>master</code>中插入一条数据</p>
-<table>
-<thead>
-<tr>
-<th align="left">123</th>
-<th align="left">mysql&gt; use testmysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<p>查看<code>slave</code>是否自动同步了数据</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left">mysql&gt; insert into article (title,content) values (‘mysql master and slave’,’record the cluster building succeed!:)’);Query OK, 1 row affected (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<p>至此，主从复制的配置成功！：)<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xlgen157387/article/details/52452394">使用 mysqlreplicate 命令快速搭建 Mysql 主从复制</a></p>
-<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><p>读写分离是依赖于主从复制，而主从复制又是为读写分离服务的。因为主从复制要求<code>slave</code>不能写只能读（如果对<code>slave</code>执行写操作，那么<code>show slave status</code>将会呈现<code>Slave_SQL_Running=NO</code>，此时你需要按照前面提到的手动同步一下<code>slave</code>）。</p>
-<h3 id="方案一、定义两种连接"><a href="#方案一、定义两种连接" class="headerlink" title="方案一、定义两种连接"></a>方案一、定义两种连接</h3><p>就像我们在学 JDBC 时定义的<code>DataBase</code>一样，我们可以抽取出<code>ReadDataBase,WriteDataBase implements DataBase</code>，但是这种方式无法利用优秀的线程池技术如<code>DruidDataSource</code>帮我们管理连接，也无法利用<code>Spring AOP</code>让连接对<code>DAO</code>层透明。</p>
-<h3 id="方案二、使用-Spring-AOP"><a href="#方案二、使用-Spring-AOP" class="headerlink" title="方案二、使用 Spring AOP"></a>方案二、使用 Spring AOP</h3><p>如果能够使用<code>Spring AOP</code>解决数据源切换的问题，那么就可以和<code>Mybatis</code>、<code>Druid</code>整合到一起了。<br>我们在整合<code>Spring1</code>和<code>Mybatis</code>时，我们只需写 DAO 接口和对应的<code>SQL</code>语句，那么 DAO 实例是由谁创建的呢？实际上就是<code>Spring</code>帮我们创建的，它通过我们注入的数据源，帮我们完成从中获取数据库连接、使用连接执行 <code>SQL</code> 语句的过程以及最后归还连接给数据源的过程。<br>如果我们能在调用 DAO 接口时根据接口方法命名规范（增<code>addXXX/createXXX</code>、删<code>deleteXX/removeXXX</code>、改<code>updateXXXX</code>、查<code>selectXX/findXXX/getXX/queryXXX</code>）动态地选择数据源（读数据源对应连接<code>master</code>而写数据源对应连接<code>slave</code>），那么就可以做到读写分离了。</p>
-<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1584681927934-ae443fd0-1934-4076-b2a5-aed058579a5f.jpeg#align=left&display=inline&height=421&originHeight=421&originWidth=316&size=0&status=done&style=none&width=316"></p>
-<h4 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h4><p>其中，为了方便访问数据库引入了<code>mybatis</code>和<code>druid</code>，实现数据源动态切换主要依赖<code>spring-aop</code>和<code>spring-aspects</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465</th>
-<th align="left"><dependencies> <dependency> <groupId>org.mybatis</groupId> <artifactId>mybatis-spring</artifactId> <version>1.3.2</version> </dependency> <dependency> <groupId>org.mybatis</groupId> <artifactId>mybatis</artifactId> <version>3.4.6</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-core</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-aop</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-jdbc</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>com.alibaba</groupId> <artifactId>druid</artifactId> <version>1.1.6</version> </dependency> <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> <version>6.0.2</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-aspects</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> <version>1.16.22</version> </dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-test</artifactId> <version>5.0.8.RELEASE</version> </dependency> <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> <version>4.12</version> </dependency></dependencies></th>
-</tr>
-</thead>
-</table>
-<h4 id="数据类"><a href="#数据类" class="headerlink" title="数据类"></a>数据类</h4><table>
-<thead>
-<tr>
-<th align="left">123456789101112131415</th>
-<th align="left">package top.zhenganwen.mysqloptimize.entity;import lombok.AllArgsConstructor;import lombok.Data;import lombok.NoArgsConstructor;@Data@AllArgsConstructor@NoArgsConstructorpublic class Article { private int id; private String title; private String content;}</th>
-</tr>
-</thead>
-</table>
-<h4 id="spring-配置文件"><a href="#spring-配置文件" class="headerlink" title="spring 配置文件"></a>spring 配置文件</h4><p>其中<code>RoutingDataSourceImpl</code>是实现动态切换功能的核心类，稍后介绍。</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152</th>
-<th align="left"><?xml version="1.0" encoding="UTF-8"?><beans xmlns="http://www.springframework.org/schema/beans"       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       xmlns:context="http://www.springframework.org/schema/context"       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> &lt;context:property-placeholder location=”db.properties”&gt;</context:property-placeholder> &lt;context:component-scan base-package=”top.zhenganwen.mysqloptimize”/&gt; <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"/> <property name="url" value="${master.db.url}"></property> <property name="username" value="${master.db.username}"></property> <property name="password" value="${master.db.password}"></property> </bean> <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource"> <property name="driverClassName" value="${db.driverClass}"/> <property name="url" value="${slave.db.url}"></property> <property name="username" value="${slave.db.username}"></property> <property name="password" value="${slave.db.password}"></property> </bean> <bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"/> <entry key="write" value-ref="masterDataSource"/> </map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"/> </map> </property> </bean> <!-- Mybatis文件 --> <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> <property name="configLocation" value="classpath:mybatis-config.xml" /> <property name="dataSource" ref="dataSourceRouting" /> <property name="mapperLocations" value="mapper/*.xml"/> </bean> <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> <property name="basePackage" value="top.zhenganwen.mysqloptimize.mapper" /> <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> </bean></beans></th>
-</tr>
-</thead>
-</table>
-<p><code>dp.properties</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789</th>
-<th align="left">master.db.url=jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCmaster.db.username=rootmaster.db.password=rootslave.db.url=jdbc:mysql://192.168.10.10:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTCslave.db.username=rootslave.db.password=rootdb.driverClass=com.mysql.jdbc.Driver</th>
-</tr>
-</thead>
-</table>
-<p><code>mybatis-config.xml</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789</th>
-<th align="left"><?xml version="1.0" encoding="UTF-8"?><!DOCTYPE configuration        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-config.dtd"><configuration> <typeAliases> <typeAlias type="top.zhenganwen.mysqloptimize.entity.Article" alias="Article"/> </typeAliases></configuration></th>
-</tr>
-</thead>
-</table>
-<h4 id="mapper-接口和配置文件"><a href="#mapper-接口和配置文件" class="headerlink" title="mapper 接口和配置文件"></a>mapper 接口和配置文件</h4><p><code>ArticleMapper.java</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">1234567891011121314151617</th>
-<th align="left">package top.zhenganwen.mysqloptimize.mapper;import org.springframework.stereotype.Repository;import top.zhenganwen.mysqloptimize.entity.Article;import java.util.List;@Repositorypublic interface ArticleMapper { List<Article> findAll(); void add(Article article); void delete(int id);}</th>
-</tr>
-</thead>
-</table>
-<p><code>ArticleMapper.xml</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415</th>
-<th align="left"><?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" ><mapper namespace="top.zhenganwen.mysqloptimize.mapper.ArticleMapper"> <select id="findAll" resultType="Article"> select * from article </select> <insert id="add" parameterType="Article"> insert into article (title,content) values (#{title},#{content}) </insert> <delete id="delete" parameterType="int"> delete from article where id=#{id} </delete></mapper></th>
-</tr>
-</thead>
-</table>
-<h4 id="核心类"><a href="#核心类" class="headerlink" title="核心类"></a>核心类</h4><h5 id="RoutingDataSourceImpl"><a href="#RoutingDataSourceImpl" class="headerlink" title="RoutingDataSourceImpl"></a>RoutingDataSourceImpl</h5><table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718192021222324252627282930313233343536373839404142</th>
-<th align="left">package top.zhenganwen.mysqloptimize.dataSource;import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;import java.util._;/** _ RoutingDataSourceImpl class _ 数据源路由 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 _/public class RoutingDataSourceImpl extends AbstractRoutingDataSource { /** _ key 为 read 或 write _ value 为 DAO 方法的前缀 _ 什么前缀开头的方法使用读数据员，什么开头的方法使用写数据源 _/ public static final Map&lt;String, List<String>&gt; METHOD_TYPE_MAP = new HashMap&lt;String, List<String>&gt;(); /** _ 由我们指定数据源的 id，由 Spring 切换数据源 * _ @return _/ @Override protected Object determineCurrentLookupKey() { System.out.println(“数据源为：”+DataSourceHandler.getDataSource()); return DataSourceHandler.getDataSource(); } public void setMethodType(Map&lt;String, String&gt; map) { for (String type : map.keySet()) { String methodPrefixList = map.get(type); if (methodPrefixList != null) { METHOD_TYPE_MAP.put(type, Arrays.asList(methodPrefixList.split(“,”))); } } }}</th>
-</tr>
-</thead>
-</table>
-<p>它的主要功能是，本来我们只配置一个数据源，因此<code>Spring</code>动态代理 DAO 接口时直接使用该数据源，现在我们有了读、写两个数据源，我们需要加入一些自己的逻辑来告诉调用哪个接口使用哪个数据源（读数据的接口使用<code>slave</code>，写数据的接口使用<code>master</code>。这个告诉<code>Spring</code>该使用哪个数据源的类就是<code>AbstractRoutingDataSource</code>，必须重写的方法<code>determineCurrentLookupKey</code>返回数据源的标识，结合<code>spring</code>配置文件（下段代码的 5，6 两行）</p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415</th>
-<th align="left"><bean id="dataSourceRouting" class="top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl"> <property name="defaultTargetDataSource" ref="masterDataSource"></property> <property name="targetDataSources"> <map key-type="java.lang.String" value-type="javax.sql.DataSource"> <entry key="read" value-ref="slaveDataSource"/> <entry key="write" value-ref="masterDataSource"/> </map> </property> <property name="methodType"> <map key-type="java.lang.String" value-type="java.lang.String"> <entry key="read" value="query,find,select,get,load,"></entry> <entry key="write" value="update,add,create,delete,remove,modify"/> </map> </property></bean></th>
-</tr>
-</thead>
-</table>
-<p>如果<code>determineCurrentLookupKey</code>返回<code>read</code>那么使用<code>slaveDataSource</code>，如果返回<code>write</code>就使用<code>masterDataSource</code>。</p>
-<h5 id="DataSourceHandler"><a href="#DataSourceHandler" class="headerlink" title="DataSourceHandler"></a>DataSourceHandler</h5><table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718192021222324252627</th>
-<th align="left">package top.zhenganwen.mysqloptimize.dataSource;/** _ DataSourceHandler class _ <p> _ 将数据源与线程绑定，需要时根据线程获取 _ _ @author zhenganwen, blog:zhenganwen.top _ @date 2018/12/29 */public class DataSourceHandler { /** _ 绑定的是 read 或 write，表示使用读或写数据源 _/ private static final ThreadLocal<String> holder = new ThreadLocal<String>(); public static void setDataSource(String dataSource) { System.out.println(Thread.currentThread().getName()+”设置了数据源类型”); holder.set(dataSource); } public static String getDataSource() { System.out.println(Thread.currentThread().getName()+”获取了数据源类型”); return holder.get(); }}</th>
-</tr>
-</thead>
-</table>
-<h5 id="DataSourceAspect"><a href="#DataSourceAspect" class="headerlink" title="DataSourceAspect"></a>DataSourceAspect</h5><table>
-<thead>
-<tr>
-<th align="left">12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758</th>
-<th align="left">package top.zhenganwen.mysqloptimize.dataSource;import org.aspectj.lang.JoinPoint;import org.aspectj.lang.annotation.Aspect;import org.aspectj.lang.annotation.Before;import org.aspectj.lang.annotation.Pointcut;import org.springframework.context.annotation.EnableAspectJAutoProxy;import org.springframework.stereotype.Component;import java.util.List;import java.util.Set;import static top.zhenganwen.mysqloptimize.dataSource.RoutingDataSourceImpl.METHOD_TYPE_MAP;/** _ DataSourceAspect class _ _ 配置切面，根据方法前缀设置读、写数据源 _ 项目启动时会加载该 bean，并按照配置的切面（哪些切入点、如何增强）确定动态代理逻辑 _ @author zhenganwen,blog:zhenganwen.top _ @date 2018/12/29 */@Component//声明这是一个切面，这样 Spring 才会做相应的配置，否则只会当做简单的 bean 注入@Aspect@EnableAspectJAutoProxypublic class DataSourceAspect { /** _ 配置切入点：DAO 包下的所有类的所有方法 <em>/ @Pointcut(“execution(</em> top.zhenganwen.mysqloptimize.mapper.<em>.</em>(..))”) public void aspect() { } /** _ 配置前置增强，对象是 aspect()方法上配置的切入点 */ @Before(“aspect()”) public void before(JoinPoint point) { String className = point.getTarget().getClass().getName(); String invokedMethod = point.getSignature().getName(); System.out.println(“对 “+className+”$”+invokedMethod+” 做了前置增强，确定了要使用的数据源类型”); Set<String> dataSourceType = METHOD_TYPE_MAP.keySet(); for (String type : dataSourceType) { List<String> prefixList = METHOD_TYPE_MAP.get(type); for (String prefix : prefixList) { if (invokedMethod.startsWith(prefix)) { DataSourceHandler.setDataSource(type); System.out.println(“数据源为：”+type); return; } } } }}</th>
-</tr>
-</thead>
-</table>
-<h4 id="测试读写分离"><a href="#测试读写分离" class="headerlink" title="测试读写分离"></a>测试读写分离</h4><blockquote>
-<p>如何测试读是从<code>slave</code>中读的呢？可以将写后复制到<code>slave</code>中的数据更改，再读该数据就知道是从<code>slave</code>中读了。==注意==，一但对<code>slave</code>做了写操作就要重新手动将<code>slave</code>与<code>master</code>同步一下，否则主从复制就会失效。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718192021222324252627282930313233</th>
-<th align="left">package top.zhenganwen.mysqloptimize.dataSource;import org.junit.Test;import org.junit.runner.RunWith;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.test.context.ContextConfiguration;import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;import top.zhenganwen.mysqloptimize.entity.Article;import top.zhenganwen.mysqloptimize.mapper.ArticleMapper;@RunWith(SpringJUnit4ClassRunner.class)@ContextConfiguration(locations = “classpath:spring-mybatis.xml”)public class RoutingDataSourceTest { @Autowired ArticleMapper articleMapper; @Test public void testRead() { System.out.println(articleMapper.findAll()); } @Test public void testAdd() { Article article = new Article(0, “我是新插入的文章”, “测试是否能够写到 master 并且复制到 slave 中”); articleMapper.add(article); } @Test public void testDelete() { articleMapper.delete(2); }}</th>
-</tr>
-</thead>
-</table>
-<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><ul>
-<li>轮询</li>
-<li>加权轮询：按照处理能力来加权</li>
-<li>负载分配：依据当前的空闲状态（但是测试每个节点的内存使用率、CPU 利用率等，再做比较选出最闲的那个，效率太低）</li>
-</ul>
-<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>在服务器架构时，为了保证服务器 7x24 不宕机在线状态，需要为每台单点服务器（由一台服务器提供服务的服务器，如写服务器、数据库中间件）提供冗余机。<br>对于写服务器来说，需要提供一台同样的写-冗余服务器，当写服务器健康时（写-冗余通过心跳检测），写-冗余作为一个从机的角色复制写服务器的内容与其做一个同步；当写服务器宕机时，写-冗余服务器便顶上来作为写服务器继续提供服务。对外界来说这个处理过程是透明的，即外界仅通过一个 IP 访问服务。</p>
-<h1 id="典型-SQL"><a href="#典型-SQL" class="headerlink" title="典型 SQL"></a>典型 SQL</h1><h2 id="线上-DDL"><a href="#线上-DDL" class="headerlink" title="线上 DDL"></a>线上 DDL</h2><p>DDL(Database Definition Language)是指数据库表结构的定义（<code>create table</code>）和维护（<code>alter table</code>）的语言。在线上执行 DDL，在低于<code>MySQL5.6</code>版本时会导致全表被独占锁定，此时表处于维护、不可操作状态，这会导致该期间对该表的所有访问无法响应。但是在<code>MySQL5.6</code>之后，支持<code>Online DDL</code>，大大缩短了锁定时间。<br>优化技巧是采用的维护表结构的 DDL（比如增加一列，或者增加一个索引），是==copy==策略。思路：创建一个满足新结构的新表，将旧表数据==逐条==导入（复制）到新表中，以保证==一次性锁定的内容少==（锁定的是正在导入的数据），同时旧表上可以执行其他任务。导入的过程中，将对旧表的所有操作以日志的形式记录下来，导入完毕后，将更新日志在新表上再执行一遍（确保一致性）。最后，新表替换旧表（在应用程序中完成，或者是数据库的 rename，视图完成）。<br>但随着 MySQL 的升级，这个问题几乎淡化了。</p>
-<h2 id="数据库导入语句"><a href="#数据库导入语句" class="headerlink" title="数据库导入语句"></a>数据库导入语句</h2><p>在恢复数据时，可能会导入大量的数据。此时为了快速导入，需要掌握一些技巧：</p>
-<ol>
-<li>导入时==先禁用索引和约束==：<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table table-name disable keys</th>
-</tr>
-</thead>
-</table>
-</li>
-</ol>
-<p>待数据导入完成之后，再开启索引和约束，一次性创建索引</p>
-<table>
-<thead>
-<tr>
-<th align="left">1</th>
-<th align="left">alter table table-name enable keys</th>
-</tr>
-</thead>
-</table>
-<ol start="2">
-<li>数据库如果使用的引擎是<code>Innodb</code>，那么它==默认会给每条写指令加上事务==（这也会消耗一定的时间），因此建议先手动开启事务，再执行一定量的批量导入，最后手动提交事务。</li>
-<li>如果批量导入的 SQL 指令格式相同只是数据不同，那么你应该先<code>prepare</code>==预编译==一下，这样也能节省很多重复编译的时间。</li>
-</ol>
-<h2 id="limit-offset-rows"><a href="#limit-offset-rows" class="headerlink" title="limit offset,rows"></a>limit offset,rows</h2><p>尽量保证不要出现大的<code>offset</code>，比如<code>limit 10000,10</code>相当于对已查询出来的行数弃掉前<code>10000</code>行后再取<code>10</code>行，完全可以加一些条件过滤一下（完成筛选），而不应该使用<code>limit</code>跳过已查询到的数据。这是一个==<code>offset</code>做无用功==的问题。对应实际工程中，要避免出现大页码的情况，尽量引导用户做条件过滤。</p>
-<h2 id="select-要少用"><a href="#select-要少用" class="headerlink" title="select * 要少用"></a>select * 要少用</h2><p>即尽量选择自己需要的字段<code>select</code>，但这个影响不是很大，因为网络传输多了几十上百字节也没多少延时，并且现在流行的 ORM 框架都是用的<code>select *</code>，只是我们在设计表的时候注意将大数据量的字段分离，比如商品详情可以单独抽离出一张商品详情表，这样在查看商品简略页面时的加载速度就不会有影响了。</p>
-<h2 id="order-by-rand-不要用"><a href="#order-by-rand-不要用" class="headerlink" title="order by rand()不要用"></a>order by rand()不要用</h2><p>它的逻辑就是随机排序（为每条数据生成一个随机数，然后根据随机数大小进行排序）。如<code>select * from student order by rand() limit 5</code>的执行效率就很低，因为它为表中的每条数据都生成随机数并进行排序，而我们只要前 5 条。<br>解决思路：在应用程序中，将随机的主键生成好，去数据库中利用主键检索。</p>
-<h2 id="单表和多表查询"><a href="#单表和多表查询" class="headerlink" title="单表和多表查询"></a>单表和多表查询</h2><p>多表查询：<code>join</code>、子查询都是涉及到多表的查询。如果你使用<code>explain</code>分析执行计划你会发现多表查询也是一个表一个表的处理，最后合并结果。因此可以说单表查询将计算压力放在了应用程序上，而多表查询将计算压力放在了数据库上。<br>现在有 ORM 框架帮我们解决了单表查询带来的对象映射问题（查询单表时，如果发现有外键自动再去查询关联表，是一个表一个表查的）。</p>
-<h2 id="count"><a href="#count" class="headerlink" title="count(*)"></a>count(*)</h2><p>在<code>MyISAM</code>存储引擎中，会自动记录表的行数，因此使用<code>count(*)</code>能够快速返回。而<code>Innodb</code>内部没有这样一个计数器，需要我们手动统计记录数量，解决思路就是单独使用一张表：</p>
-<table>
-<thead>
-<tr>
-<th align="left">id</th>
-<th align="left">table</th>
-<th align="left">count</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">1</td>
-<td align="left">student</td>
-<td align="left">100</td>
-</tr>
-</tbody></table>
-<h2 id="limit-1"><a href="#limit-1" class="headerlink" title="limit 1"></a>limit 1</h2><p>如果可以确定仅仅检索一条，建议加上<code>limit 1</code>，其实 ORM 框架帮我们做到了这一点（查询单条的操作都会自动加上<code>limit 1</code>）。</p>
-<h1 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h1><blockquote>
-<p>用于记录执行时间超过某个临界值的 SQL 日志，用于快速定位慢查询，为我们的优化做参考。</p>
-</blockquote>
-<h2 id="开启慢查询日志"><a href="#开启慢查询日志" class="headerlink" title="开启慢查询日志"></a>开启慢查询日志</h2><p>配置项：<code>slow_query_log</code><br>可以使用<code>show variables like ‘slov_query_log’</code>查看是否开启，如果状态值为<code>OFF</code>，可以使用<code>set GLOBAL slow_query_log = on</code>来开启，它会在<code>datadir</code>下产生一个<code>xxx-slow.log</code>的文件。</p>
-<h2 id="设置临界时间"><a href="#设置临界时间" class="headerlink" title="设置临界时间"></a>设置临界时间</h2><p>配置项：<code>long_query_time</code><br>查看：<code>show VARIABLES like &#39;long_query_time&#39;</code>，单位秒<br>设置：<code>set long_query_time=0.5</code><br>实操时应该从长时间设置到短的时间，即将最慢的 SQL 优化掉</p>
-<h2 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h2><p>一旦 SQL 超过了我们设置的临界时间就会被记录到<code>xxx-slow.log</code>中</p>
-<h1 id="profile-信息"><a href="#profile-信息" class="headerlink" title="profile 信息"></a>profile 信息</h1><p>配置项：<code>profiling</code></p>
-<h2 id="开启-profile"><a href="#开启-profile" class="headerlink" title="开启 profile"></a>开启 profile</h2><p><code>set profiling=on</code><br>开启后，所有的 SQL 执行的详细信息都会被自动记录下来</p>
-<table>
-<thead>
-<tr>
-<th align="left">12345678910</th>
-<th align="left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
-<th>Variable_name</th>
-<th>Value</th>
-<th>+—————+——-+</th>
-<th>profiling</th>
-<th>OFF</th>
-<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; set profiling=on;Query OK, 0 rows affected, 1 warning (0.00 sec)</th>
-</tr>
-</thead>
-</table>
-<h2 id="查看-profile-信息"><a href="#查看-profile-信息" class="headerlink" title="查看 profile 信息"></a>查看 profile 信息</h2><p><code>show profiles</code></p>
-<table>
-<thead>
-<tr>
-<th align="left">123456789101112131415161718</th>
-<th align="left">mysql&gt; show variables like ‘profiling’;+—————+——-+</th>
-<th>Variable_name</th>
-<th>Value</th>
-<th>+—————+——-+</th>
-<th>profiling</th>
-<th>ON</th>
-<th>+—————+——-+1 row in set, 1 warning (0.00 sec)mysql&gt; insert into article values (null,’test profile’,’:)’);Query OK, 1 row affected (0.15 sec)mysql&gt; show profiles;+———-+————+——————————————————-+</th>
-<th>Query_ID</th>
-<th>Duration</th>
-<th>Query</th>
-<th>+———-+————+——————————————————-+</th>
-<th>1</th>
-<th>0.00086150</th>
-<th>show variables like ‘profiling’</th>
-<th></th>
-<th>2</th>
-<th>0.15027550</th>
-<th>insert into article values (null,’test profile’,’:)’)</th>
-<th>+———-+————+——————————————————-+</th>
-</tr>
-</thead>
-</table>
-<h2 id="通过-Query-ID-查看某条-SQL-所有详细步骤的时间"><a href="#通过-Query-ID-查看某条-SQL-所有详细步骤的时间" class="headerlink" title="通过 Query_ID 查看某条 SQL 所有详细步骤的时间"></a>通过 Query_ID 查看某条 SQL 所有详细步骤的时间</h2><p><code>show profile for query Query_ID</code><br>上面<code>show profiles</code>的结果中，每个 SQL 有一个<code>Query_ID</code>，可以通过它查看执行该 SQL 经过了哪些步骤，各消耗了多场时间</p>
-<table>
-<thead>
-<tr>
-<th align="left">12</th>
-<th align="left"></th>
-</tr>
-</thead>
-</table>
-<h1 id="典型的服务器配置"><a href="#典型的服务器配置" class="headerlink" title="典型的服务器配置"></a>典型的服务器配置</h1><blockquote>
-<p>以下的配置全都取决于实际的运行环境</p>
-</blockquote>
-<ul>
-<li><code>max_connections</code>，最大客户端连接数<br>| 123456 | mysql&gt; show variables like ‘max_connections’;+—————–+——-+| Variable_name | Value |+—————–+——-+| max_connections | 151 |+—————–+——-+ |<br>| :— | :— |</li>
-</ul>
-<p>-</p>
-<ul>
-<li><code>table_open_cache</code>，表文件句柄缓存（表数据是存储在磁盘上的，缓存磁盘文件的句柄方便打开文件读取数据）<br>| 123456 | mysql&gt; show variables like ‘table_open_cache’;+——————+——-+| Variable_name | Value |+——————+——-+| table_open_cache | 2000 |+——————+——-+ |<br>| :— | :— |</li>
-</ul>
-<p>-</p>
-<ul>
-<li><code>key_buffer_size</code>，索引缓存大小（将从磁盘上读取的索引缓存到内存，可以设置大一些，有利于快速检索）<br>| 123456 | mysql&gt; show variables like ‘key_buffer_size’;+—————–+———+| Variable_name | Value |+—————–+———+| key_buffer_size | 8388608 |+—————–+———+ |<br>| :— | :— |</li>
-</ul>
-<p>-</p>
-<ul>
-<li><code>innodb_buffer_pool_size</code>，<code>Innodb</code>存储引擎缓存池大小（对于<code>Innodb</code>来说最重要的一个配置，如果所有的表用的都是<code>Innodb</code>，那么甚至建议将该值设置到物理内存的 80%，<code>Innodb</code>的很多性能提升如索引都是依靠这个）<br>| 123456 | mysql&gt; show variables like ‘innodb_buffer_pool_size’;+————————-+———+| Variable_name | Value |+————————-+———+| innodb_buffer_pool_size | 8388608 |+————————-+———+ |<br>| :— | :— |</li>
-</ul>
-<p>-</p>
-<ul>
-<li><code>innodb_file_per_table</code>（<code>innodb</code>中，表数据存放在<code>.ibd</code>文件中，如果将该配置项设置为<code>ON</code>，那么一个表对应一个<code>ibd</code>文件，否则所有<code>innodb</code>共享表空间）</li>
-</ul>
-<h1 id="压测工具-mysqlslap"><a href="#压测工具-mysqlslap" class="headerlink" title="压测工具 mysqlslap"></a>压测工具 mysqlslap</h1><p>安装 MySQL 时附带了一个压力测试工具<code>mysqlslap</code>（位于<code>bin</code>目录下）</p>
-<h2 id="自动生成-sql-测试"><a href="#自动生成-sql-测试" class="headerlink" title="自动生成 sql 测试"></a>自动生成 sql 测试</h2><table>
-<thead>
-<tr>
-<th align="left">12345678</th>
-<th align="left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 1.219 seconds Minimum number of seconds to run all queries: 1.219 seconds Maximum number of seconds to run all queries: 1.219 seconds Number of clients running queries: 1 Average number of queries per client: 0</th>
-</tr>
-</thead>
-</table>
-<h2 id="并发测试"><a href="#并发测试" class="headerlink" title="并发测试"></a>并发测试</h2><table>
-<thead>
-<tr>
-<th align="left">1234567891011121314151617</th>
-<th align="left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=100 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 3.578 seconds Minimum number of seconds to run all queries: 3.578 seconds Maximum number of seconds to run all queries: 3.578 seconds Number of clients running queries: 100 Average number of queries per client: 0C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.718 seconds Minimum number of seconds to run all queries: 5.718 seconds Maximum number of seconds to run all queries: 5.718 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
-</tr>
-</thead>
-</table>
-<h2 id="多轮测试"><a href="#多轮测试" class="headerlink" title="多轮测试"></a>多轮测试</h2><table>
-<thead>
-<tr>
-<th align="left">12345678</th>
-<th align="left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=10 -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Average number of seconds to run all queries: 5.398 seconds Minimum number of seconds to run all queries: 4.313 seconds Maximum number of seconds to run all queries: 6.265 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
-</tr>
-</thead>
-</table>
-<h2 id="存储引擎测试"><a href="#存储引擎测试" class="headerlink" title="存储引擎测试"></a>存储引擎测试</h2><table>
-<thead>
-<tr>
-<th align="left">123456789</th>
-<th align="left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=innodb -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine innodb Average number of seconds to run all queries: 5.911 seconds Minimum number of seconds to run all queries: 5.485 seconds Maximum number of seconds to run all queries: 6.703 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
-</tr>
-</thead>
-</table>
-<table>
-<thead>
-<tr>
-<th align="left">123456789</th>
-<th align="left">C:\Users\zaw&gt;mysqlslap –auto-generate-sql –concurrency=150 –iterations=3 –engine=myisam -uroot -prootmysqlslap: [Warning] Using a password on the command line interface can be insecure.Benchmark Running for engine myisam Average number of seconds to run all queries: 53.104 seconds Minimum number of seconds to run all queries: 46.843 seconds Maximum number of seconds to run all queries: 60.781 seconds Number of clients running queries: 150 Average number of queries per client: 0</th>
-</tr>
-</thead>
-</table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/20/yuque/MySQL%20%E4%BC%98%E5%8C%96/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Go Modules基本使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">Go Modules基本使用</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2020-03-01T16:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="所提供的命令"><a href="#所提供的命令" class="headerlink" title="所提供的命令"></a>所提供的命令</h3><p>在 Go modules 中，我们能够使用如下命令进行操作：</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">go mod init</td>
-<td align="left">生成 go.mod 文件</td>
-</tr>
-<tr>
-<td align="left">go mod download</td>
-<td align="left">下载 go.mod 文件中指明的所有依赖</td>
-</tr>
-<tr>
-<td align="left">go mod tidy</td>
-<td align="left">整理现有的依赖</td>
-</tr>
-<tr>
-<td align="left">go mod graph</td>
-<td align="left">查看现有的依赖结构</td>
-</tr>
-<tr>
-<td align="left">go mod edit</td>
-<td align="left">编辑 go.mod 文件</td>
-</tr>
-<tr>
-<td align="left">go mod vendor</td>
-<td align="left">导出项目所有的依赖到 vendor 目录</td>
-</tr>
-<tr>
-<td align="left">go mod verify</td>
-<td align="left">校验一个模块是否被篡改过</td>
-</tr>
-<tr>
-<td align="left">go mod why</td>
-<td align="left">查看为什么需要依赖某模块</td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
     </nav>
   
 

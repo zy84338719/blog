@@ -176,6 +176,77 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Redis 各类型数据存储分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/">Redis 各类型数据存储分析</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/" class="archive-article-date">
+  	<time datetime="2020-05-05T12:16:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h6 id="一、简介和应用"><a href="#一、简介和应用" class="headerlink" title="一、简介和应用"></a>一、简介和应用</h6><p>Redis 是一个由 ANSI C 语言编写，性能优秀、支持网络、可持久化的 K-K 内存数据库，并提供多种语言的 API。它常用的类型主要是 String、List、Hash、Set、ZSet 这 5 种。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363145-ea9b97e5-84e0-4726-a607-543395e55377.png#align=left&display=inline&height=443&margin=%5Bobject%20Object%5D&originHeight=443&originWidth=690&size=0&status=done&style=none&width=690"><br>Redis 在互联网公司一般有以下应用:<br>String：缓存、限流、计数器、分布式锁、分布式 Session<br>Hash：存储用户信息、用户主页访问量、组合查询<br>List：微博关注人时间轴列表、简单队列<br>Set：赞、踩、标签、好友关系<br>Zset：排行榜<br>再比如电商在大促销时，会用一些特殊的设计来保证系统稳定，扣减库存可以考虑如下设计：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363153-d881d2f3-1ae5-4b30-b67c-d66bb61c6254.png#align=left&display=inline&height=80&margin=%5Bobject%20Object%5D&originHeight=80&originWidth=603&size=0&status=done&style=none&width=603"><br>上图中，直接在 Redis 中扣减库存，记录日志后通过 Worker 同步到数据库，在设计同步 Worker 时需要考虑并发处理和重复处理的问题。<br>通过上面的应用场景可以看出 Redis 是非常高效和稳定的，那 Redis 底层是如何实现的呢？</p>
+<h6 id="二、Redis-的对象-redisObject"><a href="#二、Redis-的对象-redisObject" class="headerlink" title="二、Redis 的对象 redisObject"></a>二、Redis 的对象 redisObject</h6><p>当我们执行 set hello world 命令时，会有以下数据模型：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363153-165836d5-5785-41a3-9eaf-6c53e2717564.png#align=left&display=inline&height=173&margin=%5Bobject%20Object%5D&originHeight=173&originWidth=507&size=0&status=done&style=none&width=507"><br><strong>dictEntry</strong>：Redis 给每个 key-value 键值对分配一个 dictEntry，里面有着 key 和 val 的指针，next 指向下一个 dictEntry 形成链表，这个指针可以将多个哈希值相同的键值对链接在一起，由此来解决哈希冲突问题(链地址法)。<br><strong>sds</strong>：键 key“hello”是以 SDS（简单动态字符串）存储，后面详细介绍。<br><strong>redisObject</strong>：值 val“world”存储在 redisObject 中。实际上，redis 常用 5 中类型都是以 redisObject 来存储的；而 redisObject 中的 type 字段指明了 Value 对象的类型，ptr 字段则指向对象所在的地址。<br>redisObject 对象非常重要，Redis 对象的类型、内部编码、内存回收、共享对象等功能，都需要 redisObject 支持。这样设计的好处是，可以针对不同的使用场景，对 5 中常用类型设置多种不同的数据结构实现，从而优化对象在不同场景下的使用效率。<br>无论是 dictEntry 对象，还是 redisObject、SDS 对象，都需要内存分配器（如 jemalloc）分配内存进行存储。jemalloc 作为 Redis 的默认内存分配器，在减小内存碎片方面做的相对比较好。比如 jemalloc 在 64 位系统中，将内存空间划分为小、大、巨大三个范围；每个范围内又划分了许多小的内存块单位；当 Redis 存储数据时，会选择大小最合适的内存块进行存储。<br>前面说过，Redis 每个对象由一个 redisObject 结构表示，它的 ptr 指针指向底层实现的数据结构，而数据结构由 encoding 属性决定。比如我们执行以下命令得到存储“hello”对应的编码：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363150-bd6b4544-bef3-4675-aa7a-9ecb6abc724d.png#align=left&display=inline&height=63&margin=%5Bobject%20Object%5D&originHeight=63&originWidth=326&size=0&status=done&style=none&width=326"><br>redis 所有的数据结构类型如下：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363149-571e119c-2b49-43de-8a87-e5e8769a9d81.png#align=left&display=inline&height=270&margin=%5Bobject%20Object%5D&originHeight=270&originWidth=685&size=0&status=done&style=none&width=685"></p>
+<h6 id="三、String"><a href="#三、String" class="headerlink" title="三、String"></a>三、String</h6><p>字符串对象的底层实现可以是 int、raw、embstr（上面的表对应有名称介绍）。embstr 编码是通过调用一次内存分配函数来分配一块连续的空间，而 raw 需要调用两次。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363161-aee4b1a9-9d87-441f-970d-f6ee0ff9594d.png#align=left&display=inline&height=145&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=858&size=0&status=done&style=none&width=858"><br>int 编码字符串对象和 embstr 编码字符串对象在一定条件下会转化为 raw 编码字符串对象。embstr：&lt;=39 字节的字符串。int：8 个字节的长整型。raw：大于 39 个字节的字符串。<br>简单动态字符串（SDS），这种结构更像 C++的 String 或者 Java 的 ArrayList<Character>，长度动态可变：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363225-06a4dfee-098e-49a3-a0ac-de26df28ef9a.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>struct sdshdr {<br>    // buf 中已占用空间的长度<br>    int len;<br>    // buf 中剩余可用空间的长度<br>    int free;<br>    // 数据空间<br>    char buf[]; // ’\0’空字符结尾<br>};<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363144-598e0116-0816-49f7-bd8e-febf1285b706.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>get：sdsrange—O(n)<br>set：sdscpy—O(n)<br>create：sdsnew—O(1)<br>len：sdslen—O(1)<br>常数复杂度获取字符串长度：因为 SDS 在 len 属性中记录了长度，所以获取一个 SDS 长度时间复杂度仅为 O(1)。<br>预空间分配：如果对一个 SDS 进行修改，分为一下两种情况：<br>1、SDS 长度（len 的值）小于 1MB，那么程序将分配和 len 属性同样大小的未使用空间，这时 free 和 len 属性值相同。举个例子，SDS 的 len 将变成 15 字节，则程序也会分配 15 字节的未使用空间，SDS 的 buf 数组的实际长度变成 15+15+1=31 字节（额外一个字节用户保存空字符）。<br>2、SDS 长度（len 的值）大于等于 1MB，程序会分配 1MB 的未使用空间。比如进行修改之后，SDS 的 len 变成 30MB，那么它的实际长度是 30MB+1MB+1byte。<br>惰性释放空间：当执行 sdstrim（截取字符串）之后，SDS 不会立马释放多出来的空间，如果下次再进行拼接字符串操作，且拼接的没有刚才释放的空间大，则那些未使用的空间就会排上用场。通过惰性释放空间避免了特定情况下操作字符串的内存重新分配操作。<br>杜绝缓冲区溢出：使用 C 字符串的操作时，如果字符串长度增加（如 strcat 操作）而忘记重新分配内存，很容易造成缓冲区的溢出；而 SDS 由于记录了长度，相应的操作在可能造成缓冲区溢出时会自动重新分配内存，杜绝了缓冲区溢出。</p>
+<h6 id="四、List"><a href="#四、List" class="headerlink" title="四、List"></a>四、List</h6><p>List 对象的底层实现是 quicklist（快速列表，是 ziplist 压缩列表 和 linkedlist 双端链表 的组合）。Redis 中的列表支持两端插入和弹出，并可以获得指定位置（或范围）的元素，可以充当数组、队列、栈等。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363147-ae5ec094-2fb4-4117-b49a-9d4c22e59a83.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct listNode {<br>     // 前置节点<br>    struct listNode *prev;<br>    // 后置节点<br>    struct listNode <em>next;<br>    // 节点的值<br>    void \</em>value;<br> } listNode;</p>
+<p>typedef struct list {<br>     // 表头节点<br>    listNode <em>head;<br>    // 表尾节点<br>    listNode *tail;<br>    // 节点值复制函数<br>    void *(*dup)(void *ptr);<br>    // 节点值释放函数<br>    void (*free)(void *ptr);<br>     // 节点值对比函数<br>    int (*match)(void *ptr, void *key);<br>     // 链表所包含的节点数量<br>    unsigned long len;<br> } list;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363144-73b90485-729e-48a8-8164-14adb99dcdcf.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>rpush: listAddNodeHead —O(1)<br>lpush: listAddNodeTail —O(1)<br>push: listInsertNode —O(1)<br>index : listIndex —O(N)<br>pop: ListFirst/listLast —O(1)<br>llen: listLength —O(N)<br>*</em>4.1 linkedlist（双端链表）**<br>此结构比较像 Java 的 LinkedList，有兴趣可以阅读一下源码。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363160-fffbaa48-fdcb-4067-af84-3d00d463e496.png#align=left&display=inline&height=189&margin=%5Bobject%20Object%5D&originHeight=189&originWidth=554&size=0&status=done&style=none&width=554"><br>从图中可以看出 Redis 的 linkedlist 双端链表有以下特性：节点带有 prev、next 指针、head 指针和 tail 指针，获取前置节点、后置节点、表头节点和表尾节点的复杂度都是 O（1）。len 属性获取节点数量也为 O（1）。<br>与双端链表相比，压缩列表可以节省内存空间，但是进行修改或增删操作时，复杂度较高；因此当节点数量较少时，可以使用压缩列表；但是节点数量多时，还是使用双端链表划算。<br><strong>4.2 ziplist（压缩列表）</strong><br>当一个列表键只包含少量列表项，且是小整数值或长度比较短的字符串时，那么 redis 就使用 ziplist（压缩列表）来做列表键的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363179-e42415f0-ed1d-44bb-af22-27487dbb28c9.png#align=left&display=inline&height=180&margin=%5Bobject%20Object%5D&originHeight=180&originWidth=549&size=0&status=done&style=none&width=549"><br><strong>ziplist 是 Redis 为了节约内存而开发的</strong>，是由一系列特殊编码的连续内存块(而不是像双端链表一样每个节点是指针)组成的顺序型数据结构；具体结构相对比较复杂，有兴趣读者可以看 Redis 哈希结构内存模型剖析。在新版本中<strong>list 链表使用 quicklist 代替了 ziplist 和 linkedlist</strong>：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363180-aafff63d-c527-465d-a326-bacc88fa8de6.png#align=left&display=inline&height=66&margin=%5Bobject%20Object%5D&originHeight=66&originWidth=445&size=0&status=done&style=none&width=445"><br>quickList 是 zipList 和 linkedList 的混合体。它将 linkedList 按段切分，每一段使用 zipList 来紧凑存储，多个 zipList 之间使用双向指针串接起来。因为链表的附加空间相对太高，prev 和 next 指针就要占去 16 个字节 (64bit 系统的指针是 8 个字节)，另外每个节点的内存都是单独分配，会加剧内存的碎片化，影响内存管理效率。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363185-c134b3e6-ff2c-401c-aeab-d639a410b1f6.png#align=left&display=inline&height=205&margin=%5Bobject%20Object%5D&originHeight=205&originWidth=612&size=0&status=done&style=none&width=612"><br>quicklist 默认的压缩深度是 0，也就是不压缩。为了支持快速的 push/pop 操作，quicklist 的首尾两个 ziplist 不压缩，此时深度就是 1。为了进一步节约空间，Redis 还会对 ziplist 进行压缩存储，使用 LZF 算法压缩。</p>
+<h6 id="五、Hash"><a href="#五、Hash" class="headerlink" title="五、Hash"></a>五、Hash</h6><p>Hash 对象的底层实现可以是 ziplist（压缩列表）或者 hashtable（字典或者也叫哈希表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363186-d87ffddf-debe-4e61-a8b5-3027cd5a7e04.png#align=left&display=inline&height=245&margin=%5Bobject%20Object%5D&originHeight=245&originWidth=551&size=0&status=done&style=none&width=551"><br>Hash 对象只有同时满足下面两个条件时，才会使用 ziplist（压缩列表）：1.哈希中元素数量小于 512 个；2.哈希中所有键值对的键和值字符串长度都小于 64 字节。<br>hashtable 哈希表可以实现 O(1)复杂度的读写操作，因此效率很高。源码如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363173-8d54479d-1eea-4ce8-a16b-86291c6946ec.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct dict {<br>    // 类型特定函数<br>    dictType <em>type;<br>     // 私有数据<br>    void <em>privdata;<br>     // 哈希表<br>    dictht ht[2];<br>    // rehash 索引<br>    // 当 rehash 不在进行时，值为 -1<br>    int rehashidx; /_ rehashing not in progress if rehashidx == -1 <em>/<br>     // 目前正在运行的安全迭代器的数量<br>    int iterators; /</em> number of iterators currently running _/<br> } dict;<br> typedef struct dictht {<br>    // 哈希表数组<br>    dictEntry \</em></em>table;<br>     // 哈希表大小<br>    unsigned long size;<br>    // 哈希表大小掩码，用于计算索引值<br>    // 总是等于 size - 1<br>    unsigned long sizemask;<br>    // 该哈希表已有节点的数量<br>    unsigned long used;<br>} dictht;<br>typedef struct dictEntry {<br>    void *key;<br>    union {void *val;uint64_t u64;int64_t s64;} v;<br>    // 指向下个哈希表节点，形成链表<br>    struct dictEntry *next;<br> } dictEntry;<br> typedef struct dictType {<br>     // 计算哈希值的函数<br>    unsigned int (*hashFunction)(const void *key);<br>     // 复制键的函数<br>    void *(*keyDup)(void *privdata, const void *key);<br>     // 复制值的函数<br>    void *(*valDup)(void *privdata, const void *obj);<br>     // 对比键的函数<br>    int (*keyCompare)(void *privdata, const void *key1, const void *key2);<br>    // 销毁键的函数<br>    void (*keyDestructor)(void *privdata, void *key);<br>    // 销毁值的函数<br>    void (*valDestructor)(void *privdata, void *obj);<br>} dictType;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363191-870b9e4c-7562-4ccc-ba8a-38a665b57f70.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>上面源码可以简化成如下结构：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363193-c7eda244-4c3f-4137-b33f-746f7c811534.png#align=left&display=inline&height=331&margin=%5Bobject%20Object%5D&originHeight=331&originWidth=609&size=0&status=done&style=none&width=609"><br>这个结构类似于 JDK7 以前的 HashMap&lt;String,Object&gt;，当有两个或以上的键被分配到哈希数组的同一个索引上时，会产生哈希冲突。Redis 也使用链地址法来解决键冲突。即每个哈希表节点都有一个 next 指针，多个哈希表节点用 next 指针构成一个单项链表，链地址法就是将相同 hash 值的对象组织成一个链表放在 hash 值对应的槽位。<br>Redis 中的字典使用 hashtable 作为底层实现的话，每个字典会带有两个哈希表，一个平时使用，另一个仅在 rehash（重新散列）时使用。随着对哈希表的操作，键会逐渐增多或减少。为了让哈希表的负载因子维持在一个合理范围内，Redis 会对哈希表的大小进行扩展或收缩（rehash），也就是将 ht【0】里面所有的键值对分多次、渐进式的 rehash 到 ht【1】里。</p>
+<h6 id="六、Set"><a href="#六、Set" class="headerlink" title="六、Set"></a>六、Set</h6><p>Set 集合对象的底层实现可以是 intset（整数集合）或者 hashtable（字典或者也叫哈希表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363199-36aa9d00-e2b6-4bd0-a96f-c2555a9a1958.png#align=left&display=inline&height=189&margin=%5Bobject%20Object%5D&originHeight=189&originWidth=305&size=0&status=done&style=none&width=305"><br>intset（整数集合）当一个集合只含有整数，并且元素不多时会使用 intset（整数集合）作为 Set 集合对象的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363193-eed366a5-9608-4bd5-a84b-f589c0925968.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct intset {<br>    // 编码方式<br>   uint32_t encoding;<br>    // 集合包含的元素数量<br>   uint32_t length;<br>    // 保存元素的数组<br>   int8_t contents[];<br>} intset;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363230-a1bc0a7e-ce71-4356-b681-cd812ead9b8c.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>sadd: intsetAdd—O(1)<br>smembers: intsetGetO(1)—O(N)<br>srem: intsetRemove—O(N)<br>slen: intsetlen —O(1)<br>intset 底层实现为有序，无重复数组保存集合元素。 intset 这个结构里的整数数组的类型可以是 16 位的，32 位的，64 位的。如果数组里所有的整数都是 16 位长度的，如果新加入一个 32 位的整数，那么整个 16 的数组将升级成一个 32 位的数组。升级可以提升 intset 的灵活性，又可以节约内存，但不可逆。</p>
+<h6 id="7-ZSet"><a href="#7-ZSet" class="headerlink" title="7.ZSet"></a>7.ZSet</h6><p>ZSet 有序集合对象底层实现可以是 ziplist（压缩列表）或者 skiplist（跳跃表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363226-a304bedb-e72e-421e-bd82-9cc98313e45d.png#align=left&display=inline&height=192&margin=%5Bobject%20Object%5D&originHeight=192&originWidth=548&size=0&status=done&style=none&width=548"><br>当一个有序集合的元素数量比较多或者成员是比较长的字符串时，Redis 就使用 skiplist（跳跃表）作为 ZSet 对象的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363219-8807bcb1-2b78-404e-a17b-a7df3b0a90d7.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct zskiplist {<br>     // 表头节点和表尾节点<br>    struct zskiplistNode <em>header, <em>tail;<br>    // 表中节点的数量<br>    unsigned long length;<br>    // 表中层数最大的节点的层数<br>    int level;<br> } zskiplist;<br>typedef struct zskiplistNode {<br>    // 成员对象<br>    robj *obj;<br>    // 分值<br>    double score;<br>     // 后退指针<br>    struct zskiplistNode *backward;<br>    // 层<br>   struct zskiplistLevel {<br>        // 前进指针<br>        struct zskiplistNode \</em>forward;<br>         // 跨度—前进指针所指向节点与当前节点的距离<br>        unsigned int span;<br>    } level[];<br>} zskiplistNode;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363231-c1b655fd-a897-40cc-993f-53f5f674439a.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>zadd—zslinsert—平均 O(logN), 最坏 O(N)<br>zrem—zsldelete—平均 O(logN), 最坏 O(N)<br>zrank–zslGetRank—平均 O(logN), 最坏 O(N)<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363250-42f84bcb-da64-4ac0-b866-b1247a58026c.png#align=left&display=inline&height=233&margin=%5Bobject%20Object%5D&originHeight=233&originWidth=591&size=0&status=done&style=none&width=591"><br>skiplist 的查找时间复杂度是 LogN，可以和平衡二叉树相当，但实现起来又比它简单。*</em>跳跃表(skiplist)是一种有序数据结构，它通过在某个节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。**<br>** **</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mysql-AICD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -769,85 +840,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/04/26/yuque/Goroutine%E4%B8%8EChannel%E9%94%81%E4%B9%8B%E5%A4%96%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/切片数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/">切片数组</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/" class="archive-article-date">
-  	<time datetime="2020-03-25T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>数组是值拷贝<br>切片是引用传递</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.数组是多个相同类型数据的组合,一个数组一旦声明/定义了,其长度是固定的, 不能动态变化</p>
-<p>2.数组中的元素可以是任何数据类型，包括值类型和引用类型，但是不能混用。</p>
-<p>3.数组创建后，如果没有赋值，有默认值(零值)</p>
-<p>4.数组的下标是从 0 开始的</p>
-<p>5.数组下标必须在指定范围内使用，否则报 panic:数组越界，比如</p>
-<p>6.数组默认是值传递，因此值会进行拷贝。数组间不会相互影响 7.长度是数组类型的一部分，在传递函数参数时 需要考虑数组的长度</p>
-<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>1.切片的英文是 slice 2.切片是数组的一个引用，因此切片是引用类型，在进行传递时，遵守引用传递的机制。</p>
-<p>3.切片的使用和数组类似，遍历切片、访问切片的元素和求切片长度 len(slice)都一样。</p>
-<p>4.切片的长度是可以变化的，因此切片是一个可以动态变化数组。 5.通过 make 方式创建切片可以指定切片的大小和容量 6.通过 make 方式创建的切片对应的数组是由 make 底层维护，对外不可见，即只能通过 slice 去访问各个元素.<br>切片的数据类型</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer</span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>扩容</p>
-<ul>
-<li>当需要的容量超过原切片容量的两倍时，会使用需要的容量作为新容量。</li>
-<li>当原切片长度小于 1024 时，新切片的容量会直接翻倍。而当原切片的容量大于等于 1024 时，会反复地增加 25%，直到新容量超过所需要的容量。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/">展开全文 >></a>
         </p>
       
 

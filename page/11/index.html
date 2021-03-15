@@ -176,6 +176,75 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/（转载）WEB开发的发展史" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/10/yuque/%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89WEB%E5%BC%80%E5%8F%91%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2/">（转载）WEB开发的发展史</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/10/yuque/%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89WEB%E5%BC%80%E5%8F%91%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2/" class="archive-article-date">
+  	<time datetime="2019-05-10T18:51:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/2ac8d073ba00bde4270a3c0530490255392ca162/687474703a2f2f696d672e68622e616963646e2e636f6d2f6366323535396466303137396666346431666630336463346465663961386334666661376435346531626134662d695355784373"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514305282-7248006c-249e-401e-9c67-9939a46e6681.jpeg#align=left&display=inline&height=514&originHeight=514&originWidth=432&size=0&status=done&width=432"></a><br>前不久徐飞写了一篇很好的文章：<a target="_blank" rel="noopener" href="http://goo.gl/DKNX6z">Web 应用的组件化开发</a>。本文尝试从历史发展角度，说说各种研发模式的优劣。</p>
+<h2 id="一、简单明快的早期时代"><a href="#一、简单明快的早期时代" class="headerlink" title="一、简单明快的早期时代"></a>一、简单明快的早期时代</h2><p><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/90850e93b917cd3c958dff1c7d0197f819167343/687474703a2f2f696d672e68622e616963646e2e636f6d2f63333639616163633864613338616638653432326664323935313438633537643162353831376666666335362d4f636250646c5f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514304845-faa7aac0-ea30-4396-af38-35a7de6cff67.jpeg#align=left&display=inline&height=379&originHeight=379&originWidth=542&size=0&status=done&width=542"></a>z<br>可称之为 Web 1.0 时代，非常适合创业型小项目，不分前后端，经常 3-5 人搞定所有开发。页面由 JSP、PHP 等工程师在服务端生成，浏览器负责展现。基本上是服务端给什么浏览器就展现什么，展现的控制在 Web Server 层。<br>这种模式的好处是：简单明快，本地起一个 Tomcat 或 Apache 就能开发，调试什么的都还好，只要业务不太复杂。<br>然而业务总会变复杂，这是好事情，否则很可能就意味着创业失败了。业务的复杂会让 Service 越来越多，参与开发的人员也很可能从几个人快速扩招到几十人。在这种情况下，会遇到一些典型问题：<br>1、<strong>Service 越来越多，调用关系变复杂，前端搭建本地环境不再是一件简单的事。</strong>考虑团队协作，往往会考虑搭建集中式的开发服务器来解决。这种解决方案对编译型的后端开发来说也许还好，但对前端开发来说并不友好。天哪，我只是想调整下按钮样式，却要本地开发、代码上传、验证生效等好几个步骤。也许习惯了也还好，但开发服务器总是不那么稳定，出问题时往往需要依赖后端开发搞定。看似仅仅是前端开发难以本地化，但这对研发效率的影响其实蛮大。<br>2、<strong>JSP 等代码的可维护性越来越差。</strong>JSP 非常强大，可以内嵌 Java 代码。这种强大使得前后端的职责不清晰，JSP 变成了一个灰色地带。经常为了赶项目，为了各种紧急需求，会在 JSP 里揉杂大量业务代码。积攒到一定阶段时，往往会带来大量维护成本。<br>这个时期，为了提高可维护性，可以通过下面的方式实现前端的组件化：<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/bbbf666300ccea8dc4f5deb3f22773195555d3ac/687474703a2f2f696d672e68622e616963646e2e636f6d2f3835393365623736663966353163613735333933333234333131303933623731356235373637316531313466342d6e61677936445f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514304977-8b61dfcb-04c2-4d73-bde2-7e22338e593b.jpeg#align=left&display=inline&height=384&originHeight=384&originWidth=545&size=0&status=done&width=545"></a>ua<br>理论上，如果大家都能按照最佳实践去书写代码，那么无论是 JSP 还是 PHP，可维护性都不会差。<strong>但可维护性更多是工程含义，有时候需要通过限制带来自由，需要某种约定，使得即便是新手也不会写出太糟糕的代码。</strong><br><strong>如何让前后端分工更合理高效，如何提高代码的可维护性，在 Web 开发中很重要。</strong>下面我们继续来看，技术架构的演变如何解决这两个问题。</p>
+<h2 id="二、后端为主的-MVC-时代"><a href="#二、后端为主的-MVC-时代" class="headerlink" title="二、后端为主的 MVC 时代"></a>二、后端为主的 MVC 时代</h2><p>为了降低复杂度，以后端为出发点，有了 Web Server 层的架构升级，比如 Structs、Spring MVC 等，这是后端的 MVC 时代。<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/b9e16b0b3ff3361a481badaca7d408e8fa6b404f/687474703a2f2f696d672e68622e616963646e2e636f6d2f3961366266353237646162626462396237393563353862306237616636633761313864653963653331316136312d3975697578545f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514305041-5169c3f8-85af-4f9a-b61c-12814443c32c.jpeg#align=left&display=inline&height=352&originHeight=352&originWidth=540&size=0&status=done&width=540"></a><br>代码可维护性得到明显好转，MVC 是个非常好的协作模式，从架构层面让开发者懂得什么代码应该写在什么地方。为了让 View 层更简单干脆，还可以选择 Velocity、Freemaker 等模板，使得模板里写不了 Java 代码。看起来是功能变弱了，但正是这种限制使得前后端分工更清晰。然而依旧并不是那么清晰，这个阶段的典型问题是：<br>1、<strong>前端开发重度依赖开发环境。</strong>这种架构下，前后端协作有两种模式：一种是前端写 demo，写好后，让后端去套模板。淘宝早期包括现在依旧有大量业务线是这种模式。好处很明显，demo 可以本地开发，很高效。不足是还需要后端套模板，有可能套错，套完后还需要前端确定，来回沟通调整的成本比较大。另一种协作模式是前端负责浏览器端的所有开发和服务器端的 View 层模板开发，支付宝是这种模式。好处是 UI 相关的代码都是前端去写就好，后端不用太关注，不足就是前端开发重度绑定后端环境，环境成为影响前端开发效率的重要因素。<br>2、<strong>前后端职责依旧纠缠不清。</strong>Velocity 模板还是蛮强大的，变量、逻辑、宏等特性，依旧可以通过拿到的上下文变量来实现各种业务逻辑。这样，只要前端弱势一点，往往就会被后端要求在模板层写出不少业务代码。还有一个很大的灰色地带是 Controller，页面路由等功能本应该是前端最关注的，但却是由后端来实现。Controller 本身与 Model 往往也会纠缠不清，看了让人咬牙的代码经常会出现在 Controller 层。这些问题不能全归结于程序员的素养，否则 JSP 就够了。<br>经常会有人吐槽 Java，但 Java 在工程化开发方面真的做了大量思考和架构尝试。Java 蛮符合马云的一句话：让平凡人做非凡事。</p>
+<h2 id="三、Ajax-带来的-SPA-时代"><a href="#三、Ajax-带来的-SPA-时代" class="headerlink" title="三、Ajax 带来的 SPA 时代"></a>三、Ajax 带来的 SPA 时代</h2><p>历史滚滚往前，2004 年 Gmail 像风一样的女子来到人间，很快 2005 年 Ajax 正式提出，加上 CDN 开始大量用于静态资源存储，于是出现了 JavaScript 王者归来的 SPA （Single Page Application 单页面应用）时代。<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/d0098546c9fa01b443c16ff1953c90aa9056955b/687474703a2f2f696d672e68622e616963646e2e636f6d2f3932393766646337336438336632373764343439633932313933613361663432386464633064343431316366392d6e31445936465f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514304770-b784a1c3-9a0a-4ba9-8c33-a0bd905bc861.jpeg#align=left&display=inline&height=379&originHeight=379&originWidth=538&size=0&status=done&width=538"></a><br>这种模式下，前后端的分工非常清晰，前后端的关键协作点是 Ajax 接口。看起来是如此美妙，但回过头来看看的话，这与 JSP 时代区别不大。复杂度从服务端的 JSP 里移到了浏览器的 JavaScript，浏览器端变得很复杂。类似 Spring MVC，这个时代开始出现浏览器端的分层架构：<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/f064bc7a5b06ea9a39cf039a5dec0ca6675141ff/687474703a2f2f696d672e68622e616963646e2e636f6d2f3135383839323134336263363430333364323264643865643765373533366537316530373063346131336335372d6850673150635f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514304679-d0d02d5c-b099-4645-abeb-339f390141ce.jpeg#align=left&display=inline&height=376&originHeight=376&originWidth=540&size=0&status=done&width=540"></a><br>对于 SPA 应用，有几个很重要的挑战：<br>1、<strong>前后端接口的约定。</strong>如果后端的接口一塌糊涂，如果后端的业务模型不够稳定，那么前端开发会很痛苦。这一块在业界有 API Blueprint 等方案来约定和沉淀接口，在阿里，不少团队也有类似尝试，通过接口规则、接口平台等方式来做。有了和后端一起沉淀的接口规则，还可以用来模拟数据，使得前后端可以在约定接口后实现高效并行开发。相信这一块会越做越好。<br>2、<strong>前端开发的复杂度控制。</strong>SPA 应用大多以功能交互型为主，JavaScript 代码过十万行很正常。大量 JS 代码的组织，与 View 层的绑定等，都不是容易的事情。典型的解决方案是业界的 Backbone，但 Backbone 做的事还很有限，依旧存在大量空白区域需要挑战。<br>SPA 让前端看到了一丝绿色，但依旧是在荒漠中行走。</p>
+<h2 id="四、前端为主的-MV-时代"><a href="#四、前端为主的-MV-时代" class="headerlink" title="四、前端为主的 MV* 时代"></a>四、前端为主的 MV* 时代</h2><p>为了降低前端开发复杂度，除了 Backbone，还有大量框架涌现，比如 EmberJS、KnockoutJS、AngularJS 等等。这些框架总的原则是先按类型分层，比如 Templates、Controllers、Models，然后再在层内做切分，如下图：<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/2ab0e0e247dfae7b74760b7d57056a680204874d/687474703a2f2f696d672e68622e616963646e2e636f6d2f3536663463656530653663376166363165323464626633316534626531376631343264353930326331313039612d42637852696d5f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1557514304849-44cfc25c-d64b-4346-b8c1-bfffe4f64782.jpeg#align=left&display=inline&height=382&originHeight=382&originWidth=541&size=0&status=done&width=541"></a><br>好处很明显：<br>1、<strong>前后端职责很清晰。</strong>前端工作在浏览器端，后端工作在服务端。清晰的分工，可以让开发并行，测试数据的模拟不难，前端可以本地开发。后端则可以专注于业务逻辑的处理，输出 RESTful 等接口。<br>2、<strong>前端开发的复杂度可控。</strong>前端代码很重，但合理的分层，让前端代码能各司其职。这一块蛮有意思的，简单如模板特性的选择，就有很多很多讲究。并非越强大越好，限制什么，留下哪些自由，代码应该如何组织，所有这一切设计，得花一本的厚度去说明。<br>3、<strong>部署相对独立</strong>，产品体验可以快速改进。<br>但依旧有不足之处：<br>1、代码不能复用。比如后端依旧需要对数据做各种校验，校验逻辑无法复用浏览器端的代码。如果可以复用，那么后端的数据校验可以相对简单化。<br>2、全异步，对 SEO 不利。往往还需要服务端做同步渲染的降级方案。<br>3、性能并非最佳，特别是移动互联网环境下。<br>4、SPA 不能满足所有需求，依旧存在大量多页面应用。URL Design 需要后端配合，前端无法完全掌控。</p>
+<h2 id="五、Node-带来的全栈时代"><a href="#五、Node-带来的全栈时代" class="headerlink" title="五、Node 带来的全栈时代"></a>五、Node 带来的全栈时代</h2><p>前端为主的 MV* 模式解决了很多很多问题，但如上所述，依旧存在不少不足之处。随着 Node.js 的兴起，JavaScript 开始有能力运行在服务端。这意味着可以有一种新的研发模式：<br><a target="_blank" rel="noopener" href="https://camo.githubusercontent.com/ed895cf7561cb3ec07ef74aa2dea573b57dbe219/687474703a2f2f696d672e68622e616963646e2e636f6d2f3430303931653637316230626465653236653531366163303530633663616563383038383562386131326238372d374a676646685f6677363538"><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1557514304969-fba72091-3db7-4e32-aefc-bb4f69054d3b.png#align=left&display=inline&height=611&originHeight=611&originWidth=590&size=0&status=done&width=590"></a>nz<br>在这种研发模式下，前后端的职责很清晰。对前端来说，两个 UI 层各司其职：<br>1、Front-end UI layer 处理浏览器层的展现逻辑。通过 CSS 渲染样式，通过 JavaScript 添加交互功能，HTML 的生成也可以放在这层，具体看应用场景。<br>2、Back-end UI layer 处理路由、模板、数据获取、cookie 等。通过路由，前端终于可以自主把控 URL Design，这样无论是单页面应用还是多页面应用，前端都可以自由调控。后端也终于可以摆脱对展现的强关注，转而可以专心于业务逻辑层的开发。<br>通过 Node，Web Server 层也是 JavaScript 代码，这意味着部分代码可前后复用，需要 SEO 的场景可以在服务端同步渲染，由于异步请求太多导致的性能问题也可以通过服务端来缓解。前一种模式的不足，通过这种模式几乎都能完美解决掉。<br>与 JSP 模式相比，全栈模式看起来是一种回归，也的确是一种向原始开发模式的回归，不过是一种螺旋上升式的回归。<br>基于 Node 的全栈模式，依旧面临很多挑战：<br>1、需要前端对服务端编程有更进一步的认识。比如 network/tcp、PE 等知识的掌握。<br>2、Node 层与 Java 层的高效通信。Node 模式下，都在服务器端，RESTful HTTP 通信未必高效，通过 SOAP 等方式通信更高效。一切需要在验证中前行。<br>3、对部署、运维层面的熟练了解，需要更多知识点和实操经验。<br>4、大量历史遗留问题如何过渡。这可能是最大最大的阻力。</p>
+<h2 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h2><p>回顾历史总是让人感慨，展望未来则让人兴奋。上面讲到的研发模式，除了最后一种还在探索期，其他各种在各大公司都已有大量实践。几点小结：<br>1、模式没有好坏高下之分，只有合不合适。<br>2、Ajax 给前端开发带来了一次质的飞跃，Node 很可能是第二次。<br>3、SoC（关注度分离） 是一条伟大的原则。上面种种模式，都是让前后端的职责更清晰，分工更合理高效。<br>4、还有个原则，让合适的人做合适的事。比如 Web Server 层的 UI Layer 开发，前端是更合适的人选。<br><strong>历史有时候会打转，咋一看以为是回去了，实际上是螺旋转了一圈，站在了一个新的起点。</strong><br>（完）<br>题图：演化真不容易呀。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/10/yuque/%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89WEB%E5%BC%80%E5%8F%91%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Python 风靡的原因" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1878,102 +1947,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/03/yuque/%E8%83%BD%E5%8A%9B%E6%8F%90%E5%8D%87%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%97%E6%B3%95%EF%BC%88%E5%8F%AF%E8%A7%86%E5%8C%96%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/JAVA HttpURLConnection" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/yuque/JAVA%20HttpURLConnection/">JAVA HttpURLConnection</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/30/yuque/JAVA%20HttpURLConnection/" class="archive-article-date">
-  	<time datetime="2019-03-30T17:08:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
-<p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
-<p>通过服务器返回的信息获取会话例程如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">&quot;set-cookie&quot;</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">&quot;;&quot;</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中的 session 格式为:  JSESSIONID=XXXXXXXXX</p>
-<p>获取 session ID 之后需要在每次发送请求的同时设置请求参数才能保持会话，例程如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">&quot;http://adugiudadiugb&quot;</span>);</span><br><span class="line"></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">this</span>.sessionID.equals(<span class="string">&quot;&quot;</span>))&#123;<span class="comment">//如果sessionID存在，即存在会话</span></span><br><span class="line"></span><br><span class="line">	connection.setRequestProperty(<span class="string">&quot;cookie&quot;</span>, <span class="keyword">this</span>.sessionID);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>只要 session ID 不改变，相应的会话也就不会改变</p>
-<p>小结：利用 Java 的 HttpURLConnection 进行请求发送时，如果需要保持同服务器的会话，需要先通过连接服务器获取 session ID ，之后发送请求加入 session ID 到请求参数中就可以了。</p>
-<p>注意：此时的服务器后台需要支持会话，即 Java Web 后台实现了 session。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Java//" class="article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/yuque/JAVA%20HttpURLConnection/">展开全文 >></a>
         </p>
       
 

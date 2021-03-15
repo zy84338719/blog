@@ -176,6 +176,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/指针反转lianbiao，树右序遍历" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/18/yuque/%E6%8C%87%E9%92%88%E5%8F%8D%E8%BD%AClianbiao%EF%BC%8C%E6%A0%91%E5%8F%B3%E5%BA%8F%E9%81%8D%E5%8E%86/">指针反转lianbiao，树右序遍历</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/yuque/%E6%8C%87%E9%92%88%E5%8F%8D%E8%BD%AClianbiao%EF%BC%8C%E6%A0%91%E5%8F%B3%E5%BA%8F%E9%81%8D%E5%8E%86/" class="archive-article-date">
+  	<time datetime="2020-05-18T08:21:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> ListNode <span class="keyword">struct</span> &#123;</span><br><span class="line">	Val  <span class="keyword">int</span></span><br><span class="line">	Next *ListNode</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverselist</span><span class="params">(head *ListNode)</span> *<span class="title">ListNode</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> temp *ListNode</span><br><span class="line">	pre := head</span><br><span class="line">	<span class="keyword">for</span> pre != <span class="literal">nil</span> &#123;</span><br><span class="line">		t := pre.Next</span><br><span class="line">		pre.Next = temp</span><br><span class="line">		temp = pre</span><br><span class="line">		pre = t</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> NodeTree <span class="keyword">struct</span> &#123;</span><br><span class="line">	Val   <span class="keyword">int</span></span><br><span class="line">	Left  *NodeTree</span><br><span class="line">	Right *NodeTree</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">levelOrder</span><span class="params">(node *NodeTree)</span> <span class="params">(res [][]<span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	res = [][]<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">if</span> node == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	queue := []*NodeTree&#123;node&#125;</span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">len</span>(queue) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">//创建临时队列,保存层节点</span></span><br><span class="line">		tmpQ := []*NodeTree&#123;&#125;</span><br><span class="line">		tmpRes := []<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(queue); j++ &#123;</span><br><span class="line">			node := queue[j]</span><br><span class="line">			tmpRes = <span class="built_in">append</span>(tmpRes, node.Val)</span><br><span class="line">			<span class="keyword">if</span> node.Right != <span class="literal">nil</span> &#123;</span><br><span class="line">				tmpQ = <span class="built_in">append</span>(tmpQ, node.Right)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> node.Left != <span class="literal">nil</span> &#123;</span><br><span class="line">				tmpQ = <span class="built_in">append</span>(tmpQ, node.Left)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//处理下一层</span></span><br><span class="line">		queue = tmpQ</span><br><span class="line">		res = <span class="built_in">append</span>(res, tmpRes)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/18/yuque/%E6%8C%87%E9%92%88%E5%8F%8D%E8%BD%AClianbiao%EF%BC%8C%E6%A0%91%E5%8F%B3%E5%BA%8F%E9%81%8D%E5%8E%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Go核心36讲中50个思考题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1647,175 +1710,6 @@ From the both cases we observed that either reader or writer has to starve. Belo
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/12/yuque/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%94%81%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/并发编程与锁的底层原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">并发编程与锁的底层原理</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="archive-article-date">
-  	<time datetime="2020-05-12T02:52:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。</span><br></pre></td></tr></table></figure>
-
-<h2 id="大纲："><a href="#大纲：" class="headerlink" title="大纲："></a>大纲：</h2><ul>
-<li>1.并发编程与锁</li>
-<li>2.缓存和一致性协议 MESI</li>
-<li>3.CPU/缓存与锁</li>
-<li>4.常见锁总结</li>
-</ul>
-<h1 id="1-并发编程与锁"><a href="#1-并发编程与锁" class="headerlink" title="1 并发编程与锁"></a>1 并发编程与锁</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我们写的各种应用系统，像网络编程，基本上都是并发编程，不论是多进程还是多线程，亦或是协程、队列的方式，也都是并发编程的范畴。并发编程中，在多核操作系统中，多线程的时候，就会出现**线程安全性**问题，有的也说**并发安全性**问题。这种问题，都是因为对共享变量的并发读写引起的数据不一致问题。所以，在并发编程中，就会经常用到锁，当然也可能使用队列或者单线程的方式来处理共享数据。</span><br><span class="line">我们先来还原一下具体的问题，然后再用不同的方法来处理它们。</span><br></pre></td></tr></table></figure>
-
-<h2 id="线程安全性问题-1"><a href="#线程安全性问题-1" class="headerlink" title="线程安全性问题 1"></a>线程安全性问题 1</h2><p><img src="//img.mukewang.com/5c8e21170001caa703400439.jpg#align=left&display=inline&height=439&margin=%5Bobject%20Object%5D&originHeight=439&originWidth=340&status=done&style=none&width=340"><br>代码中共享变量 num 是一个简单的计数器，main 主线程启动了两个协程，分别循环一万次对 num 进行递增操作。正常情况下，预期的结果应该是 1w+1w=2w，但是，在并发执行的情况下，最终的结果只有 10891，离 2w 差的好多。<br><strong>典型应用场景：</strong></p>
-<ul>
-<li>1 库存数量扣减</li>
-<li>2 投票数量递增</li>
-</ul>
-<p><strong>并发安全性问题：</strong></p>
-<p>num+ +是三个操作（读、改、写），不满足原子性</p>
-<p>并发读写全局变量，线程不安全</p>
-<h2 id="线程安全性问题-2"><a href="#线程安全性问题-2" class="headerlink" title="线程安全性问题 2"></a>线程安全性问题 2</h2><p><img src="//img.mukewang.com/5c8e213d00019ed603890438.jpg#align=left&display=inline&height=438&margin=%5Bobject%20Object%5D&originHeight=438&originWidth=389&status=done&style=none&width=389"><br>代码中共享变量 list 作为一个数据集合，由两个协程并发的循环 append 数据进去。同样是每个协程执行一万次，正常情况下，预期的 list 长度应该是 2w，但是，在并发执行下，结果却可能连 1w 都不到。<br>具体的原因，大家可以思考下，为什么并发执行的情况下，2 个协程，竟然 list 长度还小于 1w 呢？<br><strong>典型应用场景：</strong></p>
-<ul>
-<li>1 发放优惠券</li>
-<li>2 在线用户列表</li>
-</ul>
-<p><strong>并发安全性问题：</strong></p>
-<p>append(list, i) 内部是一个复杂的数组操作函数</p>
-<p>并发读写全局变量，线程不安全</p>
-<h2 id="问题修复"><a href="#问题修复" class="headerlink" title="问题修复"></a>问题修复</h2><p><img src="//img.mukewang.com/5c8e214a0001b22d03350407.jpg#align=left&display=inline&height=407&margin=%5Bobject%20Object%5D&originHeight=407&originWidth=335&status=done&style=none&width=335"><br>通过 WaitGroup 将两个协程分开执行，第一个执行完成再执行第二个，避免并发执行，串行化两个任务。<br><img src="//img.mukewang.com/5c8e216c00011b3003350423.jpg#align=left&display=inline&height=423&margin=%5Bobject%20Object%5D&originHeight=423&originWidth=335&status=done&style=none&width=335"><br>通过互斥锁，在数字递增的前后加上锁的处理，数值递增操作时互斥。<br><img src="//img.mukewang.com/5c8e217e0001718603770403.jpg#align=left&display=inline&height=403&margin=%5Bobject%20Object%5D&originHeight=403&originWidth=377&status=done&style=none&width=377"><br>针对 int64 的数字指针递增操作，可以利用 atomic.AddInt64 原子递增方法来处理。<br>当然还会有更多的实现方法，但是内部的实现原理也都类似，原子操作，避免对共享数据的并发读写。</p>
-<h2 id="并发编程的几个基础概念"><a href="#并发编程的几个基础概念" class="headerlink" title="并发编程的几个基础概念"></a>并发编程的几个基础概念</h2><ul>
-<li>概念 1：并发执行不一定是并行执行。</li>
-<li>概念 2：单核 CPU 可以并发执行，不能并行执行。</li>
-<li>概念 3：单进程、单线程，也可以并发执行。</li>
-</ul>
-<p>并行是<strong>同一时刻</strong>的多任务处理，并发是一个<strong>时间段</strong>内（1 秒、1 毫秒）的多任务处理。</p>
-<p>区别并发和并行，多核的并行处理涉及到多核同时读写一个缓存行，所以很容易出现数据的脏读和脏写；单核的并发处理中因为任务内部的中间变量，所以有可能存在脏写的情况。</p>
-<h2 id="锁的作用"><a href="#锁的作用" class="headerlink" title="锁的作用"></a>锁的作用</h2><ul>
-<li>避免并行运算中，共享数据读写的安全性问题。</li>
-<li>并行执行中，在锁的位置，同时只能有一个程序可以获得锁，其他程序不能获得锁。</li>
-<li>锁的出现，使得并行执行的程序在锁的位置串行化执行。</li>
-<li>多核、分布式运算、并发执行，才会需要锁。</li>
-</ul>
-<h2 id="不用锁，也可以实现同样效果？"><a href="#不用锁，也可以实现同样效果？" class="headerlink" title="不用锁，也可以实现同样效果？"></a>不用锁，也可以实现同样效果？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单线程串行化执行，队列式，CAS。</span><br><span class="line">——不要通过共享内存来通信，而应该通过通信来共享内存</span><br></pre></td></tr></table></figure>
-
-<h2 id="锁的底层实现类型"><a href="#锁的底层实现类型" class="headerlink" title="锁的底层实现类型"></a>锁的底层实现类型</h2><ul>
-<li>1 <strong>锁内存总线</strong>，针对内存的读写操作，在总线上控制，限制程序的内存访问</li>
-<li>2 <strong>锁缓存行</strong>，同一个缓存行的内容读写操作，CPU 内部的高速缓存保证一致性</li>
-</ul>
-<p><strong>锁</strong>，作用在一个对象或者变量上。现代 CPU 会优先在高速缓存查找，如果存在这个对象、变量的缓存行数据，会使用锁缓存行的方式。否则，才使用锁总线的方式。</p>
-<p><strong>速度</strong>，加锁、解锁的速度，理论上就是高速缓存、内存总线的读写速度，它的效率是非常高的。而出现效率问题，是在产生冲突时的串行化等待时间，再加上线程的上下文切换，让多核的并发能力直线下降。</p>
-<h1 id="2-缓存和一致性协议-MESI"><a href="#2-缓存和一致性协议-MESI" class="headerlink" title="2 缓存和一致性协议 MESI"></a>2 缓存和一致性协议 MESI</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文首字母缩写，也就是英文环境下的术语、俚语、成语，新人理解和学习有难度，但是，掌握好了既可以省事，又可以缩小文化差距。</span><br><span class="line">另外就是对英文的异形化，也类似汉字的变形体，“表酱紫”，“蓝瘦香菇”，老外是很难懂得，反之一样。</span><br></pre></td></tr></table></figure>
-
-<h2 id="MESI“生老病死”缓存行的四种状态"><a href="#MESI“生老病死”缓存行的四种状态" class="headerlink" title="MESI“生老病死”缓存行的四种状态"></a>MESI“生老病死”缓存行的四种状态</h2><ul>
-<li>M: modify 被修改，数据有效，cache 和内存不一致</li>
-<li>E: exclusive 独享，数据有效，cache 与内存一致</li>
-<li>S: shared 共享，数据有效，cache 与内存一致，多核同时存在</li>
-<li>I: invalid 数据无效</li>
-<li>F: forward 向前(intel)，特殊的共享状态，多个 S 状态，只有一个 F 状态，从 F 高速缓存接受副本</li>
-</ul>
-<p>当内核需要某份数据时，而其它核有这份数据的备份时，本 cache 既可以从内存中导入数据，也可以从其它 cache 中导入数据(Forward 状态的 cache)。</p>
-<h2 id="四种状态的更新路线图"><a href="#四种状态的更新路线图" class="headerlink" title="四种状态的更新路线图"></a>四种状态的更新路线图</h2><p><img src="//img.mukewang.com/5c8e219d000162e904750295.jpg#align=left&display=inline&height=295&margin=%5Bobject%20Object%5D&originHeight=295&originWidth=475&status=done&style=none&width=475"><br>高效的状态： E, S<br>低效的状态： I, M<br>　　这四种状态，保证 CPU 内部的缓存数据是一致的，但是，并不能保证是强一致性。<br>　　每个 cache 的控制器不仅知道自己的读写操作，而且也要监听其它 cache 的读写操作。</p>
-<h2 id="缓存的意义"><a href="#缓存的意义" class="headerlink" title="缓存的意义"></a>缓存的意义</h2><p><img src="//img.mukewang.com/5c8e21ab0001cd8903980382.jpg#align=left&display=inline&height=382&margin=%5Bobject%20Object%5D&originHeight=382&originWidth=398&status=done&style=none&width=398"></p>
-<ul>
-<li>1 时间局部性：如果某个数据被访问，那么不久还会被访问</li>
-<li>2 空间局部性：如果某个数据被访问，那么相邻的数据也很快可能被访问</li>
-</ul>
-<p><strong>局限性：空间、速度、成本</strong></p>
-<p>更大的缓存容量，需要更大的成本。更快的速度，需要更大的成本。均衡缓存的空间、速度、成本，才能更有市场竞争力，也是现在我们看到的情况。当然，随着技术的升级，成本下降，空间、速度也就能继续稳步提高了。</p>
-<h2 id="缓存行，64Byte-的内容"><a href="#缓存行，64Byte-的内容" class="headerlink" title="缓存行，64Byte 的内容"></a>缓存行，64Byte 的内容</h2><p><img src="//img.mukewang.com/5c8e21b900015d6106140248.jpg#align=left&display=inline&height=248&margin=%5Bobject%20Object%5D&originHeight=248&originWidth=614&status=done&style=none&width=614"><br>缓存行的存储空间是 64Byte（字节），也就是可以放 64 个英文字母，或者 8 个 int64 变量。<br>注意伪共享的情况——56Byte 共享数据不变化，但是 8Byte 的数据频繁更新，导致 56Byte 的共享数据也会频繁失效。<br>解决方法：缓存行的数据对齐，更新频繁的变量独占一个缓存行，只读的变量共享一个缓存行。</p>
-<h1 id="3-CPU-缓存与锁"><a href="#3-CPU-缓存与锁" class="headerlink" title="3 CPU/缓存与锁"></a>3 CPU/缓存与锁</h1><p>锁的底层实现原理，与 CPU、高速缓存有着密切的关系，接下来一起看看 CPU 的内部结构。</p>
-<h2 id="CPU-与计算机结构"><a href="#CPU-与计算机结构" class="headerlink" title="CPU 与计算机结构"></a>CPU 与计算机结构</h2><p><img src="//img.mukewang.com/5c8e21c70001228304540310.jpg#align=left&display=inline&height=310&margin=%5Bobject%20Object%5D&originHeight=310&originWidth=454&status=done&style=none&width=454"><br><img src="//img.mukewang.com/5c8e21d50001b17404060269.jpg#align=left&display=inline&height=269&margin=%5Bobject%20Object%5D&originHeight=269&originWidth=406&status=done&style=none&width=406"><br>内核独享寄存器、L1/L2，共享 L3。在早先时候只有单核 CPU，那时只有 L1 和 L2，后来有了多核 CPU，为了效率和性能，就增加了共享的 L3 缓存。<br>多颗 CPU 通过 QPI 连接。再后来，同一个主板上面也可以支持多颗 CPU，多颗 CPU 也需要有通信和控制，才有了 QPI。<br>内存读写都要通过内存总线。CPU 与内存、磁盘、网络、外设等通信，都需要通过各种系统提供的系统总线。</p>
-<h2 id="CPU-流水线"><a href="#CPU-流水线" class="headerlink" title="CPU 流水线"></a>CPU 流水线</h2><p><img src="//img.mukewang.com/5c8e21e20001020505010346.jpg#align=left&display=inline&height=346&margin=%5Bobject%20Object%5D&originHeight=346&originWidth=501&status=done&style=none&width=501"><br><img src="//img.mukewang.com/5c930bb70001210d04190380.jpg#align=left&display=inline&height=380&margin=%5Bobject%20Object%5D&originHeight=380&originWidth=419&status=done&style=none&width=419"><br>CPU 流水线，里面还有异步的 LoadBuffer,<br>Store Buffer, Invalidate Queue。这些缓冲队列的出现，更多的异步处理数据，提高了 CPU 的数据读写性能。<br>CPU 为了保证性能，默认是宽松的数据一致性。</p>
-<h2 id="编译器、CPU-优化"><a href="#编译器、CPU-优化" class="headerlink" title="编译器、CPU 优化"></a>编译器、CPU 优化</h2><p><img src="//img.mukewang.com/5c8e22000001cff204800129.jpg#align=left&display=inline&height=129&margin=%5Bobject%20Object%5D&originHeight=129&originWidth=480&status=done&style=none&width=480"><br><img src="//img.mukewang.com/5c8e220c00013f6104740179.jpg#align=left&display=inline&height=179&margin=%5Bobject%20Object%5D&originHeight=179&originWidth=474&status=done&style=none&width=474"><br>编译器优化：重排代码顺序，优先读操作（读有更好的性能，因为 cache 中有共享数据，而写操作，会让共享数据失效）<br>CPU 优化：指令执行乱序（多核心协同处理，自动优化和重排指令顺序）</p>
-<h2 id="编译器、CPU-屏蔽"><a href="#编译器、CPU-屏蔽" class="headerlink" title="编译器、CPU 屏蔽"></a>编译器、CPU 屏蔽</h2><ul>
-<li>优化屏蔽：禁止编译器优化。按照代码逻辑顺序生成二进制代码，volatile 关键词</li>
-<li>内存屏蔽：禁止 CPU 优化。防止指令之间的重排序，保证数据的可见性，store barrier, load barrier, full barrier</li>
-<li>写屏障：阻塞直到把 Store Buffer 中的数据刷到 Cache 中</li>
-<li>读屏障：阻塞直到 Invalid Queue 中的消息执行完毕</li>
-<li>全屏蔽：包括读写屏障，以保证各核的数据一致性</li>
-</ul>
-<p>Go 语言中的 Lock 指令就是一个内存全屏蔽同时禁止了编译器优化。</p>
-<p><img src="//img.mukewang.com/5c8e221c000182f708930157.jpg#align=left&display=inline&height=157&margin=%5Bobject%20Object%5D&originHeight=157&originWidth=893&status=done&style=none&width=893"></p>
-<p>x86 的架构在 CPU 优化方面做的相对少一些，只是针对“写读”的顺序才可能调序。</p>
-<h2 id="加锁，加了些什么？"><a href="#加锁，加了些什么？" class="headerlink" title="加锁，加了些什么？"></a>加锁，加了些什么？</h2><ul>
-<li>禁止编译器做优化（加了优化屏蔽）</li>
-<li>禁止 CPU 对指令重排（加了内存屏蔽）</li>
-<li>针对缓存行、内存总线上的控制</li>
-<li>冲突时的任务等待队列</li>
-</ul>
-<h1 id="4-常见锁总结"><a href="#4-常见锁总结" class="headerlink" title="4 常见锁总结"></a>4 常见锁总结</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最后，我们一起来看看常见的自旋锁、互斥锁、条件锁、读写锁的实现逻辑，以及在Go源码中，是如何来实现的CAS&#x2F;atomic.AddInt64和Mutext.Lock方法的。</span><br></pre></td></tr></table></figure>
-
-<h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p><img src="//img.mukewang.com/5c8e222e00014be702420057.jpg#align=left&display=inline&height=57&margin=%5Bobject%20Object%5D&originHeight=57&originWidth=242&status=done&style=none&width=242"><br>只要没有锁上，就不断重试。<br>如果别的线程长期持有该锁，那么你这个线程就一直在 while while while 地检查是否能够加锁，浪费 CPU 做无用功。<br>优点：不切换上下文；<br>不足：烧 CPU；<br><strong>适用场景：冲突不多，等待时间不长的情况下，或者少次数的尝试自旋。</strong></p>
-<h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p><img src="//img.mukewang.com/5c8e223d00014cce04080066.jpg#align=left&display=inline&height=66&margin=%5Bobject%20Object%5D&originHeight=66&originWidth=408&status=done&style=none&width=408"><br>操作系统负责线程调度，为了实现「锁的状态发生改变时再唤醒」就需要把锁也交给操作系统管理。<br>所以互斥器的加锁操作通常都需要涉及到上下文切换，操作花销也就会比自旋锁要大。<br>优点：简单高效；<br>不足：冲突等待时的上下文切换；<br><strong>适用场景：绝大部分情况下都可以直接使用互斥锁。</strong></p>
-<h2 id="条件锁"><a href="#条件锁" class="headerlink" title="条件锁"></a>条件锁</h2><p><img src="//img.mukewang.com/5c8e224a0001b66704220239.jpg#align=left&display=inline&height=239&margin=%5Bobject%20Object%5D&originHeight=239&originWidth=422&status=done&style=none&width=422"><br><strong>它解决的问题不是「互斥」，而是「等待」。</strong><br>消息队列的消费者程序，在队列为空的时候休息，数据不为空的时候（条件改变）启动消费任务。<br>条件锁的业务针对性更强。</p>
-<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><img src="//img.mukewang.com/5c8e225e00013ff603010540.jpg#align=left&display=inline&height=540&margin=%5Bobject%20Object%5D&originHeight=540&originWidth=301&status=done&style=none&width=301"><br>内部有两个锁，一个是读的锁，一个是写的锁。<br>如果只有一个读者、一个写者，那么等价于直接使用互斥锁。<br>不过由于读写锁需要额外记录读者数量，花销要大一点。<br>也可以认为读写锁是针对某种特定情景（读多写少）的「优化」。<br>但个人还是建议忘掉读写锁，直接用互斥器。<br><strong>试用场景：读多写少，而且读的过程时间较长，可以通过读写锁，减少读冲突时的等待。</strong></p>
-<h2 id="无锁操作-CAS"><a href="#无锁操作-CAS" class="headerlink" title="无锁操作 CAS"></a>无锁操作 CAS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Compare And Swap 比较并交换，类似于将 num+ + 的三个指令合并成一个指令 CMPXCHG，保证了操作的原子性。</span><br></pre></td></tr></table></figure>
-
-<p>为了保证顺序一致性和数据强一致性，还需要有一个 LOCK 指令。<br>源码，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e22740001717005300300.jpg#align=left&display=inline&height=300&margin=%5Bobject%20Object%5D&originHeight=300&originWidth=530&status=done&style=none&width=530"><br>LOCK 指令的作用就是禁止编译器优化，同时加上内存全屏障，可以保证<strong>LOCK 指令之后的一个指令</strong>执行时的数据强一致性和可见性。</p>
-<h2 id="数字的原子递增操作-atomic-AddInt64"><a href="#数字的原子递增操作-atomic-AddInt64" class="headerlink" title="数字的原子递增操作 atomic.AddInt64"></a>数字的原子递增操作 atomic.AddInt64</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在原始指针数字的基础上，原子性递增 delta 数值，并且返回递增后的结果值。</span><br><span class="line">源码1，参见 sync&#x2F;atomic&#x2F;asm.s</span><br></pre></td></tr></table></figure>
-
-<p><img src="//img.mukewang.com/5c8e22820001444204150046.jpg#align=left&display=inline&height=46&margin=%5Bobject%20Object%5D&originHeight=46&originWidth=415&status=done&style=none&width=415"><br>XADDQ 数据交换，数值相加，写入目标数据<br>ADDQ 数值相加，写入目标数据<br>在 XADDQ 之前加上 LOCK 指令，保证这个指令执行时的数据强一致性和可见性。<br>源码 2，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e228d0001572105570185.jpg#align=left&display=inline&height=185&margin=%5Bobject%20Object%5D&originHeight=185&originWidth=557&status=done&style=none&width=557"></p>
-<h2 id="互斥锁操作-sync-Mutex-Lock"><a href="#互斥锁操作-sync-Mutex-Lock" class="headerlink" title="互斥锁操作 sync.Mutex.Lock"></a>互斥锁操作 sync.Mutex.Lock</h2><p><img src="//img.mukewang.com/5c8e229900014e2106810486.jpg#align=left&display=inline&height=486&margin=%5Bobject%20Object%5D&originHeight=486&originWidth=681&status=done&style=none&width=681"><br><img src="//img.mukewang.com/5c8e22a70001b37305270491.jpg#align=left&display=inline&height=491&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=527&status=done&style=none&width=527"><br>源码，参见 sync/mutex.go<br><strong>大概的源码处理逻辑如下：</strong></p>
-<ul>
-<li>1 通过 CAS 操作来竞争锁的状态 &amp;m.state；</li>
-<li>2 没有竞争到锁，先主动自旋尝试获取锁 runtime_canSpin 和 runtime_doSpin (原地烧 CPU)；</li>
-<li>3 自旋尝试失败，再次 CAS 尝试获取锁；</li>
-<li>4 runtime_SemacquireMutex 锁请求失败,进入休眠状态,等待信号唤醒后重新开始循环；</li>
-<li>5 m.state 等待队列长度（复用的 int32 位数字，第一位是锁的状态，后 31 位是锁的等待队列长度计数器）；</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">展开全文 >></a>
         </p>
       
 

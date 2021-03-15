@@ -176,6 +176,135 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Golang Date 的日期（转载）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">Golang Date 的日期（转载）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2019-11-23T15:27:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="热身"><a href="#热身" class="headerlink" title="热身"></a>热身</h2><p>在讲这个问题之前，先来看一道代码题：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    timeString := time.Now().Format(<span class="string">&quot;2006-01-02 15:04:05&quot;</span>)</span><br><span class="line">    fmt.Println(timeString)</span><br><span class="line">    fmt.Println(time.Now().Format(<span class="string">&quot;2017-09-07 18:05:32&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的输出是什么（假定运行时刻的时间是 2017-09-07 18:05:32）？<br>什么？你已经知道答案了？那你是大神，可以跳过这篇文章了。</p>
+<h2 id="一、神奇的日期"><a href="#一、神奇的日期" class="headerlink" title="一、神奇的日期"></a>一、神奇的日期</h2><p>刚接触 Golang 时，阅读代码的时候总会在代码中发现这么一个日期，</p>
+<blockquote>
+<p>2006-01-02 15:04:05</p>
+</blockquote>
+<p>刚看到这段代码的时候，我当时想：这个人好随便啊，随便写一个日期在这里，但是又感觉还挺方便的，格式清晰一目了然。也没有更多的在意了。<br>之后一次做需求的时候轮到自己要格式化时间了，仿照它的样子，写了一个日期格式来格式化，差不多就是上面代码题上写的那样。殊不知，运行完毕后，结果令人惊呆。。。<br>运行结果如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-07</span> <span class="number">18</span>:<span class="number">06</span>:<span class="number">43</span></span><br><span class="line"><span class="number">7097</span><span class="number">-09</span>+<span class="number">08</span> <span class="number">98</span>:<span class="number">43</span>:<span class="number">67</span></span><br></pre></td></tr></table></figure>
+
+<p>顿时就犯糊涂了：怎么就变成这个鸟样子了？format 不认识我的日期？这么标准的日期都不认识？</p>
+<h2 id="二、开始探究"><a href="#二、开始探究" class="headerlink" title="二、开始探究"></a>二、开始探究</h2><p>查阅了资料，发现原来这个日期就是写死的一个日期，不是这个日期就不认识，就不能正确的格式化。记住就好了。<br>但是，还是觉得有点纳闷。为什么输出日期是这个乱的？仔细观察这个日期，06 年，1 月 2 日下午 3 点 4 分 5 秒，查阅相关资料还有 -7 时区，Monday，数字 1~7 都有了，而且都不重复。难道有什么深刻含义？还是单纯的为了方便记忆？<br>晚上睡觉前一直在心里想。突然想到：这些数字全都不重复，那岂不就是说，每个数字就能代表你需要格式化的属性了？比如，解析格式化字符串的时候，遇到了 1，就说明这个地方要填的是月份，遇到了 4，说明这个位置是分钟？<br>不禁觉得，发明这串时间数字的人还是很聪明的。2006-01-02 15:04:05 这个日期，不但挺好记的，而且用起来也比较方便。这个比其他编程语言的 yyyy-MM-dd HH:mm:ss 这种东西好记多了。（楼主就曾经把 yyyy 大小写弄错了，弄出一个大 bug，写成 YYYY，结果，当时没测出来，到了十二月左右的时候，年份多了一年。。。）</p>
+<h2 id="三、深入探究"><a href="#三、深入探究" class="headerlink" title="三、深入探究"></a>三、深入探究</h2><p>为了一窥这个时间格式化的究竟，我们还是得阅读 go 的 time 包源代码。在$GOROOT/src/time/format.go 文件中，我们可以找到如下代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    _                        = <span class="literal">iota</span></span><br><span class="line">    stdLongMonth             = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;January&quot;</span></span><br><span class="line">    stdMonth                                       <span class="comment">// &quot;Jan&quot;</span></span><br><span class="line">    stdNumMonth                                    <span class="comment">// &quot;1&quot;</span></span><br><span class="line">    stdZeroMonth                                   <span class="comment">// &quot;01&quot;</span></span><br><span class="line">    stdLongWeekDay                                 <span class="comment">// &quot;Monday&quot;</span></span><br><span class="line">    stdWeekDay                                     <span class="comment">// &quot;Mon&quot;</span></span><br><span class="line">    stdDay                                         <span class="comment">// &quot;2&quot;</span></span><br><span class="line">    stdUnderDay                                    <span class="comment">// &quot;_2&quot;</span></span><br><span class="line">    stdZeroDay                                     <span class="comment">// &quot;02&quot;</span></span><br><span class="line">    stdHour                  = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;15&quot;</span></span><br><span class="line">    stdHour12                                      <span class="comment">// &quot;3&quot;</span></span><br><span class="line">    stdZeroHour12                                  <span class="comment">// &quot;03&quot;</span></span><br><span class="line">    stdMinute                                      <span class="comment">// &quot;4&quot;</span></span><br><span class="line">    stdZeroMinute                                  <span class="comment">// &quot;04&quot;</span></span><br><span class="line">    stdSecond                                      <span class="comment">// &quot;5&quot;</span></span><br><span class="line">    stdZeroSecond                                  <span class="comment">// &quot;05&quot;</span></span><br><span class="line">    stdLongYear              = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;2006&quot;</span></span><br><span class="line">    stdYear                                        <span class="comment">// &quot;06&quot;</span></span><br><span class="line">    stdPM                    = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;PM&quot;</span></span><br><span class="line">    stdpm                                          <span class="comment">// &quot;pm&quot;</span></span><br><span class="line">    stdTZ                    = <span class="literal">iota</span>                <span class="comment">// &quot;MST&quot;</span></span><br><span class="line">    stdISO8601TZ                                   <span class="comment">// &quot;Z0700&quot;  // prints Z for UTC</span></span><br><span class="line">    stdISO8601SecondsTZ                            <span class="comment">// &quot;Z070000&quot;</span></span><br><span class="line">    stdISO8601ShortTZ                              <span class="comment">// &quot;Z07&quot;</span></span><br><span class="line">    stdISO8601ColonTZ                              <span class="comment">// &quot;Z07:00&quot; // prints Z for UTC</span></span><br><span class="line">    stdISO8601ColonSecondsTZ                       <span class="comment">// &quot;Z07:00:00&quot;</span></span><br><span class="line">    stdNumTZ                                       <span class="comment">// &quot;-0700&quot;  // always numeric</span></span><br><span class="line">    stdNumSecondsTz                                <span class="comment">// &quot;-070000&quot;</span></span><br><span class="line">    stdNumShortTZ                                  <span class="comment">// &quot;-07&quot;    // always numeric</span></span><br><span class="line">    stdNumColonTZ                                  <span class="comment">// &quot;-07:00&quot; // always numeric</span></span><br><span class="line">    stdNumColonSecondsTZ                           <span class="comment">// &quot;-07:00:00&quot;</span></span><br><span class="line">    stdFracSecond0                                 <span class="comment">// &quot;.0&quot;, &quot;.00&quot;, ... , trailing zeros included</span></span><br><span class="line">    stdFracSecond9                                 <span class="comment">// &quot;.9&quot;, &quot;.99&quot;, ..., trailing zeros omitted</span></span><br></pre></td></tr></table></figure>
+
+<p>上面就是所能见到的所有关于日期时间的片段。基本能够涵盖所有的关于日期格式化的请求。<br>可以总结如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">格式</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">01、 1、Jan、January</td>
+<td align="center">月</td>
+</tr>
+<tr>
+<td align="center">02、 2、_2</td>
+<td align="center">日，这个_2 表示如果日期是只有一个数字，则表示出来的日期前面用个空格占位。</td>
+</tr>
+<tr>
+<td align="center">03、 3、15</td>
+<td align="center">时</td>
+</tr>
+<tr>
+<td align="center">04、4</td>
+<td align="center">分</td>
+</tr>
+<tr>
+<td align="center">05、5</td>
+<td align="center">秒</td>
+</tr>
+<tr>
+<td align="center">2006、06、6</td>
+<td align="center">年</td>
+</tr>
+</tbody></table>
+<p>| -070000、 -07:00:00、 -0700、 -07:00、 -07<br>Z070000、Z07:00:00、 Z0700、 Z07:00 | 时区 |<br>| PM、pm | 上下午 |<br>| Mon、Monday | 星期 |<br>| MST | 美国时间，如果机器设置的是中国时间则表示为 UTC |</p>
+<p>看完了这些，心里对日期格式问题已经有数了。<br>所以，我们回头看一下开头的问题，我用</p>
+<blockquote>
+<p>2017-09-07 18:05:32</p>
+</blockquote>
+<p>这串数字来格式化这个日期</p>
+<blockquote>
+<p>2017-09-07 18:05:32</p>
+</blockquote>
+<p>得到的结果就是</p>
+<blockquote>
+<p>7097-09+08 98:43:67</p>
+</blockquote>
+<p>看了这个我就在想，如果是我，我会怎么解析这个格式呢？不禁想起来了学习《编译原理》时候的词法分析器，这个肯定需要构造一个语法树。至于文法什么的，暂时我也还弄不清。既然这样，那不如我们直接看 GO 源代码一窥究竟，看看 golang 语言团队的人是怎么解析的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nextStdChunk</span><span class="params">(layout <span class="keyword">string</span>)</span> <span class="params">(prefix <span class="keyword">string</span>, std <span class="keyword">int</span>, suffix <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(layout); i++ &#123;</span><br><span class="line">        <span class="keyword">switch</span> c := <span class="keyword">int</span>(layout[i]); c &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;J&#x27;</span>: <span class="comment">// January, Jan</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Jan&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;January&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongMonth, layout[i+<span class="number">7</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMonth, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;M&#x27;</span>: <span class="comment">// Monday, Mon, MST</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Mon&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Monday&quot;</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongWeekDay, layout[i+<span class="number">6</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdWeekDay, layout[i+<span class="number">3</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;MST&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span>: <span class="comment">// 01, 02, 03, 04, 05, 06</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; <span class="string">&#x27;1&#x27;</span> &lt;= layout[i+<span class="number">1</span>] &amp;&amp; layout[i+<span class="number">1</span>] &lt;= <span class="string">&#x27;6&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], std0x[layout[i+<span class="number">1</span>]-<span class="string">&#x27;1&#x27;</span>], layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;1&#x27;</span>: <span class="comment">// 15, 1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;5&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumMonth, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;2&#x27;</span>: <span class="comment">// 2006, 2</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">4</span> &amp;&amp; layout[i:i+<span class="number">4</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongYear, layout[i+<span class="number">4</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdDay, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;_&#x27;</span>: <span class="comment">// _2, _2006</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;2&#x27;</span> &#123;</span><br><span class="line">                <span class="comment">//_2006 is really a literal _, followed by stdLongYear</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i+<span class="number">1</span>:i+<span class="number">5</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span> : i+<span class="number">1</span>], stdLongYear, layout[i+<span class="number">5</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdUnderDay, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour12, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;4&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMinute, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;5&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdSecond, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;P&#x27;</span>: <span class="comment">// PM</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;M&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdPM, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;p&#x27;</span>: <span class="comment">// pm</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;m&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdpm, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: <span class="comment">// -070000, -07:00:00, -0700, -07:00, -07</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;-070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumSecondsTz, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;-07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;-0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumTZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;-07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;-07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;Z&#x27;</span>: <span class="comment">// Z070000, Z07:00:00, Z0700, Z07:00,</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;Z070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601SecondsTZ, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;Z07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;Z0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601TZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Z07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Z07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;.&#x27;</span>: <span class="comment">// .000 or .999 - repeated digits for fractional seconds.</span></span><br><span class="line">            <span class="keyword">if</span> i+<span class="number">1</span> &lt; <span class="built_in">len</span>(layout) &amp;&amp; (layout[i+<span class="number">1</span>] == <span class="string">&#x27;0&#x27;</span> || layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span>) &#123;</span><br><span class="line">                ch := layout[i+<span class="number">1</span>]</span><br><span class="line">                j := i + <span class="number">1</span></span><br><span class="line">                <span class="keyword">for</span> j &lt; <span class="built_in">len</span>(layout) &amp;&amp; layout[j] == ch &#123;</span><br><span class="line">                    j++</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// String of digits must end here - only fractional second is all digits.</span></span><br><span class="line">                <span class="keyword">if</span> !isDigit(layout, j) &#123;</span><br><span class="line">                    std := stdFracSecond0</span><br><span class="line">                    <span class="keyword">if</span> layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span> &#123;</span><br><span class="line">                        std = stdFracSecond9</span><br><span class="line">                    &#125;</span><br><span class="line">                    std |= (j - (i + <span class="number">1</span>)) &lt;&lt; stdArgShift</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], std, layout[j:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> layout, <span class="number">0</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码有点长，不过逻辑还是很清楚的，我们吧上面表格中的那些常用项的先进行排序，然后根据排序结果，对首个字符进行分类，相同首字符的项放在一个 case 里面判断处理。看起来这里是简单的进行判断处理，其实这就是编译里面词法分析的一个步骤（分词）。<br>纵观整个 format.go 文件，其实这个日期处理还是挺复杂的，包括日期计算，格式解析，对日期进行格式化等。</p>
+<p>作者：FredGan<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c7f7fbb16932">https://www.jianshu.com/p/c7f7fbb16932</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/《Murphy‘s Law》 墨菲定律" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -871,113 +1000,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/20/yuque/Readiness%20probe%20failed!%20caliconode%20is%20not%20ready%20BIRD%20is%20not%20ready%20BGP%20not%20established%20with%20xxxx/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/">K8S 应用篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/" class="archive-article-date">
-  	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>部署 dashboard</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;dashboard&#x2F;v2.0.0-beta4&#x2F;aio&#x2F;deploy&#x2F;recommended.yaml</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole&#x3D;cluster-admin --serviceaccount&#x3D;kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io&#x2F;service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io&#x2F;service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io&#x2F;service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
-
-<p>部署</p>
-<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew</a> users can use <code>brew install kubernetes-helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://chocolatey.org/">Chocolatey</a> users can use <code>choco install kubernetes-helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://scoop.sh/">Scoop</a> users can use <code>scoop install helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://gofi.sh/">GoFish</a> users can use <code>gofish install helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://snapcraft.io/">Snap</a> users can use <code>sudo snap install helm --classic</code>.</li>
-</ul>
-<p>k8s 升级以及容器版本升级</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get upgrade  kubeadm</span><br><span class="line">更新到1.13.0后，在master执行,执行一次</span><br><span class="line">kubeadm upgrade plan</span><br></pre></td></tr></table></figure>
-
-<p>docker 降级<br>打印可用版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache madison docker-ce</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<p>安装指定版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce&#x3D;&lt;VERSION&gt;</span><br></pre></td></tr></table></figure>
-
-<p>三、给 Tiller 授权<br>因为 Helm 的服务端 Tiller 是一个部署在 Kubernetes 中 Kube-System Namespace 下 的 Deployment，它会去连接 Kube-Api 在 Kubernetes 里创建和删除应用。</p>
-<p>而从 Kubernetes 1.6 版本开始，API Server 启用了 RBAC 授权。目前的 Tiller 部署时默认没有定义授权的 ServiceAccount，这会导致访问 API Server 时被拒绝。所以我们需要明确为 Tiller 部署添加授权。</p>
-<p>创建 Kubernetes 的服务帐号和绑定角色</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br></pre></td></tr></table></figure>
-
-<p>为 Tiller 设置帐号</p>
-<h1 id="使用-kubectl-patch-更新-API-对象"><a href="#使用-kubectl-patch-更新-API-对象" class="headerlink" title="使用 kubectl patch 更新 API 对象"></a>使用 kubectl patch 更新 API 对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p <span class="string">&#x27;&#123;&quot;spec&quot;:&#123;&quot;template&quot;:&#123;&quot;spec&quot;:&#123;&quot;serviceAccount&quot;:&quot;tiller&quot;&#125;&#125;&#125;&#125;&#x27;</span></span><br><span class="line">deployment.extensions <span class="string">&quot;tiller-deploy&quot;</span> patched</span><br></pre></td></tr></table></figure>
-
-<p>查看是否授权成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount</span><br><span class="line">serviceAccount: tiller</span><br><span class="line">serviceAccountName: tiller</span><br></pre></td></tr></table></figure>
-
-<p>四、验证 Tiller 是否安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n kube-system get pods|grep tiller</span><br><span class="line">tiller-deploy-6d68f5c78f-nql2z          1/1       Running   0          5m</span><br><span class="line">helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:<span class="string">&quot;v2.9.1&quot;</span>, GitCommit:<span class="string">&quot;20adb27c7c5868466912eebdf6664e7390ebe710&quot;</span>, GitTreeState:<span class="string">&quot;clean&quot;</span>&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:<span class="string">&quot;v2.9.1&quot;</span>, GitCommit:<span class="string">&quot;20adb27c7c5868466912eebdf6664e7390ebe710&quot;</span>, GitTreeState:<span class="string">&quot;clean&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="NFS-挂载失败"><a href="#NFS-挂载失败" class="headerlink" title="NFS 挂载失败"></a>NFS 挂载失败</h2><p>在一台机器上创建 Pod，挂载 nfs 失败。<br>然后在节点上尝试挂载，依然显示失败</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# mount -t nfs 192.168.207.121:&#x2F;nas&#x2F;dg_vd &#x2F;nfs</span><br><span class="line">mount: mount point &#x2F;nfs does not exist</span><br><span class="line">root@master:~# mkdir &#x2F;nfs</span><br><span class="line">root@master:~# mount -t nfs 192.168.207.121:&#x2F;nas&#x2F;dg_vd &#x2F;nfs</span><br><span class="line">mount: wrong fs type, bad option, bad superblock on 192.168.207.121:&#x2F;nas&#x2F;dg_vd,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a &#x2F;sbin&#x2F;mount.&lt;type&gt; helper program)</span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line">root@master:~# showmount -e 192.168.207.121</span><br><span class="line">The program &#39;showmount&#39; is currently not installed. You can install it by typing:</span><br><span class="line">apt install nfs-common</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>apt install nfs-common</code>后可以本地挂载 nfs。<br>这是再创建 pod 成功</p>
-<h2 id="Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117"><a href="#Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117" class="headerlink" title="Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117."></a>Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.</h2><p>Calico 问题排障<br>// 错误信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
-
-<p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface&#x3D;ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">&#x2F;&#x2F; 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface&#x3D;ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface&#x3D;ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/">展开全文 >></a>
         </p>
       
 

@@ -176,6 +176,73 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Spring中容器管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/14/yuque/Spring%E4%B8%AD%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86/">Spring中容器管理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/14/yuque/Spring%E4%B8%AD%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86/" class="archive-article-date">
+  	<time datetime="2018-12-14T01:40:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天在写程序的时候看见一个以前没有见过的注解（@Component），在网上查找过后，经过实践，决定把它记录下来。<br>1、@controller 控制器（注入服务）</p>
+<p>用于标注控制层，相当于 struts 中的 action 层<br>2、@service 服务（注入 dao）</p>
+<p>用于标注服务层，主要用来进行业务的逻辑处理<br>3、@repository（实现 dao 访问）</p>
+<p>用于标注数据访问层，也可以说用于标注数据访问组件，即 DAO 组件.<br>4、@component （把普通 pojo 实例化到 spring 容器中，相当于配置文件中的<br><bean id="" class=""/>）</p>
+<p>泛指各种组件，就是说当我们的类不属于各种归类的时候（不属于@Controller、@Services 等的时候），我们就可以使用@Component 来标注这个类。<br>案例：<br>&lt;context:component-scan base-package=”com.*”&gt;<br>上面的这个例子是引入 Component 组件的例子，其中 base-package 表示为需要扫描的所有子包。<br>共同点：被@controller 、@service、@repository 、@component 注解的类，都会把这些类纳入进 spring 容器中进行管理</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/14/yuque/Spring%E4%B8%AD%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/java mysql 数据类型对照" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1250,87 +1317,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/11/19/yuque/Shell%20%E4%B8%AD%E6%96%87%E9%80%9F%E6%9F%A5%E8%A1%A8%EF%BC%88Cheatsheet%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/JAVA小抄（二）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/12/yuque/JAVA%E5%B0%8F%E6%8A%84%EF%BC%88%E4%BA%8C%EF%BC%89/">JAVA小抄（二）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/12/yuque/JAVA%E5%B0%8F%E6%8A%84%EF%BC%88%E4%BA%8C%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2018-11-12T12:17:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1、一个”-java”源文件中是否可以包括多个类（不是内部类）？有什么限制？"><a href="#1、一个”-java”源文件中是否可以包括多个类（不是内部类）？有什么限制？" class="headerlink" title="1、一个”.java”源文件中是否可以包括多个类（不是内部类）？有什么限制？"></a>1、一个”.java”源文件中是否可以包括多个类（不是内部类）？有什么限制？</h3><p>可以有多个类，但只能有一个 public 的类，并且 public 的类名必须与文件名相一致。</p>
-<h3 id="2、Java-有没有-goto"><a href="#2、Java-有没有-goto" class="headerlink" title="2、Java 有没有 goto?"></a>2、Java 有没有 goto?</h3><p>java 中的保留字，现在没有在 java 中使用。（可以明确的说现在使用的人就是有病）</p>
-<h3 id="3、说说-amp-和-amp-amp-的区别。"><a href="#3、说说-amp-和-amp-amp-的区别。" class="headerlink" title="3、说说&amp;和&amp;&amp;的区别。"></a>3、说说&amp;和&amp;&amp;的区别。</h3><p>&amp;和&amp;&amp;都可以用作逻辑与的运算符，表示逻辑与（and），当运算符两边的表达式的结果都为 true 时，整个运算结果才为 true，否则，只要有一方为 false，则结果为 false。<br>&amp;&amp;还具有短路的功能，即如果第一个表达式为 false，则不再计算第二个表达式，例如，对于 if(str != null &amp;&amp; !str.equals(“”))表达式，当 str 为 null 时，后面的表达式不会执行，所以不会出现 NullPointerException 如果将&amp;&amp;改为&amp;，则会抛出 NullPointerException 异常。If(x==33 &amp; ++y&gt;0) y 会增长，If(x==33 &amp;&amp; ++y&gt;0)不会增长。<br>&amp;还可以用作位运算符，当&amp;操作符两边的表达式不是 boolean 类型时，&amp;表示按位与操作，我们通常使用 0x0f 来与一个整数进行&amp;运算，来获取该整数的最低 4 个 bit 位，例如，0x31 &amp; 0x0f 的结果为 0x01。</p>
-<h3 id="4、在-JAVA-中如何跳出当前的多重嵌套循环？"><a href="#4、在-JAVA-中如何跳出当前的多重嵌套循环？" class="headerlink" title="4、在 JAVA 中如何跳出当前的多重嵌套循环？"></a>4、在 JAVA 中如何跳出当前的多重嵌套循环？</h3><p>在 Java 中，要想跳出多重循环，可以在外面的循环语句前定义一个标号，然后在里层循环体的代码中使用带有标号的 break  语句，即可跳出外层循环。另外，我个人通常并不使用标号这种方式，而是让外层的循环条件表达式的结果可以受到里层循环体代码的控制。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> a = <span class="keyword">false</span>;</span><br><span class="line">    ok:&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i==<span class="number">5</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span> ok;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> a = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>&amp;&amp;a;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i==<span class="number">5</span>)&#123;</span><br><span class="line">                a = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="5、switch-语句能否作用在-byte-上，能否作用在-long-上，能否作用在-String-上"><a href="#5、switch-语句能否作用在-byte-上，能否作用在-long-上，能否作用在-String-上" class="headerlink" title="5、switch 语句能否作用在 byte 上，能否作用在 long 上，能否作用在 String 上?"></a>5、switch 语句能否作用在 byte 上，能否作用在 long 上，能否作用在 String 上?</h3><p>在 switch（expr1）中，expr1 只能是一个整数表达式或者枚举常量（更大字体），整数表达式可以是 int 基本类型或 Integer 包装类型，由于，byte,short,char 都可以隐含转换为 int，所以，这些类型以及这些类型的包装类型也是可以的。显然，long 类型不符合 switch 的语法规定，并且不能被隐式转换成 int 类型，所以，它不能作用于 swtich 语句中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    Scanner sc=<span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    System.out.print(<span class="string">&quot;请输入一个学生的成绩：&quot;</span>);</span><br><span class="line">    String score = sc.next();</span><br><span class="line">    String level=<span class="string">&quot;&quot;</span>;<span class="comment">//等级</span></span><br><span class="line">    <span class="keyword">switch</span>(score)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;A&quot;</span>:level=<span class="string">&quot;90-100&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;B&quot;</span>:level=<span class="string">&quot;80-89&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;C&quot;</span>:level=<span class="string">&quot;70-79&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;D&quot;</span>:level=<span class="string">&quot;60-69&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;E&quot;</span>:level=<span class="string">&quot;0-59&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span> :level=<span class="string">&quot;error&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;您的成绩对应的等级是：&quot;</span>+level);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>1.switch 后面的(),里面返回的是一个具体的数值：byte ,short,char ,int ,jdk1.5 增加了枚举；JDK 1.7 之后 可以是 String 2.这个数值会依次跟 case 后面的数值进行比较，只要满足就执行后面的代码，直到遇到 break 结束 3.在每个分支后面要加上一个关键字 break<br>4.default 就是一个备胎的作用。其余的分支假如都没有走，那么一定会走 default 里面的代码。（类似 if 多分钟中的 else 结构）<br>default 可以写在任意的位置上，但是要写 break 结束语句。<br>假如放在最后一行，break 可以省略不写。（建议写在最后一行–可读性好）<br>5.switch 能解决的，if 都能解决，if 能解决的 switch 不一定能解决。</p>
-<h3 id="6、short-s1-1-s1-s1-1-有什么错-short-s1-1-s1-1-有什么错"><a href="#6、short-s1-1-s1-s1-1-有什么错-short-s1-1-s1-1-有什么错" class="headerlink" title="6、short s1 = 1; s1 = s1 + 1;有什么错? short s1 = 1; s1 += 1;有什么错?"></a>6、short s1 = 1; s1 = s1 + 1;有什么错? short s1 = 1; s1 += 1;有什么错?</h3><p>对于 short s1 = 1; s1 = s1 + 1;  由于 s1+1 运算时会自动提升表达式的类型，所以结果是 int 型，再赋值给 short 类型 s1 时，编译器将报告需要强制转换类型的错误。<br>对于 short s1 = 1; s1 += 1;由于  +=  是 java 语言规定的运算符，java 编译器会对它进行特殊处理，因此可以正确编译。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">short</span> s1 = <span class="number">1</span>;</span><br><span class="line">    s1 = s1 + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> </p>
-<h3 id="7-char-型变量中能不能存贮一个中文汉字-双字符-为什么"><a href="#7-char-型变量中能不能存贮一个中文汉字-双字符-为什么" class="headerlink" title="7.char 型变量中能不能存贮一个中文汉字(双字符)?为什么?"></a>7.char 型变量中能不能存贮一个中文汉字(双字符)?为什么?</h3><p>char 型变量是用来存储 Unicode 编码的字符的，unicode 编码字符集中包含了汉字，所以，char 型变量中当然可以存储汉字啦。不过，如果某个特殊的汉字没有被包含在 unicode 编码字符集中，那么，这个 char 型变量中就不能存储这个特殊汉字。补充说明：unicode 编码占用两个字节，所以，char 类型的变量也是占用两个字节。</p>
-<h3 id="8、用最有效率的方法算出-2-乘以-8-等于几"><a href="#8、用最有效率的方法算出-2-乘以-8-等于几" class="headerlink" title="8、用最有效率的方法算出 2 乘以 8 等于几?"></a>8、用最有效率的方法算出 2 乘以 8 等于几?</h3><p>8 &lt;&lt; 1</p>
-<h3 id="9、请设计一个一百亿的计算器"><a href="#9、请设计一个一百亿的计算器" class="headerlink" title="9、请设计一个一百亿的计算器"></a>9、请设计一个一百亿的计算器</h3><p>这种问题就是想问你对 long 的表示范围的了解，10^10=(2^10)^10 超过了 long 的表示范围，可以使用 biginteger 直接使用。如果非要实现可以将其保存为 String 然后单个符号位进行计算。</p>
-<h3 id="10、使用-final-关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？"><a href="#10、使用-final-关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？" class="headerlink" title="10、使用 final 关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？"></a>10、使用 final 关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？</h3><p>使用 final 关键字修饰一个变量时，是指引用变量不能变，引用变量所指向的对象中的内容还是可以改变的。例如，对于如下语句：<br>final StringBuffer a=new StringBuffer(“immutable”);<br>执行如下语句将报告编译期错误：a=new StringBuffer(“”);<br>但是，执行如下语句则可以通过编译： a.append(“ broken!”);</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test5</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> StringBuffer a = <span class="keyword">new</span> StringBuffer(<span class="string">&quot;immutable&quot;</span>);</span><br><span class="line"><span class="comment">//虽然不可以被重新赋值，但是可以进行添加元素；可以简单的理解为不可变指针数组追加元素问题。</span></span><br><span class="line"><span class="comment">//        a = new StringBuffer(&quot;&quot;);</span></span><br><span class="line">        a.append(<span class="string">&quot; broken!&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/12/yuque/JAVA%E5%B0%8F%E6%8A%84%EF%BC%88%E4%BA%8C%EF%BC%89/">展开全文 >></a>
         </p>
       
 

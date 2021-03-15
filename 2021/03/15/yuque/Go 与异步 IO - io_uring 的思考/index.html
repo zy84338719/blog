@@ -16,7 +16,7 @@
 <meta property="og:description" content="Golang 中并发 IO 的现状对于 Go 这种本身便是为并发而生的语言来说，使用 io_uring 这种系统级异步接口也不是那么的迫切比如对于普通文件的读写以及 socket 的操作都会通过 netpoll 来进行优化，当文件&#x2F;套接字可读可写时 netpoll 便会唤醒相应 goroutine 来对文件进行读写而对于可能会阻塞的系统调用，在 syscall 底层调用 syscall.Sysca">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-15T03:11:09.000Z">
-<meta property="article:modified_time" content="2021-03-15T18:55:13.388Z">
+<meta property="article:modified_time" content="2021-03-15T18:58:24.621Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   

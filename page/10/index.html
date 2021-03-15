@@ -176,6 +176,149 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/tar 命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/">tar 命令</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2019-09-24T12:14:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>tar</p>
+<p>-c: 建立压缩档案<br>-x：解压<br>-t：查看内容<br>-r：向压缩归档文件末尾追加文件<br>-u：更新原压缩包中的文件</p>
+<p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
+<p>-z：有 gzip 属性的<br>-j：有 bz2 属性的<br>-Z：有 compress 属性的<br>-v：显示所有过程<br>-O：将文件解开到标准输出</p>
+<p>下面的参数-f 是必须的</p>
+<p>-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</p>
+<h1 id="tar-cf-all-tar-jpg"><a href="#tar-cf-all-tar-jpg" class="headerlink" title="tar -cf all.tar *.jpg"></a>tar -cf all.tar *.jpg</h1><p>这条命令是将所有.jpg 的文件打成一个名为 all.tar 的包。-c 是表示产生新的包，-f 指定包的文件名。</p>
+<h1 id="tar-rf-all-tar-gif"><a href="#tar-rf-all-tar-gif" class="headerlink" title="tar -rf all.tar *.gif"></a>tar -rf all.tar *.gif</h1><p>这条命令是将所有.gif 的文件增加到 all.tar 的包里面去。-r 是表示增加文件的意思。</p>
+<h1 id="tar-uf-all-tar-logo-gif"><a href="#tar-uf-all-tar-logo-gif" class="headerlink" title="tar -uf all.tar logo.gif"></a>tar -uf all.tar logo.gif</h1><p>这条命令是更新原来 tar 包 all.tar 中 logo.gif 文件，-u 是表示更新文件的意思。</p>
+<h1 id="tar-tf-all-tar"><a href="#tar-tf-all-tar" class="headerlink" title="tar -tf all.tar"></a>tar -tf all.tar</h1><p>这条命令是列出 all.tar 包中所有文件，-t 是列出文件的意思</p>
+<h1 id="tar-xf-all-tar"><a href="#tar-xf-all-tar" class="headerlink" title="tar -xf all.tar"></a>tar -xf all.tar</h1><p>这条命令是解出 all.tar 包中所有文件，-t 是解开的意思</p>
+<p>压缩</p>
+<p>tar -cvf jpg.tar *.jpg <a target="_blank" rel="noopener" href="//xn--jpgtar-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.jpg">//将目录里所有 jpg 文件打包成 tar.jpg</a></p>
+<p>tar -czf jpg.tar.gz *.jpg   <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 gzip 压缩，生成一个 gzip 压缩过的包，命名为 jpg.tar.gz</p>
+<p>tar -cjf jpg.tar.bz2 *.jpg <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 bzip2 压缩，生成一个 bzip2 压缩过的包，命名为 jpg.tar.bz2</p>
+<p>tar -cZf jpg.tar.Z *.jpg   <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 compress 压缩，生成一个 umcompress 压缩过的包，命名为 jpg.tar.Z</p>
+<p>rar a jpg.rar *.jpg //rar 格式的压缩，需要先下载 rar for linux</p>
+<p>zip jpg.zip *.jpg //zip 格式的压缩，需要先下载 zip for linux</p>
+<p>解压</p>
+<p>tar -xvf file.tar //解压 tar 包</p>
+<p>tar -xzvf file.tar.gz <a target="_blank" rel="noopener" href="//xn--tar-vo3e979v.gz">//解压 tar.gz</a></p>
+<p>tar -xjvf file.tar.bz2   //解压 tar.bz2</p>
+<p>tar -xZvf file.tar.Z   <a target="_blank" rel="noopener" href="//xn--tar-vo3e979v.Z">//解压 tar.Z</a></p>
+<p>unrar e file.rar //解压 rar</p>
+<p>unzip file.zip //解压 zip</p>
+<p>总结</p>
+<p>1、*.tar 用 tar -xvf 解压</p>
+<p>2、*.gz 用 gzip -d 或者 gunzip 解压</p>
+<p>3、<em>.tar.gz 和</em>.tgz 用 tar -xzf 解压</p>
+<p>4、*.bz2 用 bzip2 -d 或者用 bunzip2 解压</p>
+<p>5、*.tar.bz2 用 tar -xjf 解压</p>
+<p>6、*.Z 用 uncompress 解压</p>
+<p>7、*.tar.Z 用 tar -xZf 解压</p>
+<p>8、*.rar 用 unrar e 解压</p>
+<p>9、*.zip 用 unzip 解压</p>
+<p>解压 jdk 到指定文件夹：</p>
+<p>tar -xzvf jdk-8u131-linux-x64.tar.gz -C /usr/local/java</p>
+<p>root@ubuntu:~# tar –help<br>用法: tar [选项…] [FILE]…<br>GNU ‘tar’ saves many files together into a single tape or disk archive, and can<br>restore individual files from the archive.</p>
+<p>Examples:<br>tar -cf archive.tar foo bar # Create archive.tar from files foo and bar.<br>tar -tvf archive.tar # List all files in archive.tar verbosely.<br>tar -xf archive.tar # Extract all files from archive.tar.</p>
+<p>主操作模式:</p>
+<p>-A, –catenate, –concatenate 追加 tar 文件至归档<br>-c, –create 创建一个新归档<br>-d, –diff, –compare 找出归档和文件系统的差异<br>–delete 从归档(非磁带！)中删除<br>-r, –append 追加文件至归档结尾<br>-t, –list 列出归档内容<br>–test-label 测试归档卷标并退出<br>-u, –update 仅追加比归档中副本更新的文件<br>-x, –extract, –get 从归档中解出文件</p>
+<p>操作修饰符:</p>
+<p>–check-device 当创建增量归档时检查设备号(默认)<br>-g, –listed-incremental=FILE 处理新式的 GNU 格式的增量备份<br>-G, –incremental 处理老式的 GNU 格式的增量备份<br>–ignore-failed-read<br>当遇上不可读文件时不要以非零值退出<br>–level=NUMBER 所创建的增量列表归档的输出级别<br>-n, –seek 归档可检索<br>–no-check-device 当创建增量归档时不要检查设备号<br>–no-seek 归档不可检索<br>–occurrence[=NUMBER] 仅处理归档中每个文件的第 NUMBER<br>个事件；仅当与以下子命令 –delete,<br>–diff, –extract 或是 –list<br>中的一个联合使用时，此选项才有效。而且不管文件列表是以命令行形式给出或是通过<br>-T 选项指定的；NUMBER 值默认为 1<br>–sparse-version=MAJOR[.MINOR]<br>设置所用的离散格式版本(隐含<br>–sparse)<br>-S, –sparse 高效处理离散文件</p>
+<p>重写控制:</p>
+<p>-k, –keep-old-files don’t replace existing files when extracting,<br>treat them as errors<br>–keep-directory-symlink preserve existing symlinks to directories when<br>extracting<br>–keep-newer-files<br>不要替换比归档中副本更新的已存在的文件<br>–no-overwrite-dir 保留已存在目录的元数据<br>–one-top-level[=DIR] create a subdirectory to avoid having loose files<br>extracted<br>–overwrite 解压时重写存在的文件<br>–overwrite-dir 解压时重写已存在目录的元数据(默认)</p>
+<p>–recursive-unlink 解压目录之前先清除目录层次<br>–remove-files 在添加文件至归档后删除它们<br>–skip-old-files don’t replace existing files when extracting,<br>silently skip over them<br>-U, –unlink-first 在解压要重写的文件之前先删除它们<br>-W, –verify 在写入以后尝试校验归档</p>
+<p>选择输出流:</p>
+<p>–ignore-command-error 忽略子进程的退出代码<br>–no-ignore-command-error<br>将子进程的非零退出代码认为发生错误<br>-O, –to-stdout 解压文件至标准输出<br>–to-command=COMMAND<br>将解压的文件通过管道传送至另一个程序</p>
+<p>操作文件属性:</p>
+<p>–atime-preserve[=METHOD]<br>在输出的文件上保留访问时间，要么通过在读取(默认<br>METHOD=‘replace’)后还原时间，要不就不要在第一次(METHOD=‘system’)设置时间<br>–clamp-mtime only set time when the file is more recent than<br>what was given with –mtime<br>–delay-directory-restore<br>直到解压结束才设置修改时间和所解目录的权限<br>–group=名称 强制将 NAME<br>作为所添加的文件的组所有者<br>–mode=CHANGES 强制将所添加的文件(符号)更改为权限<br>CHANGES<br>–mtime=DATE-OR-FILE 从 DATE-OR-FILE 中为添加的文件设置<br>mtime<br>-m, –touch 不要解压文件的修改时间<br>–no-delay-directory-restore<br>取消 –delay-directory-restore 选项的效果<br>–no-same-owner<br>将文件解压为您所有(普通用户默认此项)<br>–no-same-permissions<br>从归档中解压权限时使用用户的掩码位(默认为普通用户服务)<br>–numeric-owner 总是以数字代表用户/组的名称<br>–owner=名称 强制将 NAME<br>作为所添加的文件的所有者<br>-p, –preserve-permissions, –same-permissions<br>解压文件权限信息(默认只为超级用户服务)<br>–preserve 与 -p 和 -s 一样<br>–same-owner<br>尝试解压时保持所有者关系一致(超级用户默认此项)<br>-s, –preserve-order, –same-order<br>member arguments are listed in the same order as<br>the files in the archive<br>–sort=ORDER directory sorting order: none (default), name or<br>inode</p>
+<p>Handling of extended file attributes:</p>
+<p>–acls Enable the POSIX ACLs support<br>–no-acls Disable the POSIX ACLs support<br>–no-selinux Disable the SELinux context support<br>–no-xattrs Disable extended attributes support<br>–selinux Enable the SELinux context support<br>–xattrs Enable extended attributes support<br>–xattrs-exclude=MASK specify the exclude pattern for xattr keys<br>–xattrs-include=MASK specify the include pattern for xattr keys</p>
+<p>设备选择和切换:</p>
+<p>-f, –file=ARCHIVE 使用归档文件或 ARCHIVE 设备<br>–force-local<br>即使归档文件存在副本还是把它认为是本地归档<br>-F, –info-script=名称, –new-volume-script=名称<br>在每卷磁带最后运行脚本(隐含 -M)<br>-L, –tape-length=NUMBER 写入 NUMBER × 1024 字节后更换磁带<br>-M, –multi-volume 创建/列出/解压多卷归档文件<br>–rmt-command=COMMAND 使用指定的 rmt COMMAND 代替 rmt<br>–rsh-command=COMMAND 使用远程 COMMAND 代替 rsh<br>–volno-file=FILE 使用/更新 FILE 中的卷数</p>
+<p>设备分块:</p>
+<p>-b, –blocking-factor=BLOCKS 每个记录 BLOCKS x 512 字节<br>-B, –read-full-records 读取时重新分块(只对 4.2BSD 管道有效)<br>-i, –ignore-zeros 忽略归档中的零字节块(即文件结尾)<br>–record-size=NUMBER 每个记录的字节数 NUMBER，乘以 512</p>
+<p>选择归档格式:</p>
+<p>-H, –format=FORMAT 创建指定格式的归档</p>
+<p>FORMAT 是以下格式中的一种:</p>
+<p>gnu GNU tar 1.13.x 格式<br>oldgnu GNU 格式 as per tar &lt;= 1.12<br>pax POSIX 1003.1-2001 (pax) 格式<br>posix 等同于 pax<br>ustar POSIX 1003.1-1988 (ustar) 格式<br>v7 old V7 tar 格式</p>
+<p>–old-archive, –portability<br>等同于 –format=v7<br>–pax-option=关键字[[:]=值][,关键字[[:]=值]]…<br>控制 pax 关键字<br>–posix 等同于 –format=posix<br>-V, –label=TEXT 创建带有卷名 TEXT<br>的归档；在列出/解压时，使用 TEXT<br>作为卷名的模式串</p>
+<p>压缩选项:</p>
+<p>-a, –auto-compress 使用归档后缀名来决定压缩程序<br>-I, –use-compress-program=PROG<br>通过 PROG 过滤(必须是能接受 -d<br>选项的程序)<br>-j, –bzip2 通过 bzip2 过滤归档<br>-J, –xz 通过 xz 过滤归档<br>–lzip 通过 lzip 过滤归档<br>–lzma 通过 xz 过滤归档<br>–lzop 通过 xz 过滤归档<br>–no-auto-compress 不使用归档后缀名来决定压缩程序<br>-z, –gzip, –gunzip, –ungzip 通过 gzip 过滤归档<br>-Z, –compress, –uncompress 通过 compress 过滤归档</p>
+<p>本地文件选择:</p>
+<p>–add-file=FILE 添加指定的 FILE 至归档(如果名字以 -<br>开始会很有用的)<br>–backup[=CONTROL] 在删除前备份，选择 CONTROL 版本<br>-C, –directory=DIR 改变至目录 DIR<br>–exclude=PATTERN 排除以 PATTERN 指定的文件<br>–exclude-backups 排除备份和锁文件<br>–exclude-caches 除标识文件本身外，排除包含<br>CACHEDIR.TAG 的目录中的内容<br>–exclude-caches-all 排除包含 CACHEDIR.TAG 的目录<br>–exclude-caches-under 排除包含 CACHEDIR.TAG<br>的目录中所有内容<br>–exclude-ignore=FILE read exclude patterns for each directory from<br>FILE, if it exists<br>–exclude-ignore-recursive=FILE<br>read exclude patterns for each directory and its<br>subdirectories from FILE, if it exists<br>–exclude-tag=FILE 除 FILE 自身外，排除包含 FILE<br>的目录中的内容<br>–exclude-tag-all=FILE 排除包含 FILE 的目录<br>–exclude-tag-under=FILE 排除包含 FILE 的目录中的所有内容<br>–exclude-vcs 排除版本控制系统目录<br>–exclude-vcs-ignores read exclude patterns from the VCS ignore files<br>-h, –dereference<br>跟踪符号链接；将它们所指向的文件归档并输出<br>–hard-dereference<br>跟踪硬链接；将它们所指向的文件归档并输出<br>-K, –starting-file=MEMBER-NAME<br>begin at member MEMBER-NAME when reading the<br>archive<br>–newer-mtime=DATE 当只有数据改变时比较数据和时间<br>–no-null 禁用上一次的效果 –null 选项<br>–no-recursion 避免目录中的自动降级<br>–no-unquote do not unquote input file or member names<br>–null -T 读取以空终止的名字，-C 禁用<br>-N, –newer=DATE-OR-FILE, –after-date=DATE-OR-FILE<br>只保存比 DATE-OR-FILE 更新的文件<br>–one-file-system 创建归档时保存在本地文件系统中<br>-P, –absolute-names don’t strip leading ‘/‘s from file names<br>–recursion 目录递归(默认)<br>–suffix=STRING 在删除前备份，除非被环境变量<br>SIMPLE_BACKUP_SUFFIX<br>覆盖，否则覆盖常用后缀(‘’)<br>-T, –files-from=FILE 从 FILE<br>中获取文件名来解压或创建文件<br>–unquote unquote input file or member names (default)<br>-X, –exclude-from=FILE 排除 FILE 中列出的模式串</p>
+<p>文件名变换:</p>
+<p>–strip-components=NUMBER 解压时从文件名中清除 NUMBER<br>个引导部分<br>–transform=EXPRESSION, –xform=EXPRESSION<br>使用 sed 代替 EXPRESSION<br>来进行文件名变换</p>
+<p>文件名匹配选项(同时影响排除和包括模式串):</p>
+<p>–anchored 模式串匹配文件名头部<br>–ignore-case 忽略大小写<br>–no-anchored patterns match after any ‘/‘ (default for<br>exclusion)<br>–no-ignore-case 匹配大小写(默认)<br>–no-wildcards 逐字匹配字符串<br>–no-wildcards-match-slash wildcards do not match ‘/‘<br>–wildcards 使用通配符(默认对 exclusion )<br>–wildcards-match-slash wildcards match ‘/‘ (default for exclusion)</p>
+<p>提示性输出:</p>
+<p>–checkpoint[=NUMBER] 每隔 NUMBER<br>个记录显示进度信息(默认为 10 个)<br>–checkpoint-action=ACTION 在每个检查点上执行 ACTION<br>–full-time 按文件原本时间格式打印<br>–index-file=FILE 将详细输出发送至 FILE<br>-l, –check-links<br>只要不是所有链接都被输出就打印信息<br>–no-quote-chars=STRING 禁用来自 STRING 的字符引用<br>–quote-chars=STRING 来自 STRING 的额外的引用字符<br>–quoting-style=STYLE 设置名称引用风格；有效的 STYLE<br>值请参阅以下说明<br>-R, –block-number 每个信息都显示归档内的块数<br>–show-defaults 显示 tar 默认选项<br>–show-omitted-dirs<br>列表或解压时，列出每个不匹配查找标准的目录<br>–show-snapshot-field-ranges<br>show valid ranges for snapshot-file fields<br>–show-transformed-names, –show-stored-names<br>显示变换后的文件名或归档名<br>–totals[=SIGNAL] 处理归档后打印出总字节数；当此<br>SIGNAL 被触发时带参数 -<br>打印总字节数；允许的信号为:<br>SIGHUP，SIGQUIT，SIGINT，SIGUSR1 和<br>SIGUSR2；同时也接受不带 SIG<br>前缀的信号名称<br>–utc 以 UTC 格式打印文件修改时间<br>-v, –verbose 详细地列出处理的文件<br>–warning=KEYWORD 警告控制:<br>-w, –interactive, –confirmation<br>每次操作都要求确认</p>
+<p>兼容性选项:</p>
+<p>-o 创建归档时，相当于<br>–old-archive；展开归档时，相当于<br>–no-same-owner</p>
+<p>其它选项:</p>
+<p>-?, –help 显示此帮助列表<br>–restrict 禁用某些潜在的有危险的选项<br>–usage 显示简短的用法说明<br>–version 打印程序版本</p>
+<p>长选项和相应短选项具有相同的强制参数或可选参数。</p>
+<p>The backup suffix is ‘~’, unless set with –suffix or SIMPLE_BACKUP_SUFFIX.<br>The version control may be set with –backup or VERSION_CONTROL, values are:</p>
+<p>none, off never make backups<br>t, numbered make numbered backups<br>nil, existing numbered if numbered backups exist, simple otherwise<br>never, simple always make simple backups</p>
+<p>–quoting-style 选项的有效参数为:</p>
+<p>literal<br>shell<br>shell-always<br>c<br>c-maybe<br>escape<br>locale<br>clocale</p>
+<p>此 tar 默认为:<br>–format=gnu -f- -b20 –quoting-style=escape –rmt-command=/usr/lib/tar/rmt<br>–rsh-command=/usr/bin/rsh</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Readiness probe failed! caliconode is not ready BIRD is not ready BGP not established with xxxx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -894,72 +1037,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/07/08/yuque/deepin%EF%BC%88ubuntu%EF%BC%89%E7%B3%BB%E7%BB%9F%E4%BC%81%E4%B8%9A%E7%BA%A7802.1x%E5%8D%8F%E8%AE%AE%E8%AE%A4%E8%AF%81/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/TypeScript 学习之路（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/04/yuque/TypeScript%20%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%80%EF%BC%89/">TypeScript 学习之路（一）</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/04/yuque/TypeScript%20%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%80%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2019-07-04T02:47:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="TypeScript-好处"><a href="#TypeScript-好处" class="headerlink" title="TypeScript 好处"></a>TypeScript 好处</h2><p>支持 ES6<br>强大的 IDE 支持（语法提示）<br>原生支持 AngularJS</p>
-<h2 id="TypeScript-概念语法、特性"><a href="#TypeScript-概念语法、特性" class="headerlink" title="TypeScript 概念语法、特性"></a>TypeScript 概念语法、特性</h2><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>多行字符串 撇号`` 字符串模版 <div><code>$getName()</code></div> <br>自动拆分字符串 字符串模版，使用声明定义函数。使用</p>
-<h3 id="参数的类型"><a href="#参数的类型" class="headerlink" title="参数的类型"></a>参数的类型</h3><p>可以自动推断类型<br>可以定义接口的方式自定义数据类型<br>可以通过指定数据类型的方式定义数据类型。</p>
-<p>可选参数 在变量后面加上？ 此参数声明必须在比选参数之后。<br>Rest and Spread 操作符 …arg 任意数量方法参数<br>generator 函数 控制函数执行过程，手工回复暂停代码执行。<br>析构表达式</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/04/yuque/TypeScript%20%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%80%EF%BC%89/">展开全文 >></a>
         </p>
       
 

@@ -182,6 +182,542 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Go Mod 终极入门指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">Go Mod 终极入门指南</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2021-01-16T19:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>go modules 是 go 官方包管理方案。<br>go 1.14 已经发布，正式推荐 go modules 可用于生产环境。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583056526255-11406b86-8b63-474a-a46e-1c41a469a63d.png#align=left&display=inline&height=539&margin=%5Bobject%20Object%5D&originHeight=539&originWidth=1027&status=done&style=none&width=1027"></p>
+<p>今天这篇文章，来介绍 go modules</p>
+<h2 id="什么是-go-modules"><a href="#什么是-go-modules" class="headerlink" title="什么是 go modules"></a>什么是 go modules</h2><p>go modules 是 Go 语言的依赖解决方案，发布于 go 1.11，成长为 go 1.12，丰富于 go 1.13，正式于 go1.14 推荐在生产环境上使用。</p>
+<p>go modules 目前集成在 go 的工具链中，只要安装了 go， 自然而然就可以使用 go modules 了，而 go modules 的出现也解决了在 go 1.11 前的几个常见争议问题：</p>
+<ol>
+<li>go 语言长久以来的依赖管理问题</li>
+<li>淘汰现在的 GOPATH 使用模式</li>
+<li>统一社区中的其他依赖管理工具（提供了迁移功能）</li>
+</ol>
+<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p>go 1.11 前使用 GOPATH</p>
+<h3 id="GOPATH-是什么"><a href="#GOPATH-是什么" class="headerlink" title="GOPATH 是什么"></a>GOPATH 是什么</h3><p>使用如下命令查看<br>go env</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">GO111MODULE&#x3D;&quot;on&quot;</span><br><span class="line">GOARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOBIN&#x3D;&quot;&quot;</span><br><span class="line">GOCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Caches&#x2F;go-build&quot;</span><br><span class="line">GOENV&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Application Support&#x2F;go&#x2F;env&quot;</span><br><span class="line">GOEXE&#x3D;&quot;&quot;</span><br><span class="line">GOFLAGS&#x3D;&quot;&quot;</span><br><span class="line">GOHOSTARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOHOSTOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOINSECURE&#x3D;&quot;&quot;</span><br><span class="line">GOMODCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&#x2F;pkg&#x2F;mod&quot;</span><br><span class="line">GONOPROXY&#x3D;&quot;&quot;</span><br><span class="line">GONOSUMDB&#x3D;&quot;&quot;</span><br><span class="line">GOOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOPATH&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&quot;</span><br><span class="line">GOPRIVATE&#x3D;&quot;&quot;</span><br><span class="line">GOPROXY&#x3D;&quot;https:&#x2F;&#x2F;goproxy.cn,direct&quot;</span><br><span class="line">GOROOT&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&quot;</span><br><span class="line">GOSUMDB&#x3D;&quot;sum.golang.org&quot;</span><br><span class="line">GOTMPDIR&#x3D;&quot;&quot;</span><br><span class="line">GOTOOLDIR&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&#x2F;pkg&#x2F;tool&#x2F;darwin_amd64&quot;</span><br><span class="line">GCCGO&#x3D;&quot;gccgo&quot;</span><br><span class="line">AR&#x3D;&quot;ar&quot;</span><br><span class="line">CC&#x3D;&quot;clang&quot;</span><br><span class="line">CXX&#x3D;&quot;clang++&quot;</span><br><span class="line">CGO_ENABLED&#x3D;&quot;1&quot;</span><br><span class="line">GOMOD&#x3D;&quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">CGO_CFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_CPPFLAGS&#x3D;&quot;&quot;</span><br><span class="line">CGO_CXXFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_FFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_LDFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">PKG_CONFIG&#x3D;&quot;pkg-config&quot;</span><br><span class="line">GOGCCFLAGS&#x3D;&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length&#x3D;0 -fdebug-prefix-map&#x3D;&#x2F;var&#x2F;folders&#x2F;mt&#x2F;w0md4fbn74xggzrf18zb1v_h0000gn&#x2F;T&#x2F;go-build126588908&#x3D;&#x2F;tmp&#x2F;go-build -gno-record-gcc-switches -fno-common&quot;</span><br></pre></td></tr></table></figure>
+
+<p>GOPATH 下包含了三个子目录</p>
+<ul>
+<li>bin     存放所有编译生成的二进制文件</li>
+<li>pkg     存放预编译的目标文件，以加快程序的后续编译速度</li>
+<li>src       存入项目代码</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span></span><br><span class="line">❯ ls</span><br><span class="line">bin pkg</span><br></pre></td></tr></table></figure>
+
+<p>因此在 GOPATH 模式下，我们需要将应用代码存放在固定的 `` <code>go get -u -v 下载到</code> <code>GOPATH</code> 下。</p>
+<h3 id="为什么要弃用-GOPATH"><a href="#为什么要弃用-GOPATH" class="headerlink" title="为什么要弃用 GOPATH"></a>为什么要弃用 GOPATH</h3><p>主要原因：</p>
+<ul>
+<li>GOPATH 模式没有版本控制的概念，具有致命的缺陷，至少会有以下问题<ul>
+<li>在执行 go get 时，你无法传达任何的版本信息，也就是说你无法知道自己当前更新的哪一个版本，也无法拉取自己所期望的版本</li>
+<li>在运行 go 应用时，你无法保证其他人与你所期望依赖的第三方库是相同的版本，也就是说在项目依赖库的管理上，你无法保证所有人的依赖版本一致。</li>
+<li>你没办法处理 v1,v2,v3 等不同版本的引用问题，因为 GOPATH 下导入的路径都是一样的</li>
+</ul>
+</li>
+<li>GO 语言官方从 go 1.11 起开始推进 go modules</li>
+</ul>
+<h3 id="GOPATH-同期其他方案"><a href="#GOPATH-同期其他方案" class="headerlink" title="GOPATH 同期其他方案"></a>GOPATH 同期其他方案</h3><p>go 1 在 2012 年 03 月 28 号发布<br>go 1.11 是在 2018 年 08 月 25 号才正式发布<br>在这个空档时间内，并没有 go modules 这一个东西，早期还好说，因为刚发布，使用的人不多，所以没有明显暴露，但是后期 go 语言使用的人越来越多了，那怎么办？</p>
+<p>这时候社区涌现了大量的依赖解决方案，百花齐放；其中有名的有</p>
+<ul>
+<li>vendor</li>
+<li>dep</li>
+</ul>
+<p>现在已经退出主流。</p>
+<h2 id="go-modules-使用"><a href="#go-modules-使用" class="headerlink" title="go modules 使用"></a>go modules 使用</h2><p>在初步了解了 go modules 有历史后，我们正式进入到 go modules 的使用介绍，首先我们将从头开始一个 go modules 项目（原则上所创建的目录应试不要放在 GOPATH 中）</p>
+<h3 id="go-mod-常用命令"><a href="#go-mod-常用命令" class="headerlink" title="go mod 常用命令"></a>go mod 常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go mod init</td>
+<td>生成  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod download</td>
+<td>下载 go.mod  中的旨的依赖</td>
+</tr>
+<tr>
+<td>go mod tidy</td>
+<td>整理现在的依赖</td>
+</tr>
+<tr>
+<td>go mod graph</td>
+<td>查看现在的依赖结构</td>
+</tr>
+<tr>
+<td>go mod edit</td>
+<td>编辑  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod vendor</td>
+<td>导出项目所有的依赖到  vendor  目录</td>
+</tr>
+<tr>
+<td>go mod verify</td>
+<td>校验一个模块是否被篡改过</td>
+</tr>
+<tr>
+<td>go mod why</td>
+<td>查看为什么需要依赖某模块</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>在 go modules 中有如下常用环境变量，我们可以通过 go env 来查看，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">GO111MODULE=<span class="string">&quot;on&quot;</span></span><br><span class="line">GOARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOBIN=<span class="string">&quot;&quot;</span></span><br><span class="line">GOCACHE=<span class="string">&quot;/Users/zhangyi/Library/Caches/go-build&quot;</span></span><br><span class="line">GOENV=<span class="string">&quot;/Users/zhangyi/Library/Application Support/go/env&quot;</span></span><br><span class="line">GOEXE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">GOHOSTARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOHOSTOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOINSECURE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOMODCACHE=<span class="string">&quot;/Users/zhangyi/go/pkg/mod&quot;</span></span><br><span class="line">GONOPROXY=<span class="string">&quot;&quot;</span></span><br><span class="line">GONOSUMDB=<span class="string">&quot;&quot;</span></span><br><span class="line">GOOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOPATH=<span class="string">&quot;/Users/zhangyi/go&quot;</span></span><br><span class="line">GOPRIVATE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOPROXY=<span class="string">&quot;https://goproxy.cn,direct&quot;</span></span><br><span class="line">GOROOT=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec&quot;</span></span><br><span class="line">GOSUMDB=<span class="string">&quot;sum.golang.org&quot;</span></span><br><span class="line">GOTMPDIR=<span class="string">&quot;&quot;</span></span><br><span class="line">GOTOOLDIR=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec/pkg/tool/darwin_amd64&quot;</span></span><br><span class="line">GCCGO=<span class="string">&quot;gccgo&quot;</span></span><br><span class="line">AR=<span class="string">&quot;ar&quot;</span></span><br><span class="line">CC=<span class="string">&quot;clang&quot;</span></span><br><span class="line">CXX=<span class="string">&quot;clang++&quot;</span></span><br><span class="line">CGO_ENABLED=<span class="string">&quot;1&quot;</span></span><br><span class="line">GOMOD=<span class="string">&quot;/dev/null&quot;</span></span><br><span class="line">CGO_CFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_CPPFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">CGO_CXXFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_FFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_LDFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">PKG_CONFIG=<span class="string">&quot;pkg-config&quot;</span></span><br><span class="line">GOGCCFLAGS=<span class="string">&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/mt/w0md4fbn74xggzrf18zb1v_h0000gn/T/go-build583788123=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">每个命令 设置的时候 可以 用 go env -w </a></p>
+<h4 id="GO111MODULE"><a href="#GO111MODULE" class="headerlink" title="GO111MODULE"></a>GO111MODULE</h4><p>作为 go modules 功能的开关，其允许设置以下参数：</p>
+<ul>
+<li>auto 只要项目包含了 go.mod 文件就自动启用 go modules<ul>
+<li>目前在 1.11~1.14 中仍然是默认值</li>
+</ul>
+</li>
+<li>on   启用 go modules</li>
+<li>off   禁用 go modules</li>
+</ul>
+<h4 id="GOPROXY"><a href="#GOPROXY" class="headerlink" title="GOPROXY"></a>GOPROXY</h4><p>用于设置 go 模块代理，作用用于使 go 在后续拉取模块版本时能够脱离传统的 VCS 方式，直接通过镜像来快速拉取。</p>
+<p>GOPROXY 的默认值<br><a href="">
+</a></p>
+<p>这有一个严重问题，就是在国内无法访问 <a target="_blank" rel="noopener" href="https://proxy.golang.org/">https://proxy.golang.org</a><br>，因此这会直接卡住你的第一步，所以你必须在开启 go modules 时，指定 GOPROXY<br><a href="">
+</a></p>
+<p>GOPROXY 的值是一个以英文逗号来分割的列表，可以设置多个值；如果你不想使用，也可以设置为 <code>off</code> ，这会禁用 go 在后续操作中使用任何 go 模块代理</p>
+<p>direct 是什么？<br>上面的设置中，列表中有个 direct 标识，它有什么作用呢？<br>实际上，direct 是一个特殊的标识符，用于指示 go 回源到模块版本的源地址去抓取（比如 github 等），场景如下：</p>
+<ol>
+<li>当值列表中上一个 go 模块代理返回 404/410 时，</li>
+<li>go 自动尝试列表中下一个，</li>
+<li>遇到 direct 时回源（也就是回到源地址去抓取），</li>
+<li>而遇到 EOF 时终止并抛出类似“invalid version: unknown revision…”的错误。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583064116238-1d06dc6a-a478-4f75-825f-59d1495d5a85.png#align=left&display=inline&height=334&margin=%5Bobject%20Object%5D&originHeight=334&originWidth=760&status=done&style=none&width=760"></p>
+<h3 id="GOSUMDB"><a href="#GOSUMDB" class="headerlink" title="GOSUMDB"></a>GOSUMDB</h3><p>用于在拉取模块版本时（无论是从源站还是通过 go modules proxy）保证拉取到的模块的数据未经过篡改，若发布不一致，也就是可能存在篡改</p>
+<p>GOSUMDB 默认值</p>
+<p><a href="">
+</a></p>
+<p>同样， 在国内是无法访问的，但是 GOSUMDB 可以这被 GOPROXY 所代理（详见：Proxying a Checksum Database）</p>
+<p>因此我们可以通过设置 GOPROXY 来解决，而先前我们所设置的模块代理 goproxy.cn 就能支持代理 sum.golang.org，所以，这一个问题在设置 GOPROXY 后，就不需要关心了</p>
+<p>另外若对 GOSUMDB 有自定义需求，其支持中如下格式：</p>
+<ul>
+<li>格式 1: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt;</code></li>
+<li>格式 2: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt; &lt;SUMDB_URL&gt;</code></li>
+</ul>
+<p>同样，也可以设置为 <code>off</code> ，关闭 go 后续操作中校验模块版本功能。</p>
+<h4 id="GONOPROXY-GONOSUMDB-GOPRIVATE"><a href="#GONOPROXY-GONOSUMDB-GOPRIVATE" class="headerlink" title="GONOPROXY/GONOSUMDB/GOPRIVATE"></a>GONOPROXY/GONOSUMDB/GOPRIVATE</h4><p>针对于私有模块的拉取场景<br>一般建议直接设置 GORPIVATE，它的值将作为 GONOPROXY/GONOSUMDB 的默认值，所以建议的最佳姿势是直接使用 GORPIVATE<br><a href="">
+</a></p>
+<p>设置的后，前缀为 git.xxx.com 和 github.com/eddycjy/mquote 的模块都会被认为是私有模块。<br>此处也支持通配符，<br><a href="">
+</a></p>
+<p>这样子设置后，所有要薽路径为 example.com 的子域名都将不经过 GORPOXY 和 GOSUMDB，<strong>需要注意的是不包括 example.com 本身。</strong></p>
+<h3 id="启用-go-mod"><a href="#启用-go-mod" class="headerlink" title="启用 go mod"></a>启用 go mod</h3><p>目前 go modules 并不是默认开启的，因此 go 语言提供了 GO111MODULE 这个环境变量来作为 go modules 的开关，其允许设置以下参数</p>
+<ul>
+<li>auto 默认值，只要项目中包含了 go.mod 文件就启用 go moduels</li>
+<li>on</li>
+<li>off</li>
+</ul>
+<p>如果你不确定你当前的值是什么，可以执行 go env 命令查看<br>如果需要对 GO111MODULE 的值变更，推荐通过 go env 命令设置<br><a href="">
+</a></p>
+<p>但需要注意的是，如果对应的系统环境变量有值了，go env 是不支持覆盖写入的，否则会出现如下报错信息</p>
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p>在完成 Go modules 的开启后，我们需要创建一个示例项目来进行演示，执行如下命令：<br>   <a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p $HOME&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">$ cd $HOME&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">go: creating new go.mod: module github.com&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">   </a><br><a href="">
+</a></p>
+<p>在执行 go mod init 命令时，我们指定了模块导入路径为 github.com/eddycjy/module-repo，接下来我们在该项目根目录下创建 main.go 文件</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/eddycjy/mquote&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  fmt.Println(mquote.GetHello())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>然后在项目根目录下执行 go get github.com/eddycjy/mquote 命令，如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go: finding github.com/eddycjy/mquote latest</span><br><span class="line">go: downloading github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">go: extracting github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<h3 id="查看-go-mod-文件"><a href="#查看-go-mod-文件" class="headerlink" title="查看 go.mod 文件"></a>查看 go.mod 文件</h3><p>在初始化项目时，会自动生成一个 go.mod 文件，是启用了 go modules 项目所必须的最重要的标识，同时也是 GO111MODULE 值为 auto 时的识别标识，它描述了当前项目的元信息，每一行都以一个动词开头<br>在我们刚刚进行了初始化和简单拉取后，我们再次查看 go.mod 文件，基本内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line">go 1.13</span><br><span class="line">require (</span><br><span class="line">  github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>为了更进一步的讲解，我们模拟引用如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line"><span class="comment"># 标识当前要模块的 go 语言版本，值为初始化时的版本，目前来看还只是个标识作用。</span></span><br><span class="line">go 1.13</span><br><span class="line"><span class="comment"># 用于设置一个特定的模块版本</span></span><br><span class="line">require (</span><br><span class="line">    example.com/apple v0.1.2</span><br><span class="line">    example.com/banana v1.2.3</span><br><span class="line">    example.com/banana/v2 v2.3.4</span><br><span class="line">    example.com/pear // indirect   <span class="comment"># indirect 表示该模块为间接模块（可能是你 go get，或者其他模块所依赖的）</span></span><br><span class="line">    example.com/strawberry // incompatible</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 用于从使用中排除一个特定的模块版本</span></span><br><span class="line">exclude example.com/banana v1.2.4</span><br><span class="line"><span class="comment"># 用于将一个模块版本替换为另外一个模块版本</span></span><br><span class="line">replace example.com/apple v0.1.2 =&gt; example.com/fried v0.1.0</span><br><span class="line">replace example.com/banana =&gt; example.com/fish</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-go-sum"><a href="#查看-go-sum" class="headerlink" title="查看 go.sum"></a>查看 go.sum</h3><p>在第一次拉取模块依赖后，会发现多出了一个 go.sum 文件，其详细罗列了当前项目直接/间接依赖的所有模块的版本，并写明了那些模块版本的 SHA-256 哈希值以备 go 在售后操作中保证项目所依赖的那些模块版本不会被篡改。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1 h1:cc+pgV0LnR8Fhou0zNHughT7IbSnLvfUZ+X3fvshrv8=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1/go.mod h1:8uL1FOiQJZ4/1hzqQ5mv4Sm7nJcwYu41F3nZmkiWx5I=</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><a href="">     </a><br>我们可以看到一个模块路径可能有如下两种</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>h1 hash 是 go modules 将目标模块版本的 zip 文件开包后，针对所有包内文件依次进行 hash，然后再把它们的 hash 结果按照固定格式和算法组成总的 hash 值。</p>
+<p>h1 hash 和 go.mod hash 两者，要不就是同时存在，要不就是只存在 go.mod hash。那么什么情况下不存在 h1 hash 呢？ 就是当 go 认为肯定用不到这个模块版本时就会省略它的 h1 hash，就会出现不存在 h1 hash，只存在 go.mod hash 情况。</p>
+<h3 id="查看全局缓存"><a href="#查看全局缓存" class="headerlink" title="查看全局缓存"></a>查看全局缓存</h3><p>我们刚刚成功的将  <code>github.com/eddycjy/mquote</code>   拉取了下来，其拉取的结果缓存在<br>GOPATH/pkg/sum 目录下，而在 mod 目录下会以 github.com/foo/bar 的格式进行存放</p>
+<p>├── cache<br>├── github.com<br>├── golang.org<br>├── google.golang.org<br>├── gopkg.in…<br><a href="">
+</a></p>
+<p>需要注意的是同一个模块版本的数据只缓存一份，所有其他模块共享使用。如果你希望清理所有已经缓存的模块，可以使用</p>
+<h2 id="go-modules-的-go-get-行为"><a href="#go-modules-的-go-get-行为" class="headerlink" title="go modules 的 go get 行为"></a>go modules 的 go get 行为</h2><p>在拉取项目依赖时，你会发现拉取的过程总共分了三大步，分别是</p>
+<ul>
+<li>finding 发现</li>
+<li>downloading 下载</li>
+<li>extracting 提取</li>
+</ul>
+<p>并且在拉取信息上一共分为了三段内容<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861221259-8884bc24-157e-47d5-9d98-e9a0b4bf3ad5.png#align=left&display=inline&height=430&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.26.55.png&originHeight=430&originWidth=1294&size=163681&status=done&style=none&width=1294" alt="截屏2021-01-17 下午1.26.55.png"></p>
+<p>pkg/mod 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~/go/pkg</span><br><span class="line">❯ ls</span><br><span class="line">mod   sumdb</span><br><span class="line"></span><br><span class="line">~/go/pkg</span><br><span class="line">❯ <span class="built_in">cd</span> mod</span><br><span class="line"></span><br><span class="line">go/pkg/mod</span><br><span class="line">❯ ls</span><br><span class="line">cache             github.com        golang.org        gopkg.in</span><br><span class="line">fyne.io           go.uber.org       google.golang.org moul.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，所拉取版本的 commit 时间是以 UTC 时区为准，而并非本地时区，同时我们会发现我们 go get 命令所拉取到的版本是 <code>v.0.0.0</code> ，这是因为我们是直接执行 go get -u 获取的，并没有指定任何的版本信息，由 go modules 自行按内部规则进行选择。</p>
+<h3 id="go-get-行为"><a href="#go-get-行为" class="headerlink" title="go get 行为"></a>go get 行为</h3><p>刚刚我们用 go get   命令拉取了新的依赖，那么 go get 又提供了哪些功能有呢？ 常用的拉取命令</p>
+<p><strong>那么我们想选择具体版本应该如何执行呢</strong>？如下</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go get golang.org/x/text<a href="/latest">@latest </a></td>
+<td>拉取最新的版本，若存在  tag，则优先使用。</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/master">@master </a></td>
+<td>拉取  master  分支的最新  commit</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/v0.3.2">@v0.3.2 </a></td>
+<td>拉取  tagv0.3.2  的 commit</td>
+</tr>
+<tr>
+<td>go get golang/x/text<a href="/342b2e">@342b2e </a></td>
+<td>拉取 hash342b2e  的 commit，最终会被转换为 v0.3.2</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br><a href="">
+</a><br>go get 版本选择<br>我们回顾一下我们拉取的 go get github.com/eddycjy/mquote， 其结果是 <code>v0.0.0-20200220041913-e066a990ce6f</code> ，对照着上面所提到的 go get 行为来看，你可能还会有一些疑惑，<br><strong>那么就是在 go get 没有指定任何版本的情况下，它的版本选择规则是怎么样的</strong>，也就是为什么 go get 拉取的是  v0.0.0，它什么时候会拉取正常带版本号的 tags 呢。实际上这需要区分两种情况，如下</p>
+<ol>
+<li>所拉取的模块有发布 tags：<ol>
+<li>如果只有单个模块，那么就取主版本号最大的那个 tag</li>
+<li>如果有多个模块，则推算相应的模块路径，取主版本号最大的那个 tag（子模块的 tag 的模块路径会有前缀要求）</li>
+</ol>
+</li>
+<li>所拉取的模块没有发布过 tags<ol>
+<li>默认取主分支最新一次 commit 的 commithash</li>
+</ol>
+</li>
+</ol>
+<h4 id="没有发布过-tags"><a href="#没有发布过-tags" class="headerlink" title="没有发布过 tags"></a>没有发布过 tags</h4><p>那么为佬以拉取的是 v0.0.0，因为 github.com/eddycjy/mquote 没有发布任何的 tag，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861317038-557c0ab0-ee10-4f8b-9b6c-ea060d40fb7a.png#align=left&display=inline&height=522&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.28.31.png&originHeight=522&originWidth=1454&size=123515&status=done&style=none&width=1454" alt="截屏2021-01-17 下午1.28.31.png"></p>
+<p>因此它默认取的是主分支最新一次 commit 的 commit_time 和 commit_hash，也就是 0200220041913-e066a990ce6f</p>
+<h4 id="有发布过-tags"><a href="#有发布过-tags" class="headerlink" title="有发布过 tags"></a>有发布过 tags</h4><p>在项目有发布 tags 的情况下，还存在着多种模式，也就是只有单个模块和多个模块，我们统一以多个模块来进行展示，因为多个模块的情况下就已经包含了单个模块的使用了，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861506695-0692c455-2c28-48cb-a1be-93a8810555e4.png#align=left&display=inline&height=842&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.31.39.png&originHeight=842&originWidth=1322&size=222789&status=done&style=none&width=1322" alt="截屏2021-01-17 下午1.31.39.png"></p>
+<p>在这个项目中，我们一共打了两个 tag，分别是 v0.0.1 和 module/tour/v0.0.1. 这时候你可能会奇怪，为什么要打 module/tour/v0.0.1 ，这么奇怪的 tag，这有什么意思吗？</p>
+<p>其实 go modules 在同一个项目下多个模块的 tag 表现方式，其主要目录结构为</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── go.mod</span><br><span class="line">├── module</span><br><span class="line">│   └── tour</span><br><span class="line">│       ├── go.mod</span><br><span class="line">│       └── tour.go</span><br><span class="line">└── quote.go</span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">
+</a><br>可以看到 mquote 这个项目的根目录有一个 go.mod 文件，而在 module/tour 目录下也有一个 go.mod 文件，其模块导入和版本信息的对应关系如下</p>
+<table>
+<thead>
+<tr>
+<th><strong>tag</strong></th>
+<th><strong>模块导入路径</strong></th>
+<th><strong>含义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.1</td>
+<td>github.com/eddycjy/mquote</td>
+<td>mquote  项目的 v0.0.1 版本</td>
+</tr>
+<tr>
+<td>module/tour/v0.0.1</td>
+<td>github.com/eddycjy/mquote/module/tour</td>
+<td>mquote  项目下子模块 module/tour  的 v0.0.1  版本</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<p><a href="">
+</a></p>
+<h4 id="导入主模块和子模块"><a href="#导入主模块和子模块" class="headerlink" title="导入主模块和子模块"></a>导入主模块和子模块</h4><p>结合上述内容，拉取主模块的话，还是照旧执行如下命令</p>
+<p>go: finding github.com/eddycjy/mquote v0.0.1<br>go: downloading github.com/eddycjy/mquote v0.0.1<br>go: extracting github.com/eddycjy/mquote v0.0.1</p>
+<p>如果是想拉取子模块，执行</p>
+<p>go: finding github.com/eddycjy/mquote/module v0.0.1<br>go: finding github.com/eddycjy/mquote/module/tour v0.0.1<br>go: downloading github.com/eddycjy/mquote/module/tour v0.0.1<br>go: extracting github.com/eddycjy/mquote/module/tour v0.0.1<br><a href="">
+</a></p>
+<p>我们将主模块和子模块的拉取进行对比，你会发现子模块的拉取会多出一步，它会发现 github.com/eddycjy/mquote/module，再继续推算，最终拉取到 module/tour</p>
+<h2 id="go-mod-的导入路径"><a href="#go-mod-的导入路径" class="headerlink" title="go mod 的导入路径"></a>go mod 的导入路径</h2><h3 id="不同版本的导入路径"><a href="#不同版本的导入路径" class="headerlink" title="不同版本的导入路径"></a>不同版本的导入路径</h3><p>在前面的模块拉取和引用中，你会发现我们的模块导入路径就是 github.com/eddycjy/mquote 和 github.com/eddycjy/mquote/module/tour ，似乎并没有什么特殊的。</p>
+<p>其实不然，实际上 go modules 在主版本号为 v0 和 v1 的情况下省略了版本号，而在主版本号为 v2 及以上刚需要明确指定出主版本号，否则会出现冲突，其 tag 与模块导入路径的大致对应关系如下：</p>
+<table>
+<thead>
+<tr>
+<th>tag</th>
+<th>模块导入路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v1.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v2.0.0</td>
+<td>github.com/eddycjy/mquote/v2</td>
+</tr>
+<tr>
+<td>v3.0.0</td>
+<td>github.com/eddycjy/mquote/v3</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br>简单来讲，就是主版本号为 v0 和 v1，不需要在模块导入路径包含主版本信息，而在 v1 版本以后，也就是 v2 起，必须在模块的导入路径末尾加上主版本号，引用时就需要调整为如下格式</p>
+<p><a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;github.com&#x2F;eddycjy&#x2F;mquote&#x2F;v2&#x2F;example&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>另外忽略主版本号 v0 和 v1 是强制性的（不是可选项），因此每个软件包只有一个明确且规范的导入路径。</p>
+<h3 id="为什么忽略-v0、v1"><a href="#为什么忽略-v0、v1" class="headerlink" title="为什么忽略 v0、v1"></a>为什么忽略 v0、v1</h3><ol>
+<li>导入路径中忽略 v1 的原因是：考虑到许多开发人员创建一旦到达 v1 版本便永不改变的软件包，这是官方所鼓励的，不认为所有这些开发人员在无意发布 v2 版本时都应被迫拥有明确的 v1 版本尾缀，<strong>这将导致 v1 版本变成“噪音”且无意义。</strong></li>
+<li>导入路径中忽略了 v0 版本的原因是： 根据语义化版本规范，v0 的这些版本完全没有兼容性保证。需要<strong>一个显式的 v0 版本的标识对确保兼容性没有多大帮助。</strong></li>
+</ol>
+<h2 id="go-modules-语义化版本控制"><a href="#go-modules-语义化版本控制" class="headerlink" title="go modules 语义化版本控制"></a>go modules 语义化版本控制</h2><p>我们不断地在 go modules 的使用中提到版本号，其实质上被称为“语义化版本”，假设我们的版本号 v1.2.3，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861346684-ab7daa23-0890-4a55-82ed-48ff42ec56ed.png#align=left&display=inline&height=598&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.29.01.png&originHeight=598&originWidth=1216&size=97845&status=done&style=none&width=1216" alt="截屏2021-01-17 下午1.29.01.png"></p>
+<p>其版本格式为 <strong>主版本号.次版本号.修订号</strong>， 版本号的递增规则如下</p>
+<ol>
+<li>主版本号：当你做了不兼容的 API 修改</li>
+<li>次版本号： 当你做了向下兼容的功能性新增</li>
+<li>修订号：当你做了向下兼容的问题修正。</li>
+</ol>
+<p>假设你是先行版本号或者特殊情况，可以将版本追加到“主版本.次版本号.修订号”的后面，作为延伸</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861427051-ba13e616-eaab-4b7a-b356-a4c77f92e3ea.png#align=left&display=inline&height=502&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.19.png&originHeight=502&originWidth=1286&size=104448&status=done&style=none&width=1286" alt="截屏2021-01-17 下午1.30.19.png"></p>
+<p>至此我们介绍了 go modules 所支持的两类版本号方式，在我们发布新版本打 tag 时，需要注意遵循，否则不遵循语义化版本规则的版本号都是无法进行拉取的。</p>
+<h3 id="go-moduels-的最小版本选择"><a href="#go-moduels-的最小版本选择" class="headerlink" title="go moduels 的最小版本选择"></a>go moduels 的最小版本选择</h3><p>现在我们已经有一个模块，也有发布的 tag，但是一个模块往往依赖着许多其他的模块，并且不同的模块在依赖时很有可能会出现依赖同一个模块的不同版本，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861456233-18052bae-5a2f-4484-b45b-0bb87273d4b8.png#align=left&display=inline&height=684&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.52.png&originHeight=684&originWidth=1072&size=252115&status=done&style=none&width=1072" alt="截屏2021-01-17 下午1.30.52.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go 环境变量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">Go 环境变量</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" class="archive-article-date">
+  	<time datetime="2021-01-15T16:00:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 开发环境依赖于一些操作系统环境变量，你最好在安装 Go 之间就已经设置好他们。如果你使用的是 Windows 的话，你完全不用进行手动设置，Go 将被默认安装在目录 <code>c:/go</code> 下。这里列举几个最为重要的环境变量：</p>
+<ul>
+<li><strong>$GOROOT</strong> 表示 Go 在你的电脑上的安装位置，它的值一般都是 <code>$HOME/go</code>，当然，你也可以安装在别的地方。</li>
+<li><strong>$GOARCH</strong> 表示目标机器的处理器架构，它的值可以是 386、amd64 或 arm。</li>
+<li><strong>$GOOS</strong> 表示目标机器的操作系统，它的值可以是 darwin、freebsd、linux 或 windows。</li>
+<li><strong>$GOBIN</strong> 表示编译器和链接器的安装位置，默认是 <code>$GOROOT/bin</code>，如果你使用的是 Go 1.0.3 及以后的版本，一般情况下你可以将它的值设置为空，Go 将会使用前面提到的默认值。</li>
+</ul>
+<p>目标机器是指你打算运行你的 Go 应用程序的机器。<br>Go 编译器支持交叉编译，也就是说你可以在一台机器上构建运行在具有不同操作系统和处理器架构上运行的应用程序，也就是说编写源代码的机器可以和目标机器有完全不同的特性（操作系统与处理器架构）。<br>为了区分本地机器和目标机器，你可以使用 <code>$GOHOSTOS</code> 和 <code>$GOHOSTARCH</code> 设置本地机器的操作系统名称和编译体系结构，这两个变量只有在进行交叉编译的时候才会用到，如果你不进行显示设置，他们的值会和本地机器（<code>$GOOS</code> 和 <code>$GOARCH</code>）一样。</p>
+<ul>
+<li><strong>$GOPATH</strong> 默认采用和 <code>$GOROOT</code> 一样的值，但从 Go 1.1 版本开始，你必须修改为其它路径。它可以包含多个包含 Go 语言源码文件、包文件和可执行文件的路径，而这些路径下又必须分别包含三个规定的目录：<code>src</code>、<code>pkg</code> 和 <code>bin</code>，这三个目录分别用于存放源码文件、包文件和可执行文件。</li>
+<li><strong>$GOARM</strong> 专门针对基于 arm 架构的处理器，它的值可以是 5 或 6，默认为 6。</li>
+<li><strong>$GOMAXPROCS</strong> 用于设置应用程序可使用的处理器个数与核数，详见第 14.1.3 节。</li>
+</ul>
+<p>在接下来的章节中，我们将会讨论如何在 Linux、Mac OS X 和 Windows 上安装 Go 语言。在 FreeBSD 上的安装和 Linux 非常类似。开发团队正在尝试将 Go 语言移植到其它例如 OpenBSD、DragonFlyBSD、NetBSD、Plan 9、Haiku 和 Solaris 操作系统上，你可以在这个页面找到最近的动态：<a target="_blank" rel="noopener" href="http://go-lang.cat-v.org/os-ports">Go Porting Efforts</a>。</p>
+<p><code>GOPROXY</code><br>设置代理服务器，可以设置多个代理服务器以及 direct，比如<a target="_blank" rel="noopener" href="https://goproxy.cn,direct/">https://goproxy.cn,direct</a></p>
+<p><code>GOSUMDB</code><br>用来校验你下载的库的 hash 是否==官方的 hash 一样。</p>
+<p><code>GOPRIVATE</code><br>设置不使用代理的人下限为，比如一些公司内部的仓库等，如<code>GOPRIVATE=*.corp.example.com,rsc.io/private</code>。<br>作为和之前的兼容，还保留着 <code>GONOPROXY</code> 功能与 <code>GOPRIVATE</code> 一样。</p>
+<p>go help module-auth 了解 GOSUMDB 和 GONOSUMDB 变量<br>go help goproxy 了解 proxy 的通讯协议<br>go help modules 了解 module 的功能。<br>go help module-get 了解 go get 命令的变化。<br>go help gopath-get 显示先前的基于 GOPATH 的 go get 功能。<br>go help module-private 了解私有库的设置</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/特洛伊使用说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">特洛伊使用说明</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="archive-article-date">
+  	<time datetime="2021-01-03T13:13:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
+<p>macos <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg?_lake_card=%7B%22uid%22:%221611542907886-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg%22,%22name%22:%22Trojan-Qt5-macOS+(1).dmg%22,%22size%22:39300693,%22type%22:%22%22,%22ext%22:%22dmg%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%225frYR%22,%22card%22:%22file%22%7D">Trojan-Qt5-macOS (1).dmg</a></p>
+<p>ios 使用软件(需要非中国大陆 apple id)，否则打开白屏幕：<a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518">https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518</a></p>
+<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>PAC 代理：为防火墙智能代理，会自动过滤 中国大陆以内的 ip 地址数据包。 （国内非 T 子，访问国外为 T 子）<br>全局代理：为全局 T 子 如果采用这个模式，中国大陆某些视频网站会提示你版权出现问题或者访问国内网站特别慢的情况发生</p>
+<h1 id="ios-端"><a href="#ios-端" class="headerlink" title="ios 端"></a>ios 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22uploaded%22,%22name%22:%22RPReplay_Final1613837361.MP4%22,%22size%22:123451548,%22percent%22:100,%22taskId%22:%2243bbwmUvodwp%22,%22margin%22:true,%22id%22:%22kacxw%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/MP4/1613838724900-8252848e-cd46-4e23-a92f-238cf1323c43.MP4%22,%22card%22:%22video%22%7D#kacxw"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="RPReplay_Final1613837361.MP4 (117.73MB)"></a></p>
+<h1 id="windows-端"><a href="#windows-端" class="headerlink" title="windows 端"></a>windows 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
+<h2 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
+<h1 id="MacOS-使用"><a href="#MacOS-使用" class="headerlink" title="MacOS 使用"></a>MacOS 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22tro.mp4%22,%22size%22:105906344,%22percent%22:100,%22taskId%22:%22jtcGxLWC2rzM%22,%22margin%22:true,%22id%22:%22dkdJr%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1611553175119-214606d4-c00e-4dd5-98a2-5407cdafe5e8.mp4%22,%22card%22:%22video%22%7D#dkdJr"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="tro.mp4 (101MB)"></a></p>
+<h1 id="正常使用状态"><a href="#正常使用状态" class="headerlink" title="正常使用状态"></a>正常使用状态</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552878301-bcfa22f2-f08a-44ed-bd17-d71f6481e47d.png#align=left&display=inline&height=86&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=145&size=12770&status=done&style=none&width=145" alt="image.png"><br>蓝色小马 上面带个 G 全局代理</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552920679-2cb4cf23-df72-47ea-a52f-d93d57ff0bf4.png#align=left&display=inline&height=44&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=76&size=6568&status=done&style=none&width=76" alt="image.png"><br>绿色小马 上面带个 P 国外代理 误伤概率比较高<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611553009805-f6d8cec9-72ce-4790-8935-cb2f43197e61.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-25%2013.36.41.png&originHeight=343&originWidth=494&size=192789&status=done&style=none&width=494" alt="截屏2021-01-25 13.36.41.png"></p>
+<h1 id="使用注意："><a href="#使用注意：" class="headerlink" title="使用注意："></a>使用注意：</h1><p>访问外 wang<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1609681415544-d2aba294-f93f-4ac0-b7f4-5b043df99b2f.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&name=image.png&originHeight=742&originWidth=712&size=358619&status=done&style=none&width=356" alt="image.png"></p>
+<p>内网访问不了，请关闭该软件</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/pip!pip3 包下载加速" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -738,1327 +1274,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/08/06/yuque/Hexo%20+%20Github%20+%20%E8%AF%AD%E9%9B%80%20+%20yuque-hexo%20+github-action+severless%20%E6%89%93%E9%80%A0%E5%85%A8%E8%87%AA%E5%8A%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%8C%E4%BA%91%E7%AB%AF%E5%86%99%E4%BD%9C%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%AE%8C%E7%BE%8E%E4%BD%93%E9%AA%8C~/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/go build 编译时的附加参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/">go build 编译时的附加参数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-05-22T05:22:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="go-build-编译时的附加参数"><a href="#go-build-编译时的附加参数" class="headerlink" title="go build 编译时的附加参数"></a>go build 编译时的附加参数</h2><p>go build 还有一些附加参数，可以显示更多的编译信息和更多的操作，详见下表所示。</p>
-<p>go build 编译时的附加参数</p>
-<table>
-<thead>
-<tr>
-<th>附加参数</th>
-<th>备   注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-v</td>
-<td>编译时显示包名</td>
-</tr>
-<tr>
-<td>-p n</td>
-<td>开启并发编译，默认情况下该值为 CPU 逻辑核数</td>
-</tr>
-<tr>
-<td>-a</td>
-<td>强制重新构建</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>打印编译时会用到的所有命令，但不真正执行</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>打印编译时会用到的所有命令</td>
-</tr>
-<tr>
-<td>-race</td>
-<td>开启竞态检测</td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/22/yuque/go%20build%20%E7%BC%96%E8%AF%91%E6%97%B6%E7%9A%84%E9%99%84%E5%8A%A0%E5%8F%82%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/go 面试题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/18/yuque/go%20%E9%9D%A2%E8%AF%95%E9%A2%98/">go 面试题</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/18/yuque/go%20%E9%9D%A2%E8%AF%95%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2020-05-18T12:32:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1.   【初级】下面属于关键字的是（）<br>A. func<br>B. def<br>C. struct<br>D. class</p>
-<p>参考答案：AC</p>
-<p>2.   【初级】定义一个包内全局字符串变量，下面语法正确的是（）<br>A. var str string<br>B. str := “”<br>C. str = “”<br>D. var str = “”</p>
-<p>参考答案：AD</p>
-<p>3.   【初级】通过指针变量 p 访问其成员变量 name，下面语法正确的是（）<br>A. p.name<br>B. (*p).name<br>C. (&amp;p).name<br>D. p-&gt;name</p>
-<p>参考答案：AB</p>
-<p>4.   【初级】关于接口和类的说法，下面说法正确的是（）<br>A. 一个类只需要实现了接口要求的所有函数，我们就说这个类实现了该接口<br>B. 实现类的时候，只需要关心自己应该提供哪些方法，不用再纠结接口需要拆得多细才合理<br>C. 类实现接口时，需要导入接口所在的包<br>D. 接口由使用方按自身需求来定义，使用方无需关心是否有其他模块定义过类似的接口</p>
-<p>参考答案：ABD</p>
-<p>5.   【初级】关于字符串连接，下面语法正确的是（）<br>A. str := ‘abc’ + ‘123’<br>B. str := “abc” + “123”<br>C. str ：= ‘123’ + “abc”<br>D. fmt.Sprintf(“abc%d”, 123)</p>
-<p>参考答案：BD</p>
-<p>6.   【初级】关于协程，下面说法正确是（）<br>A. 协程和线程都可以实现程序的并发执行<br>B. 线程比协程更轻量级<br>C. 协程不存在死锁问题<br>D. 通过 channel 来进行协程间的通信</p>
-<p>参考答案：AD</p>
-<p>7.   【中级】关于 init 函数，下面说法正确的是（）<br>A. 一个包中，可以包含多个 init 函数<br>B. 程序编译时，先执行导入包的 init 函数，再执行本包内的 init 函数<br>C. main 包中，不能有 init 函数<br>D. init 函数可以被其他函数调用</p>
-<p>参考答案：AB</p>
-<p>8.   【初级】关于循环语句，下面说法正确的有（）<br>A. 循环语句既支持 for 关键字，也支持 while 和 do-while<br>B. 关键字 for 的基本使用方法与 C/C++中没有任何差异<br>C. for 循环支持 continue 和 break 来控制循环，但是它提供了一个更高级的 break，可以选择中断哪一个循环<br>D. for 循环不支持以逗号为间隔的多个赋值语句，必须使用平行赋值的方式来初始化多个变量  <br>参考答案：CD</p>
-<p>9.   【中级】对于函数定义：</p>
-<ol start="10">
-<li>func add(args …int) int {</li>
-<li>sum :=0</li>
-<li>for _,arg := range args {</li>
-<li>sum += arg</li>
-<li>}</li>
-<li>returnsum</li>
-</ol>
-<p>}</p>
-<p>下面对 add 函数调用正确的是（）<br>A. add(1, 2)<br>B. add(1, 3, 7)<br>C. add([]int{1, 2})<br>D. add([]int{1, 3, 7}…)</p>
-<p>参考答案：ABD</p>
-<ol start="16">
-<li>【初级】关于类型转化，下面语法正确的是（）</li>
-</ol>
-<p>A. 16. type MyInt int 16. var i int = 1</p>
-<p>var jMyInt = i</p>
-<p>B.</p>
-<p>type MyIntint</p>
-<p>var i int= 1</p>
-<p>var jMyInt = (MyInt)i</p>
-<p>C.</p>
-<p>type MyIntint</p>
-<p>var i int= 1</p>
-<p>var jMyInt = MyInt(i)</p>
-<p>D.</p>
-<p>type MyIntint</p>
-<p>var i int= 1</p>
-<p>var jMyInt = i.(MyInt)</p>
-<p>参考答案：C</p>
-<ol start="19">
-<li>【初级】关于局部变量的初始化，下面正确的使用方式是（）</li>
-</ol>
-<p>A. var i int = 10</p>
-<p>B. var i = 10</p>
-<p>C. i := 10</p>
-<p>D. i = 10</p>
-<p>参考答案：ABC</p>
-<ol start="20">
-<li>【初级】关于 const 常量定义，下面正确的使用方式是（）</li>
-</ol>
-<p>A. 20. const Pi float64 = 3.14159265358979323846</p>
-<p>const zero= 0.0</p>
-<p>B.</p>
-<p>const (</p>
-<p>size int64= 1024</p>
-<p>eof = -1</p>
-<p>)</p>
-<p>C.</p>
-<p>const (</p>
-<p>ERR_ELEM_EXISTerror = errors.New(“element already exists”)</p>
-<p>ERR_ELEM_NT_EXISTerror = errors.New(“element not exists”)</p>
-<p>)</p>
-<p>D.</p>
-<p>const u, vfloat32 = 0, 3</p>
-<p>const a,b, c = 3, 4, “foo”</p>
-<p>参考答案：ABD</p>
-<ol start="22">
-<li>【初级】关于布尔变量 b 的赋值，下面错误的用法是（）</li>
-</ol>
-<p>A. b = true</p>
-<p>B. b = 1</p>
-<p>C. b = bool(1)</p>
-<p>D. b = (1 == 2)</p>
-<p>参考答案：BC</p>
-<ol start="23">
-<li>【中级】下面的程序的运行结果是（）</li>
-<li>func main() {</li>
-<li>if (true) {</li>
-<li>defer fmt.Printf(“1”)</li>
-<li>} else {</li>
-<li>defer fmt.Printf(“2”)</li>
-<li>}</li>
-<li>fmt.Printf(“3”)</li>
-</ol>
-<p>}</p>
-<p>A. 321<br>B. 32<br>C. 31<br>D. 13</p>
-<p>参考答案：C</p>
-<ol start="31">
-<li>【初级】关于 switch 语句，下面说法正确的有（）</li>
-</ol>
-<p>A. 条件表达式必须为常量或者整数</p>
-<p>B. 单个 case 中，可以出现多个结果选项</p>
-<p>C. 需要用 break 来明确退出一个 case</p>
-<p>D. 只有在 case 中明确添加 fallthrough 关键字，才会继续执行紧跟的下一个 case</p>
-<p>参考答案：BD</p>
-<ol start="32">
-<li>【中级】 golang 中没有隐藏的 this 指针，这句话的含义是（）</li>
-</ol>
-<p>A. 方法施加的对象显式传递，没有被隐藏起来</p>
-<p>B. golang 沿袭了传统面向对象编程中的诸多概念，比如继承、虚函数和构造函数</p>
-<p>C. golang 的面向对象表达更直观，对于面向过程只是换了一种语法形式来表达</p>
-<p>D. 方法施加的对象不需要非得是指针，也不用非得叫 this</p>
-<p>参考答案：ACD</p>
-<ol start="33">
-<li>【中级】 golang 中的引用类型包括（）</li>
-</ol>
-<p>A. 数组切片</p>
-<p>B. map</p>
-<p>C. channel</p>
-<p>D. interface</p>
-<p>参考答案：ABCD</p>
-<ol start="34">
-<li>【中级】 golang 中的指针运算包括（）</li>
-</ol>
-<p>A. 可以对指针进行自增或自减运算</p>
-<p>B. 可以通过“&amp;”取指针的地址</p>
-<p>C. 可以通过“*”取指针指向的数据</p>
-<p>D. 可以对指针进行下标运算</p>
-<p>参考答案：BC</p>
-<ol start="35">
-<li>【初级】关于 main 函数（可执行程序的执行起点），下面说法正确的是（）</li>
-</ol>
-<p>A. main 函数不能带参数</p>
-<p>B. main 函数不能定义返回值</p>
-<p>C. main 函数所在的包必须为 main 包</p>
-<p>D. main 函数中可以使用 flag 包来获取和解析命令行参数</p>
-<p>参考答案：ABCD</p>
-<ol start="36">
-<li>【中级】下面赋值正确的是（）</li>
-</ol>
-<p>A. var x = nil</p>
-<p>B. var x interface{} = nil</p>
-<p>C. var x string = nil</p>
-<p>D. var x error = nil</p>
-<p>参考答案：BD</p>
-<ol start="37">
-<li>【中级】关于整型切片的初始化，下面正确的是（）</li>
-</ol>
-<p>A. s := make([]int)</p>
-<p>B. s := make([]int, 0)</p>
-<p>C. s := make([]int, 5, 10)</p>
-<p>D. s := []int{1, 2, 3, 4, 5}</p>
-<p>参考答案：BCD</p>
-<ol start="38">
-<li>【中级】从切片中删除一个元素，下面的算法实现正确的是（）</li>
-</ol>
-<p>A. 38. func (s *Slice)Remove(value interface{})error { 38. for i, v := range *s { 38. if isEqual(value, v) { 38. if i== len(*s) - 1 { 38. _s = (_s)[:i] 38. }else { 38. _s = append((_s)[:i],(*s)[i + 2:]…) 38. } 38. return nil 38. } 38. } 38. return ERR_ELEM_NT_EXIST</p>
-<p>}</p>
-<p>B.</p>
-<p>func (s*Slice)Remove(value interface{}) error {</p>
-<p>for i, v:= range *s {</p>
-<p>if isEqual(value, v) {</p>
-<p>_s =append((_s)[:i],(*s)[i + 1:])</p>
-<p>return nil</p>
-<p>}</p>
-<p>}</p>
-<p>returnERR_ELEM_NT_EXIST</p>
-<p>}</p>
-<p>C.</p>
-<p>func (s*Slice)Remove(value interface{}) error {</p>
-<p>for i, v:= range *s {</p>
-<p>if isEqual(value, v) {</p>
-<p>delete(*s, v)</p>
-<p>return nil</p>
-<p>}</p>
-<p>}</p>
-<p>returnERR_ELEM_NT_EXIST</p>
-<p>}</p>
-<p>D.</p>
-<p>func (s*Slice)Remove(value interface{}) error {</p>
-<p>for i, v:= range *s {</p>
-<p>if isEqual(value, v) {</p>
-<p>_s =append((_s)[:i],(*s)[i + 1:]…)</p>
-<p>return nil</p>
-<p>}</p>
-<p>}</p>
-<p>returnERR_ELEM_NT_EXIST</p>
-<p>}</p>
-<p>参考答案：D</p>
-<ol start="51">
-<li>【初级】对于局部变量整型切片 x 的赋值，下面定义正确的是（）</li>
-</ol>
-<p>A. 51. x := []int{ 51. 1, 2, 3, 51. 4, 5, 6,</p>
-<p>}</p>
-<p>B.</p>
-<p>x :=[]int{</p>
-<p>1, 2, 3,</p>
-<p>4, 5, 6</p>
-<p>}</p>
-<p>C.</p>
-<p>x :=[]int{</p>
-<p>1, 2, 3,</p>
-<p>4, 5, 6}</p>
-<p>D.</p>
-<p>x :=[]int{1, 2, 3, 4, 5, 6,}</p>
-<p>参考答案：ACD</p>
-<ol start="55">
-<li>【初级】关于变量的自增和自减操作，下面语句正确的是（）</li>
-</ol>
-<p>A. 55. i := 1</p>
-<p>i++</p>
-<p>B.</p>
-<p>i := 1</p>
-<p>j = i++</p>
-<p>C.</p>
-<p>i := 1</p>
-<p>++i</p>
-<p>D.</p>
-<p>i := 1</p>
-<p>i–</p>
-<p>参考答案：AD</p>
-<ol start="57">
-<li>【中级】关于函数声明，下面语法错误的是（）</li>
-</ol>
-<p>A. func f(a, b int) (value int, err error)</p>
-<p>B. func f(a int, b int) (value int, err error)</p>
-<p>C. func f(a, b int) (value int, error)</p>
-<p>D. func f(a int, b int) (int, int, error)</p>
-<p>参考答案：C</p>
-<ol start="58">
-<li>【中级】如果 Add 函数的调用代码为：</li>
-<li>func main() {</li>
-<li>var a Integer = 1</li>
-<li>var b Integer = 2</li>
-<li>var i interface{} = &amp;a</li>
-<li>sum := i.(*Integer).Add(b)</li>
-<li>fmt.Println(sum)</li>
-</ol>
-<p>}</p>
-<p>则 Add 函数定义正确的是（）<br>A.</p>
-<p>typeInteger int</p>
-<p>func (aInteger) Add(b Integer) Integer {</p>
-<p>return a + b</p>
-<p>}</p>
-<p>B.</p>
-<p>typeInteger int</p>
-<p>func (aInteger) Add(b *Integer) Integer {</p>
-<p>return a + *b</p>
-<p>}</p>
-<p>C.</p>
-<p>typeInteger int</p>
-<p>func (a*Integer) Add(b Integer) Integer {</p>
-<p>return *a + b</p>
-<p>}</p>
-<p>D.</p>
-<p>typeInteger int</p>
-<p>func (a_Integer) Add(b _Integer) Integer {</p>
-<p>return _a + _b</p>
-<p>}</p>
-<p>参考答案：AC</p>
-<ol start="65">
-<li>【中级】如果 Add 函数的调用代码为：</li>
-<li>func main() {</li>
-<li>var a Integer = 1</li>
-<li>var b Integer = 2</li>
-<li>var i interface{} = a</li>
-<li>sum := i.(Integer).Add(b)</li>
-<li>fmt.Println(sum)</li>
-</ol>
-<p>}</p>
-<p>则 Add 函数定义正确的是（）<br>A.</p>
-<p>typeInteger int</p>
-<p>func (a Integer)Add(b Integer) Integer {</p>
-<p>return a + b</p>
-<p>}</p>
-<p>B.</p>
-<p>typeInteger int</p>
-<p>func (aInteger) Add(b *Integer) Integer {</p>
-<p>return a + *b</p>
-<p>}</p>
-<p>C.</p>
-<p>typeInteger int</p>
-<p>func (a*Integer) Add(b Integer) Integer {</p>
-<p>return *a + b</p>
-<p>}</p>
-<p>D.</p>
-<p>typeInteger int</p>
-<p>func (a_Integer) Add(b _Integer) Integer {</p>
-<p>return _a + _b</p>
-<p>}</p>
-<p>参考答案：A</p>
-<ol start="72">
-<li>【中级】关于 GetPodAction 定义，下面赋值正确的是（）</li>
-<li>type Fragment interface {</li>
-<li>Exec(transInfo *TransInfo) error</li>
-<li>}</li>
-<li>type GetPodAction struct {</li>
-<li>}</li>
-<li>func (g GetPodAction) Exec(transInfo*TransInfo) error {</li>
-<li>…</li>
-<li>return nil</li>
-</ol>
-<p>}</p>
-<p>A. var fragment Fragment =new(GetPodAction)<br>B. var fragment Fragment = GetPodAction<br>C. var fragment Fragment = &amp;GetPodAction{}<br>D. var fragment Fragment = GetPodAction{}</p>
-<p>参考答案：ACD</p>
-<ol start="81">
-<li>【中级】关于 GoMock，下面说法正确的是（）</li>
-</ol>
-<p>A. GoMock 可以对 interface 打桩</p>
-<p>B. GoMock 可以对类的成员函数打桩</p>
-<p>C. GoMock 可以对函数打桩</p>
-<p>D. GoMock 打桩后的依赖注入可以通过 GoStub 完成</p>
-<p>参考答案：AD</p>
-<ol start="82">
-<li>【中级】关于接口，下面说法正确的是（）</li>
-</ol>
-<p>A. 只要两个接口拥有相同的方法列表（次序不同不要紧），那么它们就是等价的，可以相互赋值</p>
-<p>B. 如果接口 A 的方法列表是接口 B 的方法列表的子集，那么接口 B 可以赋值给接口 A</p>
-<p>C. 接口查询是否成功，要在运行期才能够确定</p>
-<p>D. 接口赋值是否可行，要在运行期才能够确定</p>
-<p>参考答案：ABC</p>
-<ol start="83">
-<li>【初级】关于 channel，下面语法正确的是（）</li>
-</ol>
-<p>A. var ch chan int</p>
-<p>B. ch := make(chan int)</p>
-<p>C. &lt;- ch</p>
-<p>D. ch &lt;-</p>
-<p>参考答案：ABC</p>
-<ol start="84">
-<li>【初级】关于同步锁，下面说法正确的是（）</li>
-</ol>
-<p>A. 当一个 goroutine 获得了 Mutex 后，其他 goroutine 就只能乖乖的等待，除非该 goroutine 释放这个 Mutex</p>
-<p>B. RWMutex 在读锁占用的情况下，会阻止写，但不阻止读</p>
-<p>C. RWMutex 在写锁占用情况下，会阻止任何其他 goroutine（无论读和写）进来，整个锁相当于由该 goroutine 独占</p>
-<p>D. Lock()操作需要保证有 Unlock()或 RUnlock()调用与之对应</p>
-<p>参考答案：ABC</p>
-<ol start="85">
-<li>【中级】 golang 中大多数数据类型都可以转化为有效的 JSON 文本，下面几种类型除外（）</li>
-</ol>
-<p>A. 指针</p>
-<p>B. channel</p>
-<p>C. complex</p>
-<p>D. 函数</p>
-<p>参考答案：BCD</p>
-<ol start="86">
-<li>【中级】关于 go vendor，下面说法正确的是（）</li>
-</ol>
-<p>A. 基本思路是将引用的外部包的源代码放在当前工程的 vendor 目录下面</p>
-<p>B. 编译 go 代码会优先从 vendor 目录先寻找依赖包</p>
-<p>C. 可以指定引用某个特定版本的外部包</p>
-<p>D. 有了 vendor 目录后，打包当前的工程代码到其他机器的$GOPATH/src 下都可以通过编译</p>
-<p>参考答案：ABD</p>
-<ol start="87">
-<li>【初级】 flag 是 bool 型变量，下面 if 表达式符合编码规范的是（）</li>
-</ol>
-<p>A. if flag == 1</p>
-<p>B. if flag</p>
-<p>C. if flag == false</p>
-<p>D. if !flag</p>
-<p>参考答案：BD</p>
-<ol start="88">
-<li>【初级】 value 是整型变量，下面 if 表达式符合编码规范的是（）</li>
-</ol>
-<p>A. if value == 0</p>
-<p>B. if value</p>
-<p>C. if value != 0</p>
-<p>D. if !value</p>
-<p>参考答案：AC</p>
-<ol start="89">
-<li>【中级】关于函数返回值的错误设计，下面说法正确的是（）</li>
-</ol>
-<p>A. 如果失败原因只有一个，则返回 bool</p>
-<p>B. 如果失败原因超过一个，则返回 error</p>
-<p>C. 如果没有失败原因，则不返回 bool 或 error</p>
-<p>D. 如果重试几次可以避免失败，则不要立即返回 bool 或 error</p>
-<p>参考答案：ABCD</p>
-<ol start="90">
-<li>【中级】关于异常设计，下面说法正确的是（）</li>
-</ol>
-<p>A. 在程序开发阶段，坚持速错，让程序异常崩溃</p>
-<p>B. 在程序部署后，应恢复异常避免程序终止</p>
-<p>C. 一切皆错误，不用进行异常设计</p>
-<p>D. 对于不应该出现的分支，使用异常处理</p>
-<p>参考答案：ABD</p>
-<ol start="91">
-<li>【中级】关于 slice 或 map 操作，下面正确的是（）</li>
-</ol>
-<p>A. 91. var s []int</p>
-<p>s =append(s,1)</p>
-<p>B.</p>
-<p>var mmap[string]int</p>
-<p>m[“one”]= 1</p>
-<p>C.</p>
-<p>var s[]int</p>
-<p>s =make([]int, 0)</p>
-<p>s =append(s,1)</p>
-<p>D.</p>
-<p>var mmap[string]int</p>
-<p>m =make(map[string]int)</p>
-<p>m[“one”]= 1</p>
-<p>参考答案：ACD</p>
-<ol start="93">
-<li>【中级】关于 channel 的特性，下面说法正确的是（）</li>
-</ol>
-<p>A. 给一个 nil channel 发送数据，造成永远阻塞</p>
-<p>B. 从一个 nil channel 接收数据，造成永远阻塞</p>
-<p>C. 给一个已经关闭的 channel 发送数据，引起 panic</p>
-<p>D. 从一个已经关闭的 channel 接收数据，如果缓冲区中为空，则返回一个零值</p>
-<p>参考答案：ABCD</p>
-<ol start="94">
-<li>【中级】关于无缓冲和有冲突的 channel，下面说法正确的是（）</li>
-</ol>
-<p>A. 无缓冲的 channel 是默认的缓冲为 1 的 channel</p>
-<p>B. 无缓冲的 channel 和有缓冲的 channel 都是同步的</p>
-<p>C. 无缓冲的 channel 和有缓冲的 channel 都是非同步的</p>
-<p>D. 无缓冲的 channel 是同步的，而有缓冲的 channel 是非同步的</p>
-<p>参考答案：D</p>
-<ol start="95">
-<li>【中级】关于异常的触发，下面说法正确的是（）</li>
-</ol>
-<p>A. 空指针解析</p>
-<p>B. 下标越界</p>
-<p>C. 除数为 0</p>
-<p>D. 调用 panic 函数</p>
-<p>参考答案：ABCD</p>
-<ol start="96">
-<li>【中级】关于 cap 函数的适用类型，下面说法正确的是（）</li>
-</ol>
-<p>A. array</p>
-<p>B. slice</p>
-<p>C. map</p>
-<p>D. channel</p>
-<p>参考答案：ABD</p>
-<ol start="97">
-<li>【中级】关于 beego 框架，下面说法正确的是（）</li>
-</ol>
-<p>A. beego 是一个 golang 实现的轻量级 HTTP 框架</p>
-<p>B. beego 可以通过注释路由、正则路由等多种方式完成 url 路由注入</p>
-<p>C. 可以使用 bee new 工具生成空工程，然后使用 bee run 命令自动热编译</p>
-<p>D. beego 框架只提供了对 url 路由的处理，而对于 MVC 架构中的数据库部分未提供框架支持</p>
-<p>参考答案：ABC</p>
-<ol start="98">
-<li>【中级】关于 goconvey，下面说法正确的是（）</li>
-</ol>
-<p>A. goconvey 是一个支持 golang 的单元测试框架</p>
-<p>B. goconvey 能够自动监控文件修改并启动测试，并可以将测试结果实时输出到 web 界面</p>
-<p>C. goconvey 提供了丰富的断言简化测试用例的编写</p>
-<p>D. goconvey 无法与 go test 集成</p>
-<p>参考答案：ABC</p>
-<ol start="99">
-<li>【中级】关于 go vet，下面说法正确的是（）</li>
-</ol>
-<p>A. go vet 是 golang 自带工具 go tool vet 的封装</p>
-<p>B. 当执行 go vet database 时，可以对 database 所在目录下的所有子文件夹进行递归检测</p>
-<p>C. go vet 可以使用绝对路径、相对路径或相对 GOPATH 的路径指定待检测的包</p>
-<p>D. go vet 可以检测出死代码</p>
-<p>参考答案：ACD</p>
-<p>100.             【中级】关于 map，下面说法正确的是（）<br>A. map 反序列化时 json.unmarshal 的入参必须为 map 的地址<br>B. 在函数调用中传递 map，则子函数中对 map 元素的增加不会导致父函数中 map 的修改<br>C. 在函数调用中传递 map，则子函数中对 map 元素的修改不会导致父函数中 map 的修改<br>D. 不能使用内置函数 delete 删除 map 的元素</p>
-<p>参考答案：A</p>
-<p>101.             【中级】关于 GoStub，下面说法正确的是（）<br>A. GoStub 可以对全局变量打桩<br>B. GoStub 可以对函数打桩<br>C. GoStub 可以对类的成员方法打桩<br>D. GoStub 可以打动态桩，比如对一个函数打桩后，多次调用该函数会有不同的行为</p>
-<p>参考答案：ABD</p>
-<p>102.             【初级】关于 select 机制，下面说法正确的是（）<br>A. select 机制用来处理异步 IO 问题<br>B. select 机制最大的一条限制就是每个 case 语句里必须是一个 IO 操作<br>C. golang 在语言级别支持 select 关键字<br>D. select 关键字的用法与 switch 语句非常类似，后面要带判断条件</p>
-<p>参考答案：ABC</p>
-<p>103.             【初级】关于内存泄露，下面说法正确的是（）<br>A. golang 有自动垃圾回收，不存在内存泄露<br>B. golang 中检测内存泄露主要依靠的是 pprof 包<br>C. 内存泄露可以在编译阶段发现<br>D. 应定期使用浏览器来查看系统的实时内存信息，及时发现内存泄露问题</p>
-<p>参考答案：BD</p>
-<p>填空题</p>
-<p>1.   【初级】声明一个整型变量 i**<strong>__**</strong></p>
-<p>参考答案：var i int</p>
-<p>2.   【初级】声明一个含有 10 个元素的整型数组 a**<strong>__**</strong></p>
-<p>参考答案：var a [10]int</p>
-<p>3.   【初级】声明一个整型数组切片 s**<strong>__**</strong></p>
-<p>参考答案：var s []int</p>
-<p>4.   【初级】声明一个整型指针变量 p**<strong>__**</strong></p>
-<p>参考答案：var p *int</p>
-<p>5.   【初级】声明一个 key 为字符串型 value 为整型的 map 变量 m**<strong>__**</strong></p>
-<p>参考答案：var m map[string]int</p>
-<p>6.   【初级】声明一个入参和返回值均为整型的函数变量 f**<strong>__**</strong></p>
-<p>参考答案：var f func(a int) int</p>
-<p>7.   【初级】声明一个只用于读取 int 数据的单向 channel 变量 ch**<strong>__**</strong></p>
-<p>参考答案：var ch &lt;-chan int</p>
-<p>8.   【初级】假设源文件的命名为 slice.go，则测试文件的命名为**<strong>__**</strong></p>
-<p>参考答案：slice_test.go</p>
-<p>9.   【初级】 go test 要求测试函数的前缀必须命名为**<strong>__**</strong></p>
-<p>参考答案：Test</p>
-<ol start="10">
-<li>【中级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>for i := 0; i &lt; 5; i++ {</li>
-<li>defer fmt.Printf(“%d “, i)</li>
-</ol>
-<p>}</p>
-<p>参考答案：4 3 2 1 0</p>
-<ol start="13">
-<li>【中级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>func main() {</li>
-<li>x := 1</li>
-<li>{</li>
-<li>x := 2</li>
-<li>fmt.Print(x)</li>
-<li>}</li>
-<li>fmt.Println(x)</li>
-</ol>
-<p>}</p>
-<p>参考答案：21</p>
-<ol start="21">
-<li><p>【中级】下面的程序的运行结果是**<strong>__**</strong></p>
-</li>
-<li><p>func main() {</p>
-</li>
-<li><p>strs := []string{“one”,”two”, “three”}</p>
-</li>
-<li></li>
-<li><p>for _, s := range strs {</p>
-</li>
-<li><p>go func() {</p>
-</li>
-<li><p>time.Sleep(1 * time.Second)</p>
-</li>
-<li><p>fmt.Printf(“%s “, s)</p>
-</li>
-<li><p>}()</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>time.Sleep(3 * time.Second)</p>
-</li>
-</ol>
-<p>}</p>
-<p>参考答案：three threethree</p>
-<ol start="32">
-<li>【中级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>func main() {</li>
-<li>x := []string{“a”, “b”,”c”}</li>
-<li>for v := range x {</li>
-<li>fmt.Print(v)</li>
-<li>}</li>
-</ol>
-<p>}</p>
-<p>参考答案：012</p>
-<ol start="38">
-<li>【中级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>func main() {</li>
-<li>x := []string{“a”, “b”,”c”}</li>
-<li>for _, v := range x {</li>
-<li>fmt.Print(v)</li>
-<li>}</li>
-</ol>
-<p>}</p>
-<p>参考答案：abc</p>
-<ol start="44">
-<li>【初级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>func main() {</li>
-<li>i := 1</li>
-<li>j := 2</li>
-<li>i, j = j, i</li>
-<li>fmt.Printf(“%d%d\n”, i, j)</li>
-</ol>
-<p>}</p>
-<p>参考答案：21</p>
-<ol start="50">
-<li>【初级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>func incr(p *int) int {</li>
-<li>*p++</li>
-<li>return *p</li>
-<li>}</li>
-<li>func main() {</li>
-<li>v := 1</li>
-<li>incr(&amp;v)</li>
-<li>fmt.Println(v)</li>
-</ol>
-<p>}</p>
-<p>参考答案：2</p>
-<ol start="59">
-<li>【初级】启动一个 goroutine 的关键字是**<strong>__**</strong></li>
-</ol>
-<p>参考答案：go</p>
-<ol start="60">
-<li>【中级】下面的程序的运行结果是**<strong>__**</strong></li>
-<li>type Slice []int</li>
-<li>func NewSlice() Slice {</li>
-<li>return make(Slice, 0)</li>
-<li>}</li>
-<li>func (s_ Slice) Add(elem int) _Slice {</li>
-<li>_s = append(_s, elem)</li>
-<li>fmt.Print(elem)</li>
-<li>return s</li>
-<li>}</li>
-<li>func main() {</li>
-<li>s := NewSlice()</li>
-<li>defer s.Add(1).Add(2)</li>
-<li>s.Add(3)</li>
-</ol>
-<p>}</p>
-<p>参考答案：132</p>
-<p>判断题</p>
-<p>1.   【初级】数组是一个值类型（）</p>
-<p>参考答案：T</p>
-<p>2.   【初级】使用 map 不需要引入任何库（）</p>
-<p>参考答案：T</p>
-<p>3.   【中级】内置函数 delete 可以删除数组切片内的元素（）</p>
-<p>参考答案：F</p>
-<p>4.   【初级】指针是基础类型（）</p>
-<p>参考答案：F</p>
-<p>5.   【初级】 interface{}是可以指向任意对象的 Any 类型（）</p>
-<p>参考答案：T</p>
-<p>6.   【中级】下面关于文件操作的代码可能触发异常（）</p>
-<p>7.  file, err := os.Open(“test.go”)</p>
-<p>8.  defer file.Close()</p>
-<p>9.  if err != nil {</p>
-<ol start="10">
-<li>fmt.Println(“open file failed:”,err)</li>
-<li>return</li>
-<li>}</li>
-</ol>
-<p>…</p>
-<p>参考答案：T</p>
-<ol start="13">
-<li>【初级】 Golang 不支持自动垃圾回收（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="14">
-<li>【初级】 Golang 支持反射，反射最常见的使用场景是做对象的序列化（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="15">
-<li>【初级】 Golang 可以复用 C/C++的模块，这个功能叫 Cgo（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="16">
-<li>【初级】下面代码中两个斜点之间的代码，比如 json:”x”，作用是 X 字段在从结构体实例编码到 JSON 数据格式的时候，使用 x 作为名字，这可以看作是一种重命名的方式（）</li>
-<li>type Position struct {</li>
-<li>X int <code>json:&quot;x&quot;</code></li>
-<li>Y int <code>json:&quot;y&quot;</code></li>
-<li>Z int <code>json:&quot;z&quot;</code></li>
-</ol>
-<p>}</p>
-<p>参考答案：T</p>
-<ol start="21">
-<li>【初级】通过成员变量或函数首字母的大小写来决定其作用域（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="22">
-<li>【初级】对于常量定义 zero(const zero = 0.0)，zero 是浮点型常量（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="23">
-<li>【初级】对变量 x 的取反操作是~x（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="24">
-<li>【初级】下面的程序的运行结果是 xello（）</li>
-<li>func main() {</li>
-<li>str := “hello”</li>
-<li>str[0] = ‘x’</li>
-<li>fmt.Println(str)</li>
-</ol>
-<p>}</p>
-<p>参考答案：F</p>
-<ol start="29">
-<li>【初级】 golang 支持 goto 语句（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="30">
-<li>【初级】下面代码中的指针 p 为野指针，因为返回的栈内存在函数结束时会被释放（）</li>
-<li>type TimesMatcher struct {</li>
-<li>base int</li>
-<li>}</li>
-<li>func NewTimesMatcher(base int) *TimesMatcher{</li>
-<li>return &amp;TimesMatcher{base:base}</li>
-<li>}</li>
-<li>func main() {</li>
-<li>p := NewTimesMatcher(3)</li>
-<li>…</li>
-</ol>
-<p>}</p>
-<p>参考答案：F</p>
-<ol start="40">
-<li>【初级】匿名函数可以直接赋值给一个变量或者直接执行（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="41">
-<li>【初级】如果调用方调用了一个具有多返回值的方法，但是却不想关心其中的某个返回值，可以简单地用一个下划线“_”来跳过这个返回值，该下划线对应的变量叫匿名变量（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="42">
-<li>【初级】在函数的多返回值中，如果有 error 或 bool 类型，则一般放在最后一个（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="43">
-<li>【初级】错误是业务过程的一部分，而异常不是（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="44">
-<li>【初级】函数执行时，如果由于 panic 导致了异常，则延迟函数不会执行（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="45">
-<li>【中级】当程序运行时，如果遇到引用空指针、下标越界或显式调用 panic 函数等情况，则先触发 panic 函数的执行，然后调用延迟函数。调用者继续传递 panic，因此该过程一直在调用栈中重复发生：函数停止执行，调用延迟执行函数。如果一路在延迟函数中没有 recover 函数的调用，则会到达该携程的起点，该携程结束，然后终止其他所有携程，其他携程的终止过程也是重复发生：函数停止执行，调用延迟执行函数（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="46">
-<li>【初级】同级文件的包名不允许有多个（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="47">
-<li>【中级】可以给任意类型添加相应的方法（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="48">
-<li>【初级】 golang 虽然没有显式的提供继承语法，但是通过匿名组合实现了继承（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="49">
-<li>【初级】使用 for range 迭代 map 时每次迭代的顺序可能不一样，因为 map 的迭代是随机的（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="50">
-<li>【初级】 switch 后面可以不跟表达式（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="51">
-<li>【中级】结构体在序列化时非导出变量（以小写字母开头的变量名）不会被 encode，因此在 decode 时这些非导出变量的值为其类型的零值（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="52">
-<li>【初级】 golang 中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以 NewXXX 来命名（）</li>
-</ol>
-<p>参考答案：T</p>
-<ol start="53">
-<li><p>【中级】当函数 deferDemo 返回失败时，并不能 destroy 已 create 成功的资源（）</p>
-</li>
-<li><p>func deferDemo() error {</p>
-</li>
-<li><p>err := createResource1()</p>
-</li>
-<li><p>if err != nil {</p>
-</li>
-<li><p>return ERR_CREATE_RESOURCE1_FAILED</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>defer func() {</p>
-</li>
-<li><p>if err != nil {</p>
-</li>
-<li><p>destroyResource1()</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>}()</p>
-</li>
-<li></li>
-<li><p>err = createResource2()</p>
-</li>
-<li><p>if err != nil {</p>
-</li>
-<li><p>return ERR_CREATE_RESOURCE2_FAILED</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>defer func() {</p>
-</li>
-<li><p>if err != nil {</p>
-</li>
-<li><p>destroyResource2()</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>}()</p>
-</li>
-<li></li>
-<li><p>err = createResource3()</p>
-</li>
-<li><p>if err != nil {</p>
-</li>
-<li><p>return ERR_CREATE_RESOURCE3_FAILED</p>
-</li>
-<li><p>}</p>
-</li>
-<li><p>return nil</p>
-</li>
-</ol>
-<p>}</p>
-<p>参考答案：F</p>
-<ol start="80">
-<li>【中级】 channel 本身必然是同时支持读写的，所以不存在单向 channel（）</li>
-</ol>
-<p>参考答案：F</p>
-<ol start="81">
-<li>【初级】 import 后面的最后一个元素是包名（）</li>
-</ol>
-<p>参考答案：F</p>
-<p>最近在很多地方看到了 golang 的面试题，看到了很多人对 Golang 的面试题心存恐惧，也是为了复习基础，我把解题的过程总结下来。</p>
-<p>面试题</p>
-<p>1 写出下面代码输出内容。</p>
-<p>package main<br>import (   <br>“fmt”<br>)<br>funcmain() {<br>    defer_call()<br>}<br>funcdefer_call() {<br>    deferfunc() {fmt.Println(“打印前”)}()<br>    deferfunc() {fmt.Println(“打印中”)}()<br>    deferfunc() {fmt.Println(“打印后”)}()<br>    panic(“触发异常”)<br>}</p>
-<p>考点：defer 执行顺序<br>解答：<br>defer 是后进先出。<br>panic 需要等 defer 结束后才会向上传递。 出现 panic 恐慌时候，会先按照 defer 的后入先出的顺序执行，最后才会执行 panic。</p>
-<p>打印后<br>打印中<br>打印前<br>panic: 触发异常</p>
-<p>2 以下代码有什么问题，说明原因。</p>
-<p>type student struct {<br>    Name string<br>    Age  int<br>}<br>funcpase<em>student() {<br>    m := make(map[string]\</em>student)<br>    stus := []student{<br>        {Name: “zhou”,Age: 24},<br>        {Name: “li”,Age: 23},<br>        {Name: “wang”,Age: 22},<br>    }    for *,stu := range stus {<br>        m[stu.Name] =&amp;stu<br>    }<br>}</p>
-<p>考点：foreach<br>解答：<br>这样的写法初学者经常会遇到的，很危险！ 与 Java 的 foreach 一样，都是使用副本的方式。所以 m[stu.Name]=&amp;stu 实际上一致指向同一个指针， 最终该指针的值为遍历的最后一个 struct 的值拷贝。 就像想修改切片元素的属性：</p>
-<p>for _, stu := rangestus {<br>    stu.Age = stu.Age+10}</p>
-<p>也是不可行的。 大家可以试试打印出来：</p>
-<p>func pase<em>student() {<br>    m := make(map[string]\</em>student)<br>    stus := []student{<br>        {Name: “zhou”,Age: 24},<br>        {Name: “li”,Age: 23},<br>        {Name: “wang”,Age: 22},<br>    }    <br>    // 错误写法<br>    for *,stu := range stus {<br>        m[stu.Name] =&amp;stu<br>    }    <br>     fork,v:=range m{        <br>      println(k,”=&gt;”,v.Name)<br>    }    <br>      // 正确<br>    for i:=0;i&lt;len(stus);i++ {<br>       m[stus[i].Name] = &amp;stus[i]<br>    }    <br>     fork,v:=range m{        <br>       println(k,”=&gt;”,v.Name)<br>    }<br>}</p>
-<p>3 下面的代码会输出什么，并说明原因</p>
-<p>func main() {<br>    runtime.GOMAXPROCS(1)<br>    wg := sync.WaitGroup{}<br>    wg.Add(20)   for i := 0; i &lt; 10; i++ {        <br>         gofunc() {<br>           fmt.Println(“A: “, i)<br>           wg.Done()<br>        }()<br>    }    <br>        for i:= 0; i &lt; 10; i++ {        <br>           gofunc(i int) {<br>           fmt.Println(“B: “, i)<br>           wg.Done()<br>        }(i)<br>    }<br>    wg.Wait()<br>}</p>
-<p>考点：go 执行的随机性和闭包<br>解答：<br>谁也不知道执行后打印的顺序是什么样的，所以只能说是随机数字。 但是 A:均为输出 10，B:从 0~9 输出(顺序不定)。 第一个 go func 中 i 是外部 for 的一个变量，地址不变化。遍历完成后，最终 i=10。 故 go func 执行时，i 的值始终是 10。</p>
-<p>第二个 go func 中 i 是函数参数，与外部 for 中的 i 完全是两个变量。 尾部(i)将发生值拷贝，go func 内部指向值拷贝地址。<br>4 下面代码会输出什么？</p>
-<p>type People struct{}func (p <em>People)ShowA() {<br>    fmt.Println(“showA”)<br>    p.ShowB()<br>}<br>func(p</em>People)ShowB() {<br>    fmt.Println(“showB”)<br>}<br>typeTeacher struct {<br>    People<br>}<br>func(t*Teacher)ShowB() {<br>    fmt.Println(“teachershowB”)<br>}<br>funcmain() {<br>    t := Teacher{}<br>    t.ShowA()<br>}</p>
-<p>考点：go 的组合继承<br>解答：<br>这是 Golang 的组合模式，可以实现 OOP 的继承。 被组合的类型 People 所包含的方法虽然升级成了外部类型 Teacher 这个组合类型的方法（一定要是匿名字段），但它们的方法(ShowA())调用时接受者并没有发生变化。 此时 People 类型并不知道自己会被什么类型组合，当然也就无法调用方法时去使用未知的组合者 Teacher 类型的功能。<br>showAshowB</p>
-<p>5 下面代码会触发异常吗？请详细说明</p>
-<p>func main() {<br>    runtime.GOMAXPROCS(1)<br>    int_chan := make(chanint, 1)<br>    string_chan := make(chanstring, 1)<br>    int_chan &lt;- 1<br>    string_chan &lt;- “hello”<br>    select {   <br>            case value := &lt;-int_chan:<br>       fmt.Println(value)<br>          casevalue := &lt;-string_chan:        <br>          panic(value)<br>    }<br>}</p>
-<p>考点：select 随机性<br>解答：<br>select 会随机选择一个可用通用做收发操作。 所以代码是有肯触发异常，也有可能不会。 单个 chan 如果无缓冲时，将会阻塞。但结合 select 可以在多个 chan 间等待执行。有三点原则：</p>
-<p>select 中只要有一个 case 能 return，则立刻执行。<br>当如果同一时间有多个 case 均能 return 则伪随机方式抽取任意一个执行。<br>如果没有一个 case 能 return 则可以执行”default”块。</p>
-<p>6 下面代码输出什么？</p>
-<p>funccalc(indexstring, a, bint) int {<br>    ret := a+ b<br>    fmt.Println(index,a, b, ret)<br>    return ret<br>}<br>funcmain() {   <br>      a := 1<br>    b := 2<br>    defer calc(“1”, a,calc(“10”, a, b))    a = 0<br>    defer calc(“2”, a,calc(“20”, a, b))    b = 1<br>}</p>
-<p>考点：defer 执行顺序<br>解答：<br>这道题类似第 1 题 需要注意到 defer 执行顺序和值传递 index:1 肯定是最后执行的，但是 index:1 的第三个参数是一个函数，所以最先被调用<br>calc(“10”,1,2)&gt;10,1,2,3 执行 index:2 时,与之前一样，需要先调用 calc(“20”,0,2)&gt;20,0,2,2 执行到 b=1 时候开始调用，index:2==&gt;calc(“2”,0,2)&gt;2,0,2,2 最后执行 index:1&gt;calc(“1”,1,3)==&gt;1,1,3,4</p>
-<p>10 1 2 320 0 2 22 0 2 21 1 3 4</p>
-<p>7 请写出以下输入内容</p>
-<p>funcmain() {    <br>       s := make([]int,5)<br>    s = append(s,1, 2, 3)<br>    fmt.Println(s)<br>}</p>
-<p>考点：make 默认值和 append<br>解答：<br>make 初始化是由默认值的哦，此处默认值为 0</p>
-<p>[00000123]</p>
-<p>大家试试改为:</p>
-<p>s := make([]int, 0)<br>s = append(s, 1, 2, 3)<br>fmt.Println(s)//[1 2 3]</p>
-<p>8 下面的代码有什么问题?</p>
-<p>type UserAges struct {<br>    ages map[string]int<br>    sync.Mutex<br>}<br>func(ua<em>UserAges)Add(name string, age int) {<br>    ua.Lock()  <br>       deferua.Unlock()<br>    ua.ages[name] = age<br>}<br>func(ua</em>UserAges)Get(name string)int {    <br>      ifage, ok := ua.ages[name]; ok {        <br>         return age<br>    }  <br>      return-1<br>}</p>
-<p>考点：map 线程安全<br>解答：<br>可能会出现</p>
-<p>fatal error: concurrent mapreadandmapwrite.</p>
-<p>修改一下看看效果</p>
-<p>func (ua *UserAges)Get(namestring)int {<br>    ua.Lock()    <br>     deferua.Unlock()    <br>     ifage, ok := ua.ages[name]; ok {        <br>          return age<br>    }    <br>       return-1<br>}</p>
-<p>9.    下面的迭代会有什么问题？</p>
-<p>func (set *threadSafeSet)Iter()&lt;-chaninterface{} {<br>    ch := make(chaninterface{})   <br>              gofunc() {<br>        set.RLock()   <br>            for elem := range set.s {<br>           ch &lt;- elem<br>        }     <br>             close(ch)<br>        set.RUnlock()<br>    }()<br>     return ch<br>}</p>
-<p>考点：chan 缓存池<br>解答：<br>看到这道题，我也在猜想出题者的意图在哪里。 chan?sync.RWMutex?go?chan 缓存池?迭代? 所以只能再读一次题目，就从迭代入手看看。 既然是迭代就会要求 set.s 全部可以遍历一次。但是 chan 是为缓存的，那就代表这写入一次就会阻塞。 我们把代码恢复为可以运行的方式，看看效果</p>
-<p>package main<br>import (   <br>      “sync”<br>    “fmt”)//下面的迭代会有什么问题？type threadSafeSet struct {<br>    sync.RWMutex<br>    s []interface{}<br>}<br>func(set*threadSafeSet)Iter() &lt;-chaninterface{} {    <br>//ch := make(chan interface{}) // 解除注释看看！<br>    ch := make(chaninterface{},len(set.s))   <br>gofunc() {<br>        set.RLock()       <br>forelem,value := range set.s {<br>           ch &lt;- elem            <br>println(“Iter:”,elem,value)<br>        }       close(ch)<br>        set.RUnlock()<br>    }()    <br>return ch<br>}<br>funcmain() {<br>    th:=threadSafeSet{<br>        s:[]interface{}{“1”,”2”},<br>    }<br>    v:=&lt;-th.Iter()<br>    fmt.Sprintf(“%s%v”,”ch”,v)<br>}</p>
-<p>10 以下代码能编译过去吗？为什么？</p>
-<p>package main<br>import (   “fmt”)<br>typePeople interface {<br>    Speak(string) string<br>}<br>typeStduent struct{}<br>func(stu*Stduent)Speak(think string)(talk string) {    <br>ifthink == “bitch” {<br>        talk = “Youare a good boy”<br>    } else {<br>        talk = “hi”<br>    }<br>    return<br>}<br>funcmain() {<br>    var peoPeople = Stduent{}<br>    think := “bitch”<br>   fmt.Println(peo.Speak(think))<br>}</p>
-<p>考点：golang 的方法集<br>解答：<br>编译不通过！ 做错了！？说明你对 golang 的方法集还有一些疑问。 一句话：golang 的方法集仅仅影响接口实现和方法表达式转化，与通过实例或者指针调用方法无关。</p>
-<p>11 以下代码打印出来什么内容，说出为什么。</p>
-<p>package main<br>import (   “fmt”)<br>typePeople interface {<br>    Show()<br>}<br>typeStudent struct{}<br>func(stu<em>Student)Show() {<br>}<br>funclive()People {<br>    var stu</em>Student<br>    return stu<br>}<br>funcmain() {   if live() == nil<br>{<br>        fmt.Println(“AAAAAAA”)<br>    } else {<br>        fmt.Println(“BBBBBBB”)<br>    }<br>}</p>
-<p>考点：interface 内部结构<br>解答：<br>很经典的题！ 这个考点是很多人忽略的 interface 内部结构。 go 中的接口分为两种一种是空的接口类似这样：</p>
-<p>varininterface{}</p>
-<p>另一种如题目：</p>
-<p>type People interface {<br>    Show()<br>}</p>
-<p>他们的底层结构如下：</p>
-<p>type eface struct {      //空接口<br>    <em>type __type        //类型信息<br>    data  unsafe.Pointer //指向数据的指针(go 语言中特殊的指针类型 unsafe.Pointer 类似于 c 语言中的 void</em>)}<br>typeiface struct {      //带有方法的接口<br>    tab  <em>itab          //存储 type 信息还有结构实现方法的集合<br>    data unsafe.Pointer  //指向数据的指针(go 语言中特殊的指针类型 unsafe.Pointer 类似于 c 语言中的 void</em>)}<br>type_type struct {<br>    size       uintptr //类型大小<br>    ptrdata    uintptr //前缀持有所有指针的内存大小<br>    hash       uint32  //数据 hash 值<br>    tflag     tflag<br>    align      uint8   //对齐<br>    fieldalign uint8   //嵌入结构体时的对齐<br>    kind       uint8   //kind 有些枚举值 kind 等于 0 是无效的<br>    alg       *typeAlg //函数指针数组，类型实现的所有方法<br>    gcdata    *byte   str       nameOff<br>    ptrToThis typeOff<br>}type itab struct {<br>    inter  _interfacetype //接口类型</p>
-<p>_type  __type         //结构类型<br>    link   *itab<br>    bad    int32<br>    inhash int32<br>    fun    [1]uintptr     //可变大小方法集合}</p>
-<p>可以看出 iface 比 eface 中间多了一层 itab 结构。 itab 存储_type 信息和[]fun 方法集，从上面的结构我们就可得出，因为 data 指向了 nil 并不代表 interface 是 nil， 所以返回值并不为空，这里的 fun(方法集)定义了接口的接收规则，在编译的过程中需要验证是否实现接口 结果：</p>
-<p>BBBBBBB 12.是否可以编译通过？如果通过，输出什么？</p>
-<p>func main() {<br>    i := GetValue() switch i.(type) { <br>        caseint:       <br>        println(“int”)   <br>        casestring:       <br>        println(“string”)   <br>        caseinterface{}:       <br>        println(“interface”)   <br>        default:       <br>         println(“unknown”)<br>    }<br>}<br>funcGetValue()int {   <br>return1<br>}</p>
-<p>解析<br>考点：type</p>
-<p>编译失败，因为 type 只能使用在 interface</p>
-<p>13.下面函数有什么问题？</p>
-<p>func funcMui(x,y int)(sum int,error){    <br>returnx+y,nil<br>}</p>
-<p>解析<br>考点：函数返回值命名<br>在函数有多个返回值时，只要有一个返回值有指定命名，其他的也必须有命名。 如果返回值有有多个返回值必须加上括号； 如果只有一个返回值并且有命名也需要加上括号； 此处函数第一个返回值有 sum 名称，第二个未命名，所以错误。</p>
-<p>14.是否可以编译通过？如果通过，输出什么？</p>
-<p>package mainfunc main() {    println(DeferFunc1(1)) println(DeferFunc2(1)) println(DeferFunc3(1))<br>}func DeferFunc1(i int)(t int) {<br>    t = i   deferfunc() {<br>        t += 3<br>    }() return t<br>}<br>funcDeferFunc2(i int)int {<br>    t := i  deferfunc() {<br>        t += 3<br>    }() return t<br>}<br>funcDeferFunc3(i int)(t int) {   deferfunc() {<br>        t += i<br>    }() return2}</p>
-<p>解析<br>考点:defer 和函数返回值<br>需要明确一点是 defer 需要在函数结束前执行。 函数返回值名字会在函数起始处被初始化为对应类型的零值并且作用域为整个函数 DeferFunc1 有函数返回值 t 作用域为整个函数，在 return 之前 defer 会被执行，所以 t 会被修改，返回 4; DeferFunc2 函数中 t 的作用域为函数，返回 1;DeferFunc3 返回 3</p>
-<p>15.是否可以编译通过？如果通过，输出什么？</p>
-<p>funcmain() {    list := new([]int)<br>    list = append(list,1)<br>    fmt.Println(list)<br>}</p>
-<p>解析<br>考点：new</p>
-<p>list:=make([]int,0)</p>
-<p>16.是否可以编译通过？如果通过，输出什么？</p>
-<p>package mainimport “fmt”funcmain() {<br>    s1 := []int{1, 2, 3}<br>    s2 := []int{4, 5}<br>    s1 = append(s1,s2)<br>    fmt.Println(s1)<br>}</p>
-<p>解析<br>考点：append<br>append 切片时候别漏了’…’</p>
-<p>17.是否可以编译通过？如果通过，输出什么？</p>
-<p>func main() {<br>    sn1 := struct {<br>        age  int<br>        name string<br>    }{age: 11,name: “qq”}<br>    sn2 := struct {<br>        age  int<br>        name string<br>    }{age: 11,name: “qq”}  if sn1== sn2 {<br>        fmt.Println(“sn1== sn2”)<br>    }<br>    sm1 := struct {<br>        age int<br>        m   map[string]string<br>    }{age: 11, m:map[string]string{“a”: “1”}}<br>    sm2 := struct {<br>        age int<br>        m   map[string]string<br>    }{age: 11, m:map[string]string{“a”: “1”}} <br>           if sm1 == sm2 {<br>        fmt.Println(“sm1== sm2”)<br>    }<br>}</p>
-<p>解析<br>考点:结构体比较<br>进行结构体比较时候，只有相同类型的结构体才可以比较，结构体是否相同不但与属性类型个数有关，还与属性顺序相关。</p>
-<p>sn3:= struct {<br>    name string<br>    age  int<br>}<br>{age:11,name:”qq”}</p>
-<p>sn3 与 sn1 就不是相同的结构体了，不能比较。 还有一点需要注意的是结构体是相同的，但是结构体属性中有不可以比较的类型，如 map,slice。 如果该结构属性都是可以比较的，那么就可以使用“==”进行比较操作。</p>
-<p>可以使用 reflect.DeepEqual 进行比较</p>
-<p>if reflect.DeepEqual(sn1, sm) {<br>    fmt.Println(“sn1==sm”)<br>}else {<br>    fmt.Println(“sn1!=sm”)<br>}</p>
-<p>所以编译不通过： invalid operation: sm1 == sm2</p>
-<p>18.是否可以编译通过？如果通过，输出什么？</p>
-<p>func Foo(x interface{}) {    if x== nil {<br>        fmt.Println(“emptyinterface”)      <br>          return<br>    }<br>    fmt.Println(“non-emptyinterface”)<br>}<br>       funcmain() {   <br>       var x *int = nil<br>    Foo(x)<br>}</p>
-<p>解析<br>考点：interface 内部结构</p>
-<p>non-emptyinterface</p>
-<p>19.是否可以编译通过？如果通过，输出什么？</p>
-<p>func GetValue(m map[int]string, id int)(string, bool) {    <br>         if _,exist := m[id]; exist {        <br>           return”存在数据”, true<br>    }  <br>         returnnil, false}funcmain() {<br>    intmap:=map[int]string{   <br>1:”a”,       <br>2:”bb”,       <br>3:”ccc”,<br>    }<br>    v,err:=GetValue(intmap,3)<br>    fmt.Println(v,err)<br>}</p>
-<p>解析<br>考点：函数返回值类型<br>nil 可以用作 interface、function、pointer、map、slice 和 channel 的“空值”。但是如果不特别指定的话，Go 语言不能识别类型，所以会报错。报:cannot use nil as type string in return argument.</p>
-<p>20.是否可以编译通过？如果通过，输出什么？</p>
-<p>const (<br>    x = iota<br>    y<br>    z = “zz”<br>    k<br>    p = iota)<br>funcmain() <br>{<br>    fmt.Println(x,y,z,k,p)<br>}</p>
-<p>解析<br>考点：iota<br>结果:</p>
-<p>0 1 zz zz 4</p>
-<p>21.编译执行下面代码会出现什么?</p>
-<p>package mainvar(<br>    size :=1024<br>    max_size = size*2)<br>funcmain() {    <br>println(size,max_size)<br>}</p>
-<p>解析<br>考点:变量简短模式<br>变量简短模式限制：</p>
-<p>定义变量同时显式初始化<br>不能提供数据类型<br>只能在函数内部使用<br>结果：</p>
-<p>syntaxerror: unexpected :=</p>
-<p>22.下面函数有什么问题？</p>
-<p>package main<br>const cl = 100<br>var bl   = 123<br>funcmain() {    <br>println(&amp;bl,bl)   <br>println(&amp;cl,cl)<br>}</p>
-<p>解析<br>考点:常量<br>常量不同于变量的在运行期分配内存，常量通常会被编译器在预处理阶段直接展开，作为指令数据使用，</p>
-<p>cannot take the address of cl</p>
-<p>23.编译执行下面代码会出现什么?</p>
-<p>package main<br>funcmain() {    <br>for i:=0;i&lt;10;i++  {<br>    loop:       <br>println(i)<br>    }    gotoloop<br>}</p>
-<p>解析<br>考点：goto<br>goto 不能跳转到其他函数或者内层代码</p>
-<p>goto loop jumps intoblock starting at</p>
-<p>24.编译执行下面代码会出现什么?</p>
-<p>package main<br>import”fmt”<br>funcmain() {    <br> typeMyInt1 int    <br> typeMyInt2 = int<br>    var i int =9<br>    var i1MyInt1 = i<br>    var i2MyInt2 = i<br>    fmt.Println(i1,i2)<br>}</p>
-<p>解析<br>考点：**Go 1.9 新特性 Type Alias **<br>基于一个类型创建一个新类型，称之为 defintion；基于一个类型创建一个别名，称之为 alias。 MyInt1 为称之为 defintion，虽然底层类型为 int 类型，但是不能直接赋值，需要强转； MyInt2 称之为 alias，可以直接赋值。</p>
-<p>结果:</p>
-<p>cannot use i (typeint) astype MyInt1 in assignment</p>
-<p>25.编译执行下面代码会出现什么?</p>
-<p>package main<br>import”fmt”<br>typeUser struct {<br>}<br>typeMyUser1 User<br>typeMyUser2 = User<br>func(iMyUser1)m1(){<br>    fmt.Println(“MyUser1.m1”)<br>}<br>func(iUser)m2(){<br>    fmt.Println(“User.m2”)<br>}<br>funcmain() {<br>    var i1MyUser1<br>    var i2MyUser2<br>    i1.m1()<br>    i2.m2()<br>}</p>
-<p>解析<br>考点：**Go 1.9 新特性 Type Alias **<br>因为 MyUser2 完全等价于 User，所以具有其所有的方法，并且其中一个新增了方法，另外一个也会有。 但是</p>
-<p>i1.m2()</p>
-<p>是不能执行的，因为 MyUser1 没有定义该方法。 结果:</p>
-<p>MyUser1.m1User.m2</p>
-<p>26.编译执行下面代码会出现什么?</p>
-<p>package main<br>import”fmt”<br>type T1 struct {<br>}<br>func(tT1)m1(){<br>    fmt.Println(“T1.m1”)<br>}<br>type T2= T1<br>typeMyStruct struct {<br>    T1<br>    T2<br>}<br>funcmain() {<br>    my:=MyStruct{}<br>    my.m1()<br>}</p>
-<p>解析<br>考点：**Go 1.9 新特性 Type Alias **<br>是不能正常编译的,异常：</p>
-<p>ambiguousselectormy.m1</p>
-<p>结果不限于方法，字段也也一样；也不限于 type alias，type defintion 也是一样的，只要有重复的方法、字段，就会有这种提示，因为不知道该选择哪个。 改为:</p>
-<p>my.T1.m1()<br>my.T2.m1()</p>
-<p>type alias 的定义，本质上是一样的类型，只是起了一个别名，源类型怎么用，别名类型也怎么用，保留源类型的所有方法、字段等。</p>
-<p>27.编译执行下面代码会出现什么?</p>
-<p>package main<br>import (   <br>       “errors”<br>    “fmt”)<br>varErrDidNotWork = errors.New(“did not work”)<br>funcDoTheThing(reallyDoItbool)(errerror) {    <br>ifreallyDoIt {<br>        result, err:= tryTheThing()        <br>if err!= nil || result != “it worked” {<br>           err = ErrDidNotWork<br>        }<br>    }    return err<br>}<br>functryTheThing()(string,error) {    <br>return””,ErrDidNotWork<br>}<br>funcmain() {<br>    fmt.Println(DoTheThing(true))<br>    fmt.Println(DoTheThing(false))<br>}</p>
-<p>解析<br>考点：变量作用域<br>因为 if 语句块内的 err 变量会遮罩函数作用域内的 err 变量，结果：</p>
-<p>改为：</p>
-<p>func DoTheThing(reallyDoIt bool)(errerror) {    <br>varresult string<br>    ifreallyDoIt {<br>        result, err =tryTheThing()        <br>if err!= nil || result != “it worked” {<br>           err = ErrDidNotWork<br>        }<br>    }    return err<br>}</p>
-<p>28.编译执行下面代码会出现什么?</p>
-<p>package main<br>functest() []func() {    <br>varfuns []func()<br>    fori:=0;i&lt;2;i++  {<br>        funs = append(funs,func() {           <br>           println(&amp;i,i)<br>        })<br>    }    returnfuns<br>}<br>funcmain(){<br>    funs:=test()    <br>       for_,f:=range funs{<br>        f()<br>    }<br>}</p>
-<p>解析<br>考点：闭包延迟求值<br>for 循环复用局部变量 i，每一次放入匿名函数的应用都是想一个变量。 结果：</p>
-<p>0xc042046000 2<br>0xc042046000 2</p>
-<p>如果想不一样可以改为：</p>
-<p>func test() []func()  {    <br>varfuns []func()<br>    fori:=0;i&lt;2;i++  {<br>        x:=i<br>        funs = append(funs,func() {           <br>println(&amp;x,x)<br>        })<br>    }    returnfuns<br>}</p>
-<p>29.编译执行下面代码会出现什么?</p>
-<p>package main<br>functest(x int)(func(),func()) {    <br>returnfunc() {       <br>println(x)<br>    x+=10<br>    }, func() {       <br>      println(x)<br>    }<br>}<br>funcmain() {<br>    a,b:=test(100)<br>    a()<br>    b()<br>}</p>
-<p>解析<br>考点：闭包引用相同变量*<br>结果：</p>
-<p>100<br>110</p>
-<ol start="30">
-<li>编译执行下面代码会出现什么?</li>
-</ol>
-<p>package main<br>import (   “fmt”<br>    “reflect”)<br>funcmain1() {    <br>deferfunc() {     <br>iferr:=recover();err!=nil{<br>          fmt.Println(err)<br>       }else {<br>          fmt.Println(“fatal”)<br>       }<br>    }()    <br>deferfunc() {       <br>panic(“deferpanic”)<br>    }()    <br>panic(“panic”)<br>}<br>funcmain() {    <br>deferfunc() {       <br>iferr:=recover();err!=nil{<br>           fmt.Println(“++++”)<br>           f:=err.(func()string)            <br>fmt.Println(err,f(),reflect.TypeOf(err).Kind().String())<br>        }else {<br>           fmt.Println(“fatal”)<br>        }<br>    }()    <br>deferfunc() {       <br>panic(func()string {           <br>return “defer panic”<br>        })<br>    }()    <br>panic(“panic”)<br>}</p>
-<p>解析<br>考点：panic 仅有最后一个可以被 revover 捕获<br>触发 panic(“panic”)后顺序执行 defer，但是 defer 中还有一个 panic，所以覆盖了之前的 panic(“panic”)</p>
-<p>————————————————<br>版权声明：本文为 CSDN 博主「尹成」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/itcastcpp/java/article/details/80462619">https://blog.csdn.net/itcastcpp/java/article/details/80462619</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/18/yuque/go%20%E9%9D%A2%E8%AF%95%E9%A2%98/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/系统设计" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="archive-article-date">
-  	<time datetime="2020-05-18T10:49:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>对于技术来说，每一个系统都少不了最重要的一个环节，系统设计。<br>系统设计的成功与否直接决定了后续的系统开发能否成功。<br>这次的分享，我们将系统设计的方法简化为三板斧，简单易懂，居家旅行学习进修必备。<br><strong>三包承诺：包记住，包理解，包会用。如有问题，请再看一遍。如想快速浏览，可以先看总论</strong></p>
-<h2 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h2><ul>
-<li>1 系统设计的基本流程</li>
-<li>2 三板斧的招式</li>
-<li>3 实例讲解，权限系统设计</li>
-<li>4 总结</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956326-9ee7312e-d443-4be9-b86d-93168f7ca37f.jpeg#align=left&display=inline&height=244&margin=%5Bobject%20Object%5D&originHeight=244&originWidth=326&size=0&status=done&style=none&width=326"></p>
-<h2 id="什么是系统设计"><a href="#什么是系统设计" class="headerlink" title="什么是系统设计"></a>什么是系统设计</h2><p>The process of <strong>defining</strong> the 　　　　　　　　　 　 定义（产出）<br><strong>architecture</strong>, 　　　　　　　　　　　　　　　　　架构<br><strong>components</strong>, 　　　　　　　　　　　　　　　　　组件<br><strong>modules</strong>, 　　　　　　　　　　　　　　　　　　　模块<br><strong>interfaces</strong>, 　　　　　　　　　　　　　　　　　　接口<br>and <strong>data</strong> 　　　　　　　　　　　　　　　　　　　数据<br>for a system to satisfy specified <strong>requirements</strong>. 　　需求（目标）</p>
-<h2 id="1-系统设计的基本流程"><a href="#1-系统设计的基本流程" class="headerlink" title="1 系统设计的基本流程"></a>1 系统设计的基本流程</h2><h3 id="1-1-软件开发流程"><a href="#1-1-软件开发流程" class="headerlink" title="1.1 软件开发流程"></a>1.1 软件开发流程</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956235-bb06d7f8-2bc9-4bef-bba7-a4340e37ff50.jpeg#align=left&display=inline&height=419&margin=%5Bobject%20Object%5D&originHeight=419&originWidth=638&size=0&status=done&style=none&width=638"></p>
-<ul>
-<li>1 需求分析</li>
-<li>2 <strong>概要设计</strong></li>
-<li>3 <strong>详细设计</strong></li>
-<li>4 系统开发</li>
-<li>5 系统测试</li>
-<li>6 软件交付</li>
-</ul>
-<p>软件开发流程，详细内容可以参考： <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B">https://baike.baidu.com/item/软件开发流程</a></p>
-<p>需求分析就是一个很专业的工作，对于大型的软件开发，也有专门的需求分析师，所以这里面的方法和流程也还有很多细分的内容，有兴趣的同学可以继续挖掘。</p>
-<p>系统设计主要就是 2、3 两部分，大学毕业设计的时候，应该也都有深刻的印象，自己的文档是怎么写出来，怎么组织和编排的吧。</p>
-<h3 id="1-2-系统设计的流程"><a href="#1-2-系统设计的流程" class="headerlink" title="1.2 系统设计的流程"></a>1.2 系统设计的流程</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956212-d3e9b6ee-03a7-4137-8870-abafcdbd7f97.jpeg#align=left&display=inline&height=351&margin=%5Bobject%20Object%5D&originHeight=351&originWidth=952&size=0&status=done&style=none&width=952"><br>系统设计的内容可以用 16 或者 32 课时来专门开一课，大学时候应该也有这样的课，可能是选修吧。<br>详细内容可以参考： 从 0 到 1 教你设计业务系统 <a target="_blank" rel="noopener" href="https://36kr.com/p/5105245">https://36kr.com/p/5105245</a></p>
-<h3 id="1-3-总结，系统设计的基本流程"><a href="#1-3-总结，系统设计的基本流程" class="headerlink" title="1.3 总结，系统设计的基本流程"></a>1.3 总结，系统设计的基本流程</h3><p>上面的软件开发流程和系统设计流程，看着就很复杂，分工很细，要完全遵守这些方法来做互联网产品开发的话，很多人是无法想象的，2 周上线，1 天 1 个版本？<br>所以，上面的流程都是来自传统的企业软件开发方法。而传统软件的开发周期，最少也是半年、一年的周期，交付物也都会比较严格，也不会有持续迭代一说。<br>传统企业软件开发，有很多是外包公司，规模很大，类似富士康的工厂。而规模的基础就需要标准化，遵守各种认证体系的要求，这样也更能被企业认可和信任。<br>但是，这些流程、方法，对于我们互联网研发就很不合适，系统设计也是。所以，才有了本文的核心方法。</p>
-<h2 id="2-三板斧的招式"><a href="#2-三板斧的招式" class="headerlink" title="2 三板斧的招式"></a>2 三板斧的招式</h2><h3 id="2-1-第一招：抽象，万物归一"><a href="#2-1-第一招：抽象，万物归一" class="headerlink" title="2.1 第一招：抽象，万物归一"></a>2.1 第一招：抽象，万物归一</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956214-e3ec2ac7-2271-41df-a6f6-39e0921854b8.jpeg#align=left&display=inline&height=261&margin=%5Bobject%20Object%5D&originHeight=261&originWidth=500&size=0&status=done&style=none&width=500"></p>
-<ul>
-<li>1 人，主体对象</li>
-</ul>
-<p>实体模型，数据结构</p>
-<ul>
-<li>2 事，核心功能</li>
-</ul>
-<p>组件模块，功能需求</p>
-<ul>
-<li>3 物，资源要求</li>
-</ul>
-<p>系统规模，开发周期，架构设计</p>
-<p>宏观上的面，提炼和定义，不拘泥细节。<br>从繁杂的系统中剥离、提炼，抽象出来我们系统的核心，定义好系统的人、事、物，也就有了系统的大致样貌。<br><strong>抽象，这是最重要的一步，也是最厉害的一招。</strong></p>
-<h3 id="2-2-第二招：具象，有血有肉"><a href="#2-2-第二招：具象，有血有肉" class="headerlink" title="2.2 第二招：具象，有血有肉"></a>2.2 第二招：具象，有血有肉</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956220-5f62a64e-c7a3-47d4-bbca-739ee5d11f48.jpeg#align=left&display=inline&height=266&margin=%5Bobject%20Object%5D&originHeight=266&originWidth=479&size=0&status=done&style=none&width=479"></p>
-<ul>
-<li>1 数据结构设计</li>
-</ul>
-<p>对象的属性，数据表</p>
-<ul>
-<li>2 业务功能设计</li>
-</ul>
-<p>功能模块，任务清单</p>
-<ul>
-<li>3 系统架构设计</li>
-</ul>
-<p>性能、并发、伸缩、扩展、安全</p>
-<p>微观实现的点，为后续的编码扫平模糊。<br>系统设计在这一招完成后，基本上就要全面完工了，交付给开发来编码。如果这时候还有不清晰的地方，还有遗留的点，那么后续就会出现很严重的需求变更、技术变更、甚至重构，会严重影响项目开发的周期和质量。<br><strong>具象，这是需要细致且耐心的一步，也是势大力沉的一招。</strong></p>
-<h3 id="2-3-第三招：演算，活灵活现"><a href="#2-3-第三招：演算，活灵活现" class="headerlink" title="2.3 第三招：演算，活灵活现"></a>2.3 第三招：演算，活灵活现</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956246-40e7f983-d7d4-4658-bac3-d1f49f3c9727.jpeg#align=left&display=inline&height=275&margin=%5Bobject%20Object%5D&originHeight=275&originWidth=462&size=0&status=done&style=none&width=462"></p>
-<ul>
-<li>1 业务流程</li>
-</ul>
-<p>让功能细节发生互动（业务恋爱）</p>
-<ul>
-<li>2 数据流程</li>
-</ul>
-<p>让对象之间发生关系（数据怀孕）</p>
-<ul>
-<li>3 模拟操作与系统预估</li>
-</ul>
-<p>模拟的运转和系统压力评估（成长烦恼）</p>
-<p>流程不通，操作不顺，系统瓶颈，及早发现和补充完善。<br>纯脑力运算的过程，可能是设计者来做，也可能是要系统相关人一起来做。<br>这里用时 2 小时或者一起开个会，把系统设计的方方面面都模拟的运转起来，各个环节，各个角色带入进来，发现问题马上调整前面的抽象和具象的设计。<br>演算是一个快速查缺补漏的环节，也是对系统设计进行方案优化、调整的最后环节，这里投入的每一分钟都是十倍百倍于后续研发阶段的调整时间效率。<br><strong>演算，这是最容易忽略的一步，也是最难的一招。</strong></p>
-<h3 id="2-4-总结，系统设计的三板斧"><a href="#2-4-总结，系统设计的三板斧" class="headerlink" title="2.4 总结，系统设计的三板斧"></a>2.4 总结，系统设计的三板斧</h3><p>围绕系统设计中的人、事、物，我们通过宏观层面的抽象，提炼和定义出来核心内容，在通过微观层面的具象，把各个细节补充完善，最后，运用演算，让这个系统在我们的脑子里面活起来，重复这三板斧，完善我们的系统设计。</p>
-<h2 id="3-实例讲解，权限系统设计"><a href="#3-实例讲解，权限系统设计" class="headerlink" title="3 实例讲解，权限系统设计"></a>3 实例讲解，权限系统设计</h2><p>介绍：权限系统管理着应用和服务之间的调用关系。应用要调用服务的接口，必须先申请对应的服务接口权限才可以。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956241-cedbc9dd-3aea-4e45-9257-a7491088b716.jpeg#align=left&display=inline&height=264&margin=%5Bobject%20Object%5D&originHeight=264&originWidth=332&size=0&status=done&style=none&width=332"></p>
-<h3 id="3-1-1-抽象：权限系统的核心对象（主体）"><a href="#3-1-1-抽象：权限系统的核心对象（主体）" class="headerlink" title="3.1.1 抽象：权限系统的核心对象（主体）"></a>3.1.1 抽象：权限系统的核心对象（主体）</h3><ul>
-<li>1 主要对象</li>
-</ul>
-<p>应用，服务</p>
-<ul>
-<li>2 派生对象</li>
-</ul>
-<p>接口，应用请求服务</p>
-<p>权限，接口权限</p>
-<ul>
-<li>3 外部对象</li>
-</ul>
-<p>网关，系统平台，第三方服务等</p>
-<p>提炼权限系统内部的主体对象，确定系统的数据模型。</p>
-<h3 id="3-1-2-抽象：权限系统的核心功能（硬性）"><a href="#3-1-2-抽象：权限系统的核心功能（硬性）" class="headerlink" title="3.1.2 抽象：权限系统的核心功能（硬性）"></a>3.1.2 抽象：权限系统的核心功能（硬性）</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-bf5c86f1-debe-4bc7-8619-5211986311fb.jpeg#align=left&display=inline&height=410&margin=%5Bobject%20Object%5D&originHeight=410&originWidth=372&size=0&status=done&style=none&width=372"></p>
-<ul>
-<li>1 权限相关功能</li>
-</ul>
-<p>应用端申请，服务端审批，查询</p>
-<ul>
-<li>2 后台管理功能</li>
-</ul>
-<p>服务信息和扩展权限的配置</p>
-<ul>
-<li>3 扩展功能</li>
-</ul>
-<p>消息通知，权限推送</p>
-<p>定义必须的应用的全后端功能，扩展的与外部系统的交互功能。</p>
-<h3 id="3-1-3-抽象：权限系统的资源要求（软性）"><a href="#3-1-3-抽象：权限系统的资源要求（软性）" class="headerlink" title="3.1.3 抽象：权限系统的资源要求（软性）"></a>3.1.3 抽象：权限系统的资源要求（软性）</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956211-782b9043-98d7-41c7-b5e1-c9c7b5627444.jpeg#align=left&display=inline&height=435&margin=%5Bobject%20Object%5D&originHeight=435&originWidth=298&size=0&status=done&style=none&width=298"></p>
-<ul>
-<li>1 权限的管理系统，不涉及权限验证</li>
-</ul>
-<p>系统并发量很有限，性能要求低</p>
-<ul>
-<li>2 平台内应用、服务的权限依赖度高</li>
-</ul>
-<p>系统的安全和稳定性高</p>
-<ul>
-<li>3 内部和外部服务的权限定义差别大</li>
-</ul>
-<p>扩展性要求高</p>
-<p>系统的架构设计不必过于复杂，保证应用程序的安全和稳定性，定义好系统的可扩展性。</p>
-<h3 id="3-2-1-具象：权限系统的数据结构"><a href="#3-2-1-具象：权限系统的数据结构" class="headerlink" title="3.2.1 具象：权限系统的数据结构"></a>3.2.1 具象：权限系统的数据结构</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956230-ac9cdc85-12ce-41e4-a135-0ab71d15eb1a.jpeg#align=left&display=inline&height=453&margin=%5Bobject%20Object%5D&originHeight=453&originWidth=500&size=0&status=done&style=none&width=500"></p>
-<ul>
-<li>1 申请记录表 tb_privilege</li>
-</ul>
-<p>应用相关</p>
-<p>服务相关</p>
-<p>接口相关</p>
-<p>申请相关</p>
-<p>审批相关</p>
-<p>标准字段</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956250-800d6067-0fbf-4cba-b491-1e5cb45cfa11.jpeg#align=left&display=inline&height=411&margin=%5Bobject%20Object%5D&originHeight=411&originWidth=577&size=0&status=done&style=none&width=577"></p>
-<ul>
-<li>2 服务配置表 tb_paas</li>
-</ul>
-<p>服务信息</p>
-<p>推送相关</p>
-<p>外部相关</p>
-<p>扩展相关</p>
-<p>标准字段</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956248-8ded5322-4c83-4a9f-8731-80b46f173733.jpeg#align=left&display=inline&height=311&margin=%5Bobject%20Object%5D&originHeight=311&originWidth=684&size=0&status=done&style=none&width=684"></p>
-<ul>
-<li>3 操作日志表 tb_log</li>
-</ul>
-<p>数据模型</p>
-<p>新旧数据</p>
-<p>标准字段</p>
-<h3 id="3-2-2-具象：权限系统的业务功能"><a href="#3-2-2-具象：权限系统的业务功能" class="headerlink" title="3.2.2 具象：权限系统的业务功能"></a>3.2.2 具象：权限系统的业务功能</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589798956295-7d950b7d-f588-4038-9c39-a580b5f2dff4.png#align=left&display=inline&height=1334&margin=%5Bobject%20Object%5D&originHeight=1334&originWidth=2148&size=0&status=done&style=none&width=2148"><br>细化每一个功能的处理过程，要结合交互页面，操作流程，数据输入和产出等。</p>
-<h3 id="3-2-3-具象：权限系统的系统架构"><a href="#3-2-3-具象：权限系统的系统架构" class="headerlink" title="3.2.3 具象：权限系统的系统架构"></a>3.2.3 具象：权限系统的系统架构</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956232-c87fc415-1440-4123-834d-997e87e2e5db.jpeg#align=left&display=inline&height=540&margin=%5Bobject%20Object%5D&originHeight=540&originWidth=378&size=0&status=done&style=none&width=378"></p>
-<ul>
-<li>1 分层模型，前后端分离</li>
-</ul>
-<p>前端展现和交互，后端数据和逻辑，前后端耦合度低</p>
-<ul>
-<li>2 服务的权限订阅和推送，预留第三方服务和扩展权限</li>
-</ul>
-<p>定制化多端推送，扩展能力强</p>
-<ul>
-<li>3 多机分布式，定时任务更新权限和通知</li>
-</ul>
-<p>资源伸缩性强</p>
-<p><strong>架构演化：</strong>单机 -&gt; 分布式，单库 -&gt; 主从库 -&gt; 缓存层 -&gt; 数据分拆（水平、垂直） -&gt; 应用分拆（微服务）</p>
-<p>架构选择，只有合适与否，没有好坏之分。</p>
-<h3 id="3-3-演算：数据流程、业务流程和交互模拟"><a href="#3-3-演算：数据流程、业务流程和交互模拟" class="headerlink" title="3.3 演算：数据流程、业务流程和交互模拟"></a>3.3 演算：数据流程、业务流程和交互模拟</h3><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956254-d644e927-9769-4710-892d-dea89c47b5f8.jpeg#align=left&display=inline&height=221&margin=%5Bobject%20Object%5D&originHeight=221&originWidth=735&size=0&status=done&style=none&width=735"></p>
-<ul>
-<li>1 权限申请流程</li>
-</ul>
-<p>方便查找服务，方便申请接口权限</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956238-fd21bd6d-7a80-468e-95e8-da04c5d06253.jpeg#align=left&display=inline&height=316&margin=%5Bobject%20Object%5D&originHeight=316&originWidth=640&size=0&status=done&style=none&width=640"></p>
-<ul>
-<li>2 权限审批流程</li>
-</ul>
-<p>方便查找服务，方便申请接口权限</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956262-129bd7ed-c3e6-4fe3-8e28-e18e10a00a00.jpeg#align=left&display=inline&height=369&margin=%5Bobject%20Object%5D&originHeight=369&originWidth=660&size=0&status=done&style=none&width=660"></p>
-<ul>
-<li>3 接口权限申请的状态变更</li>
-</ul>
-<p>申请、审批和推送、通知，把开发者、服务方、网关、服务都串联起来</p>
-<p>流程，让整个系统运转起来，是一个活的系统，不再是冷冰冰的数据结构和系统框架。</p>
-<p>考虑开发者和服务方的用户，带入用户的立场和操作，更好地模拟整个系统的交互体验。</p>
-<h3 id="3-4-总结，实例讲解，权限系统设计"><a href="#3-4-总结，实例讲解，权限系统设计" class="headerlink" title="3.4 总结，实例讲解，权限系统设计"></a>3.4 总结，实例讲解，权限系统设计</h3><p>这里的实例比较简单，但毕竟是最近设计开发的一个系统。<br>而对于更加复杂的系统，方法还是互通的。<br>定义好，写下来，画下来，这就是一个系统设计和项目文档。<br>当然系统设计不仅仅是上面呈现出来的内容，还有关于接口，任务清单等内容。</p>
-<h2 id="4-总结，系统设计的三板斧"><a href="#4-总结，系统设计的三板斧" class="headerlink" title="4 总结，系统设计的三板斧"></a>4 总结，系统设计的三板斧</h2><p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798956288-a836eaac-5b26-4883-8292-b17ab31a9eb7.jpeg#align=left&display=inline&height=385&margin=%5Bobject%20Object%5D&originHeight=385&originWidth=535&size=0&status=done&style=none&width=535"><br><strong>一句话形容，从宏观到微观，互动更长久。</strong><br><strong>抽象</strong>，先从宏观层面做好抽象；<br><strong>具象</strong>，再从微观层面补充完善细节；<br><strong>演算</strong>，全流程的模拟，查缺补漏；<br>重复上述三板斧，不断完善系统设计。<br>注意：不用纠结未知和差异化太大的部分。<br>系统设计的三板斧，相信不仅仅可以用在系统设计中，在其他的很多方面应该也是类似，比如：写作。<br>主题 -&gt; 目标<br>创意 -&gt; 抽象（人、事、物）<br>细节 -&gt; 具象（有血有肉）<br>故事 -&gt; 演算（活灵活现）<br><strong>在最后，强调一遍，抽象和推理是数学的重要能力，数学绝对是极其重要的学科，掌握好数学，能够更好地掌握科学方法，而不仅仅只有个人的经验和直觉。</strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">展开全文 >></a>
         </p>
       
 

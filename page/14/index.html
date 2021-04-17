@@ -182,6 +182,200 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Intellij 需配置项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/">Intellij 需配置项</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/" class="archive-article-date">
+  	<time datetime="2019-01-14T15:08:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Intellij-快捷键"><a href="#Intellij-快捷键" class="headerlink" title="Intellij 快捷键"></a>Intellij 快捷键</h2><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/18/2019/png/214234/1547478405006-86781dce-a19c-4089-94a4-18e2067aee34.png#align=left&display=inline&height=407&name=jetbrains%20%E5%BF%AB%E6%8D%B7%E9%94%AE.png&originHeight=1805&originWidth=3308&size=633235&width=746" alt="jetbrains 快捷键.png"></h2><p>Intellij 有八条一定要改的配置呢！我没列快捷键，是因为 IDEA 原生的快捷键，我用的也挺顺手，所以并不是认为一定要改！<br>•   自动编译开关<br>•   忽略大小写开关<br>•   智能导包开关<br>•   悬浮提示开关<br>•   取消单行显示 tabs 的操作<br>•   项目文件编码<br>•   滚轴修改字体大小<br>•   设置行号显示</p>
+<h2 id="自动编译开关"><a href="#自动编译开关" class="headerlink" title="自动编译开关"></a>自动编译开关</h2><p>在 Eclipse 中自动编译开关是开着的，如下所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212506-82aad7fe-3e2a-447d-a5f1-5aa0a844c831.jpeg#align=left&display=inline&height=351&originHeight=351&originWidth=338&size=0&width=338"><br>那么，在 IDEA 中，务必要手动将其打开，非常重要！如下所示</p>
+<p><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212476-9b55717b-ee5a-4681-b982-a4bfbccbb7f1.jpeg#align=left&display=inline&height=539&originHeight=577&originWidth=798&size=0&width=746"><br><strong>忽略大小写开关</strong><br>IDEA 默认是匹配大小写，此开关如果未关。你输入字符一定要符合大小写。比如你敲 string 是不会出现代码提示或智能补充。<br>但是，如果你开了这个开关，你无论输入 String 或者 string 都会出现代码提示或者智能补充！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-b0010e3e-d1c1-427a-9b11-f94024cd922c.jpeg#align=left&display=inline&height=550&originHeight=550&originWidth=700&size=0&width=700"><br><strong>智能导包开关</strong><br>如下图所示，将<br>•   自动导入不明确的结构<br>•   智能优化包<br>这两个选项勾上。那么有什么效果呢？<br>你在代码中，只要敲 list，就会出现提示，自动导入 java.util.List 这个类。而这个特性，在 eclipse 中，是无法做到的。如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212473-0fa385fd-49e6-456b-9df3-2646810c4aae.jpeg#align=left&display=inline&height=446&originHeight=493&originWidth=825&size=0&width=746"><br><strong>悬浮提示开关</strong><br>这个容易理解，打开这个开关后。只要把鼠标放在相应的类上，就会出现提示，如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212501-d8f90823-5964-4d27-9312-2884df42bcbf.jpeg#align=left&display=inline&height=382&originHeight=505&originWidth=986&size=0&width=746"><br><strong>取消单行显示 tabs 的操作</strong><br>如下图所示，把该按钮去了<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212486-d65add22-9202-47f3-a828-f105fb2e6773.jpeg#align=left&display=inline&height=547&originHeight=607&originWidth=828&size=0&width=746"><br>那么去掉后有什么效果呢？</p>
+<p>打开多个文件的时候，会换行显示，非常直观。大大提升效率！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-7bfebd85-7463-4f68-a539-c285019b6b1c.jpeg#align=left&display=inline&height=94&originHeight=130&originWidth=1037&size=0&width=746"><br><strong>项目文件编码</strong><br>如下图所示进行设置<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212485-a6ae7361-bd42-45a4-9ced-923209f7f3ed.jpeg#align=left&display=inline&height=404&originHeight=585&originWidth=1080&size=0&width=746"><br>Transparent native-to-ascii conversion 的意思是：自动转换 ASCII 编码。<br>他的工作原理是：在文件中输入文字时他会自动的转换为 Unicode 编码，然后在 idea 中发开文件时他会自动转回文字来显示。<br>这样做是为了防止文件乱码。<br>这样你的 properties 文件，一般都不会出现中文乱码！<br><strong>滚轴修改字体大小</strong></p>
+<p>是这样的，我一般在写代码的时候。都是设按住 Ctrl+滚轴可以修改编辑器字体大小，这样其实很方便，大家不妨试试。</p>
+<p>如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212504-d341e539-9ea5-4b92-b812-6a4747a0c12a.jpeg#align=left&display=inline&height=289&originHeight=419&originWidth=1080&size=0&width=746"><br><strong>设置行号显示</strong><br>这个的重要性就不用多说了，勾上后代码中，会显示行数!<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212514-62ccc6a5-ac78-4772-a9b5-c32613e64290.jpeg#align=left&display=inline&height=439&originHeight=612&originWidth=1040&size=0&width=746"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/docker 目录挂载踩坑记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">docker 目录挂载踩坑记录</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" class="archive-article-date">
+  	<time datetime="2019-01-12T13:57:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在弄容器化数据库，一开始自己的技术选择方案是用 docker-compose 但是发现采用这个需要自己编写好 docker-compose 里面的 my.conf 需要外挂所以自己没有选择这样做，而是选择 docker 原生创建，自己把数据层外挂，配置层也想外挂，后来发现配置层外挂会导致 mysql 找不到配置，从而导致容器无法启动。自己一直在排查这个问题原因。一开始以为是权限问题导致的，因为数据外挂并没有实现，后来给目录加权限，增加权限后还是不可以。随后切换到 root 账户去增加权限，也是不可以的。后来没办法了找了一个网上数据库的搭建的命令对比后发现问题在配置文件外挂的问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/小网站计划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/">小网站计划</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/" class="archive-article-date">
+  	<time datetime="2019-01-08T19:20:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>小计 2019.1.1<br>这个想法从 2018 年九月份就开始有了，一直没有付出实施，真的真的快毕业了（其实是为了给这四年大学生活添加点乐趣），自己做一个小网站。也是为了巩固自己所学的知识，目前自己购买了一台腾讯云的服务器 1U1G1M 的配置，买的腾讯域名一口气买了 3 年的<br>2018 年 11 月某天，依托自己的服务本地主机群晖，以及自己的域名，搭建了邮件系统。<br>2018 年 12 月某天，依托本地主机，搭建了 maridb,以及两台 rdeis 服务器（尚未进行鉴权，主从操作）<br>2018 年 12.27 进行备案<br>2019.1.5 增加一台阿里云，1U2G1M<br>2019.1.8 备案下来了。<br>目前强制所有请求地址为 HTTPS，为了防止中间人获取 2019.1.9 将自己的简历通过反向代理的方式将数据转发到云端，发现一个严重的问题，自己的贷款太小了。（目前主要业务还没有，先不考虑进行 cdn 加速操作）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/《代码整洁之道》读后感" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -857,280 +1051,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/05/yuque/%E5%88%86%E4%BA%ABBromon%E7%9A%84blog%E4%B8%8A%E5%AF%B9IoC%E4%B8%8EDI%E6%B5%85%E6%98%BE%E6%98%93%E6%87%82%E7%9A%84%E8%AE%B2%E8%A7%A3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Java中 VO、 PO、DO、DTO、 BO、 QO、DAO、POJO的概念" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/05/yuque/Java%E4%B8%AD%20VO%E3%80%81%20PO%E3%80%81DO%E3%80%81DTO%E3%80%81%20BO%E3%80%81%20QO%E3%80%81DAO%E3%80%81POJO%E7%9A%84%E6%A6%82%E5%BF%B5/">Java中 VO、 PO、DO、DTO、 BO、 QO、DAO、POJO的概念</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/05/yuque/Java%E4%B8%AD%20VO%E3%80%81%20PO%E3%80%81DO%E3%80%81DTO%E3%80%81%20BO%E3%80%81%20QO%E3%80%81DAO%E3%80%81POJO%E7%9A%84%E6%A6%82%E5%BF%B5/" class="archive-article-date">
-  	<time datetime="2018-12-05T04:23:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="PO-persistant-object-持久对象"><a href="#PO-persistant-object-持久对象" class="headerlink" title="PO(persistant object) 持久对象"></a>PO(persistant object) 持久对象</h2><p>在 o/r 映射的时候出现的概念，如果没有 o/r 映射，没有这个概念存在了。通常对应数据模型 ( 数据库 ), 本身还有部分业务逻辑的处理。可以看成是与数据库中的表相映射的 java 对象。最简单的 PO 就是对应数据库中某个表中的一条记录，多个记录可以用 PO 的集合。 PO 中应该不包含任何对数据库的操作。</p>
-<h2 id="DO（Domain-Object）领域对象"><a href="#DO（Domain-Object）领域对象" class="headerlink" title="DO（Domain Object）领域对象"></a>DO（Domain Object）领域对象</h2><p>就是从现实世界中抽象出来的有形或无形的业务实体。一般和数据中的表结构对应。</p>
-<h2 id="TO-Transfer-Object-，数据传输对象"><a href="#TO-Transfer-Object-，数据传输对象" class="headerlink" title="TO(Transfer Object) ，数据传输对象"></a>TO(Transfer Object) ，数据传输对象</h2><p>在应用程序不同 tie( 关系 ) 之间传输的对象</p>
-<h2 id="DTO（Data-Transfer-Object）数据传输对象"><a href="#DTO（Data-Transfer-Object）数据传输对象" class="headerlink" title="DTO（Data Transfer Object）数据传输对象"></a>DTO（Data Transfer Object）数据传输对象</h2><p>这个概念来源于 J2EE 的设计模式，原来的目的是为了 EJB 的分布式应用提供粗粒度的数据实体，以减少分布式调用的次数，从而提高分布式调用的性能和降低网络负载，但在这里，我泛指用于展示层与服务层之间的数据传输对象。</p>
-<h2 id="VO-view-object-值对象"><a href="#VO-view-object-值对象" class="headerlink" title="VO(view object) 值对象"></a>VO(view object) 值对象</h2><p>视图对象，用于展示层，它的作用是把某个指定页面（或组件）的所有数据封装起来。</p>
-<h2 id="BO-business-object-业务对象"><a href="#BO-business-object-业务对象" class="headerlink" title="BO(business object) 业务对象"></a>BO(business object) 业务对象</h2><p>从业务模型的角度看 , 见 UML 元件领域模型中的领域对象。封装业务逻辑的 java 对象 , 通过调用 DAO 方法 , 结合 PO,VO 进行业务操作。 business object: 业务对象 主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。 比如一个简历，有教育经历、工作经历、社会关系等等。 我们可以把教育经历对应一个 PO ，工作经历对应一个 PO ，社会关系对应一个 PO 。 建立一个对应简历的 BO 对象处理简历，每个 BO 包含这些 PO 。 这样处理业务逻辑时，我们就可以针对 BO 去处理。</p>
-<h2 id="POJO-plain-ordinary-java-object-简单无规则-java-对象"><a href="#POJO-plain-ordinary-java-object-简单无规则-java-对象" class="headerlink" title="POJO(plain ordinary java object) 简单无规则 java 对象"></a>POJO(plain ordinary java object) 简单无规则 java 对象</h2><p>纯的传统意义的 java 对象。就是说在一些 Object/Relation Mapping 工具中，能够做到维护数据库表记录的 persisent object 完全是一个符合 Java Bean 规范的纯 Java 对象，没有增加别的属性和方法。我的理解就是最基本的 Java Bean ，只有属性字段及 setter 和 getter 方法！。</p>
-<h2 id="DAO-data-access-object-数据访问对象"><a href="#DAO-data-access-object-数据访问对象" class="headerlink" title="DAO(data access object) 数据访问对象"></a>DAO(data access object) 数据访问对象</h2><p>是一个 sun 的一个标准 j2ee 设计模式， 这个模式中有个接口就是 DAO ，它负持久层的操作。为业务层提供接口。此对象用于访问数据库。通常和 PO 结合使用， DAO 中包含了各种数据库的操作方法。通过它的方法 , 结合 PO 对数据库进行相关的操作。夹在业务逻辑与数据库资源中间。配合 VO, 提供数据库的 CRUD 操作</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/05/yuque/Java%E4%B8%AD%20VO%E3%80%81%20PO%E3%80%81DO%E3%80%81DTO%E3%80%81%20BO%E3%80%81%20QO%E3%80%81DAO%E3%80%81POJO%E7%9A%84%E6%A6%82%E5%BF%B5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/常用小工具整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/">常用小工具整理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/" class="archive-article-date">
-  	<time datetime="2018-11-30T07:25:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>每周定期更新</p>
-<h3 id="产品经理必备应用："><a href="#产品经理必备应用：" class="headerlink" title="产品经理必备应用："></a>产品经理必备应用：</h3><table>
-<thead>
-<tr>
-<th>应用名称</th>
-<th>软件</th>
-<th>官网</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Sketch</td>
-<td>下载链接</td>
-<td><a target="_blank" rel="noopener" href="https://www.sketchapp.com/">https://www.sketchapp.com/</a></td>
-</tr>
-<tr>
-<td>Sketch18 国语言插件</td>
-<td><a target="_blank" rel="noopener" href="https://github.com/cute/SketchI18N/archive/master.zip">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="https://github.com/cute/SketchI18N">https://github.com/cute/SketchI18N</a></td>
-</tr>
-<tr>
-<td>Kitchen（Sketch 的扩展插件，流程图产品原型图，报表图等等，高大上图）</td>
-<td><a target="_blank" rel="noopener" href="https://gw.alipayobjects.com/os/kitchen/42515441-04c0-47d5-9bd0-552fc70e248b/kitchen-2.10.5.zip">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="http://kitchen.alipay.com/">http://kitchen.alipay.com/</a></td>
-</tr>
-<tr>
-<td>飞冰（ice）（网页原型设计）</td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/iceworks">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/">https://alibaba.github.io/ice/</a></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id="开发人员必备："><a href="#开发人员必备：" class="headerlink" title="开发人员必备："></a><strong>开发人员必备：</strong></h3><table>
-<thead>
-<tr>
-<th>应用名称</th>
-<th>软件</th>
-<th>官网</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">ant.design</a>(前端开发必备，后端自研必备)</td>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">ant.design</a></td>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">https://ant.design/index-cn</a></td>
-</tr>
-<tr>
-<td>飞冰（ice）（网页原型设计）</td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/iceworks">​ 下载链接 ​</a></td>
-<td>​<a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/%E2%80%8B">https://alibaba.github.io/ice/​</a></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Java中ArrayList和LinkedList区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/20/yuque/Java%E4%B8%ADArrayList%E5%92%8CLinkedList%E5%8C%BA%E5%88%AB/">Java中ArrayList和LinkedList区别</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/20/yuque/Java%E4%B8%ADArrayList%E5%92%8CLinkedList%E5%8C%BA%E5%88%AB/" class="archive-article-date">
-  	<time datetime="2018-11-20T06:49:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>其实这两个数据结构蛮好玩的，都是 List 列表存储<br>1.ArrayList 底层是数组存储，LinkedList 底层是基于双向链表存储的 2.由于底层存储方式不同，一些特性也就由此展现。 3.数组存储：添加删除操作都是比较浪费存储时间的，以为每一次操作，都要进行数据的迁移。但是对于数据经常查询.get()方法的时候，Array 的优势就体现了。基于链表存储，他的添加删除操作是比较快的，但查询来说就相对较慢，因为他需要遍历每一个节点，从而得倒想要的数据。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhangyi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">compare</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> N=<span class="number">100000</span>;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">long</span> <span class="title">timeList</span><span class="params">(List list)</span></span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start=System.currentTimeMillis();</span><br><span class="line">        Object o = <span class="keyword">new</span> Object();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;N;i++) &#123;</span><br><span class="line">            list.add(<span class="number">0</span>, o);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> System.currentTimeMillis()-start;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">long</span> <span class="title">readList</span><span class="params">(List list)</span></span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start=System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j=list.size();i&lt;j;i++)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> System.currentTimeMillis()-start;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> List <span class="title">addList</span><span class="params">(List list)</span></span>&#123;</span><br><span class="line">        Object o = <span class="keyword">new</span> Object();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;N;i++) &#123;</span><br><span class="line">            list.add(<span class="number">0</span>, o);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;ArrayList添加&quot;</span>+N+<span class="string">&quot;条耗时：&quot;</span>+timeList(<span class="keyword">new</span> ArrayList()));</span><br><span class="line">        System.out.println(<span class="string">&quot;LinkedList添加&quot;</span>+N+<span class="string">&quot;条耗时：&quot;</span>+timeList(<span class="keyword">new</span> LinkedList()));</span><br><span class="line"></span><br><span class="line">        List list1=addList(<span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">        List list2=addList(<span class="keyword">new</span> LinkedList&lt;&gt;());</span><br><span class="line">        System.out.println(<span class="string">&quot;ArrayList查找&quot;</span>+N+<span class="string">&quot;条耗时：&quot;</span>+readList(list1));</span><br><span class="line">        System.out.println(<span class="string">&quot;LinkedList查找&quot;</span>+N+<span class="string">&quot;条耗时：&quot;</span>+timeList(list2));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/bin/java &quot;-javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=52811:/Applications/IntelliJ IDEA.app/Contents/bin&quot; -Dfile.encoding=UTF-8 -classpath /opt/dev/java/Course/out/production/Course:/Users/zhangyi/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.3.1/junit-jupiter-api-5.3.1.jar:/Users/zhangyi/.m2/repository/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar:/Users/zhangyi/.m2/repository/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1.jar:/Users/zhangyi/.m2/repository/org/junit/platform/junit-platform-commons/1.3.1/junit-platform-commons-1.3.1.jar:/Users/zhangyi/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/zhangyi/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar com.zhangyi.compare</span><br><span class="line">ArrayList添加100000条耗时：523</span><br><span class="line">LinkedList添加100000条耗时：6</span><br><span class="line">ArrayList查找100000条耗时：1</span><br><span class="line">LinkedList查找100000条耗时：2</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
-
-<p>通过这个小程序，可以清楚的发现查找如果对于数据存储而言，如果 Arraylist 进行添加数据，除了在尾部添加效率相对较高，但是还要考虑扩容问题，那么 LinkedList 就比较划算了，而数据查找起来，ArrayList 相对 Linkedlist 优势比较明显。所以我觉得若果在数据库读取数据的时候存储应该优先考虑将数据保存为 ArrayList 格式。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/20/yuque/Java%E4%B8%ADArrayList%E5%92%8CLinkedList%E5%8C%BA%E5%88%AB/">展开全文 >></a>
         </p>
       
 

@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
-  <title>网络知识个人总结（一） | Murphy Yi site</title>
+  <title>SSH 使用说明（超级详细） | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="经典协议    7 层网络协议 osi 功能 TCP&#x2F;IP 协议族 5 层网络协议    物理层 以二进制数据在物理媒体上传输数据 ISO2110，IEEE802，IEEE802.2………. 物理层   数据链路层 传输地址的帧以及错误检测功能 SLIP,CSLIP,PPP,MTU,ARP,RARP 数据链路层   网络层 为数据包选择路由 IP,ICMP,OSPF,BGP,IGM,ARP,RAR">
+  <meta name="description" content="学习总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络知识个人总结（一）">
-<meta property="og:url" content="http://zy84338719.github.io/blog/2018/10/25/yuque/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:title" content="SSH 使用说明（超级详细）">
+<meta property="og:url" content="http://zy84338719.github.io/blog/2021/04/17/yuque/SSH%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%EF%BC%88%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%EF%BC%89/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="经典协议    7 层网络协议 osi 功能 TCP&#x2F;IP 协议族 5 层网络协议    物理层 以二进制数据在物理媒体上传输数据 ISO2110，IEEE802，IEEE802.2………. 物理层   数据链路层 传输地址的帧以及错误检测功能 SLIP,CSLIP,PPP,MTU,ARP,RARP 数据链路层   网络层 为数据包选择路由 IP,ICMP,OSPF,BGP,IGM,ARP,RAR">
+<meta property="og:description" content="学习总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-10-25T12:42:35.000Z">
-<meta property="article:modified_time" content="2021-04-17T08:29:26.531Z">
+<meta property="article:published_time" content="2021-04-17T11:17:20.000Z">
+<meta property="article:modified_time" content="2021-04-17T12:51:08.250Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -182,144 +182,27 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/网络知识个人总结（一）" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/SSH 使用说明（超级详细）" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      网络知识个人总结（一）
+      SSH 使用说明（超级详细）
     </h1>
   
 
         
-        <a href="/2018/10/25/yuque/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2018-10-25T12:42:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-25</time>
+        <a href="/2021/04/17/yuque/SSH%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%EF%BC%88%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-04-17T11:17:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>经典协议</p>
-<table>
-<thead>
-<tr>
-<th>7 层网络协议 osi</th>
-<th>功能</th>
-<th>TCP/IP 协议族</th>
-<th>5 层网络协议</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>物理层</td>
-<td>以二进制数据在物理媒体上传输数据</td>
-<td>ISO2110，IEEE802，IEEE802.2……….</td>
-<td>物理层</td>
-</tr>
-<tr>
-<td>数据链路层</td>
-<td>传输地址的帧以及错误检测功能</td>
-<td>SLIP,CSLIP,PPP,MTU,ARP,RARP</td>
-<td>数据链路层</td>
-</tr>
-<tr>
-<td>网络层</td>
-<td>为数据包选择路由</td>
-<td>IP,ICMP,OSPF,BGP,IGM,ARP,RARP</td>
-<td>网络层</td>
-</tr>
-<tr>
-<td>交换层（传输）</td>
-<td>提供端到端的接口</td>
-<td>TCP,UDP</td>
-<td>交换层</td>
-</tr>
-<tr>
-<td>会话层</td>
-<td>解除或简历与别的接点的联系</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>表示层</td>
-<td>数据格式转换，代码转化，数据加密</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>应用层</td>
-<td>文件传输，电子邮件，文件服务，虚拟终端</td>
-<td>TFTP,HTTP,SNMP,FTP,SMTP,DNS,RIP,Telnet</td>
-<td>应用层</td>
-</tr>
-</tbody></table>
-<h2 id="状态码："><a href="#状态码：" class="headerlink" title="状态码："></a>状态码：</h2><table>
-<thead>
-<tr>
-<th>1XX</th>
-<th>2XX</th>
-<th>3XX 重定向</th>
-<th>4XX 客户端</th>
-<th>5XX 服务器</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>连接状态信息</td>
-<td>200 连接 ok</td>
-<td>301 永久重定向</td>
-<td>400 错误请求</td>
-<td>500 服务器遇到了一个未曾预料的状况</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>302 临时重定向</td>
-<td>401 访问代码存在异常，身份验证错误</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>303 临时重定向</td>
-<td>403 服务被拒绝</td>
-<td>503 服务器正忙，无资源</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>304 特定条件下临时重定向</td>
-<td>404 未找到</td>
-<td>504 网关超时</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>307 临时重定向（POST 方法）</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id="VPN-全称为-Virtual-Private-Network"><a href="#VPN-全称为-Virtual-Private-Network" class="headerlink" title="VPN 全称为 Virtual Private Network"></a>VPN 全称为 Virtual Private Network</h2><p>VPN 工作在第二层第三层上，第二层是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/PPTP">PPTP</a>（TCP1723）、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/L2TP">L2TP</a>（UDP:500 (isakmp)，UDP:4500 (nat-t)<br>UDP:1701 (l2tp)）第三层是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IPSec">IPSec</a>（UDP:500 (isakmp)，UDP:4500 (nat-t)）<br>有 NAT 是 500 无 NAT 是 4500</p>
-<h2 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h2><p>A 类地址的第一组数字为 1 ～ 126。注意，数字 0 和 127 不作为 A 类地址，数字 127 保留给内部回送函数，而数字 0 则表示该地址是本地宿主机，不能传送。</p>
-<p>范围：1.0.0.1 到 126.255.255.254</p>
-<p>B 类地址的第一组数字为 128 ～ 191。</p>
-<p>范围：128.0.0.1 到 191.255.255.254</p>
-<p>C 类地址的第一组数字为 192 ～ 223。</p>
-<p>范围：192.0.0.1 到 223.255.255.254</p>
-<p>0.0.0.0 是 默认 ip 地址，是缺省 ip 127.0.0.x 是回环地址</p>
-<h4 id="私有-IP-地址分类及范围。"><a href="#私有-IP-地址分类及范围。" class="headerlink" title="私有 IP 地址分类及范围。"></a>私有 IP 地址分类及范围。</h4><p>A 类：10.0.0.1 – 10.255.255.254</p>
-<p>B 类：172.16.0.1 – 172.31.255.254</p>
-<p>C 类：192.168.0.1 – 192.168.255.25</p>
-<h2 id="DHCP-动态主机配置协议（网络层）"><a href="#DHCP-动态主机配置协议（网络层）" class="headerlink" title="DHCP 动态主机配置协议（网络层）"></a>DHCP 动态主机配置协议（网络层）</h2><p>DHCP 的端口号为 67 UDP<br>DHCP 主要组成是由 3 个东东组成，第一个是 DHCP 服务器，第二个是 DHCP 客户端 第三个 DHCP 中继器。<br>配置：ip，子网掩码，网关。<br>DHCP 未分配地址是 169.254.x.x</p>
-<h2 id="VLAN-虚拟局域网"><a href="#VLAN-虚拟局域网" class="headerlink" title="VLAN 虚拟局域网"></a>VLAN 虚拟局域网</h2><p>逻辑划分网络<br>根据端口换分静态，根据 ip 划分，根据 mac 地址划分动态的</p>
-<h2 id="DNS-域名系统"><a href="#DNS-域名系统" class="headerlink" title="DNS 域名系统"></a>DNS 域名系统</h2><p>DNS 查询方式：递归，非递归，迭代</p>
-<p><a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E9%A1%B6%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">顶级域名</a>：又叫<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">一级域名</a>，一串字符串中间一个点隔开，例如 baidu.com，这里说明一下，<a href="http://www.baidu.com不是[一级域名](https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)！！而是[二级域名](https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)！">www.baidu.com不是[一级域名](https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)！！而是[二级域名](https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)！</a><br><a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">二级域名</a>：实际上就是一个<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">一级域名</a>以下的主机名，一串字符串中间两个“.”隔开，例如 pan.baidu.com（”pan”就是主机名）。<br><a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%B8%89%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">三级域名</a>：<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">二级域名</a>的<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E5%AD%90%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">子域名</a>，特征是包含三个“.”，一般来说<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=%E4%B8%89%E7%BA%A7%E5%9F%9F%E5%90%8D&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao">三级域名</a>都是免费的。</p>
-<p>FTP 文件传输系统 利用 21,20 端口<br>SFTP 基于 SSH 的文件传输端口 利用 22 端口<br>HTTP 版本分为 1.0/1.1(添加流水线解决并发)/2.0 只用于 HTTPS，加密</p>
-<p>在 DNS 中，主机名又称主机名.域名</p>
-<h2 id="TCP-IP-协议"><a href="#TCP-IP-协议" class="headerlink" title="TCP/IP 协议"></a><strong>TCP/IP 协议</strong></h2><p>可以让不同主机，不同架构，不同系统之间互相通信</p>
-
+        
       
 
       
@@ -408,7 +291,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2018/10/25/yuque/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zy84338719.github.io/blog/2021/04/17/yuque/SSH%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%EF%BC%88%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%EF%BC%89/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -422,18 +305,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2018/10/25/yuque/ARM%E6%9E%B6%E6%9E%84%E4%B8%8E8086%E6%9E%B6%E6%9E%84node.js%E7%9A%84Bug%E8%AE%B0%E5%BD%95/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/04/17/yuque/SSL!TLS%E5%8D%8F%E8%AE%AE%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E7%9A%84%E6%A6%82%E8%BF%B0/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          ARM架构与8086架构node.js的Bug记录
+          SSL/TLS协议运行机制的概述
         
       </div>
     </a>
   
   
-    <a href="/2018/10/24/yuque/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B0%81%E9%94%81%E7%9F%A5%E8%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">数据库封锁知识</div>
+    <a href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E7%AE%80%E5%8C%96%E7%90%86%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">HTTP 协议简化理解</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -472,7 +355,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: '网络知识个人总结（一）',
+  id: 'SSH 使用说明（超级详细）',
   owner: 'zy84338719',
   repo: 'zy84338719.github.io',
   oauth: {

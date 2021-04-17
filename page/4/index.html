@@ -182,6 +182,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/系统架构升级知道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%8D%87%E7%BA%A7%E7%9F%A5%E9%81%93/">系统架构升级知道</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%8D%87%E7%BA%A7%E7%9F%A5%E9%81%93/" class="archive-article-date">
+  	<time datetime="2020-05-18T10:40:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414354-308fad5c-6900-476e-b80d-2c4d1fd5f45e.jpeg#align=left&display=inline&height=473&margin=%5Bobject%20Object%5D&originHeight=473&originWidth=316&size=0&status=done&style=none&width=316"><br>【数据库】<br>一个典型的互联网应用，前端服务器可以利用负载均衡服务，组成一个集群，但是只有一个 mysql 主库，这时候，mysql 服务就是系统中依赖的关键服务。<br>关键服务的性能和波动将成为整个系统的性能瓶颈和主要问题源。<br>为了减轻只有一个 mysql 主库的依赖，我们引入了一主多从的架构，让更多从库也来提供查询服务，减轻主库的查询依赖。<br>这样升级改造后，系统的性能和稳定性还是有明显的提升，但是 mysql 查询的复杂度和数量增加后，mysql 的性能瓶颈依然会很突出。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414343-2377a7d0-cfe6-4faf-8edc-92af24c08513.jpeg#align=left&display=inline&height=460&margin=%5Bobject%20Object%5D&originHeight=460&originWidth=358&size=0&status=done&style=none&width=358"><br>【缓存层】<br>于是，继续升级，引入 redis 或者 memcache，将大量的结果缓存起来，把应用尽量从 mysql 隔离，减少对数据库的依赖。<br>这时候，我们会欣喜的发现，应用的性能比之前完全依赖 mysql 的时候要强好多，稳定性也响应的提高很多。<br>随着我们的系统越来越复杂，访问量越来越大，缓存层的压力也会越来越大。<br>一方面是内存不足的问题，另一方面数据更新更复杂，还有就是访问压力以及内网带宽的瓶颈也增加了。<br>这时候又要开始对缓存层继续升级改造了，于是分布式缓存集群也就出现了。<br>通过一致性 hash 算法或者简单的散列方法，都可以很容易的增加 redis/memcache 服务来构建更大规模的集群。<br>这样一来，随着服务器增加，单机的内存瓶颈减轻了，访问压力以及带宽压力也降低了，但是数据更新的问题依然存在。<br>数据更新的问题，就是数据不一致的问题，本质上就是因为一个数据的多次写入，中间出现异常的话，就导致出现不一致了。<br>关于数据一致性问题，我们后面再来详细分析和讲解。<br>随着缓存层集群的构建，整个系统架构就变成了多前端服务器，多缓存服务器，一个主库，多个从库。<br>主库主要承载数据写入的负载，在大部分的互联网应用中，写入的数量相对还是少很多的，所以大部分时候，这样的架构也就可以安枕无忧啦。<br>【更大规模】<br>我们的追求不仅是眼前的苟且，还有更强大的系统和更多的用户。<br>当我们的应用，用户数、访问量过千万之后，以前的架构还是会遇到越来越多的挑战。<br>这里面，可能数据库还是会第一个出现瓶颈，毕竟一个主库，再强大也是没法做到一秒钟数万次的更新，哪怕只是小小的点击数的增加。<br>这时候，就要开始考虑对数据库做分拆了，把一个数据库分拆为好几个数据库（分表分库）。<br>而分拆的方式，大家应该能想到的，比如：水平分拆和垂直分拆。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414227-1f805639-3f99-4348-ba3c-cebf9a67a41b.jpeg#align=left&display=inline&height=465&margin=%5Bobject%20Object%5D&originHeight=465&originWidth=504&size=0&status=done&style=none&width=504"><br>【水平分拆】<br>典型的水平分拆就是对数据做归档，按照日期（每年归档），把旧的数据迁移到归档库里面，访问量少，也不会有写入的压力。<br>水平分拆对整个系统的改造和变化相对来说是影响比较小的，毕竟数据结构没有变化，只是数据源增加了。<br>而这种分拆带来的明显效果就是，数据规模减少，数据库的读写性能都会有明显的提升，当然对整个应用的性能和稳定性都会有很大提高。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414337-bac0cd3d-6ef6-4877-a563-23baad189881.jpeg#align=left&display=inline&height=485&margin=%5Bobject%20Object%5D&originHeight=485&originWidth=750&size=0&status=done&style=none&width=750"><br>【垂直分拆】<br>如果只是对数据库做垂直分拆，只是把一部分数据表迁移到其他独立数据库中，比如：把用户相关的信息表迁移到用户库，把商品相关的产品表迁移到商品库，那这个分拆也不算难。<br>但是，往往伴随着系统规模的变大，应用的复杂度也会不断提高。<br>所以，这个时候垂直分拆，很可能会同时进行应用的分拆。<br>比如：把用户的登录注册、信息维护单独部署和维护，把商品信息的管理和维护单独部署。<br>这时候，应用也就同时进行了垂直分拆，即：把大的应用进行组件化、服务化。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414260-0721e9c1-1109-4b4c-a727-b0e4adac479f.jpeg#align=left&display=inline&height=353&margin=%5Bobject%20Object%5D&originHeight=353&originWidth=550&size=0&status=done&style=none&width=550"><br>【微服务】<br>到这个阶段，大家应该就开始感觉大一个系统的复杂了吧。<br>一开始说好的做一个互联网应用，而现在却出来了很多个应用和服务，他们之间又有很多关联，组成一个大型的系统。<br>这时候，系统中的关键服务依赖已经不仅仅是缓存层、数据库服务，而变成了一个个拆分之后的应用、微服务了。<br>这时候，系统的性能和稳定性就完全依赖各个微服务的性能和稳定性了。<br>如果，再把每个微服务按照上面的架构升级路线演练一遍，貌似又不那么困难。<br>但是，全部组合在一起，新的难点已经是对这些服务的监控、运维、故障排除等治理工作。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589798414363-9fdc8433-f5f1-4b40-baef-713473865cb2.jpeg#align=left&display=inline&height=612&margin=%5Bobject%20Object%5D&originHeight=612&originWidth=749&size=0&status=done&style=none&width=749"><br>【畅想未来】<br>那么，系统继续升级的话，我想，可能就是自动化运维的工作会更多了吧。<br>一两个数据库宕机不用怕，主从自动切换，数据库集群秒级自动恢复。<br>几个缓存服务器网络不稳定也没关系，有备份的缓存可以先用着。<br>微服务的一些服务器不稳定，服务自动降级，并且在微服务稳定后自动恢复以及同步数据。<br>甚至一个机房断网、断电了，其他机房依然正常的提供全面的服务，不影响用户使用。<br>【总结】<br>关键服务依赖总是最重要的环节，也是最容易出问题的地方。<br>系统架构升级，正是对这些关键依赖的瓶颈进行针对性优化升级和改造。<br>应用从小变大，再分拆变小，从一个应用到很多个微服务，这些都是技术不断变革的过程。<br>规模化带来了带来了的总体容量和总体性能的提高，同时也带来了关于服务治理的新挑战。<br>那么，是不是开发系统都要用这么复杂的架构呢？<br>其实不是，上面的架构升级过程，其实是对线上问题不断发现和解决的过程，也是一个不得已的过程。如果一个系统的用户量、业务量不大，一开始就复用一套庞大的系统架构，那真的就费时费力，累死自己，完全没必要。所以，合适就好。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/18/yuque/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%8D%87%E7%BA%A7%E7%9F%A5%E9%81%93/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/高性能程序设计，缓存为王" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2009,77 +2072,6 @@ From the both cases we observed that either reader or writer has to starve. Belo
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%9F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E8%A2%AB%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%9A%84%E5%B9%82%E7%AD%89%E6%80%A7%EF%BC%9F/">如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E8%A2%AB%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%9A%84%E5%B9%82%E7%AD%89%E6%80%A7%EF%BC%9F/" class="archive-article-date">
-  	<time datetime="2020-05-12T07:09:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你<strong>使用消息队列如何保证幂等性</strong>，这个是你架构里要考虑的一个问题。</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90">面试题剖析</a></h2><p>回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你<strong>先大概说一说可能会有哪些重复消费的问题</strong>。<br>首先，比如 RabbitMQ、RocketMQ、Kafka，都有可能会出现消息重复消费的问题，正常。因为这问题通常不是 MQ 自己保证的，是由我们开发来保证的。挑一个 Kafka 来举个例子，说说怎么重复消费吧。<br>Kafka 实际上有个 offset 的概念，就是每个消息写进去，都有一个 offset，代表消息的序号，然后 consumer 消费了数据之后，<strong>每隔一段时间</strong>（定时定期），会把自己消费过的消息的 offset 提交一下，表示“我已经消费过了，下次我要是重启啥的，你就让我继续从上次消费到的 offset 来继续消费吧”。<br>但是凡事总有意外，比如我们之前生产经常遇到的，就是你有时候重启系统，看你怎么重启了，如果碰到点着急的，直接 kill 进程了，再重启。这会导致 consumer 有些消息处理了，但是没来得及提交 offset，尴尬了。重启之后，少数消息会再次消费一次。<br>举个栗子。<br>有这么个场景。数据 1/2/3 依次进入 kafka，kafka 会给这三条数据每条分配一个 offset，代表这条数据的序号，我们就假设分配的 offset 依次是 152/153/154。消费者从 kafka 去消费的时候，也是按照这个顺序去消费。假如当消费者消费了 <code>offset=153</code> 的这条数据，刚准备去提交 offset 到 zookeeper，此时消费者进程被重启了。那么此时消费过的数据 1/2 的 offset 并没有提交，kafka 也就不知道你已经消费了 <code>offset=153</code> 这条数据。那么重启之后，消费者会找 kafka 说，嘿，哥儿们，你给我接着把上次我消费到的那个地方后面的数据继续给我传递过来。由于之前的 offset 没有提交成功，那么数据 1/2 会再次传过来，如果此时消费者没有去重的话，那么就会导致重复消费。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267373953-13528044-a9d5-460d-9423-6bd54673a916.png#align=left&display=inline&height=454&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=568&size=0&status=done&style=none&width=568"><br>如果消费者干的事儿是拿一条数据就往数据库里写一条，会导致说，你可能就把数据 1/2 在数据库里插入了 2 次，那么数据就错啦。<br>其实重复消费不可怕，可怕的是你没考虑到重复消费之后，<strong>怎么保证幂等性</strong>。<br>举个例子吧。假设你有个系统，消费一条消息就往数据库里插入一条数据，要是你一个消息重复两次，你不就插入了两条，这数据不就错了？但是你要是消费到第二次的时候，自己判断一下是否已经消费过了，若是就直接扔了，这样不就保留了一条数据，从而保证了数据的正确性。<br>一条数据重复出现两次，数据库里就只有一条数据，这就保证了系统的幂等性。<br>幂等性，通俗点说，就一个数据，或者一个请求，给你重复来多次，你得确保对应的数据是不会改变的，<strong>不能出错</strong>。<br>所以第二个问题来了，怎么保证消息队列消费的幂等性？<br>其实还是得结合业务来思考，我这里给几个思路：</p>
-<ul>
-<li>比如你拿个数据要写库，你先根据主键查一下，如果这数据都有了，你就别插入了，update 一下好吧。</li>
-<li>比如你是写 Redis，那没问题了，反正每次都是 set，天然幂等性。</li>
-<li>比如你不是上面两个场景，那做的稍微复杂一点，你需要让生产者发送每条数据的时候，里面加一个全局唯一的 id，类似订单 id 之类的东西，然后你这里消费到了之后，先根据这个 id 去比如 Redis 里查一下，之前消费过吗？如果没有消费过，你就处理，然后这个 id 写 Redis。如果消费过了，那你就别处理了，保证别重复处理相同的消息即可。</li>
-<li>比如基于数据库的唯一键来保证重复数据不会重复插入多条。因为有唯一键约束了，重复数据插入只会报错，不会导致数据库中出现脏数据。</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589267376202-9923a8ef-e923-4b8b-953c-fe9723c70f08.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&originHeight=371&originWidth=401&size=0&status=done&style=none&width=401"><br>当然，如何保证 MQ 的消费是幂等性的，需要结合具体的业务来看。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E8%A2%AB%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%9A%84%E5%B9%82%E7%AD%89%E6%80%A7%EF%BC%9F/">展开全文 >></a>
         </p>
       
 

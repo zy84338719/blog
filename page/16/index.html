@@ -182,6 +182,73 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/数据库封锁知识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/24/yuque/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B0%81%E9%94%81%E7%9F%A5%E8%AF%86/">数据库封锁知识</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/24/yuque/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B0%81%E9%94%81%E7%9F%A5%E8%AF%86/" class="archive-article-date">
+  	<time datetime="2018-10-24T15:17:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天写代码的时候突然发自己对数据库封锁相关概念有些模糊，现在整理一下。<br>封锁协议是为了解决数据库数据更新的时候三个问题，1 丢失更新，2 读脏数据，3 不可重复读这三个概念。</p>
+<h2 id="造成原因"><a href="#造成原因" class="headerlink" title="造成原因"></a>造成原因</h2><p>1.丢失更新，一个事务更新覆盖了另一个事务的结果。<br>例如： 用户 A 将数据从 100 改为 99，而用户 B 将数据从 99 改成 100，这样用户 A 的数据操作丢失了。</p>
+<p>2.读脏数据，事务 T1 修改某一数据，将其写回磁盘，事务 T2 读取同一数据后，由于某一原因，事务 T1 要求回滚，这时，T1 数据被恢复成原来的数据，而 T2 读取到的数据与数据库中的数据不一致，是错误数据，又称脏数据。 3.不可重复读，事务 T1 读取数据后，事务 T2 执行了更新操作，T1 使用的仍是更新前的数据，造成了数据不一致性。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>封锁技术：<br>这里的锁分两种，一种是排他锁（X 锁），一种是共享锁（S 锁）。<br>排他锁：<strong>只</strong>允许事务 T 对数据对象 A 进行读/写操作。<br>共享锁：允许所有事务对数据进行读，不允许写操作。</p>
+<p>封锁协议：<br>一级封锁协议，事务在修改数据 A 之前必须对其加 X 锁，直到结束才释放。一级封锁协议解决了数据更新丢失问题。<br>二级封锁协议，在一级封锁协议上，加上事务 T 在读取数据 A 之前必须加 S 锁，读完后释放 S 锁，二级封锁协议解决读脏数据问题。<br>三级封锁协议，在一级封锁协议上，加上事务 T 在读取数据 A 之前必须加 S 锁，<strong>直到事务结束</strong>才释放 S 锁，三级封锁协议解决读脏数据问题，而且防止不可重复读的问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/24/yuque/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B0%81%E9%94%81%E7%9F%A5%E8%AF%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/1024 节日快乐" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

@@ -182,6 +182,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Docker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/10/yuque/Docker/">Docker</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/10/yuque/Docker/" class="archive-article-date">
+  	<time datetime="2020-05-10T08:19:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Jinshu <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/41bee79b6cbc">https://www.jianshu.com/p/41bee79b6cbc</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/10/yuque/Docker/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/go 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -880,96 +943,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Mysql 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">Mysql 锁</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql%20%E9%94%81/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:23:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>加上一个版本控制即可</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>会话 0：<br>lock table tablelock read;<br>select * from tablelock; —读（查），可以（自己加了锁，自己可以读）<br>delete from tablelock where id=1; —写（增删改），不可以</p>
-<p>在当前会话中访问其他表（emp 表，未加锁）：<br>select * from emp; —读，不可以<br>delete from emp where eid = 1; —写，不可以</p>
-<p>结论 1：<br>—如果某一个会话，对 A 表加了锁，则该会话可以对 A 表进行读操作，不能进行写操作；且该会话不能对其他表进行读、写操作。<br>—即如果给 A 表加了读锁，则当前会话只能对 A 表进行读操作。</p>
-<p>会话 1（其他会话）：<br>select * from tablelock; –读（查），可以<br>delete from tablelock where id=1; —写，会“等待”会话 0 将锁释放</p>
-<p>select * from emp; –读（查），可以<br>delete from emp where eid=1; —写，可以</p>
-<p>结论 2：<br>会话 0 给 A 表加了锁：</p>
-<p>其他会话的操作：<br>a.可以对其他表（A 表以外的表）进行读、写操作<br>b.对 A 表：读–可以；写–需要等待释放锁</p>
-<p>加写锁：</p>
-<p>会话 0：<br>lock table tablelock write;<br>结论：当前会话（会话 0）可以对加了写锁的表进行任何操作（增删改查）；但是不能操作（增删改查）其他表</p>
-<p>其他会话：<br>对会话 0 中加写锁的表可以进行增删改查的前提是：等待会话 0 释放写锁</p>
-<p>MySQL 表级锁的锁模式：<br>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，<br>在执行更新操作（增删改（DML））前，会自动给涉及的表加写锁。</p>
-<p>所以对 MyISAM 表进行操作，会有以下情况：<br>a.对 MyISAM 表的读操作（如读锁），不会阻塞其他进程（会话）对同一表的读请求，但会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它进程的写操作。<br>b.对 MyISAM 表的写操作（加写锁），会阻塞其他进程（会话）对同一表的读和写操作，只有当写锁释放后，才会执行其他进程的读写操作。</p>
-<h2 id="行锁（InnoDB-需要命中索引，否则行锁无效）"><a href="#行锁（InnoDB-需要命中索引，否则行锁无效）" class="headerlink" title="行锁（InnoDB 需要命中索引，否则行锁无效）"></a>行锁（InnoDB 需要命中索引，否则行锁无效）</h2><p>创建行锁条件：</p>
-<p>1、表中创建索引， select 。。。 where   字段（必须是索引）   不然行锁就无效。</p>
-<p>2、必须要有事务，这样才是 行锁（排他锁）</p>
-<p>3、在 select   语句后面 加 上    FOR UPDATE；</p>
-<p>例子： 测试是否 加了锁，先执行 1 后执行 2</p>
-<p>查询 1</p>
-<p>START TRANSACTION;  #加事务</p>
-<p>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;  #加锁</p>
-<p>select SLEEP(5);  # 睡眠</p>
-<p>COMMIT; #提交</p>
-<p>查询 2 ：</p>
-<p>START TRANSACTION; <br>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;<br>COMMIT;</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
     </nav>
   
 

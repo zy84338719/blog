@@ -182,6 +182,75 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 小抄（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/05/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%80%EF%BC%89/">Java 小抄（一）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/05/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%80%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2018-11-05T12:24:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之所以把这个文档叫做小抄的原因，是因为这个文档很杂碎，很小的知识点。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#今天看到个东西，🤦‍♂️</span><br><span class="line">System.cout.println();</span><br><span class="line">#注意这是cout。报错没有这个方法</span><br><span class="line">String st = <span class="string">&quot; world&quot;</span>;</span><br><span class="line">st.concat(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">#注意这个方法返回的是concat会创建一个新的对象，新对象的内容是&quot;hello world&quot;;</span><br><span class="line">System.out.println(st);</span><br><span class="line">#结果是 world</span><br></pre></td></tr></table></figure>
+
+<p>做题做到了这个题，虽然自己知道结果是什么但是忽然想到{}代码块的时候输出顺序是什么！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> B();</span><br><span class="line">        a=<span class="keyword">new</span> B();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;<span class="comment">//静态语块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;<span class="comment">//构造函数</span></span><br><span class="line">        System.out.println(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;<span class="comment">//构造语块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然这个题很无聊，但是自己还是做的含糊不清。尤其是第二次 a = new B()的时候；发现自己对于这里掌握不是很好。查了一下需要有很多改进的地方。第一静态变量只会加载一次 仅仅是静态加载一次。<br>class B extends A 优先加载两个方法中的静态方法，然后加载静态代码块。<br>总结是优先级：1.静态语块（从父到子）。2.构造语块。3.构造函数</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/05/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%80%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/数据结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -890,74 +959,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/apple产品国行港行？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/15/yuque/apple%E4%BA%A7%E5%93%81%E5%9B%BD%E8%A1%8C%E6%B8%AF%E8%A1%8C%EF%BC%9F/">apple产品国行港行？</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/15/yuque/apple%E4%BA%A7%E5%93%81%E5%9B%BD%E8%A1%8C%E6%B8%AF%E8%A1%8C%EF%BC%9F/" class="archive-article-date">
-  	<time datetime="2018-10-15T14:22:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="每一次苹果手机出新款，总会听到有人嚷嚷着要去香港买最新版苹果手"><a href="#每一次苹果手机出新款，总会听到有人嚷嚷着要去香港买最新版苹果手" class="headerlink" title="每一次苹果手机出新款，总会听到有人嚷嚷着要去香港买最新版苹果手"></a>每一次苹果手机出新款，总会听到有人嚷嚷着要去香港买最新版苹果手</h3><h3 id="现在告诉一些中国大陆国行与其他版本在保修上的区别，（现在苹果产品品控有点闹心）。中国大陆三包法规定，更换产品零部件必须采用全新零件，这与苹果全球大多数地区售后政策不同，所以导致-apple-在中国大陆官网上的一系列解释。"><a href="#现在告诉一些中国大陆国行与其他版本在保修上的区别，（现在苹果产品品控有点闹心）。中国大陆三包法规定，更换产品零部件必须采用全新零件，这与苹果全球大多数地区售后政策不同，所以导致-apple-在中国大陆官网上的一系列解释。" class="headerlink" title="现在告诉一些中国大陆国行与其他版本在保修上的区别，（现在苹果产品品控有点闹心）。中国大陆三包法规定，更换产品零部件必须采用全新零件，这与苹果全球大多数地区售后政策不同，所以导致 apple 在中国大陆官网上的一系列解释。"></a>现在告诉一些中国大陆国行与其他版本在保修上的区别，（现在苹果产品品控有点闹心）。中国大陆三包法规定，更换产品零部件必须采用全新零件，这与苹果全球大多数地区售后政策不同，所以导致 apple 在中国大陆官网上的一系列解释。</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/190217/1539615747553-1e06468e-b052-499f-9eb5-a020a7863d82.png#width=747"></p>
-<h3 id="非中国大陆销售的商品，享受-apple-care-全球联保的同时，更换的零件-商品为翻新零件-或商品。也就是说，如果你是一个港版手机，当你去中国大陆的任何一家直营店去维修的时候，你的手机，不享受中国大陆维修政策，而享受购买当地的维修政策。"><a href="#非中国大陆销售的商品，享受-apple-care-全球联保的同时，更换的零件-商品为翻新零件-或商品。也就是说，如果你是一个港版手机，当你去中国大陆的任何一家直营店去维修的时候，你的手机，不享受中国大陆维修政策，而享受购买当地的维修政策。" class="headerlink" title="非中国大陆销售的商品，享受 apple care 全球联保的同时，更换的零件/商品为翻新零件/或商品。也就是说，如果你是一个港版手机，当你去中国大陆的任何一家直营店去维修的时候，你的手机，不享受中国大陆维修政策，而享受购买当地的维修政策。"></a>非中国大陆销售的商品，享受 apple care 全球联保的同时，更换的零件/商品为翻新零件/或商品。也就是说，如果你是一个港版手机，当你去中国大陆的任何一家直营店去维修的时候，你的手机，不享受中国大陆维修政策，而享受购买当地的维修政策。</h3><h3 id="当你的非国行设备，在中国大陆进行置换操作的时候，你的设备，会被换成大陆行货的翻新机。（这也就是非国行机器不太值钱的原因之一），当你用非国航机器置换成国行机器后，你的设备之前不是全网通，置换完毕后依然不是全网通。苹果的激活策略决定了你的机器网络属性。"><a href="#当你的非国行设备，在中国大陆进行置换操作的时候，你的设备，会被换成大陆行货的翻新机。（这也就是非国行机器不太值钱的原因之一），当你用非国航机器置换成国行机器后，你的设备之前不是全网通，置换完毕后依然不是全网通。苹果的激活策略决定了你的机器网络属性。" class="headerlink" title="当你的非国行设备，在中国大陆进行置换操作的时候，你的设备，会被换成大陆行货的翻新机。（这也就是非国行机器不太值钱的原因之一），当你用非国航机器置换成国行机器后，你的设备之前不是全网通，置换完毕后依然不是全网通。苹果的激活策略决定了你的机器网络属性。"></a>当你的非国行设备，在中国大陆进行置换操作的时候，你的设备，会被换成大陆行货的翻新机。（这也就是非国行机器不太值钱的原因之一），当你用非国航机器置换成国行机器后，你的设备之前不是全网通，置换完毕后依然不是全网通。苹果的激活策略决定了你的机器网络属性。</h3><blockquote>
-</blockquote>
-<h4 id="还有一点值得注意的是，苹果生产零部件的工厂有很多，当年-6s-芯片门，就是这个事情。不同的工厂生产出来了的产品品质有所不同。例如苹果屏幕供应商-LCD-JDI-和-LG，一个负责大面积供货，给富士康这样的公司，一个负责小范围供货给直营店做维修零件-机器，笔者自己用的电脑一年内经过-5-次维修，分别换了键盘帽，键盘电池总成-X2，主板，屏幕。似乎每一次维修都会造成新的故障点，电子产品是个易耗品。且用且珍惜-😢。"><a href="#还有一点值得注意的是，苹果生产零部件的工厂有很多，当年-6s-芯片门，就是这个事情。不同的工厂生产出来了的产品品质有所不同。例如苹果屏幕供应商-LCD-JDI-和-LG，一个负责大面积供货，给富士康这样的公司，一个负责小范围供货给直营店做维修零件-机器，笔者自己用的电脑一年内经过-5-次维修，分别换了键盘帽，键盘电池总成-X2，主板，屏幕。似乎每一次维修都会造成新的故障点，电子产品是个易耗品。且用且珍惜-😢。" class="headerlink" title="还有一点值得注意的是，苹果生产零部件的工厂有很多，当年 6s 芯片门，就是这个事情。不同的工厂生产出来了的产品品质有所不同。例如苹果屏幕供应商 LCD JDI 和 LG，一个负责大面积供货，给富士康这样的公司，一个负责小范围供货给直营店做维修零件/机器，笔者自己用的电脑一年内经过 5 次维修，分别换了键盘帽，键盘电池总成 X2，主板，屏幕。似乎每一次维修都会造成新的故障点，电子产品是个易耗品。且用且珍惜 😢。"></a>还有一点值得注意的是，苹果生产零部件的工厂有很多，当年 6s 芯片门，就是这个事情。不同的工厂生产出来了的产品品质有所不同。例如苹果屏幕供应商 LCD JDI 和 LG，一个负责大面积供货，给富士康这样的公司，一个负责小范围供货给直营店做维修零件/机器，笔者自己用的电脑一年内经过 5 次维修，分别换了键盘帽，键盘电池总成 X2，主板，屏幕。似乎每一次维修都会造成新的故障点，电子产品是个易耗品。且用且珍惜 😢。</h4><h3 id="总结一下，如果不怕麻烦，或者没有二手洁癖，可以选择“省钱”（实际上，当你遇到问题后并不省钱）的非国行（毕竟少了大概近-20-的钱），如果你不差钱选择-apple-产品国行，推荐你买一个-apple-care-，如果你要求一年一换机器，推荐年年换新计划。"><a href="#总结一下，如果不怕麻烦，或者没有二手洁癖，可以选择“省钱”（实际上，当你遇到问题后并不省钱）的非国行（毕竟少了大概近-20-的钱），如果你不差钱选择-apple-产品国行，推荐你买一个-apple-care-，如果你要求一年一换机器，推荐年年换新计划。" class="headerlink" title="总结一下，如果不怕麻烦，或者没有二手洁癖，可以选择“省钱”（实际上，当你遇到问题后并不省钱）的非国行（毕竟少了大概近 20%的钱），如果你不差钱选择 apple 产品国行，推荐你买一个 apple care+，如果你要求一年一换机器，推荐年年换新计划。"></a>总结一下，如果不怕麻烦，或者没有二手洁癖，可以选择“省钱”（实际上，当你遇到问题后并不省钱）的非国行（毕竟少了大概近 20%的钱），如果你不差钱选择 apple 产品国行，推荐你买一个 apple care+，如果你要求一年一换机器，推荐年年换新计划。</h3>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/15/yuque/apple%E4%BA%A7%E5%93%81%E5%9B%BD%E8%A1%8C%E6%B8%AF%E8%A1%8C%EF%BC%9F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/15/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span>
+      <a class="extend prev" rel="prev" href="/page/15/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/17/">Next &amp;raquo;</a>
     </nav>
   
 

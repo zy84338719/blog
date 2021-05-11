@@ -182,6 +182,109 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Go Modules基本使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">Go Modules基本使用</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2020-03-01T16:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="所提供的命令"><a href="#所提供的命令" class="headerlink" title="所提供的命令"></a>所提供的命令</h3><p>在 Go modules 中，我们能够使用如下命令进行操作：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">go mod init</td>
+<td align="left">生成 go.mod 文件</td>
+</tr>
+<tr>
+<td align="left">go mod download</td>
+<td align="left">下载 go.mod 文件中指明的所有依赖</td>
+</tr>
+<tr>
+<td align="left">go mod tidy</td>
+<td align="left">整理现有的依赖</td>
+</tr>
+<tr>
+<td align="left">go mod graph</td>
+<td align="left">查看现有的依赖结构</td>
+</tr>
+<tr>
+<td align="left">go mod edit</td>
+<td align="left">编辑 go.mod 文件</td>
+</tr>
+<tr>
+<td align="left">go mod vendor</td>
+<td align="left">导出项目所有的依赖到 vendor 目录</td>
+</tr>
+<tr>
+<td align="left">go mod verify</td>
+<td align="left">校验一个模块是否被篡改过</td>
+</tr>
+<tr>
+<td align="left">go mod why</td>
+<td align="left">查看为什么需要依赖某模块</td>
+</tr>
+</tbody></table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/01/yuque/Go%20Modules%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Golang 包使用的注意事项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1088,75 +1191,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/如何快速的学习一门新技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">如何快速的学习一门新技术</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/" class="archive-article-date">
-  	<time datetime="2020-02-15T16:43:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-我们有一个需求"><a href="#1-我们有一个需求" class="headerlink" title="1.我们有一个需求"></a>1.我们有一个需求</h1><h2 id="项目开发时，我们需要解决某个问题（例如页面局部刷新）"><a href="#项目开发时，我们需要解决某个问题（例如页面局部刷新）" class="headerlink" title="项目开发时，我们需要解决某个问题（例如页面局部刷新）"></a>项目开发时，我们需要解决某个问题（例如页面局部刷新）</h2><h2 id="跳槽，学习新技术"><a href="#跳槽，学习新技术" class="headerlink" title="跳槽，学习新技术"></a>跳槽，学习新技术</h2><h1 id="2-我们先看看使用现有技术能否解决这个问题"><a href="#2-我们先看看使用现有技术能否解决这个问题" class="headerlink" title="2.我们先看看使用现有技术能否解决这个问题"></a>2.我们先看看使用现有技术能否解决这个问题</h1><h2 id="可以解决"><a href="#可以解决" class="headerlink" title="可以解决"></a>可以解决</h2><p>1.使用传统的方法 iframe<br>发现使用传统方法可以解决，但是不够好 2.使用新技术-&gt;axjx</p>
-<h1 id="3-学习一下新技术或者知识点的"><a href="#3-学习一下新技术或者知识点的" class="headerlink" title="3.学习一下新技术或者知识点的"></a>3.学习一下新技术或者知识点的</h1><p>1.原理 2.基本语法</p>
-<h1 id="4-快速入门案例"><a href="#4-快速入门案例" class="headerlink" title="4.快速入门案例"></a>4.快速入门案例</h1><p>1.简单<br>2 了解新技术或者知识点的基本使用<br>这里不需要设计技术细节</p>
-<h1 id="5-讨论这个新技术知识点的"><a href="#5-讨论这个新技术知识点的" class="headerlink" title="5.讨论这个新技术知识点的"></a>5.讨论这个新技术知识点的</h1><p>1.怎么规范使用 2.使用陷阱 3.需要使用时，注意什么</p>
-<h3 id="这里体现一个程序员的水平"><a href="#这里体现一个程序员的水平" class="headerlink" title="这里体现一个程序员的水平"></a>这里体现一个程序员的水平</h3><h1 id="1-gt-2-gt-3-gt-4-gt-5"><a href="#1-gt-2-gt-3-gt-4-gt-5" class="headerlink" title="1-&gt;2-&gt;3-&gt;4-&gt;5-|"></a>1-&gt;2-&gt;3-&gt;4-&gt;5-|</h1><h1 id="往复循环"><a href="#往复循环" class="headerlink" title="|      往复循环      |"></a>|      往复循环      |</h1><h1 id="lt-lt-lt-lt-lt-lt"><a href="#lt-lt-lt-lt-lt-lt" class="headerlink" title="| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |"></a>| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |</h1>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/">Next &amp;raquo;</a>
     </nav>
   
 

@@ -182,6 +182,461 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/高并发和高性能系统中锁的影响与解决办法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/12/yuque/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%94%81%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">高并发和高性能系统中锁的影响与解决办法</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/12/yuque/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%94%81%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2020-05-12T02:54:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>【为什么需要锁呢？】<br>在单核时代，在不需要并行运算的情况下，锁确实是不需要的。<br>那么多核并行运算的时候，为什么需要锁呢？<br>我们先来看一个例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061637-5225bbd9-5dcf-48c4-ab60-b2ad0a339133.jpeg#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&originHeight=240&originWidth=420&size=0&status=done&style=none&width=420"><br>古代有一家钱庄，掌柜一个人记账，一个人更新钱庄的总账户余额，那么总账户余额的更新不存在并行运算的情况，也就不会有数据更新的问题。<br>而随着钱庄业务量的不断增加，掌柜一个人越来越忙不过来，于是请了 2 个伙计，这时候就有 3 个人一起来记账了。<br>这一天，来了两个客户，客户 A 找伙计 A 存 50 两银子，客户 B 找伙计 B 取 50 两银子。<br>伙计 A 和伙计 B 在自己的账本上分别记录上自己操作的这笔业务，然后同时去看了一下总账户余额是 1200 两。<br>伙计 A 算了下，1200+50=1250 两，于是把 1250 更新为总账户余额了。<br>伙计 B 算了下，1200-50=1150 两，于是把 1150 更新为总账户余额了。<br>大家是不是发现问题了，两笔业务，一个+50，一个-50，最后应该是不变，但是在伙计 B 更新完成后，总账户余额却少了 50 两。<br>上面就是因为并行运算导致数据更新异常的情况。<br>要怎么解决这个问题呢？<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061663-8cf8685c-47e7-4ff9-856f-e4f456b2d2b8.jpeg#align=left&display=inline&height=145&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=348&size=0&status=done&style=none&width=348"><br>掌柜给总账户余额的本子上面加了一个锁。谁要看和写总账户余额之前都需要上锁，操作完成之后再解开锁。<br>于是上面的两个业务操作就有些变化了。如下：<br>伙计 A 去看查看总账户余额，先上锁，看到余额是 1200，然后回来计算下 1200+50=1250，把 1250 更新为总账户余额，然后解开锁。<br>伙计 B 也来查看总账户余额，一看上锁了，就只好先等着，等锁解开了，他才能去看余额是 1250，回来计算下 1250-50=1200，把 1200 更新为总账户余额，然后解开锁。<br>这样，数据更新也就安全了。<br>锁，是为了解决并行运算时，数据并发读写的安全性问题。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061867-9962de26-59d5-496e-ad5b-c8635318c5da.jpeg#align=left&display=inline&height=225&margin=%5Bobject%20Object%5D&originHeight=225&originWidth=225&size=0&status=done&style=none&width=225"><br>【增加锁的操作，带来的影响】<br>首先，增加锁的操作，伙计的工作流程中多了上锁解锁，虽然这个上锁解锁的速度很快，但毕竟是增加了操作和开销。<br>另外，伙计 B 看到已经上锁，意味着有冲突时，需要增加额外的等待，对总账户余额的更新变成串行化。<br>从上面可以看出来，如果工作流程中，有一个大循环，循环里面不断有对数据操作，大量的上锁解锁，也是很影响性能。<br>如果不只 2 个伙计，如果是 20 个伙计，非常频繁的去更新总账户余额，冲突太频繁，伙计的工作效率会急剧下降。<br>所以，我们知道了，在并发编程中，锁带来了安全性，同时也带来了性能瓶颈。<br>锁和并发，貌似有一种相克相生的关系。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061669-f8c74302-0830-4e1b-9173-bad1886a452b.jpeg#align=left&display=inline&height=446&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=700&size=0&status=done&style=none&width=700"><br>【怎么减少锁的负面影响，同时保证数据安全呢】<br>下面几种方法大家可以考虑：<br>方法 1：<br>对单个数据的更新，可以使用 CAS（Compare-and-Swap）指令。<br>伙计们的操作变成下面这个过程：<br>伙计 A 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200+50=1250，回去修改，一看总账户余额还是 1200，于是成功修改为 1250；<br>伙计 B 看了下总账户余额是 1200，然后记住这个数字，回来计算 1200-50=1150，回去修改，一看总账户余额是 1250，不是原来的 1200，说明数据被修改了，需要重新计算，于是记住新的值 1250，回去重新计算 1250-50=1200，在回去修改，一看总账户余额是 1250，于是成功修改为 1200。<br>上面的操作过程就是运用了 CAS 指令，修改之前先对比，数据没变化说明没有被修改过，这时候才能进行更新。<br>但是 CAS 操作时，还有一个 ABA 的问题。<br>例如：伙计 A 动作很快，改了一笔 1200-&gt;1250，又改了一笔 1250-&gt;1200；这时候伙计 B 回来改，看到的 1200 虽然数量没变，但是已经被改动两次了。<br>虽然上面的这种情况 ABA 问题不会有什么影响，但是有时候还是会出问题。<br>例如：总账户余额是每天记录一个数。<br>伙计 A 在今天的总账户余额上面改了一笔 1200-&gt;1250，掌柜过来翻了一下总账户，翻到了昨天那页，而那页的总账户余额刚好是 1200；<br>伙计 B 过来更新数据，一看还是 1200，就改成了 1150，这个改动是有问题的，因为伙计 B 改的是昨天的总账户余额。<br>要怎么解决这种 ABA 问题呢？<br>只需要在之前的数据基础上，再增加一个日期数据，检查的时候，需要同时检查总账户余额的数据和日期的数据，都没有变化才可以成功更新。<br>方法 2：<br>引入队列，让一个任务专门来做数据的更新，避免并行运算。<br>这时候，就是让掌柜一个人来更新总账户余额，伙计们只需要把自己的每一笔业务结果记录在总账户下面。<br>伙计 A 有一笔业务是存 50 两，则在总账户下面记录上+50；<br>伙计 B 有一笔业务是取 50 两，则在总账户下面记录上-50；<br>而掌柜只需要从总账户里面，顺序的把+50，-50 的操作更新到总账户余额就可以了。<br>这种方法的好处是，避免伙计并行更新总账户余额，发生冲突时的等待，既提高了伙计的效率也保证了数据更新的安全。<br>方法 3：<br>还是需要有锁的操作，但是让运算的过程更快，减少锁冲突的频率和时间。<br>前面是伙计先上锁，然后看总账户余额，再回去运算，再回来更新和解锁。<br>把这个过程改一下，伙计带着算盘过来，先上锁，然后现场运算，更新后解锁，再回去。<br>这样一来，整个的读写时间变短了，锁的冲突时间也就减少了，效率和性能也就能有所提高。<br>方法 4：<br>能否进一步减少锁的冲突时间，比如：将读、写的锁分开考虑，毕竟大部分业务中读的次数会远多于写的次数。<br>A 使用读写锁而不是互斥锁，可以提高并发读的效率，减少读时候的锁冲突。<br>例如：大量的业务都需要查看总账余额才可以做决定，那么就会有大量的读需求。而多个人一起读不冲突，只是在需要写的时候才独占总账余额的锁。<br>B 将大的数据分拆为多段的小数据，这样通过多个锁分别作用在小数据上，避免一个锁作用在大的数据中，减少冲突的概率。<br>例如：对总账余额的每一位设置单独的锁，而不是对整个数设置一个锁。这样的话，+50 只需要得到十位数的锁，-3 只需要得到个位的锁，如果是+55 则要个位和十位两个锁。<br>C 读的时候不需要锁，而写入的时候串行化同时只能一个人更新<br>例如：总账余额对所有人公开的，大家可以随便看，但是修改的时候，只能由掌柜来操作。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061690-5f577fc5-e07e-4d32-9921-c04cd2804080.jpeg#align=left&display=inline&height=305&margin=%5Bobject%20Object%5D&originHeight=305&originWidth=310&size=0&status=done&style=none&width=310"><br>【死锁是怎么造成的？怎么避免？】<br>锁有两个操作，一个是加锁，一个是解锁。<br>锁冲突的时候，所有需要加锁的人就要等待，而无限等待就是死锁的状态。<br>造成的情况有下面 2 种：<br>1 如果伙计 A 对总账余额加锁，但是被客户叫走了，就会导致伙计 B 陷入死锁，一直等待。<br>这种情况就是伙计 A 出现了异常，没能及时的操作完，进行解锁。<br>2 如果伙计 A 对今天的总账余额加锁，同时伙计 B 对昨天的总账余额加锁，然后伙计 A 又想要获取昨天总账余额的锁，同时伙计 B 要今天的总账余额锁。<br>那这个时候，伙计 A、B 就会因为今天、昨天的总账余额两个锁互相依赖，都无法成功完成操作，造成死锁。<br>要怎么避免呢？<br>针对情况 1，就需要对异常情况做更周密的考虑，增加超时处理，锁占用时间最多 1 分钟，超时就自动解锁。<br>针对情况 2，可以考虑把锁的粒度设置粗一些，锁的效率低些总比造成死锁的情况要好很多。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061632-0175b53e-9417-4c3e-b83d-7ae1ff262ffc.jpeg#align=left&display=inline&height=481&margin=%5Bobject%20Object%5D&originHeight=481&originWidth=500&size=0&status=done&style=none&width=500"><br>【单机的锁是怎么实现的？】<br>锁总线，只能有一个 CPU 核心可以通过数据总线访问主存，其他 CPU 等待，保证多 CPU 并行时数据读写的一致性。效率低，CPU 闲置。<br>缓存锁，针对单个缓存行中的数据地址，缓存读写只能发生在一个 CPU 核心，其他 CPU 缓存全部失效。数据少，只能是一个缓存行的数据。<br>因此，只对一个变量做更新的时候，能用缓存锁就尽量不要使用锁总线的方式。<br><img src="https://cdn.nlark.com/yuque/0/2020/jpeg/190217/1589252061850-c6a67064-0a63-4cb6-80ac-033ac735d3e0.jpeg#align=left&display=inline&height=375&margin=%5Bobject%20Object%5D&originHeight=375&originWidth=750&size=0&status=done&style=none&width=750"><br>【分布式锁的实现】<br>多服务器多进程之间需要做到数据安全更新的时候，就需要用到分布式锁。<br>而分布式锁的实现，还是需要有独立的线程安全的服务来提供锁的实现。<br>比如：<br>redis，实现简单，吞吐量十分可观，对于高并发情况应付自如，自带超时保护，对于网络抖动的情况也可以利用超时删除策略保证不会阻塞所有流程。<br>zookeeper，实现分布式锁虽然是比较重量级的，但实现的锁功能十分健全，由于 Zookeeper 本身需要维护自己的一致性，所以性能上较 Redis 还是有一定差距的。<br>【写在最后】<br>并发编程是非常复杂，充满挑战的一项工作，可为什么大部分感觉不到它的难点呢？<br>互联网应用、Web 应用，都是并发编程的典型应用，大家写着业务代码，却体会不到其中的难点呢？<br>我个人理解，是不是以为工作任务只是测试通过，功能跑通而已呢？<br>是不是以为几次几十次的操作，数据写入成功，返回正常就可以呢？<br>是不是以为偶尔出个错，排查后修正解决了就完事了呢？<br>我们的应用如果是作为一个系统，那么就不能是片面去看待和思考它，要有系统化的思维，从很小的点开始，认真面对这一切。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/12/yuque/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%94%81%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/并发编程与锁的底层原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">并发编程与锁的底层原理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="archive-article-date">
+  	<time datetime="2020-05-12T02:52:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">并发编程，多核、多线程的情况下，线程安全性问题都是一个无法回避的难题。虽然我们可以用到CAS,互斥锁，消息队列，甚至分布式锁来解决，但是对于锁的底层实现，这次课程，我们想更深入的来分析和探讨锁的底层原理，以便更好地理解和掌握并发编程。</span><br></pre></td></tr></table></figure>
+
+<h2 id="大纲："><a href="#大纲：" class="headerlink" title="大纲："></a>大纲：</h2><ul>
+<li>1.并发编程与锁</li>
+<li>2.缓存和一致性协议 MESI</li>
+<li>3.CPU/缓存与锁</li>
+<li>4.常见锁总结</li>
+</ul>
+<h1 id="1-并发编程与锁"><a href="#1-并发编程与锁" class="headerlink" title="1 并发编程与锁"></a>1 并发编程与锁</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我们写的各种应用系统，像网络编程，基本上都是并发编程，不论是多进程还是多线程，亦或是协程、队列的方式，也都是并发编程的范畴。并发编程中，在多核操作系统中，多线程的时候，就会出现**线程安全性**问题，有的也说**并发安全性**问题。这种问题，都是因为对共享变量的并发读写引起的数据不一致问题。所以，在并发编程中，就会经常用到锁，当然也可能使用队列或者单线程的方式来处理共享数据。</span><br><span class="line">我们先来还原一下具体的问题，然后再用不同的方法来处理它们。</span><br></pre></td></tr></table></figure>
+
+<h2 id="线程安全性问题-1"><a href="#线程安全性问题-1" class="headerlink" title="线程安全性问题 1"></a>线程安全性问题 1</h2><p><img src="//img.mukewang.com/5c8e21170001caa703400439.jpg#align=left&display=inline&height=439&margin=%5Bobject%20Object%5D&originHeight=439&originWidth=340&status=done&style=none&width=340"><br>代码中共享变量 num 是一个简单的计数器，main 主线程启动了两个协程，分别循环一万次对 num 进行递增操作。正常情况下，预期的结果应该是 1w+1w=2w，但是，在并发执行的情况下，最终的结果只有 10891，离 2w 差的好多。<br><strong>典型应用场景：</strong></p>
+<ul>
+<li>1 库存数量扣减</li>
+<li>2 投票数量递增</li>
+</ul>
+<p><strong>并发安全性问题：</strong></p>
+<p>num+ +是三个操作（读、改、写），不满足原子性</p>
+<p>并发读写全局变量，线程不安全</p>
+<h2 id="线程安全性问题-2"><a href="#线程安全性问题-2" class="headerlink" title="线程安全性问题 2"></a>线程安全性问题 2</h2><p><img src="//img.mukewang.com/5c8e213d00019ed603890438.jpg#align=left&display=inline&height=438&margin=%5Bobject%20Object%5D&originHeight=438&originWidth=389&status=done&style=none&width=389"><br>代码中共享变量 list 作为一个数据集合，由两个协程并发的循环 append 数据进去。同样是每个协程执行一万次，正常情况下，预期的 list 长度应该是 2w，但是，在并发执行下，结果却可能连 1w 都不到。<br>具体的原因，大家可以思考下，为什么并发执行的情况下，2 个协程，竟然 list 长度还小于 1w 呢？<br><strong>典型应用场景：</strong></p>
+<ul>
+<li>1 发放优惠券</li>
+<li>2 在线用户列表</li>
+</ul>
+<p><strong>并发安全性问题：</strong></p>
+<p>append(list, i) 内部是一个复杂的数组操作函数</p>
+<p>并发读写全局变量，线程不安全</p>
+<h2 id="问题修复"><a href="#问题修复" class="headerlink" title="问题修复"></a>问题修复</h2><p><img src="//img.mukewang.com/5c8e214a0001b22d03350407.jpg#align=left&display=inline&height=407&margin=%5Bobject%20Object%5D&originHeight=407&originWidth=335&status=done&style=none&width=335"><br>通过 WaitGroup 将两个协程分开执行，第一个执行完成再执行第二个，避免并发执行，串行化两个任务。<br><img src="//img.mukewang.com/5c8e216c00011b3003350423.jpg#align=left&display=inline&height=423&margin=%5Bobject%20Object%5D&originHeight=423&originWidth=335&status=done&style=none&width=335"><br>通过互斥锁，在数字递增的前后加上锁的处理，数值递增操作时互斥。<br><img src="//img.mukewang.com/5c8e217e0001718603770403.jpg#align=left&display=inline&height=403&margin=%5Bobject%20Object%5D&originHeight=403&originWidth=377&status=done&style=none&width=377"><br>针对 int64 的数字指针递增操作，可以利用 atomic.AddInt64 原子递增方法来处理。<br>当然还会有更多的实现方法，但是内部的实现原理也都类似，原子操作，避免对共享数据的并发读写。</p>
+<h2 id="并发编程的几个基础概念"><a href="#并发编程的几个基础概念" class="headerlink" title="并发编程的几个基础概念"></a>并发编程的几个基础概念</h2><ul>
+<li>概念 1：并发执行不一定是并行执行。</li>
+<li>概念 2：单核 CPU 可以并发执行，不能并行执行。</li>
+<li>概念 3：单进程、单线程，也可以并发执行。</li>
+</ul>
+<p>并行是<strong>同一时刻</strong>的多任务处理，并发是一个<strong>时间段</strong>内（1 秒、1 毫秒）的多任务处理。</p>
+<p>区别并发和并行，多核的并行处理涉及到多核同时读写一个缓存行，所以很容易出现数据的脏读和脏写；单核的并发处理中因为任务内部的中间变量，所以有可能存在脏写的情况。</p>
+<h2 id="锁的作用"><a href="#锁的作用" class="headerlink" title="锁的作用"></a>锁的作用</h2><ul>
+<li>避免并行运算中，共享数据读写的安全性问题。</li>
+<li>并行执行中，在锁的位置，同时只能有一个程序可以获得锁，其他程序不能获得锁。</li>
+<li>锁的出现，使得并行执行的程序在锁的位置串行化执行。</li>
+<li>多核、分布式运算、并发执行，才会需要锁。</li>
+</ul>
+<h2 id="不用锁，也可以实现同样效果？"><a href="#不用锁，也可以实现同样效果？" class="headerlink" title="不用锁，也可以实现同样效果？"></a>不用锁，也可以实现同样效果？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单线程串行化执行，队列式，CAS。</span><br><span class="line">——不要通过共享内存来通信，而应该通过通信来共享内存</span><br></pre></td></tr></table></figure>
+
+<h2 id="锁的底层实现类型"><a href="#锁的底层实现类型" class="headerlink" title="锁的底层实现类型"></a>锁的底层实现类型</h2><ul>
+<li>1 <strong>锁内存总线</strong>，针对内存的读写操作，在总线上控制，限制程序的内存访问</li>
+<li>2 <strong>锁缓存行</strong>，同一个缓存行的内容读写操作，CPU 内部的高速缓存保证一致性</li>
+</ul>
+<p><strong>锁</strong>，作用在一个对象或者变量上。现代 CPU 会优先在高速缓存查找，如果存在这个对象、变量的缓存行数据，会使用锁缓存行的方式。否则，才使用锁总线的方式。</p>
+<p><strong>速度</strong>，加锁、解锁的速度，理论上就是高速缓存、内存总线的读写速度，它的效率是非常高的。而出现效率问题，是在产生冲突时的串行化等待时间，再加上线程的上下文切换，让多核的并发能力直线下降。</p>
+<h1 id="2-缓存和一致性协议-MESI"><a href="#2-缓存和一致性协议-MESI" class="headerlink" title="2 缓存和一致性协议 MESI"></a>2 缓存和一致性协议 MESI</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">英文首字母缩写，也就是英文环境下的术语、俚语、成语，新人理解和学习有难度，但是，掌握好了既可以省事，又可以缩小文化差距。</span><br><span class="line">另外就是对英文的异形化，也类似汉字的变形体，“表酱紫”，“蓝瘦香菇”，老外是很难懂得，反之一样。</span><br></pre></td></tr></table></figure>
+
+<h2 id="MESI“生老病死”缓存行的四种状态"><a href="#MESI“生老病死”缓存行的四种状态" class="headerlink" title="MESI“生老病死”缓存行的四种状态"></a>MESI“生老病死”缓存行的四种状态</h2><ul>
+<li>M: modify 被修改，数据有效，cache 和内存不一致</li>
+<li>E: exclusive 独享，数据有效，cache 与内存一致</li>
+<li>S: shared 共享，数据有效，cache 与内存一致，多核同时存在</li>
+<li>I: invalid 数据无效</li>
+<li>F: forward 向前(intel)，特殊的共享状态，多个 S 状态，只有一个 F 状态，从 F 高速缓存接受副本</li>
+</ul>
+<p>当内核需要某份数据时，而其它核有这份数据的备份时，本 cache 既可以从内存中导入数据，也可以从其它 cache 中导入数据(Forward 状态的 cache)。</p>
+<h2 id="四种状态的更新路线图"><a href="#四种状态的更新路线图" class="headerlink" title="四种状态的更新路线图"></a>四种状态的更新路线图</h2><p><img src="//img.mukewang.com/5c8e219d000162e904750295.jpg#align=left&display=inline&height=295&margin=%5Bobject%20Object%5D&originHeight=295&originWidth=475&status=done&style=none&width=475"><br>高效的状态： E, S<br>低效的状态： I, M<br>　　这四种状态，保证 CPU 内部的缓存数据是一致的，但是，并不能保证是强一致性。<br>　　每个 cache 的控制器不仅知道自己的读写操作，而且也要监听其它 cache 的读写操作。</p>
+<h2 id="缓存的意义"><a href="#缓存的意义" class="headerlink" title="缓存的意义"></a>缓存的意义</h2><p><img src="//img.mukewang.com/5c8e21ab0001cd8903980382.jpg#align=left&display=inline&height=382&margin=%5Bobject%20Object%5D&originHeight=382&originWidth=398&status=done&style=none&width=398"></p>
+<ul>
+<li>1 时间局部性：如果某个数据被访问，那么不久还会被访问</li>
+<li>2 空间局部性：如果某个数据被访问，那么相邻的数据也很快可能被访问</li>
+</ul>
+<p><strong>局限性：空间、速度、成本</strong></p>
+<p>更大的缓存容量，需要更大的成本。更快的速度，需要更大的成本。均衡缓存的空间、速度、成本，才能更有市场竞争力，也是现在我们看到的情况。当然，随着技术的升级，成本下降，空间、速度也就能继续稳步提高了。</p>
+<h2 id="缓存行，64Byte-的内容"><a href="#缓存行，64Byte-的内容" class="headerlink" title="缓存行，64Byte 的内容"></a>缓存行，64Byte 的内容</h2><p><img src="//img.mukewang.com/5c8e21b900015d6106140248.jpg#align=left&display=inline&height=248&margin=%5Bobject%20Object%5D&originHeight=248&originWidth=614&status=done&style=none&width=614"><br>缓存行的存储空间是 64Byte（字节），也就是可以放 64 个英文字母，或者 8 个 int64 变量。<br>注意伪共享的情况——56Byte 共享数据不变化，但是 8Byte 的数据频繁更新，导致 56Byte 的共享数据也会频繁失效。<br>解决方法：缓存行的数据对齐，更新频繁的变量独占一个缓存行，只读的变量共享一个缓存行。</p>
+<h1 id="3-CPU-缓存与锁"><a href="#3-CPU-缓存与锁" class="headerlink" title="3 CPU/缓存与锁"></a>3 CPU/缓存与锁</h1><p>锁的底层实现原理，与 CPU、高速缓存有着密切的关系，接下来一起看看 CPU 的内部结构。</p>
+<h2 id="CPU-与计算机结构"><a href="#CPU-与计算机结构" class="headerlink" title="CPU 与计算机结构"></a>CPU 与计算机结构</h2><p><img src="//img.mukewang.com/5c8e21c70001228304540310.jpg#align=left&display=inline&height=310&margin=%5Bobject%20Object%5D&originHeight=310&originWidth=454&status=done&style=none&width=454"><br><img src="//img.mukewang.com/5c8e21d50001b17404060269.jpg#align=left&display=inline&height=269&margin=%5Bobject%20Object%5D&originHeight=269&originWidth=406&status=done&style=none&width=406"><br>内核独享寄存器、L1/L2，共享 L3。在早先时候只有单核 CPU，那时只有 L1 和 L2，后来有了多核 CPU，为了效率和性能，就增加了共享的 L3 缓存。<br>多颗 CPU 通过 QPI 连接。再后来，同一个主板上面也可以支持多颗 CPU，多颗 CPU 也需要有通信和控制，才有了 QPI。<br>内存读写都要通过内存总线。CPU 与内存、磁盘、网络、外设等通信，都需要通过各种系统提供的系统总线。</p>
+<h2 id="CPU-流水线"><a href="#CPU-流水线" class="headerlink" title="CPU 流水线"></a>CPU 流水线</h2><p><img src="//img.mukewang.com/5c8e21e20001020505010346.jpg#align=left&display=inline&height=346&margin=%5Bobject%20Object%5D&originHeight=346&originWidth=501&status=done&style=none&width=501"><br><img src="//img.mukewang.com/5c930bb70001210d04190380.jpg#align=left&display=inline&height=380&margin=%5Bobject%20Object%5D&originHeight=380&originWidth=419&status=done&style=none&width=419"><br>CPU 流水线，里面还有异步的 LoadBuffer,<br>Store Buffer, Invalidate Queue。这些缓冲队列的出现，更多的异步处理数据，提高了 CPU 的数据读写性能。<br>CPU 为了保证性能，默认是宽松的数据一致性。</p>
+<h2 id="编译器、CPU-优化"><a href="#编译器、CPU-优化" class="headerlink" title="编译器、CPU 优化"></a>编译器、CPU 优化</h2><p><img src="//img.mukewang.com/5c8e22000001cff204800129.jpg#align=left&display=inline&height=129&margin=%5Bobject%20Object%5D&originHeight=129&originWidth=480&status=done&style=none&width=480"><br><img src="//img.mukewang.com/5c8e220c00013f6104740179.jpg#align=left&display=inline&height=179&margin=%5Bobject%20Object%5D&originHeight=179&originWidth=474&status=done&style=none&width=474"><br>编译器优化：重排代码顺序，优先读操作（读有更好的性能，因为 cache 中有共享数据，而写操作，会让共享数据失效）<br>CPU 优化：指令执行乱序（多核心协同处理，自动优化和重排指令顺序）</p>
+<h2 id="编译器、CPU-屏蔽"><a href="#编译器、CPU-屏蔽" class="headerlink" title="编译器、CPU 屏蔽"></a>编译器、CPU 屏蔽</h2><ul>
+<li>优化屏蔽：禁止编译器优化。按照代码逻辑顺序生成二进制代码，volatile 关键词</li>
+<li>内存屏蔽：禁止 CPU 优化。防止指令之间的重排序，保证数据的可见性，store barrier, load barrier, full barrier</li>
+<li>写屏障：阻塞直到把 Store Buffer 中的数据刷到 Cache 中</li>
+<li>读屏障：阻塞直到 Invalid Queue 中的消息执行完毕</li>
+<li>全屏蔽：包括读写屏障，以保证各核的数据一致性</li>
+</ul>
+<p>Go 语言中的 Lock 指令就是一个内存全屏蔽同时禁止了编译器优化。</p>
+<p><img src="//img.mukewang.com/5c8e221c000182f708930157.jpg#align=left&display=inline&height=157&margin=%5Bobject%20Object%5D&originHeight=157&originWidth=893&status=done&style=none&width=893"></p>
+<p>x86 的架构在 CPU 优化方面做的相对少一些，只是针对“写读”的顺序才可能调序。</p>
+<h2 id="加锁，加了些什么？"><a href="#加锁，加了些什么？" class="headerlink" title="加锁，加了些什么？"></a>加锁，加了些什么？</h2><ul>
+<li>禁止编译器做优化（加了优化屏蔽）</li>
+<li>禁止 CPU 对指令重排（加了内存屏蔽）</li>
+<li>针对缓存行、内存总线上的控制</li>
+<li>冲突时的任务等待队列</li>
+</ul>
+<h1 id="4-常见锁总结"><a href="#4-常见锁总结" class="headerlink" title="4 常见锁总结"></a>4 常见锁总结</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最后，我们一起来看看常见的自旋锁、互斥锁、条件锁、读写锁的实现逻辑，以及在Go源码中，是如何来实现的CAS&#x2F;atomic.AddInt64和Mutext.Lock方法的。</span><br></pre></td></tr></table></figure>
+
+<h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p><img src="//img.mukewang.com/5c8e222e00014be702420057.jpg#align=left&display=inline&height=57&margin=%5Bobject%20Object%5D&originHeight=57&originWidth=242&status=done&style=none&width=242"><br>只要没有锁上，就不断重试。<br>如果别的线程长期持有该锁，那么你这个线程就一直在 while while while 地检查是否能够加锁，浪费 CPU 做无用功。<br>优点：不切换上下文；<br>不足：烧 CPU；<br><strong>适用场景：冲突不多，等待时间不长的情况下，或者少次数的尝试自旋。</strong></p>
+<h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p><img src="//img.mukewang.com/5c8e223d00014cce04080066.jpg#align=left&display=inline&height=66&margin=%5Bobject%20Object%5D&originHeight=66&originWidth=408&status=done&style=none&width=408"><br>操作系统负责线程调度，为了实现「锁的状态发生改变时再唤醒」就需要把锁也交给操作系统管理。<br>所以互斥器的加锁操作通常都需要涉及到上下文切换，操作花销也就会比自旋锁要大。<br>优点：简单高效；<br>不足：冲突等待时的上下文切换；<br><strong>适用场景：绝大部分情况下都可以直接使用互斥锁。</strong></p>
+<h2 id="条件锁"><a href="#条件锁" class="headerlink" title="条件锁"></a>条件锁</h2><p><img src="//img.mukewang.com/5c8e224a0001b66704220239.jpg#align=left&display=inline&height=239&margin=%5Bobject%20Object%5D&originHeight=239&originWidth=422&status=done&style=none&width=422"><br><strong>它解决的问题不是「互斥」，而是「等待」。</strong><br>消息队列的消费者程序，在队列为空的时候休息，数据不为空的时候（条件改变）启动消费任务。<br>条件锁的业务针对性更强。</p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><img src="//img.mukewang.com/5c8e225e00013ff603010540.jpg#align=left&display=inline&height=540&margin=%5Bobject%20Object%5D&originHeight=540&originWidth=301&status=done&style=none&width=301"><br>内部有两个锁，一个是读的锁，一个是写的锁。<br>如果只有一个读者、一个写者，那么等价于直接使用互斥锁。<br>不过由于读写锁需要额外记录读者数量，花销要大一点。<br>也可以认为读写锁是针对某种特定情景（读多写少）的「优化」。<br>但个人还是建议忘掉读写锁，直接用互斥器。<br><strong>试用场景：读多写少，而且读的过程时间较长，可以通过读写锁，减少读冲突时的等待。</strong></p>
+<h2 id="无锁操作-CAS"><a href="#无锁操作-CAS" class="headerlink" title="无锁操作 CAS"></a>无锁操作 CAS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Compare And Swap 比较并交换，类似于将 num+ + 的三个指令合并成一个指令 CMPXCHG，保证了操作的原子性。</span><br></pre></td></tr></table></figure>
+
+<p>为了保证顺序一致性和数据强一致性，还需要有一个 LOCK 指令。<br>源码，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e22740001717005300300.jpg#align=left&display=inline&height=300&margin=%5Bobject%20Object%5D&originHeight=300&originWidth=530&status=done&style=none&width=530"><br>LOCK 指令的作用就是禁止编译器优化，同时加上内存全屏障，可以保证<strong>LOCK 指令之后的一个指令</strong>执行时的数据强一致性和可见性。</p>
+<h2 id="数字的原子递增操作-atomic-AddInt64"><a href="#数字的原子递增操作-atomic-AddInt64" class="headerlink" title="数字的原子递增操作 atomic.AddInt64"></a>数字的原子递增操作 atomic.AddInt64</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在原始指针数字的基础上，原子性递增 delta 数值，并且返回递增后的结果值。</span><br><span class="line">源码1，参见 sync&#x2F;atomic&#x2F;asm.s</span><br></pre></td></tr></table></figure>
+
+<p><img src="//img.mukewang.com/5c8e22820001444204150046.jpg#align=left&display=inline&height=46&margin=%5Bobject%20Object%5D&originHeight=46&originWidth=415&status=done&style=none&width=415"><br>XADDQ 数据交换，数值相加，写入目标数据<br>ADDQ 数值相加，写入目标数据<br>在 XADDQ 之前加上 LOCK 指令，保证这个指令执行时的数据强一致性和可见性。<br>源码 2，参见 runtime/internal/atomic/asm_amd64.s<br><img src="//img.mukewang.com/5c8e228d0001572105570185.jpg#align=left&display=inline&height=185&margin=%5Bobject%20Object%5D&originHeight=185&originWidth=557&status=done&style=none&width=557"></p>
+<h2 id="互斥锁操作-sync-Mutex-Lock"><a href="#互斥锁操作-sync-Mutex-Lock" class="headerlink" title="互斥锁操作 sync.Mutex.Lock"></a>互斥锁操作 sync.Mutex.Lock</h2><p><img src="//img.mukewang.com/5c8e229900014e2106810486.jpg#align=left&display=inline&height=486&margin=%5Bobject%20Object%5D&originHeight=486&originWidth=681&status=done&style=none&width=681"><br><img src="//img.mukewang.com/5c8e22a70001b37305270491.jpg#align=left&display=inline&height=491&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=527&status=done&style=none&width=527"><br>源码，参见 sync/mutex.go<br><strong>大概的源码处理逻辑如下：</strong></p>
+<ul>
+<li>1 通过 CAS 操作来竞争锁的状态 &amp;m.state；</li>
+<li>2 没有竞争到锁，先主动自旋尝试获取锁 runtime_canSpin 和 runtime_doSpin (原地烧 CPU)；</li>
+<li>3 自旋尝试失败，再次 CAS 尝试获取锁；</li>
+<li>4 runtime_SemacquireMutex 锁请求失败,进入休眠状态,等待信号唤醒后重新开始循环；</li>
+<li>5 m.state 等待队列长度（复用的 int32 位数字，第一位是锁的状态，后 31 位是锁的等待队列长度计数器）；</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/12/yuque/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Redis 雪崩击穿" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/10/yuque/Redis%20%E9%9B%AA%E5%B4%A9%E5%87%BB%E7%A9%BF/">Redis 雪崩击穿</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/10/yuque/Redis%20%E9%9B%AA%E5%B4%A9%E5%87%BB%E7%A9%BF/" class="archive-article-date">
+  	<time datetime="2020-05-10T18:05:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在我们日常的开发中，无不都是使用数据库来进行数据的存储，由于一般的系统任务中通常不会存在高并发的情况，所以这样看起来并没有什么问题，可是一旦涉及大数据量的需求，比如一些商品抢购的情景，或者是主页访问量瞬间较大的时候，单一使用数据库来保存数据的系统会因为面向磁盘，磁盘读/写速度比较慢的问题而存在严重的性能弊端，一瞬间成千上万的请求到来，需要系统在极短的时间内完成成千上万次的读/写操作，这个时候往往不是数据库能够承受的，极其容易造成数据库系统瘫痪，最终导致服务宕机的严重生产问题。<br>为了克服上述的问题，项目通常会引入 NoSQL 技术，这是一种基于内存的数据库，并且提供一定的持久化功能。<br>redis 技术就是 NoSQL 技术中的一种，但是引入 redis 又有可能出现缓存穿透，缓存击穿，缓存雪崩等问题。本文就对这三种问题进行较深入剖析。</p>
+<h3 id="二、初认识"><a href="#二、初认识" class="headerlink" title="二、初认识"></a>二、初认识</h3><ul>
+<li>缓存穿透：key 对应的数据在数据源并不存在，每次针对此 key 的请求从缓存获取不到，请求都会到数据源，从而可能压垮数据源。比如用一个不存在的用户 id 获取用户信息，不论缓存还是数据库都没有，若黑客利用此漏洞进行攻击可能压垮数据库。</li>
+<li>缓存击穿：key 对应的数据存在，但在 redis 中过期，此时若有大量并发请求过来，这些请求发现缓存过期一般都会从后端 DB 加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端 DB 压垮。</li>
+<li>缓存雪崩：当缓存服务器重启或者大量缓存集中在某一个时间段失效，这样在失效的时候，也会给后端系统(比如 DB)带来很大压力。</li>
+</ul>
+<h3 id="三、缓存穿透解决方案"><a href="#三、缓存穿透解决方案" class="headerlink" title="三、缓存穿透解决方案"></a>三、缓存穿透解决方案</h3><p>一个一定不存在缓存及查询不到的数据，由于缓存是不命中时被动写的，并且出于容错考虑，如果从存储层查不到数据则不写入缓存，这将导致这个不存在的数据每次请求都要到存储层去查询，失去了缓存的意义。<br><strong>有很多种方法可以有效地解决缓存穿透问题</strong>，<strong>最常见</strong>的则是采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的 bitmap 中，一个一定不存在的数据会被 这个 bitmap 拦截掉，从而避免了对底层存储系统的查询压力。<strong>另外也有一个</strong>更为简单粗暴的方法（我们采用的就是这种），如果一个查询返回的数据为空（不管是数据不存在，还是系统故障），我们仍然把这个空结果进行缓存，但它的过期时间会很短，最长不超过五分钟。<br><strong>粗暴方式伪代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//伪代码</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> object <span class="title">GetProductListNew</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cacheTime = <span class="number">30</span>;</span><br><span class="line">    String cacheKey = <span class="string">&quot;product_list&quot;</span>;</span><br><span class="line">    String cacheValue = CacheHelper.Get(cacheKey);</span><br><span class="line">    <span class="keyword">if</span> (cacheValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">    cacheValue = CacheHelper.Get(cacheKey);</span><br><span class="line">    <span class="keyword">if</span> (cacheValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//数据库查询不到，为空</span></span><br><span class="line">        cacheValue = GetProductListFromDB();</span><br><span class="line">        <span class="keyword">if</span> (cacheValue == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//如果发现为空，设置个默认值，也缓存起来</span></span><br><span class="line">            cacheValue = string.Empty;</span><br><span class="line">        &#125;</span><br><span class="line">        CacheHelper.Add(cacheKey, cacheValue, cacheTime);</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、缓存击穿解决方案"><a href="#四、缓存击穿解决方案" class="headerlink" title="四、缓存击穿解决方案"></a>四、缓存击穿解决方案</h3><p>key 可能会在某些时间点被超高并发地访问，是一种非常“热点”的数据。这个时候，需要考虑一个问题：缓存被“击穿”的问题。<br><strong>使用互斥锁(mutex key)</strong><br>业界比较常用的做法，是使用 mutex。简单地来说，就是在缓存失效的时候（判断拿出来的值为空），不是立即去 load db，而是先使用缓存工具的某些带成功操作返回值的操作（比如 Redis 的 SETNX 或者 Memcache 的 ADD）去 set 一个 mutex key，当操作返回成功时，再进行 load db 的操作并回设缓存；否则，就重试整个 get 缓存的方法。<br>SETNX，是「SET if Not eXists」的缩写，也就是只有不存在的时候才设置，可以利用它来实现锁的效果。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public String get(key) &#123;</span><br><span class="line">      String value = redis.get(key);</span><br><span class="line">      <span class="keyword">if</span> (value == null) &#123; <span class="comment">//代表缓存值过期</span></span><br><span class="line">          <span class="comment">//设置3min的超时，防止del操作失败的时候，下次缓存过期一直不能load db</span></span><br><span class="line">      <span class="keyword">if</span> (redis.setnx(key_mutex, <span class="number">1</span>, <span class="number">3</span> * <span class="number">60</span>) == <span class="number">1</span>) &#123;  <span class="comment">//代表设置成功</span></span><br><span class="line">               value = db.get(key);</span><br><span class="line">                      redis.set(key, value, expire_secs);</span><br><span class="line">                      redis.del(key_mutex);</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;  <span class="comment">//这个时候代表同时候的其他线程已经load db并回设到缓存了，这时候重试获取缓存值即可</span></span><br><span class="line">                      sleep(<span class="number">50</span>);</span><br><span class="line">                      get(key);  <span class="comment">//重试</span></span><br><span class="line">              &#125;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> value;</span><br><span class="line">          &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>memcache 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (memcache.get(key) == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 3 min timeout to avoid mutex holder crash</span></span><br><span class="line">    <span class="keyword">if</span> (memcache.add(key_mutex, <span class="number">3</span> * <span class="number">60</span> * <span class="number">1000</span>) == <span class="keyword">true</span>) &#123;</span><br><span class="line">        value = db.get(key);</span><br><span class="line">        memcache.set(key, value);</span><br><span class="line">        memcache.delete(key_mutex);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        sleep(<span class="number">50</span>);</span><br><span class="line">        retry();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其它方案：待各位补充。</strong></p>
+<h3 id="五、缓存雪崩解决方案"><a href="#五、缓存雪崩解决方案" class="headerlink" title="五、缓存雪崩解决方案"></a>五、缓存雪崩解决方案</h3><p>与缓存击穿的区别在于这里针对很多 key 缓存，前者则是某一个 key。<br>缓存正常从 Redis 中获取，示意图如下：<br><img src="https://cdn.nlark.com/yuque/0/2020/webp/190217/1589134002276-e8339caa-1277-4dbc-ba3e-b37338cd8d4f.webp#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&originHeight=371&originWidth=529&size=0&status=done&style=none&width=529"><br>缓存失效瞬间示意图如下：<br><img src="https://cdn.nlark.com/yuque/0/2020/webp/190217/1589134002265-17410f60-d9d9-468f-bf41-1d37efb1aaf6.webp#align=left&display=inline&height=366&margin=%5Bobject%20Object%5D&originHeight=366&originWidth=531&size=0&status=done&style=none&width=531"><br>缓存失效时的雪崩效应对底层系统的冲击非常可怕！大多数系统设计者考虑用加锁或者队列的方式保证来保证不会有大量的线程对数据库一次性进行读写，从而避免失效时大量的并发请求落到底层存储系统上。还有一个简单方案就时讲缓存失效时间分散开，比如我们可以在原有的失效时间基础上增加一个随机值，比如 1-5 分钟随机，这样每一个缓存的过期时间的重复率就会降低，就很难引发集体失效的事件。<br><strong>加锁排队，伪代码如下：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//伪代码</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> object <span class="title">GetProductListNew</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cacheTime = <span class="number">30</span>;</span><br><span class="line">    String cacheKey = <span class="string">&quot;product_list&quot;</span>;</span><br><span class="line">    String lockKey = cacheKey;</span><br><span class="line">    String cacheValue = CacheHelper.get(cacheKey);</span><br><span class="line">    <span class="keyword">if</span> (cacheValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(lockKey) &#123;</span><br><span class="line">            cacheValue = CacheHelper.get(cacheKey);</span><br><span class="line">            <span class="keyword">if</span> (cacheValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> cacheValue;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="comment">//这里一般是sql查询数据</span></span><br><span class="line">                cacheValue = GetProductListFromDB();</span><br><span class="line">                CacheHelper.Add(cacheKey, cacheValue, cacheTime);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>加锁排队只是为了减轻数据库的压力，并没有提高系统吞吐量。假设在高并发下，缓存重建期间 key 是锁着的，这是过来 1000 个请求 999 个都在阻塞的。同样会导致用户等待超时，这是个治标不治本的方法！<br>注意：加锁排队的解决方式分布式环境的并发问题，有可能还要解决分布式锁的问题；线程还会被阻塞，用户体验很差！因此，在真正的高并发场景下很少使用！<br><strong>随机值伪代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//伪代码</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> object <span class="title">GetProductListNew</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cacheTime = <span class="number">30</span>;</span><br><span class="line">    String cacheKey = <span class="string">&quot;product_list&quot;</span>;</span><br><span class="line">    <span class="comment">//缓存标记</span></span><br><span class="line">    String cacheSign = cacheKey + <span class="string">&quot;_sign&quot;</span>;</span><br><span class="line">    String sign = CacheHelper.Get(cacheSign);</span><br><span class="line">    <span class="comment">//获取缓存值</span></span><br><span class="line">    String cacheValue = CacheHelper.Get(cacheKey);</span><br><span class="line">    <span class="keyword">if</span> (sign != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue; <span class="comment">//未过期，直接返回</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        CacheHelper.Add(cacheSign, <span class="string">&quot;1&quot;</span>, cacheTime);</span><br><span class="line">        ThreadPool.QueueUserWorkItem((arg) -&gt; &#123;</span><br><span class="line">      <span class="comment">//这里一般是 sql查询数据</span></span><br><span class="line">            cacheValue = GetProductListFromDB();</span><br><span class="line">          <span class="comment">//日期设缓存时间的2倍，用于脏读</span></span><br><span class="line">          CacheHelper.Add(cacheKey, cacheValue, cacheTime * <span class="number">2</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>解释说明：</strong></p>
+<ul>
+<li>缓存标记：记录缓存数据是否过期，如果过期会触发通知另外的线程在后台去更新实际 key 的缓存；</li>
+<li>缓存数据：它的过期时间比缓存标记的时间延长 1 倍，例：标记缓存时间 30 分钟，数据缓存设置为 60 分钟。这样，当缓存标记 key 过期后，实际缓存还能把旧数据返回给调用端，直到另外的线程在后台更新完成后，才会返回新缓存。</li>
+</ul>
+<p>关于缓存崩溃的解决方法，这里提出了三种方案：使用锁或队列、设置过期标志更新缓存、为 key 设置不同的缓存失效时间，还有一种被称为“二级缓存”的解决方法。</p>
+<h3 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h3><p>针对业务系统，永远都是具体情况具体分析，没有最好，只有最合适。<br>于缓存其它问题，缓存满了和数据丢失等问题，大伙可自行学习。最后也提一下三个词 LRU、RDB、AOF，通常我们采用 LRU 策略处理溢出，Redis 的 RDB 和 AOF 持久化策略来保证一定情况下的数据安全。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/10/yuque/Redis%20%E9%9B%AA%E5%B4%A9%E5%87%BB%E7%A9%BF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Map" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/10/yuque/Map/">Map</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/10/yuque/Map/" class="archive-article-date">
+  	<time datetime="2020-05-10T17:21:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="开篇语"><a href="#开篇语" class="headerlink" title="开篇语"></a>开篇语</h4><blockquote>
+<p>Map 是一种常用的 kv 数据结构，程序设计中经常使用，且作为一种最基础的数据结构，很多编程语言本身提供的 api 都会有实现，Go 也不例外，今天我们将从一下三个方面为大家分析 Go 中的 Map。</p>
+<ul>
+<li>什么是 Map？</li>
+<li>Go 中如何使用 Map？</li>
+<li>以及 Go 的 Map 实现机制是什么样？</li>
+</ul>
+<p>希望通过这几个方面的讲解，让大家真正理解 Go 的 Map 使用和实现。</p>
+</blockquote>
+<h4 id="什么是-Map"><a href="#什么是-Map" class="headerlink" title="什么是 Map"></a>什么是 Map</h4><h5 id="key，value-存储"><a href="#key，value-存储" class="headerlink" title="key，value 存储"></a>key，value 存储</h5><blockquote>
+<p>最通俗的话说 Map 是一种通过 key 来获取 value 的一个数据结构，其底层存储方式为数组，在存储时 key 不能重复，当 key 重复时，value 进行覆盖，我们通过 key 进行 hash 运算（可以简单理解为把 key 转化为一个整形数字）然后对数组的长度取余，得到 key 存储在数组的哪个下标位置，最后将 key 和 value 组装为一个结构体，放入数组下标处，看下图：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">length &#x3D; len(array) &#x3D; 4</span><br><span class="line">hashkey1 &#x3D; hash(xiaoming) &#x3D; 4</span><br><span class="line">index1  &#x3D; hashkey1% length&#x3D; 0</span><br><span class="line">hashkey2 &#x3D; hash(xiaoli) &#x3D; 6</span><br><span class="line">index2  &#x3D; hashkey2% length&#x3D; 2</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302223-a2052a91-b12b-4cd2-abe0-87518ae2fd10.png#align=left&display=inline&height=255&margin=%5Bobject%20Object%5D&originHeight=255&originWidth=588&size=0&status=done&style=none&width=588"></p>
+<h5 id="hash-冲突"><a href="#hash-冲突" class="headerlink" title="hash 冲突"></a>hash 冲突</h5><blockquote>
+<p>如上图所示，数组一个下标处只能存储一个元素，也就是说一个数组下标只能存储一对 key，value, hashkey(xiaoming)=4 占用了下标 0 的位置，假设我们遇到另一个 key，hashkey(xiaowang)也是 4，这就是 hash 冲突（不同的 key 经过 hash 之后得到的值一样），那么 key=xiaowang 的怎么存储？<br>hash 冲突的常见解决方法</p>
+</blockquote>
+<ul>
+<li>开放定址法<blockquote>
+<p>也就是说当我们存储一个 key，value 时，发现 hashkey(key)的下标已经被别 key 占用，那我们在这个数组中空间中重新找一个没被占用的存储这个冲突的 key，那么没被占用的有很多，找哪个好呢？常见的有线性探测法，线性补偿探测法，随机探测法，这里我们主要说一下线性探测法<br><strong>线性探测</strong>，字面意思就是按照顺序来，从冲突的下标处开始往后探测，到达数组末尾时，从数组开始处探测，直到找到一个空位置存储这个 key，当数组都找不到的情况下回扩容（事实上当数组容量快满的时候就会扩容了）；查找某一个 key 的时候，找到 key 对应的下标，比较 key 是否相等，如果相等直接取出来，否则按照顺寻探测直到碰到一个空位置，说明 key 不存在。如下图：</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302300-ff0a429f-f2e4-4cf3-b449-1fd5dc2337f9.png#align=left&display=inline&height=522&margin=%5Bobject%20Object%5D&originHeight=522&originWidth=799&size=0&status=done&style=none&width=799"></p>
+<blockquote>
+<p>首先存储 key=xiaoming 在下标 0 处，当存储 key=xiaowang 时，hash 冲突了，按照线性探测，存储在下标 1 处，（红色的线是冲突或者下标已经被占用了） 再者 key=xiaozhao 存储在下标 4 处，当存储 key=xiaoliu 是，hash 冲突了，按照线性探测，从头开始，存储在下标 2 处 （黄色的是冲突或者下标已经被占用了）</p>
+</blockquote>
+<ul>
+<li>拉链法<blockquote>
+<p>何为拉链，简单理解为链表，当 key 的 hash 冲突时，我们在冲突位置的元素上形成一个链表，通过指针互连接，当查找时，发现 key 冲突，顺着链表一直往下找，直到链表的尾节点，找不到则返回空，如下图：</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302210-f99d7211-503e-4862-9c42-026f85d338ba.png#align=left&display=inline&height=393&margin=%5Bobject%20Object%5D&originHeight=393&originWidth=682&size=0&status=done&style=none&width=682"></p>
+<ul>
+<li>开放定址（线性探测）和拉链的优缺点<ol>
+<li> 由上面可以看出拉链法比线性探测处理简单</li>
+<li> 线性探测查找是会被拉链法会更消耗时间</li>
+<li> 线性探测会更加容易导致扩容，而拉链不会</li>
+<li> 拉链存储了指针，所以空间上会比线性探测占用多一点</li>
+<li> 拉链是动态申请存储空间的，所以更适合链长不确定的</li>
+</ol>
+</li>
+</ul>
+<h4 id="Go-中-Map-的使用"><a href="#Go-中-Map-的使用" class="headerlink" title="Go 中 Map 的使用"></a>Go 中 Map 的使用</h4><blockquote>
+<p>直接用代码描述，直观，简单，易理解</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//直接创建初始化一个mao</span></span><br><span class="line"><span class="keyword">var</span> mapInit = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> &#123;<span class="string">&quot;xiaoli&quot;</span>:<span class="string">&quot;湖南&quot;</span>, <span class="string">&quot;xiaoliu&quot;</span>:<span class="string">&quot;天津&quot;</span>&#125;</span><br><span class="line"><span class="comment">//声明一个map类型变量,</span></span><br><span class="line"><span class="comment">//map的key的类型是string，value的类型是string</span></span><br><span class="line"><span class="keyword">var</span> mapTemp <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line"><span class="comment">//使用make函数初始化这个变量,并指定大小(也可以不指定)</span></span><br><span class="line">mapTemp = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>,<span class="number">10</span>)</span><br><span class="line"><span class="comment">//存储key ，value</span></span><br><span class="line">mapTemp[<span class="string">&quot;xiaoming&quot;</span>] = <span class="string">&quot;北京&quot;</span></span><br><span class="line">mapTemp[<span class="string">&quot;xiaowang&quot;</span>]= <span class="string">&quot;河北&quot;</span></span><br><span class="line"><span class="comment">//根据key获取value,</span></span><br><span class="line"><span class="comment">//如果key存在，则ok是true，否则是flase</span></span><br><span class="line"><span class="comment">//v1用来接收key对应的value,当ok是false时，v1是nil</span></span><br><span class="line">v1,ok := mapTemp[<span class="string">&quot;xiaoming&quot;</span>]</span><br><span class="line">fmt.Println(ok,v1)</span><br><span class="line"><span class="comment">//当key=xiaowang存在时打印value</span></span><br><span class="line"><span class="keyword">if</span> v2,ok := mapTemp[<span class="string">&quot;xiaowang&quot;</span>]; ok&#123;</span><br><span class="line">    fmt.Println(v2)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//遍历map,打印key和value</span></span><br><span class="line"><span class="keyword">for</span> k,v := <span class="keyword">range</span> mapTemp&#123;</span><br><span class="line">    fmt.Println(k,v)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//删除map中的key</span></span><br><span class="line"><span class="built_in">delete</span>(mapTemp,<span class="string">&quot;xiaoming&quot;</span>)</span><br><span class="line"><span class="comment">//获取map的大小</span></span><br><span class="line">l := <span class="built_in">len</span>(mapTemp)</span><br><span class="line">fmt.Println(l)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>看了上面的 map 创建，初始化，增删改查等操作，我们发现 go 的 api 其实挺简单易学的</p>
+</blockquote>
+<h4 id="Go-中-Map-的实现原理"><a href="#Go-中-Map-的实现原理" class="headerlink" title="Go 中 Map 的实现原理"></a>Go 中 Map 的实现原理</h4><blockquote>
+<p>知其然，更得知其所以然，会使用 map 了，多问问为什么，go 底层 map 到底怎么存储呢?接下来我们一探究竟。<br><strong>map 的源码位于 src/runtime/map.go 中 笔者 go 的版本是 1.12</strong><br>在 go 中，map 同样也是数组存储的的，每个数组下标处存储的是一个 bucket,这个 bucket 的类型见下面代码，每个 bucket 中可以存储 8 个 kv 键值对，当每个 bucket 存储的 kv 对到达 8 个之后，会通过 overflow 指针指向一个新的 bucket，从而形成一个链表,看 bmap 的结构，我想大家应该很纳闷，没看见 kv 的结构和 overflow 指针啊，事实上，这两个结构体并没有显示定义，是通过指针运算进行访问的。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//bucket结构体定义 b就是bucket</span></span><br><span class="line"><span class="keyword">type</span> bmap&#123;</span><br><span class="line">    <span class="comment">// tophash generally contains the top byte of the hash value// for each key  in this bucket. If tophash[0] &lt; minTopHash,// tophash[0] is a bucket               evacuation state instead.</span></span><br><span class="line">    <span class="comment">//翻译：top hash通常包含该bucket中每个键的hash值的高八位。如果tophash[0]小于mintophash，则tophash[0]为桶疏散状态</span></span><br><span class="line">    <span class="comment">//bucketCnt 的初始值是8</span></span><br><span class="line">    tophash [bucketCnt]<span class="keyword">uint8</span></span><br><span class="line">    <span class="comment">// Followed by bucketCnt keys and then bucketCnt values.// <span class="doctag">NOTE:</span> packing all the keys together and then all the values together makes the// code a bit more complicated than alternating key/value/key/value/... but it allows// us to eliminate padding which would be needed for, e.g., map[int64]int8.// Followed by an overflow pointer.</span></span><br><span class="line">    <span class="comment">//翻译：接下来是bucketcnt键，然后是bucketcnt值。注意：将所有键打包在一起，然后将所有值打包在一起，使得//代码比交替键/值/键/值/更复杂。但它允许//我们消除可能需要的填充，例如map[int64]int8./后面跟一个溢出指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>看上面代码以及注释，我们能得到 bucket 中存储的 kv 是这样的，tophash 用来快速查找 key 值是否在该 bucket 中，而不同每次都通过真值进行比较；还有 kv 的存放，为什么不是 k1v1，k2v2….. 而是 k1k2…v1v2…，我们看上面的注释说的 map[int64]int8,key 是 int64（8 个字节），value 是 int8（一个字节），kv 的长度不同，如果按照 kv 格式存放，则考虑内存对齐 v 也会占用 int64，而按照后者存储时，8 个 v 刚好占用一个 int64,从这个就可以看出 go 的 map 设计之巧妙。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302293-b0ea8202-7c36-49c8-a965-7982a454b5d3.png#align=left&display=inline&height=325&margin=%5Bobject%20Object%5D&originHeight=325&originWidth=337&size=0&status=done&style=none&width=337"></p>
+<blockquote>
+<p>最后我们分析一下 go 的整体内存结构，阅读一下 map 存储的源码，如下图所示，当往 map 中存储一个 kv 对时，通过 k 获取 hash 值，hash 值的低八位和 bucket 数组长度取余，定位到在数组中的那个下标，hash 值的高八位存储在 bucket 中的 tophash 中，用来快速判断 key 是否存在，key 和 value 的具体值则通过指针运算存储，当一个 bucket 满时，通过 overfolw 指针链接到下一个 bucket。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589131302299-eca3c11e-552c-4e48-b360-33085c497c7e.png#align=left&display=inline&height=509&margin=%5Bobject%20Object%5D&originHeight=509&originWidth=1221&size=0&status=done&style=none&width=1221"></p>
+<blockquote>
+<p>go 的 map 存储源码如下，省略了一些无关紧要的代码</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mapassign</span><span class="params">(t *maptype, h *hmap, key unsafe.Pointer)</span> <span class="title">unsafe</span>.<span class="title">Pointer</span></span> &#123;</span><br><span class="line">    <span class="comment">//获取hash算法</span></span><br><span class="line">    alg := t.key.alg</span><br><span class="line">    <span class="comment">//计算hash值</span></span><br><span class="line">    hash := alg.hash(key, <span class="keyword">uintptr</span>(h.hash0))</span><br><span class="line">    <span class="comment">//如果bucket数组一开始为空，则初始化</span></span><br><span class="line">    <span class="keyword">if</span> h.buckets == <span class="literal">nil</span> &#123;</span><br><span class="line">        h.buckets = newobject(t.bucket) <span class="comment">// newarray(t.bucket, 1)</span></span><br><span class="line">    &#125;</span><br><span class="line">again:</span><br><span class="line">    <span class="comment">// 定位存储在哪一个bucket中</span></span><br><span class="line">    bucket := hash &amp; bucketMask(h.B)</span><br><span class="line">    <span class="comment">//得到bucket的结构体</span></span><br><span class="line">    b := (*bmap)(unsafe.Pointer(<span class="keyword">uintptr</span>(h.buckets) +bucket*<span class="keyword">uintptr</span>(t.bucketsize)))</span><br><span class="line">    <span class="comment">//获取高八位hash值</span></span><br><span class="line">    top := tophash(hash)</span><br><span class="line">    <span class="keyword">var</span> inserti *<span class="keyword">uint8</span></span><br><span class="line">    <span class="keyword">var</span> insertk unsafe.Pointer</span><br><span class="line">    <span class="keyword">var</span> val unsafe.Pointer</span><br><span class="line">bucketloop:</span><br><span class="line">    <span class="comment">//死循环</span></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="comment">//循环bucket中的tophash数组</span></span><br><span class="line">        <span class="keyword">for</span> i := <span class="keyword">uintptr</span>(<span class="number">0</span>); i &lt; bucketCnt; i++ &#123;</span><br><span class="line">            <span class="comment">//如果hash不相等</span></span><br><span class="line">            <span class="keyword">if</span> b.tophash[i] != top &#123;</span><br><span class="line">             <span class="comment">//判断是否为空，为空则插入</span></span><br><span class="line">                <span class="keyword">if</span> isEmpty(b.tophash[i]) &amp;&amp; inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">                    inserti = &amp;b.tophash[i]</span><br><span class="line">                    insertk = add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">                    val = add( unsafe.Pointer(b),</span><br><span class="line">                    dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize) )</span><br><span class="line">                &#125;</span><br><span class="line">              <span class="comment">//插入成功，终止最外层循环</span></span><br><span class="line">                <span class="keyword">if</span> b.tophash[i] == emptyRest &#123;</span><br><span class="line">                    <span class="keyword">break</span> bucketloop</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//到这里说明高八位hash一样，获取已存在的key</span></span><br><span class="line">            k := add(unsafe.Pointer(b), dataOffset+i*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">            <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">                k = *((*unsafe.Pointer)(k))</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//判断两个key是否相等，不相等就循环下一个</span></span><br><span class="line">            <span class="keyword">if</span> !alg.equal(key, k) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果相等则更新</span></span><br><span class="line">            <span class="keyword">if</span> t.needkeyupdate() &#123;</span><br><span class="line">                typedmemmove(t.key, k, key)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//获取已存在的value</span></span><br><span class="line">            val = add(unsafe.Pointer(b), dataOffset+bucketCnt*<span class="keyword">uintptr</span>(t.keysize)+i*<span class="keyword">uintptr</span>(t.valuesize))</span><br><span class="line">            <span class="keyword">goto</span> done</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果上一个bucket没能插入，则通过overflow获取链表上的下一个bucket</span></span><br><span class="line">        ovf := b.overflow(t)</span><br><span class="line">        <span class="keyword">if</span> ovf == <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        b = ovf</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> inserti == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// all current buckets are full, allocate a new one.</span></span><br><span class="line">        newb := h.newoverflow(t, b)</span><br><span class="line">        inserti = &amp;newb.tophash[<span class="number">0</span>]</span><br><span class="line">        insertk = add(unsafe.Pointer(newb), dataOffset)</span><br><span class="line">        val = add(insertk, bucketCnt*<span class="keyword">uintptr</span>(t.keysize))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// store new key/value at insert position</span></span><br><span class="line">    <span class="keyword">if</span> t.indirectkey() &#123;</span><br><span class="line">        kmem := newobject(t.key)</span><br><span class="line">        *(*unsafe.Pointer)(insertk) = kmem</span><br><span class="line">        insertk = kmem</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> t.indirectvalue() &#123;</span><br><span class="line">        vmem := newobject(t.elem)</span><br><span class="line">        *(*unsafe.Pointer)(val) = vmem</span><br><span class="line">    &#125;</span><br><span class="line">    typedmemmove(t.key, insertk, key)</span><br><span class="line">    <span class="comment">//将高八位hash值存储</span></span><br><span class="line">    *inserti = top</span><br><span class="line">    h.count++</span><br><span class="line">    <span class="keyword">return</span> val</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/10/yuque/Map/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Docker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -655,265 +1110,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/06/yuque/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/运输层TCP!UDP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/06/yuque/%E8%BF%90%E8%BE%93%E5%B1%82TCP!UDP/">运输层TCP/UDP</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/06/yuque/%E8%BF%90%E8%BE%93%E5%B1%82TCP!UDP/" class="archive-article-date">
-  	<time datetime="2020-05-06T12:48:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/06/yuque/%E8%BF%90%E8%BE%93%E5%B1%82TCP!UDP/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Redis 各类型数据存储分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/">Redis 各类型数据存储分析</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/" class="archive-article-date">
-  	<time datetime="2020-05-05T12:16:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h6 id="一、简介和应用"><a href="#一、简介和应用" class="headerlink" title="一、简介和应用"></a>一、简介和应用</h6><p>Redis 是一个由 ANSI C 语言编写，性能优秀、支持网络、可持久化的 K-K 内存数据库，并提供多种语言的 API。它常用的类型主要是 String、List、Hash、Set、ZSet 这 5 种。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363145-ea9b97e5-84e0-4726-a607-543395e55377.png#align=left&display=inline&height=443&margin=%5Bobject%20Object%5D&originHeight=443&originWidth=690&size=0&status=done&style=none&width=690"><br>Redis 在互联网公司一般有以下应用:<br>String：缓存、限流、计数器、分布式锁、分布式 Session<br>Hash：存储用户信息、用户主页访问量、组合查询<br>List：微博关注人时间轴列表、简单队列<br>Set：赞、踩、标签、好友关系<br>Zset：排行榜<br>再比如电商在大促销时，会用一些特殊的设计来保证系统稳定，扣减库存可以考虑如下设计：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363153-d881d2f3-1ae5-4b30-b67c-d66bb61c6254.png#align=left&display=inline&height=80&margin=%5Bobject%20Object%5D&originHeight=80&originWidth=603&size=0&status=done&style=none&width=603"><br>上图中，直接在 Redis 中扣减库存，记录日志后通过 Worker 同步到数据库，在设计同步 Worker 时需要考虑并发处理和重复处理的问题。<br>通过上面的应用场景可以看出 Redis 是非常高效和稳定的，那 Redis 底层是如何实现的呢？</p>
-<h6 id="二、Redis-的对象-redisObject"><a href="#二、Redis-的对象-redisObject" class="headerlink" title="二、Redis 的对象 redisObject"></a>二、Redis 的对象 redisObject</h6><p>当我们执行 set hello world 命令时，会有以下数据模型：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363153-165836d5-5785-41a3-9eaf-6c53e2717564.png#align=left&display=inline&height=173&margin=%5Bobject%20Object%5D&originHeight=173&originWidth=507&size=0&status=done&style=none&width=507"><br><strong>dictEntry</strong>：Redis 给每个 key-value 键值对分配一个 dictEntry，里面有着 key 和 val 的指针，next 指向下一个 dictEntry 形成链表，这个指针可以将多个哈希值相同的键值对链接在一起，由此来解决哈希冲突问题(链地址法)。<br><strong>sds</strong>：键 key“hello”是以 SDS（简单动态字符串）存储，后面详细介绍。<br><strong>redisObject</strong>：值 val“world”存储在 redisObject 中。实际上，redis 常用 5 中类型都是以 redisObject 来存储的；而 redisObject 中的 type 字段指明了 Value 对象的类型，ptr 字段则指向对象所在的地址。<br>redisObject 对象非常重要，Redis 对象的类型、内部编码、内存回收、共享对象等功能，都需要 redisObject 支持。这样设计的好处是，可以针对不同的使用场景，对 5 中常用类型设置多种不同的数据结构实现，从而优化对象在不同场景下的使用效率。<br>无论是 dictEntry 对象，还是 redisObject、SDS 对象，都需要内存分配器（如 jemalloc）分配内存进行存储。jemalloc 作为 Redis 的默认内存分配器，在减小内存碎片方面做的相对比较好。比如 jemalloc 在 64 位系统中，将内存空间划分为小、大、巨大三个范围；每个范围内又划分了许多小的内存块单位；当 Redis 存储数据时，会选择大小最合适的内存块进行存储。<br>前面说过，Redis 每个对象由一个 redisObject 结构表示，它的 ptr 指针指向底层实现的数据结构，而数据结构由 encoding 属性决定。比如我们执行以下命令得到存储“hello”对应的编码：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363150-bd6b4544-bef3-4675-aa7a-9ecb6abc724d.png#align=left&display=inline&height=63&margin=%5Bobject%20Object%5D&originHeight=63&originWidth=326&size=0&status=done&style=none&width=326"><br>redis 所有的数据结构类型如下：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363149-571e119c-2b49-43de-8a87-e5e8769a9d81.png#align=left&display=inline&height=270&margin=%5Bobject%20Object%5D&originHeight=270&originWidth=685&size=0&status=done&style=none&width=685"></p>
-<h6 id="三、String"><a href="#三、String" class="headerlink" title="三、String"></a>三、String</h6><p>字符串对象的底层实现可以是 int、raw、embstr（上面的表对应有名称介绍）。embstr 编码是通过调用一次内存分配函数来分配一块连续的空间，而 raw 需要调用两次。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363161-aee4b1a9-9d87-441f-970d-f6ee0ff9594d.png#align=left&display=inline&height=145&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=858&size=0&status=done&style=none&width=858"><br>int 编码字符串对象和 embstr 编码字符串对象在一定条件下会转化为 raw 编码字符串对象。embstr：&lt;=39 字节的字符串。int：8 个字节的长整型。raw：大于 39 个字节的字符串。<br>简单动态字符串（SDS），这种结构更像 C++的 String 或者 Java 的 ArrayList<Character>，长度动态可变：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363225-06a4dfee-098e-49a3-a0ac-de26df28ef9a.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>struct sdshdr {<br>    // buf 中已占用空间的长度<br>    int len;<br>    // buf 中剩余可用空间的长度<br>    int free;<br>    // 数据空间<br>    char buf[]; // ’\0’空字符结尾<br>};<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363144-598e0116-0816-49f7-bd8e-febf1285b706.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>get：sdsrange—O(n)<br>set：sdscpy—O(n)<br>create：sdsnew—O(1)<br>len：sdslen—O(1)<br>常数复杂度获取字符串长度：因为 SDS 在 len 属性中记录了长度，所以获取一个 SDS 长度时间复杂度仅为 O(1)。<br>预空间分配：如果对一个 SDS 进行修改，分为一下两种情况：<br>1、SDS 长度（len 的值）小于 1MB，那么程序将分配和 len 属性同样大小的未使用空间，这时 free 和 len 属性值相同。举个例子，SDS 的 len 将变成 15 字节，则程序也会分配 15 字节的未使用空间，SDS 的 buf 数组的实际长度变成 15+15+1=31 字节（额外一个字节用户保存空字符）。<br>2、SDS 长度（len 的值）大于等于 1MB，程序会分配 1MB 的未使用空间。比如进行修改之后，SDS 的 len 变成 30MB，那么它的实际长度是 30MB+1MB+1byte。<br>惰性释放空间：当执行 sdstrim（截取字符串）之后，SDS 不会立马释放多出来的空间，如果下次再进行拼接字符串操作，且拼接的没有刚才释放的空间大，则那些未使用的空间就会排上用场。通过惰性释放空间避免了特定情况下操作字符串的内存重新分配操作。<br>杜绝缓冲区溢出：使用 C 字符串的操作时，如果字符串长度增加（如 strcat 操作）而忘记重新分配内存，很容易造成缓冲区的溢出；而 SDS 由于记录了长度，相应的操作在可能造成缓冲区溢出时会自动重新分配内存，杜绝了缓冲区溢出。</p>
-<h6 id="四、List"><a href="#四、List" class="headerlink" title="四、List"></a>四、List</h6><p>List 对象的底层实现是 quicklist（快速列表，是 ziplist 压缩列表 和 linkedlist 双端链表 的组合）。Redis 中的列表支持两端插入和弹出，并可以获得指定位置（或范围）的元素，可以充当数组、队列、栈等。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363147-ae5ec094-2fb4-4117-b49a-9d4c22e59a83.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct listNode {<br>     // 前置节点<br>    struct listNode *prev;<br>    // 后置节点<br>    struct listNode <em>next;<br>    // 节点的值<br>    void \</em>value;<br> } listNode;</p>
-<p>typedef struct list {<br>     // 表头节点<br>    listNode <em>head;<br>    // 表尾节点<br>    listNode *tail;<br>    // 节点值复制函数<br>    void *(*dup)(void *ptr);<br>    // 节点值释放函数<br>    void (*free)(void *ptr);<br>     // 节点值对比函数<br>    int (*match)(void *ptr, void *key);<br>     // 链表所包含的节点数量<br>    unsigned long len;<br> } list;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363144-73b90485-729e-48a8-8164-14adb99dcdcf.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>rpush: listAddNodeHead —O(1)<br>lpush: listAddNodeTail —O(1)<br>push: listInsertNode —O(1)<br>index : listIndex —O(N)<br>pop: ListFirst/listLast —O(1)<br>llen: listLength —O(N)<br>*</em>4.1 linkedlist（双端链表）**<br>此结构比较像 Java 的 LinkedList，有兴趣可以阅读一下源码。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363160-fffbaa48-fdcb-4067-af84-3d00d463e496.png#align=left&display=inline&height=189&margin=%5Bobject%20Object%5D&originHeight=189&originWidth=554&size=0&status=done&style=none&width=554"><br>从图中可以看出 Redis 的 linkedlist 双端链表有以下特性：节点带有 prev、next 指针、head 指针和 tail 指针，获取前置节点、后置节点、表头节点和表尾节点的复杂度都是 O（1）。len 属性获取节点数量也为 O（1）。<br>与双端链表相比，压缩列表可以节省内存空间，但是进行修改或增删操作时，复杂度较高；因此当节点数量较少时，可以使用压缩列表；但是节点数量多时，还是使用双端链表划算。<br><strong>4.2 ziplist（压缩列表）</strong><br>当一个列表键只包含少量列表项，且是小整数值或长度比较短的字符串时，那么 redis 就使用 ziplist（压缩列表）来做列表键的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363179-e42415f0-ed1d-44bb-af22-27487dbb28c9.png#align=left&display=inline&height=180&margin=%5Bobject%20Object%5D&originHeight=180&originWidth=549&size=0&status=done&style=none&width=549"><br><strong>ziplist 是 Redis 为了节约内存而开发的</strong>，是由一系列特殊编码的连续内存块(而不是像双端链表一样每个节点是指针)组成的顺序型数据结构；具体结构相对比较复杂，有兴趣读者可以看 Redis 哈希结构内存模型剖析。在新版本中<strong>list 链表使用 quicklist 代替了 ziplist 和 linkedlist</strong>：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363180-aafff63d-c527-465d-a326-bacc88fa8de6.png#align=left&display=inline&height=66&margin=%5Bobject%20Object%5D&originHeight=66&originWidth=445&size=0&status=done&style=none&width=445"><br>quickList 是 zipList 和 linkedList 的混合体。它将 linkedList 按段切分，每一段使用 zipList 来紧凑存储，多个 zipList 之间使用双向指针串接起来。因为链表的附加空间相对太高，prev 和 next 指针就要占去 16 个字节 (64bit 系统的指针是 8 个字节)，另外每个节点的内存都是单独分配，会加剧内存的碎片化，影响内存管理效率。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363185-c134b3e6-ff2c-401c-aeab-d639a410b1f6.png#align=left&display=inline&height=205&margin=%5Bobject%20Object%5D&originHeight=205&originWidth=612&size=0&status=done&style=none&width=612"><br>quicklist 默认的压缩深度是 0，也就是不压缩。为了支持快速的 push/pop 操作，quicklist 的首尾两个 ziplist 不压缩，此时深度就是 1。为了进一步节约空间，Redis 还会对 ziplist 进行压缩存储，使用 LZF 算法压缩。</p>
-<h6 id="五、Hash"><a href="#五、Hash" class="headerlink" title="五、Hash"></a>五、Hash</h6><p>Hash 对象的底层实现可以是 ziplist（压缩列表）或者 hashtable（字典或者也叫哈希表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363186-d87ffddf-debe-4e61-a8b5-3027cd5a7e04.png#align=left&display=inline&height=245&margin=%5Bobject%20Object%5D&originHeight=245&originWidth=551&size=0&status=done&style=none&width=551"><br>Hash 对象只有同时满足下面两个条件时，才会使用 ziplist（压缩列表）：1.哈希中元素数量小于 512 个；2.哈希中所有键值对的键和值字符串长度都小于 64 字节。<br>hashtable 哈希表可以实现 O(1)复杂度的读写操作，因此效率很高。源码如下：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363173-8d54479d-1eea-4ce8-a16b-86291c6946ec.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct dict {<br>    // 类型特定函数<br>    dictType <em>type;<br>     // 私有数据<br>    void <em>privdata;<br>     // 哈希表<br>    dictht ht[2];<br>    // rehash 索引<br>    // 当 rehash 不在进行时，值为 -1<br>    int rehashidx; /_ rehashing not in progress if rehashidx == -1 <em>/<br>     // 目前正在运行的安全迭代器的数量<br>    int iterators; /</em> number of iterators currently running _/<br> } dict;<br> typedef struct dictht {<br>    // 哈希表数组<br>    dictEntry \</em></em>table;<br>     // 哈希表大小<br>    unsigned long size;<br>    // 哈希表大小掩码，用于计算索引值<br>    // 总是等于 size - 1<br>    unsigned long sizemask;<br>    // 该哈希表已有节点的数量<br>    unsigned long used;<br>} dictht;<br>typedef struct dictEntry {<br>    void *key;<br>    union {void *val;uint64_t u64;int64_t s64;} v;<br>    // 指向下个哈希表节点，形成链表<br>    struct dictEntry *next;<br> } dictEntry;<br> typedef struct dictType {<br>     // 计算哈希值的函数<br>    unsigned int (*hashFunction)(const void *key);<br>     // 复制键的函数<br>    void *(*keyDup)(void *privdata, const void *key);<br>     // 复制值的函数<br>    void *(*valDup)(void *privdata, const void *obj);<br>     // 对比键的函数<br>    int (*keyCompare)(void *privdata, const void *key1, const void *key2);<br>    // 销毁键的函数<br>    void (*keyDestructor)(void *privdata, void *key);<br>    // 销毁值的函数<br>    void (*valDestructor)(void *privdata, void *obj);<br>} dictType;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363191-870b9e4c-7562-4ccc-ba8a-38a665b57f70.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>上面源码可以简化成如下结构：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363193-c7eda244-4c3f-4137-b33f-746f7c811534.png#align=left&display=inline&height=331&margin=%5Bobject%20Object%5D&originHeight=331&originWidth=609&size=0&status=done&style=none&width=609"><br>这个结构类似于 JDK7 以前的 HashMap&lt;String,Object&gt;，当有两个或以上的键被分配到哈希数组的同一个索引上时，会产生哈希冲突。Redis 也使用链地址法来解决键冲突。即每个哈希表节点都有一个 next 指针，多个哈希表节点用 next 指针构成一个单项链表，链地址法就是将相同 hash 值的对象组织成一个链表放在 hash 值对应的槽位。<br>Redis 中的字典使用 hashtable 作为底层实现的话，每个字典会带有两个哈希表，一个平时使用，另一个仅在 rehash（重新散列）时使用。随着对哈希表的操作，键会逐渐增多或减少。为了让哈希表的负载因子维持在一个合理范围内，Redis 会对哈希表的大小进行扩展或收缩（rehash），也就是将 ht【0】里面所有的键值对分多次、渐进式的 rehash 到 ht【1】里。</p>
-<h6 id="六、Set"><a href="#六、Set" class="headerlink" title="六、Set"></a>六、Set</h6><p>Set 集合对象的底层实现可以是 intset（整数集合）或者 hashtable（字典或者也叫哈希表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363199-36aa9d00-e2b6-4bd0-a96f-c2555a9a1958.png#align=left&display=inline&height=189&margin=%5Bobject%20Object%5D&originHeight=189&originWidth=305&size=0&status=done&style=none&width=305"><br>intset（整数集合）当一个集合只含有整数，并且元素不多时会使用 intset（整数集合）作为 Set 集合对象的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363193-eed366a5-9608-4bd5-a84b-f589c0925968.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct intset {<br>    // 编码方式<br>   uint32_t encoding;<br>    // 集合包含的元素数量<br>   uint32_t length;<br>    // 保存元素的数组<br>   int8_t contents[];<br>} intset;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363230-a1bc0a7e-ce71-4356-b681-cd812ead9b8c.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>sadd: intsetAdd—O(1)<br>smembers: intsetGetO(1)—O(N)<br>srem: intsetRemove—O(N)<br>slen: intsetlen —O(1)<br>intset 底层实现为有序，无重复数组保存集合元素。 intset 这个结构里的整数数组的类型可以是 16 位的，32 位的，64 位的。如果数组里所有的整数都是 16 位长度的，如果新加入一个 32 位的整数，那么整个 16 的数组将升级成一个 32 位的数组。升级可以提升 intset 的灵活性，又可以节约内存，但不可逆。</p>
-<h6 id="7-ZSet"><a href="#7-ZSet" class="headerlink" title="7.ZSet"></a>7.ZSet</h6><p>ZSet 有序集合对象底层实现可以是 ziplist（压缩列表）或者 skiplist（跳跃表）。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363226-a304bedb-e72e-421e-bd82-9cc98313e45d.png#align=left&display=inline&height=192&margin=%5Bobject%20Object%5D&originHeight=192&originWidth=548&size=0&status=done&style=none&width=548"><br>当一个有序集合的元素数量比较多或者成员是比较长的字符串时，Redis 就使用 skiplist（跳跃表）作为 ZSet 对象的底层实现。<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363219-8807bcb1-2b78-404e-a17b-a7df3b0a90d7.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>typedef struct zskiplist {<br>     // 表头节点和表尾节点<br>    struct zskiplistNode <em>header, <em>tail;<br>    // 表中节点的数量<br>    unsigned long length;<br>    // 表中层数最大的节点的层数<br>    int level;<br> } zskiplist;<br>typedef struct zskiplistNode {<br>    // 成员对象<br>    robj *obj;<br>    // 分值<br>    double score;<br>     // 后退指针<br>    struct zskiplistNode *backward;<br>    // 层<br>   struct zskiplistLevel {<br>        // 前进指针<br>        struct zskiplistNode \</em>forward;<br>         // 跨度—前进指针所指向节点与当前节点的距离<br>        unsigned int span;<br>    } level[];<br>} zskiplistNode;<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589133363231-c1b655fd-a897-40cc-993f-53f5f674439a.gif#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=20&size=0&status=done&style=none&width=20"><br>zadd—zslinsert—平均 O(logN), 最坏 O(N)<br>zrem—zsldelete—平均 O(logN), 最坏 O(N)<br>zrank–zslGetRank—平均 O(logN), 最坏 O(N)<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589133363250-42f84bcb-da64-4ac0-b866-b1247a58026c.png#align=left&display=inline&height=233&margin=%5Bobject%20Object%5D&originHeight=233&originWidth=591&size=0&status=done&style=none&width=591"><br>skiplist 的查找时间复杂度是 LogN，可以和平衡二叉树相当，但实现起来又比它简单。*</em>跳跃表(skiplist)是一种有序数据结构，它通过在某个节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。**<br>** **</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/05/yuque/Redis%20%E5%90%84%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%86%E6%9E%90/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Mysql-AICD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql-AICD/">Mysql-AICD</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql-AICD/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:24:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>A 原子性<br>C 一致性<br>I   分离性～并发<br>D 永久性</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql-AICD/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/mysql 范式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">mysql 范式</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:23:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>第一范式 原子性’不可再分<br>第二范式 消除部分码函数依赖<br>第三范式 完全消除函数依赖</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">展开全文 >></a>
         </p>
       
 

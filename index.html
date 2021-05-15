@@ -182,6 +182,423 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Mysql 部分总结（转载腾讯技术工程）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/15/yuque/Mysql%20%E9%83%A8%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%85%BE%E8%AE%AF%E6%8A%80%E6%9C%AF%E5%B7%A5%E7%A8%8B%EF%BC%89/">Mysql 部分总结（转载腾讯技术工程）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/15/yuque/Mysql%20%E9%83%A8%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%85%BE%E8%AE%AF%E6%8A%80%E6%9C%AF%E5%B7%A5%E7%A8%8B%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-05-15T14:28:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="什么是索引？"><a href="#什么是索引？" class="headerlink" title="什么是索引？"></a>什么是索引？</h1><p>在关系数据库中，索引是一种单独的、物理的对数据库表中一列或多列的值进行排序的一种存储结构，它是某个表中一列或若干列值的集合和相应的指向表中物理标识这些值的数据页的逻辑指针清单。索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。（百度百科）<br>索引的目的是提高查找效率，对数据表的值集合进行了排序，并按照一定数据结构进行了存储。<br>本文将从一个案例开始，从索引的数据结构、分类、关键概念及如何使用索引提高查找效率等方面对索引知识进行总结。</p>
+<h1 id="从一个案例开始"><a href="#从一个案例开始" class="headerlink" title="从一个案例开始"></a>从一个案例开始</h1><h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>业务中有个既存的历史 SQL 语句在运行时会导致 DB 服务器过载，进而导致相关服务阻塞无法及时完成。CPU 监控曲线如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088891743-ad7cda30-b471-456c-8b1e-726c97b81269.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=381&id=u16118b0c&margin=%5Bobject%20Object%5D&originHeight=761&originWidth=1440&originalType=url&status=done&style=none&taskId=u6cb54cb6-81ab-47a7-a395-0dd1bd6ee5f&width=720"><br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088891788-5a38209e-e0b9-4e2b-b909-c677fe9598bf.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=379&id=u17bca82b&margin=%5Bobject%20Object%5D&originHeight=758&originWidth=1440&originalType=url&status=done&style=none&taskId=u1e75bdfb-0c62-45c3-a606-a48300909a3&width=720"><br>从 DB 的 CPU 使用率曲线可以看到业务运行一直处于“亚健康”状态（1），随着业务的增长随时都可能出现问题。这种问题（2）在 11 月 11 日凌晨出现，当时 DB CPU 一直处于 100%高负荷状态，且存在大量的慢查询语句。最终以杀死进程降低 DB 负载、减少业务进程（3）的方式恢复业务。<br>在 11 月 11 日下午，对该业务的 SQL 语句进行了优化，优化的效果如下。业务运行时的 CPU 使用率峰值有很大的降低（对比图 2 的 1，2，3 可见）；慢查询语句几乎在监控曲线上也无法明显观察到（对比图 3 的 1，2，3 可见）。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088891982-0b69fedf-2a31-4a52-befd-66d00b70856e.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=375&id=u35d30296&margin=%5Bobject%20Object%5D&originHeight=750&originWidth=1440&originalType=url&status=done&style=none&taskId=u7699f0cd-16ba-4eab-8f98-ba3e013607d&width=720"><br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088891828-1fddae0a-81cf-407f-b479-68cfc1d19c9c.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=382&id=u4784d475&margin=%5Bobject%20Object%5D&originHeight=764&originWidth=1440&originalType=url&status=done&style=none&taskId=u8c197e90-248c-493b-a712-c505693216c&width=720"></p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>表结构<br>CREATE TABLE T_Mch<strong>**</strong>Stat (<code>FStatDate</code> int unsigned NOT NULL DEFAULT 19700101 COMMENT ‘统计日期’,<br><code>FMerchantId</code> bigint unsigned NOT NULL DEFAULT 0 COMMENT ‘商户 ID’,<br><code>FVersion</code> int unsigned NOT NULL DEFAULT 0 COMMENT ‘数据版本号’,<br><code>FBatch</code> bigint unsigned NOT NULL DEFAULT 0 COMMENT ‘统计批次’,<br><code>FTradeAmount</code> bigint NOT NULL DEFAULT 0 COMMENT ‘交易金额’<br>PRIMARY KEY (<code>FStatDate</code>,<code>FMerchantId</code>,<code>FVersion</code>),<br>INDEX i_FStatDate_FVersion (<code>FStatDate</code>,<code>FVersion</code>))<br>DEFAULT CHARSET = utf8 ENGINE = InnoDB;<br>从建表语句可以知道该表有两个索引：</p>
+<ol>
+<li>主键索引，是一个组合索引，由字段 FStateDate、FMerchantId 和 FVersion 组成；</li>
+<li>普通索引，是一个组合索引，由字段 FStateDate 和 FVersion 组成；</li>
+</ol>
+<p>优化前的 SQL 语句（做了部分裁剪）A：<br>SELECT SQL_CALC_FOUND_ROWS FStatDate,<br>FMerchantId,<br>FVersion,<br>FBatch,<br>FTradeAmount,<br>FTradeCount<br>FROM T_Mch<strong>**</strong>Stat_1020<br>WHERE FStatDate = 20201020<br>AND FVersion = 0<br>AND FMerchantId &gt; 0<br>ORDER BY FMerchantId ASC LIMIT 0, 8000<br>对该 SQL 进行 explain 得到如下结果，Extra 字段的值为 using where，说明并没有使用到索引。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088891924-3bb851ab-485f-452c-8f58-fceb74c354d9.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=70&id=u44e1cd8d&margin=%5Bobject%20Object%5D&originHeight=140&originWidth=1440&originalType=url&status=done&style=none&taskId=uc620cf25-ad69-4a45-9c50-179abc52ca9&width=720"><br>优化后的 SQL 语句（做了部分裁剪）B：<br>SELECT SQL_CALC_FOUND_ROWS a1.FStatDate,<br>a1.FMerchantId,<br>a1.FVersion,<br>FBatch,<br>FTradeAmount,<br>FTradeCount<br>FROM T_Mch<strong>**</strong>Stat_1020 a1, (<br>SELECT FStatDate, FMerchantId, FVersion<br>FROM T_Mch<strong>**</strong>Stat_1020<br>WHERE FStatDate = 20201020<br>AND FVersion = 0<br>AND FMerchantId &gt; 0<br>ORDER BY FMerchantId ASC LIMIT 0, 8000 ) a2<br>where a1.FStatDate = a2.FStatDate<br>and a1.FVersion = a2.FVersion<br>and a1.FMerchantId = a2.FMerchantId;<br>优化关键步骤为：</p>
+<ul>
+<li>新增一个子查询，select 字段只有主键字段；</li>
+</ul>
+<p>该 SQL 的 explain 结果如下，子查询语句使用了索引，而最终在线上运行结果也证明了优化效果显著。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088892453-33d081bf-0303-4561-94e9-06458e54291d.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=71&id=u76640727&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=1440&originalType=url&status=done&style=none&taskId=uae746a3b-75d6-4fcd-8ba0-97e1acb4629&width=720"></p>
+<h1 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h1><p>优化后的 SQL 语句 B 比原来的 SQL 语句 A 复杂的多（子查询，临时表关联等），怎么效率会提升，违反直觉？有三个疑问：</p>
+<ol>
+<li>SQL 语句 A 的查询条件字段都在主键中，主键索引用到了没？</li>
+<li>SQL 语句 B 的子查询为什么能够用到索引？</li>
+<li>前后两条语句执行流程的差异是什么？</li>
+</ol>
+<h1 id="索引的数据结构"><a href="#索引的数据结构" class="headerlink" title="索引的数据结构"></a>索引的数据结构</h1><p>在 MySQL 中，索引是在存储引擎层实现的，而不同的存储引擎根据其业务场景特点会有不同的实现方式。这里会先介绍我们常见的有序数组、Hash 和搜索树，最后看下 Innodb 的引擎支持的 B+树。</p>
+<h1 id="有序数组"><a href="#有序数组" class="headerlink" title="有序数组"></a>有序数组</h1><p>数组是在任何一本数据结构和算法的书籍都会介绍到的一种重要的数据结构。有序数组如其字面意思，以 Key 的递增顺序保存数据在数组中。非常适合等值查询和范围查询。<br>ID：1ID：2……ID:N<br>在 ID 值没有重复的情况下，上述数组按照 ID 的递增顺序进行保存。这个时候如果需要查询特定 ID 值的 name，用二分法就可以快速得到，时间复杂度是 O(logn)。<br>// 二分查找递归实现方式<br>int binary_search(const int arr[], int start, int end, int key)<br>{<br>if (start &gt; end)<br>return -1;</p>
+<pre><code>int mid = start + (end - start) / 2;
+if (arr[mid] &gt; key)
+    return binary_search(arr, start, mid - 1, key);
+else if (arr[mid] &lt; key)
+    return binary_search(arr, mid + 1, end, key);
+else
+    return mid;
+</code></pre>
+<p>}<br>有序数组的优点很明显，同样其缺点也很明显。其只适合静态数据，如遇到有数据新增插入，则就会需要数据移动（新申请空间、拷贝数据和释放空间等动作），这将非常消耗资源。</p>
+<h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>哈希表是一种以键-值（K-V）存储数据的结构，我们只需要输入键 K，就可以找到对应的值 V。哈希的思路是用特定的哈希函数将 K 换算到数组中的位置，然后将值 V 放到数组的这个位置。如果遇到不同的 K 计算出相同的位置，则在这个位置拉出一个链表依次存放。哈希表适用于等值查询的场景，对应范围查询则无能为力。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621088893757-8de13330-9749-4d09-8502-4241dda75b0a.png#clientId=u1e98e4ef-4c14-4&from=paste&height=422&id=u99b70e89&margin=%5Bobject%20Object%5D&originHeight=843&originWidth=1129&originalType=url&status=done&style=none&taskId=u9af1edf7-a6af-48f9-9ecd-bdb5fb36134&width=564.5"></p>
+<h1 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h1><p>二叉搜索树，也称为二叉查找树、有序二叉树或排序二叉树，是指一颗空树或者具有以下性质的二叉树：</p>
+<ol>
+<li>若任意节点的左子树不空，则左子树上所有节点的值均小于它的根节点的值；</li>
+<li>若任意节点的右子树不空，则右子树上所有节点的值均大于或等于它的根节点的值；</li>
+<li>任意节点的左、右子树也分别为二叉查找树；</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088894106-6ec1f08c-a5ce-44eb-bc5c-fd73cb6267d5.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=619&id=u36ff8193&margin=%5Bobject%20Object%5D&originHeight=1237&originWidth=1440&originalType=url&status=done&style=none&taskId=u2f7d6a0a-9da6-45bd-bbd8-e22c9a7d09b&width=720"><br>二叉搜索树相比于其它数据结构的优势在于查找、插入的时间复杂度较低，为 O(logn)。为了维持 O(logn)的查询复杂度，需要保持这棵树是平衡二叉树。<br>二叉搜索树的查找算法：</p>
+<ol>
+<li>若 b 是空树，则搜索失败，否则：</li>
+<li>若 x 等于 b 的根节点的值，则查找成功；否则：</li>
+<li>若 x 小于 b 的根节点的值，则搜索左子树；否则：</li>
+<li>查找右子树。</li>
+</ol>
+<p>相对于有序数组和 Hash，二叉搜索树在查找和插入两端的表现都非常不错。后续基于此不断的优化，发展出 N 叉树等。</p>
+<h1 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h1><p>Innodb 存储引擎支持 B+树索引、全文索引和哈希索引。其中 Innodb 存储引擎支持的哈希索引是自适应的，Innodb 存储引擎会根据表的使用情况自动为表生成哈希索引，不能人为干预。B+树索引是关系型数据库中最常见的一种索引，也将是本文的主角。<br><strong>数据结构</strong><br>在前文简单介绍了有序数组和二叉搜索树，对二分查找法和二叉树有了基本了解。B+树的定义相对复杂，在理解索引工作机制上无须深入、只需理解数据组织形式和查找算法即可。我们可以简单的认为 B+树是一种 N 叉树和有序数组的结合体。<br>例如：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088894448-67b222a7-62e6-4575-aa2b-c10908d136b5.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=331&id=u3568d1ca&margin=%5Bobject%20Object%5D&originHeight=661&originWidth=1440&originalType=url&status=done&style=none&taskId=u057e5029-dd2e-446a-be76-1b1804689e0&width=720"><br>B+树的 3 个优点:</p>
+<ol>
+<li>层级更低，IO 次数更少</li>
+<li>每次都需要查询到叶子节点，查询性能稳定</li>
+<li>叶子节点形成有序链表，范围查询方便</li>
+</ol>
+<p><strong>操作算法</strong></p>
+<ul>
+<li>查找</li>
+</ul>
+<p>由根节点自顶向下遍历树，根据分离值在要查找的一边的指针；在节点内使用二分查找来确定位置。</p>
+<ul>
+<li>插入</li>
+</ul>
+<p>Leaf Page（叶子）满 Index Page（索引）满操作<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088894350-6e794528-b4fc-4b8b-be1f-ae1a0f59d902.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=361&id=ue289c95a&margin=%5Bobject%20Object%5D&originHeight=722&originWidth=1440&originalType=url&status=done&style=none&taskId=uddbfe9bc-2f40-4403-9c60-539a1c73511&width=720"></p>
+<ul>
+<li>删除</li>
+</ul>
+<p>叶子节点小于填充因子中间节点小于填充因子操作<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088894407-434b1125-4e5a-4e0a-879f-b16be9beac4c.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=238&id=u7e3377dd&margin=%5Bobject%20Object%5D&originHeight=476&originWidth=1440&originalType=url&status=done&style=none&taskId=ud1694b59-1f81-4bf9-944c-55d824e3a4f&width=720"><br>注：插入和删除两个表格内容来自《MySQL 技术内幕-InnoDB 存储引擎》<br>填充因子（innodb_fill_factor）：索引构建期间填充的每个 B-tree 页面上的空间百分比，其余空间保留给未来索引增长。从插入和删除操作中可以看到填充因子的值会影响到数据页的 split 和 merge 的频率。将值设置小些，可以减少 split 和 merge 的频率，但是索引相对会占用更多的磁盘空间；反之，则会增加 split 和 merge 的频率，但是可以减少占用磁盘空间。Innodb 对于聚集索引默认会预留 1/16 的空间保证后续的插入和升级索引。</p>
+<h1 id="Innodb-B-树索引"><a href="#Innodb-B-树索引" class="headerlink" title="Innodb B+树索引"></a>Innodb B+树索引</h1><p>前文介绍了索引的基本数据结构，现在开始我们从 Innodb 的角度了解如何使用 B+树构建索引，索引如何工作和如何使用索引提升查找效率。</p>
+<h1 id="聚集索引和非聚集索引"><a href="#聚集索引和非聚集索引" class="headerlink" title="聚集索引和非聚集索引"></a>聚集索引和非聚集索引</h1><p>数据库中的 B+树索引可以分为聚集索引和非聚集索引。聚集索引和非聚集索引的不同点在于叶子节点是否是完整行数据。<br>Innodb 存储引擎表是索引组织表，即表中的数据按照主键顺序存放。聚集索引就是按照每张表的主键构造一棵 B+树，叶子节点存放的是表的完整行记录。非聚集索引的叶子节点不包含行记录的全部数据。Innodb 存储引擎的非聚集索引的叶子节点的内容为主键索引值。<br>若数据表没有主键聚集索引是怎么建立的？在没有主键时 Innodb 会给数据表的每条记录生成一个 6 个字节长度的 RowId 字段，会以此建立聚集索引。</p>
+<h1 id="Select-语句查找记录的过程"><a href="#Select-语句查找记录的过程" class="headerlink" title="Select 语句查找记录的过程"></a>Select 语句查找记录的过程</h1><p>下面例子将展示索引数据的组织形式及 Select 语句查询数据的过程。</p>
+<ul>
+<li>建表语句：</li>
+</ul>
+<p>create table T (<br>ID int primary key,<br>k int NOT NULL DEFAULT 0,<br>s varchar(16) NOT NULL DEFAULT ‘’,<br>index k(k)<br>) engine=InnoDB DEFAULT CHARSET=utf8;</p>
+<p>insert into T values(100, 1, ‘aa’),(200, 2, ‘bb’),(300, 3, ‘cc’),(500, 5, ‘ee’),(600,6,’ff’),(700,7,’gg’);</p>
+<ul>
+<li>索引结构示意</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088894949-4262e636-5054-43e2-8f89-9d298af1e0ad.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=244&id=u3e13afcd&margin=%5Bobject%20Object%5D&originHeight=487&originWidth=1440&originalType=url&status=done&style=none&taskId=ufd03a59f-6abc-46e1-8ea9-f8003318c40&width=720"><br>左边是以主键 ID 建立起的聚集索引，其叶子节点存储了完整的表记录信息；右边是以普通字段 K 建立的普通索引，其叶子节点的值是主键 ID。</p>
+<ul>
+<li>Select 语句执行过程</li>
+</ul>
+<p>select * from T where k between 3 and 5;<br>执行流程如下：</p>
+<ol>
+<li>在 K 索引树上找到 k=3 的记录，取得 ID=300；</li>
+<li>再到 ID 索引树上查找 ID=300 对应的 R3；</li>
+<li>在 k 索引树取下一个值 k=5，取得 ID=500；</li>
+<li>再回到 ID 索引树查到 ID=500 对应的 R4；</li>
+<li>在 k 索引树取下一个值 k=6，不满足条件，循环结束。</li>
+</ol>
+<p>上述查找记录的过程中引入了一个重要的概念：<strong>回表</strong>，即回到主键索引树搜索的过程。避免回表操作是提升 SQL 查询效率的常规思路及重要方法。那么如何避免回表？<br>注：该例子来自《MySQL 实战 45 讲》</p>
+<h1 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h1><p>MySQL 5.7,建表语句：<br>CREATE TABLE <code>employees</code> (<br><code>emp_no</code> int(11) NOT NULL,<br><code>birth_date</code> date NOT NULL,<br><code>first_name</code> varchar(14) NOT NULL,<br><code>last_name</code> varchar(16) NOT NULL,<br><code>gender</code> enum(‘M’,’F’) NOT NULL,<br><code>hire_date</code> date NOT NULL,<br>PRIMARY KEY (<code>emp_no</code>),<br>KEY <code>i_first_name</code> (<code>first_name</code>),<br>KEY <code>i_hire_date</code> (<code>hire_date</code>)<br>) ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
+<ul>
+<li>SQL 语句 A</li>
+</ul>
+<p>explain select * from employees where hire_date &gt; ‘1990-01-14’;<br>explain 结果：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088895396-33382d49-550b-4328-b357-40279f746576.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=118&id=u256a6796&margin=%5Bobject%20Object%5D&originHeight=236&originWidth=1440&originalType=url&status=done&style=none&taskId=ucbf0cfb6-c0dd-4e14-9f8c-0814c44313e&width=720"></p>
+<ul>
+<li>SQL 语句 B</li>
+</ul>
+<p>explain select emp_no from employees where hire_date &gt; ‘1990-01-14’;<br>explain 结果：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088895575-568ec1f0-756a-4c0d-a4c9-fc06f69d8fdb.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=101&id=u538da89f&margin=%5Bobject%20Object%5D&originHeight=202&originWidth=1440&originalType=url&status=done&style=none&taskId=u0c095317-4735-462c-bdbb-91169093eb3&width=720"></p>
+<ul>
+<li>分析</li>
+</ul>
+<p>从前后两次 explain 的结果可以看到 SQL 语句 A 的 extra 为 using where，SQL 语句 B 的 extra 为 using where;using index。这说明 A 没有使用索引，而 B 使用了索引。<br>索引 K 中包含了查询语句所需要的字段 ID 的值，无需再次回到主键索引树查找，也就是“覆盖”了我们的查询需求，我们称之为覆盖索引。覆盖索引可以减少树的搜索次数，显著提升查询性能。</p>
+<h1 id="最左匹配"><a href="#最左匹配" class="headerlink" title="最左匹配"></a>最左匹配</h1><ul>
+<li>SQL 语句 A</li>
+</ul>
+<p>explain select * from employees where hire_date &gt; ‘1990-01-14’ and first_name like ‘%Hi%’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088895722-1cc85578-107b-43f6-b022-c2e231e4086d.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=113&id=uf87fd166&margin=%5Bobject%20Object%5D&originHeight=225&originWidth=1440&originalType=url&status=done&style=none&taskId=u8380019d-8ae5-4f70-bf05-3497f8bc813&width=720"></p>
+<ul>
+<li>SQL 语句 B</li>
+</ul>
+<p>explain select * from employees where hire_date &gt; ‘1990-01-14’ and first_name like ‘Hi%’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088895688-c8e3c84c-ab7c-46d3-a632-fd627b335673.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=88&id=u33e49afd&margin=%5Bobject%20Object%5D&originHeight=175&originWidth=1440&originalType=url&status=done&style=none&taskId=u48e4e9f2-8be1-4387-a5a5-dfc67a34acf&width=720"></p>
+<ul>
+<li>分析</li>
+</ul>
+<p>在上述测试的 SQL 语句 A 使用了极端方式: first_name like ‘%Hi%’，前后都增加模糊匹配使得 SQL 语句无法使用到索引；当去掉最左边的‘%’后，SQL 语句 B 就使用了索引。最左匹配可以是字符串索引的最左 N 个字符，也可以是联合索引的最左 M 的字段。合理规划、使用最左匹配可以减少索引，从而节约磁盘空间。</p>
+<h1 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h1><p>何为索引下推？我们先从下面这组对比测试开始，将在 MySQL5.5 版本和 MySQL5.7 版本中执行同一条 SQL 语句：<br>select * from employees where hire_date &gt; ‘1990-01-14’ and first_name like ‘Hi%’;</p>
+<ul>
+<li>在 MySQL 5.5 执行 explain，extra 字段的值显示没有使用索引</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088896206-fbe2a06b-ef49-48b1-a026-74641b87b994.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=132&id=u03315432&margin=%5Bobject%20Object%5D&originHeight=264&originWidth=1440&originalType=url&status=done&style=none&taskId=udf885841-a916-4d06-bc0c-8e5c3cda136&width=720"><br>执行查询花费时间为 0.12s<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088896891-8fc394dc-9a11-4a4a-8114-cfd9a1eca215.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=168&id=u751a485e&margin=%5Bobject%20Object%5D&originHeight=335&originWidth=1440&originalType=url&status=done&style=none&taskId=u55ef74f8-c80d-46e7-a693-5342e639eca&width=720"></p>
+<ul>
+<li>在 MySQL 5.7 执行 explain，extra 字段的值显示使用了索引下推</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088896688-953377a5-9867-4a92-ba3f-090ab5e7436f.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=85&id=uc426898e&margin=%5Bobject%20Object%5D&originHeight=169&originWidth=1440&originalType=url&status=done&style=none&taskId=u60c191cf-860d-4dbc-934f-a5c9b636ab2&width=720"><br>执行查询花费时间为 0.02s<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088897039-dd44c0cb-63c1-4505-8288-a4c1ccba0aaa.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=173&id=ua7aa09ea&margin=%5Bobject%20Object%5D&originHeight=345&originWidth=1440&originalType=url&status=done&style=none&taskId=uc9955798-7e3c-490b-b7d0-a3ad7b25e52&width=720"></p>
+<ul>
+<li>索引下推</li>
+</ul>
+<p>explain 结果中的 extra 字段值包含 using index condition，则说明使用了索引下推。索引下推功能是从 5.6 版本开始支持的。在 5.6 版本之前，i_first_name 索引是没有使用上的，需要每次去主键索引表取完整的记录值进行比较。从 5.6 版本开始，由于索引 i_first_name 的存在，可以直接取索引的 first_name 值进行过滤，这样不符合”first_name like ‘Hi%’”条件的记录就不再需要回表操作。</p>
+<h1 id="MRR-优化"><a href="#MRR-优化" class="headerlink" title="MRR 优化"></a>MRR 优化</h1><p>MySQL 5.6 版本开始支持 Multi-Range Read(MRR)优化，MRR 优化的目的是为减少磁盘的随机访问，并且将随机访问转化为较为顺序的数据访问，对于 IO-bound 类型的 SQL 查询语句可带来性能极大提升。我们先看下对比测试，以下测试语句在同一个 MySQL 实例下执行，执行前均进行 mysql 服务重启，以保证缓存此没被预热。</p>
+<ul>
+<li>关闭 MRR</li>
+</ul>
+<p>SET @@optimizer_switch=’mrr=off’;<br>select * from employees where hire_date &gt; ‘1990-01-14’ and first_name like ‘Hi%’;<br>执行耗时为 0.90s<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088897059-f057161d-66c0-4540-a7df-c12d65705659.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=148&id=u6f238ad8&margin=%5Bobject%20Object%5D&originHeight=296&originWidth=1440&originalType=url&status=done&style=none&taskId=u46a40f65-0bed-494b-880e-a7560b2da72&width=720"></p>
+<ul>
+<li>开启 MRR</li>
+</ul>
+<p>SET @@optimizer_switch=’mrr=on,mrr_cost_based=off’;<br>select * from employees where hire_date &gt; ‘1990-01-14’ and first_name like ‘Hi%’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088897660-0e587a0e-9661-4618-85b9-4b01aa9715b8.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=168&id=u35b96db8&margin=%5Bobject%20Object%5D&originHeight=336&originWidth=1440&originalType=url&status=done&style=none&taskId=uae149433-29b8-4bce-a927-9db95ac9ace&width=720"></p>
+<ul>
+<li>分析</li>
+</ul>
+<p>从测试结果可以发现在 mrr 从关闭到开启，耗时从 0.90s 减少到 0.03s，查询速率达到 30 倍的提升。</p>
+<h1 id="常见的索引失效场景"><a href="#常见的索引失效场景" class="headerlink" title="常见的索引失效场景"></a>常见的索引失效场景</h1><p>在 MySQL 表中建立了索引，SQL 查询语句就会一定使用到索引么？不一定，存在着索引失效的场景。我们给 employees 表增一个组合索引，后续例子均基于此表进行分析、测试。<br>alter table employees add index i_b_f_l(birth_date, first_name, last_name)<br>alter table employees add index i_h(hire_date);<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088898027-e743911c-3a37-4062-85e8-f830211e4569.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=135&id=ue9894827&margin=%5Bobject%20Object%5D&originHeight=270&originWidth=1440&originalType=url&status=done&style=none&taskId=u4ebcd569-f78a-41e0-997e-2ad421354f7&width=720"></p>
+<h1 id="失效场景"><a href="#失效场景" class="headerlink" title="失效场景"></a>失效场景</h1><ul>
+<li>范围查询（&gt;,&lt;,&lt;&gt;）</li>
+</ul>
+<p>explain select * from employees where hire_date &gt; ‘1989-06-02’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088897945-e6238fdf-b81c-4795-b5f7-576db0ee1cf0.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=109&id=u79117872&margin=%5Bobject%20Object%5D&originHeight=217&originWidth=1440&originalType=url&status=done&style=none&taskId=ud018c751-0830-41d4-9a77-cb44b9a2f98&width=720"></p>
+<ul>
+<li>查询条件类型不一致</li>
+</ul>
+<p>alter table employees add index i_first_name (first_name);<br>explain select * from employees where first_name = 1;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088898632-2e157d37-fca2-4ec3-9849-c1222fd27829.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=171&id=uc7641f94&margin=%5Bobject%20Object%5D&originHeight=342&originWidth=1440&originalType=url&status=done&style=none&taskId=uab0b3ca9-c25d-445c-ab0d-a1eb3062aff&width=720"></p>
+<ul>
+<li>查询条件使用了函数</li>
+</ul>
+<p>explain select * from employees where CHAR_LENGTH(hire_date) = 10;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088898307-ff31d9fd-ca40-4901-bfb5-30b08e2786a4.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=112&id=uf00e99b7&margin=%5Bobject%20Object%5D&originHeight=223&originWidth=1440&originalType=url&status=done&style=none&taskId=u393cf983-eadf-4813-8a9e-6ef3ef8983e&width=720"></p>
+<ul>
+<li>模糊查询</li>
+</ul>
+<p>explain select * from employees where hire_date like ‘%1995’;<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621088898781-16063120-966c-4bb2-8e02-a8b633462581.png#clientId=u1e98e4ef-4c14-4&from=paste&height=127&id=uc02bd986&margin=%5Bobject%20Object%5D&originHeight=254&originWidth=1959&originalType=url&status=done&style=none&taskId=u1febf59a-5f85-460a-a2ad-fed1a83762c&width=979.5"></p>
+<ul>
+<li>不使用组合索引的首个字段当条件</li>
+</ul>
+<p>explain select * from employees where last_name = ‘Kalloufi’ and first_name = ‘Saniya’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088899149-68025a6c-26f3-4fc1-9056-edf46c5f291f.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=84&id=ua01b9557&margin=%5Bobject%20Object%5D&originHeight=167&originWidth=1440&originalType=url&status=done&style=none&taskId=u434b83b2-d27c-409d-8a19-a9512e4c83c&width=720"></p>
+<h1 id="为什么会失效？"><a href="#为什么会失效？" class="headerlink" title="为什么会失效？"></a>为什么会失效？</h1><ul>
+<li>顺序读比离散读性能要好范围查询一定会导致索引失效么？并不会！稍微更改下查询条件看下 explain 的对比结果，可以看到新语句用到索引下推，说明索引并未失效。为什么？在不使用覆盖索引的情况下，优化器只有在数据量小的时候才会选择使用非聚集索引。受制于传统的机械磁盘特性，通过聚集索引顺序读数据行的性能会比通过非聚集索引离散读数据行要好。所以，优化器在即使有非聚集索引、但是访问数据量可能达到送记录数的 20%时会选择聚集索引。当然也可以用 Force index 强制使用索引。</li>
+</ul>
+<p>explain select * from employees where hire_date &gt; ‘1999-06-02’;<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088899307-996dc6c8-b60b-4d92-ae70-4c23b868d1b4.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=200&id=u0855a14d&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=1440&originalType=url&status=done&style=none&taskId=u668230d7-12a9-4888-802e-70e5a32096d&width=720"></p>
+<ul>
+<li>无法使用 B+索引快速查找 B+树索引支持快速查询的基本要素是因为其索引键值是有序存储的，从左到右由小到大，这样就可以在每个层级的节点中快速查并进入下一层级，最终在叶子节点找到对应的值。使用函数会使得 MySQL 无法使用索引进行快速查询，因为对索引字段做函数操作会破坏索引值的有序性，所以优化器选择不使用索引。而查询条件类型不一致其实也是同样的情况，因为其使用了隐式类型转换*。</li>
+</ul>
+<p>模糊匹配和不使用组合索引的首字段作为查询条件均是无法快速定位索引位置从而导致无法使用索引。模糊匹配当查询条件是 lwhere A ike ‘a%’，a 是 A 的最左前缀时是可能用上索引的（最左匹配），是否用上最终还是依赖优化器对查询数据量的评估。</p>
+<h1 id="回到初始的案例"><a href="#回到初始的案例" class="headerlink" title="回到初始的案例"></a>回到初始的案例</h1><p>让我们回到文章初的案例，尝试回答下当时提出的 3 个问题。<br>– A 语句<br>SELECT FStatDate, FMerchantId, FVersion, FBatch, FTradeAmount, FTradeCount FROM T_Mch<strong>**</strong>Stat_1020 WHERE FStatDate = 20201020 AND FVersion = 0 AND FMerchantId &gt; 0 ORDER BY FMerchantId ASC LIMIT 0, 8000;</p>
+<p>– B 语句<br>SELECT SQL_CALC_FOUND_ROWS a1.FStatDate,<br>a1.FMerchantId,<br>a1.FVersion,<br>FBatch,<br>FTradeAmount,<br>FTradeCount<br>FROM T_Mch<strong>**</strong>Stat_1020 a1, (<br>SELECT FStatDate, FMerchantId, FVersion<br>FROM T_Mch<strong>**</strong>Stat_1020<br>WHERE FStatDate = 20201020<br>AND FVersion = 0<br>AND FMerchantId &gt; 0<br>ORDER BY FMerchantId ASC LIMIT 0, 8000 ) a2<br>where a1.FStatDate = a2.FStatDate<br>and a1.FVersion = a2.FVersion<br>and a1.FMerchantId = a2.FMerchantId;<br><strong>SQL 语句 A 的查询条件字段都在主键中，主键索引用到了没？</strong><br>主键索引其实是有被使用的：索引的范围查询，只是其需要逐条读取和解析所有记录才导致慢查询。<br><strong>SQL 语句 B 的子查询为什么能够用到索引？</strong></p>
+<ol>
+<li>前文中我们介绍了聚集索引，其索引键值就是主键。</li>
+<li>两条 SQL 语句的不同之处在于 B 语句的子查询语句的 Select 字段都包含在主键字段中，而 A 语句还有其它字段（例如 FBatch 和 FTradeAmount 等）。这种情况下只凭主键索引的键值就能满足 B 语句的字段要求；A 语句则需要逐条取整行记录进行解析。</li>
+</ol>
+<p><strong>前后两条语句执行流程的差异是什么？</strong></p>
+<ul>
+<li>SQL 语句 A 的执行过程：</li>
+</ul>
+<ol>
+<li>逐条扫描索引表并比较查询条件</li>
+<li>遇到符合查询条件的则读取整行数据返回</li>
+<li>回到 a 步骤，直至完成所有索引记录的比较</li>
+<li>对返回的所有符合条件的记录（完整的记录）进行排序</li>
+<li>选取前 8000 条数据返回</li>
+</ol>
+<ul>
+<li>SQL 语句 B 的执行过程：</li>
+</ul>
+<ol>
+<li>逐条扫描索引表并比较查询条件</li>
+<li>遇到符合查询条件的则从索引键中取相关字段值返回</li>
+<li>回到 a 步骤，直至完成所有索引记录的比较</li>
+<li>对返回的所有符合条件的记录（每条记录只有 3 个主键）进行排序</li>
+<li>选取前 8000 条数据返回形成临时表</li>
+<li>关联临时表与主表，使用主键相等比较查询 8000 条数据</li>
+</ol>
+<ul>
+<li>对比两个 SQL 语句的执行过程，可以发现差异点集中在步骤 2 和步骤 4。在步骤 2 中 SQL 语句 A 需要随机读取整行数据并解析非常耗资源；步骤 4 涉及 MySQL 的排序算法，这里也会对执行效率有影响，排序效果上看 SQL 语句 B 比 SQL 语句 A 好。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1621088899512-dc003980-00a0-43de-8f70-37b751065e12.jpeg#clientId=u1e98e4ef-4c14-4&from=paste&height=174&id=u37212646&margin=%5Bobject%20Object%5D&originHeight=348&originWidth=1440&originalType=url&status=done&style=none&taskId=u17ad8085-3ef1-4a12-890a-b749d568dc3&width=720"></p>
+<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><ul>
+<li>主键索引</li>
+</ul>
+<p>顾名思义该类索引由表的主键组成，从左到右由小到大排序。一个 Innodb 存储表只有一张主键索引表（聚集索引）。</p>
+<ul>
+<li>普通索引</li>
+</ul>
+<p>最为平常的一种索引，没有特别限制。</p>
+<ul>
+<li>唯一索引</li>
+</ul>
+<p>该索引的字段不能有相同值，但允许有空值。</p>
+<ul>
+<li>组合索引</li>
+</ul>
+<p>由多列字段组合而成的索引，往往是为了提升查询效率而设置。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/15/yuque/Mysql%20%E9%83%A8%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%85%BE%E8%AE%AF%E6%8A%80%E6%9C%AF%E5%B7%A5%E7%A8%8B%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/go 逃逸分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/14/yuque/go%20%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/">go 逃逸分析</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/14/yuque/go%20%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/" class="archive-article-date">
+  	<time datetime="2021-05-14T08:17:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="逃逸分析的用处（为了性能）"><a href="#逃逸分析的用处（为了性能）" class="headerlink" title="逃逸分析的用处（为了性能）"></a>逃逸分析的用处（为了性能）</h2><p>最大的好处应该是减少 gc 的压力，不逃逸的对象分配在栈上，当函数返回时就回收了资源，不需要 gc 标记清除。因为逃逸分析完后可以确定哪些变量可以分配在栈上，栈的分配比堆快，性能好。同步消除，如果你定义的对象的方法上有同步锁，但在运行时，却只有一个线程在访问，此时逃逸分析后的机器码，会去掉同步锁运行。<br>go 消除了堆和栈的区别 go 在一定程度消除了堆和栈的区别，因为 go 在编译的时候进行逃逸分析，来决定一个对象放栈上还是放堆上，不逃逸的对象放栈上，可能逃逸的放堆上。<br>​</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/14/yuque/go%20%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/IO select poll epoll" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/13/yuque/IO%20select%20poll%20epoll/">IO select poll epoll</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/13/yuque/IO%20select%20poll%20epoll/" class="archive-article-date">
+  	<time datetime="2021-05-13T16:23:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><h3 id="最初级的-I-O-复用"><a href="#最初级的-I-O-复用" class="headerlink" title="最初级的 I/O 复用"></a>最初级的 I/O 复用</h3><p>所谓的 I/O 复用，就是多个 I/O 可以复用一个进程。<br>采用非阻塞的模式，当一个连接过来时，我们不阻塞住，这样一个进程可以同时处理多个连接了。<br>比如一个进程接受了 10000 个连接，这个进程每次从头到尾的问一遍这 10000 个连接：“有 I/O 事件没？有的话就交给我处理，没有的话我一会再来问一遍。”然后进程就一直从头到尾问这 10000 个连接，如果这 1000 个连接都没有 I/O 事件，就会造成 CPU 的空转，并且效率也很低，不好不好。</p>
+<h3 id="升级版的-I-O-复用"><a href="#升级版的-I-O-复用" class="headerlink" title="升级版的 I/O 复用"></a>升级版的 I/O 复用</h3><p>上面虽然实现了基础版的 I/O 复用，但是效率太低了。于是伟大的程序猿们日思夜想的去解决这个问题…终于！<br>我们能不能引入一个代理，这个代理可以同时观察许多 I/O 流事件呢？<br>当没有 I/O 事件的时候，这个进程处于阻塞状态；当有 I/O 事件的时候，这个代理就去通知进程醒来？<br>于是，早期的程序猿们发明了两个代理—select、poll。<br>select、poll 代理的原理是这样的：<br>当连接有 I/O 流事件产生的时候，就会去唤醒进程去处理。但是进程并不知道是哪个连接产生的 I/O 流事件，于是进程就挨个去问：“请问是你有事要处理吗？”……问了 99999 遍，哦，原来是第 100000 个进程有事要处理。那么，前面这 99999 次就白问了，白白浪费宝贵的 CPU 时间片了！痛哉，惜哉…</p>
+<ol>
+<li>select 是第一个实现 (1983 左右在 BSD 里面实现)</li>
+<li>1997 年实现了 poll.</li>
+<li>select 与 poll 原理是一样的，只不过 select 只能观察 1024 个连接，poll 可以观察无限个连接。</li>
+</ol>
+<p>上面看了，select、poll 因为不知道哪个连接有 I/O 流事件要处理，性能也挺不好的。<br>那么，如果发明一个代理，每次能够知道哪个连接有了 I/O 流事件，不就可以避免无意义的空转了吗？<br>于是，超级无敌、闪闪发光的 epoll，于 5 年以后, 在 2002 年被大神 Davide Libenzi 发明出来了。</p>
+<h3 id="epoll-IO-多路复用"><a href="#epoll-IO-多路复用" class="headerlink" title="epoll IO 多路复用"></a>epoll IO 多路复用</h3><p>epoll 代理的原理是这样的：<br>当连接有 I/O 流事件产生的时候，epoll 就会去告诉进程哪个连接有 I/O 流事件产生，然后进程就去处理这个进程。如此，多高效！<br>epoll 可以说是 I/O 多路复用最新的一个实现，epoll 修复了 poll 和 select 绝大部分问题, 比如：<br>epoll 现在是线程安全的。epoll 现在不仅告诉你 sock 组里面数据，还会告诉你具体哪个 sock 有数据，你不用自己去找了。<br>可是 epoll 有个致命的缺点，只有 linux 支持。于是其他的平台实现类型的多路复用，比如 BSD 上面对应的是 kqueue， win 下对应的 iocp。</p>
+<h3 id="epoll-和-select-poll-区别"><a href="#epoll-和-select-poll-区别" class="headerlink" title="epoll 和 select/poll 区别"></a>epoll 和 select/poll 区别</h3><p>简单说 epoll 和 select/poll 最大区别是</p>
+<ol>
+<li>epoll 内部使用了 mmap 共享了用户和内核的部分空间，避免了数据的来回拷贝</li>
+<li>epoll 基于事件驱动，epoll_ctl 注册事件并注册 callback 回调函数，epoll_wait 只返回发生的事件避免了像 select 和 poll 对事件的整个轮寻操作。</li>
+</ol>
+<h2 id="Nginx-异步，非阻塞，IO-多路复用"><a href="#Nginx-异步，非阻塞，IO-多路复用" class="headerlink" title="Nginx 异步，非阻塞，IO 多路复用"></a>Nginx 异步，非阻塞，IO 多路复用</h2><p>Nginx 这样出众，正是他采用了异步，非阻塞，IO 多路复用。<br>Nginx 之前是单进程的。看下他的进程。1 个 master 进程，2 个 work 进程。<br>$ pstree |grep nginx |-+= 81666 root nginx: master process nginx | |— 82500 nobody nginx: worker process | -– 82501 nobody nginx: worker process<br>每进来一个 request，会有一个 worker 进程去处理。但不是全程的处理，处理到什么程度呢？处理到可能发生阻塞的地方，比如向上游（后端）服务器转发 request，并等待请求返回。那么，这个处理的 worker 不会这么傻等着，他会在发送完请求后，注册一个事件：“如果 upstream 返回了，告诉我一声，我再接着干”。于是他就休息去了。这就是异步。此时，如果再有 request 进来，他就可以很快再按这种方式处理。这就是非阻塞和 IO 多路复用。而一旦上游服务器返回了，就会触发这个事件，worker 才会来接手，这个 request 才会接着往下走。这就是异步回调。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/13/yuque/IO%20select%20poll%20epoll/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/短服务" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -208,9 +625,9 @@ var _hmt = _hmt || [];
 <li>用户访问短链接，会跳转到正确的长链接上去。</li>
 </ol>
 <p>查找到对应的长网址，并跳转到对应的页面。</p>
-<h4 id="短链生成方法"><a href="#短链生成方法" class="headerlink" title="短链生成方法"></a>短链生成方法</h4><p>短码一般是由[a - z, A - Z, 0 - 9]这 62 个字母或数字组成，短码的长度也可以自定义，但一般不超过 8 位。比较常用的都是 6 位，6 位的短码已经能有 568 亿种的组合：(26+26+10)^6 = 56800235584，已满足绝大多数的使用场景。<br>目前比较流行的生成短码方法有：自增 id、摘要算法、普通随机数。</p>
-<h5 id="自增-id"><a href="#自增-id" class="headerlink" title="自增 id"></a>自增 id</h5><p>该方法是一种无碰撞的方法，原理是，每新增一个短码，就在上次添加的短码 id 基础上加 1，然后将这个 10 进制的 id 值，转化成一个 62 进制的字符串。<br>一般利用数据表中的自增 id 来完成：每次先查询数据表中的自增 id 最大值 max，那么需要插入的长网址对应自增 id 值就是 max+1，将 max+1 转成 62 进制即可得到短码。<br>但是短码 id 是从一位长度开始递增，短码的长度不固定，不过可以用 id 从指定的数字开始递增的方式来处理，确保所有的短码长度都一致。同时，生成的短码是有序的，可能会有安全的问题，可以将生成的短码 id，结合长网址等其他关键字，进行 md5 运算生成最后的短码。</p>
-<h5 id="摘要算法"><a href="#摘要算法" class="headerlink" title="摘要算法"></a>摘要算法</h5><p>摘要算法又称哈希算法，它表示输入任意长度的数据，输出固定长度的数据。相同的输入数据始终得到相同的输出，不同的输入数据尽量得到不同的输出。<br>算法过程：</p>
+<h2 id="短链生成方法"><a href="#短链生成方法" class="headerlink" title="短链生成方法"></a>短链生成方法</h2><p>短码一般是由[a - z, A - Z, 0 - 9]这 62 个字母或数字组成，短码的长度也可以自定义，但一般不超过 8 位。比较常用的都是 6 位，6 位的短码已经能有 568 亿种的组合：(26+26+10)^6 = 56800235584，已满足绝大多数的使用场景。<br>目前比较流行的生成短码方法有：自增 id、摘要算法、普通随机数。</p>
+<h3 id="自增-id"><a href="#自增-id" class="headerlink" title="自增 id"></a>自增 id</h3><p>该方法是一种无碰撞的方法，原理是，每新增一个短码，就在上次添加的短码 id 基础上加 1，然后将这个 10 进制的 id 值，转化成一个 62 进制的字符串。<br>一般利用数据表中的自增 id 来完成：每次先查询数据表中的自增 id 最大值 max，那么需要插入的长网址对应自增 id 值就是 max+1，将 max+1 转成 62 进制即可得到短码。<br>但是短码 id 是从一位长度开始递增，短码的长度不固定，不过可以用 id 从指定的数字开始递增的方式来处理，确保所有的短码长度都一致。同时，生成的短码是有序的，可能会有安全的问题，可以将生成的短码 id，结合长网址等其他关键字，进行 md5 运算生成最后的短码。</p>
+<h3 id="摘要算法"><a href="#摘要算法" class="headerlink" title="摘要算法"></a>摘要算法</h3><p>摘要算法又称哈希算法，它表示输入任意长度的数据，输出固定长度的数据。相同的输入数据始终得到相同的输出，不同的输入数据尽量得到不同的输出。<br>算法过程：</p>
 <ol>
 <li>将长网址 md5 生成 32 位签名串,分为 4 段, 每段 8 个字节；</li>
 <li>对这四段循环处理, 取 8 个字节, 将他看成 16 进制串与 0x3fffffff(30 位 1)与操作, 即超过 30 位的忽略处理；</li>
@@ -218,9 +635,13 @@ var _hmt = _hmt || [];
 <li>总的 md5 串可以获得 4 个 6 位串；取里面的任意一个就可作为这个长 url 的短 url 地址；</li>
 </ol>
 <p>这种算法,虽然会生成 4 个,但是仍然存在重复几率。<br>虽然几率很小，但是该方法依然存在碰撞的可能性，解决冲突会比较麻烦。不过该方法生成的短码位数是固定的，也不存在连续生成的短码有序的情况。</p>
-<h5 id="普通随机数"><a href="#普通随机数" class="headerlink" title="普通随机数"></a>普通随机数</h5><p>该方法是从 62 个字符串中随机取出一个 6 位短码的组合，然后去数据库中查询该短码是否已存在。如果已存在，就继续循环该方法重新获取短码，否则就直接返回。<br>该方法是最简单的一种实现，不过由于 Math.round()方法生成的随机数属于伪随机数，碰撞的可能性也不小。在数据比较多的情况下，可能会循环很多次，才能生成一个不冲突的短码。<br><strong>算法分析</strong><br>以上算法利弊我们一个一个来分析。<br>如果使用自增 id 算法，会有一个问题就是不法分子是可以穷举你的短链地址的。原理就是将 10 进制数字转为 62 进制，那么别人也可以使用相同的方式遍历你的短链获取对应的原始链接。打个比方说：<a target="_blank" rel="noopener" href="http://tinyurl.com/a3300%E5%92%8C">http://tinyurl.com/a3300 和</a><a target="_blank" rel="noopener" href="http://bit.ly/a3300%EF%BC%8C%E8%BF%99%E4%B8%A4%E4%B8%AA%E7%9F%AD%E9%93%BE%E7%BD%91%E7%AB%99%EF%BC%8C%E5%88%86%E5%88%AB%E4%BB%8Ea3300">http://bit.ly/a3300，这两个短链网站，分别从 a3300</a>- a3399，能够试出来多次返回正确的 url。所以这种方式生成的短链对于使用者来说其实是不安全的。<br>摘要算法，其实就是 hash 算法吧，一说 hash 大家可能觉得很 low，但是事实上 hash 可能是最优解。比如：<a target="_blank" rel="noopener" href="http://www.sina.lt/">http://www.sina.lt/</a>和<a target="_blank" rel="noopener" href="http://mrw.so/">http://mrw.so/</a>连续生成的 url 发现并没有规律，很有可能就是使用 hash 算法来实现。<br>普通随机数算法，这种算法生成的东西和摘要算法一样，但是碰撞的概率会大一些。因为摘要算法毕竟是对 url 进行 hash 生成，随机数算法就是简单的随机生成，数量一旦上来必然会导致重复。<br>综合以上，我选择最 low 的算法：摘要算法。<br>​</p>
+<h3 id="普通随机数"><a href="#普通随机数" class="headerlink" title="普通随机数"></a>普通随机数</h3><p>该方法是从 62 个字符串中随机取出一个 6 位短码的组合，然后去数据库中查询该短码是否已存在。如果已存在，就继续循环该方法重新获取短码，否则就直接返回。<br>该方法是最简单的一种实现，不过由于 Math.round()方法生成的随机数属于伪随机数，碰撞的可能性也不小。在数据比较多的情况下，可能会循环很多次，才能生成一个不冲突的短码。</p>
+<h2 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h2><p>以上算法利弊我们一个一个来分析。<br>如果使用自增 id 算法，会有一个问题就是不法分子是可以穷举你的短链地址的。原理就是将 10 进制数字转为 62 进制，那么别人也可以使用相同的方式遍历你的短链获取对应的原始链接。打个比方说：<a target="_blank" rel="noopener" href="http://tinyurl.com/a3300%E5%92%8C">http://tinyurl.com/a3300 和</a><a target="_blank" rel="noopener" href="http://bit.ly/a3300%EF%BC%8C%E8%BF%99%E4%B8%A4%E4%B8%AA%E7%9F%AD%E9%93%BE%E7%BD%91%E7%AB%99%EF%BC%8C%E5%88%86%E5%88%AB%E4%BB%8Ea3300">http://bit.ly/a3300，这两个短链网站，分别从 a3300</a>- a3399，能够试出来多次返回正确的 url。所以这种方式生成的短链对于使用者来说其实是不安全的。<br>摘要算法，其实就是 hash 算法吧，一说 hash 大家可能觉得很 low，但是事实上 hash 可能是最优解。比如：<a target="_blank" rel="noopener" href="http://www.sina.lt/">http://www.sina.lt/</a>和<a target="_blank" rel="noopener" href="http://mrw.so/">http://mrw.so/</a>连续生成的 url 发现并没有规律，很有可能就是使用 hash 算法来实现。<br>普通随机数算法，这种算法生成的东西和摘要算法一样，但是碰撞的概率会大一些。因为摘要算法毕竟是对 url 进行 hash 生成，随机数算法就是简单的随机生成，数量一旦上来必然会导致重复。<br>综合以上，我选择最 low 的算法：摘要算法。<br>​</p>
 <p>​</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;crypto/md5&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/spaolacci/murmur3&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Hash</span><span class="params">(data []<span class="keyword">byte</span>)</span> <span class="title">uint64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> murmur3.Sum64(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Hash32</span><span class="params">(data []<span class="keyword">byte</span>)</span> <span class="title">uint32</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> murmur3.Sum32(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(Short)</span> <span class="title">getShortUrl</span><span class="params">(key, url <span class="keyword">string</span>,ct <span class="keyword">int</span>/*冲突标记*/)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="comment">//加密字符传前的混合 KEY</span></span><br><span class="line">	<span class="comment">// 要使用生成 URL 的字符</span></span><br><span class="line">	<span class="comment">// 对传入网址进行 MMH3 加密</span></span><br><span class="line">    hash32 := Hash32([]<span class="keyword">byte</span>(key + url))</span><br><span class="line">    <span class="keyword">if</span> ct !=<span class="number">0</span>&#123;</span><br><span class="line">        hash32 = Hash32([]<span class="keyword">byte</span>(key + url+<span class="keyword">string</span>(i)))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 把加密字符按照 8 位一组 16 进制与 0x3FFFFFFF 进行位与运算</span></span><br><span class="line">	lHexLong := <span class="number">0x3FFFFFFF</span> &amp; hash32</span><br><span class="line">	outChars := <span class="string">&quot;&quot;</span></span><br><span class="line">	<span class="comment">//循环获得每组6位的字符串</span></span><br><span class="line">	<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">6</span>; j++ &#123;</span><br><span class="line">		<span class="comment">// 把得到的值与 0x0000003E 这是62 进行mod运算，取得字符数组 chars 索引(具体需要看chars数组的长度   以防下标溢出，注意起点为0)</span></span><br><span class="line">		index := lHexLong % <span class="number">0x0000003E</span></span><br><span class="line">		<span class="comment">// 把取得的字符相加</span></span><br><span class="line">		outChars += model.Chars[index]</span><br><span class="line">		<span class="comment">// 每次循环按位右移 5 位</span></span><br><span class="line">		lHexLong = lHexLong &gt;&gt; <span class="number">5</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 把字符串存入对应索引的输出数组</span></span><br><span class="line">	<span class="keyword">return</span> outChars + CreateShortExtra()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这块可以做分库分表设计</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateShortExtra</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	x := (getDays() / <span class="number">62</span>) % <span class="number">62</span></span><br><span class="line">	y := getDays() % <span class="number">62</span></span><br><span class="line">	<span class="keyword">return</span> Chars[x] + Chars[y]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDays</span><span class="params">()</span> <span class="title">int64</span></span> &#123;</span><br><span class="line">	yearMonthDay := time.Date(<span class="number">2021</span>, <span class="number">01</span>, <span class="number">01</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.Local)</span><br><span class="line">	<span class="keyword">return</span> (time.Now().Unix() - yearMonthDay.Unix()) / <span class="number">3600</span> / <span class="number">24</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Chars = []<span class="keyword">string</span>&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;f&quot;</span>, <span class="string">&quot;g&quot;</span>, <span class="string">&quot;h&quot;</span>,</span><br><span class="line">	<span class="string">&quot;i&quot;</span>, <span class="string">&quot;j&quot;</span>, <span class="string">&quot;k&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;m&quot;</span>, <span class="string">&quot;n&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;q&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="string">&quot;s&quot;</span>, <span class="string">&quot;t&quot;</span>,</span><br><span class="line">	<span class="string">&quot;u&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;w&quot;</span>, <span class="string">&quot;x&quot;</span>, <span class="string">&quot;y&quot;</span>, <span class="string">&quot;z&quot;</span>, <span class="string">&quot;0&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>, <span class="string">&quot;5&quot;</span>,</span><br><span class="line">	<span class="string">&quot;6&quot;</span>, <span class="string">&quot;7&quot;</span>, <span class="string">&quot;8&quot;</span>, <span class="string">&quot;9&quot;</span>, <span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>, <span class="string">&quot;D&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;F&quot;</span>, <span class="string">&quot;G&quot;</span>, <span class="string">&quot;H&quot;</span>,</span><br><span class="line">	<span class="string">&quot;I&quot;</span>, <span class="string">&quot;J&quot;</span>, <span class="string">&quot;K&quot;</span>, <span class="string">&quot;L&quot;</span>, <span class="string">&quot;M&quot;</span>, <span class="string">&quot;N&quot;</span>, <span class="string">&quot;O&quot;</span>, <span class="string">&quot;P&quot;</span>, <span class="string">&quot;Q&quot;</span>, <span class="string">&quot;R&quot;</span>, <span class="string">&quot;S&quot;</span>, <span class="string">&quot;T&quot;</span>,</span><br><span class="line">	<span class="string">&quot;U&quot;</span>, <span class="string">&quot;V&quot;</span>, <span class="string">&quot;W&quot;</span>, <span class="string">&quot;X&quot;</span>, <span class="string">&quot;Y&quot;</span>, <span class="string">&quot;Z&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="是否有分库分表的需要？"><a href="#是否有分库分表的需要？" class="headerlink" title="是否有分库分表的需要？"></a>是否有分库分表的需要？</h2><p>对于单条数据 10b 以内，一亿条数据总容量大约为 953G，单表肯定无法撑住这么大的量，所以有分表的需要，如果你对服务很有信心 2 年内能达到这个规模，那么你可以从一开始设计就考虑分表的方案。<br>那么如何定义分表的规则呢？<br>如果按照单表 500 万条记录来算，总计可以分为 20 张表，那么单表容量就是 47G，还是挺大，所以考虑分表的 key 和单表容量，如果分为 100 张表那么单表容量就是 10G，并且通过数字后缀路由到表中也比较容易。可以对 short_code 做 encoding 编码生成数字类型然后做路由。<br>​</p>
+<h2 id="高并发？"><a href="#高并发？" class="headerlink" title="高并发？"></a>高并发？</h2><p>需要考虑 缓存击穿的默认页面问题。</p>
 
       
 
@@ -1275,554 +1696,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/03/15/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/深挖 Redis 6.0 源码——SDS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/15/yuque/%E6%B7%B1%E6%8C%96%20Redis%206.0%20%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SDS/">深挖 Redis 6.0 源码——SDS</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/15/yuque/%E6%B7%B1%E6%8C%96%20Redis%206.0%20%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SDS/" class="archive-article-date">
-  	<time datetime="2021-03-15T18:53:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>SDS（Simple Dynamic Strings, 简单动态字符串）是 Redis 的一种基本数据结构，主要是用于存储字符串和整数。</strong> 这篇文章里，我们就来探讨一下 Redis SDS 这种数据结构的底层实现原理。</p>
-<p>学习之前，首先我们要明确，Redis 是一个<strong>使用 C 语言编写的键值对存储系统</strong>。</p>
-<h2 id="前置思考"><a href="#前置思考" class="headerlink" title="前置思考"></a>前置思考</h2><p>我们首先考虑一个问题，如何实现一个二进制安全的字符串？</p>
-<p>在 C 语言中，<code>\0</code> 表示字符串结束，如果字符串中本身就包含 <code>\0</code> 字符，那么字符串就会在 <code>\0</code> 处被截断，即非二进制安全；若通过使用一个 len 属性，来判断字符串是否结束，就可以保证读写字符串时不受到 <code>\0</code> 的影响，则是二进制安全。同时 len 属性也能保证在 O(1) 时间内获取字符串的长度。</p>
-<h2 id="Redis-3-2-以前的-SDS-实现"><a href="#Redis-3-2-以前的-SDS-实现" class="headerlink" title="Redis 3.2 以前的 SDS 实现"></a>Redis 3.2 以前的 SDS 实现</h2><p>在 Redis 3.2 版本以前，SDS 的结构如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> len;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>其中，<strong>buf 表示数据空间，用于存储字符串；len 表示 buf 中已占用的字节数，也即字符串长度；free 表示 buf 中剩余可用字节数。</strong></p>
-<p>字段 len 和 free 各占 4 字节，紧接着存放字符串。</p>
-<p>这样做有以下几个好处：</p>
-<ul>
-<li>用单独的变量 len 和 free，可以<strong>方便地获取字符串长度和剩余空间</strong>；</li>
-<li>内容存储在动态数组 buf 中，<strong>SDS 对上层暴露的指针指向 buf，而不是指向结构体 SDS</strong>。因此，上层可以像读取 C 字符串一样读取 SDS 的内容，兼容 C 语言处理字符串的各种函数，同时也能通过 buf 地址的偏移，方便地获取其他变量；</li>
-<li>读写字符串不依赖于 <code>\0</code>，保证<strong>二进制安全</strong>。</li>
-</ul>
-<p>但其实以上的设计是存在一些问题的，对于不同长度的字符串，是否有必要使用 len 和 free 这 2 个 4 字节的变量？4 字节的 len，可表示的字符串长度为 <code>2^32</code>，而在实际应用中，存放于 Redis 中的字符串往往没有这么长，因此，空间的使用上能否进一步压缩？</p>
-<p>那么接下来，我们就来看看最新的 Redis 是<strong>如何根据字符串的长度，使用不同的数据结构进行存储的</strong>。</p>
-<h2 id="Redis-SDS-最新实现"><a href="#Redis-SDS-最新实现" class="headerlink" title="Redis SDS 最新实现"></a>Redis SDS 最新实现</h2><p>在 Redis 3.2 版本之后（v3.2 - v6.0），Redis 将 SDS 划分为 5 种类型：</p>
-<ul>
-<li>sdshdr5：长度小于 1 字节</li>
-<li>sdshdr8：长度 1 字节</li>
-<li>sdshdr16：长度 2 字节</li>
-<li>sdshdr32：长度 4 字节</li>
-<li>sdshdr64：长度 8 字节</li>
-</ul>
-<p>Redis 增加了一个 flags 字段来标识类型，用一个字节(8 位)来存储。</p>
-<p>其中：前 3 位表示字符串的类型；剩余 5 位，可以用来存储长度小于 32 的短字符串。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr5</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 前3位存储类型，后5位存储长度 */</span></span><br><span class="line">    <span class="keyword">char</span> buf[]; <span class="comment">/* 动态数组，存放字符串 */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>而对于长度大于 31 的字符串，仅仅靠 flags 的后 5 位来存储长度明显是不够的，需要用另外的变量来存储。sdshdr8、sdshdr16、sdshdr32、sdshdr64 的数据结构定义如下，其中 len 表示已使用的长度，alloc 表示总长度，buf 存储实际内容，而 flags 的前 3 位依然存储类型，后 5 位则预留。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span> len; <span class="comment">/* 已使用长度，1字节 */</span></span><br><span class="line">    <span class="keyword">uint8_t</span> alloc; <span class="comment">/* 总长度，1字节 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 前3位存储类型，后5位预留 */</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr16</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> len; <span class="comment">/* 已使用长度，2字节 */</span></span><br><span class="line">    <span class="keyword">uint16_t</span> alloc; <span class="comment">/* 总长度，2字节 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 前3位存储类型，后5位预留 */</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr32</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span> len; <span class="comment">/* 已使用长度，4字节 */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> alloc; <span class="comment">/* 总长度，4字节 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 前3位存储类型，后5位预留 */</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr64</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint64_t</span> len; <span class="comment">/* 已使用长度，8字节 */</span></span><br><span class="line">    <span class="keyword">uint64_t</span> alloc; <span class="comment">/* 总长度，8字节 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 前3位存储类型，后5位预留 */</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>注意，一般情况下，结构体会按照所有变量大小的最小公倍数做字节对齐，而用 <code>packed</code> 修饰后，结构体则变为 1 字节对齐。这样做的好处有二：一是<strong>节省内存</strong>，比如 sdshdr32 可节约 3 个字节；二是 <strong>SDS 返回给上层的是指向 buf 的指针，此时按 1 字节对齐，所以可在创建 SDS 后，通过 <code>(char*)sh+hdrlen</code> 得到 buf 指针地址，也可以通过 <code>buf[-1]</code> 找到 flags</strong>。</p>
-<p>以上，Redis 根据字符串长度的不同，选择对应的数据结构进行存储。接下来，我们就来看看 Redis 字符串的相关 API 实现。</p>
-<h2 id="SDS-API-实现"><a href="#SDS-API-实现" class="headerlink" title="SDS API 实现"></a>SDS API 实现</h2><h3 id="1-创建字符串"><a href="#1-创建字符串" class="headerlink" title="1. 创建字符串"></a>1. 创建字符串</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">sds <span class="title">sdsnewlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *init, <span class="keyword">size_t</span> initlen)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *sh;</span><br><span class="line">    sds s;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据字符串长度计算相应类型</span></span><br><span class="line">    <span class="keyword">char</span> type = sdsReqType(initlen);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果创建的是&quot;&quot;字符串，强转为SDS_TYPE_8</span></span><br><span class="line">    <span class="keyword">if</span> (type == SDS_TYPE_5 &amp;&amp; initlen == <span class="number">0</span>) type = SDS_TYPE_8;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据类型计算头部所需长度（头部包含 len、alloc、flags）</span></span><br><span class="line">    <span class="keyword">int</span> hdrlen = sdsHdrSize(type);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指向flags的指针</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *fp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建字符串，+1是因为 `\0` 结束符</span></span><br><span class="line">    sh = s_malloc(hdrlen+initlen+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (sh == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (init==SDS_NOINIT)</span><br><span class="line">        init = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!init)</span><br><span class="line">        <span class="built_in">memset</span>(sh, <span class="number">0</span>, hdrlen+initlen+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// s指向buf</span></span><br><span class="line">    s = (<span class="keyword">char</span>*)sh+hdrlen;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// s减1得到flags</span></span><br><span class="line">    fp = ((<span class="keyword">unsigned</span> <span class="keyword">char</span>*)s)<span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在s末尾添加\0结束符</span></span><br><span class="line">    s[initlen] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回指向buf的指针s</span></span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建 SDS 的大致流程是这样的：首先根据字符串长度计算得到 type，根据 type 计算头部所需长度，然后动态分配内存空间。</p>
-<p>注意：</p>
-<ol>
-<li>创建空字符串时，<code>SDS_TYPE_5</code> 被强制转换为 <code>SDS_TYPE_8</code>（原因是创建空字符串后，内容可能会频繁更新而引发扩容操作，故直接创建为 sdshdr8）</li>
-<li>长度计算有 <code>+1</code> 操作，因为结束符 <code>\0</code> 会占用一个长度的空间。</li>
-<li>返回的是指向 buf 的指针 s。</li>
-</ol>
-<h3 id="2-清空字符串"><a href="#2-清空字符串" class="headerlink" title="2. 清空字符串"></a>2. 清空字符串</h3><p>SDS 提供了两种清空字符串的方法。</p>
-<p>一种是通过 s 偏移得到结构体的地址，然后调用 <code>s_free</code> 直接释放内存。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sdsfree</span><span class="params">(sds s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// s减去头部的大小得到结构体的地址</span></span><br><span class="line">    s_free((<span class="keyword">char</span>*)s-sdsHdrSize(s[<span class="number">-1</span>]));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>另一种是通过重置 len 属性值而达到清空字符串的目的，本质上 buf 并没有被真正清除，新的数据会直接覆盖 buf 中原有的数据，无需申请新的内存空间。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sdsclear</span><span class="params">(sds s)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将len属性置为0</span></span><br><span class="line">    sdssetlen(s, <span class="number">0</span>);</span><br><span class="line">    s[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-拼接字符串"><a href="#3-拼接字符串" class="headerlink" title="3. 拼接字符串"></a>3. 拼接字符串</h3><p>SDS 拼接字符串的实现如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">sds <span class="title">sdscatsds</span><span class="params">(sds s, <span class="keyword">const</span> sds t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> sdscatlen(s, t, sdslen(t));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>sdscatsds</code> 内部调用的是 <code>sdscatlen</code>。</p>
-<p>而 <code>sdscatlen</code> 内部的实现相对复杂一些，由于拼接字符串可能涉及 SDS 的扩容，因此 <code>sdscatlen</code> 内部调用 <code>sdsMakeRoomFor</code> 对拼接的字符串做检查：若无需扩容，直接返回 s；若需要扩容，则返回扩容好的新字符串 s。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">sds <span class="title">sdscatlen</span><span class="params">(sds s, <span class="keyword">const</span> <span class="keyword">void</span> *t, <span class="keyword">size_t</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 计算当前字符串长度</span></span><br><span class="line">    <span class="keyword">size_t</span> curlen = sdslen(s);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 确保s的剩余空间足以拼接上t</span></span><br><span class="line">    s = sdsMakeRoomFor(s,len);</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拼接s、t</span></span><br><span class="line">    <span class="built_in">memcpy</span>(s+curlen, t, len);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新s的len属性</span></span><br><span class="line">    sdssetlen(s, curlen+len);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// s末尾添加\0结束符</span></span><br><span class="line">    s[curlen+len] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>SDS 的扩容策略是这样的：</p>
-<ol>
-<li>若 SDS 中剩余空闲长度 avail 大于或等于新增内容的长度 addlen，无需扩容。</li>
-<li>若 SDS 中剩余空闲长度 avail 小于或等于 addlen，则分情况讨论：新增后总长度 <code>len+addlen &lt; 1MB</code> 的，按新长度的 2 倍扩容；新增后总长度 <code>len+addlen &gt;= 1MB</code> 的，按新长度加上 <code>1MB</code> 扩容。</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">sds <span class="title">sdsMakeRoomFor</span><span class="params">(sds s, <span class="keyword">size_t</span> addlen)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *sh, *newsh;</span><br><span class="line">    <span class="comment">// 当前剩余长度</span></span><br><span class="line">    <span class="keyword">size_t</span> avail = sdsavail(s);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> len, newlen;</span><br><span class="line">    <span class="keyword">char</span> type, oldtype = s[<span class="number">-1</span>] &amp; SDS_TYPE_MASK;</span><br><span class="line">    <span class="keyword">int</span> hdrlen;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 剩余长度&gt;=新增字符串长度，直接返回 */</span></span><br><span class="line">    <span class="keyword">if</span> (avail &gt;= addlen) <span class="keyword">return</span> s;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算当前字符串长度len</span></span><br><span class="line">    len = sdslen(s);</span><br><span class="line"></span><br><span class="line">    sh = (<span class="keyword">char</span>*)s-sdsHdrSize(oldtype);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算新长度</span></span><br><span class="line">    newlen = (len+addlen);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新长度&lt;1MB，按新长度的2倍扩容</span></span><br><span class="line">    <span class="keyword">if</span> (newlen &lt; SDS_MAX_PREALLOC)</span><br><span class="line">        newlen *= <span class="number">2</span>;</span><br><span class="line">    <span class="comment">// 否则按新长度+1MB扩容</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        newlen += SDS_MAX_PREALLOC;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算新长度所属类型</span></span><br><span class="line">    type = sdsReqType(newlen);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* type5不支持扩容，强转为type8 */</span></span><br><span class="line">    <span class="keyword">if</span> (type == SDS_TYPE_5) type = SDS_TYPE_8;</span><br><span class="line"></span><br><span class="line">    hdrlen = sdsHdrSize(type);</span><br><span class="line">    <span class="keyword">if</span> (oldtype==type) &#123;</span><br><span class="line">        <span class="comment">// 类型没变，直接通过realloc扩大动态数组即可。</span></span><br><span class="line">        newsh = s_realloc(sh, hdrlen+newlen+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (newsh == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        s = (<span class="keyword">char</span>*)newsh+hdrlen;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 类型改变了，则说明头部长度也发生了变化，不进行realloc操作，而是直接重新开辟内存</span></span><br><span class="line">        newsh = s_malloc(hdrlen+newlen+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (newsh == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 原内存拷贝到新的内存地址上</span></span><br><span class="line">        <span class="built_in">memcpy</span>((<span class="keyword">char</span>*)newsh+hdrlen, s, len+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 释放原先空间</span></span><br><span class="line">        s_free(sh);</span><br><span class="line">        s = (<span class="keyword">char</span>*)newsh+hdrlen;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 为flags赋值</span></span><br><span class="line">        s[<span class="number">-1</span>] = type;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 为len属性赋值</span></span><br><span class="line">        sdssetlen(s, len);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为alloc属性赋值</span></span><br><span class="line">    sdssetalloc(s, newlen);</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li>SDS 返回的是指向 buf 的指针，兼容了 C 语言操作字符串的函数，读取内容时，通过 len 属性来限制读取的长度，不受 <code>\0</code> 影响，从而保证二进制安全；</li>
-<li>Redis 根据字符串长度的不同，定义了多种数据结构，包括：sdshdr5/sdshdr8/sdshdr16/sdshdr32/sdshdr64。</li>
-<li>SDS 在设计字符串修改出会调用 <code>sdsMakeRoomFor</code> 函数进行检查，根据不同情况进行扩容。</li>
-</ol>
-<p>全文完！</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/15/yuque/%E6%B7%B1%E6%8C%96%20Redis%206.0%20%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SDS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/曹春晖：谈一谈 Go 和 Syscall" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/15/yuque/%E6%9B%B9%E6%98%A5%E6%99%96%EF%BC%9A%E8%B0%88%E4%B8%80%E8%B0%88%20Go%20%E5%92%8C%20Syscall/">曹春晖：谈一谈 Go 和 Syscall</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/15/yuque/%E6%9B%B9%E6%98%A5%E6%99%96%EF%BC%9A%E8%B0%88%E4%B8%80%E8%B0%88%20Go%20%E5%92%8C%20Syscall/" class="archive-article-date">
-  	<time datetime="2021-03-15T03:13:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>▎<strong>阅读索引</strong><br>**</p>
-<ul>
-<li><p>概念</p>
-</li>
-<li><p>入口</p>
-</li>
-<li><p>系统调用管理</p>
-</li>
-<li><p>runtime 中的 SYSCALL</p>
-</li>
-<li><p>和调度的交互</p>
-<ul>
-<li><p>entersyscall</p>
-</li>
-<li><p>exitsyscallfast</p>
-</li>
-<li><p>exitsyscall</p>
-</li>
-<li><p>entersyscallblock</p>
-</li>
-<li><p>entersyscallblock_handoff</p>
-</li>
-<li><p>entersyscall_sysmon</p>
-</li>
-<li><p>entersyscall_gcwait</p>
-</li>
-</ul>
-</li>
-<li><p>总结</p>
-</li>
-</ul>
-<p>**</p>
-<h2 id="▎概念"><a href="#▎概念" class="headerlink" title="▎概念"></a>▎<strong>概念</strong></h2><p><img src="https://cdn.nlark.com/yuque/0/2021/webp/190217/1615778187154-daf8b288-50e6-482b-952b-1a6c95980d91.webp#align=left&display=inline&height=110&margin=%5Bobject%20Object%5D&originHeight=846&originWidth=1080&size=0&status=done&style=none&width=140"></p>
-<h2 id="▎入口"><a href="#▎入口" class="headerlink" title="▎入口"></a>▎<strong>入口</strong></h2><p>syscall 有下面几个入口，在 syscall/asm_linux_amd64.s 中。</p>
-<p>1func Syscall(trap, a1, a2, a3 uintptr) (r1, r2 uintptr, err syscall.Errno)<br>2<br>3func Syscall6(trap, a1, a2, a3, a4, a5, a6 uintptr) (r1, r2 uintptr, err syscall.Errno)<br>4<br>5func RawSyscall(trap, a1, a2, a3 uintptr) (r1, r2 uintptr, err syscall.Errno)<br>6<br>7func RawSyscall6(trap, a1, a2, a3, a4, a5, a6 uintptr) (r1, r2 uintptr, err syscall.Errno)<br>8</p>
-<p>这些函数的实现都是汇编，按照 linux 的 syscall 调用规范，我们只要在汇编中把参数依次传入寄存器，并调用 SYSCALL 指令即可进入内核处理逻辑，系统调用执行完毕之后，返回值放在 RAX 中：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/190217/1615778187077-65fb0753-f95e-4987-a305-da25dd23ad04.webp#align=left&display=inline&height=78&margin=%5Bobject%20Object%5D&originHeight=78&originWidth=505&size=0&status=done&style=none&width=505"></p>
-<p>Syscall  和  Syscall6  的区别只有传入参数不一样:</p>
-<p>1// func Syscall(trap int64, a1, a2, a3 uintptr) (r1, r2, err uintptr);<br>2TEXT ·Syscall(SB),NOSPLIT,$0-56<br> 3    CALL    runtime·entersyscall(SB)<br> 4    MOVQ    a1+8(FP), DI<br> 5    MOVQ    a2+16(FP), SI<br> 6    MOVQ    a3+24(FP), DX<br> 7    MOVQ    $0, R10<br> 8    MOVQ    $0, R8<br> 9    MOVQ    $0, R9<br>10    MOVQ    trap+0(FP), AX    // syscall entry<br>11    SYSCALL<br>12    // 0xfffffffffffff001 是 linux MAX_ERRNO 取反 转无符号，<a target="_blank" rel="noopener" href="http://lxr.free-electrons.com/source/include/linux/err.h#L17">http://lxr.free-electrons.com/source/include/linux/err.h#L17</a><br>13    CMPQ    AX, $0xfffffffffffff001<br>14    JLS    ok<br>15    MOVQ    $-1, r1+32(FP)<br>16    MOVQ    $0, r2+40(FP)<br>17    NEGQ    AX<br>18    MOVQ    AX, err+48(FP)<br>19    CALL    runtime·exitsyscall(SB)<br>20    RET<br>21ok:<br>22    MOVQ    AX, r1+32(FP)<br>23    MOVQ    DX, r2+40(FP)<br>24    MOVQ    $0, err+48(FP)<br>25    CALL    runtime·exitsyscall(SB)<br>26    RET<br>27<br>28// func Syscall6(trap, a1, a2, a3, a4, a5, a6 uintptr) (r1, r2, err uintptr)<br>29TEXT ·Syscall6(SB),NOSPLIT,$0-80<br>30    CALL    runtime·entersyscall(SB)<br>31    MOVQ    a1+8(FP), DI<br>32    MOVQ    a2+16(FP), SI<br>33    MOVQ    a3+24(FP), DX<br>34    MOVQ    a4+32(FP), R10<br>35    MOVQ    a5+40(FP), R8<br>36    MOVQ    a6+48(FP), R9<br>37    MOVQ    trap+0(FP), AX    // syscall entry<br>38    SYSCALL<br>39    CMPQ    AX, $0xfffffffffffff001<br>40    JLS    ok6<br>41    MOVQ    $-1, r1+56(FP)<br>42    MOVQ    $0, r2+64(FP)<br>43    NEGQ    AX<br>44    MOVQ    AX, err+72(FP)<br>45    CALL    runtime·exitsyscall(SB)<br>46    RET<br>47ok6:<br>48    MOVQ    AX, r1+56(FP)<br>49    MOVQ    DX, r2+64(FP)<br>50    MOVQ    $0, err+72(FP)<br>51    CALL    runtime·exitsyscall(SB)<br>52    RET</p>
-<p>两个函数没什么大区别，为啥不用一个呢？个人猜测，Go 的函数参数都是栈上传入，可能是为了节省一点栈空间。。在正常的 Syscall 操作之前会通知 runtime，接下来我要进行 syscall 操作了 <strong>runtime·entersyscall **，退出时会调用</strong> runtime·exitsyscall **。</p>
-<p>1// func RawSyscall(trap, a1, a2, a3 uintptr) (r1, r2, err uintptr)<br>2TEXT ·RawSyscall(SB),NOSPLIT,$0-56<br> 3    MOVQ    a1+8(FP), DI<br> 4    MOVQ    a2+16(FP), SI<br> 5    MOVQ    a3+24(FP), DX<br> 6    MOVQ    $0, R10<br> 7    MOVQ    $0, R8<br> 8    MOVQ    $0, R9<br> 9    MOVQ    trap+0(FP), AX    // syscall entry<br>10    SYSCALL<br>11    CMPQ    AX, $0xfffffffffffff001<br>12    JLS    ok1<br>13    MOVQ    $-1, r1+32(FP)<br>14    MOVQ    $0, r2+40(FP)<br>15    NEGQ    AX<br>16    MOVQ    AX, err+48(FP)<br>17    RET<br>18ok1:<br>19    MOVQ    AX, r1+32(FP)<br>20    MOVQ    DX, r2+40(FP)<br>21    MOVQ    $0, err+48(FP)<br>22    RET<br>23<br>24// func RawSyscall6(trap, a1, a2, a3, a4, a5, a6 uintptr) (r1, r2, err uintptr)<br>25TEXT ·RawSyscall6(SB),NOSPLIT,$0-80<br>26    MOVQ    a1+8(FP), DI<br>27    MOVQ    a2+16(FP), SI<br>28    MOVQ    a3+24(FP), DX<br>29    MOVQ    a4+32(FP), R10<br>30    MOVQ    a5+40(FP), R8<br>31    MOVQ    a6+48(FP), R9<br>32    MOVQ    trap+0(FP), AX    // syscall entry<br>33    SYSCALL<br>34    CMPQ    AX, $0xfffffffffffff001<br>35    JLS    ok2<br>36    MOVQ    $-1, r1+56(FP)<br>37    MOVQ    $0, r2+64(FP)<br>38    NEGQ    AX<br>39    MOVQ    AX, err+72(FP)<br>40    RET<br>41ok2:<br>42    MOVQ    AX, r1+56(FP)<br>43    MOVQ    DX, r2+64(FP)<br>44    MOVQ    $0, err+72(FP)<br>45    RET</p>
-<p>RawSyscall  和  Syscall  的区别也非常微小，就只是在进入  Syscall  和退出的时候没有通知  runtime，这样  runtime  理论上是没有办法通过调度把这个  g  的  m  的  p  调度走的，所以如果用户代码使用了  RawSyscall  来做一些阻塞的系统调用，是有可能阻塞其它的  g  的，下面是官方开发的原话:</p>
-<p><em>Yes, if you call RawSyscall you may block other goroutines from running. The system monitor may start them up after a while, but I think there are cases where it won’t. I would say that Go programs should always call Syscall. RawSyscall exists to make it slightly more efficient to call system calls that never block, such as getpid. But it’s really an internal mechanism.</em></p>
-<p>1// func gettimeofday(tv *Timeval) (err uintptr)<br>2TEXT ·gettimeofday(SB),NOSPLIT,$0-16<br>3    MOVQ    tv+0(FP), DI<br>4    MOVQ    $0, SI<br>5    MOVQ    runtime·__vdso_gettimeofday_sym(SB), AX<br>6    CALL    AX<br>7<br>8    CMPQ    AX, $0xfffffffffffff001<br>9    JLS    ok7<br>10    NEGQ    AX<br>11    MOVQ    AX, err+8(FP)<br>12    RET<br>13ok7:<br>14    MOVQ    $0, err+8(FP)<br>15    RET</p>
-<h2 id="▎系统调用管理"><a href="#▎系统调用管理" class="headerlink" title="▎系统调用管理"></a>▎<strong>系统调用管理</strong></h2><p>先是系统调用的定义文件:</p>
-<p>1/syscall/syscall_linux.go</p>
-<p>可以把系统调用分为三类:</p>
-<ul>
-<li><p>阻塞系统调用</p>
-</li>
-<li><p>非阻塞系统调用</p>
-</li>
-<li><p>wrapped 系统调用</p>
-</li>
-</ul>
-<p>阻塞系统调用会定义成下面这样的形式:</p>
-<p>1//sys   Madvise(b []byte, advice int) (err error)</p>
-<p>非阻塞系统调用:</p>
-<p>1//sysnb    EpollCreate(size int) (fd int, err error)</p>
-<p>然后，根据这些注释，mksyscall.pl 脚本会生成对应的平台的具体实现。mksyscall.pl 是一段 perl 脚本，感兴趣的同学可以自行查看，这里就不再赘述了。</p>
-<p>看看阻塞和非阻塞的系统调用的生成结果:</p>
-<p>1func Madvise(b []byte, advice int) (err error) {<br>2    var _p0 unsafe.Pointer<br>3    if len(b) &gt; 0 {<br>4        _p0 = unsafe.Pointer(&amp;b[0])<br>5    } else {<br>6        _p0 = unsafe.Pointer(&amp;_zero)<br>7    }<br>8    _, *, e1 := Syscall(SYS_MADVISE, uintptr(_p0), uintptr(len(b)), uintptr(advice))<br>9    if e1 != 0 {<br>10        err = errnoErr(e1)<br>11    }<br>12    return<br>13}<br>14<br>15func EpollCreate(size int) (fd int, err error) {<br>16    r0, *, e1 := RawSyscall(SYS_EPOLL_CREATE, uintptr(size), 0, 0)<br>17    fd = int(r0)<br>18    if e1 != 0 {<br>19        err = errnoErr(e1)<br>20    }<br>21    return<br>22}</p>
-<p>显然，标记为 sys 的系统调用使用的是 Syscall 或者 Syscall6，标记为 sysnb 的系统调用使用的是 RawSyscall 或 RawSyscall6。</p>
-<p>wrapped 的系统调用是怎么一回事呢？</p>
-<p>1func Rename(oldpath string, newpath string) (err error) {<br>2    return Renameat(_AT_FDCWD, oldpath, _AT_FDCWD, newpath)<br>3}</p>
-<p>可能是觉得系统调用的名字不太好，或者参数太多，我们就简单包装一下。没啥特别的。</p>
-<h2 id="▎runtime-中的-SYSCALL"><a href="#▎runtime-中的-SYSCALL" class="headerlink" title="▎runtime 中的 SYSCALL"></a>▎<strong>runtime 中的 SYSCALL</strong></h2><p>除了上面提到的阻塞非阻塞和 wrapped syscall，runtime 中还定义了一些 low-level 的 syscall，这些是不暴露给用户的。</p>
-<p>提供给用户的 syscall 库，在使用时，会使 goroutine 和 p 分别进入 Gsyscall 和 Psyscall 状态。但 runtime 自己封装的这些 syscall 无论是否阻塞，都不会调用 entersyscall 和 exitsyscall。虽说是 “low-level” 的 syscall。</p>
-<p>不过和暴露给用户的 syscall 本质是一样的。这些代码在 runtime/sys_linux_amd64.s 中，举个具体的例子:</p>
-<p>1TEXT runtime·write(SB),NOSPLIT,$0-28<br> 2    MOVQ    fd+0(FP), DI<br> 3    MOVQ    p+8(FP), SI<br> 4    MOVL    n+16(FP), DX<br> 5    MOVL    $SYS_write, AX<br>6    SYSCALL<br>7    CMPQ    AX, $0xfffffffffffff001<br> 8    JLS    2(PC)<br> 9    MOVL    $-1, AX<br>10    MOVL    AX, ret+24(FP)<br>11    RET<br>12<br>13TEXT runtime·read(SB),NOSPLIT,$0-28<br>14    MOVL    fd+0(FP), DI<br>15    MOVQ    p+8(FP), SI<br>16    MOVL    n+16(FP), DX<br>17    MOVL    $SYS_read, AX<br>18    SYSCALL<br>19    CMPQ    AX, $0xfffffffffffff001<br>20    JLS    2(PC)<br>21    MOVL    $-1, AX<br>22    MOVL    AX, ret+24(FP)<br>23    RET</p>
-<p>下面是所有  runtime  另外定义的  syscall  列表:</p>
-<p>1#define SYS_read        0<br>2#define SYS_write        1<br>3#define SYS_open        2<br>4#define SYS_close        3<br>5#define SYS_mmap        9<br>6#define SYS_munmap        11<br>7#define SYS_brk         12<br>8#define SYS_rt_sigaction    13<br>9#define SYS_rt_sigprocmask    14<br>10#define SYS_rt_sigreturn    15<br>11#define SYS_access        21<br>12#define SYS_sched_yield     24<br>13#define SYS_mincore        27<br>14#define SYS_madvise        28<br>15#define SYS_setittimer        38<br>16#define SYS_getpid        39<br>17#define SYS_socket        41<br>18#define SYS_connect        42<br>19#define SYS_clone        56<br>20#define SYS_exit        60<br>21#define SYS_kill        62<br>22#define SYS_fcntl        72<br>23#define SYS_getrlimit        97<br>24#define SYS_sigaltstack     131<br>25#define SYS_arch_prctl        158<br>26#define SYS_gettid        186<br>27#define SYS_tkill        200<br>28#define SYS_futex        202<br>29#define SYS_sched_getaffinity    204<br>30#define SYS_epoll_create    213<br>31#define SYS_exit_group        231<br>32#define SYS_epoll_wait        232<br>33#define SYS_epoll_ctl        233<br>34#define SYS_pselect6        270<br>35#define SYS_epoll_create1    291</p>
-<p>这些 syscall 理论上都是不会在执行期间被调度器剥离掉 p 的，所以执行成功之后 goroutine 会继续执行，而不像用户的 goroutine 一样，若被剥离 p 会进入等待队列。</p>
-<h2 id="▎和调度的交互"><a href="#▎和调度的交互" class="headerlink" title="▎和调度的交互"></a>▎<strong>和调度的交互</strong></h2><p>既然要和调度交互，那友好地通知我要 syscall 了: entersyscall，我完事了: exitsyscall。</p>
-<p>所以这里的交互指的是用户代码使用 syscall 库时和调度器的交互。<strong>runtime 里的 syscall 不走这套流程。</strong></p>
-<h2 id="▎entersyscall"><a href="#▎entersyscall" class="headerlink" title="▎entersyscall"></a><strong>▎entersyscall</strong></h2><p>1// syscall  库和  cgo  调用的标准入口<br>2//go:nosplit<br>3func entersyscall() {<br>4    reentersyscall(getcallerpc(), getcallersp())<br>5}<br>6<br>7//go:nosplit<br>8func reentersyscall(pc, sp uintptr) {<br>9    <em>g</em> := getg()<br>10<br>11    //  需要禁止  g  的抢占<br>12    <em>g</em>.m.locks++<br>13<br>14    // entersyscall  中不能调用任何会导致栈增长/分裂的函数<br>15    <em>g</em>.stackguard0 = stackPreempt<br>16    //  设置  throwsplit，在  newstack  中，如果发现  throwsplit  是  true<br>17    //  会直接  crash<br>18    //  下面的代码是  newstack  里的<br>19    // if thisg.m.curg.throwsplit {<br>20    //     throw(“runtime: stack split at bad time”)<br>21    // }<br>22    <em>g</em>.throwsplit = true<br>23<br>24    // Leave SP around for GC and traceback.<br>25    //  保存现场，在  syscall  之后会依据这些数据恢复现场<br>26    save(pc, sp)<br>27    <em>g</em>.syscallsp = sp<br>28    <em>g</em>.syscallpc = pc<br>29    casgstatus(<em>g</em>, <em>Grunning, _Gsyscall)<br>30    if _g</em>.syscallsp &lt; <em>g</em>.stack.lo || <em>g</em>.stack.hi &lt; <em>g</em>.syscallsp {<br>31        systemstack(func() {<br>32            print(“entersyscall inconsistent “, hex(<em>g</em>.syscallsp), “ [“, hex(<em>g</em>.stack.lo), “,”, hex(<em>g</em>.stack.hi), “]\n”)<br>33            throw(“entersyscall”)<br>34        })<br>35    }<br>36<br>37    if atomic.Load(&amp;sched.sysmonwait) != 0 {<br>38        systemstack(entersyscall<em>sysmon)<br>39        save(pc, sp)<br>40    }<br>41<br>42    if _g</em>.m.p.ptr().runSafePointFn != 0 {<br>43        // runSafePointFn may stack split if run on this stack<br>44        systemstack(runSafePointFn)<br>45        save(pc, sp)<br>46    }<br>47<br>48    <em>g</em>.m.syscalltick = <em>g</em>.m.p.ptr().syscalltick<br>49    <em>g</em>.sysblocktraced = true<br>50    <em>g</em>.m.mcache = nil<br>51    <em>g</em>.m.p.ptr().m = 0<br>52    atomic.Store(&amp;<em>g</em>.m.p.ptr().status, <em>Psyscall)<br>53    if sched.gcwaiting != 0 {<br>54        systemstack(entersyscall_gcwait)<br>55        save(pc, sp)<br>56    }<br>57<br>58    _g</em>.m.locks–<br>59}</p>
-<p>可以看到，进入 syscall 的 G 是铁定不会被抢占的。</p>
-<h2 id="▎exitsyscall"><a href="#▎exitsyscall" class="headerlink" title="▎exitsyscall"></a><strong>▎exitsyscall</strong></h2><p>1// g  已经退出了  syscall<br>2//  需要准备让  g  在  cpu  上重新运行<br>3//  这个函数只会在  syscall  库中被调用，在  runtime  里用的  low-level syscall<br>4//  不会用到<br>5//  不能有  write barrier，因为  P  可能已经被偷走了<br>6//go:nosplit<br>7//go:nowritebarrierrec<br>8func exitsyscall(dummy int32) {<br>9    <em>g</em> := getg()<br>10<br>11    <em>g</em>.m.locks++ // see comment in entersyscall<br>12    if getcallersp(unsafe.Pointer(&amp;dummy)) &gt; <em>g</em>.syscallsp {<br>13        // throw calls print which may try to grow the stack,<br>14        // but throwsplit == true so the stack can not be grown;<br>15        // use systemstack to avoid that possible problem.<br>16        systemstack(func() {<br>17            throw(“exitsyscall: syscall frame is no longer valid”)<br>18        })<br>19    }<br>20<br>21    <em>g</em>.waitsince = 0<br>22    oldp := <em>g</em>.m.p.ptr()<br>23    if exitsyscallfast() {<br>24        if <em>g</em>.m.mcache == nil {<br>25            systemstack(func() {<br>26                throw(“lost mcache”)<br>27            })<br>28        }<br>29        //  目前有  p，可以运行<br>30        <em>g</em>.m.p.ptr().syscalltick++<br>31        //  把  g  的状态修改回  running<br>32        casgstatus(<em>g</em>, <em>Gsyscall, _Grunning)<br>33<br>34        //  垃圾收集未在运行(因为我们这段逻辑在执行)<br>35        //  所以清理掉  syscallsp  是安全的<br>36        _g</em>.syscallsp = 0<br>37        <em>g</em>.m.locks–<br>38        if <em>g</em>.preempt {<br>39            //  防止在  newstack  中清理掉  preemption  标记<br>40            <em>g</em>.stackguard0 = stackPreempt<br>41        } else {<br>42            //  否则恢复在  entersyscall/entersyscallblock  中破坏掉的正常的  <em>StackGuard<br>43            _g</em>.stackguard0 = <em>g</em>.stack.lo + <em>StackGuard<br>44        }<br>45        _g</em>.throwsplit = false<br>46        return<br>47    }<br>48<br>49    <em>g</em>.sysexitticks = 0<br>50    <em>g</em>.m.locks–<br>51<br>52    //  调用  scheduler<br>53    mcall(exitsyscall0)<br>54<br>55    if <em>g</em>.m.mcache == nil {<br>56        systemstack(func() {<br>57            throw(“lost mcache”)<br>58        })<br>59    }<br>60<br>61    //  调度器返回了，所以我们可以清理掉在  syscall  期间为垃圾收集器<br>62    //  准备的  syscallsp  信息了<br>63    //  需要一直等待到  gosched  返回，我们不确定垃圾收集器是不是在运行<br>64    <em>g</em>.syscallsp = 0<br>65    <em>g</em>.m.p.ptr().syscalltick++<br>66    <em>g</em>.throwsplit = false<br>67}</p>
-<p>这里还调用了 exitsyscallfast 和 exitsyscall0。</p>
-<h2 id="▎exitsyscallfast"><a href="#▎exitsyscallfast" class="headerlink" title="▎exitsyscallfast"></a><strong>▎exitsyscallfast</strong></h2><p>1//go:nosplit<br>2func exitsyscallfast() bool {<br>3    <em>g</em> := getg()<br>4<br>5    // Freezetheworld sets stopwait but does not retake P’s.<br>6    if sched.stopwait == freezeStopWait {<br>7        <em>g</em>.m.mcache = nil<br>8        <em>g</em>.m.p = 0<br>9        return false<br>10    }<br>11<br>12    // Try to re-acquire the last P.<br>13    if <em>g</em>.m.p != 0 &amp;&amp; <em>g</em>.m.p.ptr().status == <em>Psyscall &amp;&amp; atomic.Cas(&amp;_g</em>.m.p.ptr().status, <em>Psyscall, _Prunning) {<br>14        // There’s a cpu for us, so we can run.<br>15        exitsyscallfast_reacquired()<br>16        return true<br>17    }<br>18<br>19    // Try to get any other idle P.<br>20    oldp := _g</em>.m.p.ptr()<br>21    <em>g</em>.m.mcache = nil<br>22    <em>g</em>.m.p = 0<br>23    if sched.pidle != 0 {<br>24        var ok bool<br>25        systemstack(func() {<br>26            ok = exitsyscallfast_pidle()<br>27        })<br>28        if ok {<br>29            return true<br>30        }<br>31    }<br>32    return false<br>33}</p>
-<p>总之就是努力获取一个 P 来执行 syscall 之后的逻辑。如果哪都没有 P 可以给我们用，那就进入 exitsyscall0 了。</p>
-<p>1mcall(exitsyscall0)</p>
-<p>调用 exitsyscall0 时，会切换到 g0 栈。</p>
-<h2 id="▎exitsyscall0"><a href="#▎exitsyscall0" class="headerlink" title="▎exitsyscall0"></a><strong>▎exitsyscall0</strong></h2><p>1//  在  exitsyscallfast  中吃瘪了，没办法，慢慢来<br>2//  把  g  的状态设置成  runnable，先进  runq  等着<br>3//go:nowritebarrierrec<br>4func exitsyscall0(gp *g) {<br>5    <em>g</em> := getg()<br>6<br>7    casgstatus(gp, <em>Gsyscall, _Grunnable)<br>8    dropg()<br>9    lock(&amp;sched.lock)<br>10    _p</em> := pidleget()<br>11    if <em>p</em> == nil {<br>12        //  如果  P  被人偷跑了<br>13        globrunqput(gp)<br>14    } else if atomic.Load(&amp;sched.sysmonwait) != 0 {<br>15        atomic.Store(&amp;sched.sysmonwait, 0)<br>16        notewakeup(&amp;sched.sysmonnote)<br>17    }<br>18    unlock(&amp;sched.lock)<br>19    if <em>p</em> != nil {<br>20        //  如果现在还有  p，那就用这个  p  执行<br>21        acquirep(<em>p</em>)<br>22        execute(gp, false) // Never returns.<br>23    }<br>24    if <em>g</em>.m.lockedg != 0 {<br>25        //  设置了  LockOsThread  的  g  的特殊逻辑<br>26        stoplockedm()<br>27        execute(gp, false) // Never returns.<br>28    }<br>29    stopm()<br>30    schedule() // Never returns.<br>31}</p>
-<h2 id="▎entersyscallblock"><a href="#▎entersyscallblock" class="headerlink" title="▎entersyscallblock"></a><strong>▎entersyscallblock</strong></h2><p>知道自己会 block，直接就把 p 交出来了。</p>
-<p>1//  和  entersyscall  一样，就是会直接把  P  给交出去，因为知道自己是会阻塞的<br>2//go:nosplit<br>3func entersyscallblock(dummy int32) {<br>4    <em>g</em> := getg()<br>5<br>6    <em>g</em>.m.locks++ // see comment in entersyscall<br>7    <em>g</em>.throwsplit = true<br>8    <em>g</em>.stackguard0 = stackPreempt // see comment in entersyscall<br>9    <em>g</em>.m.syscalltick = <em>g</em>.m.p.ptr().syscalltick<br>10    <em>g</em>.sysblocktraced = true<br>11    <em>g</em>.m.p.ptr().syscalltick++<br>12<br>13    // Leave SP around for GC and traceback.<br>14    pc := getcallerpc()<br>15    sp := getcallersp(unsafe.Pointer(&amp;dummy))<br>16    save(pc, sp)<br>17    <em>g</em>.syscallsp = <em>g</em>.sched.sp<br>18    <em>g</em>.syscallpc = <em>g</em>.sched.pc<br>19    if <em>g</em>.syscallsp &lt; <em>g</em>.stack.lo || <em>g</em>.stack.hi &lt; <em>g</em>.syscallsp {<br>20        sp1 := sp<br>21        sp2 := <em>g</em>.sched.sp<br>22        sp3 := <em>g</em>.syscallsp<br>23        systemstack(func() {<br>24            print(“entersyscallblock inconsistent “, hex(sp1), “ “, hex(sp2), “ “, hex(sp3), “ [“, hex(<em>g</em>.stack.lo), “,”, hex(<em>g</em>.stack.hi), “]\n”)<br>25            throw(“entersyscallblock”)<br>26        })<br>27    }<br>28    casgstatus(<em>g</em>, <em>Grunning, _Gsyscall)<br>29    if _g</em>.syscallsp &lt; <em>g</em>.stack.lo || <em>g</em>.stack.hi &lt; <em>g</em>.syscallsp {<br>30        systemstack(func() {<br>31            print(“entersyscallblock inconsistent “, hex(sp), “ “, hex(<em>g</em>.sched.sp), “ “, hex(<em>g</em>.syscallsp), “ [“, hex(<em>g</em>.stack.lo), “,”, hex(<em>g</em>.stack.hi), “]\n”)<br>32            throw(“entersyscallblock”)<br>33        })<br>34    }<br>35<br>36    //  直接调用  entersyscallblock<em>handoff  把  p  交出来了<br>37    systemstack(entersyscallblock_handoff)<br>38<br>39    // Resave for traceback during blocked call.<br>40    save(getcallerpc(), getcallersp(unsafe.Pointer(&amp;dummy)))<br>41<br>42    _g</em>.m.locks–<br>43}</p>
-<p>这个函数只有一个调用方 notesleepg，这里就不再赘述了。</p>
-<h2 id="▎entersyscallblock-handoff"><a href="#▎entersyscallblock-handoff" class="headerlink" title="▎entersyscallblock_handoff"></a><strong>▎entersyscallblock_handoff</strong></h2><p>1func entersyscallblock_handoff() {<br>2    handoffp(releasep())<br>3}</p>
-<p>比较简单。</p>
-<h2 id="▎entersyscall-sysmon"><a href="#▎entersyscall-sysmon" class="headerlink" title="▎entersyscall_sysmon"></a><strong>▎entersyscall_sysmon</strong></h2><p>1func entersyscall_sysmon() {<br>2    lock(&amp;sched.lock)<br>3    if atomic.Load(&amp;sched.sysmonwait) != 0 {<br>4        atomic.Store(&amp;sched.sysmonwait, 0)<br>5        notewakeup(&amp;sched.sysmonnote)<br>6    }<br>7    unlock(&amp;sched.lock)<br>8}</p>
-<h2 id="▎entersyscall-gcwait"><a href="#▎entersyscall-gcwait" class="headerlink" title="▎entersyscall_gcwait"></a><strong>▎entersyscall_gcwait</strong></h2><p>1func entersyscall<em>gcwait() {<br>2    _g</em> := getg()<br>3    <em>p</em> := <em>g</em>.m.p.ptr()<br>4<br>5    lock(&amp;sched.lock)<br>6    if sched.stopwait &gt; 0 &amp;&amp; atomic.Cas(&amp;<em>p</em>.status, <em>Psyscall, _Pgcstop) {<br>7        _p</em>.syscalltick++<br>8        if sched.stopwait–; sched.stopwait == 0 {<br>9            notewakeup(&amp;sched.stopnote)<br>10        }<br>11    }<br>12    unlock(&amp;sched.lock)<br>13}</p>
-<h2 id="▎-总结"><a href="#▎-总结" class="headerlink" title="▎**总结**"></a><strong>▎**</strong>总结**</h2><p>提供给用户使用的系统调用，基本都会通知 runtime，以 entersyscall，exitsyscall 的形式来告诉 runtime，在这个 syscall 阻塞的时候，由 runtime 判断是否把 P 腾出来给其它的 M 用。解绑定指的是把 M 和 P 之间解绑，如果绑定被解除，在 syscall 返回时，这个 g 会被放入执行队列 runq 中。</p>
-<p>同时 runtime 又保留了自己的特权，在执行自己的逻辑的时候，我的 P 不会被调走，这样保证了在 Go 自己“底层”使用的这些 syscall 返回之后都能被立刻处理。</p>
-<p>所以同样是 epollwait，runtime 用的是不能被别人打断的，你用的 syscall.EpollWait 那显然是没有这种特权的。</p>
-<h2 id="▎-END"><a href="#▎-END" class="headerlink" title="▎**END**"></a><strong>▎**</strong>END**</h2><p>参考资料如下<br><a target="_blank" rel="noopener" href="https://z.didi.cn/1HecgP">https://z.didi.cn/1HecgP</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/15/yuque/%E6%9B%B9%E6%98%A5%E6%99%96%EF%BC%9A%E8%B0%88%E4%B8%80%E8%B0%88%20Go%20%E5%92%8C%20Syscall/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Go 与异步 IO - io_uring 的思考" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/15/yuque/Go%20%E4%B8%8E%E5%BC%82%E6%AD%A5%20IO%20-%20io_uring%20%E7%9A%84%E6%80%9D%E8%80%83/">Go 与异步 IO - io_uring 的思考</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/15/yuque/Go%20%E4%B8%8E%E5%BC%82%E6%AD%A5%20IO%20-%20io_uring%20%E7%9A%84%E6%80%9D%E8%80%83/" class="archive-article-date">
-  	<time datetime="2021-03-15T03:11:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Golang-中并发-IO-的现状"><a href="#Golang-中并发-IO-的现状" class="headerlink" title="Golang 中并发 IO 的现状"></a>Golang 中并发 IO 的现状</h1><p>对于 Go 这种本身便是为并发而生的语言来说，使用 <code>io_uring</code> 这种系统级异步接口也不是那么的迫切<br>比如对于普通文件的读写以及 socket 的操作都会通过 <code>netpoll</code> 来进行优化，当文件/套接字可读可写时 netpoll 便会唤醒相应 goroutine 来对文件进行读写<br>而对于可能会阻塞的系统调用，在 syscall 底层调用 <code>syscall.Syscall/Syscall6</code> 时配合 runtime 判断是否将 P 和 G 绑定的 M 解绑，然后将 P 交给其他 M 来使用，通过这种机制可以减少系统调用从用户态切换到内核态对整个程序带来的损耗<br>Go runtime 实际上已经实现了用户态的并发 IO，现在 Linux 内核提供了新的异步 IO 接口，那又该如何去利用这种新的技术呢<br>我们首先先看一下当前 Go 是如何做到异步 IO 的</p>
-<h2 id="IO-与-netpoll"><a href="#IO-与-netpoll" class="headerlink" title="IO 与 netpoll"></a>IO 与 netpoll</h2><h3 id="文件-IO-与-netpoll"><a href="#文件-IO-与-netpoll" class="headerlink" title="文件 IO 与 netpoll"></a>文件 IO 与 netpoll</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;os&#x2F;file.go</span><br><span class="line">func OpenFile(name string, flag int, perm FileMode) (*File, error) &#123;</span><br><span class="line">    f, err :&#x3D; openFileNolog(name, flag, perm)</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; src&#x2F;os&#x2F;file_unix.go</span><br><span class="line">func openFileNolog(name string, flag int, perm FileMode) (*File, error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    r, e &#x3D; syscall.Open(name, flag|syscall.O_CLOEXEC, syscallMode(perm))</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    return newFile(uintptr(r), name, kindOpenFile), nil</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; src&#x2F;os&#x2F;file_unix.go</span><br><span class="line">func newFile(fd uintptr, name string, kind newFileKind) *File &#123;</span><br><span class="line">    fdi :&#x3D; int(fd)</span><br><span class="line">    f :&#x3D; &amp;File&#123;&amp;file&#123;</span><br><span class="line">        pfd: poll.FD&#123;</span><br><span class="line">            Sysfd:     fdi,</span><br><span class="line">            IsStream:      true,</span><br><span class="line">            ZeroReadIsEOF: true,</span><br><span class="line">        &#125;,</span><br><span class="line">        name:    name,</span><br><span class="line">        stdoutOrErr: fdi &#x3D;&#x3D; 1 || fdi &#x3D;&#x3D; 2,</span><br><span class="line">    &#125;&#125;</span><br><span class="line">    pollable :&#x3D; kind &#x3D;&#x3D; kindOpenFile || kind &#x3D;&#x3D; kindPipe || kind &#x3D;&#x3D; kindNonBlock</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    if err :&#x3D; f.pfd.Init(&quot;file&quot;, pollable); err !&#x3D; nil &#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125; else if pollable &#123;</span><br><span class="line">        if err :&#x3D; syscall.SetNonblock(fdi, true); err &#x3D;&#x3D; nil &#123;</span><br><span class="line">            f.nonblock &#x3D; true</span><br><span class="line">        &#125;</span><br><span class="line">        return f</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从 <code>os.Open</code> 到 <code>newFile</code>，可以看到文件的 <code>文件描述符</code> 被放到 <code>poll.FD</code> 进行初始化了, <code>poll.FD.Init</code> 便是将<code>文件描述符</code>注册到 <code>netpoll(epoll)</code> 中</p>
-<blockquote>
-<p>需要注意当文件被注册到 <code>netpoll(epoll)</code> 后，会将它置为非阻塞模式(<code>SetNonblock</code>)，因为 <code>netpoll(epoll)</code> 采用的是边缘触发模式<br>比如说非阻塞文件描述符中有可读事件时，<code>epoll</code> 只会通知一次(除非有新的数据被写入文件会再次通知)，也就说需要所有数据读出来直到返回 <code>-EAGAIN</code>，对于阻塞模式的 socket 文件，当从 socket 中读取数据时就可能会阻塞等待，这样也就失去了 epoll 的意义</p>
-</blockquote>
-<p>我们可以再看一下 <code>poll.FD</code> 是如何利用 <code>netpoll</code> 进行读取的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;internal&#x2F;poll&#x2F;fd_unix.go</span><br><span class="line">func (fd *FD) Read(p []byte) (int, error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    for &#123;</span><br><span class="line">        n, err :&#x3D; ignoringEINTR(syscall.Read, fd.Sysfd, p)</span><br><span class="line">        if err !&#x3D; nil &#123;</span><br><span class="line">            n &#x3D; 0</span><br><span class="line">            if err &#x3D;&#x3D; syscall.EAGAIN &amp;&amp; fd.pd.pollable() &#123;</span><br><span class="line">                continue</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        err &#x3D; fd.eofError(n, err)</span><br><span class="line">        return n, err</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>ignoringEINTR</code> 中调用 <code>syscall.Read</code> 读取文件，如果出现 <code>syscall.EAGAIN</code>，那么就调用 <code>fd.pd.waitRead</code> 来等待数据可读</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;internal&#x2F;poll&#x2F;fd_unix.go</span><br><span class="line">type FD struct &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    Sysfd int</span><br><span class="line">    pd pollDesc</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>pollDesc</code> Go 对 <code>netpoll</code> 的抽象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;internal&#x2F;poll&#x2F;fd_poll_runtime.go</span><br><span class="line">func runtime_pollServerInit()</span><br><span class="line">func runtime_pollOpen(fd uintptr)(uintptr, int)</span><br><span class="line">func runtime_pollClose(ctx uintptr)</span><br><span class="line">&#x2F;&#x2F; ...</span><br><span class="line">type pollDesc struct &#123;</span><br><span class="line">    runtimeCtx uintptr</span><br><span class="line">&#125;</span><br><span class="line">func (pd *pollDesc) init(fd *FD) error &#123;</span><br><span class="line">    serverInit.Do(runtime_pollServerInit)</span><br><span class="line">    ctx, errno :&#x3D; runtime_pollOpen(uintptr(fd.Sysfd))</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    pd.runtimeCtx &#x3D; ctx</span><br><span class="line">    return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>runtime_poll*</code> 这些函数才是真正的 netpoll，而这些函数是在<em>src/runtime/netpoll.go</em> 中实现，并通过 <code>go:linkname</code> 来链接到 <em>internal/poll</em> 中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;netpoll.go</span><br><span class="line">&#x2F;&#x2F; go:linkname poll_runtime_pollServerInit internal&#x2F;poll.runtime_pollServerInit</span><br><span class="line">func poll_runtime_pollServerInit() &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>根据具体的平台来实现 poller，对于 Linux，便是使用 <code>epoll</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;netpoll_epoll.go</span><br><span class="line">&#x2F;&#x2F; 注册文件到 netpoll 中</span><br><span class="line">func netpolllopen(fd uintptr, pd *pollDesc) int32 &#123;</span><br><span class="line">    var ev epollevent</span><br><span class="line">    ev.events &#x3D; _EPOLLIN | _EPOLLOUT | _EPOLLRDHUP | _EPOLLET</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    return -epollctr(epfd, _EPOLL_CTL_ADD, int32(fd), &amp;ev)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>添加新的文件描述符时，可以发现<code>fd</code>是以 <code>边缘触发</code> 的方式注册到 <code>netpoll(epoll)</code> 中</p>
-<h3 id="socket-IO-与-netpoll"><a href="#socket-IO-与-netpoll" class="headerlink" title="socket IO 与 netpoll"></a>socket IO 与 netpoll</h3><p>从 <code>netpoll</code> 这个名字上就可以看出，<code>netpoll</code> 是 Go 为了高性能的异步网络而实现的<br>看一下创建 TCPListener socket 的流程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;net&#x2F;tcpsock.go</span><br><span class="line">type TCPListener struct &#123;</span><br><span class="line">    fd *netFD</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; src&#x2F;net&#x2F;fd_posix.go</span><br><span class="line">type netFD struct &#123;</span><br><span class="line">    pfd poll.FD</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 1.</span><br><span class="line">&#x2F;&#x2F; src&#x2F;net&#x2F;tcpsock.go</span><br><span class="line">func ListenTCP(network string, laddr *TCPAddr) (*TCPListener, error) &#123;</span><br><span class="line">    sl :&#x3D; &amp;sysListener&#123;network: network, address: laddr.String()&#125;</span><br><span class="line">    ln, err :&#x3D; sl.listenTCP(context.Background(), laddr)</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 2.</span><br><span class="line">&#x2F;&#x2F; src&#x2F;net&#x2F;tcpsock_posix.go</span><br><span class="line">func (sl *sysListener) listenTCP(ctx context.Context, laddr *TCPAddr) (*TCPListener, error) &#123;</span><br><span class="line">    fd, err :&#x3D; internetSocket(ctx, sl.network, laddr, nil, syscall.SOCK_STREAM, 0, &quot;listen&quot;, sl.ListenConfig.Control)</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    return &amp;TCPListener&#123;fd: fd, lc, sl.ListenConfig&#125;, nil</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 3.</span><br><span class="line">&#x2F;&#x2F; src&#x2F;net&#x2F;ipsock_posix.go</span><br><span class="line">func internelSocket(ctx context.Context, ...) (fd *netFD, err error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    return socket(ctx, net, family, sotype, proto, ipv6only, laddr, radddr, ctrlFn)</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 4.</span><br><span class="line">&#x2F;&#x2F; src&#x2F;sock_posix.go</span><br><span class="line">func socket(...) (fd *netFD, err error) &#123;</span><br><span class="line">    s, err :&#x3D; sysSocket(family, sotype, proto)</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    fd, err &#x3D; newFD(s, family, sotype, net)</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 5.</span><br><span class="line">&#x2F;&#x2F; src&#x2F;fd_unix.go</span><br><span class="line">func newFD(sysfd, family, sotype int, net string) (*netFD, error) &#123;</span><br><span class="line">    ret :&#x3D; &amp;netFD&#123;</span><br><span class="line">        pfd: poll.FD&#123;</span><br><span class="line">            Sysfd:    sysfd,</span><br><span class="line">            IsStream: sotype &#x3D;&#x3D; syscall.SOCK_STREAM,</span><br><span class="line">            &#x2F;&#x2F; ...</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">    return ret, nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建 TCPListener 链路还是挺长的，不过在第四步 <code>socket</code> 函数中可以看到调用 <code>newFD</code> 来返回 <code>netFD</code> 实例，而 <code>netFD.pfd</code> 便是 <code>poll.FD</code>, 而对 <code>netFD</code> 的读写和文件 IO 一样便都会通过 <code>poll.FD</code> 来利用 <code>netpoll</code>。</p>
-<h3 id="netpoll-唤醒-goroutine"><a href="#netpoll-唤醒-goroutine" class="headerlink" title="netpoll 唤醒 goroutine"></a>netpoll 唤醒 goroutine</h3><h4 id="挂起-goroutine"><a href="#挂起-goroutine" class="headerlink" title="挂起 goroutine"></a>挂起 goroutine</h4><p>通过 <code>poll.pollDesc</code> 将文件描述符加入到 <code>netpoll</code> 后，当对文件描述符进行读写时，如果 <code>syscall.Read</code> 返回 <code>syscall.EAGAIN</code> 的话就需要调用 <code>pollDesc.waitRead/waitWrite</code> 来等待可读可写</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;internal&#x2F;poll&#x2F;fd_poll_runtime.go</span><br><span class="line">func (pd *pollDesc) waitRead(isFile bool) error&#123;</span><br><span class="line">    return pd.wait(&#39;r&#39;, isFile)</span><br><span class="line">&#125;</span><br><span class="line">func (pd *pollDesc) waitWrite(isFile bool) error&#123;</span><br><span class="line">    return pd.wait(&#39;w&#39;, isFile)</span><br><span class="line">&#125;</span><br><span class="line">func (pd *pollDesc) wait(mode int, isFile bool) error&#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    res :&#x3D; runtime_pollWait(pd.runtimeCtx, mode)</span><br><span class="line">    return convertErr(res, isFile)</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;netpoll.go</span><br><span class="line">&#x2F;&#x2F;go:linkname poll_runtime_pollWait internal&#x2F;poll.runtime_pollWait</span><br><span class="line">func poll_runtime_pollWait(pd *pollDesc, mode int) int &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    for !netpollblock(pd, int32(mode), false) &#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">func netpollblock(pd *pollDesc, mode int32, waitio bool) bool &#123;</span><br><span class="line">    gpp :&#x3D; &amp;pd.rg</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    &#x2F;&#x2F; 状态检查</span><br><span class="line">    if waitio || netpollcheckerr(pd, mode) &#x3D;&#x3D; 0 &#123;</span><br><span class="line">        gopark(netpollblockcommit, unsafe.Pointer(gpp), waitReasonIOWait, traceEvGoBlockNet, 5)</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">func netpollblockcommit(gp *g, gpp unsafe.Pointer) bool &#123;</span><br><span class="line">    r :&#x3D; atomic.Casuintptr((*uintptr)(gpp), pdWait, uintptr(unsafe.Pointer(gp)))</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>等待文件可读写，最终会调用 <code>netpollblock</code> 函数，并不会直接调用 epoll wait 的系统调用，而是挂起当前 goroutine, 并等待唤醒</p>
-<h4 id="唤醒-goroutine"><a href="#唤醒-goroutine" class="headerlink" title="唤醒 goroutine"></a>唤醒 goroutine</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;netpoll_epoll.go</span><br><span class="line">func netpoll(delay int64) gList &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    var waitms int32</span><br><span class="line">    &#x2F;&#x2F; 计算 waitms，大概规则：</span><br><span class="line">    &#x2F;&#x2F; delay &lt; 0, waitms &#x3D; -1，阻塞等待</span><br><span class="line">    &#x2F;&#x2F; delay &#x3D;&#x3D; 0, waitms &#x3D; 0, 不阻塞</span><br><span class="line">    &#x2F;&#x2F; delay &gt; 0, delay 以纳秒为单位作为 waitms</span><br><span class="line">    var events [128]epollevent</span><br><span class="line">retry:</span><br><span class="line">    n :&#x3D; epollwait(epfd, &amp;events[0], int32(len(events)), waitms)</span><br><span class="line">    if n &lt; 0 &#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">    var toRun gList</span><br><span class="line">    for i :&#x3D; int32(0); i &lt; n; i++ &#123;</span><br><span class="line">        ev :&#x3D; &amp;events[i]</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        var mode int32</span><br><span class="line">        if ev.events&amp;(_EPOLLIN|_EPOLLRDHUP|_EPOLLHUP|_EPOLLERR) !&#x3D; 0 &#123;</span><br><span class="line">            mode +&#x3D; &#39;r&#39;</span><br><span class="line">        &#125;</span><br><span class="line">        if ev.events&amp;(_EPOLLOUT|_EPOLLHUP|_EPOLLERR) !&#x3D; 0 &#123;</span><br><span class="line">            mode +&#x3D; &#39;w&#39;</span><br><span class="line">        &#125;</span><br><span class="line">        if mode !&#x3D; 0 &#123;</span><br><span class="line">            pd :&#x3D; *(**pollDesc)(unsafe.Pointer(&amp;ev.data))</span><br><span class="line">            pd.everr &#x3D; false</span><br><span class="line">            if ev.events &#x3D;&#x3D; _EPOLLERR &#123;</span><br><span class="line">                pd.everr &#x3D; true</span><br><span class="line">            &#125;</span><br><span class="line">            netpollready(&amp;toRun, pd, mode)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return toRun</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>netpoll</code> 会调用 <code>epollWait</code> 来获取 epoll 事件，而在 runtime 中很多地方都会调用 <code>netpoll</code> 函数<br><strong>监控函数 <code>sysmon</code></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;proc.go</span><br><span class="line">func sysmon() &#123;</span><br><span class="line">    &#x2F;&#x2F; ....</span><br><span class="line">    for &#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        list :&#x3D; netpoll(0)</span><br><span class="line">        if !list.empty() &#123;</span><br><span class="line">            &#x2F;&#x2F;...</span><br><span class="line">            injectglist(&amp;list) &#x2F;&#x2F; 将 goroutine 放到 runable 队列中</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>查找可运行的 goroutine</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;proc.go</span><br><span class="line">func findrunable() (gp *g, inheritTIme bool) &#123;</span><br><span class="line">top:</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    if list :&#x3D; netpoll(0); !list.empty() &#123;</span><br><span class="line">        gp :&#x3D; list.pop()</span><br><span class="line">        injectglist(&amp;list)</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        return gp, false</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ....</span><br><span class="line">stop:</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    list :&#x3D; netpoll(delta) &#x2F;&#x2F; block until new work is available</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>GC 时调用 <code>startTheWorld</code></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;runtime&#x2F;proc.go</span><br><span class="line">func startTheWorld() &#123;</span><br><span class="line">    systemstack(func() &#123;startTheWorldWithSema(false)&#125;)</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line"> &#125;</span><br><span class="line">func startTheWorldWithSema(emitTraceEvent bool) int64 &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    list :&#x3D; netpoll(0)</span><br><span class="line">    injectglist(&amp;list)</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通常获取可用的 goroutine 时都可能有机会去调用 <code>netpoll</code>，然后再调用 <code>injectglist(&amp;list)</code> 将可运行 goroutine 加入到<code>runq</code>队列中</p>
-<h1 id="系统级异步接口-——-io-uring"><a href="#系统级异步接口-——-io-uring" class="headerlink" title="系统级异步接口 —— io_uring"></a>系统级异步接口 —— io_uring</h1><blockquote>
-<p>本节不会详细介绍 io_uring 的具体操作，关于 io_uring 的使用，可以查看 <a target="_blank" rel="noopener" href="https://unixism.net/loti/index.html">Lord of the io_uring</a></p>
-</blockquote>
-<p>Linux kernel 5.1 新增了异步接口 <code>io_uring</code>，它是 Jens Axboe 以高效，可扩展，易用为目的设计的一种全新异步接口，为什么是全新呢，因为 Linux 已经提供了异步 IO 接口 —— AIO，不过就连 Linus 都对它一阵吐槽<br><a target="_blank" rel="noopener" href="https://lwn.net/Articles/671657/">Re: [PATCH 09/13] aio: add support for async openat()</a></p>
-<blockquote>
-<p>So I think this is ridiculously ugly.<br>AIO is a horrible ad-hoc design, with the main excuse being “other,<br>less gifted people, made that design, and we are implementing it for<br>compatibility because database people - who seldom have any shred of<br>taste - actually use it”.<br>But AIO was always really really ugly.</p>
-</blockquote>
-<p>io_uring 提供的异步接口，不仅仅可以使用 文件 IO，套接字 IO，甚至未来可以扩展加入其它系统调用<br>而且 <code>io_uring</code> 采用应用程序和内核共享内存的方式，来提交请求和获取完成事件</p>
-<blockquote>
-<p>使用共享内存的方式可能是内核对接口优化的一种趋势</p>
-</blockquote>
-<p><strong>io<em>uring 名称的意思便是 _io use ring</em>，而 ring 便是指和内核内存共享的 <code>提交队列</code>和<code>完成队列</code>两个环形缓冲区</strong></p>
-<h2 id="SubmissionQueueEntry"><a href="#SubmissionQueueEntry" class="headerlink" title="SubmissionQueueEntry"></a>SubmissionQueueEntry</h2><p>我们来看一下 io_uring 用来提交请求的结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">struct io_uring_sqe &#123;</span><br><span class="line">        __u8    opcode;         &#x2F;* 请求的操作类型 *&#x2F;</span><br><span class="line">        __u8    flags;          &#x2F;* IOSQE_ flags *&#x2F;</span><br><span class="line">        __u16   ioprio;         &#x2F;* ioprio for the request *&#x2F;</span><br><span class="line">        __s32   fd;             &#x2F;* 用于 IO 的文件描述符 *&#x2F;</span><br><span class="line">        union &#123;</span><br><span class="line">                __u64   off;    &#x2F;* offset into file *&#x2F;</span><br><span class="line">                __u64   addr2;</span><br><span class="line">        &#125;;</span><br><span class="line">        union &#123;</span><br><span class="line">                __u64   addr;   &#x2F;* pointer to buffer or iovecs *&#x2F;</span><br><span class="line">                __u64   splice_off_in;</span><br><span class="line">        &#125;;</span><br><span class="line">        __u32   len;            &#x2F;* buffer size or number of iovecs *&#x2F;</span><br><span class="line"></span><br><span class="line">        &#x2F;*</span><br><span class="line">         * 用于特定操作的字段</span><br><span class="line">         *&#x2F;</span><br><span class="line">        union &#123;</span><br><span class="line">                __kernel_rwf_t  rw_flags;</span><br><span class="line">                __u32           fsync_flags;</span><br><span class="line">                __u16           poll_events;    &#x2F;* compatibility *&#x2F;</span><br><span class="line">                __u32           poll32_events;  &#x2F;* word-reversed for BE *&#x2F;</span><br><span class="line">                __u32           sync_range_flags;</span><br><span class="line">                __u32           msg_flags;</span><br><span class="line">                __u32           timeout_flags;</span><br><span class="line">                __u32           accept_flags;</span><br><span class="line">                __u32           cancel_flags;</span><br><span class="line">                __u32           open_flags;</span><br><span class="line">                __u32           statx_flags;</span><br><span class="line">                __u32           fadvise_advice;</span><br><span class="line">                __u32           splice_flags;</span><br><span class="line">        &#125;;</span><br><span class="line">        __u64   user_data;      &#x2F;* 用来关联请求的完成事件 *&#x2F;</span><br><span class="line">        union &#123;</span><br><span class="line">                struct &#123;</span><br><span class="line">                        &#x2F;* pack this to avoid bogus arm OABI complaints *&#x2F;</span><br><span class="line">                        union &#123;</span><br><span class="line">                                &#x2F;* index into fixed buffers, if used *&#x2F;</span><br><span class="line">                                __u16   buf_index;</span><br><span class="line">                                &#x2F;* for grouped buffer selection *&#x2F;</span><br><span class="line">                                __u16   buf_group;</span><br><span class="line">                        &#125; __attribute__((packed));</span><br><span class="line">                        &#x2F;* personality to use, if used *&#x2F;</span><br><span class="line">                        __u16   personality;</span><br><span class="line">                        __s32   splice_fd_in;</span><br><span class="line">                &#125;;</span><br><span class="line">                __u64   __pad2[3];</span><br><span class="line">        &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><code>io_uring_sqe</code> 一个非常复杂的结构，最核心的三个字段 <code>opcode</code>，<code>fd</code>，<code>user_data</code></p>
-<ul>
-<li><code>opcode</code> 指定具体是什么操作，比如 <code>IORING_OP_READV</code>，<code>IORING_OP_ACCEPT</code>，<code>IORING_OP_OPENAT</code>，现在支持 35 种操作</li>
-<li><code>fd</code> 表示用于 IO 操作的文件描述符</li>
-<li><code>user_data</code> 当请求操作完成后，io_uring 会生成一个完成事件放到 <code>完成队列(CompletionQueue)</code> 中，而 <code>user_data</code> 便是用来和<code>完成队列</code>中的事件进行绑定的，他会原封不动的复制到<code>完成队列的事件(cqe)</code>中</li>
-<li><code>flags</code> 字段用来实现链式请求之类的功能<blockquote>
-<p>可以发现 <code>opcode</code> 是 uint8，也就是现在来看最多支持 256 个系统调用，但是整个 <code>io_uring_sqe</code> 还为未来预留了一些空间 <code>__pad2</code></p>
-</blockquote>
-</li>
-</ul>
-<p><strong>通过 <code>opcode</code> 结合结合其他 <code>union</code> 的字段，便实现了扩展性极强的 <code>io_uring</code> 接口</strong></p>
-<h2 id="CompletionQueueEvent"><a href="#CompletionQueueEvent" class="headerlink" title="CompletionQueueEvent"></a>CompletionQueueEvent</h2><p><code>完成队列事件(CompletionQueueEvent)</code> 的结构就比较简单了，主要是表示提交的异步操作执行的结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct io_uring_cqe &#123;</span><br><span class="line">        __u64   user_data;      &#x2F;* 直接复制 sqe-&gt;data *&#x2F;</span><br><span class="line">        __s32   res;            &#x2F;* 异步操作的结果 *&#x2F;</span><br><span class="line">        __u32   flags;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><code>user_data</code> 便是从 <code>sqe-&gt;data</code> 直接复制过来了，可以通过 <code>user_data</code> 绑定到对应的 <code>sqe</code><br><code>res</code> 便是异步操作执行的结果，如果 res &lt; 0，通常说明操作执行错误<br><code>flags</code> 暂时没有使用</p>
-<h2 id="io-uring-setup"><a href="#io-uring-setup" class="headerlink" title="io_uring_setup"></a>io_uring_setup</h2><p><strong>io_uring 使用共享内存的方式，来提交请求和获取执行结果，减少内存拷贝带来的损耗</strong><br><code>io_uring_setup</code> 接口会接受一个指定提交队列大小的 <code>uint32</code> 类型参数和一个 <code>io_uring_params</code> 对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;linux&#x2F;io_uring.h&gt;</span><br><span class="line">int io_uring_setup(u32 entries, struct io_uring_params *p);</span><br></pre></td></tr></table></figure>
-
-<p>调用成功会返回一个<code>文件描述符</code>，用于后续的操作</p>
-<h4 id="io-uring-params"><a href="#io-uring-params" class="headerlink" title="io_uring_params"></a>io_uring_params</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">struct io_uring_params &#123;</span><br><span class="line">        __u32 sq_entries;</span><br><span class="line">        __u32 cq_entries;</span><br><span class="line">        __u32 flags;</span><br><span class="line">        __u32 sq_thread_cpu;</span><br><span class="line">        __u32 sq_thread_idle;</span><br><span class="line">        __u32 features;</span><br><span class="line">        __u32 wq_fd;</span><br><span class="line">        __u32 resv[3];</span><br><span class="line">        struct io_sqring_offsets sq_off;</span><br><span class="line">        struct io_cqring_offsets cq_off;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><code>io_uring_params</code> 不只用来配置 <code>io_uring</code> 实例，内核也会填充 <code>io_uring_params</code> 中关于 <code>io_uring</code> 实例的信息，比如用来映射共享内存的请求队列和完成队列字段的偏移量 - <code>io_sqring_offsets</code> 和 <code>io_cqring_offsets</code></p>
-<h5 id="配置-io-uring"><a href="#配置-io-uring" class="headerlink" title="配置 io_uring"></a>配置 io_uring</h5><p><code>flags</code> 以位掩码的方式，结合相应 <code>sq_thread_cpu</code>，<code>sq_thread_idle</code> ，<code>wq_fd</code>，<code>cq_entries</code> 字段来配置 io_uring 实例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * io_uring_setup() flags</span><br><span class="line"> *&#x2F;</span><br><span class="line">#define IORING_SETUP_IOPOLL     (1U &lt;&lt; 0)       &#x2F;* io_context is polled *&#x2F;</span><br><span class="line">#define IORING_SETUP_SQPOLL     (1U &lt;&lt; 1)       &#x2F;* SQ poll thread *&#x2F;</span><br><span class="line">#define IORING_SETUP_SQ_AFF     (1U &lt;&lt; 2)       &#x2F;* sq_thread_cpu is valid *&#x2F;</span><br><span class="line">#define IORING_SETUP_CQSIZE     (1U &lt;&lt; 3)       &#x2F;* app defines CQ size *&#x2F;</span><br><span class="line">#define IORING_SETUP_CLAMP      (1U &lt;&lt; 4)       &#x2F;* clamp SQ&#x2F;CQ ring sizes *&#x2F;</span><br><span class="line">#define IORING_SETUP_ATTACH_WQ  (1U &lt;&lt; 5)       &#x2F;* attach to existing wq *&#x2F;</span><br><span class="line">#define IORING_SETUP_R_DISABLED (1U &lt;&lt; 6)       &#x2F;* start with ring disabled *&#x2F;</span><br></pre></td></tr></table></figure>
-
-<p>通常 cq_entries 为 sq_entries 的两倍，通过 <code>flags</code> 指定 <code>IORING_SETUP_CQSIZE</code> ，然后设置 <code>cq_entries</code> 字段为指定大小</p>
-<blockquote>
-<p>cq_entries 不能小于 sq_entries</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 提供了初始化 io_uring 对象时的配置函数，可以看一下这些函数的具体实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type IOURingOption func(*IOURing)</span><br><span class="line">func New(entries uint, opts ...IOURingOption) (iour *IOURing, err error)</span><br><span class="line">func WithParams(params *iouring_syscall.IOURingParams) IOURingOption</span><br><span class="line">func WithAsync() IOURingOption</span><br><span class="line">func WithDisableRing() IOURingOption</span><br><span class="line">func WithCQSize(size uint32) IOURingOption</span><br><span class="line">func WithSQPoll() IOURingOption</span><br><span class="line">func WithSQPollThreadCPU(cpu uint32) IOURingOption</span><br><span class="line">func WithSQPollThreadIdle(idle time.Duration) IOURingOption</span><br></pre></td></tr></table></figure>
-
-<h5 id="内核填充信息"><a href="#内核填充信息" class="headerlink" title="内核填充信息"></a>内核填充信息</h5><p>内核会向 <code>io_uring_params</code> 填充跟 io_uring 实例相关的信息<br><code>sq_entries</code> 请求队列的大小，<code>io_uring_setup</code> 会传递请求队列的大小 <code>entries</code>，io_uring 会根据 <code>entries</code> 设置 <code>sq_entries</code> 为 2 的次方大小<br><code>cq_entries</code> 完成队列的大小，通常为 <code>sq_entries</code> 的两倍，即使通过 <code>IORING_SETUP_CQSIZE</code> flag 设置了 <code>cq_enries</code> ，内核依然会以 2 的次方重新计算出 <code>cq_entries</code> 的大小<br><code>features</code> 记录了当前内核版本支持的一些功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * io_uring_params-&gt;features flags</span><br><span class="line"> *&#x2F;</span><br><span class="line">#define IORING_FEAT_SINGLE_MMAP         (1U &lt;&lt; 0)</span><br><span class="line">#define IORING_FEAT_NODROP              (1U &lt;&lt; 1)</span><br><span class="line">#define IORING_FEAT_SUBMIT_STABLE       (1U &lt;&lt; 2)</span><br><span class="line">#define IORING_FEAT_RW_CUR_POS          (1U &lt;&lt; 3)</span><br><span class="line">#define IORING_FEAT_CUR_PERSONALITY     (1U &lt;&lt; 4)</span><br><span class="line">#define IORING_FEAT_FAST_POLL           (1U &lt;&lt; 5)</span><br><span class="line">#define IORING_FEAT_POLL_32BITS         (1U &lt;&lt; 6)</span><br><span class="line">#define IORING_FEAT_SQPOLL_NONFIXED     (1U &lt;&lt; 7)</span><br></pre></td></tr></table></figure>
-
-<p><code>io_sqring_offsets</code> 和 <code>io_cqring_offsets</code> 便是<code>SQ</code>和<code>CQ</code>在共享内存中的偏移量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct io_sqring_offsets &#123;</span><br><span class="line">        __u32 head;</span><br><span class="line">        __u32 tail;</span><br><span class="line">        __u32 ring_mask;</span><br><span class="line">        __u32 ring_entries;</span><br><span class="line">        __u32 flags;</span><br><span class="line">        __u32 dropped;</span><br><span class="line">        __u32 array;</span><br><span class="line">        __u32 resv1;</span><br><span class="line">        __u64 resv2;</span><br><span class="line">&#125;;</span><br><span class="line">struct io_cqring_offsets &#123;</span><br><span class="line">        __u32 head;</span><br><span class="line">        __u32 tail;</span><br><span class="line">        __u32 ring_mask;</span><br><span class="line">        __u32 ring_entries;</span><br><span class="line">        __u32 overflow;</span><br><span class="line">        __u32 cqes;</span><br><span class="line">        __u32 flags;</span><br><span class="line">        __u32 resv1;</span><br><span class="line">        __u64 resv2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>根据这些偏移量便可以调用 mmap 来映射 SQ 和 CQ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ptr &#x3D; mmap(0, sq_off.array + sq_entries * sizeof(__u32),</span><br><span class="line">           PROT_READ|PROT_WRITE, MAP_SHARED|MAP_POPULATE,</span><br><span class="line">           ring_fd, IORING_OFF_SQ_RING);</span><br></pre></td></tr></table></figure>
-
-<p>可以参考 <a target="_blank" rel="noopener" href="https://github.com/Iceber/iouring-go">iouring-go</a> 对 IOURing 对象的初始化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; iouring-go&#x2F;iouring.go</span><br><span class="line">func New(entries uint, opts ...IOURingOption) (*IOURing, error) &#123;</span><br><span class="line">    iour :&#x3D; &amp;IOURing&#123;</span><br><span class="line">        params:    &amp;iouring_syscall.IOURingParams&#123;&#125;,</span><br><span class="line">        userDatas: make(map[uint64]*UserData),</span><br><span class="line">        cqeSign:   make(chan struct&#123;&#125;, 1),</span><br><span class="line">        closer:    make(chan struct&#123;&#125;),</span><br><span class="line">        closed:    make(chan struct&#123;&#125;),</span><br><span class="line">    &#125;</span><br><span class="line">    for _, opt :&#x3D; range opts &#123;</span><br><span class="line">        opt(iour)</span><br><span class="line">    &#125;</span><br><span class="line">    var err error</span><br><span class="line">    iour.fd, err &#x3D; iouring_syscall.IOURingSetup(entries, iour.params)</span><br><span class="line">    if err !&#x3D; nil &#123;</span><br><span class="line">        return nil, err</span><br><span class="line">    &#125;</span><br><span class="line">    if err :&#x3D; mmapIOURing(iour); err !&#x3D; nil &#123;</span><br><span class="line">        munmapIOURing(iour)</span><br><span class="line">        return nil, err</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>mmapIOURing</code> 中实现了对请求队列以及完成队列的内存映射</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; iouring-go&#x2F;mmap.go</span><br><span class="line">func mmapIOURing(iour *IOURing) (err error) &#123;</span><br><span class="line">    defer func() &#123;</span><br><span class="line">        if err !&#x3D; nil &#123;</span><br><span class="line">            munmapIOURing(iour)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    iour.sq &#x3D; new(SubmissionQueue)</span><br><span class="line">    iour.cq &#x3D; new(CompletionQueue)</span><br><span class="line">    if err &#x3D; mmapSQ(iour); err !&#x3D; nil &#123;</span><br><span class="line">        return err</span><br><span class="line">    &#125;</span><br><span class="line">    if (iour.params.Features &amp; iouring_syscall.IORING_FEAT_SINGLE_MMAP) !&#x3D; 0 &#123;</span><br><span class="line">        iour.cq.ptr &#x3D; iour.sq.ptr</span><br><span class="line">    &#125;</span><br><span class="line">    if err &#x3D; mmapCQ(iour); err !&#x3D; nil &#123;</span><br><span class="line">        return err</span><br><span class="line">    &#125;</span><br><span class="line">    if err &#x3D; mmapSQEs(iour); err !&#x3D; nil &#123;</span><br><span class="line">        return err</span><br><span class="line">    &#125;</span><br><span class="line">    return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里不再详细介绍 <code>io_uring</code> 的使用 ，想要了解更多可以查看文末的<a target="_blank" rel="noopener" href="http://icebergu.com/archives/go-iouring#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB">推荐阅读</a></p>
-<h2 id="io-uring-的功能"><a href="#io-uring-的功能" class="headerlink" title="io_uring 的功能"></a>io_uring 的功能</h2><p>这里简单介绍一下 <code>io_uring</code> 提供的一些功能，以及在 Go 中如何去使用</p>
-<h3 id="顺序执行"><a href="#顺序执行" class="headerlink" title="顺序执行"></a>顺序执行</h3><p>设置 <code>sqe-&gt;flags</code> 的 <code>IOSQE_IO_DRAIN</code> 标记，这样只有当该 <code>sqe</code> 之前所有的 <code>sqes</code> 都完成后，才会执行该 <code>sqe</code>，而后续的 <code>sqe</code> 也会在该 <code>sqe</code> 完成后才会执行<br>在 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中可以在构建 <code>IOURing</code> 对象时使用 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#WithDrain"><code>WithDrain</code></a> 来全局设置请求顺序执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iour :&#x3D; iouring.New(8, WithDrain())</span><br></pre></td></tr></table></figure>
-
-<p>针对单一请求设置 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#PrepRequest.WithDrain"><code>WithDrain</code></a>，保证请求会在之前所有的请求都完成才会执行，而后续的请求也都会在该请求完成之后才会开始执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request, err :&#x3D; iour.SubmitRequest(iouring.Read(fd, buf).WithDrain(), nil)</span><br></pre></td></tr></table></figure>
-
-<h3 id="链式请求"><a href="#链式请求" class="headerlink" title="链式请求"></a>链式请求</h3><p><code>io_uring</code> 提供了一组请求的链式/顺序执行的方法，可以让链中的请求会在上一个请求执行完成后才会执行，而且不影响链外其他请求的并发执行<br>设置 <code>sqe-&gt;flags</code> 的 <code>IOSQE_IO_LINK</code> 标记后，下一个 <code>sqe</code> 和当前 <code>sqe</code> 自动组成新链或者当前 <code>sqe</code> 的链中，链中没有设置 <code>IOSQWE_IO_LINK</code> 的 <code>sqe</code> 便是链尾<br>如果链中的有请求执行失败了，那么链中后续的 <code>sqe</code> 都会被取消( <code>cqe.res</code> 为 <code>-ECANCELED</code>)<br><strong><code>io_uring</code> 还提供了以外一种设置链式请求的方式，设置 <code>sqe-&gt;flags</code> 为 <code>IOSQE_IO_HARDLINK</code> flag，这种方式会让链中的请求忽略之前请求的结果，也就是说即使链中之前的请求执行失败了，也不会取消链中后边的请求</strong><br><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中可以使用 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#IOURing.SubmitLinkRequests"><code>SubmitLinkRequests</code></a> 或者 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#IOURing.SubmitHardLinkRequests"><code>SubmitHardLinkRequests</code></a> 方法来设置链式请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">preps :&#x3D; []iouring.PrepRequest&#123; iouring.Read(fd1, buf), iouring.Write(fd2, buf) &#125;</span><br><span class="line">requests, err :&#x3D; iour.SubmitLinkRequest(preps, nil)</span><br></pre></td></tr></table></figure>
-
-<h3 id="请求取消"><a href="#请求取消" class="headerlink" title="请求取消"></a>请求取消</h3><p>当请求提交后，还可以提交取消请求的请求，这样如果请求还没有执行或者请求的操作可以被中断(比如 socket IO)，那么就可以被异步的取消，而对于已经启动的磁盘 IO 请求则无法取消<br>在 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中，提交请求后会返回一个 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#Request"><code>iouring.Request</code></a> 对象，通过<code>request.Cancel</code> 方法就可以取消请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request, err :&#x3D; iour.SubmitRequest(iouring.Timeout(1 * time.Second), nil)</span><br><span class="line">cancelRequest, err :&#x3D; request.Cancel()</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#Request"><code>Cancel</code></a> 方法会返回一个 cancelRequest 对象，表示提交的取消请求<br>可以监听 <code>request</code> 的执行是否失败，并且失败原因是否为 <code>iouring.ErrRequestCanceled</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;- request.Done()</span><br><span class="line">if err :&#x3D; request.Err(); if err !&#x3D; nil &#123;</span><br><span class="line">    if err &#x3D;&#x3D; iouring.ErrRequestCanceled &#123;</span><br><span class="line">        fmt.Println(&quot;request is canceled&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>也可去监听 cancelRequest 的执行结果，如果<code>cancelRequest.Err</code> 方法返回 <code>nil</code>，便是可能成功取消了，注意是可能取消了，因为一些操作是无法被取消的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;- cancelRequest.Done()</span><br><span class="line">if err :&#x3D; cancelRequest.Err(); if err !&#x3D; nil&#123;</span><br><span class="line">    if err &#x3D;&#x3D; iouring.ErrRequestNotFound()&#123;</span><br><span class="line">        fmt.Println(&quot;canceled request is not found&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; do something</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="定时和请求完成计数"><a href="#定时和请求完成计数" class="headerlink" title="定时和请求完成计数"></a>定时和请求完成计数</h3><p><code>io_uring</code> 提供了 <code>IORING_OP_TIMEOUT</code> 请求，可以用来提交超时请求<br>超时请求可以分为三种:</p>
-<ul>
-<li>相对时间超时</li>
-<li>绝对时间超时</li>
-<li>对请求完成计数，到达指定的完成事件数量后，超时请求就会完成</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 对这三种情况封装了三个函数 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#Timeout"><code>iouring.Timeout</code></a>，<a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#TimeoutWithTime"><code>iouring.TimeoutWithTime</code></a>，<a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#CountCompletionEvent"><code>iouring.CountCompletionEvent</code></a> 来分别代表三种超时请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">now :&#x3D; time.Now()</span><br><span class="line">request, err :&#x3D; iouring.SubmitRequest(iouring.Timeout(2 * time.Second), nil)</span><br><span class="line">if err !&#x3D; nil &#123;</span><br><span class="line">    panic(err)</span><br><span class="line">&#125;</span><br><span class="line">&lt;- request.Done()</span><br><span class="line">fmt.Println(time.Now().Sub(now))</span><br></pre></td></tr></table></figure>
-
-<p><strong>根据 <code>io_uring</code> 提供的超时请求，可以实现系统级的异步定时器</strong></p>
-<h3 id="请求超时"><a href="#请求超时" class="headerlink" title="请求超时"></a>请求超时</h3><p><code>io_uring</code> 通过 <code>IOSQE_IO_LINK</code> 将一个请求和 <code>IORING_OP_LINK_TIMEOUT</code> 请求链接在一起，那么就可以做到请求的超时控制<br><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 同样提供了简便方法 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#PrepRequest.WithTimeout"><code>WithTimeout</code></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preps :&#x3D; iouring.Read(fd, buf).WithTimeout()</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#PrepRequest.WithTimeout"><code>WithTimeout</code></a> 方法会返回两个 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#PrepRequest"><code>PrepRequest</code></a> 对象，所以需要使用 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#IOURing.SubmitRequests"><code>SubmitRequests</code></a> 来提交</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中请求超时的一些操作使用起来感觉还不是特别友好，有待优化</p>
-</blockquote>
-<h3 id="注册文件"><a href="#注册文件" class="headerlink" title="注册文件"></a>注册文件</h3><p><code>io_uring</code> 的一些 IO 操作需要提供文件描述符，而频繁的将文件和内核之间进行映射也会导致一定的性能损耗，所以可以使用 <code>io_uring</code> 的 <code>io_uring_register</code> 接口来提前注册文件描述符<br>详细的概念可以参考 <a target="_blank" rel="noopener" href="https://unixism.net/loti/ref-iouring/io_uring_register.html#io-uring-register">io_uring_register</a><br><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 也提供了文件描述符的注册功能，而且对于已经注册的文件描述符会自动使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func (iour *IOURing) RegisterFile(file *os.File) error</span><br><span class="line">func (iour *IOURing) RegisterFiles(files []*os.File) error</span><br><span class="line">func (iour *IOURing) UnregisterFile(file *os.File) error</span><br><span class="line">func (iour *IOURing) UnregisterFiles(files []*os.File) error</span><br></pre></td></tr></table></figure>
-
-<p>当 <code>io_uring</code> 的文件描述符被关闭后，这些注册的文件会自动注销<br><em>需要注意，调用 <code>io_uring_register</code> 来注册文件描述符时，如果有其他的正在进行的请求的话，会等到这些请求都完成才会注册</em><br>注册文件描述符在 Go 中带来的并发问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type fileRegister struct &#123;</span><br><span class="line">    lock sync.Mutex</span><br><span class="line">    iouringFd int</span><br><span class="line">    fds          []int32</span><br><span class="line">    sparseindexs map[int]int</span><br><span class="line"></span><br><span class="line">    registered bool</span><br><span class="line">    indexs     sync.Map</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>需要注意由于存在对索引 <code>fileRegister.indexs</code> 的并发读写，所以使用 <code>sync.Map</code>，也就意味着，使用注册文件描述符，会带来一定的并发问题，经过简单的测试，<code>sync.Map</code> 带来的性能损耗导致注册文件描述符带来的优势并没有那么大的</p>
-<blockquote>
-<p>在 Go 中使用 <code>io_uring</code> 的最大问题便是对 <code>io_uring</code> 实例的竞争问题，而通过 Go 暴露给外部使用的并发机制，并不能让 <code>io_uring</code> 带来的异步 IO 发挥最大的性能<br>将 <code>io_uring</code> 融入 runtime 中，才是最终的解决方案</p>
-</blockquote>
-<h3 id="注册缓冲区"><a href="#注册缓冲区" class="headerlink" title="注册缓冲区"></a>注册缓冲区</h3><p>和注册文件描述符类似， <code>io_uring</code> 为了减少 IO 请求中缓冲区的映射，同样可以使用 <code>io_uring_register</code> 来注册缓冲区<br>如果要在请求中使用缓冲区的话，需要使用 <code>IORING_OP_READ_FIXED</code> 或者 <code>IORING_OP_WRITE_FIXED</code> 请求<br>具体可以参考 <a target="_blank" rel="noopener" href="https://unixism.net/loti/ref-iouring/io_uring_register.html#io-uring-register">io_uring_register</a></p>
-<h3 id="内核侧请求队列轮询"><a href="#内核侧请求队列轮询" class="headerlink" title="内核侧请求队列轮询"></a>内核侧请求队列轮询</h3><p>将请求放到<code>SQ</code>的环形缓冲区后，需要调用 <code>io_uring_enter</code> 来通知内核有请求需要处理<br>io_uring 为了进一步减少系统调用，可以在 <code>io_uring_setup</code> 是设置 <code>io_uring_params-&gt;flags</code> 的 <code>IORING_SETUP_SQPOLL</code> flags，内核就会创建一个轮询请求队列的线程<br>可以通过 <code>ps</code> 命令查看用来轮询的内核线程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps --ppid 2 | grep io_uring-sq</span><br></pre></td></tr></table></figure>
-
-<p>需要注意在 5.10 之前的版本，需要使用特权用户来执行，而 5.10 以后只需 <code>CAP_SYS_NICE</code> 权限即可<br>并且 5.10 之前，SQPoll 需要配合注册的文件描述符一起使用，而 5.10 以后则不需要，可以通过查看内核填充的 <code>io_uring_params-&gt;features</code> 是否设置了 <code>IORING_FEAT_SQPOLL_NONFIXED</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; iouring-go&#x2F;iouring.go</span><br><span class="line">func (iour *IOURing) doRequest(sqe *iouring_syscall.SubmissionQueueEntry, request PrepRequest, ch chan&lt;- Result) (*UserData, error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    if sqe.Fd() &gt;&#x3D; 0 &#123;</span><br><span class="line">        if index, ok :&#x3D; iour.fileRegister.GetFileIndex(int32(sqe.Fd())); ok &#123;</span><br><span class="line">            sqe.SetFdIndex(int32(index))</span><br><span class="line">        &#125; else if iour.Flags&amp;iouring_syscall.IORING_SETUP_SQPOLL !&#x3D; 0 &amp;&amp;</span><br><span class="line">            iour.Features&amp;iouring_syscall.IORING_FEAT_SQPOLL_NONFIXED &#x3D;&#x3D; 0 &#123;</span><br><span class="line">            return nil, ErrUnregisteredFile</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>iouring-go 同样提供了开启 SQPoll 的 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#WithSQPoll"><code>WithSQPoll</code></a> 以及设置与 SQPoll 内核线程的相关配置 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#WithSQPollThreadCPU"><code>WithSQPollThreadCpu</code></a> 和 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#WithSQPollThreadIdle"><code>WithSQPollThreadIdle</code></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iour, err :&#x3D; iouring.New(8, iouring.WithSQPoll())</span><br></pre></td></tr></table></figure>
-
-<p>但是在 Go 简单的设置 <code>io_uring_params</code> 并不能正常的工作，可能是由于 Go 的 GMP 模型导致的一些问题。暂时还在思考解决方案</p>
-<h3 id="注册-eventfd，利用-epoll"><a href="#注册-eventfd，利用-epoll" class="headerlink" title="注册 eventfd，利用 epoll"></a>注册 eventfd，利用 epoll</h3><p>通过 <code>io_uring_register</code> 可以将 <code>eventfd</code> 注册到 io_uring 实例中，然后将 <code>eventfd</code> 加入到 <code>epoll</code> 中，如果当 io_uring 中有完成事件时，便会通知 <code>eventfd</code><br>在 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中，对于完成事件的监听便是使用了 <code>eventfd</code> 和 <code>epoll</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">type IOURing struct &#123;</span><br><span class="line">    eventfd int</span><br><span class="line">    cqeSign chan struct&#123;&#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">func New() (*IOURing, error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ....</span><br><span class="line">    if err :&#x3D; iour.registerEventfd(); err !&#x3D; nil &#123;</span><br><span class="line">        return nil, err</span><br><span class="line">    &#125;</span><br><span class="line">    if err :&#x3D; registerIOURing(iour); err !&#x3D; nil &#123;</span><br><span class="line">        return nil, err</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">func (iour *IOURing) registerEventfd() error &#123;</span><br><span class="line">    eventfd, err :&#x3D; unix.Eventfd(0, unix.EFD_NONBLOCK|unix.FD_CLOEXEC)</span><br><span class="line">    if err !&#x3D; nil &#123;</span><br><span class="line">         return os.NewSyscallError(&quot;eventfd&quot;, err)</span><br><span class="line">    &#125;</span><br><span class="line">    iour.eventfd &#x3D; eventfd</span><br><span class="line">    return iouring_syscall.IOURingRegister(</span><br><span class="line">        iour.fd,</span><br><span class="line">        iouring_syscall.IOURING_REGISTER_EVENTFD,</span><br><span class="line">        unsafe.Pointer(&amp;iour.eventfd), 1,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line">func registerIOURing(iour *IOURing) error &#123;</span><br><span class="line">    if err :&#x3D; initpoller(); err !&#x3D; nil &#123;</span><br><span class="line">        return err</span><br><span class="line">    &#125;</span><br><span class="line">    if err :&#x3D; unix.EpollCtl(poller.fd, unix.EPOLL_CTL_ADD, iour.eventfd,</span><br><span class="line">         &amp;unix.EpollEvent&#123;Fd: int32(iour.eventfd), Events: unix.EPOLLIN | unix.EPOLLET&#125;,</span><br><span class="line">    ); err !&#x3D; nil &#123;</span><br><span class="line">         return os.NewSyscallError(&quot;epoll_ctl_add&quot;, err)</span><br><span class="line">    &#125;</span><br><span class="line">    poller.Lock()</span><br><span class="line">    poller.iours[iour.eventfd] &#x3D; iour</span><br><span class="line">    poller.Unlock()</span><br><span class="line">    return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>poller</code> 会调用 EpollWait 等待<code>完成队列</code>中有完成事件，并通知相应的 IOURing 对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; iouring-go&#x2F;iouring.go</span><br><span class="line">func (iour *IOURing) getCQEvent(wait bool) (cqe *iouring_syscall.CompletionQueueEvent, err error) &#123;</span><br><span class="line">    var tryPeeks int</span><br><span class="line">    for &#123;</span><br><span class="line">        if cqe &#x3D; iour.cq.peek(); cqe !&#x3D; nil &#123;</span><br><span class="line">            iour.cq.advance(1)</span><br><span class="line">            return</span><br><span class="line">        &#125;</span><br><span class="line">        if !wait &amp;&amp; !iour.sq.cqOverflow() &#123;</span><br><span class="line">            err &#x3D; syscall.EAGAIN</span><br><span class="line">            return</span><br><span class="line">        &#125;</span><br><span class="line">        if iour.sq.cqOverflow() &#123;</span><br><span class="line">            _, err &#x3D; iouring_syscall.IOURingEnter(iour.fd, 0, 0, iouring_syscall.IORING_ENTER_FLAGS_GETEVENTS, nil)</span><br><span class="line">            if err !&#x3D; nil &#123;</span><br><span class="line">                return</span><br><span class="line">            &#125;</span><br><span class="line">            continue</span><br><span class="line">        &#125;</span><br><span class="line">        if tryPeeks++; tryPeeks &lt; 3 &#123;</span><br><span class="line">            runtime.Gosched()</span><br><span class="line">            continue</span><br><span class="line">        &#125;</span><br><span class="line">        select &#123;</span><br><span class="line">        case &lt;-iour.cqeSign:</span><br><span class="line">        case &lt;-iour.closer:</span><br><span class="line">            return nil, ErrIOURingClosed</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; iouring-go&#x2F;poller.go</span><br><span class="line">func (poller *iourPoller) run() &#123;</span><br><span class="line">    for &#123;</span><br><span class="line">        n, err :&#x3D; unix.EpollWait(poller.fd, poller.events, -1)</span><br><span class="line">        if err !&#x3D; nil &#123;</span><br><span class="line">            continue</span><br><span class="line">        &#125;</span><br><span class="line">        for i :&#x3D; 0; i &lt; n; i++ &#123;</span><br><span class="line">            fd :&#x3D; int(poller.events[i].Fd)</span><br><span class="line">            poller.Lock()</span><br><span class="line">            iour, ok :&#x3D; poller.iours[fd]</span><br><span class="line">            poller.Unlock()</span><br><span class="line">            if !ok &#123;</span><br><span class="line">                continue</span><br><span class="line">            &#125;</span><br><span class="line">            select &#123;</span><br><span class="line">            case iour.cqeSign &lt;- struct&#123;&#125;&#123;&#125;:</span><br><span class="line">            default:</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        poller.adjust()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="保证数据不丢失"><a href="#保证数据不丢失" class="headerlink" title="保证数据不丢失"></a>保证数据不丢失</h3><p>默认情况下， CQ 环的大小是 SQ 环的 两倍，为什么 SQ 环的大小会小于 CQ 环，是因为 SQ 环中的 sqe 一旦被内核发现，便会被内核消耗掉，也就意味着 sqe 的生命周期很短，而请求的完成事件都会放到 CQ 环中<br>我们也可以通过 <code>IORING_SETUP_CQSIZE</code> 或者 <code>iouring-go</code> 的 <code>WithCQSize</code> Option 里设置 CQ 环的大小<br>但是依然会存在 CQ 环溢出的情况，而内核会在内部存储溢出的时间，直到 CQ 环有空间容纳更多事件。</p>
-<blockquote>
-<p>可以通过 io_uring_params-&gt;features 是否设置 IORING_FEAT_NODROP 来判断当前内核是否支持该功能</p>
-</blockquote>
-<p>如果 CQ 环溢出，那么提交请求时可能会以 <code>-EBUSY</code> 错误失败，需要重新提交<br>并且当 CQ 环中数据被消耗后，需要调用 <code>io_uring_enter</code> 来通知内核 CQ 环中有空余空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">func (iour *IOURing) getCQEvent(wait bool) (cqe *iouring_syscall.CompletionQueueEvent, err error) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    if iour.sq.cqOverflow() &#123;</span><br><span class="line">        _, err :&#x3D; iour.syscall.IOURingEnter(iour.fd, 0, 0, iouring_syscall.IORING_ENTER_FLAGS_GETEVENTS, nil)</span><br><span class="line">        if err !&#x3D; nil&#123;</span><br><span class="line">            return</span><br><span class="line">        &#125;</span><br><span class="line">        continue</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="io-uring-与-Go-——-iouring-go"><a href="#io-uring-与-Go-——-iouring-go" class="headerlink" title="io_uring 与 Go —— iouring-go"></a>io_uring 与 Go —— iouring-go</h1><h3 id="竞争问题"><a href="#竞争问题" class="headerlink" title="竞争问题"></a>竞争问题</h3><p>在实现 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 中遇到的问题，一个是并发导致对 <code>io_uring</code> 的竞争问题<br><strong>对于 CQ 环的竞争是使用单一的 CQ 环消费 goroutine <code>IOURing.run()</code> 来完成 <code>cqe</code> 的消费</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">func New(entries int, opts ...IOURingOption) (iour *IOURing, err error) &#123;</span><br><span class="line">    iour :&#x3D; &amp;IOURing&#123;...&#125;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    go iour.run()</span><br><span class="line">    return</span><br><span class="line">&#125;</span><br><span class="line">func (iour *IOURing) run() &#123;</span><br><span class="line">    for &#123;</span><br><span class="line">        cqe, err :&#x3D; iour.getCQEvent(true)</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>SQ 环的解决方案有两种</p>
-<ol>
-<li><strong>使用单独的提交 goroutine，将需要提交的请求通过内部 channel 发送给提交 goroutine，这样保证了 SQ 环的单一生产者</strong></li>
-<li><strong>使用锁的方式，对于提交请求的函数加锁，保证同一时间只有一个 goroutine 在提交请求</strong></li>
-</ol>
-<p>第一种方式听起来使用 channel 更优雅一些，但是 channel 内部依然使用锁的方式以及额外的内存复制<br>另外最大的弊端就是将 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/Iceber/iouring-go#IOURing"><code>IOURIng</code></a> 的<code>提交函数</code>（_将请求发送给提交 channel_）和真正将请求提交给内核（_调用 <code>io_uring_enter</code>通知内核有新的请求_）分开<br>当多个<code>提交函数</code> 向 channel 发送的请求的顺序无法保证，这样链式请求就无法实现（除非对于链式请求再次加锁）<br>第二种方式，采用加锁的方式，保证了同一时间只有一个提交函数在处理 SQ 环，并且可以立即是否真正提交成功（_调用 <code>IOURing.submit</code> 方法通知内核有新的请求_）<br><a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 采用了第二种方式<br>真正去解决这个问题的方式，估计可能只有 runtime 才能给出答案，为每一个 P 创建一个 io_uring 实例在 runtime 内部解决竞争问题，内部使用 eventfd 注册到 <code>netpoll</code> 中来获取<code>完成队列</code>通知</p>
-<h3 id="io-uring-与-channel"><a href="#io-uring-与-channel" class="headerlink" title="io_uring 与 channel"></a>io_uring 与 channel</h3><p>对于 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 设计比较好的地方，我感觉便是对 channel 的利用，异步 IO 加上 channel，可以将异步在并发的程序中发挥出最大的作用<br><em>当然，如果只是简单的使用 channel 的话又会引入其他一些问题，后续会进行说明</em></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func (iour *IOURing) SubmitRequest(request PrepRequest, ch chan&lt;- Result) (Request, error)</span><br></pre></td></tr></table></figure>
-
-<p><code>SubmitRequest</code> 方法接收一个 channel，当请求完成后，会将结果发送到 channel 中，这样通过多个请求复用同一个 channel，程序便可以监听一组请求的完成情况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">func (iour *IOURing) run() &#123;</span><br><span class="line">    for &#123;</span><br><span class="line">        cqe, err :&#x3D; iour.getCQEvent(true)</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        userData :&#x3D; iour.userData[cqe.UserData]</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        userData.request.complate(cqe)</span><br><span class="line">        if userData.resulter !&#x3D; nil &#123;</span><br><span class="line">            userData.resulter &lt;- userData.request</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>而 <code>SubmitRequest</code> 方法同样会返回一个 Request 接口对象，通过 Request 我们同样可以去查看请求的是否完成已经它的完成结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">type Request interface &#123;</span><br><span class="line">	Result</span><br><span class="line">	Cancel() (Request, error)</span><br><span class="line">	Done() &lt;-chan struct&#123;&#125;</span><br><span class="line">	GetRes() (int, error)</span><br><span class="line">	&#x2F;&#x2F; Can Only be used in ResultResolver</span><br><span class="line">	SetResult(r0, r1 interface&#123;&#125;, err error) error</span><br><span class="line">&#125;</span><br><span class="line">type Result interface &#123;</span><br><span class="line">	Fd() int</span><br><span class="line">	Opcode() uint8</span><br><span class="line">	GetRequestBuffer() (b0, b1 []byte)</span><br><span class="line">	GetRequestBuffers() [][]byte</span><br><span class="line">	GetRequestInfo() interface&#123;&#125;</span><br><span class="line">	FreeRequestBuffer()</span><br><span class="line">	Err() error</span><br><span class="line">	ReturnValue0() interface&#123;&#125;</span><br><span class="line">	ReturnValue1() interface&#123;&#125;</span><br><span class="line">	ReturnFd() (int, error)</span><br><span class="line">	ReturnInt() (int, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>利用 channel 便可以完成对异步 IO 的异步监听和同步监听</p>
-<h4 id="channel-带来的问题"><a href="#channel-带来的问题" class="headerlink" title="channel 带来的问题"></a>channel 带来的问题</h4><p>当然使用 channel 又会带来其他的问题，比如 channel 满了以后，对 io_uring 完成队列的消费便会阻塞在向 channel 发送数据，阻塞时间过长也会导致 CQ 环溢出<br>比较好的解决方案是，在 channel 上抽象出一层 <code>Resulter</code>，<code>Resulter</code> 会对完成事件进行自动缓冲，当然这也会带来一定的代码复杂度，所以 <a target="_blank" rel="noopener" href="https://github.com/iceber/iouring-go">iouring-go</a> 便将 channel 阻塞的问题交给使用者，要求 channel 的消费端尽快消费掉数据</p>
-<h1 id="思考-io-uring-在-Go-中的发展"><a href="#思考-io-uring-在-Go-中的发展" class="headerlink" title="思考 io_uring 在 Go 中的发展"></a>思考 io_uring 在 Go 中的发展</h1><p><code>netpoll</code> 在 Linux 平台下使用了 <code>epoll</code>，而且 <code>epoll</code> 在使用上并没有竞争问题，当然如果要使用 <code>io_uring</code> 来替代 <code>epoll</code> 来实现 <code>netpoll</code> 的话并不是不可能，只是这样对于工作很好的 epoll 来说并没有什么必要，而且是否能够带来可观的性能收益也都是不确定的<br>在高并发的情况下，有限的 SQ 环和 CQ 环，对于请求数量大于完成事件的消费速度的情况，CQ 环的大量溢出带来对内核的压力以及新的请求提交带来的错误处理，都会提高真正利用 <code>io_uring</code> 的难度<br>对于 SQ 环和 CQ 环的大小限制，也许需要通过 Pool 的方式来解决，初始化多个 io_uring 实例，当一个实例的 SQ 环满，那么就使用另外的实例来提交请求<br>而使用 Pool 又会增加一定的复杂度<br><code>io_uring</code> 的功能实际可以覆盖了 <code>epoll</code> 的，比如提交的阻塞 IO 请求便相当于 <code>epoll</code> + <code>syscall</code>，另外 <code>io_uring</code> 还提供了超时设置和请求的超时控制，相当于实现了系统级的定时器以及 <code>netpoll</code> 的 deadline<br>但是 epoll 自身的优势，比如没有竞争问题，没有监听文件描述符的数量限制，都让 epoll 在实际的使用中更加好用，而这些问题对于 <code>io_uring</code> 在本身设计上就会导致的问题<br>比如竞争问题，使用环形缓冲区可以协调应用和内核对请求队列的访问，但是应用中多个线程或者 goroutine 就会引发对环形缓冲区的竞争问题<br>而请求数量的限制，那么就需要考虑到请求完成事件的溢出问题，内核不能无限制的去保存溢出的完成事件，当然这个问题通过应用中在 <code>io_uring</code> 实例上抽象出 <code>io_uring 池</code>的方式来解决<br>使用 <code>io_uring</code> 来实现异步网络框架，对已有的网络模型会是非常大的冲击，怎么去使用 <code>io_uring</code> 来发挥最大的能力依然处于探索阶段，毕竟 <code>io_uring</code> 是一个出现才 1 年的技术<br>而对于普通的磁盘 IO 来说，<code>io_uring</code> 还是有很大的发挥空间的，利用 Go 中已有的并发机制，结合具体的性能评估，对于文件服务器来说，也许会带来极大的提升<br><strong>另外一个问题便是，对于 5.1 引入，5.6 开始功能变得丰富成熟的 <code>io_uring</code> 来说，现在大量的环境处于 3.X，4.X，甚至 2.X ， <code>io_uring</code> 仍然需要等待时机才能去发挥它真正的作用，而这段时间便是留给我们去探讨怎么让 <code>io_uring</code> 更好用</strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/15/yuque/Go%20%E4%B8%8E%E5%BC%82%E6%AD%A5%20IO%20-%20io_uring%20%E7%9A%84%E6%80%9D%E8%80%83/">展开全文 >></a>
         </p>
       
 

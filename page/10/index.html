@@ -182,6 +182,365 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Linux Shell输出文本中的指定行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/">Linux Shell输出文本中的指定行</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/" class="archive-article-date">
+  	<time datetime="2019-12-17T03:25:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Linux Shell 输出文本中的指定行<br>在 Linux 系统上如何快速查看文本中指定行呢？有时文本较大比如有 10w 行，想要快速查看第 99 行该怎么做呢？<br>本文以文件名 test.txt 为例，介绍 3 种方式快速查看 test.txt 的第 99 行。相信你可以轻易的举一反三。</p>
+<p>使用 sed<br>sed 全名：stream editor，流编辑器，使用程序的方式来编辑文本，可以实现替换、删除、新增、选取特定行等功能，是一种很 hacker 的方式。sed 基本上使用正则表达式匹配，对正则表达式要求较高。<br>想要快速入门 sed 参考 sed 简明教程，想要深入学习参考 sed 完整手册。</p>
+<p>sed 语法格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed [ -n ] [ -u ] Script  [ File ... ]</span><br><span class="line">sed [ -n ] [ -u ] [ -e Script ] ... [ -f ScriptFile ] ...  [ File</span><br><span class="line">... ]</span><br></pre></td></tr></table></figure>
+
+<p>关键 Options 介绍：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-n : 安静模式。一般sed用法中，所有来自STDIN的数据都会被输出到屏幕上，使用-n只有被sed处理的行才会列出来。如果不使用-n，使用sed打印时，会把输入流和处理的信息都打印一遍</span><br><span class="line">a：append，追加文本</span><br><span class="line">i：insert，插入文本</span><br><span class="line">d：delete，删除文本</span><br><span class="line">s: 模式匹配替换</span><br><span class="line">p：打印文本</span><br><span class="line">sed使用示例</span><br><span class="line">在指定行插入或追加: a, i</span><br><span class="line">a. 在test.txt第一行前插入：sed “1 i This is a test file” test.txt</span><br><span class="line">b. 在test.txt最后一行追加：sed “$ a This is the end of file” test.txt</span><br><span class="line">删除： d</span><br><span class="line">a. 删除test.txt第二行： sed ‘2d’ test.txt</span><br><span class="line">b. 删除test.txt符合正则表达式&#x2F;fish的行： sed ‘&#x2F;fish&#x2F;d’ test.txt</span><br><span class="line">修改文本：s</span><br><span class="line">a. 将text.txt中love替换为like： sed “s&#x2F;love&#x2F;like&#x2F;g” test.txt （&#x2F;g表示全局匹配）</span><br><span class="line">打印文本： p</span><br><span class="line">a. 输出test.txt的第5-7行：sed -n ‘5,7p’ test.txt （-n的作用就显示出来了，可以去除-n查看效果）</span><br></pre></td></tr></table></figure>
+
+<p>ps: 以上命令并不会真的修改掉 test.txt 的内容，如果想修改文本内容可以使用重定向，或者使用-i 选项。</p>
+<p>使用 sed 输出 test.txt 的第 99 行？<br>有了以上的 sed 基础，可以轻易得出解决方案：sed -n ‘99,p’ test.txt。但 sed 在 print 后并不会立即退出，还会继续搜索文件直到文件末尾，当文件较大的时候使用 sed 的效率会比较低。可以做如下优化：sed -n ‘99,p;100q’ test.txt，打印完之后在 100 行退出。</p>
+<p>使用 awk<br>awk: 文本处理工具，可以在文件中查找与模式匹配的行并在这些行上执行指定的操作。awk 比 sed 早诞生 2-3 年，作用与 sed 类似。快速入门 awk 可参考 awk 简明教程。</p>
+<p>awk 语法格式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awk [ -u ] [ -F Ere ] [ -v Assignment ] ... &#123; -f ProgramFile |</span><br><span class="line"><span class="string">&#x27;Program&#x27;</span> &#125; [ [ File ... | Assignment ... ] ] ...</span><br></pre></td></tr></table></figure>
+
+<p>awk 提供了一系列内建变量：</p>
+<p>$0: 当前记录（这个变量中存放着整个行的内容）<br>$1~$n: 当前记录的第 n 个字段，字段间由 FS 分隔<br>FS: 输入字段分隔符 默认是空格或 Tab<br>NF: 当前记录中的字段个数，就是有多少列<br>NR: 已经读出的记录数，就是行号，从 1 开始，如果有多个文件话，这个值也是不断累加中。<br>FNR: 当前记录数，与 NR 不同的是，这个值会是各个文件自己的行号<br>RS: 输入的记录分隔符， 默认为换行符<br>OFS: 输出字段分隔符， 默认也是空格<br>ORS: 输出的记录分隔符，默认为换行符<br>FILENAME: 当前输入文件的名字<br>awk 使用示例：<br>打印 test.txt 中第一列为 This 的行：awk ‘$1==”This” test.txt<br>打印表头和 test.txt 中第一列为 This 的行：awk ‘$1==”This” || NR == 1’ test.txt<br>格式化输出：awk ‘$1==”This” || NR==1 {printf “%-20s %-20s\n”,$4,$5}’ test.txt<br>使用 awk 输出 test.txt 的第 99 行？<br>使用内建变量 NR 和 FNR：</p>
+<p>awk ‘NR==99’ test.txt<br>awk ‘FNR==99’ test.txt<br>ps: awk 打印完也不会立即退出，可以添加 exit 优化：awk ‘NR==99 {print; exit}’ test.txt</p>
+<p>使用 head 和 tail 组合<br>head 和 tail 故名思意，相对简单，分别输出文件或流的开头 n 行或结尾 n 行，就不在此详细介绍了。直接给出解决方案：<br>tail -n+99 test.txt|head -1</p>
+<p>很容易想到对称的组合：head -99 test.txt|tail -1，但是当文件不足 99 行时，输出的是文件最后一行的内容。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/MacOS 制作Ubuntu ISO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/">MacOS 制作Ubuntu ISO</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/" class="archive-article-date">
+  	<time datetime="2019-12-04T01:28:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">☁  Desktop [master] ⚡ hdiutil convert -format UDRW -o ./ubuntu-18.04-desktop-amd64 ./ubuntu-18.04-desktop-amd64.iso    <span class="comment"># 将ISO转为DMG</span></span><br><span class="line">正在读取Driver Descriptor Map（DDM：0）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：1）…</span><br><span class="line">正在读取Apple（Apple_partition_map：2）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：3）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取EFI（Apple_HFS：4）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：5）…</span><br><span class="line">..............................................................................</span><br><span class="line">已耗时： 2.082s</span><br><span class="line">速度：880.0M 字节/秒</span><br><span class="line">节省：0.0%</span><br><span class="line">created: /Users/huqilin/Desktop/ubuntu-18.04-desktop-amd64.dmg</span><br><span class="line">☁  Desktop [master] ⚡ diskutil list    <span class="comment"># 得到 U 盘设备号</span></span><br><span class="line">/dev/disk0 (internal):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      GUID_partition_scheme                         251.0 GB   disk0</span><br><span class="line">   1:                        EFI EFI                     314.6 MB   disk0s1</span><br><span class="line">   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2</span><br><span class="line">/dev/disk1 (synthesized):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      APFS Container Scheme -                      +250.7 GB   disk1</span><br><span class="line">                                 Physical Store disk0s2</span><br><span class="line">   1:                APFS Volume Macintosh HD            112.5 GB   disk1s1</span><br><span class="line">   2:                APFS Volume Preboot                 21.1 MB    disk1s2</span><br><span class="line">   3:                APFS Volume Recovery                517.8 MB   disk1s3</span><br><span class="line">   4:                APFS Volume VM                      3.2 GB     disk1s4</span><br><span class="line">/dev/disk2 (external, physical):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:     FDisk_partition_scheme                        *7.8 GB     disk2</span><br><span class="line">   1:                  Apple_HFS USB8G                   7.8 GB     disk2s1</span><br><span class="line">☁  Desktop [master] ⚡ diskutil unmountDisk /dev/disk2    <span class="comment"># 卸载 U 盘设备</span></span><br><span class="line">Unmount of all volumes on disk2 was successful</span><br><span class="line">☁  Desktop [master] ⚡ sudo dd <span class="keyword">if</span>=ubuntu-18.04-desktop-amd64.dmg of=/dev/disk2 bs=1m    <span class="comment"># 创建可启动的 USB 驱动盘</span></span><br><span class="line">Password:</span><br><span class="line">1832+1 records <span class="keyword">in</span></span><br><span class="line">1832+1 records out</span><br><span class="line">1921843200 bytes transferred <span class="keyword">in</span> 207.200284 secs (9275292 bytes/sec)</span><br><span class="line">☁  Desktop [master] ⚡ diskutil eject /dev/disk2    <span class="comment"># 弹出磁盘</span></span><br><span class="line">Disk /dev/disk2 ejected</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang Date 的日期（转载）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">Golang Date 的日期（转载）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2019-11-23T15:27:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="热身"><a href="#热身" class="headerlink" title="热身"></a>热身</h2><p>在讲这个问题之前，先来看一道代码题：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    timeString := time.Now().Format(<span class="string">&quot;2006-01-02 15:04:05&quot;</span>)</span><br><span class="line">    fmt.Println(timeString)</span><br><span class="line">    fmt.Println(time.Now().Format(<span class="string">&quot;2017-09-07 18:05:32&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的输出是什么（假定运行时刻的时间是 2017-09-07 18:05:32）？<br>什么？你已经知道答案了？那你是大神，可以跳过这篇文章了。</p>
+<h2 id="一、神奇的日期"><a href="#一、神奇的日期" class="headerlink" title="一、神奇的日期"></a>一、神奇的日期</h2><p>刚接触 Golang 时，阅读代码的时候总会在代码中发现这么一个日期，</p>
+<blockquote>
+<p>2006-01-02 15:04:05</p>
+</blockquote>
+<p>刚看到这段代码的时候，我当时想：这个人好随便啊，随便写一个日期在这里，但是又感觉还挺方便的，格式清晰一目了然。也没有更多的在意了。<br>之后一次做需求的时候轮到自己要格式化时间了，仿照它的样子，写了一个日期格式来格式化，差不多就是上面代码题上写的那样。殊不知，运行完毕后，结果令人惊呆。。。<br>运行结果如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-07</span> <span class="number">18</span>:<span class="number">06</span>:<span class="number">43</span></span><br><span class="line"><span class="number">7097</span><span class="number">-09</span>+<span class="number">08</span> <span class="number">98</span>:<span class="number">43</span>:<span class="number">67</span></span><br></pre></td></tr></table></figure>
+
+<p>顿时就犯糊涂了：怎么就变成这个鸟样子了？format 不认识我的日期？这么标准的日期都不认识？</p>
+<h2 id="二、开始探究"><a href="#二、开始探究" class="headerlink" title="二、开始探究"></a>二、开始探究</h2><p>查阅了资料，发现原来这个日期就是写死的一个日期，不是这个日期就不认识，就不能正确的格式化。记住就好了。<br>但是，还是觉得有点纳闷。为什么输出日期是这个乱的？仔细观察这个日期，06 年，1 月 2 日下午 3 点 4 分 5 秒，查阅相关资料还有 -7 时区，Monday，数字 1~7 都有了，而且都不重复。难道有什么深刻含义？还是单纯的为了方便记忆？<br>晚上睡觉前一直在心里想。突然想到：这些数字全都不重复，那岂不就是说，每个数字就能代表你需要格式化的属性了？比如，解析格式化字符串的时候，遇到了 1，就说明这个地方要填的是月份，遇到了 4，说明这个位置是分钟？<br>不禁觉得，发明这串时间数字的人还是很聪明的。2006-01-02 15:04:05 这个日期，不但挺好记的，而且用起来也比较方便。这个比其他编程语言的 yyyy-MM-dd HH:mm:ss 这种东西好记多了。（楼主就曾经把 yyyy 大小写弄错了，弄出一个大 bug，写成 YYYY，结果，当时没测出来，到了十二月左右的时候，年份多了一年。。。）</p>
+<h2 id="三、深入探究"><a href="#三、深入探究" class="headerlink" title="三、深入探究"></a>三、深入探究</h2><p>为了一窥这个时间格式化的究竟，我们还是得阅读 go 的 time 包源代码。在$GOROOT/src/time/format.go 文件中，我们可以找到如下代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    _                        = <span class="literal">iota</span></span><br><span class="line">    stdLongMonth             = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;January&quot;</span></span><br><span class="line">    stdMonth                                       <span class="comment">// &quot;Jan&quot;</span></span><br><span class="line">    stdNumMonth                                    <span class="comment">// &quot;1&quot;</span></span><br><span class="line">    stdZeroMonth                                   <span class="comment">// &quot;01&quot;</span></span><br><span class="line">    stdLongWeekDay                                 <span class="comment">// &quot;Monday&quot;</span></span><br><span class="line">    stdWeekDay                                     <span class="comment">// &quot;Mon&quot;</span></span><br><span class="line">    stdDay                                         <span class="comment">// &quot;2&quot;</span></span><br><span class="line">    stdUnderDay                                    <span class="comment">// &quot;_2&quot;</span></span><br><span class="line">    stdZeroDay                                     <span class="comment">// &quot;02&quot;</span></span><br><span class="line">    stdHour                  = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;15&quot;</span></span><br><span class="line">    stdHour12                                      <span class="comment">// &quot;3&quot;</span></span><br><span class="line">    stdZeroHour12                                  <span class="comment">// &quot;03&quot;</span></span><br><span class="line">    stdMinute                                      <span class="comment">// &quot;4&quot;</span></span><br><span class="line">    stdZeroMinute                                  <span class="comment">// &quot;04&quot;</span></span><br><span class="line">    stdSecond                                      <span class="comment">// &quot;5&quot;</span></span><br><span class="line">    stdZeroSecond                                  <span class="comment">// &quot;05&quot;</span></span><br><span class="line">    stdLongYear              = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;2006&quot;</span></span><br><span class="line">    stdYear                                        <span class="comment">// &quot;06&quot;</span></span><br><span class="line">    stdPM                    = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;PM&quot;</span></span><br><span class="line">    stdpm                                          <span class="comment">// &quot;pm&quot;</span></span><br><span class="line">    stdTZ                    = <span class="literal">iota</span>                <span class="comment">// &quot;MST&quot;</span></span><br><span class="line">    stdISO8601TZ                                   <span class="comment">// &quot;Z0700&quot;  // prints Z for UTC</span></span><br><span class="line">    stdISO8601SecondsTZ                            <span class="comment">// &quot;Z070000&quot;</span></span><br><span class="line">    stdISO8601ShortTZ                              <span class="comment">// &quot;Z07&quot;</span></span><br><span class="line">    stdISO8601ColonTZ                              <span class="comment">// &quot;Z07:00&quot; // prints Z for UTC</span></span><br><span class="line">    stdISO8601ColonSecondsTZ                       <span class="comment">// &quot;Z07:00:00&quot;</span></span><br><span class="line">    stdNumTZ                                       <span class="comment">// &quot;-0700&quot;  // always numeric</span></span><br><span class="line">    stdNumSecondsTz                                <span class="comment">// &quot;-070000&quot;</span></span><br><span class="line">    stdNumShortTZ                                  <span class="comment">// &quot;-07&quot;    // always numeric</span></span><br><span class="line">    stdNumColonTZ                                  <span class="comment">// &quot;-07:00&quot; // always numeric</span></span><br><span class="line">    stdNumColonSecondsTZ                           <span class="comment">// &quot;-07:00:00&quot;</span></span><br><span class="line">    stdFracSecond0                                 <span class="comment">// &quot;.0&quot;, &quot;.00&quot;, ... , trailing zeros included</span></span><br><span class="line">    stdFracSecond9                                 <span class="comment">// &quot;.9&quot;, &quot;.99&quot;, ..., trailing zeros omitted</span></span><br></pre></td></tr></table></figure>
+
+<p>上面就是所能见到的所有关于日期时间的片段。基本能够涵盖所有的关于日期格式化的请求。<br>可以总结如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">格式</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">01、 1、Jan、January</td>
+<td align="center">月</td>
+</tr>
+<tr>
+<td align="center">02、 2、_2</td>
+<td align="center">日，这个_2 表示如果日期是只有一个数字，则表示出来的日期前面用个空格占位。</td>
+</tr>
+<tr>
+<td align="center">03、 3、15</td>
+<td align="center">时</td>
+</tr>
+<tr>
+<td align="center">04、4</td>
+<td align="center">分</td>
+</tr>
+<tr>
+<td align="center">05、5</td>
+<td align="center">秒</td>
+</tr>
+<tr>
+<td align="center">2006、06、6</td>
+<td align="center">年</td>
+</tr>
+</tbody></table>
+<p>| -070000、 -07:00:00、 -0700、 -07:00、 -07<br>Z070000、Z07:00:00、 Z0700、 Z07:00 | 时区 |<br>| PM、pm | 上下午 |<br>| Mon、Monday | 星期 |<br>| MST | 美国时间，如果机器设置的是中国时间则表示为 UTC |</p>
+<p>看完了这些，心里对日期格式问题已经有数了。<br>所以，我们回头看一下开头的问题，我用</p>
+<blockquote>
+<p>2017-09-07 18:05:32</p>
+</blockquote>
+<p>这串数字来格式化这个日期</p>
+<blockquote>
+<p>2017-09-07 18:05:32</p>
+</blockquote>
+<p>得到的结果就是</p>
+<blockquote>
+<p>7097-09+08 98:43:67</p>
+</blockquote>
+<p>看了这个我就在想，如果是我，我会怎么解析这个格式呢？不禁想起来了学习《编译原理》时候的词法分析器，这个肯定需要构造一个语法树。至于文法什么的，暂时我也还弄不清。既然这样，那不如我们直接看 GO 源代码一窥究竟，看看 golang 语言团队的人是怎么解析的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nextStdChunk</span><span class="params">(layout <span class="keyword">string</span>)</span> <span class="params">(prefix <span class="keyword">string</span>, std <span class="keyword">int</span>, suffix <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(layout); i++ &#123;</span><br><span class="line">        <span class="keyword">switch</span> c := <span class="keyword">int</span>(layout[i]); c &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;J&#x27;</span>: <span class="comment">// January, Jan</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Jan&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;January&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongMonth, layout[i+<span class="number">7</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMonth, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;M&#x27;</span>: <span class="comment">// Monday, Mon, MST</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Mon&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Monday&quot;</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongWeekDay, layout[i+<span class="number">6</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdWeekDay, layout[i+<span class="number">3</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;MST&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span>: <span class="comment">// 01, 02, 03, 04, 05, 06</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; <span class="string">&#x27;1&#x27;</span> &lt;= layout[i+<span class="number">1</span>] &amp;&amp; layout[i+<span class="number">1</span>] &lt;= <span class="string">&#x27;6&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], std0x[layout[i+<span class="number">1</span>]-<span class="string">&#x27;1&#x27;</span>], layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;1&#x27;</span>: <span class="comment">// 15, 1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;5&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumMonth, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;2&#x27;</span>: <span class="comment">// 2006, 2</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">4</span> &amp;&amp; layout[i:i+<span class="number">4</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongYear, layout[i+<span class="number">4</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdDay, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;_&#x27;</span>: <span class="comment">// _2, _2006</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;2&#x27;</span> &#123;</span><br><span class="line">                <span class="comment">//_2006 is really a literal _, followed by stdLongYear</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i+<span class="number">1</span>:i+<span class="number">5</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span> : i+<span class="number">1</span>], stdLongYear, layout[i+<span class="number">5</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdUnderDay, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour12, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;4&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMinute, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;5&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdSecond, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;P&#x27;</span>: <span class="comment">// PM</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;M&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdPM, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;p&#x27;</span>: <span class="comment">// pm</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;m&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdpm, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: <span class="comment">// -070000, -07:00:00, -0700, -07:00, -07</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;-070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumSecondsTz, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;-07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;-0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumTZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;-07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;-07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;Z&#x27;</span>: <span class="comment">// Z070000, Z07:00:00, Z0700, Z07:00,</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;Z070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601SecondsTZ, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;Z07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;Z0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601TZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Z07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Z07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;.&#x27;</span>: <span class="comment">// .000 or .999 - repeated digits for fractional seconds.</span></span><br><span class="line">            <span class="keyword">if</span> i+<span class="number">1</span> &lt; <span class="built_in">len</span>(layout) &amp;&amp; (layout[i+<span class="number">1</span>] == <span class="string">&#x27;0&#x27;</span> || layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span>) &#123;</span><br><span class="line">                ch := layout[i+<span class="number">1</span>]</span><br><span class="line">                j := i + <span class="number">1</span></span><br><span class="line">                <span class="keyword">for</span> j &lt; <span class="built_in">len</span>(layout) &amp;&amp; layout[j] == ch &#123;</span><br><span class="line">                    j++</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// String of digits must end here - only fractional second is all digits.</span></span><br><span class="line">                <span class="keyword">if</span> !isDigit(layout, j) &#123;</span><br><span class="line">                    std := stdFracSecond0</span><br><span class="line">                    <span class="keyword">if</span> layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span> &#123;</span><br><span class="line">                        std = stdFracSecond9</span><br><span class="line">                    &#125;</span><br><span class="line">                    std |= (j - (i + <span class="number">1</span>)) &lt;&lt; stdArgShift</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], std, layout[j:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> layout, <span class="number">0</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码有点长，不过逻辑还是很清楚的，我们吧上面表格中的那些常用项的先进行排序，然后根据排序结果，对首个字符进行分类，相同首字符的项放在一个 case 里面判断处理。看起来这里是简单的进行判断处理，其实这就是编译里面词法分析的一个步骤（分词）。<br>纵观整个 format.go 文件，其实这个日期处理还是挺复杂的，包括日期计算，格式解析，对日期进行格式化等。</p>
+<p>作者：FredGan<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c7f7fbb16932">https://www.jianshu.com/p/c7f7fbb16932</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/《Murphy‘s Law》 墨菲定律" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/">《Murphy‘s Law》 墨菲定律</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/" class="archive-article-date">
+  	<time datetime="2019-10-26T10:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="tags-read"><a href="#tags-read" class="headerlink" title="tags: [read]"></a>tags: [read]</h2><p>categories: 课外阅读</p>
+<hr>
+<h2 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h2><blockquote>
+</blockquote>
+<h4 id="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"><a href="#墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。" class="headerlink" title="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"></a>墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。</h4><blockquote>
+</blockquote>
+<h4 id="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"><a href="#墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。" class="headerlink" title="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"></a>墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。</h4><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="镜中我效应：突破思维界限，认识真实的自我"><a href="#镜中我效应：突破思维界限，认识真实的自我" class="headerlink" title="镜中我效应：突破思维界限，认识真实的自我"></a>镜中我效应：突破思维界限，认识真实的自我</h3><h4 id="镜中我效应：“镜中我”与“真实我”"><a href="#镜中我效应：“镜中我”与“真实我”" class="headerlink" title="镜中我效应：“镜中我”与“真实我”"></a>镜中我效应：“镜中我”与“真实我”</h4><h4 id="自我服务偏见：我很优秀，而你只是运气好。"><a href="#自我服务偏见：我很优秀，而你只是运气好。" class="headerlink" title="自我服务偏见：我很优秀，而你只是运气好。"></a>自我服务偏见：我很优秀，而你只是运气好。</h4><h4 id="沉锚效应：被沉锚带偏的“独立思考”"><a href="#沉锚效应：被沉锚带偏的“独立思考”" class="headerlink" title="沉锚效应：被沉锚带偏的“独立思考”"></a>沉锚效应：被沉锚带偏的“独立思考”</h4><h4 id="瓦达伦效应：越在意的，就越容易失去"><a href="#瓦达伦效应：越在意的，就越容易失去" class="headerlink" title="瓦达伦效应：越在意的，就越容易失去"></a>瓦达伦效应：越在意的，就越容易失去</h4><h4 id="库里肖夫效应：眼中世界，其实就是内心的世界"><a href="#库里肖夫效应：眼中世界，其实就是内心的世界" class="headerlink" title="库里肖夫效应：眼中世界，其实就是内心的世界"></a>库里肖夫效应：眼中世界，其实就是内心的世界</h4><h3 id="墨菲定律：如果有可能出错，就一定会出错"><a href="#墨菲定律：如果有可能出错，就一定会出错" class="headerlink" title="墨菲定律：如果有可能出错，就一定会出错"></a>墨菲定律：如果有可能出错，就一定会出错</h3><h4 id="墨菲定律：唯有计划周全，方能避免失误。"><a href="#墨菲定律：唯有计划周全，方能避免失误。" class="headerlink" title="墨菲定律：唯有计划周全，方能避免失误。"></a>墨菲定律：唯有计划周全，方能避免失误。</h4><h4 id="酝酿效应：“不思考”也是一种思考方式。"><a href="#酝酿效应：“不思考”也是一种思考方式。" class="headerlink" title="酝酿效应：“不思考”也是一种思考方式。"></a>酝酿效应：“不思考”也是一种思考方式。</h4><h4 id="控制错觉定律：相信直觉，但别迷信直觉。"><a href="#控制错觉定律：相信直觉，但别迷信直觉。" class="headerlink" title="控制错觉定律：相信直觉，但别迷信直觉。"></a>控制错觉定律：相信直觉，但别迷信直觉。</h4><h4 id="羊群效应：“从众”和”盲从”的临界点在哪里"><a href="#羊群效应：“从众”和”盲从”的临界点在哪里" class="headerlink" title="羊群效应：“从众”和”盲从”的临界点在哪里"></a>羊群效应：“从众”和”盲从”的临界点在哪里</h4><h4 id="巴纳姆效应：似是而非的“真理”一无是处"><a href="#巴纳姆效应：似是而非的“真理”一无是处" class="headerlink" title="巴纳姆效应：似是而非的“真理”一无是处"></a>巴纳姆效应：似是而非的“真理”一无是处</h4><h4 id="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"><a href="#奥卡姆剃刀原则：砍掉一些繁琐的旁技术" class="headerlink" title="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"></a>奥卡姆剃刀原则：砍掉一些繁琐的旁技术</h4><h3 id="踢猫效应：坏情绪会传染，但也可以被管理"><a href="#踢猫效应：坏情绪会传染，但也可以被管理" class="headerlink" title="踢猫效应：坏情绪会传染，但也可以被管理"></a>踢猫效应：坏情绪会传染，但也可以被管理</h3><h4 id="踢猫效应：坏情绪的连锁反应"><a href="#踢猫效应：坏情绪的连锁反应" class="headerlink" title="踢猫效应：坏情绪的连锁反应"></a>踢猫效应：坏情绪的连锁反应</h4><h4 id="野马的结局：愤怒是一种自我毁灭"><a href="#野马的结局：愤怒是一种自我毁灭" class="headerlink" title="野马的结局：愤怒是一种自我毁灭"></a>野马的结局：愤怒是一种自我毁灭</h4><h4 id="海格力斯效应：无视仇恨，仇恨也会无视你"><a href="#海格力斯效应：无视仇恨，仇恨也会无视你" class="headerlink" title="海格力斯效应：无视仇恨，仇恨也会无视你"></a>海格力斯效应：无视仇恨，仇恨也会无视你</h4><h4 id="霍桑效应：适度发泄，才能轻装上阵。"><a href="#霍桑效应：适度发泄，才能轻装上阵。" class="headerlink" title="霍桑效应：适度发泄，才能轻装上阵。"></a>霍桑效应：适度发泄，才能轻装上阵。</h4><h4 id="习得性无助：没有绝望的环境，只有绝望的心态"><a href="#习得性无助：没有绝望的环境，只有绝望的心态" class="headerlink" title="习得性无助：没有绝望的环境，只有绝望的心态"></a>习得性无助：没有绝望的环境，只有绝望的心态</h4><h4 id="卡瑞尔公式：接受最坏的，最求最好的"><a href="#卡瑞尔公式：接受最坏的，最求最好的" class="headerlink" title="卡瑞尔公式：接受最坏的，最求最好的"></a>卡瑞尔公式：接受最坏的，最求最好的</h4><h3 id="约拿情结：从自我提升到自我突破"><a href="#约拿情结：从自我提升到自我突破" class="headerlink" title="约拿情结：从自我提升到自我突破"></a>约拿情结：从自我提升到自我突破</h3><h4 id="约拿情结：不仅害怕失败，也害怕成功"><a href="#约拿情结：不仅害怕失败，也害怕成功" class="headerlink" title="约拿情结：不仅害怕失败，也害怕成功"></a>约拿情结：不仅害怕失败，也害怕成功</h4><h4 id="跳骚效应：不要轻易给自己的人生设限"><a href="#跳骚效应：不要轻易给自己的人生设限" class="headerlink" title="跳骚效应：不要轻易给自己的人生设限"></a>跳骚效应：不要轻易给自己的人生设限</h4><h4 id="洛克定律：合理的目标才是合适的目标"><a href="#洛克定律：合理的目标才是合适的目标" class="headerlink" title="洛克定律：合理的目标才是合适的目标"></a>洛克定律：合理的目标才是合适的目标</h4><h4 id="瓦拉赫效应：补足短板，还是经营优势"><a href="#瓦拉赫效应：补足短板，还是经营优势" class="headerlink" title="瓦拉赫效应：补足短板，还是经营优势"></a>瓦拉赫效应：补足短板，还是经营优势</h4><h4 id="内卷化效应：跑起来，别让生活原地打转"><a href="#内卷化效应：跑起来，别让生活原地打转" class="headerlink" title="内卷化效应：跑起来，别让生活原地打转"></a>内卷化效应：跑起来，别让生活原地打转</h4><h4 id="青蛙效应：无视危机才是真正的危机"><a href="#青蛙效应：无视危机才是真正的危机" class="headerlink" title="青蛙效应：无视危机才是真正的危机"></a>青蛙效应：无视危机才是真正的危机</h4><h3 id="马太效应：优秀源于一次次失措"><a href="#马太效应：优秀源于一次次失措" class="headerlink" title="马太效应：优秀源于一次次失措"></a>马太效应：优秀源于一次次失措</h3><h4 id="马太效应：成功是成功之母亲"><a href="#马太效应：成功是成功之母亲" class="headerlink" title="马太效应：成功是成功之母亲"></a>马太效应：成功是成功之母亲</h4><h4 id="安慰剂效应；暗示能带扭曲现实的力量"><a href="#安慰剂效应；暗示能带扭曲现实的力量" class="headerlink" title="安慰剂效应；暗示能带扭曲现实的力量"></a>安慰剂效应；暗示能带扭曲现实的力量</h4><h4 id="马蝇效应：如何把压力转换为动力"><a href="#马蝇效应：如何把压力转换为动力" class="headerlink" title="马蝇效应：如何把压力转换为动力"></a>马蝇效应：如何把压力转换为动力</h4><h4 id="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"><a href="#布里丹毛驴效应：选择之前不犹豫，选择之后不后悔" class="headerlink" title="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"></a>布里丹毛驴效应：选择之前不犹豫，选择之后不后悔</h4><h4 id="基利定理：成功的核心不在于被失败左右"><a href="#基利定理：成功的核心不在于被失败左右" class="headerlink" title="基利定理：成功的核心不在于被失败左右"></a>基利定理：成功的核心不在于被失败左右</h4><h4 id="贝尔纳效应：每一条路都必然通向一个终点"><a href="#贝尔纳效应：每一条路都必然通向一个终点" class="headerlink" title="贝尔纳效应：每一条路都必然通向一个终点"></a>贝尔纳效应：每一条路都必然通向一个终点</h4><h3 id="首因效应：人际交往中的心理学法则"><a href="#首因效应：人际交往中的心理学法则" class="headerlink" title="首因效应：人际交往中的心理学法则"></a>首因效应：人际交往中的心理学法则</h3><h4 id="首因效应：良好的印象是成功的一半"><a href="#首因效应：良好的印象是成功的一半" class="headerlink" title="首因效应：良好的印象是成功的一半"></a>首因效应：良好的印象是成功的一半</h4><h4 id="近因效应：留下最好的“最后印象“"><a href="#近因效应：留下最好的“最后印象“" class="headerlink" title="近因效应：留下最好的“最后印象“"></a>近因效应：留下最好的“最后印象“</h4><h4 id="晕轮效应：别被“光环”迷了慧眼"><a href="#晕轮效应：别被“光环”迷了慧眼" class="headerlink" title="晕轮效应：别被“光环”迷了慧眼"></a>晕轮效应：别被“光环”迷了慧眼</h4><h4 id="刻板印象：最不靠谱的“第-0-效应”"><a href="#刻板印象：最不靠谱的“第-0-效应”" class="headerlink" title="刻板印象：最不靠谱的“第 0 效应”"></a>刻板印象：最不靠谱的“第 0 效应”</h4><h4 id="曼狄诺定律：不懂社交技巧？那就微笑吧"><a href="#曼狄诺定律：不懂社交技巧？那就微笑吧" class="headerlink" title="曼狄诺定律：不懂社交技巧？那就微笑吧"></a>曼狄诺定律：不懂社交技巧？那就微笑吧</h4><h4 id="虚假同感偏差：换位思考，而不是以己度人"><a href="#虚假同感偏差：换位思考，而不是以己度人" class="headerlink" title="虚假同感偏差：换位思考，而不是以己度人"></a>虚假同感偏差：换位思考，而不是以己度人</h4><h3 id="自重感效应：成为社交达人的心理学技巧"><a href="#自重感效应：成为社交达人的心理学技巧" class="headerlink" title="自重感效应：成为社交达人的心理学技巧"></a>自重感效应：成为社交达人的心理学技巧</h3><h4 id="自重感效应：让人感觉自己重要，这很重要"><a href="#自重感效应：让人感觉自己重要，这很重要" class="headerlink" title="自重感效应：让人感觉自己重要，这很重要"></a>自重感效应：让人感觉自己重要，这很重要</h4><h4 id="相约法则：我喜欢你因为你喜欢我"><a href="#相约法则：我喜欢你因为你喜欢我" class="headerlink" title="相约法则：我喜欢你因为你喜欢我"></a>相约法则：我喜欢你因为你喜欢我</h4><h4 id="阿伦森效应：我们厌恶那些带给我挫败感的人"><a href="#阿伦森效应：我们厌恶那些带给我挫败感的人" class="headerlink" title="阿伦森效应：我们厌恶那些带给我挫败感的人"></a>阿伦森效应：我们厌恶那些带给我挫败感的人</h4><h4 id="多看效应：提高曝光度，提高好感度"><a href="#多看效应：提高曝光度，提高好感度" class="headerlink" title="多看效应：提高曝光度，提高好感度"></a>多看效应：提高曝光度，提高好感度</h4><h4 id="改宗效应：想讨好人喜欢？那就反驳他。"><a href="#改宗效应：想讨好人喜欢？那就反驳他。" class="headerlink" title="改宗效应：想讨好人喜欢？那就反驳他。"></a>改宗效应：想讨好人喜欢？那就反驳他。</h4><h4 id="出丑效应：做别人眼中的“不完美的人”"><a href="#出丑效应：做别人眼中的“不完美的人”" class="headerlink" title="出丑效应：做别人眼中的“不完美的人”"></a>出丑效应：做别人眼中的“不完美的人”</h4><h3 id="路西法效应：所谓“心术”，不过是人性的博弈"><a href="#路西法效应：所谓“心术”，不过是人性的博弈" class="headerlink" title="路西法效应：所谓“心术”，不过是人性的博弈"></a>路西法效应：所谓“心术”，不过是人性的博弈</h3><h4 id="路西法效应：好人真的好，坏人真的坏吗？"><a href="#路西法效应：好人真的好，坏人真的坏吗？" class="headerlink" title="路西法效应：好人真的好，坏人真的坏吗？"></a>路西法效应：好人真的好，坏人真的坏吗？</h4><h4 id="米尔路伦实验：所谓“良知”，底线到底有多坚固"><a href="#米尔路伦实验：所谓“良知”，底线到底有多坚固" class="headerlink" title="米尔路伦实验：所谓“良知”，底线到底有多坚固"></a>米尔路伦实验：所谓“良知”，底线到底有多坚固</h4><h4 id="破解囚徒困境：引入反复博弈，化被动为主动"><a href="#破解囚徒困境：引入反复博弈，化被动为主动" class="headerlink" title="破解囚徒困境：引入反复博弈，化被动为主动"></a>破解囚徒困境：引入反复博弈，化被动为主动</h4><h4 id="智猪博弈：多劳多得，少劳也不少得"><a href="#智猪博弈：多劳多得，少劳也不少得" class="headerlink" title="智猪博弈：多劳多得，少劳也不少得"></a>智猪博弈：多劳多得，少劳也不少得</h4><h4 id="斗鸡博弈：最坏的结果是两败俱伤"><a href="#斗鸡博弈：最坏的结果是两败俱伤" class="headerlink" title="斗鸡博弈：最坏的结果是两败俱伤"></a>斗鸡博弈：最坏的结果是两败俱伤</h4><h4 id="枪手博弈：决胜负不一定要靠实力"><a href="#枪手博弈：决胜负不一定要靠实力" class="headerlink" title="枪手博弈：决胜负不一定要靠实力"></a>枪手博弈：决胜负不一定要靠实力</h4><h3 id="互惠法则：如何让他人对自己言听计从"><a href="#互惠法则：如何让他人对自己言听计从" class="headerlink" title="互惠法则：如何让他人对自己言听计从"></a>互惠法则：如何让他人对自己言听计从</h3><h4 id="互惠法则：说服力不是说出来的，而是做出来的"><a href="#互惠法则：说服力不是说出来的，而是做出来的" class="headerlink" title="互惠法则：说服力不是说出来的，而是做出来的"></a>互惠法则：说服力不是说出来的，而是做出来的</h4><h4 id="承诺一致性原理：让对方自己说服自己"><a href="#承诺一致性原理：让对方自己说服自己" class="headerlink" title="承诺一致性原理：让对方自己说服自己"></a>承诺一致性原理：让对方自己说服自己</h4><h4 id="登门槛效应：步步为营，走进对方内心"><a href="#登门槛效应：步步为营，走进对方内心" class="headerlink" title="登门槛效应：步步为营，走进对方内心"></a>登门槛效应：步步为营，走进对方内心</h4><h4 id="门面效应：用不可能完成的任务给对手下套"><a href="#门面效应：用不可能完成的任务给对手下套" class="headerlink" title="门面效应：用不可能完成的任务给对手下套"></a>门面效应：用不可能完成的任务给对手下套</h4><h4 id="禁果效应：越“禁”越“诱惑”"><a href="#禁果效应：越“禁”越“诱惑”" class="headerlink" title="禁果效应：越“禁”越“诱惑”"></a>禁果效应：越“禁”越“诱惑”</h4><h4 id="超限效应：越说服，越反感"><a href="#超限效应：越说服，越反感" class="headerlink" title="超限效应：越说服，越反感"></a>超限效应：越说服，越反感</h4><h3 id="凡勃伦效应：避开投资、消费中的种种陷阱"><a href="#凡勃伦效应：避开投资、消费中的种种陷阱" class="headerlink" title="凡勃伦效应：避开投资、消费中的种种陷阱"></a>凡勃伦效应：避开投资、消费中的种种陷阱</h3><h4 id="凡勃伦效应：揭穿价格的定位陷阱"><a href="#凡勃伦效应：揭穿价格的定位陷阱" class="headerlink" title="凡勃伦效应：揭穿价格的定位陷阱"></a>凡勃伦效应：揭穿价格的定位陷阱</h4><h4 id="吉芬之谜：透过价格迷雾看清供需本质"><a href="#吉芬之谜：透过价格迷雾看清供需本质" class="headerlink" title="吉芬之谜：透过价格迷雾看清供需本质"></a>吉芬之谜：透过价格迷雾看清供需本质</h4><h4 id="消费者剩余：买得值不值，自己说了算"><a href="#消费者剩余：买得值不值，自己说了算" class="headerlink" title="消费者剩余：买得值不值，自己说了算"></a>消费者剩余：买得值不值，自己说了算</h4><h4 id="稀缺效应：“稀缺”是刻意营造的心理压迫"><a href="#稀缺效应：“稀缺”是刻意营造的心理压迫" class="headerlink" title="稀缺效应：“稀缺”是刻意营造的心理压迫"></a>稀缺效应：“稀缺”是刻意营造的心理压迫</h4><h4 id="折扣效应：被理性驱使的感性消费"><a href="#折扣效应：被理性驱使的感性消费" class="headerlink" title="折扣效应：被理性驱使的感性消费"></a>折扣效应：被理性驱使的感性消费</h4><h4 id="博傻理论：蠢不可怕，别做最蠢的那个就行"><a href="#博傻理论：蠢不可怕，别做最蠢的那个就行" class="headerlink" title="博傻理论：蠢不可怕，别做最蠢的那个就行"></a>博傻理论：蠢不可怕，别做最蠢的那个就行</h4><h3 id="路径依赖法则：到底是做事重要，还是做人重要"><a href="#路径依赖法则：到底是做事重要，还是做人重要" class="headerlink" title="路径依赖法则：到底是做事重要，还是做人重要"></a>路径依赖法则：到底是做事重要，还是做人重要</h3><h4 id="路径依赖法则：“第一份工作”是成功的一半"><a href="#路径依赖法则：“第一份工作”是成功的一半" class="headerlink" title="路径依赖法则：“第一份工作”是成功的一半"></a>路径依赖法则：“第一份工作”是成功的一半</h4><h4 id="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"><a href="#蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做" class="headerlink" title="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"></a>蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做</h4><h4 id="布利斯定理：计划越充分失败概率越小"><a href="#布利斯定理：计划越充分失败概率越小" class="headerlink" title="布利斯定理：计划越充分失败概率越小"></a>布利斯定理：计划越充分失败概率越小</h4><h4 id="权威效应：权威引出的决策的惰性"><a href="#权威效应：权威引出的决策的惰性" class="headerlink" title="权威效应：权威引出的决策的惰性"></a>权威效应：权威引出的决策的惰性</h4><h4 id="古德曼定律：没有恰当的沉默，就没有良好的沟通"><a href="#古德曼定律：没有恰当的沉默，就没有良好的沟通" class="headerlink" title="古德曼定律：没有恰当的沉默，就没有良好的沟通"></a>古德曼定律：没有恰当的沉默，就没有良好的沟通</h4><h4 id="工作成瘾综合征：“工作狂”是一种心理疾病"><a href="#工作成瘾综合征：“工作狂”是一种心理疾病" class="headerlink" title="工作成瘾综合征：“工作狂”是一种心理疾病"></a>工作成瘾综合征：“工作狂”是一种心理疾病</h4><h3 id="彼得原理：把恰当的人放在恰当的位置上"><a href="#彼得原理：把恰当的人放在恰当的位置上" class="headerlink" title="彼得原理：把恰当的人放在恰当的位置上"></a>彼得原理：把恰当的人放在恰当的位置上</h3><h4 id="彼得原理：给每个人找到合适的位置"><a href="#彼得原理：给每个人找到合适的位置" class="headerlink" title="彼得原理：给每个人找到合适的位置"></a>彼得原理：给每个人找到合适的位置</h4><h4 id="德西效应：挖掘真正的“内部动机”"><a href="#德西效应：挖掘真正的“内部动机”" class="headerlink" title="德西效应：挖掘真正的“内部动机”"></a>德西效应：挖掘真正的“内部动机”</h4><h4 id="不值得定律：“必须做”不如“值得做”"><a href="#不值得定律：“必须做”不如“值得做”" class="headerlink" title="不值得定律：“必须做”不如“值得做”"></a>不值得定律：“必须做”不如“值得做”</h4><h4 id="雷尼尔效应：用“心”留人，胜过用“薪”留人"><a href="#雷尼尔效应：用“心”留人，胜过用“薪”留人" class="headerlink" title="雷尼尔效应：用“心”留人，胜过用“薪”留人"></a>雷尼尔效应：用“心”留人，胜过用“薪”留人</h4><h4 id="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"><a href="#罗森塔尔效应：寄予什么样的期望，就会培养什么样的人" class="headerlink" title="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"></a>罗森塔尔效应：寄予什么样的期望，就会培养什么样的人</h4><h4 id="破窗效应：不要轻易打破任何一扇窗户"><a href="#破窗效应：不要轻易打破任何一扇窗户" class="headerlink" title="破窗效应：不要轻易打破任何一扇窗户"></a>破窗效应：不要轻易打破任何一扇窗户</h4><h3 id="史华兹论断：合适的选择，就是好的选择"><a href="#史华兹论断：合适的选择，就是好的选择" class="headerlink" title="史华兹论断：合适的选择，就是好的选择"></a>史华兹论断：合适的选择，就是好的选择</h3><h4 id="史华兹论断：“幸福”与“不幸”"><a href="#史华兹论断：“幸福”与“不幸”" class="headerlink" title="史华兹论断：“幸福”与“不幸”"></a>史华兹论断：“幸福”与“不幸”</h4><h4 id="贝勃定律：幸福本质上是种“敏感度”"><a href="#贝勃定律：幸福本质上是种“敏感度”" class="headerlink" title="贝勃定律：幸福本质上是种“敏感度”"></a>贝勃定律：幸福本质上是种“敏感度”</h4><h4 id="狄德罗效应：幸福来自给生活做减法"><a href="#狄德罗效应：幸福来自给生活做减法" class="headerlink" title="狄德罗效应：幸福来自给生活做减法"></a>狄德罗效应：幸福来自给生活做减法</h4><h4 id="鳄鱼法则：关键时刻的取舍之道"><a href="#鳄鱼法则：关键时刻的取舍之道" class="headerlink" title="鳄鱼法则：关键时刻的取舍之道"></a>鳄鱼法则：关键时刻的取舍之道</h4><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><blockquote>
+<p>最后，没有最后，也就是最后！！！<br>为什么越在意的，就越容易失去？</p>
+</blockquote>
+<blockquote>
+<p>为什么你不懂社交，保持微笑也好？</p>
+</blockquote>
+<blockquote>
+<p>为什么想讨好他人的喜欢，最好的方法是反驳他？</p>
+</blockquote>
+<blockquote>
+<p>为什么如果有可能出错，就一定会出错？</p>
+</blockquote>
+<blockquote>
+<p>为什眼中世界，其实就是内心世界？</p>
+</blockquote>
+<blockquote>
+<p>如果想知道答案——那就请读一下这本书吧！</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mac快捷键设置（大自然的搬运工）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -583,384 +942,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/28/yuque/%E9%A1%B9%E7%9B%AE-%E4%BA%92%E8%81%94%E7%BD%91%E5%85%AC%E5%8F%B8%E7%AD%9B%E9%80%89%E5%99%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/tar 命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/">tar 命令</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2019-09-24T12:14:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>tar</p>
-<p>-c: 建立压缩档案<br>-x：解压<br>-t：查看内容<br>-r：向压缩归档文件末尾追加文件<br>-u：更新原压缩包中的文件</p>
-<p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
-<p>-z：有 gzip 属性的<br>-j：有 bz2 属性的<br>-Z：有 compress 属性的<br>-v：显示所有过程<br>-O：将文件解开到标准输出</p>
-<p>下面的参数-f 是必须的</p>
-<p>-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</p>
-<h1 id="tar-cf-all-tar-jpg"><a href="#tar-cf-all-tar-jpg" class="headerlink" title="tar -cf all.tar *.jpg"></a>tar -cf all.tar *.jpg</h1><p>这条命令是将所有.jpg 的文件打成一个名为 all.tar 的包。-c 是表示产生新的包，-f 指定包的文件名。</p>
-<h1 id="tar-rf-all-tar-gif"><a href="#tar-rf-all-tar-gif" class="headerlink" title="tar -rf all.tar *.gif"></a>tar -rf all.tar *.gif</h1><p>这条命令是将所有.gif 的文件增加到 all.tar 的包里面去。-r 是表示增加文件的意思。</p>
-<h1 id="tar-uf-all-tar-logo-gif"><a href="#tar-uf-all-tar-logo-gif" class="headerlink" title="tar -uf all.tar logo.gif"></a>tar -uf all.tar logo.gif</h1><p>这条命令是更新原来 tar 包 all.tar 中 logo.gif 文件，-u 是表示更新文件的意思。</p>
-<h1 id="tar-tf-all-tar"><a href="#tar-tf-all-tar" class="headerlink" title="tar -tf all.tar"></a>tar -tf all.tar</h1><p>这条命令是列出 all.tar 包中所有文件，-t 是列出文件的意思</p>
-<h1 id="tar-xf-all-tar"><a href="#tar-xf-all-tar" class="headerlink" title="tar -xf all.tar"></a>tar -xf all.tar</h1><p>这条命令是解出 all.tar 包中所有文件，-t 是解开的意思</p>
-<p>压缩</p>
-<p>tar -cvf jpg.tar *.jpg <a target="_blank" rel="noopener" href="//xn--jpgtar-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.jpg">//将目录里所有 jpg 文件打包成 tar.jpg</a></p>
-<p>tar -czf jpg.tar.gz *.jpg   <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 gzip 压缩，生成一个 gzip 压缩过的包，命名为 jpg.tar.gz</p>
-<p>tar -cjf jpg.tar.bz2 *.jpg <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 bzip2 压缩，生成一个 bzip2 压缩过的包，命名为 jpg.tar.bz2</p>
-<p>tar -cZf jpg.tar.Z *.jpg   <a target="_blank" rel="noopener" href="//xn--jpgjpg-k18i60zu6u9rh3xhkqa1h032blufb97e1p9e.xn--tar-x33e">//将目录里所有 jpg 文件打包成 jpg.tar 后</a>，并且将其用 compress 压缩，生成一个 umcompress 压缩过的包，命名为 jpg.tar.Z</p>
-<p>rar a jpg.rar *.jpg //rar 格式的压缩，需要先下载 rar for linux</p>
-<p>zip jpg.zip *.jpg //zip 格式的压缩，需要先下载 zip for linux</p>
-<p>解压</p>
-<p>tar -xvf file.tar //解压 tar 包</p>
-<p>tar -xzvf file.tar.gz <a target="_blank" rel="noopener" href="//xn--tar-vo3e979v.gz">//解压 tar.gz</a></p>
-<p>tar -xjvf file.tar.bz2   //解压 tar.bz2</p>
-<p>tar -xZvf file.tar.Z   <a target="_blank" rel="noopener" href="//xn--tar-vo3e979v.Z">//解压 tar.Z</a></p>
-<p>unrar e file.rar //解压 rar</p>
-<p>unzip file.zip //解压 zip</p>
-<p>总结</p>
-<p>1、*.tar 用 tar -xvf 解压</p>
-<p>2、*.gz 用 gzip -d 或者 gunzip 解压</p>
-<p>3、<em>.tar.gz 和</em>.tgz 用 tar -xzf 解压</p>
-<p>4、*.bz2 用 bzip2 -d 或者用 bunzip2 解压</p>
-<p>5、*.tar.bz2 用 tar -xjf 解压</p>
-<p>6、*.Z 用 uncompress 解压</p>
-<p>7、*.tar.Z 用 tar -xZf 解压</p>
-<p>8、*.rar 用 unrar e 解压</p>
-<p>9、*.zip 用 unzip 解压</p>
-<p>解压 jdk 到指定文件夹：</p>
-<p>tar -xzvf jdk-8u131-linux-x64.tar.gz -C /usr/local/java</p>
-<p>root@ubuntu:~# tar –help<br>用法: tar [选项…] [FILE]…<br>GNU ‘tar’ saves many files together into a single tape or disk archive, and can<br>restore individual files from the archive.</p>
-<p>Examples:<br>tar -cf archive.tar foo bar # Create archive.tar from files foo and bar.<br>tar -tvf archive.tar # List all files in archive.tar verbosely.<br>tar -xf archive.tar # Extract all files from archive.tar.</p>
-<p>主操作模式:</p>
-<p>-A, –catenate, –concatenate 追加 tar 文件至归档<br>-c, –create 创建一个新归档<br>-d, –diff, –compare 找出归档和文件系统的差异<br>–delete 从归档(非磁带！)中删除<br>-r, –append 追加文件至归档结尾<br>-t, –list 列出归档内容<br>–test-label 测试归档卷标并退出<br>-u, –update 仅追加比归档中副本更新的文件<br>-x, –extract, –get 从归档中解出文件</p>
-<p>操作修饰符:</p>
-<p>–check-device 当创建增量归档时检查设备号(默认)<br>-g, –listed-incremental=FILE 处理新式的 GNU 格式的增量备份<br>-G, –incremental 处理老式的 GNU 格式的增量备份<br>–ignore-failed-read<br>当遇上不可读文件时不要以非零值退出<br>–level=NUMBER 所创建的增量列表归档的输出级别<br>-n, –seek 归档可检索<br>–no-check-device 当创建增量归档时不要检查设备号<br>–no-seek 归档不可检索<br>–occurrence[=NUMBER] 仅处理归档中每个文件的第 NUMBER<br>个事件；仅当与以下子命令 –delete,<br>–diff, –extract 或是 –list<br>中的一个联合使用时，此选项才有效。而且不管文件列表是以命令行形式给出或是通过<br>-T 选项指定的；NUMBER 值默认为 1<br>–sparse-version=MAJOR[.MINOR]<br>设置所用的离散格式版本(隐含<br>–sparse)<br>-S, –sparse 高效处理离散文件</p>
-<p>重写控制:</p>
-<p>-k, –keep-old-files don’t replace existing files when extracting,<br>treat them as errors<br>–keep-directory-symlink preserve existing symlinks to directories when<br>extracting<br>–keep-newer-files<br>不要替换比归档中副本更新的已存在的文件<br>–no-overwrite-dir 保留已存在目录的元数据<br>–one-top-level[=DIR] create a subdirectory to avoid having loose files<br>extracted<br>–overwrite 解压时重写存在的文件<br>–overwrite-dir 解压时重写已存在目录的元数据(默认)</p>
-<p>–recursive-unlink 解压目录之前先清除目录层次<br>–remove-files 在添加文件至归档后删除它们<br>–skip-old-files don’t replace existing files when extracting,<br>silently skip over them<br>-U, –unlink-first 在解压要重写的文件之前先删除它们<br>-W, –verify 在写入以后尝试校验归档</p>
-<p>选择输出流:</p>
-<p>–ignore-command-error 忽略子进程的退出代码<br>–no-ignore-command-error<br>将子进程的非零退出代码认为发生错误<br>-O, –to-stdout 解压文件至标准输出<br>–to-command=COMMAND<br>将解压的文件通过管道传送至另一个程序</p>
-<p>操作文件属性:</p>
-<p>–atime-preserve[=METHOD]<br>在输出的文件上保留访问时间，要么通过在读取(默认<br>METHOD=‘replace’)后还原时间，要不就不要在第一次(METHOD=‘system’)设置时间<br>–clamp-mtime only set time when the file is more recent than<br>what was given with –mtime<br>–delay-directory-restore<br>直到解压结束才设置修改时间和所解目录的权限<br>–group=名称 强制将 NAME<br>作为所添加的文件的组所有者<br>–mode=CHANGES 强制将所添加的文件(符号)更改为权限<br>CHANGES<br>–mtime=DATE-OR-FILE 从 DATE-OR-FILE 中为添加的文件设置<br>mtime<br>-m, –touch 不要解压文件的修改时间<br>–no-delay-directory-restore<br>取消 –delay-directory-restore 选项的效果<br>–no-same-owner<br>将文件解压为您所有(普通用户默认此项)<br>–no-same-permissions<br>从归档中解压权限时使用用户的掩码位(默认为普通用户服务)<br>–numeric-owner 总是以数字代表用户/组的名称<br>–owner=名称 强制将 NAME<br>作为所添加的文件的所有者<br>-p, –preserve-permissions, –same-permissions<br>解压文件权限信息(默认只为超级用户服务)<br>–preserve 与 -p 和 -s 一样<br>–same-owner<br>尝试解压时保持所有者关系一致(超级用户默认此项)<br>-s, –preserve-order, –same-order<br>member arguments are listed in the same order as<br>the files in the archive<br>–sort=ORDER directory sorting order: none (default), name or<br>inode</p>
-<p>Handling of extended file attributes:</p>
-<p>–acls Enable the POSIX ACLs support<br>–no-acls Disable the POSIX ACLs support<br>–no-selinux Disable the SELinux context support<br>–no-xattrs Disable extended attributes support<br>–selinux Enable the SELinux context support<br>–xattrs Enable extended attributes support<br>–xattrs-exclude=MASK specify the exclude pattern for xattr keys<br>–xattrs-include=MASK specify the include pattern for xattr keys</p>
-<p>设备选择和切换:</p>
-<p>-f, –file=ARCHIVE 使用归档文件或 ARCHIVE 设备<br>–force-local<br>即使归档文件存在副本还是把它认为是本地归档<br>-F, –info-script=名称, –new-volume-script=名称<br>在每卷磁带最后运行脚本(隐含 -M)<br>-L, –tape-length=NUMBER 写入 NUMBER × 1024 字节后更换磁带<br>-M, –multi-volume 创建/列出/解压多卷归档文件<br>–rmt-command=COMMAND 使用指定的 rmt COMMAND 代替 rmt<br>–rsh-command=COMMAND 使用远程 COMMAND 代替 rsh<br>–volno-file=FILE 使用/更新 FILE 中的卷数</p>
-<p>设备分块:</p>
-<p>-b, –blocking-factor=BLOCKS 每个记录 BLOCKS x 512 字节<br>-B, –read-full-records 读取时重新分块(只对 4.2BSD 管道有效)<br>-i, –ignore-zeros 忽略归档中的零字节块(即文件结尾)<br>–record-size=NUMBER 每个记录的字节数 NUMBER，乘以 512</p>
-<p>选择归档格式:</p>
-<p>-H, –format=FORMAT 创建指定格式的归档</p>
-<p>FORMAT 是以下格式中的一种:</p>
-<p>gnu GNU tar 1.13.x 格式<br>oldgnu GNU 格式 as per tar &lt;= 1.12<br>pax POSIX 1003.1-2001 (pax) 格式<br>posix 等同于 pax<br>ustar POSIX 1003.1-1988 (ustar) 格式<br>v7 old V7 tar 格式</p>
-<p>–old-archive, –portability<br>等同于 –format=v7<br>–pax-option=关键字[[:]=值][,关键字[[:]=值]]…<br>控制 pax 关键字<br>–posix 等同于 –format=posix<br>-V, –label=TEXT 创建带有卷名 TEXT<br>的归档；在列出/解压时，使用 TEXT<br>作为卷名的模式串</p>
-<p>压缩选项:</p>
-<p>-a, –auto-compress 使用归档后缀名来决定压缩程序<br>-I, –use-compress-program=PROG<br>通过 PROG 过滤(必须是能接受 -d<br>选项的程序)<br>-j, –bzip2 通过 bzip2 过滤归档<br>-J, –xz 通过 xz 过滤归档<br>–lzip 通过 lzip 过滤归档<br>–lzma 通过 xz 过滤归档<br>–lzop 通过 xz 过滤归档<br>–no-auto-compress 不使用归档后缀名来决定压缩程序<br>-z, –gzip, –gunzip, –ungzip 通过 gzip 过滤归档<br>-Z, –compress, –uncompress 通过 compress 过滤归档</p>
-<p>本地文件选择:</p>
-<p>–add-file=FILE 添加指定的 FILE 至归档(如果名字以 -<br>开始会很有用的)<br>–backup[=CONTROL] 在删除前备份，选择 CONTROL 版本<br>-C, –directory=DIR 改变至目录 DIR<br>–exclude=PATTERN 排除以 PATTERN 指定的文件<br>–exclude-backups 排除备份和锁文件<br>–exclude-caches 除标识文件本身外，排除包含<br>CACHEDIR.TAG 的目录中的内容<br>–exclude-caches-all 排除包含 CACHEDIR.TAG 的目录<br>–exclude-caches-under 排除包含 CACHEDIR.TAG<br>的目录中所有内容<br>–exclude-ignore=FILE read exclude patterns for each directory from<br>FILE, if it exists<br>–exclude-ignore-recursive=FILE<br>read exclude patterns for each directory and its<br>subdirectories from FILE, if it exists<br>–exclude-tag=FILE 除 FILE 自身外，排除包含 FILE<br>的目录中的内容<br>–exclude-tag-all=FILE 排除包含 FILE 的目录<br>–exclude-tag-under=FILE 排除包含 FILE 的目录中的所有内容<br>–exclude-vcs 排除版本控制系统目录<br>–exclude-vcs-ignores read exclude patterns from the VCS ignore files<br>-h, –dereference<br>跟踪符号链接；将它们所指向的文件归档并输出<br>–hard-dereference<br>跟踪硬链接；将它们所指向的文件归档并输出<br>-K, –starting-file=MEMBER-NAME<br>begin at member MEMBER-NAME when reading the<br>archive<br>–newer-mtime=DATE 当只有数据改变时比较数据和时间<br>–no-null 禁用上一次的效果 –null 选项<br>–no-recursion 避免目录中的自动降级<br>–no-unquote do not unquote input file or member names<br>–null -T 读取以空终止的名字，-C 禁用<br>-N, –newer=DATE-OR-FILE, –after-date=DATE-OR-FILE<br>只保存比 DATE-OR-FILE 更新的文件<br>–one-file-system 创建归档时保存在本地文件系统中<br>-P, –absolute-names don’t strip leading ‘/‘s from file names<br>–recursion 目录递归(默认)<br>–suffix=STRING 在删除前备份，除非被环境变量<br>SIMPLE_BACKUP_SUFFIX<br>覆盖，否则覆盖常用后缀(‘’)<br>-T, –files-from=FILE 从 FILE<br>中获取文件名来解压或创建文件<br>–unquote unquote input file or member names (default)<br>-X, –exclude-from=FILE 排除 FILE 中列出的模式串</p>
-<p>文件名变换:</p>
-<p>–strip-components=NUMBER 解压时从文件名中清除 NUMBER<br>个引导部分<br>–transform=EXPRESSION, –xform=EXPRESSION<br>使用 sed 代替 EXPRESSION<br>来进行文件名变换</p>
-<p>文件名匹配选项(同时影响排除和包括模式串):</p>
-<p>–anchored 模式串匹配文件名头部<br>–ignore-case 忽略大小写<br>–no-anchored patterns match after any ‘/‘ (default for<br>exclusion)<br>–no-ignore-case 匹配大小写(默认)<br>–no-wildcards 逐字匹配字符串<br>–no-wildcards-match-slash wildcards do not match ‘/‘<br>–wildcards 使用通配符(默认对 exclusion )<br>–wildcards-match-slash wildcards match ‘/‘ (default for exclusion)</p>
-<p>提示性输出:</p>
-<p>–checkpoint[=NUMBER] 每隔 NUMBER<br>个记录显示进度信息(默认为 10 个)<br>–checkpoint-action=ACTION 在每个检查点上执行 ACTION<br>–full-time 按文件原本时间格式打印<br>–index-file=FILE 将详细输出发送至 FILE<br>-l, –check-links<br>只要不是所有链接都被输出就打印信息<br>–no-quote-chars=STRING 禁用来自 STRING 的字符引用<br>–quote-chars=STRING 来自 STRING 的额外的引用字符<br>–quoting-style=STYLE 设置名称引用风格；有效的 STYLE<br>值请参阅以下说明<br>-R, –block-number 每个信息都显示归档内的块数<br>–show-defaults 显示 tar 默认选项<br>–show-omitted-dirs<br>列表或解压时，列出每个不匹配查找标准的目录<br>–show-snapshot-field-ranges<br>show valid ranges for snapshot-file fields<br>–show-transformed-names, –show-stored-names<br>显示变换后的文件名或归档名<br>–totals[=SIGNAL] 处理归档后打印出总字节数；当此<br>SIGNAL 被触发时带参数 -<br>打印总字节数；允许的信号为:<br>SIGHUP，SIGQUIT，SIGINT，SIGUSR1 和<br>SIGUSR2；同时也接受不带 SIG<br>前缀的信号名称<br>–utc 以 UTC 格式打印文件修改时间<br>-v, –verbose 详细地列出处理的文件<br>–warning=KEYWORD 警告控制:<br>-w, –interactive, –confirmation<br>每次操作都要求确认</p>
-<p>兼容性选项:</p>
-<p>-o 创建归档时，相当于<br>–old-archive；展开归档时，相当于<br>–no-same-owner</p>
-<p>其它选项:</p>
-<p>-?, –help 显示此帮助列表<br>–restrict 禁用某些潜在的有危险的选项<br>–usage 显示简短的用法说明<br>–version 打印程序版本</p>
-<p>长选项和相应短选项具有相同的强制参数或可选参数。</p>
-<p>The backup suffix is ‘~’, unless set with –suffix or SIMPLE_BACKUP_SUFFIX.<br>The version control may be set with –backup or VERSION_CONTROL, values are:</p>
-<p>none, off never make backups<br>t, numbered make numbered backups<br>nil, existing numbered if numbered backups exist, simple otherwise<br>never, simple always make simple backups</p>
-<p>–quoting-style 选项的有效参数为:</p>
-<p>literal<br>shell<br>shell-always<br>c<br>c-maybe<br>escape<br>locale<br>clocale</p>
-<p>此 tar 默认为:<br>–format=gnu -f- -b20 –quoting-style=escape –rmt-command=/usr/lib/tar/rmt<br>–rsh-command=/usr/bin/rsh</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/24/yuque/tar%20%E5%91%BD%E4%BB%A4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Readiness probe failed! caliconode is not ready BIRD is not ready BGP not established with xxxx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/20/yuque/Readiness%20probe%20failed!%20caliconode%20is%20not%20ready%20BIRD%20is%20not%20ready%20BGP%20not%20established%20with%20xxxx/">Readiness probe failed: caliconode is not ready BIRD is not ready BGP not established with xxxx</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/20/yuque/Readiness%20probe%20failed!%20caliconode%20is%20not%20ready%20BIRD%20is%20not%20ready%20BGP%20not%20established%20with%20xxxx/" class="archive-article-date">
-  	<time datetime="2019-09-20T18:09:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="Calico-问题排障"><a href="#Calico-问题排障" class="headerlink" title="Calico 问题排障"></a>Calico 问题排障</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 错误信息</span><br><span class="line"></span><br><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
-
-<h6 id="自己的电脑有双网卡，且开了虚拟机。"><a href="#自己的电脑有双网卡，且开了虚拟机。" class="headerlink" title="自己的电脑有双网卡，且开了虚拟机。"></a>自己的电脑有双网卡，且开了虚拟机。</h6><h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">调整calicao 网络插件的网卡发现机制，修改IP_AUTODETECTION_METHOD对应的value值。官方提供的yaml文件中，ip识别策略（IPDETECTMETHOD）没有配置，即默认为first-found，这会导致一个网络异常的ip作为nodeIP被注册，从而影响node-to-node mesh。我们可以修改成can-reach或者interface的策略，尝试连接某一个Ready的node的IP，以此选择出正确的IP。</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">// calico.yaml 文件添加以下二行</span><br><span class="line">            - name: IP_AUTODETECTION_METHOD</span><br><span class="line">              value: <span class="string">&quot;interface=ens.*&quot;</span>  <span class="comment"># ens 根据实际网卡开头配置</span></span><br><span class="line"></span><br><span class="line"> // 配置如下</span><br><span class="line">            - name: CLUSTER_TYPE</span><br><span class="line">              value: <span class="string">&quot;k8s,bgp&quot;</span></span><br><span class="line">            <span class="comment"># Auto-detect the BGP IP address.</span></span><br><span class="line">            - name: IP</span><br><span class="line">              value: <span class="string">&quot;autodetect&quot;</span></span><br><span class="line">            - name: IP_AUTODETECTION_METHOD</span><br><span class="line">              value: <span class="string">&quot;interface=ens.*&quot;</span></span><br><span class="line">            <span class="comment"># Enable IPIP</span></span><br><span class="line">            - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">              value: <span class="string">&quot;Always&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/20/yuque/Readiness%20probe%20failed!%20caliconode%20is%20not%20ready%20BIRD%20is%20not%20ready%20BGP%20not%20established%20with%20xxxx/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/K8S 应用篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/">K8S 应用篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/" class="archive-article-date">
-  	<time datetime="2019-09-16T13:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>部署 dashboard</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;dashboard&#x2F;v2.0.0-beta4&#x2F;aio&#x2F;deploy&#x2F;recommended.yaml</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 创建dashboard管理用户</span><br><span class="line">kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"># 绑定用户为集群管理用户</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole&#x3D;cluster-admin --serviceaccount&#x3D;kube-system:dashboard-admin</span><br><span class="line"># 生成tocken</span><br><span class="line">kubectl describe secret -n kube-system dashboard-admin-token</span><br><span class="line"># --- 输出如下 ---</span><br><span class="line">Name:         dashboard-admin-token-pb78x</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io&#x2F;service-account.name: dashboard-admin</span><br><span class="line">              kubernetes.io&#x2F;service-account.uid: 166aeb8d-604e-11e9-80d6-080027d8332b</span><br><span class="line">Type:  kubernetes.io&#x2F;service-account-token</span><br><span class="line">Data(qxl:done)</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">ca.crt:     1025 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:</span><br><span class="line">eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tbHBzc2oiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOGUxNzM3YjUtNjE3OC0xMWU5LWJlMTktMDAwYzI5M2YxNDg2Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmRhc2hib2FyZC1hZG1pbiJ9.KHTf4_3DJu0liKeoOIoCssmIRXSHM_A4w9XVJKQ44jqEfPSbpwohqKnHxOspWAWsjwRrc3kSQyC9KEDCfTYl91ZY_PzUSqPG8XY58ab1p9q1xUxdDYu3qCyaSHWTQ2dATl1G5nNZQLfrarwWIPurm0BLBLsR1crIQj1P8VGafJJXz-TCQZgiw1OHqB8w89IBUhGrn8vuaIdspNLNZmrl-icjFS4eAevBREwlxqxX0-3-mzTFE8xqCHyfJ7pKpK-Jv1jSpuHjb0CfDPvNBuAGp5jQG44Ya6wq1BcqQO4RiQ07hjfIrnwmfWyZWmBn9YLvBVByupLv872kUUSSxjxxbg</span><br><span class="line"># ------</span><br><span class="line">使用生成的tocken就可以登录dashboard了。</span><br></pre></td></tr></table></figure>
-
-<p>部署</p>
-<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew</a> users can use <code>brew install kubernetes-helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://chocolatey.org/">Chocolatey</a> users can use <code>choco install kubernetes-helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://scoop.sh/">Scoop</a> users can use <code>scoop install helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://gofi.sh/">GoFish</a> users can use <code>gofish install helm</code>.</li>
-<li><a target="_blank" rel="noopener" href="https://snapcraft.io/">Snap</a> users can use <code>sudo snap install helm --classic</code>.</li>
-</ul>
-<p>k8s 升级以及容器版本升级</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get upgrade  kubeadm</span><br><span class="line">更新到1.13.0后，在master执行,执行一次</span><br><span class="line">kubeadm upgrade plan</span><br></pre></td></tr></table></figure>
-
-<p>docker 降级<br>打印可用版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache madison docker-ce</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<p>安装指定版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce&#x3D;&lt;VERSION&gt;</span><br></pre></td></tr></table></figure>
-
-<p>三、给 Tiller 授权<br>因为 Helm 的服务端 Tiller 是一个部署在 Kubernetes 中 Kube-System Namespace 下 的 Deployment，它会去连接 Kube-Api 在 Kubernetes 里创建和删除应用。</p>
-<p>而从 Kubernetes 1.6 版本开始，API Server 启用了 RBAC 授权。目前的 Tiller 部署时默认没有定义授权的 ServiceAccount，这会导致访问 API Server 时被拒绝。所以我们需要明确为 Tiller 部署添加授权。</p>
-<p>创建 Kubernetes 的服务帐号和绑定角色</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br></pre></td></tr></table></figure>
-
-<p>为 Tiller 设置帐号</p>
-<h1 id="使用-kubectl-patch-更新-API-对象"><a href="#使用-kubectl-patch-更新-API-对象" class="headerlink" title="使用 kubectl patch 更新 API 对象"></a>使用 kubectl patch 更新 API 对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p <span class="string">&#x27;&#123;&quot;spec&quot;:&#123;&quot;template&quot;:&#123;&quot;spec&quot;:&#123;&quot;serviceAccount&quot;:&quot;tiller&quot;&#125;&#125;&#125;&#125;&#x27;</span></span><br><span class="line">deployment.extensions <span class="string">&quot;tiller-deploy&quot;</span> patched</span><br></pre></td></tr></table></figure>
-
-<p>查看是否授权成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount</span><br><span class="line">serviceAccount: tiller</span><br><span class="line">serviceAccountName: tiller</span><br></pre></td></tr></table></figure>
-
-<p>四、验证 Tiller 是否安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n kube-system get pods|grep tiller</span><br><span class="line">tiller-deploy-6d68f5c78f-nql2z          1/1       Running   0          5m</span><br><span class="line">helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:<span class="string">&quot;v2.9.1&quot;</span>, GitCommit:<span class="string">&quot;20adb27c7c5868466912eebdf6664e7390ebe710&quot;</span>, GitTreeState:<span class="string">&quot;clean&quot;</span>&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:<span class="string">&quot;v2.9.1&quot;</span>, GitCommit:<span class="string">&quot;20adb27c7c5868466912eebdf6664e7390ebe710&quot;</span>, GitTreeState:<span class="string">&quot;clean&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="NFS-挂载失败"><a href="#NFS-挂载失败" class="headerlink" title="NFS 挂载失败"></a>NFS 挂载失败</h2><p>在一台机器上创建 Pod，挂载 nfs 失败。<br>然后在节点上尝试挂载，依然显示失败</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# mount -t nfs 192.168.207.121:&#x2F;nas&#x2F;dg_vd &#x2F;nfs</span><br><span class="line">mount: mount point &#x2F;nfs does not exist</span><br><span class="line">root@master:~# mkdir &#x2F;nfs</span><br><span class="line">root@master:~# mount -t nfs 192.168.207.121:&#x2F;nas&#x2F;dg_vd &#x2F;nfs</span><br><span class="line">mount: wrong fs type, bad option, bad superblock on 192.168.207.121:&#x2F;nas&#x2F;dg_vd,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a &#x2F;sbin&#x2F;mount.&lt;type&gt; helper program)</span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line">root@master:~# showmount -e 192.168.207.121</span><br><span class="line">The program &#39;showmount&#39; is currently not installed. You can install it by typing:</span><br><span class="line">apt install nfs-common</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>apt install nfs-common</code>后可以本地挂载 nfs。<br>这是再创建 pod 成功</p>
-<h2 id="Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117"><a href="#Readiness-probe-failed-caliconode-is-not-ready-BIRD-is-not-ready-BGP-not-established-with-10-117" class="headerlink" title="Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117."></a>Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.</h2><p>Calico 问题排障<br>// 错误信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:Readiness probe failed: caliconode is not ready: BIRD is not ready: BGP not established with 10.117.150.23</span><br></pre></td></tr></table></figure>
-
-<p>估计是没用发现实际真正的网卡<br>解决方法<br>/_<br>调整 calicao 网络插件的网卡发现机制，修改 IP_AUTODETECTION_METHOD 对应的 value 值。官方提供的 yaml 文件中，ip 识别策略（IPDETECTMETHOD）没有配置，即默认为 first-found，这会导致一个网络异常的 ip 作为 nodeIP 被注册，从而影响 node-to-node mesh。我们可以修改成 can-reach 或者 interface 的策略，尝试连接某一个 Ready 的 node 的 IP，以此选择出正确的 IP。<br>_/</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; calico.yaml 文件添加以下二行</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface&#x3D;ens.*&quot;  # ens 根据实际网卡开头配置</span><br><span class="line">&#x2F;&#x2F; 配置如下</span><br><span class="line">           - name: CLUSTER_TYPE</span><br><span class="line">             value: &quot;k8s,bgp&quot;</span><br><span class="line">           - name: IP_AUTODETECTION_METHOD</span><br><span class="line">             value: &quot;interface&#x3D;ens.*&quot;</span><br><span class="line">             #或者 value: &quot;interface&#x3D;ens160&quot;</span><br><span class="line">           # Auto-detect the BGP IP address.</span><br><span class="line">           - name: IP</span><br><span class="line">             value: &quot;autodetect&quot;</span><br><span class="line">           # Enable IPIP</span><br><span class="line">           - name: CALICO_IPV4POOL_IPIP</span><br><span class="line">             value: &quot;Always&quot;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/16/yuque/K8S%20%E5%BA%94%E7%94%A8%E7%AF%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Tool" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/yuque/Tool/">Tool</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/10/yuque/Tool/" class="archive-article-date">
-  	<time datetime="2019-09-10T17:20:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>谛听（数据爬虫）<br>哪吒（数据分析系统）<br>全球鹰（监控）<br>八爪鱼（运维机器人）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/10/yuque/Tool/">展开全文 >></a>
         </p>
       
 

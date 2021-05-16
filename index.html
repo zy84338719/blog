@@ -182,6 +182,152 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Linux 简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/16/yuque/Linux%20%E7%AE%80%E4%BB%8B/">Linux 简介</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/16/yuque/Linux%20%E7%AE%80%E4%BB%8B/" class="archive-article-date">
+  	<time datetime="2021-05-16T16:20:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UNIX 是一个交互式系统，用于同时处理多进程和多用户同时在线。为什么要说 UNIX，那是因为 Linux 是由 UNIX 发展而来的，UNIX 是由程序员设计，它的主要服务对象也是程序员。Linux 继承了 UNIX 的设计目标。从智能手机到汽车，超级计算机和家用电器，从家用台式机到企业服务器，Linux 操作系统无处不在。​<br>大多数程序员都喜欢让系统尽量简单，优雅并具有一致性。举个例子，从最底层的角度来讲，一个文件应该只是一个字节集合。为了实现顺序存取、随机存取、按键存取、远程存取只能是妨碍你的工作。相同的，如果命令<br>​</p>
+<p>​</p>
+<p>ls A*<br>意味着只列出以 A 为开头的所有文件，那么命令<br>​</p>
+<p>​</p>
+<p>rm A*<br>应该会移除所有以 A 为开头的文件而不是只删除文件名是 A* 的文件。这个特性也是最小吃惊原则(principle of least surprise)<br>​</p>
+<p>最小吃惊原则一般常用于用户界面和软件设计。它的原型是：该功能或者特征应该符合用户的预期，不应该使用户感到惊讶和震惊。<br>​</p>
+<p>一些有经验的程序员通常希望系统具有较强的功能性和灵活性。设计 Linux 的一个基本目标是每个应用程序只做一件事情并把他做好。所以编译器只负责编译的工作，编译器不会产生列表，因为有其他应用比编译器做的更好。<br>​</p>
+<p>很多人都不喜欢冗余，为什么在 cp 就能描述清楚你想干什么时候还使用 copy？这完全是在浪费宝贵的 hacking time。为了从文件中提取所有包含字符串 ard 的行，Linux 程序员应该输入<br>​</p>
+<p>​</p>
+<p>grep ard f<br>​</p>
+<p>作者：cxuan<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/leetbook/read/awesome-linux-handbook/eg4ecm/">https://leetcode-cn.com/leetbook/read/awesome-linux-handbook/eg4ecm/</a><br>来源：力扣（LeetCode）<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/16/yuque/Linux%20%E7%AE%80%E4%BB%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/位运算" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/15/yuque/%E4%BD%8D%E8%BF%90%E7%AE%97/">位运算</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/15/yuque/%E4%BD%8D%E8%BF%90%E7%AE%97/" class="archive-article-date">
+  	<time datetime="2021-05-15T17:30:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>位运算，是两个数字的二进制对应的值，每一位，进行运算，得出新值的过程</p>
+<h2 id="amp-两个数，每一位，同时都-1，则返回-1，其余-0。"><a href="#amp-两个数，每一位，同时都-1，则返回-1，其余-0。" class="headerlink" title="&amp; = 两个数，每一位，同时都=1，则返回 1，其余 0。"></a>&amp; = 两个数，每一位，同时都=1，则返回 1，其余 0。</h2><h2 id="两个数，每一位，任意一位-1，则返回-1，否则-0。"><a href="#两个数，每一位，任意一位-1，则返回-1，否则-0。" class="headerlink" title="| = 两个数，每一位，任意一位=1，则返回 1，否则 0。"></a>| = 两个数，每一位，任意一位=1，则返回 1，否则 0。</h2><h2 id="两个数，每一位，只有一位-1，则返回-1，否则-0"><a href="#两个数，每一位，只有一位-1，则返回-1，否则-0" class="headerlink" title="^ = 两个数，每一位，只有一位=1，则返回 1，否则 0"></a>^ = 两个数，每一位，只有一位=1，则返回 1，否则 0</h2><h2 id="amp-两个数，如果第二个数的某一位-1，则修改第一个数对应的位的值-0，否则第一个数对应的位数的值不变。"><a href="#amp-两个数，如果第二个数的某一位-1，则修改第一个数对应的位的值-0，否则第一个数对应的位数的值不变。" class="headerlink" title="&amp;^^ = 两个数，如果第二个数的某一位=1，则修改第一个数对应的位的值=0，否则第一个数对应的位数的值不变。"></a>&amp;^^ = 两个数，如果第二个数的某一位=1，则修改第一个数对应的位的值=0，否则第一个数对应的位数的值不变。</h2><p>第一个数 0110 第二个数 1011 进行&amp;运算 0010 进行|运算 1111 进行^运算 1101 进行|运算 0100</p>
+<p>/**<br>6 0110<br>11 1011</p>
+<p>&amp; 0010 2<br>| 1111 15<br>^ 1101 13<br>&amp;^ 0100 4<br>*/</p>
+<p>func main() {</p>
+<pre><code>fmt.Println(6 &amp; 11)
+fmt.Println(6 | 11)
+fmt.Println(6 ^ 11)
+fmt.Println(6 &amp;^ 11)
+</code></pre>
+<p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/15/yuque/%E4%BD%8D%E8%BF%90%E7%AE%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Mysql 部分总结（转载腾讯技术工程）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1345,357 +1491,6 @@ else
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E7%AE%80%E5%8C%96%E7%90%86%E8%A7%A3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/HTTP 协议入门（HTTP0.9-HTTP!3）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88HTTP0.9-HTTP!3%EF%BC%89/">HTTP 协议入门（HTTP0.9-HTTP/3）</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88HTTP0.9-HTTP!3%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2021-04-17T08:10:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HTTP 协议是互联网的基础协议，也是网页开发的必备知识，最新版本 HTTP/2 更是让它成为技术热点。<br>本文介绍 HTTP 协议的历史演变和设计思路。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1618647033120-a95f8401-0de1-464f-9f43-2aca7cf0a18a.jpeg#clientId=ub15e04e4-d048-4&from=paste&height=180&id=Yqo9v&margin=%5Bobject%20Object%5D&originHeight=180&originWidth=478&originalType=url&status=done&style=none&taskId=ub34df6f9-f37f-4284-a8cd-8fa8489ee78&width=478"></p>
-<h2 id="一、HTTP-0-9"><a href="#一、HTTP-0-9" class="headerlink" title="一、HTTP/0.9"></a>一、HTTP/0.9</h2><p>HTTP 是基于 TCP/IP 协议的<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html">应用层协议</a>。它不涉及数据包（packet）传输，主要规定了客户端和服务器之间的通信格式，默认使用 80 端口。<br>最早版本是 1991 年发布的 0.9 版。该版本极其简单，只有一个命令 GET。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /index.html</span><br></pre></td></tr></table></figure>
-
-<p>上面命令表示，TCP 连接（connection）建立后，客户端向服务器请求（request）网页 index.html。<br>协议规定，服务器只能回应 HTML 格式的字符串，不能回应别的格式。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    Hello World</span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>服务器发送完毕，就关闭 TCP 连接。</p>
-<h2 id="二、HTTP-1-0"><a href="#二、HTTP-1-0" class="headerlink" title="二、HTTP/1.0"></a>二、HTTP/1.0</h2><h3 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h3><p>1996 年 5 月，HTTP/1.0 版本发布，内容大大增加。<br>首先，任何格式的内容都可以发送。这使得互联网不仅可以传输文字，还能传输图像、视频、二进制文件。这为互联网的大发展奠定了基础。<br>其次，除了 GET 命令，还引入了 POST 命令和 HEAD 命令，丰富了浏览器与服务器的互动手段。<br>再次，HTTP 请求和回应的格式也变了。除了数据部分，每次通信都必须包括头信息（HTTP header），用来描述一些元数据。<br>其他的新增功能还包括状态码（status code）、多字符集支持、多部分发送（multi-part type）、权限（authorization）、缓存（cache）、内容编码（content encoding）等。</p>
-<h3 id="2-2-请求格式"><a href="#2-2-请求格式" class="headerlink" title="2.2 请求格式"></a>2.2 请求格式</h3><p>下面是一个 1.0 版的 HTTP 请求的例子。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.0 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)</span><br><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
-
-<p>可以看到，这个格式与 0.9 版有很大变化。<br>第一行是请求命令，必须在尾部添加协议版本（HTTP/1.0）。后面就是多行头信息，描述客户端的情况。</p>
-<h3 id="2-3-回应格式"><a href="#2-3-回应格式" class="headerlink" title="2.3 回应格式"></a>2.3 回应格式</h3><p>服务器的回应如下。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content-Type: text/plain</span><br><span class="line">Content-Length: 137582</span><br><span class="line">Expires: Thu, 05 Dec 1997 16:00:00 GMT</span><br><span class="line">Last-Modified: Wed, 5 August 1996 15:55:28 GMT</span><br><span class="line">Server: Apache 0.84</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;body&gt;Hello World&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>回应的格式是”头信息 + 一个空行（\r\n） + 数据”。其中，第一行是”协议版本 + 状态码（status code） + 状态描述”。</p>
-<h3 id="2-4-Content-Type-字段"><a href="#2-4-Content-Type-字段" class="headerlink" title="2.4 Content-Type 字段"></a>2.4 Content-Type 字段</h3><p>关于字符的编码，1.0 版规定，头信息必须是 ASCII 码，后面的数据可以是任何格式。因此，服务器回应的时候，必须告诉客户端，数据是什么格式，这就是 Content-Type 字段的作用。<br>下面是一些常见的 Content-Type 字段的值。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">text/plain</span><br><span class="line">text/html</span><br><span class="line">text/css</span><br><span class="line">image/jpeg</span><br><span class="line">image/png</span><br><span class="line">image/svg+xml</span><br><span class="line">audio/mp4</span><br><span class="line">video/mp4</span><br><span class="line">application/javascript</span><br><span class="line">application/pdf</span><br><span class="line">application/zip</span><br><span class="line">application/atom+xml</span><br></pre></td></tr></table></figure>
-
-<p>这些数据类型总称为 MIME type，每个值包括一级类型和二级类型，之间用斜杠分隔。<br>除了预定义的类型，厂商也可以自定义类型。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">application / vnd.debian.binary - package</span><br></pre></td></tr></table></figure>
-
-<p>上面的类型表明，发送的是 Debian 系统的二进制数据包。<br>MIME type 还可以在尾部使用分号，添加参数。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
-
-<p>上面的类型表明，发送的是网页，而且编码是 UTF-8。<br>客户端请求的时候，可以使用 Accept 字段声明自己可以接受哪些数据格式。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，客户端声明自己可以接受任何格式的数据。<br>MIME type 不仅用在 HTTP 协议，还可以用在其他地方，比如 HTML 网页。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html; charset=UTF-8&quot;</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 等同于 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-5-Content-Encoding-字段"><a href="#2-5-Content-Encoding-字段" class="headerlink" title="2.5 Content-Encoding 字段"></a>2.5 Content-Encoding 字段</h3><p>由于发送的数据可以是任何格式，因此可以把数据压缩后再发送。Content-Encoding 字段说明数据的压缩方法。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Content-Encoding: gzip</span><br><span class="line">Content-Encoding: compress</span><br><span class="line">Content-Encoding: deflate</span><br></pre></td></tr></table></figure>
-
-<p>客户端在请求时，用 Accept-Encoding 字段说明自己可以接受哪些压缩方法。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accept-Encoding: gzip, deflate</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-6-缺点"><a href="#2-6-缺点" class="headerlink" title="2.6 缺点"></a>2.6 缺点</h3><p>HTTP/1.0 版的主要缺点是，每个 TCP 连接只能发送一个请求。发送数据完毕，连接就关闭，如果还要请求其他资源，就必须再新建一个连接。<br>TCP 连接的新建成本很高，因为需要客户端和服务器三次握手，并且开始时发送速率较慢（slow start）。所以，HTTP 1.0 版本的性能比较差。随着网页加载的外部资源越来越多，这个问题就愈发突出了。<br>为了解决这个问题，有些浏览器在请求时，用了一个非标准的 Connection 字段。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
-
-<p>这个字段要求服务器不要关闭 TCP 连接，以便其他请求复用。服务器同样回应这个字段。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
-
-<p>一个可以复用的 TCP 连接就建立了，直到客户端或服务器主动关闭连接。但是，这不是标准字段，不同实现的行为可能不一致，因此不是根本的解决办法。</p>
-<h2 id="三、HTTP-1-1"><a href="#三、HTTP-1-1" class="headerlink" title="三、HTTP/1.1"></a>三、HTTP/1.1</h2><p>1997 年 1 月，HTTP/1.1 版本发布，只比 1.0 版本晚了半年。它进一步完善了 HTTP 协议，一直用到了 20 年后的今天，直到现在还是最流行的版本。</p>
-<h3 id="3-1-持久连接"><a href="#3-1-持久连接" class="headerlink" title="3.1 持久连接"></a>3.1 持久连接</h3><p>1.1 版的最大变化，就是引入了持久连接（persistent connection），即 TCP 连接默认不关闭，可以被多个请求复用，不用声明 Connection: keep-alive。<br>客户端和服务器发现对方一段时间没有活动，就可以主动关闭连接。不过，规范的做法是，客户端在最后一个请求时，发送 Connection: close，明确要求服务器关闭 TCP 连接。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
-
-<p>目前，对于同一个域名，大多数浏览器允许同时建立 6 个持久连接。</p>
-<h3 id="3-2-管道机制"><a href="#3-2-管道机制" class="headerlink" title="3.2 管道机制"></a>3.2 管道机制</h3><p>1.1 版还引入了管道机制（pipelining），即在同一个 TCP 连接里面，客户端可以同时发送多个请求。这样就进一步改进了 HTTP 协议的效率。<br>举例来说，客户端需要请求两个资源。以前的做法是，在同一个 TCP 连接里面，先发送 A 请求，然后等待服务器做出回应，收到后再发出 B 请求。管道机制则是允许浏览器同时发出 A 请求和 B 请求，但是服务器还是按照顺序，先回应 A 请求，完成后再回应 B 请求。</p>
-<h3 id="3-3-Content-Length-字段"><a href="#3-3-Content-Length-字段" class="headerlink" title="3.3 Content-Length 字段"></a>3.3 Content-Length 字段</h3><p>一个 TCP 连接现在可以传送多个回应，势必就要有一种机制，区分数据包是属于哪一个回应的。这就是 Content-length 字段的作用，声明本次回应的数据长度。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Length: 3495</span><br></pre></td></tr></table></figure>
-
-<p>上面代码告诉浏览器，本次回应的长度是 3495 个字节，后面的字节就属于下一个回应了。<br>在 1.0 版中，Content-Length 字段不是必需的，因为浏览器发现服务器关闭了 TCP 连接，就表明收到的数据包已经全了。</p>
-<h3 id="3-4-分块传输编码"><a href="#3-4-分块传输编码" class="headerlink" title="3.4 分块传输编码"></a>3.4 分块传输编码</h3><p>使用 Content-Length 字段的前提条件是，服务器发送回应之前，必须知道回应的数据长度。<br>对于一些很耗时的动态操作来说，这意味着，服务器要等到所有操作完成，才能发送数据，显然这样的效率不高。更好的处理方法是，产生一块数据，就发送一块，采用”流模式”（stream）取代”缓存模式”（buffer）。<br>因此，1.1 版规定可以不使用 Content-Length 字段，而使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%88%86%E5%9D%97%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81">“分块传输编码”</a>（chunked transfer encoding）。</p>
-<blockquote>
-<p><strong>分块传输编码</strong>（<strong>Chunked transfer encoding</strong>）是超文本传输协议（HTTP）中的一种数据传输机制，允许<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP">HTTP</a>由<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E9%A0%81%E4%BC%BA%E6%9C%8D%E5%99%A8">网页服务器</a>发送给<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF">客户端</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6">应用</a>（ 通常是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E6%B5%8F%E8%A7%88%E5%99%A8">网页浏览器</a>）的数据可以分成多个部分。分块传输编码只在 HTTP 协议 1.1 版本（HTTP/1.1）中提供。<br>通常，HTTP 应答消息中发送的数据是整个发送的，Content-Length 消息头字段表示数据的长度。数据的长度很重要，因为客户端需要知道哪里是应答消息的结束，以及后续应答消息的开始。然而，使用分块传输编码，数据分解成一系列数据块，并以一个或多个块发送，这样服务器可以发送数据而不需要预先知道发送内容的总大小。通常数据块的大小是一致的，但也不总是这种情况。</p>
-</blockquote>
-<p>只要请求或回应的头信息有 Transfer-Encoding 字段，就表明回应将由数量未定的数据块组成。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Transfer-Encoding: chunked</span><br></pre></td></tr></table></figure>
-
-<p>每个非空的数据块之前，会有一个 16 进制的数值，表示这个块的长度。最后是一个大小为 0 的块，就表示本次回应的数据发送完了。下面是一个例子。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK Content-Type: text/plain Transfer-Encoding: chunked 25 This is</span><br><span class="line">the data in the first chunk 1C and this is the second one 3 con 8 sequence 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-5-其他功能"><a href="#3-5-其他功能" class="headerlink" title="3.5 其他功能"></a>3.5 其他功能</h3><p>1.1 版还新增了许多动词方法：PUT、PATCH、HEAD、OPTIONS、DELETE。<br>另外，客户端请求的头信息新增了 Host 字段，用来指定服务器的域名。</p>
-<p>Host: <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a></p>
-<p>有了 Host 字段，就可以将请求发往同一台服务器上的不同网站，为虚拟主机的兴起打下了基础。</p>
-<h3 id="3-6-缺点"><a href="#3-6-缺点" class="headerlink" title="3.6 缺点"></a>3.6 缺点</h3><p>虽然 1.1 版允许复用 TCP 连接，但是同一个 TCP 连接里面，所有的数据通信是按次序进行的。服务器只有处理完一个回应，才会进行下一个回应。要是前面的回应特别慢，后面就会有许多请求排队等着。这称为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%98%9F%E5%A4%B4%E9%98%BB%E5%A1%9E">“队头堵塞”</a>（Head-of-line blocking）。</p>
-<blockquote>
-<p><strong>队头阻塞</strong>（英語：<strong>Head-of-line blocking</strong>，缩写：HOL blocking）在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">计算机网络</a>的范畴中是一种性能受限的现象。它的原因是一列的第一个数据包（队头）受阻而导致整列数据包受阻。例如它有可能在缓存式输入的交换机中出现，有可能因为传输顺序错乱而出现，亦有可能在 HTTP 流水线中有多个请求的情况下出现。</p>
-</blockquote>
-<p>为了避免这个问题，只有两种方法：一是减少请求数，二是同时多开持久连接。这导致了很多的网页优化技巧，比如合并脚本和样式表、将图片嵌入 CSS 代码、域名分片（domain sharding）等等。如果 HTTP 协议设计得更好一些，这些额外的工作是可以避免的。</p>
-<h2 id="四、SPDY-协议"><a href="#四、SPDY-协议" class="headerlink" title="四、SPDY 协议"></a>四、SPDY 协议</h2><p>2009 年，谷歌公开了自行研发的 SPDY 协议，主要解决 HTTP/1.1 效率不高的问题。<br>这个协议在 Chrome 浏览器上证明可行以后，就被当作 HTTP/2 的基础，主要特性都在 HTTP/2 之中得到继承。</p>
-<h2 id="五、HTTP-2"><a href="#五、HTTP-2" class="headerlink" title="五、HTTP/2"></a>五、HTTP/2</h2><p>2015 年，HTTP/2 发布。它不叫 HTTP/2.0，是因为标准委员会不打算再发布子版本了，下一个新版本将是 HTTP/3。</p>
-<h3 id="5-1-二进制协议"><a href="#5-1-二进制协议" class="headerlink" title="5.1 二进制协议"></a>5.1 二进制协议</h3><p>HTTP/1.1 版的头信息肯定是文本（ASCII 编码），数据体可以是文本，也可以是二进制。HTTP/2 则是一个彻底的二进制协议，头信息和数据体都是二进制，并且统称为”帧”（frame）：头信息帧和数据帧。<br>二进制协议的一个好处是，可以定义额外的帧。HTTP/2 定义了近十种帧，为将来的高级应用打好了基础。如果使用文本实现这种功能，解析数据将会变得非常麻烦，二进制解析则方便得多。</p>
-<h3 id="5-2-多工"><a href="#5-2-多工" class="headerlink" title="5.2 多工"></a>5.2 多工</h3><p>HTTP/2 复用 TCP 连接，在一个连接里，客户端和浏览器都可以同时发送多个请求或回应，而且不用按照顺序一一对应，这样就避免了”队头堵塞”。<br>举例来说，在一个 TCP 连接里面，服务器同时收到了 A 请求和 B 请求，于是先回应 A 请求，结果发现处理过程非常耗时，于是就发送 A 请求已经处理好的部分， 接着回应 B 请求，完成后，再发送 A 请求剩下的部分。<br>这样双向的、实时的通信，就叫做多工（Multiplexing）。</p>
-<h3 id="5-3-数据流"><a href="#5-3-数据流" class="headerlink" title="5.3 数据流"></a>5.3 数据流</h3><p>因为 HTTP/2 的数据包是不按顺序发送的，同一个连接里面连续的数据包，可能属于不同的回应。因此，必须要对数据包做标记，指出它属于哪个回应。<br>HTTP/2 将每个请求或回应的所有数据包，称为一个数据流（stream）。每个数据流都有一个独一无二的编号。数据包发送的时候，都必须标记数据流 ID，用来区分它属于哪个数据流。另外还规定，客户端发出的数据流，ID 一律为奇数，服务器发出的，ID 为偶数。<br>数据流发送到一半的时候，客户端和服务器都可以发送信号（RST_STREAM 帧），取消这个数据流。1.1 版取消数据流的唯一方法，就是关闭 TCP 连接。这就是说，HTTP/2 可以取消某一次请求，同时保证 TCP 连接还打开着，可以被其他请求使用。<br>客户端还可以指定数据流的优先级。优先级越高，服务器就会越早回应。</p>
-<h3 id="5-4-头信息压缩"><a href="#5-4-头信息压缩" class="headerlink" title="5.4 头信息压缩"></a>5.4 头信息压缩</h3><p>HTTP 协议不带有状态，每次请求都必须附上所有信息。所以，请求的很多字段都是重复的，比如 Cookie 和 User Agent，一模一样的内容，每次请求都必须附带，这会浪费很多带宽，也影响速度。<br>HTTP/2 对这一点做了优化，引入了头信息压缩机制（header compression）。一方面，头信息使用 gzip 或 compress 压缩后再发送；另一方面，客户端和服务器同时维护一张头信息表，所有字段都会存入这个表，生成一个索引号，以后就不发送同样字段了，只发送索引号，这样就提高速度了。</p>
-<h3 id="5-5-服务器推送"><a href="#5-5-服务器推送" class="headerlink" title="5.5 服务器推送"></a>5.5 服务器推送</h3><p>HTTP/2 允许服务器未经请求，主动向客户端发送资源，这叫做服务器推送（server push）。<br>常见场景是客户端请求一个网页，这个网页里面包含很多静态资源。正常情况下，客户端必须收到网页后，解析 HTML 源码，发现有静态资源，再发出静态资源请求。其实，服务器可以预期到客户端请求网页后，很可能会再请求静态资源，所以就主动把这些静态资源随着网页一起发给客户端了。</p>
-<h2 id="六、HTTP-3"><a href="#六、HTTP-3" class="headerlink" title="六、HTTP/3"></a>六、HTTP/3</h2><p>上节提到 HTTP3 通过更加底层的传输层的优化来提升效率，究竟如何，让我们一起看一下。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1618647942864-a92110af-72e7-4444-ab69-eef754081c84.png#clientId=ua837cce1-549d-4&from=paste&height=618&id=ubccf37cc&margin=%5Bobject%20Object%5D&originHeight=618&originWidth=1200&originalType=binary&size=385379&status=done&style=none&taskId=uc82c80a2-2c7f-4eaf-82e6-29a3710c0eb&width=1200"><br>通过这个图片，我们可以很清楚的看到，HTTP2 和 HTTP3 的传输层是完全不同的协议，HTTP3 的传输层是 UDP 协议。我们知道 UDP 协议是个不可靠的协议，而 TCP 协议是可靠协议，怎样保证可靠的呢，重传。</p>
-<h3 id="QUIC-协议"><a href="#QUIC-协议" class="headerlink" title="QUIC 协议"></a>QUIC 协议</h3><p>在 UDP 协议之上，新增了 QUIC 协议。我的理解是由于 TCP 协议相对于 UDP 协议控制比较复杂耗时，因此针对 HTTP 应用贴身开发了 QUIC 协议代替 TCP 协议中关于可靠、流量控制的部分。</p>
-<ul>
-<li><p>QUIC 协议特性</p>
-<ul>
-<li>QUIC 协议提供类似于 HTTP2 的流功能</li>
-<li>QUIC 协议使用流 ID 取代 IP 和端口，这样就能实现连接迁移。例如说从 4G 信号切换到 wifi，下层的 IP 和端口变了，但是由于 QUIC 的流 ID 没有变，这个连接不会变，可以继续使用这个连接。</li>
-</ul>
-</li>
-</ul>
-<p>然后我们看一下 HTTP3 在 QUIC 上有什么变化呢？HTTP3 由 HTTP2 进化，HTTP2 最大的变化就是基于二进制流的传输。那么到 HTTP3，由于 QUIC 已经管理了流，HTTP3 本身就减负了，将流管理下移 QUIC，而本身就直接调用 QUIC 的接口就可以了。</p>
-<h3 id="HTTP3-如何工作"><a href="#HTTP3-如何工作" class="headerlink" title="HTTP3 如何工作"></a>HTTP3 如何工作</h3><ul>
-<li>我们回想一下 HTTPS，HTTPS 是类似于 TCP 握手的工作方式，先工作在 HTTP1 上，通过 HTTP1 传递交换得到秘钥，然后切换到 HTTPS 上工作。</li>
-<li>接着我们回想一下 HTTP2，HTTP2 也是基于 TLS 的，所以 HTTP2 的工作方式和 HTTPS 也是同样的过程，需要握手建立 TLS 连接，只是 TLS 连接完成后，发送一个 HTTP2 的连接确认消息，确认后，客户端服务器使用 HTTP2 进行连接通讯。</li>
-<li>最后让我们看下 HTTP3 如何工作。首先要建立好 HTTP2 连接，然后发送 HTTP2 扩展帧，这个帧包含 IP 和端口，浏览器收到扩展帧，使用该 IP 和端口，使用 QUIC 建立连接，如果成功，断开 HTTP2，升级为 HTTP3。</li>
-</ul>
-<p>这三者，都用 TCP 的握手协议去理解，都是握手，不同的是握手方式不一样。</p>
-<h1 id="七、参考链接"><a href="#七、参考链接" class="headerlink" title="七、参考链接"></a>七、参考链接</h1><ul>
-<li><a target="_blank" rel="noopener" href="http://kamranahmed.info/blog/2016/08/13/http-in-depth/">Journey to HTTP/2</a>, by Kamran Ahmed</li>
-<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>, by Wikipedia</li>
-<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1945">HTTP/1.0 Specification</a></li>
-<li><a target="_blank" rel="noopener" href="https://http2.github.io/http2-spec/">HTTP/2 Specification</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88HTTP0.9-HTTP!3%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/《代码整洁之道》" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/15/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/">《代码整洁之道》</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/15/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/" class="archive-article-date">
-  	<time datetime="2021-03-15T18:57:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id=""><a href="#" class="headerlink" title=""></a></h1><h2 id="代码猴子与童子军军规"><a href="#代码猴子与童子军军规" class="headerlink" title="代码猴子与童子军军规"></a>代码猴子与童子军军规</h2><ol>
-<li>我们就像一群代码猴子，上蹿下跳，自以为领略了编程的真谛。可惜，当我们抓着几个酸桃子，得意洋洋坐到树枝上，却对自己造成的混乱熟视无睹。那堆“可以运行”的乱麻程序，就在我们的眼皮底下慢慢腐坏。</li>
-</ol>
-<h2 id="第一章-整洁代码"><a href="#第一章-整洁代码" class="headerlink" title="第一章 整洁代码"></a>第一章 整洁代码</h2><ol>
-<li>勒布朗法则：稍后等于永不（Later equals never）。</li>
-<li>制造混乱无助于赶上期限。混乱只会立刻拖慢你，叫你错过期限。赶上期限的唯一方法——做的快的唯一方法——就是始终尽可能保持代码整洁。</li>
-<li>Javadoc 中的 <code>@author</code> 字段告诉我们自己是什么人。我们是作者，作者都有读者。实际上，作者有责任与读者做良好沟通。下次你写代码的时候，记得自己是作者，要为评判你工作的读者写代码。</li>
-</ol>
-<h2 id="第三章-函数"><a href="#第三章-函数" class="headerlink" title="第三章 函数"></a>第三章 函数</h2><ol>
-<li>函数的第一规则是要短小。第二条规则是还要更短小…经过漫长的试错，经验告诉我，函数就该小。</li>
-<li>函数应该做一件事。做好这件事。只做这一件事。判断函数是否不止做了一件事，有一个方法，就是看是否能再拆出一个函数，该函数不仅只是单纯地重新诠释其实现。</li>
-<li>要确保函数只做一件事，函数中的语句都要在同一抽象层级上。函数中混杂不同的抽象层级，往往让人迷惑。读者可能无法判断某个表达式是基础概念还是细节。更恶劣的是，就像破损的窗户，一旦细节与基础概念混杂，更多的细节就会在函数中纠结起来。</li>
-<li>写出短小的 <code>switch</code> 语句往往很难。写出只做一件事的 <code>switch</code> 语句也很难。我们总不发避开 <code>switch</code> 语句，不过还是能够确保 <code>switch</code> 都埋藏在较低的抽象层级，而且永远不重复。</li>
-<li>最理想的参数数量是零，其次是一，再次是二…从测试的角度看，参数甚至更叫人为难。想想看，要编写能确保参数的各种组合运行正常的测试用例，是多么困难的事。如果没有参数，就是小菜一碟。</li>
-<li>函数承诺只做一件事，但还是会做其它被藏起来的事。有时，它会对自己类中的变量做出未能预期的改动，导致古怪的时序性耦合及顺序依赖。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserValidator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Cryptographer cryptographer;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkPassword</span><span class="params">(String userName, String password)</span> </span>&#123;</span><br><span class="line">        User user = UserGateway.findByName(userName);</span><br><span class="line">        <span class="keyword">if</span> (user != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String codePhrase = user.getPhraseEncodeByPassword();</span><br><span class="line">            String phrase = cryptographer.decrypt(codePhrase, password);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">&quot;Valid Password&quot;</span>.equals(phrase)) &#123;</span><br><span class="line">                Session.initialize();</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>副作用就在于对 <code>Session.initialize()</code> 的调用。<code>checkPassword</code> 函数是用来检查密码的。该名称未暗示它会初始化该次会话。当某个误信了函数名的调用者想要检查用户有效性时，就得冒着抹除现有会话数据的风险。这一副作用造成了一次时序性耦合。也就是说，<code>checkPassword</code> 只能在特定时刻调用。</p>
-<h2 id="第四章-注释"><a href="#第四章-注释" class="headerlink" title="第四章 注释"></a>第四章 注释</h2><ol>
-<li>注释的恰当用法是弥补我们在用代码表达意图时遭遇的失败。注释总是一种失败。我们总无法找到不用注释就能表达自我的方法，所以总要有注释，这并不值得庆贺。</li>
-<li>如果你发现自己需要写注释，再想想看是否有办法翻盘，用代码来表达。</li>
-<li>有时，有理由用 <code>// TODO</code> 形式在源代码中放置要做的工作列表。<code>TODO</code> 是一种程序员认为应该做，但由于某些原因目前还没做的工作。</li>
-<li>没有什么比被良好描述的公共 API 更有用和令人满意的了。如果你在编写公共 API，就该为它编写良好的 Javadoc。</li>
-<li>删掉无用而多余的 Javadoc 吧，这些注释只是一味将代码搞得含糊不明，完全没有文档上的价值。</li>
-<li>所谓每个函数都要有 Javadoc 或每个变量都要有注释的规矩全然是愚蠢可笑的。这类注释徒然让代码变得散乱，满口胡言，令人迷惑不解。</li>
-<li>20 世纪 60 年代，曾经有那么一段时间，注释掉的代码可能有用。但我们已经拥有优良的源代码控制系统如此之久，这些系统可以为我们记住不要的代码。我们无需再用注释来标记，删掉即可，它们丢不了，我担保。</li>
-</ol>
-<h2 id="第五章-格式"><a href="#第五章-格式" class="headerlink" title="第五章 格式"></a>第五章 格式</h2><ol>
-<li>代码格式很重要，必须严肃对待。代码格式关乎沟通，而沟通是专业开发者的头等大事。</li>
-<li>你今天编写的功能，极有可能在下一版本中被修改，但代码的可读性却会对以后可能发生的修改行为产生深远影响。原始代码修改之后很久，其代码风格和可读性仍会影响到可维护性和扩展性。即便代码不复存在，你的风格和律条仍会存活下来。</li>
-<li>若某个函数调用了另外一个，就应该把它们放在一起，而且调用者应该尽可能放在被调用者上面。</li>
-</ol>
-<h2 id="第六章-对象和数据结构"><a href="#第六章-对象和数据结构" class="headerlink" title="第六章 对象和数据结构"></a>第六章 对象和数据结构</h2><ol>
-<li>最为精炼的数据结构，是一个只有公共变量、没有函数的类。这种数据结构有时被称为数据传送对象，或 <code>DTO</code>（Data Transfer Objects）。DTO 是非常有用的结构，尤其是在于数据库通信、或解析套接字传输的消息之类的场景中。</li>
-</ol>
-<h2 id="第七章-使用异常而非返回码"><a href="#第七章-使用异常而非返回码" class="headerlink" title="第七章 使用异常而非返回码"></a>第七章 使用异常而非返回码</h2><ol>
-<li>在很久以前，许多语言都不支持异常。这些语言处理和汇报错误的手段都有限。你要么设置一个错误标识，要么返回给调用者检查的错误码。这类手段的问题在于，它们搞乱了调用者代码。调用者必须在调用之后即可检查错误。不幸的是，这个步骤很容易被遗忘。最好是抛出一个异常，这样其逻辑不会被错误处理搞乱。</li>
-<li>使用不可控异常。可控异常 <code>checked exception</code> 的代价是违反开闭原则。如果你在方法中抛出可控异常，而 catch 语句在三个层级之上，你就得在 catch 语句和抛出异常处之间的每个方法签名中声明该异常。这意味着对软件中低层级的修改，都将涉及较高层级的签名。最终得到的就是一个从软件最底端贯穿到最高端的修改链。</li>
-<li>别返回 null 值。我不想去计算曾经见过多少每行代码都在检查 null 值的应用程序。Java 中有 <code>Colletions.emptyList()</code> 方法，该方法返回一个预定义不可变列表，这样编码，就能尽量避免 <code>NullPointerException</code> 的出现，代码也就更整洁了。</li>
-<li>别传递 null 值。在大多数编程语言中，没有良好的方法能对付由调用者意外传入 null 值。事已如此，恰当的做法就是禁止传入 null 值。</li>
-</ol>
-<h2 id="第八章-边界"><a href="#第八章-边界" class="headerlink" title="第八章 边界"></a>第八章 边界</h2><ol>
-<li>第三方代码帮助我们在更少时间内发布更丰富的功能。在利用第三方程序包时，该从何处入手呢？我们没有测试第三方代码的职责，但为要使用的第三方代码编写测试，可能最符合我们的利益。</li>
-<li>学习第三方代码很难，整合第三方代码也很难，同时做这两件事难上加难。不要在生产代码中试验新东西，而是编写测试来遍览和理解第三方代码，这叫“学习性测试”。</li>
-</ol>
-<h2 id="第九章-单元测试"><a href="#第九章-单元测试" class="headerlink" title="第九章 单元测试"></a>第九章 单元测试</h2><ol>
-<li>TDD 三定律：<ul>
-<li><strong>定律一</strong> 在编写不能通过的单元测试前，不可编写生产代码。</li>
-<li><strong>定律二</strong> 只可编写刚好无法通过的单元测试，不能编译也算不通过。</li>
-<li><strong>定律三</strong> 只可编写刚好足以通过当前失败测试的生产代码。</li>
-</ul>
-</li>
-<li>TDD 三定律其实说的是，先写失败的 Case，写完之后才开始写功能 Code，只要 Code 通过了 Case，就不要再写功能代码了。也就是说，写完一个测试，就要写对应的生产代码。</li>
-<li>测试代码和生产代码一样重要。它可不是二等公民。它需要被思考、被设计和被照料。它该像生产代码一般保持整洁。</li>
-<li>如果测试不能保持整洁，你就会失去它们。没有了测试，你就会失去保证生产代码可扩展的一切要素。有了测试，你就不担心对代码的修改！没有测试，每次修改都可能带来缺陷。</li>
-<li>覆盖了生产代码的自动化单元测试程序组能尽可能地保持设计和架构的整洁。测试带来了一切好处，因为测试使改动变得可能。</li>
-<li>整洁的测试有三个要素：可读性、可读性、可读性。测试应该明确、简洁，还有足够的表达力。在测试中，要以尽量少的文字表达大量的内容。</li>
-<li>F.I.R.S.T 规则：<ul>
-<li><strong>Fast</strong>（快速） 测试应该能快速运行。测试运行缓慢，你就不会想要频繁地运行它。如果你不频繁运行测试，就不能尽早发现问题，也无法轻易修正。</li>
-<li><strong>Independent</strong>（独立） 测试应该相互独立。某个测试不应为下一个测试设定条件。你应该可以单独运行每个测试，及以任何顺序运行测试。</li>
-<li><strong>Repeatable</strong>（可重复） 测试应当可在任何环境中重复通过。</li>
-<li><strong>Self-Validating</strong> （自足验证） 测试应该有布尔值输出。</li>
-<li><strong>Timely</strong>（及时） 测试应及时编写。单元测试应该恰好在使其通过的生产代码之前编写。</li>
-</ul>
-</li>
-</ol>
-<h2 id="第十章-类"><a href="#第十章-类" class="headerlink" title="第十章 类"></a>第十章 类</h2><ol>
-<li>面向对象的其中一个设计原则是“开放——闭合原则”，即类应当对扩展开放，对修改封闭。我们希望将系统打造成在添加或修改特性时尽可能少惹麻烦的架子。在理想系统中，我们通过扩展系统而不是修改现有代码来添加新特性。</li>
-<li>类的另一条设计原则是“依赖倒置原则”（Dependency Inversion Principle, DIP），DIP 认为类应该依赖于抽象而不是依赖于具体细节。</li>
-</ol>
-<h2 id="第十一章-系统"><a href="#第十一章-系统" class="headerlink" title="第十一章 系统"></a>第十一章 系统</h2><ol>
-<li>有一种强大的机制可以实现分离构造与使用，那就是依赖注入（Dependency Injection, DI），它是控制反转（Inversion of Control, IoC）在依赖管理中的一种应用手段。控制反转将第二权责从对象中拿出来，转移到另一个专注于此的对象中，从而遵循了<strong>单一权责原则</strong>。在依赖管理情境中，对象不应负责实体化对自身的依赖，而应当将这份权责移交给其它“有权力”的机制，从而实现控制的反转。</li>
-<li>“一开始就做对系统”纯属神话。反之，我们应该只去实现今天的用户故事，然后重构，明天再扩展系统、实现新的用户故事。这就是迭代和增量敏捷的精髓所在。</li>
-</ol>
-<h2 id="第十二章-迭进"><a href="#第十二章-迭进" class="headerlink" title="第十二章 迭进"></a>第十二章 迭进</h2><ol>
-<li>简单设计的四条规则，按重要程度排序：<ul>
-<li>运行所有测试；</li>
-<li>不可重复；</li>
-<li>表达了程序员的意图；</li>
-<li>尽可能减少类和方法的数量。</li>
-</ul>
-</li>
-<li>全面测试并持续通过所有测试的系统，就是可测试的系统。看似浅显，但却重要。不可测试的系统同样不可验证。不可验证的系统，绝不应该部署。</li>
-<li>重复是拥有良好设计系统的大敌，它代表着额外的工作、额外的风险和额外且不必要的复杂度。要想创建整洁的系统，需要有消除重复的意愿。</li>
-<li>软件项目的主要成本在于长期维护。代码应当清晰地表达其作者的意图。作者把代码写得越清晰，其他人花在理解代码上的时间也就越少，从而减少缺陷，缩减维护成本。</li>
-<li>为了保持类和函数短小，我们可能会造出太多的细小类和方法。所以这条规则也主张函数和类的数量要少。我们的目标是在保持函数和类短小的同时，保持整个系统短小精悍。不过更重要的是测试、消除重复和表达力。</li>
-</ol>
-<h2 id="第十三章-并发编程"><a href="#第十三章-并发编程" class="headerlink" title="第十三章 并发编程"></a>第十三章 并发编程</h2><ol>
-<li>并发是一种解耦策略。它帮助我们把<strong>做什么</strong>（目的）和<strong>何时做</strong>（时机）分解开。解耦目的与时机能明显地改进应用程序的吞吐量和结构。</li>
-<li>并发有时能改进性能，但只在多个线程或处理器之间能分享大量等待时间的时候管用，事情没那么简单。</li>
-<li>并发算法的设计有可能与单线程系统的设计极不相同。目的与时机的解耦往往对系统结构产生巨大影响。</li>
-<li>并发编程中的一些基础定义：<ul>
-<li><strong>限定资源</strong>：并发环境中有着固定尺寸或数量的资源。</li>
-<li><strong>互斥</strong>：每一时刻仅有一个线程能访问共享数据或共享资源。</li>
-<li><strong>线程饥饿</strong>：一个或一组线程在很长时间内或永久被禁止。例如，总是让执行得快的线程先运行，加入执行得快得线程没完没了，则执行时间长的线程就会“饥饿”。</li>
-<li><strong>死锁</strong>：两个或多个线程互相等待执行结束。每个线程都拥有其它线程需要的资源，得不到其它线程拥有的资源，就无法终止。</li>
-<li><strong>活锁</strong>：执行次序一致的线程，每个都想要起步，但发现其它线程已经“在路上”。由于竞步的原因，线程会持续尝试起步，但在很长时间内却无法如愿，甚至永远无法启动。</li>
-</ul>
-</li>
-</ol>
-<h2 id="第十四章-逐步改进"><a href="#第十四章-逐步改进" class="headerlink" title="第十四章 逐步改进"></a>第十四章 逐步改进</h2><ol>
-<li>代码能工作还不够，能工作的代码经常会严重崩溃。满足于仅仅让代码工作的程序员不够专业。他们会害怕没时间改进代码的结构和设计，我不敢苟同。没什么比糟糕的代码给开发项目带来更深远和长期的损害了。</li>
-<li>进度可以重订，需求可以重新定义，团队动态可以修正。糟糕的代码只会一直腐败发酵，无情地拖着团队的后腿。</li>
-<li>保持代码持续整洁和简单，永不让腐坏有机会开始。</li>
-</ol>
-<h2 id="第十五章-JUnit-框架"><a href="#第十五章-JUnit-框架" class="headerlink" title="第十五章 JUnit 框架"></a>第十五章 JUnit 框架</h2><ol>
-<li>成员变量的前缀可以删除。在现今的运行环境中，这类范围性编码纯属多余。</li>
-<li>条件判断应当封装起来，从而更清晰地表达代码的意图。可以拆解处一个方法，解释这个条件判断。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">compact</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (expected == <span class="keyword">null</span> || actual == <span class="keyword">null</span> || areStringsEqual()) &#123;</span><br><span class="line">        <span class="keyword">return</span> Assert.format(message, expected, actual);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拆解后...</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">compact</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (shouldNotCompact()) &#123;</span><br><span class="line">        <span class="keyword">return</span> Assert.format(message, expected, actual);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">shouldNotCompact</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> expected == <span class="keyword">null</span> || actual == <span class="keyword">null</span> || areStringsEqual();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="第十七章-味道与启发"><a href="#第十七章-味道与启发" class="headerlink" title="第十七章 味道与启发"></a>第十七章 味道与启发</h2><ol>
-<li>让注释传达本该更好地在源代码控制系统、问题追踪系统或任何其它记录系统中保存的信息，是不恰当的。</li>
-<li>除函数签名之外什么也没说的 Javadoc，也是多余的。</li>
-<li>看到注释掉的代码，就删除它！别担心，源代码控制系统还会记得它。</li>
-<li>每次看到重复代码，都代表遗漏了抽象。将重复代码叠放进类似的抽象，增加了你的设计语言的词汇量。其它程序员可以用到你创建的抽象设施。编码变得越来越快，错误越来越少，因为你提升了抽象层级。</li>
-<li>死代码就是不执行的代码，可以在检查不会发生的条件的 if 语句中找到，可以在从不抛出异常的 try/catch 块中找到，可以在从不调用的小工具方法中找到，也可以在不会发生 switch/case 条件中找到。如果你找到死代码，就体面地埋葬它，将它从系统中删除掉。</li>
-<li>特性依恋是 Martin Fowler 提出的代码味道之一。类的方法只应对其所属类中的变量和函数感兴趣，不该垂青其它类中的变量和函数。我们要消除特性依恋。</li>
-<li>用多态替代 if/else 或 switch/case。对于给定的选择类型，不应有多于一个 switch 语句。在那个 switch 语句中的多个 case，必须创建多态对象，取代系统中其它类似 switch 语句。</li>
-<li>用命名常量替代魔术数。</li>
-<li>现在 enum 已经加入 java 语言了，放心用吧！别再用那个 <code>public static final int</code> 老花招。那样做 int 的意义就丧失了，而用 enum 则不然，因为它们隶属于有名称的枚举。</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/15/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/">展开全文 >></a>
         </p>
       
 

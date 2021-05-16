@@ -182,6 +182,220 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 小抄（三）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/06/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%89%EF%BC%89/">Java 小抄（三）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/06/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%89%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2019-03-06T01:50:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h3><h4 id="1-JDK-和-JRE-有什么区别？"><a href="#1-JDK-和-JRE-有什么区别？" class="headerlink" title="1.JDK 和 JRE 有什么区别？"></a>1.JDK 和 JRE 有什么区别？</h4><ul>
+<li>JDK：Java Development Kit 的简称，java 开发工具包，提供了 java 的开发环境和运行环境。</li>
+<li>JRE：Java Runtime Environment 的简称，java 运行环境，为 java 的运行提供了所需环境。</li>
+</ul>
+<p>具体来说 JDK 其实包含了 JRE，同时还包含了编译 java 源码的编译器 javac，还包含了很多 java 程序调试和分析的工具。简单来说：如果你需要运行 java 程序，只需安装 JRE 就可以了，如果你需要编写 java 程序，需要安装 JDK。</p>
+<h4 id="2-和-equals-的区别是什么？"><a href="#2-和-equals-的区别是什么？" class="headerlink" title="2.== 和 equals 的区别是什么？"></a>2.== 和 equals 的区别是什么？</h4><p><strong>== 解读</strong><br>对于基本类型和引用类型 == 的作用效果是不同的，如下所示：</p>
+<ul>
+<li>基本类型：比较的是值是否相同；</li>
+<li>引用类型：比较的是引用是否相同；</li>
+</ul>
+<p>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String x &#x3D; &quot;string&quot;;</span><br><span class="line">String y &#x3D; &quot;string&quot;;</span><br><span class="line">String z &#x3D; new String(&quot;string&quot;);</span><br><span class="line">System.out.println(x&#x3D;&#x3D;y); &#x2F;&#x2F; true</span><br><span class="line">System.out.println(x&#x3D;&#x3D;z); &#x2F;&#x2F; false</span><br><span class="line">System.out.println(x.equals(y)); &#x2F;&#x2F; true</span><br><span class="line">System.out.println(x.equals(z)); &#x2F;&#x2F; true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>代码解读：因为 x 和 y 指向的是同一个引用，所以 == 也是 true，而 new String()方法则重写开辟了内存空间，所以 == 结果为 false，而 equals 比较的一直是值，所以结果都为 true。<br><strong>equals 解读</strong><br>equals 本质上就是 ==，只不过 String 和 Integer 等重写了 equals 方法，把它变成了值比较。看下面的代码就明白了。<br>首先来看默认情况下 equals 比较一个有相同值的对象，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Cat &#123;</span><br><span class="line">    public Cat(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line">    private String name;</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat c1 &#x3D; new Cat(&quot;王磊&quot;);</span><br><span class="line">Cat c2 &#x3D; new Cat(&quot;王磊&quot;);</span><br><span class="line">System.out.println(c1.equals(c2)); &#x2F;&#x2F; false</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>输出结果出乎我们的意料，竟然是 false？这是怎么回事，看了 equals 源码就知道了，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">		return (this &#x3D;&#x3D; obj);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>原来 equals 本质上就是 ==。<br>那问题来了，两个相同值的 String 对象，为什么返回的是 true？代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 &#x3D; new String(&quot;老王&quot;);</span><br><span class="line">String s2 &#x3D; new String(&quot;老王&quot;);</span><br><span class="line">System.out.println(s1.equals(s2)); &#x2F;&#x2F; true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>同样的，当我们进入 String 的 equals 方法，找到了答案，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object anObject) &#123;</span><br><span class="line">    if (this &#x3D;&#x3D; anObject) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    if (anObject instanceof String) &#123;</span><br><span class="line">        String anotherString &#x3D; (String)anObject;</span><br><span class="line">        int n &#x3D; value.length;</span><br><span class="line">        if (n &#x3D;&#x3D; anotherString.value.length) &#123;</span><br><span class="line">            char v1[] &#x3D; value;</span><br><span class="line">            char v2[] &#x3D; anotherString.value;</span><br><span class="line">            int i &#x3D; 0;</span><br><span class="line">            while (n-- !&#x3D; 0) &#123;</span><br><span class="line">                if (v1[i] !&#x3D; v2[i])</span><br><span class="line">                    return false;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>原来是 String 重写了 Object 的 equals 方法，把引用比较改成了值比较。<br><strong>总结</strong> ：== 对于基本类型来说是值比较，对于引用类型来说是比较的是引用；而 equals 默认情况下是引用比较，只是很多类重新了 equals 方法，比如 String、Integer 等把它变成了值比较，所以一般情况下 equals 比较的是值是否相等。</p>
+<h4 id="3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？"><a href="#3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？" class="headerlink" title="3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？"></a>3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？</h4><p>不对，两个对象的 hashCode()相同，equals()不一定 true。<br>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 &#x3D; &quot;通话&quot;;</span><br><span class="line">String str2 &#x3D; &quot;重地&quot;;</span><br><span class="line">System.out.println(String.format(&quot;str1：%d | str2：%d&quot;,  str1.hashCode(),str2.hashCode()));</span><br><span class="line">System.out.println(str1.equals(str2));</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>执行的结果：<br>str1：1179395 | str2：1179395<br>false<br>代码解读：很显然“通话”和“重地”的 hashCode() 相同，然而 equals() 则为 false，因为在散列表中，hashCode()相等即两个键值对的哈希值相等，然而哈希值相等，并不一定能得出键值对相等。</p>
+<h4 id="4-final-在-java-中有什么作用？"><a href="#4-final-在-java-中有什么作用？" class="headerlink" title="4.final 在 java 中有什么作用？"></a>4.final 在 java 中有什么作用？</h4><ul>
+<li>final 修饰的类叫最终类，该类不能被继承。</li>
+<li>final 修饰的方法不能被重写。</li>
+<li>final 修饰的变量叫常量，常量必须初始化，初始化之后值就不能被修改。</li>
+</ul>
+<h4 id="5-java-中的-Math-round-1-5-等于多少？"><a href="#5-java-中的-Math-round-1-5-等于多少？" class="headerlink" title="5.java 中的 Math.round(-1.5) 等于多少？"></a>5.java 中的 Math.round(-1.5) 等于多少？</h4><p>等于 -1，因为在数轴上取值时，中间值（0.5）向右取整，所以正 0.5 是往上取整，负 0.5 是直接舍弃。</p>
+<h4 id="6-String-属于基础的数据类型吗？"><a href="#6-String-属于基础的数据类型吗？" class="headerlink" title="6.String 属于基础的数据类型吗？"></a>6.String 属于基础的数据类型吗？</h4><p>String 不属于基础类型，基础类型有 8 种：byte、boolean、char、short、int、float、long、double，而 String 属于对象。</p>
+<h4 id="7-java-中操作字符串都有哪些类？它们之间有什么区别？"><a href="#7-java-中操作字符串都有哪些类？它们之间有什么区别？" class="headerlink" title="7.java 中操作字符串都有哪些类？它们之间有什么区别？"></a>7.java 中操作字符串都有哪些类？它们之间有什么区别？</h4><p>操作字符串的类有：String、StringBuffer、StringBuilder。<br>String 和 StringBuffer、StringBuilder 的区别在于 String 声明的是不可变的对象，每次操作都会生成新的 String 对象，然后将指针指向新的 String 对象，而 StringBuffer、StringBuilder 可以在原有对象的基础上进行操作，所以在经常改变字符串内容的情况下最好不要使用 String。<br>StringBuffer 和 StringBuilder 最大的区别在于，StringBuffer 是线程安全的，而 StringBuilder 是非线程安全的，但 StringBuilder 的性能却高于 StringBuffer，所以在单线程环境下推荐使用 StringBuilder，多线程环境下推荐使用 StringBuffer。</p>
+<h4 id="8-String-str-”i”与-String-str-new-String-“i”-一样吗？"><a href="#8-String-str-”i”与-String-str-new-String-“i”-一样吗？" class="headerlink" title="8.String str=”i”与 String str=new String(“i”)一样吗？"></a>8.String str=”i”与 String str=new String(“i”)一样吗？</h4><p>不一样，因为内存的分配方式不一样。String str=”i”的方式，java 虚拟机会将其分配到常量池中；而 String str=new String(“i”) 则会被分到堆内存中。</p>
+<h4 id="9-如何将字符串反转？"><a href="#9-如何将字符串反转？" class="headerlink" title="9.如何将字符串反转？"></a>9.如何将字符串反转？</h4><p>使用 StringBuilder 或者 stringBuffer 的 reverse() 方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; StringBuffer reverse</span><br><span class="line">StringBuffer stringBuffer &#x3D; new StringBuffer();</span><br><span class="line">stringBuffer.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuffer.reverse()); &#x2F;&#x2F; gfedcba</span><br><span class="line">&#x2F;&#x2F; StringBuilder reverse</span><br><span class="line">StringBuilder stringBuilder &#x3D; new StringBuilder();</span><br><span class="line">stringBuilder.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuilder.reverse()); &#x2F;&#x2F; gfedcba</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-String-类的常用方法都有那些？"><a href="#10-String-类的常用方法都有那些？" class="headerlink" title="10.String 类的常用方法都有那些？"></a>10.String 类的常用方法都有那些？</h4><ul>
+<li>indexOf()：返回指定字符的索引。</li>
+<li>charAt()：返回指定索引处的字符。</li>
+<li>replace()：字符串替换。</li>
+<li>trim()：去除字符串两端空白。</li>
+<li>split()：分割字符串，返回一个分割后的字符串数组。</li>
+<li>getBytes()：返回字符串的 byte 类型数组。</li>
+<li>length()：返回字符串长度。</li>
+<li>toLowerCase()：将字符串转成小写字母。</li>
+<li>toUpperCase()：将字符串转成大写字符。</li>
+<li>substring()：截取字符串。</li>
+<li>equals()：字符串比较。</li>
+</ul>
+<h4 id="11-抽象类必须要有抽象方法吗？"><a href="#11-抽象类必须要有抽象方法吗？" class="headerlink" title="11.抽象类必须要有抽象方法吗？"></a>11.抽象类必须要有抽象方法吗？</h4><p>不需要，抽象类不一定非要有抽象方法。<br>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">abstract class Cat &#123;</span><br><span class="line">    public static void sayHi() &#123;</span><br><span class="line">        System.out.println(&quot;hi~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码，抽象类并没有抽象方法但完全可以正常运行。</p>
+<h4 id="12-普通类和抽象类有哪些区别？"><a href="#12-普通类和抽象类有哪些区别？" class="headerlink" title="12.普通类和抽象类有哪些区别？"></a>12.普通类和抽象类有哪些区别？</h4><ul>
+<li>普通类不能包含抽象方法，抽象类可以包含抽象方法。</li>
+<li>抽象类不能直接实例化，普通类可以直接实例化。</li>
+</ul>
+<h4 id="13-抽象类能使用-final-修饰吗？"><a href="#13-抽象类能使用-final-修饰吗？" class="headerlink" title="13.抽象类能使用 final 修饰吗？"></a>13.抽象类能使用 final 修饰吗？</h4><p>不能，定义抽象类就是让其他类继承的，如果定义为 final 该类就不能被继承，这样彼此就会产生矛盾，所以 final 不能修饰抽象类，如下图所示，编辑器也会提示错误信息：</p>
+<h4 id="14-接口和抽象类有什么区别？"><a href="#14-接口和抽象类有什么区别？" class="headerlink" title="14.接口和抽象类有什么区别？"></a>14.接口和抽象类有什么区别？</h4><ul>
+<li>实现：抽象类的子类使用 extends 来继承；接口必须使用 implements 来实现接口。</li>
+<li>构造函数：抽象类可以有构造函数；接口不能有。</li>
+<li>main 方法：抽象类可以有 main 方法，并且我们能运行它；接口不能有 main 方法。</li>
+<li>实现数量：类可以实现很多个接口；但是只能继承一个抽象类。</li>
+<li>访问修饰符：接口中的方法默认使用 public 修饰；抽象类中的方法可以是任意访问修饰符。</li>
+</ul>
+<h4 id="15-java-中-IO-流分为几种？"><a href="#15-java-中-IO-流分为几种？" class="headerlink" title="15.java 中 IO 流分为几种？"></a>15.java 中 IO 流分为几种？</h4><p>按功能来分：输入流（input）、输出流（output）。<br>按类型来分：字节流和字符流。<br>字节流和字符流的区别是：字节流按 8 位传输以字节为单位输入输出数据，字符流按 16 位传输以字符为单位输入输出数据。</p>
+<h4 id="16-BIO、NIO、AIO-有什么区别？"><a href="#16-BIO、NIO、AIO-有什么区别？" class="headerlink" title="16.BIO、NIO、AIO 有什么区别？"></a>16.BIO、NIO、AIO 有什么区别？</h4><ul>
+<li>BIO：Block IO 同步阻塞式 IO，就是我们平常使用的传统 IO，它的特点是模式简单使用方便，并发处理能力低。</li>
+<li>NIO：New IO 同步非阻塞 IO，是传统 IO 的升级，客户端和服务器端通过 Channel（通道）通讯，实现了多路复用。</li>
+<li>AIO：Asynchronous IO 是 NIO 的升级，也叫 NIO2，实现了异步非堵塞 IO ，异步 IO 的操作基于事件和回调机制。</li>
+</ul>
+<h4 id="17-Files-的常用方法都有哪些？"><a href="#17-Files-的常用方法都有哪些？" class="headerlink" title="17.Files 的常用方法都有哪些？"></a>17.Files 的常用方法都有哪些？</h4><ul>
+<li>Files.exists()：检测文件路径是否存在。</li>
+<li>Files.createFile()：创建文件。</li>
+<li>Files.createDirectory()：创建文件夹。</li>
+<li>Files.delete()：删除一个文件或目录。</li>
+<li>Files.copy()：复制文件。</li>
+<li>Files.move()：移动文件。</li>
+<li>Files.size()：查看文件个数。</li>
+<li>Files.read()：读取文件。</li>
+<li>Files.write()：写入文件。</li>
+</ul>
+<p>作者：王磊的博客<br>链接：<a target="_blank" rel="noopener" href="https://juejin.im/post/5c7cfdef6fb9a049f746ed47">https://juejin.im/post/5c7cfdef6fb9a049f746ed47</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/06/yuque/Java%20%E5%B0%8F%E6%8A%84%EF%BC%88%E4%B8%89%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/mybait xml 配置谨记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/05/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/">mybait xml 配置谨记</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/05/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2019-03-05T03:13:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>select* from table where ‘字段 1’&gt;=10 怎么表示，那么问题来啦<br>xml 转义可以使用<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1551755611316-53cb3fe4-54c4-4a18-89c7-611a8b9f7746.png#align=left&display=inline&height=253&originHeight=265&originWidth=781&size=0&status=done&width=746"><br>根据这个规则上面的 sql 写法应该变成<br>select *from table where ‘字段 1’&gt; =10</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/05/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/如何写一个优雅的文档" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1046,154 +1260,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/小网站计划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/">小网站计划</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/" class="archive-article-date">
-  	<time datetime="2019-01-08T19:20:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>小计 2019.1.1<br>这个想法从 2018 年九月份就开始有了，一直没有付出实施，真的真的快毕业了（其实是为了给这四年大学生活添加点乐趣），自己做一个小网站。也是为了巩固自己所学的知识，目前自己购买了一台腾讯云的服务器 1U1G1M 的配置，买的腾讯域名一口气买了 3 年的<br>2018 年 11 月某天，依托自己的服务本地主机群晖，以及自己的域名，搭建了邮件系统。<br>2018 年 12 月某天，依托本地主机，搭建了 maridb,以及两台 rdeis 服务器（尚未进行鉴权，主从操作）<br>2018 年 12.27 进行备案<br>2019.1.5 增加一台阿里云，1U2G1M<br>2019.1.8 备案下来了。<br>目前强制所有请求地址为 HTTPS，为了防止中间人获取 2019.1.9 将自己的简历通过反向代理的方式将数据转发到云端，发现一个严重的问题，自己的贷款太小了。（目前主要业务还没有，先不考虑进行 cdn 加速操作）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/08/yuque/%E5%B0%8F%E7%BD%91%E7%AB%99%E8%AE%A1%E5%88%92/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/《代码整洁之道》读后感" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B%E8%AF%BB%E5%90%8E%E6%84%9F/">《代码整洁之道》读后感</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/21/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B%E8%AF%BB%E5%90%8E%E6%84%9F/" class="archive-article-date">
-  	<time datetime="2018-12-21T12:32:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。"><a href="#代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。" class="headerlink" title="代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。"></a>代码整洁之道是一本讲究代码规范带给我们的好处，书中讲了许多的代码滥用的坏处。代码如果不规范会带来许多不如何如何多的后果。这是码农工作中的痛点与难点，因为不规范所带来的很多麻烦。这也就是阿里巴巴集团技术团队这两年云栖大会的推出代码公约的原因和码出高效的原因。</h3><h3 id="代码整洁之道前-14-章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如-P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。"><a href="#代码整洁之道前-14-章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如-P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。" class="headerlink" title="代码整洁之道前 14 章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如 P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。"></a>代码整洁之道前 14 章算是对代码规范进行了规范进行了定义，条条框框弄了好多小例子。但都是将一个解释编写很多数学变量（如 P1，T1），读起来真心不方便是真。整洁之道后面用许多工程的例子来深刻的解释代码规范里的条条框框，让自己去理解代码规范的意义。虽然读完这本书对自己的编程能力提高不多。但是它对自己的编程树立良好的标准还是很有帮助的。我觉得这本书和阿里巴巴代码规范和码出高效，子妹篇结合起来看会更好的帮助自己去提高，因为它里面解释了为什末要规范，规范规范的到底是什么。</h3><h3 id="例如：代码整洁，整洁的是什么。"><a href="#例如：代码整洁，整洁的是什么。" class="headerlink" title="例如：代码整洁，整洁的是什么。"></a>例如：代码整洁，整洁的是什么。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1.尽量减少依赖关系，便于项目管理与维护。</span><br><span class="line">2.简单直接，将大段if控制语句改写成短小的函数，让代码可读性增加。</span><br><span class="line">3.要有单元测试（这个spring的不太会写），下周好好琢磨一下。</span><br><span class="line">4.降低重复代码，提取公共方法和公共类。</span><br><span class="line">5.有意义的命名（这很重要）</span><br><span class="line">6.不要吝啬注视</span><br><span class="line">7.代码的长度尽量的短（20行以内）</span><br><span class="line">8.连缀少用</span><br><span class="line">9.null值回传小心。</span><br><span class="line">10.map方法不宜回传</span><br><span class="line">11.减少方法数量</span><br><span class="line">12.理论上将try&#x2F;catch少用。</span><br><span class="line">13.方法传参数应该尽量短少</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">read</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书//" class="article-tag-list-link color3">读书</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/21/yuque/%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B%E8%AF%BB%E5%90%8E%E6%84%9F/">展开全文 >></a>
         </p>
       
 

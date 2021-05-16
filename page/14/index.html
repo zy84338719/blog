@@ -182,6 +182,88 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/JDK12新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/">JDK12新特性</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/" class="archive-article-date">
+  	<time datetime="2019-03-25T04:44:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作为“功能性版本”，JDK 12 总共包含 8 个新的 JEP ，分别为：</p>
+<ul>
+<li><p>189: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/189">Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)</a> ：新增一个名为 Shenandoah 的垃圾回收器，它通过在 Java 线程运行的同时进行疏散 (evacuation) 工作来减少停顿时间。</p>
+</li>
+<li><p>230: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/230">Microbenchmark Suite</a>：新增一套微基准测试，使开发者能够基于现有的 Java Microbenchmark Harness（JMH）轻松测试 JDK 的性能，并创建新的基准测试。</p>
+</li>
+<li><p>325: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/325">Switch Expressions (Preview)</a> ：对 switch 语句进行扩展，使其可以用作语句或表达式，简化日常代码。</p>
+</li>
+<li><p>334: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/334">JVM Constants API</a> ：引入一个 API 来对关键类文件 (key class-file) 和运行时工件的名义描述（nominal descriptions）进行建模，特别是那些可从常量池加载的常量。</p>
+</li>
+<li><p>340: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/340">One AArch64 Port, Not Two</a> ：删除与 arm64 端口相关的所有源码，保留 32 位 ARM 移植和 64 位 aarch64 移植。</p>
+</li>
+<li><p>341: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/341">Default CDS Archives</a> ：默认生成类数据共享（CDS）存档。</p>
+</li>
+<li><p>344: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/344">Abortable Mixed Collections for G1</a> ：当 G1 垃圾回收器的回收超过暂停目标，则能中止垃圾回收过程。</p>
+</li>
+<li><p>346: <a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/346">Promptly Return Unused Committed Memory from G1</a> ：改进 G1 垃圾回收器，以便在空闲时自动将 Java 堆内存返回给操作系统。</p>
+</li>
+</ul>
+<p>总结<br>1.JDK12 新增了一个垃圾回收器 2.新增一套微基准测试，方便测试 JDK 性能 3.对 switch 进行扩展，使其可以作语句的表达式。 4.新增一个 API 来对关键类和运行时共建进行建模 5.删除 arm64 源码，保留 arm64 和 aarch64 移植 6.默认生成类数据共享存档 7.当 G1 垃圾回收超过暂停目标，则能终止垃圾回收过程 8.改进 G1 垃圾回收机制，以便在空闲时自动将 JAVA 堆内存韩会给操作系统</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/25/yuque/JDK12%E6%96%B0%E7%89%B9%E6%80%A7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/redis锁与zookeerper锁区别（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1196,74 +1278,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/14/yuque/JVM%20%E5%AD%A6%E4%B9%A0%20%E5%80%BC%E4%BC%A0%E9%80%92%E4%B8%8E%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Intellij 需配置项" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/">Intellij 需配置项</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/" class="archive-article-date">
-  	<time datetime="2019-01-14T15:08:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Intellij-快捷键"><a href="#Intellij-快捷键" class="headerlink" title="Intellij 快捷键"></a>Intellij 快捷键</h2><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/18/2019/png/214234/1547478405006-86781dce-a19c-4089-94a4-18e2067aee34.png#align=left&display=inline&height=407&name=jetbrains%20%E5%BF%AB%E6%8D%B7%E9%94%AE.png&originHeight=1805&originWidth=3308&size=633235&width=746" alt="jetbrains 快捷键.png"></h2><p>Intellij 有八条一定要改的配置呢！我没列快捷键，是因为 IDEA 原生的快捷键，我用的也挺顺手，所以并不是认为一定要改！<br>•   自动编译开关<br>•   忽略大小写开关<br>•   智能导包开关<br>•   悬浮提示开关<br>•   取消单行显示 tabs 的操作<br>•   项目文件编码<br>•   滚轴修改字体大小<br>•   设置行号显示</p>
-<h2 id="自动编译开关"><a href="#自动编译开关" class="headerlink" title="自动编译开关"></a>自动编译开关</h2><p>在 Eclipse 中自动编译开关是开着的，如下所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212506-82aad7fe-3e2a-447d-a5f1-5aa0a844c831.jpeg#align=left&display=inline&height=351&originHeight=351&originWidth=338&size=0&width=338"><br>那么，在 IDEA 中，务必要手动将其打开，非常重要！如下所示</p>
-<p><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212476-9b55717b-ee5a-4681-b982-a4bfbccbb7f1.jpeg#align=left&display=inline&height=539&originHeight=577&originWidth=798&size=0&width=746"><br><strong>忽略大小写开关</strong><br>IDEA 默认是匹配大小写，此开关如果未关。你输入字符一定要符合大小写。比如你敲 string 是不会出现代码提示或智能补充。<br>但是，如果你开了这个开关，你无论输入 String 或者 string 都会出现代码提示或者智能补充！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-b0010e3e-d1c1-427a-9b11-f94024cd922c.jpeg#align=left&display=inline&height=550&originHeight=550&originWidth=700&size=0&width=700"><br><strong>智能导包开关</strong><br>如下图所示，将<br>•   自动导入不明确的结构<br>•   智能优化包<br>这两个选项勾上。那么有什么效果呢？<br>你在代码中，只要敲 list，就会出现提示，自动导入 java.util.List 这个类。而这个特性，在 eclipse 中，是无法做到的。如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212473-0fa385fd-49e6-456b-9df3-2646810c4aae.jpeg#align=left&display=inline&height=446&originHeight=493&originWidth=825&size=0&width=746"><br><strong>悬浮提示开关</strong><br>这个容易理解，打开这个开关后。只要把鼠标放在相应的类上，就会出现提示，如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212501-d8f90823-5964-4d27-9312-2884df42bcbf.jpeg#align=left&display=inline&height=382&originHeight=505&originWidth=986&size=0&width=746"><br><strong>取消单行显示 tabs 的操作</strong><br>如下图所示，把该按钮去了<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212486-d65add22-9202-47f3-a828-f105fb2e6773.jpeg#align=left&display=inline&height=547&originHeight=607&originWidth=828&size=0&width=746"><br>那么去掉后有什么效果呢？</p>
-<p>打开多个文件的时候，会换行显示，非常直观。大大提升效率！<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212496-7bfebd85-7463-4f68-a539-c285019b6b1c.jpeg#align=left&display=inline&height=94&originHeight=130&originWidth=1037&size=0&width=746"><br><strong>项目文件编码</strong><br>如下图所示进行设置<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212485-a6ae7361-bd42-45a4-9ced-923209f7f3ed.jpeg#align=left&display=inline&height=404&originHeight=585&originWidth=1080&size=0&width=746"><br>Transparent native-to-ascii conversion 的意思是：自动转换 ASCII 编码。<br>他的工作原理是：在文件中输入文字时他会自动的转换为 Unicode 编码，然后在 idea 中发开文件时他会自动转回文字来显示。<br>这样做是为了防止文件乱码。<br>这样你的 properties 文件，一般都不会出现中文乱码！<br><strong>滚轴修改字体大小</strong></p>
-<p>是这样的，我一般在写代码的时候。都是设按住 Ctrl+滚轴可以修改编辑器字体大小，这样其实很方便，大家不妨试试。</p>
-<p>如下图所示<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212504-d341e539-9ea5-4b92-b812-6a4747a0c12a.jpeg#align=left&display=inline&height=289&originHeight=419&originWidth=1080&size=0&width=746"><br><strong>设置行号显示</strong><br>这个的重要性就不用多说了，勾上后代码中，会显示行数!<br><img src="https://cdn.nlark.com/yuque/18/2019/jpeg/214234/1547478212514-62ccc6a5-ac78-4772-a9b5-c32613e64290.jpeg#align=left&display=inline&height=439&originHeight=612&originWidth=1040&size=0&width=746"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/">展开全文 >></a>
         </p>
       
 

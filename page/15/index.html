@@ -182,6 +182,69 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/docker 目录挂载踩坑记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">docker 目录挂载踩坑记录</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" class="archive-article-date">
+  	<time datetime="2019-01-12T13:57:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在弄容器化数据库，一开始自己的技术选择方案是用 docker-compose 但是发现采用这个需要自己编写好 docker-compose 里面的 my.conf 需要外挂所以自己没有选择这样做，而是选择 docker 原生创建，自己把数据层外挂，配置层也想外挂，后来发现配置层外挂会导致 mysql 找不到配置，从而导致容器无法启动。自己一直在排查这个问题原因。一开始以为是权限问题导致的，因为数据外挂并没有实现，后来给目录加权限，增加权限后还是不可以。随后切换到 root 账户去增加权限，也是不可以的。后来没办法了找了一个网上数据库的搭建的命令对比后发现问题在配置文件外挂的问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/小网站计划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -990,142 +1053,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/05/yuque/Java%E4%B8%AD%20VO%E3%80%81%20PO%E3%80%81DO%E3%80%81DTO%E3%80%81%20BO%E3%80%81%20QO%E3%80%81DAO%E3%80%81POJO%E7%9A%84%E6%A6%82%E5%BF%B5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/常用小工具整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/">常用小工具整理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/" class="archive-article-date">
-  	<time datetime="2018-11-30T07:25:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>每周定期更新</p>
-<h3 id="产品经理必备应用："><a href="#产品经理必备应用：" class="headerlink" title="产品经理必备应用："></a>产品经理必备应用：</h3><table>
-<thead>
-<tr>
-<th>应用名称</th>
-<th>软件</th>
-<th>官网</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Sketch</td>
-<td>下载链接</td>
-<td><a target="_blank" rel="noopener" href="https://www.sketchapp.com/">https://www.sketchapp.com/</a></td>
-</tr>
-<tr>
-<td>Sketch18 国语言插件</td>
-<td><a target="_blank" rel="noopener" href="https://github.com/cute/SketchI18N/archive/master.zip">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="https://github.com/cute/SketchI18N">https://github.com/cute/SketchI18N</a></td>
-</tr>
-<tr>
-<td>Kitchen（Sketch 的扩展插件，流程图产品原型图，报表图等等，高大上图）</td>
-<td><a target="_blank" rel="noopener" href="https://gw.alipayobjects.com/os/kitchen/42515441-04c0-47d5-9bd0-552fc70e248b/kitchen-2.10.5.zip">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="http://kitchen.alipay.com/">http://kitchen.alipay.com/</a></td>
-</tr>
-<tr>
-<td>飞冰（ice）（网页原型设计）</td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/iceworks">下载链接</a></td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/">https://alibaba.github.io/ice/</a></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id="开发人员必备："><a href="#开发人员必备：" class="headerlink" title="开发人员必备："></a><strong>开发人员必备：</strong></h3><table>
-<thead>
-<tr>
-<th>应用名称</th>
-<th>软件</th>
-<th>官网</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">ant.design</a>(前端开发必备，后端自研必备)</td>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">ant.design</a></td>
-<td><a target="_blank" rel="noopener" href="https://ant.design/index-cn">https://ant.design/index-cn</a></td>
-</tr>
-<tr>
-<td>飞冰（ice）（网页原型设计）</td>
-<td><a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/iceworks">​ 下载链接 ​</a></td>
-<td>​<a target="_blank" rel="noopener" href="https://alibaba.github.io/ice/%E2%80%8B">https://alibaba.github.io/ice/​</a></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/30/yuque/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/">展开全文 >></a>
         </p>
       
 

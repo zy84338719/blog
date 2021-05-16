@@ -182,6 +182,80 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/微信票据接入" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/18/yuque/%E5%BE%AE%E4%BF%A1%E7%A5%A8%E6%8D%AE%E6%8E%A5%E5%85%A5/">微信票据接入</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/18/yuque/%E5%BE%AE%E4%BF%A1%E7%A5%A8%E6%8D%AE%E6%8E%A5%E5%85%A5/" class="archive-article-date">
+  	<time datetime="2019-10-18T03:26:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！<br>请记住，你是否拥有完整的微信公众号权限！</p>
+<p>这是一个血淋淋的教训，自己开发完了。然后数据不及预期。从周五周六晚上排查 一共 10 个小时。</p>
+<p>票据接入方案 JAVA 版本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.manger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.murphyyi.wechat.bean.vo.WechatTicketVO;</span><br><span class="line"><span class="keyword">import</span> com.murphyyi.wechat.bean.vo.WechatTokenVO;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.redis.core.RedisTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> com.murphyyi.wechat.utils.RandomString.SHA1;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> com.murphyyi.wechat.utils.RandomString.getRandomStringByLength;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    RedisTemplate&lt;Object, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">jsAPI</span><span class="params">(String appId,String appSecret,String url)</span></span>&#123;</span><br><span class="line">        String noncestr = getRandomStringByLength(<span class="number">32</span>);</span><br><span class="line">        String jsapiTicket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            jsapiTicket = getJsapiTicket(appId,appSecret);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String timestamp = String.valueOf(System.currentTimeMillis()).substring(<span class="number">0</span>,<span class="number">10</span>);</span><br><span class="line">        String str = <span class="string">&quot;jsapi_ticket=&quot;</span>+jsapiTicket+<span class="string">&quot;&amp;noncestr=&quot;</span>+noncestr+<span class="string">&quot;&amp;timestamp=&quot;</span>+timestamp+<span class="string">&quot;&amp;url=&quot;</span>+url;</span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;appId&quot;</span>,appId);</span><br><span class="line">        map.put(<span class="string">&quot;timestamp&quot;</span>,timestamp);</span><br><span class="line">        map.put(<span class="string">&quot;nonceStr&quot;</span>,noncestr);</span><br><span class="line">        map.put(<span class="string">&quot;signature&quot;</span>,SHA1(str));</span><br><span class="line">        map.put(<span class="string">&quot;jsticket&quot;</span>,jsapiTicket);</span><br><span class="line">        map.put(<span class="string">&quot;url&quot;</span>,url);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getJsapiTicket</span><span class="params">(String appId,String appSecret)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Object obj =redisTemplate.opsForValue().get(appId+appSecret+<span class="string">&quot;TICKET&quot;</span>);</span><br><span class="line">        String ticket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(obj!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            ticket = obj.toString();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">null</span> == ticket)&#123;</span><br><span class="line">            Map&lt;String, Object&gt; data = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            data.put(<span class="string">&quot;access_token&quot;</span>,getAccessToken(appId,appSecret));</span><br><span class="line">            data.put(<span class="string">&quot;type&quot;</span>,<span class="string">&quot;jsapi&quot;</span>);</span><br><span class="line">            String result = HttpUtil.get(<span class="string">&quot;https://api.weixin.qq.com/cgi-bin/ticket/getticket&quot;</span>,data);</span><br><span class="line">            WechatTicketVO wechatTicketVO = JSON.parseObject(result, WechatTicketVO.class);</span><br><span class="line">            <span class="keyword">if</span>(wechatTicketVO.getTicket()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                redisTemplate.opsForValue().set(appId+appSecret+<span class="string">&quot;TICKET&quot;</span>, wechatTicketVO.getTicket(), <span class="number">7200</span>, TimeUnit.SECONDS);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ticket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getAccessToken</span><span class="params">(String appId,String appSecret)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Object obj =redisTemplate.opsForValue().get(appId+appSecret+<span class="string">&quot;TOKEN&quot;</span>);</span><br><span class="line">        String token  = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(obj!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            token = obj.toString();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (token==<span class="keyword">null</span>)&#123;</span><br><span class="line">            Map&lt;String, Object&gt; data = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            data.put(<span class="string">&quot;grant_type&quot;</span>,<span class="string">&quot;client_credential&quot;</span>);</span><br><span class="line">            data.put(<span class="string">&quot;appid&quot;</span>,appId);</span><br><span class="line">            data.put(<span class="string">&quot;secret&quot;</span>,appSecret);</span><br><span class="line">            String result = HttpUtil.get(<span class="string">&quot;https://api.weixin.qq.com/cgi-bin/token&quot;</span>, data);</span><br><span class="line">            WechatTokenVO wechatTokenVO = JSON.parseObject(result, WechatTokenVO.class);</span><br><span class="line">            <span class="keyword">if</span>(wechatTokenVO.getAccess_token()!=<span class="keyword">null</span>) &#123;</span><br><span class="line">                token = wechatTokenVO.getAccess_token();</span><br><span class="line">                redisTemplate.opsForValue().set(appId + appSecret + <span class="string">&quot;TOKEN&quot;</span>, wechatTokenVO.getAccess_token(), <span class="number">7200</span>, TimeUnit.SECONDS);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>SHA1 加密</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.utils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomString</span> </span>&#123;</span><br><span class="line">    <span class="comment">//可以指定字符串的某个位置是什么范围的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getRandomStringByLength</span><span class="params">(<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        Random random=<span class="keyword">new</span> Random();</span><br><span class="line">        StringBuffer sb=<span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> number=random.nextInt(<span class="number">3</span>);</span><br><span class="line">            <span class="keyword">long</span> result=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">switch</span>(number)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                    result=Math.round(Math.random()*<span class="number">25</span>+<span class="number">65</span>);</span><br><span class="line">                    sb.append(String.valueOf((<span class="keyword">char</span>)result));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                    result=Math.round(Math.random()*<span class="number">25</span>+<span class="number">97</span>);</span><br><span class="line">                    sb.append(String.valueOf((<span class="keyword">char</span>)result));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                    sb.append(String.valueOf(<span class="keyword">new</span> Random().nextInt(<span class="number">10</span>)));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">SHA1</span><span class="params">(String decript)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            MessageDigest digest = java.security.MessageDigest.getInstance(<span class="string">&quot;SHA-1&quot;</span>);</span><br><span class="line">            digest.update(decript.getBytes());</span><br><span class="line">            <span class="keyword">byte</span> messageDigest[] = digest.digest();</span><br><span class="line">            <span class="comment">// Create Hex String</span></span><br><span class="line">            StringBuffer hexString = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">            <span class="comment">// 字节数组转换为 十六进制 数</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">byte</span> b : messageDigest) &#123;</span><br><span class="line">                String shaHex = Integer.toHexString(b &amp; <span class="number">0xFF</span>);</span><br><span class="line">                <span class="keyword">if</span> (shaHex.length() &lt; <span class="number">2</span>) &#123;</span><br><span class="line">                    hexString.append(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                hexString.append(shaHex);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> hexString.toString();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>VO</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTicketVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String ticket;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.murphyyi.wechat.bean.vo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WechatTokenVO</span> </span>&#123;</span><br><span class="line">    Integer errcode;</span><br><span class="line">    String errmsg;</span><br><span class="line">    String access_token;</span><br><span class="line">    Integer expirs_in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Golang 方案待完成</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/18/yuque/%E5%BE%AE%E4%BF%A1%E7%A5%A8%E6%8D%AE%E6%8E%A5%E5%85%A5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/一键来个热点 Linux 版本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -990,69 +1064,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/08/24/yuque/%E3%80%8A%E6%96%AD%E8%88%8D%E7%A6%BB%E3%80%8B%E2%80%94%E2%80%94%E5%B1%B1%E4%B8%8B%E8%8B%B1%E5%AD%90%E9%87%91%E5%8F%A5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/GO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/yuque/GO/">GO</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/yuque/GO/" class="archive-article-date">
-  	<time datetime="2019-08-21T11:13:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Go Go Go 1223123</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/yuque/GO/">展开全文 >></a>
         </p>
       
 

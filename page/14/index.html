@@ -182,6 +182,73 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/redis锁与zookeerper锁区别（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/redis%E9%94%81%E4%B8%8Ezookeerper%E9%94%81%E5%8C%BA%E5%88%AB%EF%BC%881%EF%BC%89/">redis锁与zookeerper锁区别（1）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/redis%E9%94%81%E4%B8%8Ezookeerper%E9%94%81%E5%8C%BA%E5%88%AB%EF%BC%881%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2019-03-18T14:47:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近完成毕设过程中对 redis 锁有所了解，随后呢想到著名的分布式锁 zk<br>为了巩固自己的知识领域，为此写这么一篇小文章</p>
+<h1 id="Redis-实现分布式锁"><a href="#Redis-实现分布式锁" class="headerlink" title="Redis 实现分布式锁"></a>Redis 实现分布式锁</h1><p>1.根据 lockKey 区进行 setnx（set not exist，如果 key 值为空，则正常设置，返回 1，否则不会进行设置并返回 0）操作，如果设置成功，表示已经获得锁，否则并没有获取锁。<br>　　 2.如果没有获得锁，去 Redis 上拿到该 key 对应的值，在该 key 上我们存储一个时间戳（用毫秒表示，t1），为了避免死锁以及其他客户端占用该锁超过一定时间（5 秒），使用该客户端当前时间戳，与存储的时间戳作比较。<br>　　 3.如果没有超过该 key 的使用时限，返回 false，表示其他人正在占用该 key，不能强制使用；如果已经超过时限，那我们就可以进行解锁，使用我们的时间戳来代替该字段的值。<br>　　 4.但是如果在 setnx 失败后，get 该值却无法拿到该字段时，说明操作之前该锁已经被释放，这个时候，最好的办法就是重新执行一遍 setnx 方法来获取其值以获得该锁。<br>　　释放锁：删除 redis 中 key</p>
+<h1 id="Zookeeper-实现分布式锁"><a href="#Zookeeper-实现分布式锁" class="headerlink" title="Zookeeper 实现分布式锁"></a>Zookeeper 实现分布式锁</h1><p>基于临时顺序节点：<br>　　 1.客户端调用 create()方法创建名为“locknode/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为 EPHEMERAL_SEQUENTIAL。<br>　　 2.客户端调用 getChildren(“locknode”)方法来获取所有已经创建的子节点。<br>　　 3.客户端获取到所有子节点 path 之后，如果发现自己在步骤 1 中创建的节点是所有节点中序号最小的，那么就认为这个客户端获得了锁。<br>　　 4.如果创建的节点不是所有节点中序号最小的，那么则监视比自己创建节点的序列号小的最大的节点，进入等待。直到下次监视的子节点变更的时候，再进行子节点的获取，判断是否获取锁。<br>　　释放锁的过程相对比较简单，就是删除自己创建的那个子节点即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>redis 分布式锁，其实需要自己不断去尝试获取锁，比较消耗性能<br>　　 zk 分布式锁，获取不到锁，注册个监听器即可，不需要不断主动尝试获取锁，性能开销较小<br>　　另外一点就是，如果是 redis 获取锁的那个客户端 bug 了或者挂了，那么只能等待超时时间之后才能释放锁；而 zk 的话，因为创建的是临时 znode，只要客户端挂了，znode 就没了，此时就自动释放锁</p>
+<p>由于自己资金有限，毕设项目 redis 先行。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/redis%E9%94%81%E4%B8%8Ezookeerper%E9%94%81%E5%8C%BA%E5%88%AB%EF%BC%881%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Java 小抄（三）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1197,69 +1264,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/14/yuque/Intellij%20%E9%9C%80%E9%85%8D%E7%BD%AE%E9%A1%B9/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/docker 目录挂载踩坑记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">docker 目录挂载踩坑记录</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" class="archive-article-date">
-  	<time datetime="2019-01-12T13:57:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在弄容器化数据库，一开始自己的技术选择方案是用 docker-compose 但是发现采用这个需要自己编写好 docker-compose 里面的 my.conf 需要外挂所以自己没有选择这样做，而是选择 docker 原生创建，自己把数据层外挂，配置层也想外挂，后来发现配置层外挂会导致 mysql 找不到配置，从而导致容器无法启动。自己一直在排查这个问题原因。一开始以为是权限问题导致的，因为数据外挂并没有实现，后来给目录加权限，增加权限后还是不可以。随后切换到 root 账户去增加权限，也是不可以的。后来没办法了找了一个网上数据库的搭建的命令对比后发现问题在配置文件外挂的问题。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/12/yuque/docker%20%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">展开全文 >></a>
         </p>
       
 

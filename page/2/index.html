@@ -182,6 +182,137 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/HTTP 协议简化理解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E7%AE%80%E5%8C%96%E7%90%86%E8%A7%A3/">HTTP 协议简化理解</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E7%AE%80%E5%8C%96%E7%90%86%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2021-04-17T10:59:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1618657501453-7184b760-0c49-4b04-90a4-1a009352db11.png#clientId=u84879e80-53f2-4&from=paste&height=273&id=y60Te&margin=%5Bobject%20Object%5D&originHeight=273&originWidth=530&originalType=binary&size=112486&status=done&style=none&taskId=u8b222cbc-6d73-4894-80f4-13439917bfd&width=530"></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>HTTP/3</th>
+<th>HTTP/2</th>
+<th>HTTPS</th>
+<th>HTTP1.1/1.0/0.9</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议属性</td>
+<td>应用层 HTTP 需要 HTTP/2</td>
+<td>需要 HTTPS</td>
+<td>需要 HTTP1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>底层协议</td>
+<td>UDP QUIC</td>
+<td>TCP</td>
+<td>TCP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>二进制传输</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>流式</td>
+<td>管理，简化了流管理。</td>
+<td>需要服务端客户端协商</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>支持多工</td>
+<td>是</td>
+<td>是</td>
+<td></td>
+<td>1.1 支持客户端并行，但不支持服务端 其他否</td>
+</tr>
+<tr>
+<td>如何终止传输</td>
+<td>可以单独放弃某些传输</td>
+<td>可以单独放弃某些传输</td>
+<td>TCP 断开</td>
+<td>TCP 断开</td>
+</tr>
+<tr>
+<td>是否有状态</td>
+<td>无，但是可以自行管里</td>
+<td>无，但是头部一已经压缩了，可以用标号代替 cookie 等</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>详情版本<br><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/hbrtk9">https://www.yuque.com/murphyyi/blog/hbrtk9</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/17/yuque/HTTP%20%E5%8D%8F%E8%AE%AE%E7%AE%80%E5%8C%96%E7%90%86%E8%A7%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/HTTP 协议入门（HTTP0.9-HTTP!3）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2868,71 +2999,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/02/15/yuque/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/正向代理 golang实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/">正向代理 golang实现</a>
-    </h1>
-  
-
-        
-        <a href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/" class="archive-article-date">
-  	<time datetime="2021-02-15T15:31:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;flag&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">    <span class="string">&quot;net&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> logger = zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    help := flag.Bool(<span class="string">&quot;help&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;print usage&quot;</span>)</span><br><span class="line">    bind := flag.String(<span class="string">&quot;bind&quot;</span>, <span class="string">&quot;127.0.0.1:6000&quot;</span>, <span class="string">&quot;The address to bind to&quot;</span>)</span><br><span class="line">    backend := flag.String(<span class="string">&quot;backend&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;The backend server address&quot;</span>)</span><br><span class="line">    flag.Parse()</span><br><span class="line"></span><br><span class="line">    logger.Level(zerolog.DebugLevel)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *help &#123;</span><br><span class="line">        flag.Usage()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *backend == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        flag.Usage()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *bind == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        <span class="comment">//use default bind</span></span><br><span class="line">        logger.Info().Str(<span class="string">&quot;bind&quot;</span>, *bind).Msg(<span class="string">&quot;use default bind&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    success, err := RunProxy(*bind, *backend)</span><br><span class="line">    <span class="keyword">if</span> !success &#123;</span><br><span class="line">        logger.Error().Err(err).Send()</span><br><span class="line">        os.Exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunProxy</span><span class="params">(bind, backend <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">bool</span>, error)</span></span> &#123;</span><br><span class="line">    listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, bind)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> listener.Close()</span><br><span class="line">    logger.Info().Str(<span class="string">&quot;bind&quot;</span>, bind).Str(<span class="string">&quot;backend&quot;</span>, backend).Msg(<span class="string">&quot;tcp-proxy started.&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        conn, err := listener.Accept()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            logger.Error().Err(err).Send()</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">go</span> ConnectionHandler(conn, backend)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConnectionHandler</span><span class="params">(conn net.Conn, backend <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Msg(<span class="string">&quot;client connected.&quot;</span>)</span><br><span class="line">    target, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, backend)</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        logger.Error().Err(err).Send()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">defer</span> target.Close()</span><br><span class="line">        logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Str(<span class="string">&quot;backend&quot;</span>, target.LocalAddr().String()).Msg(<span class="string">&quot;backend connected.&quot;</span>)</span><br><span class="line">        closed := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">go</span> Proxy(conn, target, closed)</span><br><span class="line">        <span class="keyword">go</span> Proxy(target, conn, closed)</span><br><span class="line">        &lt;-closed</span><br><span class="line">        logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Msg(<span class="string">&quot;Connection closed.&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Proxy</span><span class="params">(from net.Conn, to net.Conn, closed <span class="keyword">chan</span> <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line">    buffer := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">4096</span>)</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        n1, err := from.Read(buffer)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            closed &lt;- <span class="literal">true</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        n2, err := to.Write(buffer[:n1])</span><br><span class="line">        logger.Debug().Str(<span class="string">&quot;from&quot;</span>, from.RemoteAddr().String()).Int(<span class="string">&quot;recv&quot;</span>, n1).Str(<span class="string">&quot;to&quot;</span>, to.RemoteAddr().String()).Int(<span class="string">&quot;send&quot;</span>, n2).Send()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            closed &lt;- <span class="literal">true</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用方法 ./proxy –bind 0.0.0.0:6379 –backend 10.0.1.15:6379</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/">展开全文 >></a>
         </p>
       
 

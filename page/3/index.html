@@ -182,6 +182,71 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/正向代理 golang实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/">正向代理 golang实现</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/" class="archive-article-date">
+  	<time datetime="2021-02-15T15:31:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;flag&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">    <span class="string">&quot;net&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> logger = zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    help := flag.Bool(<span class="string">&quot;help&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;print usage&quot;</span>)</span><br><span class="line">    bind := flag.String(<span class="string">&quot;bind&quot;</span>, <span class="string">&quot;127.0.0.1:6000&quot;</span>, <span class="string">&quot;The address to bind to&quot;</span>)</span><br><span class="line">    backend := flag.String(<span class="string">&quot;backend&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;The backend server address&quot;</span>)</span><br><span class="line">    flag.Parse()</span><br><span class="line"></span><br><span class="line">    logger.Level(zerolog.DebugLevel)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *help &#123;</span><br><span class="line">        flag.Usage()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *backend == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        flag.Usage()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *bind == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        <span class="comment">//use default bind</span></span><br><span class="line">        logger.Info().Str(<span class="string">&quot;bind&quot;</span>, *bind).Msg(<span class="string">&quot;use default bind&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    success, err := RunProxy(*bind, *backend)</span><br><span class="line">    <span class="keyword">if</span> !success &#123;</span><br><span class="line">        logger.Error().Err(err).Send()</span><br><span class="line">        os.Exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunProxy</span><span class="params">(bind, backend <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">bool</span>, error)</span></span> &#123;</span><br><span class="line">    listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, bind)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> listener.Close()</span><br><span class="line">    logger.Info().Str(<span class="string">&quot;bind&quot;</span>, bind).Str(<span class="string">&quot;backend&quot;</span>, backend).Msg(<span class="string">&quot;tcp-proxy started.&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        conn, err := listener.Accept()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            logger.Error().Err(err).Send()</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">go</span> ConnectionHandler(conn, backend)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConnectionHandler</span><span class="params">(conn net.Conn, backend <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Msg(<span class="string">&quot;client connected.&quot;</span>)</span><br><span class="line">    target, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, backend)</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        logger.Error().Err(err).Send()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">defer</span> target.Close()</span><br><span class="line">        logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Str(<span class="string">&quot;backend&quot;</span>, target.LocalAddr().String()).Msg(<span class="string">&quot;backend connected.&quot;</span>)</span><br><span class="line">        closed := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">go</span> Proxy(conn, target, closed)</span><br><span class="line">        <span class="keyword">go</span> Proxy(target, conn, closed)</span><br><span class="line">        &lt;-closed</span><br><span class="line">        logger.Info().Str(<span class="string">&quot;conn&quot;</span>, conn.RemoteAddr().String()).Msg(<span class="string">&quot;Connection closed.&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Proxy</span><span class="params">(from net.Conn, to net.Conn, closed <span class="keyword">chan</span> <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line">    buffer := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">4096</span>)</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        n1, err := from.Read(buffer)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            closed &lt;- <span class="literal">true</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        n2, err := to.Write(buffer[:n1])</span><br><span class="line">        logger.Debug().Str(<span class="string">&quot;from&quot;</span>, from.RemoteAddr().String()).Int(<span class="string">&quot;recv&quot;</span>, n1).Str(<span class="string">&quot;to&quot;</span>, to.RemoteAddr().String()).Int(<span class="string">&quot;send&quot;</span>, n2).Send()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            closed &lt;- <span class="literal">true</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用方法 ./proxy –bind 0.0.0.0:6379 –backend 10.0.1.15:6379</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/15/yuque/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%20golang%E5%AE%9E%E7%8E%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/代理nps" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1195,80 +1260,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/特洛伊使用说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">特洛伊使用说明</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="archive-article-date">
-  	<time datetime="2021-01-03T13:13:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
-<p>macos <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg?_lake_card=%7B%22uid%22:%221611542907886-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg%22,%22name%22:%22Trojan-Qt5-macOS+(1).dmg%22,%22size%22:39300693,%22type%22:%22%22,%22ext%22:%22dmg%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%225frYR%22,%22card%22:%22file%22%7D">Trojan-Qt5-macOS (1).dmg</a></p>
-<p>ios 使用软件(需要非中国大陆 apple id)，否则打开白屏幕：<a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518">https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518</a></p>
-<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>PAC 代理：为防火墙智能代理，会自动过滤 中国大陆以内的 ip 地址数据包。 （国内非 T 子，访问国外为 T 子）<br>全局代理：为全局 T 子 如果采用这个模式，中国大陆某些视频网站会提示你版权出现问题或者访问国内网站特别慢的情况发生</p>
-<h1 id="ios-端"><a href="#ios-端" class="headerlink" title="ios 端"></a>ios 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22uploaded%22,%22name%22:%22RPReplay_Final1613837361.MP4%22,%22size%22:123451548,%22percent%22:100,%22taskId%22:%2243bbwmUvodwp%22,%22margin%22:true,%22id%22:%22kacxw%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/MP4/1613838724900-8252848e-cd46-4e23-a92f-238cf1323c43.MP4%22,%22card%22:%22video%22%7D#kacxw"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="RPReplay_Final1613837361.MP4 (117.73MB)"></a></p>
-<h1 id="windows-端"><a href="#windows-端" class="headerlink" title="windows 端"></a>windows 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
-<h2 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
-<h1 id="MacOS-使用"><a href="#MacOS-使用" class="headerlink" title="MacOS 使用"></a>MacOS 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22tro.mp4%22,%22size%22:105906344,%22percent%22:100,%22taskId%22:%22jtcGxLWC2rzM%22,%22margin%22:true,%22id%22:%22dkdJr%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1611553175119-214606d4-c00e-4dd5-98a2-5407cdafe5e8.mp4%22,%22card%22:%22video%22%7D#dkdJr"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="tro.mp4 (101MB)"></a></p>
-<h1 id="正常使用状态"><a href="#正常使用状态" class="headerlink" title="正常使用状态"></a>正常使用状态</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552878301-bcfa22f2-f08a-44ed-bd17-d71f6481e47d.png#align=left&display=inline&height=86&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=145&size=12770&status=done&style=none&width=145" alt="image.png"><br>蓝色小马 上面带个 G 全局代理</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552920679-2cb4cf23-df72-47ea-a52f-d93d57ff0bf4.png#align=left&display=inline&height=44&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=76&size=6568&status=done&style=none&width=76" alt="image.png"><br>绿色小马 上面带个 P 国外代理 误伤概率比较高<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611553009805-f6d8cec9-72ce-4790-8935-cb2f43197e61.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-25%2013.36.41.png&originHeight=343&originWidth=494&size=192789&status=done&style=none&width=494" alt="截屏2021-01-25 13.36.41.png"></p>
-<h1 id="使用注意："><a href="#使用注意：" class="headerlink" title="使用注意："></a>使用注意：</h1><p>访问外 wang<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1609681415544-d2aba294-f93f-4ac0-b7f4-5b043df99b2f.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&name=image.png&originHeight=742&originWidth=712&size=358619&status=done&style=none&width=356" alt="image.png"></p>
-<p>内网访问不了，请关闭该软件</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">展开全文 >></a>
         </p>
       
 

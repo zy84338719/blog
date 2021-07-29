@@ -182,6 +182,902 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Golang 程序流程控制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/18/yuque/Golang%20%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">Golang 程序流程控制</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/18/yuque/Golang%20%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2020-02-18T09:25:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="if-与传统语言的区别"><a href="#if-与传统语言的区别" class="headerlink" title="if 与传统语言的区别"></a>if 与传统语言的区别</h2><p>判断条件不推荐 ➕（） <br>无论执行语句多简单，必须 ➕{}<br>大括号必须在判断条件后，不得换行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> flag== <span class="literal">false</span> &#123; <span class="comment">//这里必须这样写 golang 语法强制要求</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;zzzzzz&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="switch-与传统语言区别很大"><a href="#switch-与传统语言区别很大" class="headerlink" title="switch 与传统语言区别很大"></a>switch 与传统语言区别很大</h2><p>1.匹配项后面也不需要再加 **break<br>**<br>2.case/switch 后是一个表达式( 即:常量值、变量、一个有返回值的函数等都可以)</p>
+<p>3.case 后的各个表达式的值的数据类型，必须和 switch 的表达式数据类型一致</p>
+<p>4.case 后面可以带多个表达式，使用逗号间隔。比如 case 表达式 1, 表达式 2 …</p>
+<p>5.case 后面的表达式如果是常量值(字面量)，则要求不能重复</p>
+<p>6.case 后面不需要带 break , 程序匹配到一个 case 后就会执行对应的代码块，然后退出 switch，如<br>果一个都匹配不到，则执行 default</p>
+<p>7.default 语句不是必须的.</p>
+<p>8.switch 后也可以不带表达式，类似 if –else 分支来使用。</p>
+<p>9.switch 后也可以直接声明/定义一个变量，分号结束，不推荐。</p>
+<p>10.switch 穿透-fallthrough ，如果在 case 语句块后增加 fallthrough ,则会继续执行下一个 case，也<br>叫 switch 穿透</p>
+<p>11.Type Switch:switch 语句还可以被用于 type-switch 来判断某个 interface 变量中实际指向的<br>变量类型</p>
+<h2 id="switch-和-if-的比较"><a href="#switch-和-if-的比较" class="headerlink" title="switch 和 if 的比较"></a>switch 和 if 的比较</h2><p>什么情况下使用 switch ,什么情况下使用 if</p>
+<ol>
+<li>如果判断的具体数值不多，而且符合整数、浮点数、字符、字符串这几种类型。建议使用 **swtich<br>**语句，简洁高效。</li>
+<li>其他情况:对区间判断和结果为 <strong>bool **类型的判断，使用 if，</strong>if **的使用范围更广。</li>
+</ol>
+<h2 id="for-循环"><a href="#for-循环" class="headerlink" title="for 循环"></a>for 循环</h2><p>1.循环条件是返回一个布尔值的表达式</p>
+<ol start="2">
+<li>for 循环的第二种使用方式</li>
+</ol>
+<p>for 循环判断条件 {<br>//循环执行语句</p>
+<p>}</p>
+<p>将变量初始化和变量迭代写到其它位置</p>
+<p>3.for 循环的第三种使用方式</p>
+<p>for {</p>
+<p>//循环执行语句</p>
+<p>}</p>
+<p>上面的写法等价 **for ; ; {} **是一个无限循环， 通常需要配合 **break **语句使用</p>
+<ol start="4">
+<li>Golang 提供 for-range 的方式，可以方便遍历字符串和数组.<br>如果我们的字符串含有中文，那么传统的遍历字符串方式，就是错误，会出现乱码。原因是传统的</li>
+</ol>
+<p>对字符串的遍历是按照字节来遍历，而一个汉字在 utf8 编码是对应 **3 **个字节。</p>
+<p>如何解决 需要要将 str 转成 []rune 切片.</p>
+<p>对应 for-range 遍历方式而言，是按照字符方式遍历。因此如果有字符串有中文，也是 ok</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/18/yuque/Golang%20%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 系统保留关键字与预定义标识符" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang%20%E7%B3%BB%E7%BB%9F%E4%BF%9D%E7%95%99%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E9%A2%84%E5%AE%9A%E4%B9%89%E6%A0%87%E8%AF%86%E7%AC%A6/">Golang 系统保留关键字与预定义标识符</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang%20%E7%B3%BB%E7%BB%9F%E4%BF%9D%E7%95%99%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E9%A2%84%E5%AE%9A%E4%B9%89%E6%A0%87%E8%AF%86%E7%AC%A6/" class="archive-article-date">
+  	<time datetime="2020-02-17T12:53:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="系统保留关键字"><a href="#系统保留关键字" class="headerlink" title="系统保留关键字"></a>系统保留关键字</h1><p>break   //退出循环<br>default  //选择结构默认项（switch、select）<br>func   //定义函数<br>interface //定义接口<br>select  //channel<br>case   //选择结构标签<br>chan   //定义 channel<br>const   //常量<br>continue  //跳过本次循环<br>defer   //延迟执行内容（收尾工作）<br>go   //并发执行<br>map   //map 类型<br>struct  //定义结构体<br>else   //选择结构<br>goto   //跳转语句<br>package  //包<br>switch  //选择结构<br>fallthrough  //switch 中 继续向下执行<br>if   //选择结构<br>range   //从 slice、map 等结构中取元素<br>type  //定义类型<br>for   //循环<br>import   //导入包<br>return   //返回<br>var  //定义变量</p>
+<h1 id="预定义标识符"><a href="#预定义标识符" class="headerlink" title="预定义标识符"></a>预定义标识符</h1><table>
+<thead>
+<tr>
+<th align="center">append</th>
+<th align="center">bool</th>
+<th align="center">byte</th>
+<th align="center">cap</th>
+<th align="center">close</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">complex</td>
+<td align="center">complex64</td>
+<td align="center">complex128</td>
+<td align="center">uint16</td>
+<td align="center">copy</td>
+</tr>
+<tr>
+<td align="center">false</td>
+<td align="center">float32</td>
+<td align="center">float64</td>
+<td align="center">imag</td>
+<td align="center">int</td>
+</tr>
+<tr>
+<td align="center">int8</td>
+<td align="center">int16</td>
+<td align="center">uint32</td>
+<td align="center">int32</td>
+<td align="center">int64</td>
+</tr>
+<tr>
+<td align="center">iota</td>
+<td align="center">len</td>
+<td align="center">make</td>
+<td align="center">new</td>
+<td align="center">nil</td>
+</tr>
+<tr>
+<td align="center">panic</td>
+<td align="center">uint64</td>
+<td align="center">print</td>
+<td align="center">println</td>
+<td align="center">real</td>
+</tr>
+<tr>
+<td align="center">recover</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="center">uint</td>
+<td align="center">uint8</td>
+</tr>
+<tr>
+<td align="center">uintptr</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang%20%E7%B3%BB%E7%BB%9F%E4%BF%9D%E7%95%99%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E9%A2%84%E5%AE%9A%E4%B9%89%E6%A0%87%E8%AF%86%E7%AC%A6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 指针" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang%20%E6%8C%87%E9%92%88/">Golang 指针</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang%20%E6%8C%87%E9%92%88/" class="archive-article-date">
+  	<time datetime="2020-02-17T10:59:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ol>
+<li>基本数据类型，变量存的就是值，也叫值类型</li>
+<li>获取变量的地址，用&amp;，比如: var num int, 获取 num 的地址:#</li>
+</ol>
+<p>基本数据类型在内存的布局.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581939949916-ecc921d5-3da1-48d2-b7da-7f9d6cb3e12a.png#align=left&display=inline&height=243&name=image.png&originHeight=243&originWidth=586&size=94804&status=done&style=none&width=586" alt="image.png"></p>
+<ol start="3">
+<li>指针类型，指针变量存的是一个地址，这个地址指向的空间存的才是值<br>比如:var ptr *int = #</li>
+</ol>
+<p>指针在内存的布局.</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940016274-8ce22fcb-ed17-4f13-bb4d-fdc51109af1e.png#align=left&display=inline&height=246&name=image.png&originHeight=246&originWidth=602&size=160843&status=done&style=none&width=602" alt="image.png"></p>
+<ol start="4">
+<li>获取指针类型所指向的值，使用:*，比如:var ptr <em>int, 使用\</em>ptr 获取 ptr 指向的值</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940062650-f7ac7076-f899-4f06-ae83-52cc888b97c6.png#align=left&display=inline&height=321&name=image.png&originHeight=321&originWidth=306&size=128895&status=done&style=none&width=306" alt="image.png"> 5) 一个案例再说明</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940101590-9e1e8b55-d19b-4526-ab55-6190aa74aca3.png#align=left&display=inline&height=185&name=image.png&originHeight=185&originWidth=580&size=67458&status=done&style=none&width=580" alt="image.png"></p>
+<h2 id="值类型和引用类型的使用特点"><a href="#值类型和引用类型的使用特点" class="headerlink" title="值类型和引用类型的使用特点"></a>值类型和引用类型的使用特点</h2><ol>
+<li>值类型:变量直接存储值，内存通常在栈中分配<br>    值类型:基本数据类型 int 系列, float 系列, bool, string 、数组和结构体 struct</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940541284-69b31427-71db-4757-ab32-c53a4c81a844.png#align=left&display=inline&height=145&name=image.png&originHeight=145&originWidth=503&size=37505&status=done&style=none&width=503" alt="image.png"> 2) 引用类型:变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆<br>上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由 GC 来回收</p>
+<p>引用类型:指针、slice 切片、map、管道 chan、interface 等都是引用类型</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940580026-091c8ed8-0dd8-4b3b-a221-4232ec8c8f37.png#align=left&display=inline&height=160&name=image.png&originHeight=160&originWidth=562&size=52567&status=done&style=none&width=562" alt="image.png"> 3) 内存的栈区和堆区示意图<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581940613523-61c4ed9b-1af9-45fa-823e-71aef9770835.png#align=left&display=inline&height=252&name=image.png&originHeight=252&originWidth=495&size=88687&status=done&style=none&width=495" alt="image.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang%20%E6%8C%87%E9%92%88/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 基础类型使用细节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E4%BD%BF%E7%94%A8%E7%BB%86%E8%8A%82/">Golang 基础类型使用细节</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E4%BD%BF%E7%94%A8%E7%BB%86%E8%8A%82/" class="archive-article-date">
+  	<time datetime="2020-02-17T08:39:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><ol>
+<li><p>Golang 各整数类型分:有符号和无符号，int uint 的大小和系统有关。</p>
+</li>
+<li><p>Golang 的整型默认声明为 int 型</p>
+</li>
+<li><p>如何在程序查看某个变量的字节大小和数据类型 (使用较多)</p>
+</li>
+<li><p>Golang 程序中整型变量在使用时，遵守保小不保大的原则，即:在保证程序正确运行下，尽量<br>使用占用空间小的数据类型。【如:年龄】</p>
+</li>
+<li><p>bit: 计算机中的最小存储单位。byte:计算机中基本存储单元。[二进制再详细说] 1byte = 8 bit</p>
+</li>
+</ol>
+<h2 id="小数-浮点类型"><a href="#小数-浮点类型" class="headerlink" title="小数/浮点类型"></a>小数/浮点类型</h2><p>1.关于浮点数在机器中存放形式的简单说明,浮点数=符号位+指数位+尾数位</p>
+<p>2.尾数部分可能丢失，造成精度损失。 -123.0000901</p>
+<p>float64 的精度比 float32 的要准确.</p>
+<p>如果我们要保存一个精度高的数，则应该选用 float64（<strong>系统默认</strong>是<strong>float64</strong>）</p>
+<ol>
+<li>Golang 浮点类型有固定长度的范围和字段长度，不受具体 OS(操作系统)的影响。</li>
+<li>Golang 的浮点型默认声明为 float64 类型。</li>
+<li>浮点型常量有两种表示形式</li>
+</ol>
+<p>十进制数形式:如:5.12 .512 (必须有小数点)<br>科学计数法形式:如:5.1234e2 = 5.12 * 10 的 2 次方 5.12E-2 = 5.12/10 的 2 次方</p>
+<ol start="4">
+<li>通常情况下，应该使用 float64 ，因为它比 float32 更精确。[开发中，推荐使用 <strong>float64</strong>]</li>
+</ol>
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>Golang 中没有专门的字符类型，如果要存储单个字符(字母)，一般使用 **byte **来保存。</p>
+<p>字符串就是一串固定长度的字符连接起来的字符序列。</p>
+<ol>
+<li><p>字符常量是用单引号(‘’)括起来的单个字符。例如:var c1 byte = ‘a’ var c2 int = ‘中’ var c3<br>byte = ‘9’</p>
+</li>
+<li><p>Go 中允许使用转义字符 ‘\’来将其后的字符转变为特殊字符型常量。例如:var c3 char = ‘\n’<br>// ‘\n’表示换行符</p>
+</li>
+<li><p>Go 语言的字符使用 UTF-8 编码 ，如果想查询字符对应的 utf8 码值<br><a target="_blank" rel="noopener" href="http://www.mytju.com/classcode/tools/encode_utf8.asp">http://www.mytju.com/classcode/tools/encode_utf8.asp</a></p>
+</li>
+</ol>
+<p>英文字母-1 个字节 汉字-3 个字节</p>
+<ol start="4">
+<li><p>在 Go 中，字符的本质是一个整数，直接输出时，是该字符对应的 UTF-8 编码的码值。</p>
+</li>
+<li><p>可以直接给某个变量赋一个数字，然后按格式化输出时%c，会输出该数字对应的 unicode 字符   6) 字符类型是可以进行运算的，相当于一个整数，因为它都对应有 Unicode 码.</p>
+</li>
+</ol>
+<h2 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h2><p>bool 类型占 1 个字节。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="String-类型"><a href="#String-类型" class="headerlink" title="String 类型"></a>String 类型</h2><ol>
+<li><p>Go 语言的字符串的字节使用 UTF-8 编码标识 Unicode 文本，这样 Golang 统一使用 UTF-8 编码,中文<br>乱码问题不会再困扰程序员。</p>
+</li>
+<li><p>字符串一旦赋值了，字符串就不能修改了:在 Go 中字符串是不可变的。</p>
+</li>
+<li><p>字符串的两种表示形式</p>
+</li>
+</ol>
+<p>(1) 双引号, 会识别转义字符</p>
+<p>(2) 反引号，以字符串的原生形式输出，包括换行和特殊字符，可以实现防止攻击、输出源代码等效果</p>
+<ol start="4">
+<li><p>字符串拼接方式</p>
+</li>
+<li><p>当一行字符串太长时，需要使用到多行字符串，可以如下处理（➕ 必须要在换行后面）<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581931037761-85ff6604-58c0-4f87-a995-7389403a309e.png#align=left&display=inline&height=147&name=image.png&originHeight=147&originWidth=657&size=127510&status=done&style=none&width=657" alt="image.png"></p>
+</li>
+</ol>
+<h2 id="基本数据类型默认值"><a href="#基本数据类型默认值" class="headerlink" title="基本数据类型默认值"></a>基本数据类型默认值</h2><table>
+<thead>
+<tr>
+<th><strong>数据类型</strong></th>
+<th><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>整型</td>
+<td>0</td>
+</tr>
+<tr>
+<td>浮点型</td>
+<td>0</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>布尔型</td>
+<td>false</td>
+</tr>
+</tbody></table>
+<h2 id="基本数据了型的相互转换"><a href="#基本数据了型的相互转换" class="headerlink" title="基本数据了型的相互转换"></a>基本数据了型的相互转换</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>Golang 和 java / c 不同，Go 在不同类型的变量之间赋值时需要显式转换。也就是说 Golang 中数<br>据类型不能自动转换。</p>
+<p>基本语法</p>
+<p>表达式 T(v) 将值 v 转换为类型 T<br><strong>T</strong>: 就是数据类型，比如 int32，int64，float32 等等<br><strong>v</strong>: 就是需要转换的变量</p>
+<h3 id="基本数据类型转换"><a href="#基本数据类型转换" class="headerlink" title="基本数据类型转换"></a>基本数据类型转换</h3><ol>
+<li><p>Go 中，数据类型的转换可以是从表示范围小–&gt;表示范围大，也可以范围大—&gt;范围小</p>
+</li>
+<li><p>被转换的是变量存储的数据(即值)，变量本身的数据类型并没有变化!</p>
+</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581934050310-0bededb8-ee62-4661-9c02-942813789f3c.png#align=left&display=inline&height=229&name=image.png&originHeight=229&originWidth=514&size=131565&status=done&style=none&width=514" alt="image.png"> 3) 在转换中，比如将 int64 转成 int8 【-128—127】 ，编译时不会报错，只是转换的结果是按溢出处理，和我们希望的结果不一样。 因此在转换时，需要考虑范围.</p>
+<h3 id="string-转基本数据类型的注意事项"><a href="#string-转基本数据类型的注意事项" class="headerlink" title="string 转基本数据类型的注意事项"></a>string 转基本数据类型的注意事项</h3><p>在将 String 类型转成 基本数据类型时，要确保 **String **类型能够转成有效的数据，比如 我们可以<br>把 “123” , 转成一个整数，但是不能把 “hello” 转成一个整数，如果这样做，Golang 直接将其转成 0 ，<br>其它类型也是一样的道理. float =&gt; 0 bool =&gt; false</p>
+<p>type</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E4%BD%BF%E7%94%A8%E7%BB%86%E8%8A%82/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 基础数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Golang 基础数据类型</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
+  	<time datetime="2020-02-17T07:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <table>
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">基本数据类型</th>
+<th align="center">数值型</th>
+<th>整数类型(int,int8,int16,int32,int64)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>(uint,uint8,uint16,uint64,byte)</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">字符型</td>
+<td>（没有专门的字符类型，使用 byte 来保存单个字母字符）</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">布尔类型</td>
+<td>bool</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">字符串</td>
+<td>(string)【官方将 string 归属到基本数据类型】</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">派生/复杂数据类型</td>
+<td align="center">1.指针</td>
+<td>pointer</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">2.数组</td>
+<td></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">3.结构体</td>
+<td>struct</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">4.管道</td>
+<td>channel</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">5.函数</td>
+<td>也是一种数据类型</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">6.切片</td>
+<td>slice</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">7.接口</td>
+<td>interface</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">8.map</td>
+<td></td>
+</tr>
+</tbody></table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang%20%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Golang 注释（comment）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Golang%20%E6%B3%A8%E9%87%8A%EF%BC%88comment%EF%BC%89/">Golang 注释（comment）</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Golang%20%E6%B3%A8%E9%87%8A%EF%BC%88comment%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2020-02-17T05:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="介绍注释"><a href="#介绍注释" class="headerlink" title="介绍注释"></a>介绍注释</h1><p>用于注解说明解释程序的文字就是注释，注释提高了代码的阅读性;<br>注释是一个程序员必须要具有的良好编程习惯。将自己的思想通过注释先整理出来，再用代码去<br>体现。</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="在-Golang-中注释有两种形式"><a href="#在-Golang-中注释有两种形式" class="headerlink" title="在 Golang 中注释有两种形式"></a>在 Golang 中注释有两种形式</h1><h2 id="1-行注释（官方推荐）"><a href="#1-行注释（官方推荐）" class="headerlink" title="1) 行注释（官方推荐）"></a>1) 行注释（官方推荐）</h2><p>基本语法</p>
+<p>// 注释内容</p>
+<p>举例</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581918600021-bd2facc7-1ebd-47c7-92ca-13a5d1a1fd6d.png#align=left&display=inline&height=327&name=image.png&originHeight=327&originWidth=806&size=273831&status=done&style=none&width=806" alt="image.png"></p>
+<h2 id="2-块注释-多行注释"><a href="#2-块注释-多行注释" class="headerlink" title="2) 块注释(多行注释)"></a>2) 块注释(多行注释)</h2><p>基本语法</p>
+<p>/* <br>注释内容</p>
+<p>*/</p>
+<p>举例<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581918689210-538cf128-84ae-4e9e-af3c-1991e5bb9232.png#align=left&display=inline&height=118&name=image.png&originHeight=130&originWidth=790&size=103688&status=done&style=none&width=715" alt="image.png"></p>
+<h2 id="使用细节"><a href="#使用细节" class="headerlink" title="使用细节"></a>使用细节</h2><h5 id="1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。"><a href="#1-对于行注释和块注释，被注释的文字，不会被-Go-编译器执行。" class="headerlink" title="1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。"></a>1) 对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。</h5><h5 id="2-块注释里面不允许有块注释嵌套-注意一下"><a href="#2-块注释里面不允许有块注释嵌套-注意一下" class="headerlink" title="2) 块注释里面不允许有块注释嵌套 [注意一下]"></a>2) 块注释里面不允许有块注释嵌套 [注意一下]</h5>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Golang%20%E6%B3%A8%E9%87%8A%EF%BC%88comment%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go 转义字符(escape char)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/17/yuque/Go%20%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6(escape%20char)/">Go 转义字符(escape char)</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/17/yuque/Go%20%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6(escape%20char)/" class="archive-article-date">
+  	<time datetime="2020-02-17T05:25:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说明:常用的转义字符有如下:<br> 1. \t : 表示一个制表符，通常使用它可以排版。</p>
+<ol start="2">
+<li> \n :换行符</li>
+<li><pre><code>                          \\ :一个\
+</code></pre>
+</li>
+</ol>
+<ol start="4">
+<li><pre><code>                          \&quot; :一个&quot;
+</code></pre>
+</li>
+</ol>
+<ol start="5">
+<li><pre><code>                          \r :一个回车 fmt.Println(&quot;天龙八部雪山飞狐\r 张飞&quot;);
+</code></pre>
+</li>
+</ol>
+<p>例子：<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581917830487-c1de47bc-10ca-4b90-be6b-7cf47283b297.png#align=left&display=inline&height=538&name=image.png&originHeight=870&originWidth=924&size=261317&status=done&style=none&width=572" alt="image.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/17/yuque/Go%20%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6(escape%20char)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go语言特点" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/16/yuque/Go%E8%AF%AD%E8%A8%80%E7%89%B9%E7%82%B9/">Go语言特点</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/16/yuque/Go%E8%AF%AD%E8%A8%80%E7%89%B9%E7%82%B9/" class="archive-article-date">
+  	<time datetime="2020-02-16T05:36:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介:"></a>简介:</h1><h5 id="Go-语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容-Go-语言-Go-C-Python-说明-Go-语言既有-C-静态语言程序的运行速度，又能达到-Python-动态语言的快速开发。"><a href="#Go-语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容-Go-语言-Go-C-Python-说明-Go-语言既有-C-静态语言程序的运行速度，又能达到-Python-动态语言的快速开发。" class="headerlink" title="Go 语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容 Go 语言:Go = C + Python , 说明 Go 语言既有 C 静态语言程序的运行速度，又能达到 Python 动态语言的快速开发。"></a>Go 语言保证了既能到达静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容 Go 语言:Go = C + Python , 说明 Go 语言既有 C 静态语言程序的运行速度，又能达到 Python 动态语言的快速开发。</h5><h5 id="1-从-C-语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和-C-语言一样的编译执行方式及弱化的指针"><a href="#1-从-C-语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和-C-语言一样的编译执行方式及弱化的指针" class="headerlink" title="1) 从 C 语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和 C 语言一样的编译执行方式及弱化的指针"></a>1) 从 C 语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和 C 语言一样的编译执行方式及弱化的指针</h5><h5 id="举一个案例-体验-go-语言的指针的使用特点-体验"><a href="#举一个案例-体验-go-语言的指针的使用特点-体验" class="headerlink" title="举一个案例(体验)://go 语言的指针的使用特点(体验)"></a>举一个案例(体验)://go 语言的指针的使用特点(体验)</h5><h5 id="func-testPtr-num-int"><a href="#func-testPtr-num-int" class="headerlink" title="func testPtr(num *int) {"></a>func testPtr(num *int) {</h5><h5 id="num-20"><a href="#num-20" class="headerlink" title="*num = 20"></a>*num = 20</h5><h5 id=""><a href="#" class="headerlink" title="}"></a>}</h5><h5 id="2-引入包的概念，用于组织程序结构，Go-语言的一个文件都要归属于一个包，而不能单独存在。"><a href="#2-引入包的概念，用于组织程序结构，Go-语言的一个文件都要归属于一个包，而不能单独存在。" class="headerlink" title="2) 引入包的概念，用于组织程序结构，Go 语言的一个文件都要归属于一个包，而不能单独存在。"></a>2) 引入包的概念，用于组织程序结构，Go 语言的一个文件都要归属于一个包，而不能单独存在。</h5><h5 id="3-垃圾回收机制，内存自动回收，不需开发人员管理"><a href="#3-垃圾回收机制，内存自动回收，不需开发人员管理" class="headerlink" title="3) 垃圾回收机制，内存自动回收，不需开发人员管理"></a>3) 垃圾回收机制，内存自动回收，不需开发人员管理</h5><h5 id="4-天然并发-重要特点"><a href="#4-天然并发-重要特点" class="headerlink" title="4) 天然并发 (重要特点)"></a>4) 天然并发 (重要特点)</h5><h5 id="1-从语言层面支持并发，实现简单"><a href="#1-从语言层面支持并发，实现简单" class="headerlink" title="(1) 从语言层面支持并发，实现简单"></a>(1) 从语言层面支持并发，实现简单</h5><h5 id="2-goroutine，轻量级线程，可实现大并发处理，高效利用多核。"><a href="#2-goroutine，轻量级线程，可实现大并发处理，高效利用多核。" class="headerlink" title="(2) goroutine，轻量级线程，可实现大并发处理，高效利用多核。"></a>(2) goroutine，轻量级线程，可实现大并发处理，高效利用多核。</h5><h5 id="3-基于-CPS-并发模型-Communicating-Sequential-Processes-实现-5-吸收了管道通信机制，形成-Go-语言特有的管道-channel-通过管道-channel-可以实现不同的-goroute-之间的相互通信。"><a href="#3-基于-CPS-并发模型-Communicating-Sequential-Processes-实现-5-吸收了管道通信机制，形成-Go-语言特有的管道-channel-通过管道-channel-可以实现不同的-goroute-之间的相互通信。" class="headerlink" title="(3) 基于 CPS 并发模型(Communicating Sequential Processes )实现 5) 吸收了管道通信机制，形成 Go 语言特有的管道 channel 通过管道 channel , 可以实现不同的 goroute 之间的相互通信。"></a>(3) 基于 CPS 并发模型(Communicating Sequential Processes )实现 5) 吸收了管道通信机制，形成 Go 语言特有的管道 channel 通过管道 channel , 可以实现不同的 goroute 之间的相互通信。</h5><h5 id="6-函数可以返回多个值。举例"><a href="#6-函数可以返回多个值。举例" class="headerlink" title="6) 函数可以返回多个值。举例:"></a>6) 函数可以返回多个值。举例:</h5><p>**//**写一个函数，实现同时返回 和，差</p>
+<p>**//go **函数支持返回多个值</p>
+<p>**    func getSumAndSub(n1 int, n2 int) (int, int ) {<br>**<br><strong>sum := n1 + n2 //go **语句后面不要带分号</strong>.<br>sub := n1 - n2**<br>**return sum , sub<br>**<br>**}<br>**</p>
+<h5 id="7-新的创新-比如切片-slice、延时执行-defer"><a href="#7-新的创新-比如切片-slice、延时执行-defer" class="headerlink" title="7) 新的创新:比如切片 slice、延时执行 defer"></a>7) 新的创新:比如切片 slice、延时执行 defer</h5><h1 id="Golang-执行流程分析"><a href="#Golang-执行流程分析" class="headerlink" title="Golang 执行流程分析"></a>Golang 执行流程分析</h1><h5 id="如果是对源码编译后，再执行，Go-的执行流程如下图"><a href="#如果是对源码编译后，再执行，Go-的执行流程如下图" class="headerlink" title="如果是对源码编译后，再执行，Go 的执行流程如下图"></a>如果是对源码编译后，再执行，Go 的执行流程如下图</h5><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581916560309-2469e871-b794-41a9-97d1-68d61906df40.png#align=left&display=inline&height=153&name=image.png&originHeight=153&originWidth=743&size=133206&status=done&style=none&width=743" alt="image.png"></p>
+<h5 id="如果我们是对源码直接-执行-go-run-源码，Go-的执行流程如下图"><a href="#如果我们是对源码直接-执行-go-run-源码，Go-的执行流程如下图" class="headerlink" title="如果我们是对源码直接 执行 go run 源码，Go 的执行流程如下图"></a>如果我们是对源码直接 执行 go run 源码，Go 的执行流程如下图</h5><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1581916575614-992ef51f-84df-4e61-9ff6-f50c6df05604.png#align=left&display=inline&height=160&name=image.png&originHeight=160&originWidth=596&size=85386&status=done&style=none&width=596" alt="image.png"></p>
+<h5 id="两种执行流程的方式区别-1-如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有-go-开发环境的机器上，仍然可以运行"><a href="#两种执行流程的方式区别-1-如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有-go-开发环境的机器上，仍然可以运行" class="headerlink" title="两种执行流程的方式区别      1) 如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有 go 开发环境的机器上，仍然可以运行"></a>两种执行流程的方式区别      1) 如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有 go 开发环境的机器上，仍然可以运行</h5><h5 id="2-如果我们是直接-go-run-go-源代码，那么如果要在另外一个机器上这么运行，也需要-go-开发环境，否则无法执行。"><a href="#2-如果我们是直接-go-run-go-源代码，那么如果要在另外一个机器上这么运行，也需要-go-开发环境，否则无法执行。" class="headerlink" title="2) 如果我们是直接 go run go 源代码，那么如果要在另外一个机器上这么运行，也需要 go 开发环境，否则无法执行。"></a>2) 如果我们是直接 go run go 源代码，那么如果要在另外一个机器上这么运行，也需要 go 开发环境，否则无法执行。</h5><h5 id="3-在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。"><a href="#3-在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。" class="headerlink" title="3) 在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。"></a>3) 在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多。</h5>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/16/yuque/Go%E8%AF%AD%E8%A8%80%E7%89%B9%E7%82%B9/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何快速的学习一门新技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">如何快速的学习一门新技术</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/" class="archive-article-date">
+  	<time datetime="2020-02-15T16:43:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-我们有一个需求"><a href="#1-我们有一个需求" class="headerlink" title="1.我们有一个需求"></a>1.我们有一个需求</h1><h2 id="项目开发时，我们需要解决某个问题（例如页面局部刷新）"><a href="#项目开发时，我们需要解决某个问题（例如页面局部刷新）" class="headerlink" title="项目开发时，我们需要解决某个问题（例如页面局部刷新）"></a>项目开发时，我们需要解决某个问题（例如页面局部刷新）</h2><h2 id="跳槽，学习新技术"><a href="#跳槽，学习新技术" class="headerlink" title="跳槽，学习新技术"></a>跳槽，学习新技术</h2><h1 id="2-我们先看看使用现有技术能否解决这个问题"><a href="#2-我们先看看使用现有技术能否解决这个问题" class="headerlink" title="2.我们先看看使用现有技术能否解决这个问题"></a>2.我们先看看使用现有技术能否解决这个问题</h1><h2 id="可以解决"><a href="#可以解决" class="headerlink" title="可以解决"></a>可以解决</h2><p>1.使用传统的方法 iframe<br>发现使用传统方法可以解决，但是不够好 2.使用新技术-&gt;axjx</p>
+<h1 id="3-学习一下新技术或者知识点的"><a href="#3-学习一下新技术或者知识点的" class="headerlink" title="3.学习一下新技术或者知识点的"></a>3.学习一下新技术或者知识点的</h1><p>1.原理 2.基本语法</p>
+<h1 id="4-快速入门案例"><a href="#4-快速入门案例" class="headerlink" title="4.快速入门案例"></a>4.快速入门案例</h1><p>1.简单<br>2 了解新技术或者知识点的基本使用<br>这里不需要设计技术细节</p>
+<h1 id="5-讨论这个新技术知识点的"><a href="#5-讨论这个新技术知识点的" class="headerlink" title="5.讨论这个新技术知识点的"></a>5.讨论这个新技术知识点的</h1><p>1.怎么规范使用 2.使用陷阱 3.需要使用时，注意什么</p>
+<h3 id="这里体现一个程序员的水平"><a href="#这里体现一个程序员的水平" class="headerlink" title="这里体现一个程序员的水平"></a>这里体现一个程序员的水平</h3><h1 id="1-gt-2-gt-3-gt-4-gt-5"><a href="#1-gt-2-gt-3-gt-4-gt-5" class="headerlink" title="1-&gt;2-&gt;3-&gt;4-&gt;5-|"></a>1-&gt;2-&gt;3-&gt;4-&gt;5-|</h1><h1 id="往复循环"><a href="#往复循环" class="headerlink" title="|      往复循环      |"></a>|      往复循环      |</h1><h1 id="lt-lt-lt-lt-lt-lt"><a href="#lt-lt-lt-lt-lt-lt" class="headerlink" title="| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |"></a>| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |</h1>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/15/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/leetcode （20-easy，10-middle，2-hard)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -445,851 +1341,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/2020-2025" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/18/yuque/2020-2025/">2020-2025</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/18/yuque/2020-2025/" class="archive-article-date">
-  	<time datetime="2020-01-18T15:12:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>5 年目标：</p>
-<ol>
-<li>自我总资产百万</li>
-<li>技术希望在中国互联网上有一席之地。（小小网红那种就成）</li>
-<li>希望 2025 年底前进入阿里巴巴</li>
-<li>有自己的稳定的副业。副业超过主业的收入。</li>
-<li>不偷奸不耍滑，勤勤恳恳，不整快钱。</li>
-</ol>
-<p>2020 年 1.找到那个合适的人。（重要不紧急） 2.整个副业，不必多、第一年年入 2 万即可。（紧急不重要-&gt;（钱不重要）） 3.技术上面有突破、独当一面（后端服务设计、代码质量提高），2020 年至少 30 篇技术文章。（长期）</p>
-<p>计划 2021 年 1.年底前结婚。<br>…….这里待完善</p>
-<p>2021 年</p>
-<p>2022 年</p>
-<p>2023 年</p>
-<p>2024 年</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/18/yuque/2020-2025/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/人生的前0.25再见，你好第二个25年" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/18/yuque/%E4%BA%BA%E7%94%9F%E7%9A%84%E5%89%8D0.25%E5%86%8D%E8%A7%81%EF%BC%8C%E4%BD%A0%E5%A5%BD%E7%AC%AC%E4%BA%8C%E4%B8%AA25%E5%B9%B4/">人生的前0.25再见，你好第二个25年</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/18/yuque/%E4%BA%BA%E7%94%9F%E7%9A%84%E5%89%8D0.25%E5%86%8D%E8%A7%81%EF%BC%8C%E4%BD%A0%E5%A5%BD%E7%AC%AC%E4%BA%8C%E4%B8%AA25%E5%B9%B4/" class="archive-article-date">
-  	<time datetime="2020-01-18T14:59:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>你好 25 岁,我希望接下来的每 5 年定一个 5 年计划。<br>每个计划分为基础目标、蹦一蹦目标、总目标。<br>每年一个短期小目标、长期小目标、重要的不紧急的小目标、紧急不重要的小目标四类。<br>每年一个年中总结、总结年中目标执行情况。<br>每年一个年终总结、总结年终目标执行情况。<br>每次分析自己的优势、劣势。<br>每次希望自己想要达到什么、什么是今年最迫切的、什么是今年最需要的、什么是今年最想得到的。<br>每个 5 年中的第三年、回顾前两年的计划是否落实、是否需要改进，找一个志同道合的人深入的聊一天。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/18/yuque/%E4%BA%BA%E7%94%9F%E7%9A%84%E5%89%8D0.25%E5%86%8D%E8%A7%81%EF%BC%8C%E4%BD%A0%E5%A5%BD%E7%AC%AC%E4%BA%8C%E4%B8%AA25%E5%B9%B4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Golang 基础题(一)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/12/yuque/Golang%20%E5%9F%BA%E7%A1%80%E9%A2%98(%E4%B8%80)/">Golang 基础题(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/12/yuque/Golang%20%E5%9F%BA%E7%A1%80%E9%A2%98(%E4%B8%80)/" class="archive-article-date">
-  	<time datetime="2020-01-12T03:59:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-在-A-和-B-处填入代码，使输出为-foo"><a href="#1-在-A-和-B-处填入代码，使输出为-foo" class="headerlink" title="1.  在 A 和 B 处填入代码，使输出为 foo"></a>1.  在 A 和 B 处填入代码，使输出为 foo</h3><p>| **package **main</p>
-<p>**type **S **struct<br>**{</p>
-<p>m string</p>
-<p>}</p>
-<p>*<em>func **f()\</em>S  {</p>
-<p>**return **<em>_\</em> _//A</p>
-<p>_}</p>
-<p>**func **main()  {</p>
-<p>p:=<em>_\</em> _//B</p>
-<p>_print(p.m)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     m <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span>*<span class="title">S</span></span>  &#123;</span><br><span class="line">      <span class="keyword">return</span> _&amp;S&#123;<span class="string">&quot;foo&quot;</span>&#125; <span class="comment">//A</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">     p:=_f()__ <span class="comment">//B</span></span><br><span class="line">     <span class="built_in">print</span>(p.m)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-下面代码输出是什么，若想输出-012，怎么改"><a href="#2-下面代码输出是什么，若想输出-012，怎么改" class="headerlink" title="2.  下面代码输出是什么，若想输出 012，怎么改"></a>2.  下面代码输出是什么，若想输出 012，怎么改</h3><p>| **package **main</p>
-<p><strong>const _N _</strong>= 3</p>
-<p>**func **main() {</p>
-<p>m := make(<strong>map</strong>[int]*int)</p>
-<p><strong>for **i :=<br>0; i &lt; **<em>N</em></strong>;<br>i++ {</p>
-<p>m[i] = &amp;i</p>
-<p>}</p>
-<p>**for **_, v<br>:= **range **m {</p>
-<p>print(*v)</p>
-<p>}</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     <span class="keyword">for</span> i :=<span class="number">0</span>; i &lt; N;i++ &#123;</span><br><span class="line">        m[i] = i</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">for</span> _, v:= <span class="keyword">range</span> m &#123;</span><br><span class="line">        <span class="built_in">print</span>(v)</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-代码输出什么？为什么？如何改会使得-len-m-为-10"><a href="#3-代码输出什么？为什么？如何改会使得-len-m-为-10" class="headerlink" title="3.  代码输出什么？为什么？如何改会使得 len(m)为 10"></a>3.  代码输出什么？为什么？如何改会使得 len(m)为 10</h3><p>| **package **main</p>
-<p>**import “sync”</p>
-<p>const _N _**= 10</p>
-<p>**func **main() {</p>
-<p>m := make(<strong>map</strong>[int]int)</p>
-<p>wg := &amp;sync.WaitGroup{}</p>
-<p>mu := &amp;sync.Mutex{}</p>
-<p>wg.Add(<strong><em>N</em></strong>)</p>
-<p><strong>for **i :=<br>0; i &lt; **<em>N</em></strong>;<br>i++ {</p>
-<p><strong>go func</strong>() {</p>
-<p>**defer **wg.Done()</p>
-<p>mu.Lock()</p>
-<p>m[i] = i</p>
-<p>mu.Unlock()</p>
-<p>}()</p>
-<p>}</p>
-<p>wg.Wait()</p>
-<p>println(len(m))</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     wg := &amp;sync.WaitGroup&#123;&#125;</span><br><span class="line">     mu := &amp;sync.Mutex&#123;&#125;</span><br><span class="line">     wg.Add(N)</span><br><span class="line">     <span class="keyword">for</span> i :=</span><br><span class="line">  <span class="number">0</span>; i &lt; N;</span><br><span class="line">  i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">           <span class="keyword">defer</span> wg.Done()</span><br><span class="line">           mu.Lock()</span><br><span class="line">           m[i] = i</span><br><span class="line">           mu.Unlock()</span><br><span class="line">        &#125;()</span><br><span class="line">     &#125;</span><br><span class="line">     wg.Wait()</span><br><span class="line">     <span class="built_in">println</span>(<span class="built_in">len</span>(m))</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-请描述-golang-语言的初始化顺序：包，变量，常量，init-函数"><a href="#4-请描述-golang-语言的初始化顺序：包，变量，常量，init-函数" class="headerlink" title="4.   请描述 golang 语言的初始化顺序：包，变量，常量，init 函数"></a>4.   请描述 golang 语言的初始化顺序：包，变量，常量，init 函数</h3><p>main 包-&gt;import 包-&gt;常量-&gt;变量-&gt;init 函数</p>
-<h3 id="5-描述下面代码输出"><a href="#5-描述下面代码输出" class="headerlink" title="5.   描述下面代码输出"></a>5.   描述下面代码输出</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S1 <span class="keyword">struct</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s1 S1)</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">&quot;S1.f()&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s1 S1)</span> <span class="title">g</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">&quot;S1.g()&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S2 <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     S1</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(s2 S2)</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">     fmt.Println(<span class="string">&quot;S2.f()&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> I <span class="keyword">interface</span></span><br><span class="line">  &#123;</span><br><span class="line">     f()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">printType</span><span class="params">(i I)</span></span> &#123;</span><br><span class="line">     <span class="keyword">if</span> s1,</span><br><span class="line">  ok := i.(S1); ok &#123;</span><br><span class="line">        s1.f()</span><br><span class="line">        s1.g()</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> s2,</span><br><span class="line">  ok := i.(S2); ok &#123;</span><br><span class="line">        s2.f()</span><br><span class="line">        s2.g()</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     printType(S1&#123;&#125;)</span><br><span class="line">     printType(S2&#123;&#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-下面代码有什么问题，怎么修改"><a href="#6-下面代码有什么问题，怎么修改" class="headerlink" title="6.   下面代码有什么问题，怎么修改"></a>6.   下面代码有什么问题，怎么修改</h3><p>| **package **main</p>
-<p>**import **(</p>
-<p>**“sync”</p>
-<p>“math/rand”</p>
-<p>**)</p>
-<p><strong>const _N _</strong>= 10</p>
-<p>**func **main() {</p>
-<p>m := make(<strong>map</strong>[int]int)</p>
-<p>wg := &amp;sync.WaitGroup{}</p>
-<p>wg.Add(<strong><em>N</em></strong>)</p>
-<p><strong>for **i :=<br>0; i &lt; **<em>N</em></strong>;<br>i++ {</p>
-<p><strong>go func</strong>() {_<br>         _**defer **wg.Done()</p>
-<p>m[rand.Int()] = rand.Int()_<br>      _}()</p>
-<p>}</p>
-<p>wg.Wait()</p>
-<p>println(len(m))</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> (</span><br><span class="line">     <span class="string">&quot;sync&quot;</span></span><br><span class="line">     <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">     wg := &amp;sync.WaitGroup&#123;&#125;</span><br><span class="line">     wg.Add(N)</span><br><span class="line">      mu:=sync.Mutex&#123;&#125;</span><br><span class="line">     <span class="keyword">for</span> i :=<span class="number">0</span>; i &lt; N;i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">           <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            mu.Lock()</span><br><span class="line">           m[rand.Int()] = rand.Int()</span><br><span class="line">            mu.Unlock()</span><br><span class="line">        &#125;()</span><br><span class="line">     &#125;</span><br><span class="line">     wg.Wait()</span><br><span class="line">     <span class="built_in">println</span>(<span class="built_in">len</span>(m))</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-请描述-make-和-new-的区别"><a href="#7-请描述-make-和-new-的区别" class="headerlink" title="7.   请描述 make 和 new 的区别"></a>7.   请描述 make 和 new 的区别</h3><p>make 被用来分配引用类型的内存： map, slice, channel<br>new 被用来分配除了引用类型的所有其他类型的内存： int, string, array 等</p>
-<h3 id="8-下面代码输出什么，如何让输出为-true"><a href="#8-下面代码输出什么，如何让输出为-true" class="headerlink" title="8.   下面代码输出什么，如何让输出为 true"></a>8.   下面代码输出什么，如何让输出为 true</h3><p>| **package **main</p>
-<p>**import “fmt”</p>
-<p>type *<em>S **struct \</em>*{</p>
-<p>a, b, c string</p>
-<p>}</p>
-<p>**func **main() {</p>
-<p>x := <strong>interface</strong>{}(&amp;S{<strong>“a”</strong>, <strong>“b”</strong>, <strong>“c”</strong>})</p>
-<p>y := <strong>interface</strong>{}(&amp;S{<strong>“a”</strong>, <strong>“b”</strong>, <strong>“c”</strong>})</p>
-<p>fmt.Println(x == y)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span> &#123;</span><br><span class="line">     a, b, c <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     x := <span class="keyword">interface</span>&#123;&#125;(S&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>&#125;)</span><br><span class="line">     y := <span class="keyword">interface</span>&#123;&#125;(S&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>&#125;)</span><br><span class="line">     fmt.Println(x == y)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="9-下面代码问题是什么，如何修改"><a href="#9-下面代码问题是什么，如何修改" class="headerlink" title="9.   下面代码问题是什么，如何修改"></a>9.   下面代码问题是什么，如何修改</h3><p>| **package **main</p>
-<p>**type **S **struct<br>**{</p>
-<p>name string</p>
-<p>}</p>
-<p><strong>func **main() {_<br>   _m := **map</strong>[string]S{<strong>“x”</strong>: S{<strong>“one”</strong>}}</p>
-<p>m[<strong>“x”</strong>].name = **“two”</p>
-<table>
-<thead>
-<tr>
-<th>**}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> S <span class="keyword">struct</span></span><br><span class="line">  &#123;</span><br><span class="line">     name <span class="keyword">string</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     m := <span class="keyword">map</span>[<span class="keyword">string</span>]S&#123;<span class="string">&quot;x&quot;</span>: &amp;S&#123;<span class="string">&quot;one&quot;</span>&#125;&#125;</span><br><span class="line">     m[<span class="string">&quot;x&quot;</span>].name = <span class="string">&quot;two&quot;</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="10-修改代码，使得-status-输出为-200"><a href="#10-修改代码，使得-status-输出为-200" class="headerlink" title="10. 修改代码，使得 status 输出为 200"></a>10. 修改代码，使得 status 输出为 200</h3><p>| **package **main</p>
-<p>**import **(</p>
-<p>**“encoding/json”</p>
-<p>“fmt”</p>
-<p>**)</p>
-<p>**type **Result **struct **{</p>
-<p>status int_<br>_}</p>
-<p>**func **main() {</p>
-<p><strong>var **data<br>= []byte(</strong><code>&#123;&quot;status&quot;:200&#125;</code>**)</p>
-<p>result := &amp;Result{}</p>
-<p>**if **err<br>:= json.Unmarshal(data, &amp;result); err != nil {</p>
-<p>fmt.Println(<strong>“error:”</strong>, err)</p>
-<p>**return</p>
-<p>**}</p>
-<p>fmt.Printf(<strong>“result=%+v”</strong>, result)</p>
-<table>
-<thead>
-<tr>
-<th>}</th>
-</tr>
-</thead>
-</table>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line">  <span class="keyword">import</span> (</span><br><span class="line">     <span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">     <span class="string">&quot;fmt&quot;</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> Result <span class="keyword">struct</span> &#123;</span><br><span class="line">     Status <span class="keyword">int</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     <span class="keyword">var</span> data= []<span class="keyword">byte</span>(<span class="string">`&#123;&quot;status&quot;:200&#125;`</span>)</span><br><span class="line">     result := &amp;Result&#123;&#125;</span><br><span class="line">     <span class="keyword">if</span> err:= json.Unmarshal(data, &amp;result); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;error:&quot;</span>, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">     &#125;</span><br><span class="line">     fmt.Printf(<span class="string">&quot;result=%+v&quot;</span>, result)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="11-描述-golang-中的-stack-和-heap-的区别，分别在什么情况下会分配-stack？又在何时会分配到-heap-中"><a href="#11-描述-golang-中的-stack-和-heap-的区别，分别在什么情况下会分配-stack？又在何时会分配到-heap-中" class="headerlink" title="11. 描述 golang 中的 stack 和 heap 的区别，分别在什么情况下会分配 stack？又在何时会分配到 heap 中"></a>11. 描述 golang 中的 stack 和 heap 的区别，分别在什么情况下会分配 stack？又在何时会分配到 heap 中</h3><p>区别：<br>栈：一般存放变量名，比较小，系统自动处理内存分配和释放<br>堆：一般存放具体数据，比较大，一般程序员处理内存<br>例如 a:=123    a 在栈，123 在堆</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/12/yuque/Golang%20%E5%9F%BA%E7%A1%80%E9%A2%98(%E4%B8%80)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/你好2020，再见2019" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/31/yuque/%E4%BD%A0%E5%A5%BD2020%EF%BC%8C%E5%86%8D%E8%A7%812019/">你好2020，再见2019</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/31/yuque/%E4%BD%A0%E5%A5%BD2020%EF%BC%8C%E5%86%8D%E8%A7%812019/" class="archive-article-date">
-  	<time datetime="2019-12-31T01:00:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>这是第二篇年终总结，还记得去年的今天，同样的时间，同样的地点，做着同样的事。<br>这一年，有许许多多的人离我们而去。<br>这一年，5 座城市，3000 多公里——回到那梦开始的地方，从零开始。<br>这一年，理性变得有些感性。<br>这一年，我焦虑。<br>这一年，哪里有资本寒冬，只能说有许许多多形形色色的我。<br>这一年，技术关注的广度少了，2 次技术峰会，1 次产品发布会，1 次极客公园。<br>这一年，实践了喜欢的技术，今年动手实践了私有 K8S、DEVOPS，技术上没啥遗憾。<br>这一年，“算法”、“标签”、“新基础设施”让我更加简单的了解这个世界。<br>这一年，更加关注效率。<br>这一年，开始关注身边……<br>这一年，是悖论年……<br>这一年,  ……<br>感恩这一年…….</p>
-<p>这年，戒掉了睡懒觉的习惯，没想到一天也可以这样长，这样的精彩。<br>这年，生活更加的规律。<br>这年，开始寻找自己的兴趣点。<br>这年，让我认识到社会的复杂性。<br>这年，自我的演化算法又精进了一步。<br>这年，又老了一岁 😂。<br>感谢这年，让自己拥有了自己的基本盘。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>2019 年完成了去年的牛，20 本纸质书。<br>2019 年也完成了那些确定的事。<br>2019 年当然也有个遗憾……<br>再见 👋2019。</p>
-<h2 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h2><p>2020 年希望直面挑战，躬身入局。<br>2020 年希望能沉浸在认认真真的解决自己的事。<br>2020 年希望能做的更好。<br>你好 👋2020。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>再过 20 天不到的样子，走过了自己人生的 1/4。你好，2020 年，即将圆满的 25 岁。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/31/yuque/%E4%BD%A0%E5%A5%BD2020%EF%BC%8C%E5%86%8D%E8%A7%812019/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Linux Shell输出文本中的指定行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/">Linux Shell输出文本中的指定行</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/" class="archive-article-date">
-  	<time datetime="2019-12-17T03:25:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Linux Shell 输出文本中的指定行<br>在 Linux 系统上如何快速查看文本中指定行呢？有时文本较大比如有 10w 行，想要快速查看第 99 行该怎么做呢？<br>本文以文件名 test.txt 为例，介绍 3 种方式快速查看 test.txt 的第 99 行。相信你可以轻易的举一反三。</p>
-<p>使用 sed<br>sed 全名：stream editor，流编辑器，使用程序的方式来编辑文本，可以实现替换、删除、新增、选取特定行等功能，是一种很 hacker 的方式。sed 基本上使用正则表达式匹配，对正则表达式要求较高。<br>想要快速入门 sed 参考 sed 简明教程，想要深入学习参考 sed 完整手册。</p>
-<p>sed 语法格式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed [ -n ] [ -u ] Script  [ File ... ]</span><br><span class="line">sed [ -n ] [ -u ] [ -e Script ] ... [ -f ScriptFile ] ...  [ File</span><br><span class="line">... ]</span><br></pre></td></tr></table></figure>
-
-<p>关键 Options 介绍：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-n : 安静模式。一般sed用法中，所有来自STDIN的数据都会被输出到屏幕上，使用-n只有被sed处理的行才会列出来。如果不使用-n，使用sed打印时，会把输入流和处理的信息都打印一遍</span><br><span class="line">a：append，追加文本</span><br><span class="line">i：insert，插入文本</span><br><span class="line">d：delete，删除文本</span><br><span class="line">s: 模式匹配替换</span><br><span class="line">p：打印文本</span><br><span class="line">sed使用示例</span><br><span class="line">在指定行插入或追加: a, i</span><br><span class="line">a. 在test.txt第一行前插入：sed “1 i This is a test file” test.txt</span><br><span class="line">b. 在test.txt最后一行追加：sed “$ a This is the end of file” test.txt</span><br><span class="line">删除： d</span><br><span class="line">a. 删除test.txt第二行： sed ‘2d’ test.txt</span><br><span class="line">b. 删除test.txt符合正则表达式&#x2F;fish的行： sed ‘&#x2F;fish&#x2F;d’ test.txt</span><br><span class="line">修改文本：s</span><br><span class="line">a. 将text.txt中love替换为like： sed “s&#x2F;love&#x2F;like&#x2F;g” test.txt （&#x2F;g表示全局匹配）</span><br><span class="line">打印文本： p</span><br><span class="line">a. 输出test.txt的第5-7行：sed -n ‘5,7p’ test.txt （-n的作用就显示出来了，可以去除-n查看效果）</span><br></pre></td></tr></table></figure>
-
-<p>ps: 以上命令并不会真的修改掉 test.txt 的内容，如果想修改文本内容可以使用重定向，或者使用-i 选项。</p>
-<p>使用 sed 输出 test.txt 的第 99 行？<br>有了以上的 sed 基础，可以轻易得出解决方案：sed -n ‘99,p’ test.txt。但 sed 在 print 后并不会立即退出，还会继续搜索文件直到文件末尾，当文件较大的时候使用 sed 的效率会比较低。可以做如下优化：sed -n ‘99,p;100q’ test.txt，打印完之后在 100 行退出。</p>
-<p>使用 awk<br>awk: 文本处理工具，可以在文件中查找与模式匹配的行并在这些行上执行指定的操作。awk 比 sed 早诞生 2-3 年，作用与 sed 类似。快速入门 awk 可参考 awk 简明教程。</p>
-<p>awk 语法格式</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awk [ -u ] [ -F Ere ] [ -v Assignment ] ... &#123; -f ProgramFile |</span><br><span class="line"><span class="string">&#x27;Program&#x27;</span> &#125; [ [ File ... | Assignment ... ] ] ...</span><br></pre></td></tr></table></figure>
-
-<p>awk 提供了一系列内建变量：</p>
-<p>$0: 当前记录（这个变量中存放着整个行的内容）<br>$1~$n: 当前记录的第 n 个字段，字段间由 FS 分隔<br>FS: 输入字段分隔符 默认是空格或 Tab<br>NF: 当前记录中的字段个数，就是有多少列<br>NR: 已经读出的记录数，就是行号，从 1 开始，如果有多个文件话，这个值也是不断累加中。<br>FNR: 当前记录数，与 NR 不同的是，这个值会是各个文件自己的行号<br>RS: 输入的记录分隔符， 默认为换行符<br>OFS: 输出字段分隔符， 默认也是空格<br>ORS: 输出的记录分隔符，默认为换行符<br>FILENAME: 当前输入文件的名字<br>awk 使用示例：<br>打印 test.txt 中第一列为 This 的行：awk ‘$1==”This” test.txt<br>打印表头和 test.txt 中第一列为 This 的行：awk ‘$1==”This” || NR == 1’ test.txt<br>格式化输出：awk ‘$1==”This” || NR==1 {printf “%-20s %-20s\n”,$4,$5}’ test.txt<br>使用 awk 输出 test.txt 的第 99 行？<br>使用内建变量 NR 和 FNR：</p>
-<p>awk ‘NR==99’ test.txt<br>awk ‘FNR==99’ test.txt<br>ps: awk 打印完也不会立即退出，可以添加 exit 优化：awk ‘NR==99 {print; exit}’ test.txt</p>
-<p>使用 head 和 tail 组合<br>head 和 tail 故名思意，相对简单，分别输出文件或流的开头 n 行或结尾 n 行，就不在此详细介绍了。直接给出解决方案：<br>tail -n+99 test.txt|head -1</p>
-<p>很容易想到对称的组合：head -99 test.txt|tail -1，但是当文件不足 99 行时，输出的是文件最后一行的内容。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/17/yuque/Linux%20Shell%E8%BE%93%E5%87%BA%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E6%8C%87%E5%AE%9A%E8%A1%8C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MacOS 制作Ubuntu ISO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/">MacOS 制作Ubuntu ISO</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/" class="archive-article-date">
-  	<time datetime="2019-12-04T01:28:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">☁  Desktop [master] ⚡ hdiutil convert -format UDRW -o ./ubuntu-18.04-desktop-amd64 ./ubuntu-18.04-desktop-amd64.iso    <span class="comment"># 将ISO转为DMG</span></span><br><span class="line">正在读取Driver Descriptor Map（DDM：0）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：1）…</span><br><span class="line">正在读取Apple（Apple_partition_map：2）…</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：3）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取EFI（Apple_HFS：4）…</span><br><span class="line">.............................................................................</span><br><span class="line">正在读取Ubuntu 18.04 LTS amd64          （Apple_ISO：5）…</span><br><span class="line">..............................................................................</span><br><span class="line">已耗时： 2.082s</span><br><span class="line">速度：880.0M 字节/秒</span><br><span class="line">节省：0.0%</span><br><span class="line">created: /Users/huqilin/Desktop/ubuntu-18.04-desktop-amd64.dmg</span><br><span class="line">☁  Desktop [master] ⚡ diskutil list    <span class="comment"># 得到 U 盘设备号</span></span><br><span class="line">/dev/disk0 (internal):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      GUID_partition_scheme                         251.0 GB   disk0</span><br><span class="line">   1:                        EFI EFI                     314.6 MB   disk0s1</span><br><span class="line">   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2</span><br><span class="line">/dev/disk1 (synthesized):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:      APFS Container Scheme -                      +250.7 GB   disk1</span><br><span class="line">                                 Physical Store disk0s2</span><br><span class="line">   1:                APFS Volume Macintosh HD            112.5 GB   disk1s1</span><br><span class="line">   2:                APFS Volume Preboot                 21.1 MB    disk1s2</span><br><span class="line">   3:                APFS Volume Recovery                517.8 MB   disk1s3</span><br><span class="line">   4:                APFS Volume VM                      3.2 GB     disk1s4</span><br><span class="line">/dev/disk2 (external, physical):</span><br><span class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></span><br><span class="line">   0:     FDisk_partition_scheme                        *7.8 GB     disk2</span><br><span class="line">   1:                  Apple_HFS USB8G                   7.8 GB     disk2s1</span><br><span class="line">☁  Desktop [master] ⚡ diskutil unmountDisk /dev/disk2    <span class="comment"># 卸载 U 盘设备</span></span><br><span class="line">Unmount of all volumes on disk2 was successful</span><br><span class="line">☁  Desktop [master] ⚡ sudo dd <span class="keyword">if</span>=ubuntu-18.04-desktop-amd64.dmg of=/dev/disk2 bs=1m    <span class="comment"># 创建可启动的 USB 驱动盘</span></span><br><span class="line">Password:</span><br><span class="line">1832+1 records <span class="keyword">in</span></span><br><span class="line">1832+1 records out</span><br><span class="line">1921843200 bytes transferred <span class="keyword">in</span> 207.200284 secs (9275292 bytes/sec)</span><br><span class="line">☁  Desktop [master] ⚡ diskutil eject /dev/disk2    <span class="comment"># 弹出磁盘</span></span><br><span class="line">Disk /dev/disk2 ejected</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/04/yuque/MacOS%20%E5%88%B6%E4%BD%9CUbuntu%20ISO/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Golang Date 的日期（转载）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">Golang Date 的日期（转载）</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2019-11-23T15:27:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="热身"><a href="#热身" class="headerlink" title="热身"></a>热身</h2><p>在讲这个问题之前，先来看一道代码题：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    timeString := time.Now().Format(<span class="string">&quot;2006-01-02 15:04:05&quot;</span>)</span><br><span class="line">    fmt.Println(timeString)</span><br><span class="line">    fmt.Println(time.Now().Format(<span class="string">&quot;2017-09-07 18:05:32&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码的输出是什么（假定运行时刻的时间是 2017-09-07 18:05:32）？<br>什么？你已经知道答案了？那你是大神，可以跳过这篇文章了。</p>
-<h2 id="一、神奇的日期"><a href="#一、神奇的日期" class="headerlink" title="一、神奇的日期"></a>一、神奇的日期</h2><p>刚接触 Golang 时，阅读代码的时候总会在代码中发现这么一个日期，</p>
-<blockquote>
-<p>2006-01-02 15:04:05</p>
-</blockquote>
-<p>刚看到这段代码的时候，我当时想：这个人好随便啊，随便写一个日期在这里，但是又感觉还挺方便的，格式清晰一目了然。也没有更多的在意了。<br>之后一次做需求的时候轮到自己要格式化时间了，仿照它的样子，写了一个日期格式来格式化，差不多就是上面代码题上写的那样。殊不知，运行完毕后，结果令人惊呆。。。<br>运行结果如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-07</span> <span class="number">18</span>:<span class="number">06</span>:<span class="number">43</span></span><br><span class="line"><span class="number">7097</span><span class="number">-09</span>+<span class="number">08</span> <span class="number">98</span>:<span class="number">43</span>:<span class="number">67</span></span><br></pre></td></tr></table></figure>
-
-<p>顿时就犯糊涂了：怎么就变成这个鸟样子了？format 不认识我的日期？这么标准的日期都不认识？</p>
-<h2 id="二、开始探究"><a href="#二、开始探究" class="headerlink" title="二、开始探究"></a>二、开始探究</h2><p>查阅了资料，发现原来这个日期就是写死的一个日期，不是这个日期就不认识，就不能正确的格式化。记住就好了。<br>但是，还是觉得有点纳闷。为什么输出日期是这个乱的？仔细观察这个日期，06 年，1 月 2 日下午 3 点 4 分 5 秒，查阅相关资料还有 -7 时区，Monday，数字 1~7 都有了，而且都不重复。难道有什么深刻含义？还是单纯的为了方便记忆？<br>晚上睡觉前一直在心里想。突然想到：这些数字全都不重复，那岂不就是说，每个数字就能代表你需要格式化的属性了？比如，解析格式化字符串的时候，遇到了 1，就说明这个地方要填的是月份，遇到了 4，说明这个位置是分钟？<br>不禁觉得，发明这串时间数字的人还是很聪明的。2006-01-02 15:04:05 这个日期，不但挺好记的，而且用起来也比较方便。这个比其他编程语言的 yyyy-MM-dd HH:mm:ss 这种东西好记多了。（楼主就曾经把 yyyy 大小写弄错了，弄出一个大 bug，写成 YYYY，结果，当时没测出来，到了十二月左右的时候，年份多了一年。。。）</p>
-<h2 id="三、深入探究"><a href="#三、深入探究" class="headerlink" title="三、深入探究"></a>三、深入探究</h2><p>为了一窥这个时间格式化的究竟，我们还是得阅读 go 的 time 包源代码。在$GOROOT/src/time/format.go 文件中，我们可以找到如下代码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    _                        = <span class="literal">iota</span></span><br><span class="line">    stdLongMonth             = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;January&quot;</span></span><br><span class="line">    stdMonth                                       <span class="comment">// &quot;Jan&quot;</span></span><br><span class="line">    stdNumMonth                                    <span class="comment">// &quot;1&quot;</span></span><br><span class="line">    stdZeroMonth                                   <span class="comment">// &quot;01&quot;</span></span><br><span class="line">    stdLongWeekDay                                 <span class="comment">// &quot;Monday&quot;</span></span><br><span class="line">    stdWeekDay                                     <span class="comment">// &quot;Mon&quot;</span></span><br><span class="line">    stdDay                                         <span class="comment">// &quot;2&quot;</span></span><br><span class="line">    stdUnderDay                                    <span class="comment">// &quot;_2&quot;</span></span><br><span class="line">    stdZeroDay                                     <span class="comment">// &quot;02&quot;</span></span><br><span class="line">    stdHour                  = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;15&quot;</span></span><br><span class="line">    stdHour12                                      <span class="comment">// &quot;3&quot;</span></span><br><span class="line">    stdZeroHour12                                  <span class="comment">// &quot;03&quot;</span></span><br><span class="line">    stdMinute                                      <span class="comment">// &quot;4&quot;</span></span><br><span class="line">    stdZeroMinute                                  <span class="comment">// &quot;04&quot;</span></span><br><span class="line">    stdSecond                                      <span class="comment">// &quot;5&quot;</span></span><br><span class="line">    stdZeroSecond                                  <span class="comment">// &quot;05&quot;</span></span><br><span class="line">    stdLongYear              = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// &quot;2006&quot;</span></span><br><span class="line">    stdYear                                        <span class="comment">// &quot;06&quot;</span></span><br><span class="line">    stdPM                    = <span class="literal">iota</span> + stdNeedClock <span class="comment">// &quot;PM&quot;</span></span><br><span class="line">    stdpm                                          <span class="comment">// &quot;pm&quot;</span></span><br><span class="line">    stdTZ                    = <span class="literal">iota</span>                <span class="comment">// &quot;MST&quot;</span></span><br><span class="line">    stdISO8601TZ                                   <span class="comment">// &quot;Z0700&quot;  // prints Z for UTC</span></span><br><span class="line">    stdISO8601SecondsTZ                            <span class="comment">// &quot;Z070000&quot;</span></span><br><span class="line">    stdISO8601ShortTZ                              <span class="comment">// &quot;Z07&quot;</span></span><br><span class="line">    stdISO8601ColonTZ                              <span class="comment">// &quot;Z07:00&quot; // prints Z for UTC</span></span><br><span class="line">    stdISO8601ColonSecondsTZ                       <span class="comment">// &quot;Z07:00:00&quot;</span></span><br><span class="line">    stdNumTZ                                       <span class="comment">// &quot;-0700&quot;  // always numeric</span></span><br><span class="line">    stdNumSecondsTz                                <span class="comment">// &quot;-070000&quot;</span></span><br><span class="line">    stdNumShortTZ                                  <span class="comment">// &quot;-07&quot;    // always numeric</span></span><br><span class="line">    stdNumColonTZ                                  <span class="comment">// &quot;-07:00&quot; // always numeric</span></span><br><span class="line">    stdNumColonSecondsTZ                           <span class="comment">// &quot;-07:00:00&quot;</span></span><br><span class="line">    stdFracSecond0                                 <span class="comment">// &quot;.0&quot;, &quot;.00&quot;, ... , trailing zeros included</span></span><br><span class="line">    stdFracSecond9                                 <span class="comment">// &quot;.9&quot;, &quot;.99&quot;, ..., trailing zeros omitted</span></span><br></pre></td></tr></table></figure>
-
-<p>上面就是所能见到的所有关于日期时间的片段。基本能够涵盖所有的关于日期格式化的请求。<br>可以总结如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center">格式</th>
-<th align="center">含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">01、 1、Jan、January</td>
-<td align="center">月</td>
-</tr>
-<tr>
-<td align="center">02、 2、_2</td>
-<td align="center">日，这个_2 表示如果日期是只有一个数字，则表示出来的日期前面用个空格占位。</td>
-</tr>
-<tr>
-<td align="center">03、 3、15</td>
-<td align="center">时</td>
-</tr>
-<tr>
-<td align="center">04、4</td>
-<td align="center">分</td>
-</tr>
-<tr>
-<td align="center">05、5</td>
-<td align="center">秒</td>
-</tr>
-<tr>
-<td align="center">2006、06、6</td>
-<td align="center">年</td>
-</tr>
-</tbody></table>
-<p>| -070000、 -07:00:00、 -0700、 -07:00、 -07<br>Z070000、Z07:00:00、 Z0700、 Z07:00 | 时区 |<br>| PM、pm | 上下午 |<br>| Mon、Monday | 星期 |<br>| MST | 美国时间，如果机器设置的是中国时间则表示为 UTC |</p>
-<p>看完了这些，心里对日期格式问题已经有数了。<br>所以，我们回头看一下开头的问题，我用</p>
-<blockquote>
-<p>2017-09-07 18:05:32</p>
-</blockquote>
-<p>这串数字来格式化这个日期</p>
-<blockquote>
-<p>2017-09-07 18:05:32</p>
-</blockquote>
-<p>得到的结果就是</p>
-<blockquote>
-<p>7097-09+08 98:43:67</p>
-</blockquote>
-<p>看了这个我就在想，如果是我，我会怎么解析这个格式呢？不禁想起来了学习《编译原理》时候的词法分析器，这个肯定需要构造一个语法树。至于文法什么的，暂时我也还弄不清。既然这样，那不如我们直接看 GO 源代码一窥究竟，看看 golang 语言团队的人是怎么解析的：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nextStdChunk</span><span class="params">(layout <span class="keyword">string</span>)</span> <span class="params">(prefix <span class="keyword">string</span>, std <span class="keyword">int</span>, suffix <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(layout); i++ &#123;</span><br><span class="line">        <span class="keyword">switch</span> c := <span class="keyword">int</span>(layout[i]); c &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;J&#x27;</span>: <span class="comment">// January, Jan</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Jan&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;January&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongMonth, layout[i+<span class="number">7</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMonth, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;M&#x27;</span>: <span class="comment">// Monday, Mon, MST</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Mon&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Monday&quot;</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongWeekDay, layout[i+<span class="number">6</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> !startsWithLowerCase(layout[i+<span class="number">3</span>:]) &#123;</span><br><span class="line">                        <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdWeekDay, layout[i+<span class="number">3</span>:]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> layout[i:i+<span class="number">3</span>] == <span class="string">&quot;MST&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span>: <span class="comment">// 01, 02, 03, 04, 05, 06</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; <span class="string">&#x27;1&#x27;</span> &lt;= layout[i+<span class="number">1</span>] &amp;&amp; layout[i+<span class="number">1</span>] &lt;= <span class="string">&#x27;6&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], std0x[layout[i+<span class="number">1</span>]-<span class="string">&#x27;1&#x27;</span>], layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;1&#x27;</span>: <span class="comment">// 15, 1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;5&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumMonth, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;2&#x27;</span>: <span class="comment">// 2006, 2</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">4</span> &amp;&amp; layout[i:i+<span class="number">4</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdLongYear, layout[i+<span class="number">4</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdDay, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;_&#x27;</span>: <span class="comment">// _2, _2006</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;2&#x27;</span> &#123;</span><br><span class="line">                <span class="comment">//_2006 is really a literal _, followed by stdLongYear</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i+<span class="number">1</span>:i+<span class="number">5</span>] == <span class="string">&quot;2006&quot;</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span> : i+<span class="number">1</span>], stdLongYear, layout[i+<span class="number">5</span>:]</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdUnderDay, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdHour12, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;4&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdMinute, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;5&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdSecond, layout[i+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;P&#x27;</span>: <span class="comment">// PM</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;M&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdPM, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;p&#x27;</span>: <span class="comment">// pm</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">2</span> &amp;&amp; layout[i+<span class="number">1</span>] == <span class="string">&#x27;m&#x27;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdpm, layout[i+<span class="number">2</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: <span class="comment">// -070000, -07:00:00, -0700, -07:00, -07</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;-070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumSecondsTz, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;-07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;-0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumTZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;-07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;-07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdNumShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;Z&#x27;</span>: <span class="comment">// Z070000, Z07:00:00, Z0700, Z07:00,</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">7</span> &amp;&amp; layout[i:i+<span class="number">7</span>] == <span class="string">&quot;Z070000&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601SecondsTZ, layout[i+<span class="number">7</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">9</span> &amp;&amp; layout[i:i+<span class="number">9</span>] == <span class="string">&quot;Z07:00:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonSecondsTZ, layout[i+<span class="number">9</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">5</span> &amp;&amp; layout[i:i+<span class="number">5</span>] == <span class="string">&quot;Z0700&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601TZ, layout[i+<span class="number">5</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">6</span> &amp;&amp; layout[i:i+<span class="number">6</span>] == <span class="string">&quot;Z07:00&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ColonTZ, layout[i+<span class="number">6</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(layout) &gt;= i+<span class="number">3</span> &amp;&amp; layout[i:i+<span class="number">3</span>] == <span class="string">&quot;Z07&quot;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> layout[<span class="number">0</span>:i], stdISO8601ShortTZ, layout[i+<span class="number">3</span>:]</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;.&#x27;</span>: <span class="comment">// .000 or .999 - repeated digits for fractional seconds.</span></span><br><span class="line">            <span class="keyword">if</span> i+<span class="number">1</span> &lt; <span class="built_in">len</span>(layout) &amp;&amp; (layout[i+<span class="number">1</span>] == <span class="string">&#x27;0&#x27;</span> || layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span>) &#123;</span><br><span class="line">                ch := layout[i+<span class="number">1</span>]</span><br><span class="line">                j := i + <span class="number">1</span></span><br><span class="line">                <span class="keyword">for</span> j &lt; <span class="built_in">len</span>(layout) &amp;&amp; layout[j] == ch &#123;</span><br><span class="line">                    j++</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// String of digits must end here - only fractional second is all digits.</span></span><br><span class="line">                <span class="keyword">if</span> !isDigit(layout, j) &#123;</span><br><span class="line">                    std := stdFracSecond0</span><br><span class="line">                    <span class="keyword">if</span> layout[i+<span class="number">1</span>] == <span class="string">&#x27;9&#x27;</span> &#123;</span><br><span class="line">                        std = stdFracSecond9</span><br><span class="line">                    &#125;</span><br><span class="line">                    std |= (j - (i + <span class="number">1</span>)) &lt;&lt; stdArgShift</span><br><span class="line">                    <span class="keyword">return</span> layout[<span class="number">0</span>:i], std, layout[j:]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> layout, <span class="number">0</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码有点长，不过逻辑还是很清楚的，我们吧上面表格中的那些常用项的先进行排序，然后根据排序结果，对首个字符进行分类，相同首字符的项放在一个 case 里面判断处理。看起来这里是简单的进行判断处理，其实这就是编译里面词法分析的一个步骤（分词）。<br>纵观整个 format.go 文件，其实这个日期处理还是挺复杂的，包括日期计算，格式解析，对日期进行格式化等。</p>
-<p>作者：FredGan<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c7f7fbb16932">https://www.jianshu.com/p/c7f7fbb16932</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/23/yuque/Golang%20Date%20%E7%9A%84%E6%97%A5%E6%9C%9F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/《Murphy‘s Law》 墨菲定律" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/">《Murphy‘s Law》 墨菲定律</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/" class="archive-article-date">
-  	<time datetime="2019-10-26T10:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="tags-read"><a href="#tags-read" class="headerlink" title="tags: [read]"></a>tags: [read]</h2><p>categories: 课外阅读</p>
-<hr>
-<h2 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h2><blockquote>
-</blockquote>
-<h4 id="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"><a href="#墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我-6-年的时间。最失落的高中生时期的决定，到-4-年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。" class="headerlink" title="墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。"></a>墨菲定律这本书今年我读了两次。前前后后都在反复思考，思索里面的内容。爱德华墨菲陪伴了我 6 年的时间。最失落的高中生时期的决定，到 4 年的大学，现在的工作。无时无刻在有意刻意的在规避墨菲定律。</h4><blockquote>
-</blockquote>
-<h4 id="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"><a href="#墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。" class="headerlink" title="墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。"></a>墨菲定律，不仅仅是一个定律。而是那些无处不在、左右我生活的心理学的效应……，这是本书是通过一个个的小故事来讲述每一个心理学知识。</h4><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="镜中我效应：突破思维界限，认识真实的自我"><a href="#镜中我效应：突破思维界限，认识真实的自我" class="headerlink" title="镜中我效应：突破思维界限，认识真实的自我"></a>镜中我效应：突破思维界限，认识真实的自我</h3><h4 id="镜中我效应：“镜中我”与“真实我”"><a href="#镜中我效应：“镜中我”与“真实我”" class="headerlink" title="镜中我效应：“镜中我”与“真实我”"></a>镜中我效应：“镜中我”与“真实我”</h4><h4 id="自我服务偏见：我很优秀，而你只是运气好。"><a href="#自我服务偏见：我很优秀，而你只是运气好。" class="headerlink" title="自我服务偏见：我很优秀，而你只是运气好。"></a>自我服务偏见：我很优秀，而你只是运气好。</h4><h4 id="沉锚效应：被沉锚带偏的“独立思考”"><a href="#沉锚效应：被沉锚带偏的“独立思考”" class="headerlink" title="沉锚效应：被沉锚带偏的“独立思考”"></a>沉锚效应：被沉锚带偏的“独立思考”</h4><h4 id="瓦达伦效应：越在意的，就越容易失去"><a href="#瓦达伦效应：越在意的，就越容易失去" class="headerlink" title="瓦达伦效应：越在意的，就越容易失去"></a>瓦达伦效应：越在意的，就越容易失去</h4><h4 id="库里肖夫效应：眼中世界，其实就是内心的世界"><a href="#库里肖夫效应：眼中世界，其实就是内心的世界" class="headerlink" title="库里肖夫效应：眼中世界，其实就是内心的世界"></a>库里肖夫效应：眼中世界，其实就是内心的世界</h4><h3 id="墨菲定律：如果有可能出错，就一定会出错"><a href="#墨菲定律：如果有可能出错，就一定会出错" class="headerlink" title="墨菲定律：如果有可能出错，就一定会出错"></a>墨菲定律：如果有可能出错，就一定会出错</h3><h4 id="墨菲定律：唯有计划周全，方能避免失误。"><a href="#墨菲定律：唯有计划周全，方能避免失误。" class="headerlink" title="墨菲定律：唯有计划周全，方能避免失误。"></a>墨菲定律：唯有计划周全，方能避免失误。</h4><h4 id="酝酿效应：“不思考”也是一种思考方式。"><a href="#酝酿效应：“不思考”也是一种思考方式。" class="headerlink" title="酝酿效应：“不思考”也是一种思考方式。"></a>酝酿效应：“不思考”也是一种思考方式。</h4><h4 id="控制错觉定律：相信直觉，但别迷信直觉。"><a href="#控制错觉定律：相信直觉，但别迷信直觉。" class="headerlink" title="控制错觉定律：相信直觉，但别迷信直觉。"></a>控制错觉定律：相信直觉，但别迷信直觉。</h4><h4 id="羊群效应：“从众”和”盲从”的临界点在哪里"><a href="#羊群效应：“从众”和”盲从”的临界点在哪里" class="headerlink" title="羊群效应：“从众”和”盲从”的临界点在哪里"></a>羊群效应：“从众”和”盲从”的临界点在哪里</h4><h4 id="巴纳姆效应：似是而非的“真理”一无是处"><a href="#巴纳姆效应：似是而非的“真理”一无是处" class="headerlink" title="巴纳姆效应：似是而非的“真理”一无是处"></a>巴纳姆效应：似是而非的“真理”一无是处</h4><h4 id="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"><a href="#奥卡姆剃刀原则：砍掉一些繁琐的旁技术" class="headerlink" title="奥卡姆剃刀原则：砍掉一些繁琐的旁技术"></a>奥卡姆剃刀原则：砍掉一些繁琐的旁技术</h4><h3 id="踢猫效应：坏情绪会传染，但也可以被管理"><a href="#踢猫效应：坏情绪会传染，但也可以被管理" class="headerlink" title="踢猫效应：坏情绪会传染，但也可以被管理"></a>踢猫效应：坏情绪会传染，但也可以被管理</h3><h4 id="踢猫效应：坏情绪的连锁反应"><a href="#踢猫效应：坏情绪的连锁反应" class="headerlink" title="踢猫效应：坏情绪的连锁反应"></a>踢猫效应：坏情绪的连锁反应</h4><h4 id="野马的结局：愤怒是一种自我毁灭"><a href="#野马的结局：愤怒是一种自我毁灭" class="headerlink" title="野马的结局：愤怒是一种自我毁灭"></a>野马的结局：愤怒是一种自我毁灭</h4><h4 id="海格力斯效应：无视仇恨，仇恨也会无视你"><a href="#海格力斯效应：无视仇恨，仇恨也会无视你" class="headerlink" title="海格力斯效应：无视仇恨，仇恨也会无视你"></a>海格力斯效应：无视仇恨，仇恨也会无视你</h4><h4 id="霍桑效应：适度发泄，才能轻装上阵。"><a href="#霍桑效应：适度发泄，才能轻装上阵。" class="headerlink" title="霍桑效应：适度发泄，才能轻装上阵。"></a>霍桑效应：适度发泄，才能轻装上阵。</h4><h4 id="习得性无助：没有绝望的环境，只有绝望的心态"><a href="#习得性无助：没有绝望的环境，只有绝望的心态" class="headerlink" title="习得性无助：没有绝望的环境，只有绝望的心态"></a>习得性无助：没有绝望的环境，只有绝望的心态</h4><h4 id="卡瑞尔公式：接受最坏的，最求最好的"><a href="#卡瑞尔公式：接受最坏的，最求最好的" class="headerlink" title="卡瑞尔公式：接受最坏的，最求最好的"></a>卡瑞尔公式：接受最坏的，最求最好的</h4><h3 id="约拿情结：从自我提升到自我突破"><a href="#约拿情结：从自我提升到自我突破" class="headerlink" title="约拿情结：从自我提升到自我突破"></a>约拿情结：从自我提升到自我突破</h3><h4 id="约拿情结：不仅害怕失败，也害怕成功"><a href="#约拿情结：不仅害怕失败，也害怕成功" class="headerlink" title="约拿情结：不仅害怕失败，也害怕成功"></a>约拿情结：不仅害怕失败，也害怕成功</h4><h4 id="跳骚效应：不要轻易给自己的人生设限"><a href="#跳骚效应：不要轻易给自己的人生设限" class="headerlink" title="跳骚效应：不要轻易给自己的人生设限"></a>跳骚效应：不要轻易给自己的人生设限</h4><h4 id="洛克定律：合理的目标才是合适的目标"><a href="#洛克定律：合理的目标才是合适的目标" class="headerlink" title="洛克定律：合理的目标才是合适的目标"></a>洛克定律：合理的目标才是合适的目标</h4><h4 id="瓦拉赫效应：补足短板，还是经营优势"><a href="#瓦拉赫效应：补足短板，还是经营优势" class="headerlink" title="瓦拉赫效应：补足短板，还是经营优势"></a>瓦拉赫效应：补足短板，还是经营优势</h4><h4 id="内卷化效应：跑起来，别让生活原地打转"><a href="#内卷化效应：跑起来，别让生活原地打转" class="headerlink" title="内卷化效应：跑起来，别让生活原地打转"></a>内卷化效应：跑起来，别让生活原地打转</h4><h4 id="青蛙效应：无视危机才是真正的危机"><a href="#青蛙效应：无视危机才是真正的危机" class="headerlink" title="青蛙效应：无视危机才是真正的危机"></a>青蛙效应：无视危机才是真正的危机</h4><h3 id="马太效应：优秀源于一次次失措"><a href="#马太效应：优秀源于一次次失措" class="headerlink" title="马太效应：优秀源于一次次失措"></a>马太效应：优秀源于一次次失措</h3><h4 id="马太效应：成功是成功之母亲"><a href="#马太效应：成功是成功之母亲" class="headerlink" title="马太效应：成功是成功之母亲"></a>马太效应：成功是成功之母亲</h4><h4 id="安慰剂效应；暗示能带扭曲现实的力量"><a href="#安慰剂效应；暗示能带扭曲现实的力量" class="headerlink" title="安慰剂效应；暗示能带扭曲现实的力量"></a>安慰剂效应；暗示能带扭曲现实的力量</h4><h4 id="马蝇效应：如何把压力转换为动力"><a href="#马蝇效应：如何把压力转换为动力" class="headerlink" title="马蝇效应：如何把压力转换为动力"></a>马蝇效应：如何把压力转换为动力</h4><h4 id="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"><a href="#布里丹毛驴效应：选择之前不犹豫，选择之后不后悔" class="headerlink" title="布里丹毛驴效应：选择之前不犹豫，选择之后不后悔"></a>布里丹毛驴效应：选择之前不犹豫，选择之后不后悔</h4><h4 id="基利定理：成功的核心不在于被失败左右"><a href="#基利定理：成功的核心不在于被失败左右" class="headerlink" title="基利定理：成功的核心不在于被失败左右"></a>基利定理：成功的核心不在于被失败左右</h4><h4 id="贝尔纳效应：每一条路都必然通向一个终点"><a href="#贝尔纳效应：每一条路都必然通向一个终点" class="headerlink" title="贝尔纳效应：每一条路都必然通向一个终点"></a>贝尔纳效应：每一条路都必然通向一个终点</h4><h3 id="首因效应：人际交往中的心理学法则"><a href="#首因效应：人际交往中的心理学法则" class="headerlink" title="首因效应：人际交往中的心理学法则"></a>首因效应：人际交往中的心理学法则</h3><h4 id="首因效应：良好的印象是成功的一半"><a href="#首因效应：良好的印象是成功的一半" class="headerlink" title="首因效应：良好的印象是成功的一半"></a>首因效应：良好的印象是成功的一半</h4><h4 id="近因效应：留下最好的“最后印象“"><a href="#近因效应：留下最好的“最后印象“" class="headerlink" title="近因效应：留下最好的“最后印象“"></a>近因效应：留下最好的“最后印象“</h4><h4 id="晕轮效应：别被“光环”迷了慧眼"><a href="#晕轮效应：别被“光环”迷了慧眼" class="headerlink" title="晕轮效应：别被“光环”迷了慧眼"></a>晕轮效应：别被“光环”迷了慧眼</h4><h4 id="刻板印象：最不靠谱的“第-0-效应”"><a href="#刻板印象：最不靠谱的“第-0-效应”" class="headerlink" title="刻板印象：最不靠谱的“第 0 效应”"></a>刻板印象：最不靠谱的“第 0 效应”</h4><h4 id="曼狄诺定律：不懂社交技巧？那就微笑吧"><a href="#曼狄诺定律：不懂社交技巧？那就微笑吧" class="headerlink" title="曼狄诺定律：不懂社交技巧？那就微笑吧"></a>曼狄诺定律：不懂社交技巧？那就微笑吧</h4><h4 id="虚假同感偏差：换位思考，而不是以己度人"><a href="#虚假同感偏差：换位思考，而不是以己度人" class="headerlink" title="虚假同感偏差：换位思考，而不是以己度人"></a>虚假同感偏差：换位思考，而不是以己度人</h4><h3 id="自重感效应：成为社交达人的心理学技巧"><a href="#自重感效应：成为社交达人的心理学技巧" class="headerlink" title="自重感效应：成为社交达人的心理学技巧"></a>自重感效应：成为社交达人的心理学技巧</h3><h4 id="自重感效应：让人感觉自己重要，这很重要"><a href="#自重感效应：让人感觉自己重要，这很重要" class="headerlink" title="自重感效应：让人感觉自己重要，这很重要"></a>自重感效应：让人感觉自己重要，这很重要</h4><h4 id="相约法则：我喜欢你因为你喜欢我"><a href="#相约法则：我喜欢你因为你喜欢我" class="headerlink" title="相约法则：我喜欢你因为你喜欢我"></a>相约法则：我喜欢你因为你喜欢我</h4><h4 id="阿伦森效应：我们厌恶那些带给我挫败感的人"><a href="#阿伦森效应：我们厌恶那些带给我挫败感的人" class="headerlink" title="阿伦森效应：我们厌恶那些带给我挫败感的人"></a>阿伦森效应：我们厌恶那些带给我挫败感的人</h4><h4 id="多看效应：提高曝光度，提高好感度"><a href="#多看效应：提高曝光度，提高好感度" class="headerlink" title="多看效应：提高曝光度，提高好感度"></a>多看效应：提高曝光度，提高好感度</h4><h4 id="改宗效应：想讨好人喜欢？那就反驳他。"><a href="#改宗效应：想讨好人喜欢？那就反驳他。" class="headerlink" title="改宗效应：想讨好人喜欢？那就反驳他。"></a>改宗效应：想讨好人喜欢？那就反驳他。</h4><h4 id="出丑效应：做别人眼中的“不完美的人”"><a href="#出丑效应：做别人眼中的“不完美的人”" class="headerlink" title="出丑效应：做别人眼中的“不完美的人”"></a>出丑效应：做别人眼中的“不完美的人”</h4><h3 id="路西法效应：所谓“心术”，不过是人性的博弈"><a href="#路西法效应：所谓“心术”，不过是人性的博弈" class="headerlink" title="路西法效应：所谓“心术”，不过是人性的博弈"></a>路西法效应：所谓“心术”，不过是人性的博弈</h3><h4 id="路西法效应：好人真的好，坏人真的坏吗？"><a href="#路西法效应：好人真的好，坏人真的坏吗？" class="headerlink" title="路西法效应：好人真的好，坏人真的坏吗？"></a>路西法效应：好人真的好，坏人真的坏吗？</h4><h4 id="米尔路伦实验：所谓“良知”，底线到底有多坚固"><a href="#米尔路伦实验：所谓“良知”，底线到底有多坚固" class="headerlink" title="米尔路伦实验：所谓“良知”，底线到底有多坚固"></a>米尔路伦实验：所谓“良知”，底线到底有多坚固</h4><h4 id="破解囚徒困境：引入反复博弈，化被动为主动"><a href="#破解囚徒困境：引入反复博弈，化被动为主动" class="headerlink" title="破解囚徒困境：引入反复博弈，化被动为主动"></a>破解囚徒困境：引入反复博弈，化被动为主动</h4><h4 id="智猪博弈：多劳多得，少劳也不少得"><a href="#智猪博弈：多劳多得，少劳也不少得" class="headerlink" title="智猪博弈：多劳多得，少劳也不少得"></a>智猪博弈：多劳多得，少劳也不少得</h4><h4 id="斗鸡博弈：最坏的结果是两败俱伤"><a href="#斗鸡博弈：最坏的结果是两败俱伤" class="headerlink" title="斗鸡博弈：最坏的结果是两败俱伤"></a>斗鸡博弈：最坏的结果是两败俱伤</h4><h4 id="枪手博弈：决胜负不一定要靠实力"><a href="#枪手博弈：决胜负不一定要靠实力" class="headerlink" title="枪手博弈：决胜负不一定要靠实力"></a>枪手博弈：决胜负不一定要靠实力</h4><h3 id="互惠法则：如何让他人对自己言听计从"><a href="#互惠法则：如何让他人对自己言听计从" class="headerlink" title="互惠法则：如何让他人对自己言听计从"></a>互惠法则：如何让他人对自己言听计从</h3><h4 id="互惠法则：说服力不是说出来的，而是做出来的"><a href="#互惠法则：说服力不是说出来的，而是做出来的" class="headerlink" title="互惠法则：说服力不是说出来的，而是做出来的"></a>互惠法则：说服力不是说出来的，而是做出来的</h4><h4 id="承诺一致性原理：让对方自己说服自己"><a href="#承诺一致性原理：让对方自己说服自己" class="headerlink" title="承诺一致性原理：让对方自己说服自己"></a>承诺一致性原理：让对方自己说服自己</h4><h4 id="登门槛效应：步步为营，走进对方内心"><a href="#登门槛效应：步步为营，走进对方内心" class="headerlink" title="登门槛效应：步步为营，走进对方内心"></a>登门槛效应：步步为营，走进对方内心</h4><h4 id="门面效应：用不可能完成的任务给对手下套"><a href="#门面效应：用不可能完成的任务给对手下套" class="headerlink" title="门面效应：用不可能完成的任务给对手下套"></a>门面效应：用不可能完成的任务给对手下套</h4><h4 id="禁果效应：越“禁”越“诱惑”"><a href="#禁果效应：越“禁”越“诱惑”" class="headerlink" title="禁果效应：越“禁”越“诱惑”"></a>禁果效应：越“禁”越“诱惑”</h4><h4 id="超限效应：越说服，越反感"><a href="#超限效应：越说服，越反感" class="headerlink" title="超限效应：越说服，越反感"></a>超限效应：越说服，越反感</h4><h3 id="凡勃伦效应：避开投资、消费中的种种陷阱"><a href="#凡勃伦效应：避开投资、消费中的种种陷阱" class="headerlink" title="凡勃伦效应：避开投资、消费中的种种陷阱"></a>凡勃伦效应：避开投资、消费中的种种陷阱</h3><h4 id="凡勃伦效应：揭穿价格的定位陷阱"><a href="#凡勃伦效应：揭穿价格的定位陷阱" class="headerlink" title="凡勃伦效应：揭穿价格的定位陷阱"></a>凡勃伦效应：揭穿价格的定位陷阱</h4><h4 id="吉芬之谜：透过价格迷雾看清供需本质"><a href="#吉芬之谜：透过价格迷雾看清供需本质" class="headerlink" title="吉芬之谜：透过价格迷雾看清供需本质"></a>吉芬之谜：透过价格迷雾看清供需本质</h4><h4 id="消费者剩余：买得值不值，自己说了算"><a href="#消费者剩余：买得值不值，自己说了算" class="headerlink" title="消费者剩余：买得值不值，自己说了算"></a>消费者剩余：买得值不值，自己说了算</h4><h4 id="稀缺效应：“稀缺”是刻意营造的心理压迫"><a href="#稀缺效应：“稀缺”是刻意营造的心理压迫" class="headerlink" title="稀缺效应：“稀缺”是刻意营造的心理压迫"></a>稀缺效应：“稀缺”是刻意营造的心理压迫</h4><h4 id="折扣效应：被理性驱使的感性消费"><a href="#折扣效应：被理性驱使的感性消费" class="headerlink" title="折扣效应：被理性驱使的感性消费"></a>折扣效应：被理性驱使的感性消费</h4><h4 id="博傻理论：蠢不可怕，别做最蠢的那个就行"><a href="#博傻理论：蠢不可怕，别做最蠢的那个就行" class="headerlink" title="博傻理论：蠢不可怕，别做最蠢的那个就行"></a>博傻理论：蠢不可怕，别做最蠢的那个就行</h4><h3 id="路径依赖法则：到底是做事重要，还是做人重要"><a href="#路径依赖法则：到底是做事重要，还是做人重要" class="headerlink" title="路径依赖法则：到底是做事重要，还是做人重要"></a>路径依赖法则：到底是做事重要，还是做人重要</h3><h4 id="路径依赖法则：“第一份工作”是成功的一半"><a href="#路径依赖法则：“第一份工作”是成功的一半" class="headerlink" title="路径依赖法则：“第一份工作”是成功的一半"></a>路径依赖法则：“第一份工作”是成功的一半</h4><h4 id="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"><a href="#蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做" class="headerlink" title="蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做"></a>蔡格尼克记忆效应：要做好一件事情的最好方法，就是立刻开始做</h4><h4 id="布利斯定理：计划越充分失败概率越小"><a href="#布利斯定理：计划越充分失败概率越小" class="headerlink" title="布利斯定理：计划越充分失败概率越小"></a>布利斯定理：计划越充分失败概率越小</h4><h4 id="权威效应：权威引出的决策的惰性"><a href="#权威效应：权威引出的决策的惰性" class="headerlink" title="权威效应：权威引出的决策的惰性"></a>权威效应：权威引出的决策的惰性</h4><h4 id="古德曼定律：没有恰当的沉默，就没有良好的沟通"><a href="#古德曼定律：没有恰当的沉默，就没有良好的沟通" class="headerlink" title="古德曼定律：没有恰当的沉默，就没有良好的沟通"></a>古德曼定律：没有恰当的沉默，就没有良好的沟通</h4><h4 id="工作成瘾综合征：“工作狂”是一种心理疾病"><a href="#工作成瘾综合征：“工作狂”是一种心理疾病" class="headerlink" title="工作成瘾综合征：“工作狂”是一种心理疾病"></a>工作成瘾综合征：“工作狂”是一种心理疾病</h4><h3 id="彼得原理：把恰当的人放在恰当的位置上"><a href="#彼得原理：把恰当的人放在恰当的位置上" class="headerlink" title="彼得原理：把恰当的人放在恰当的位置上"></a>彼得原理：把恰当的人放在恰当的位置上</h3><h4 id="彼得原理：给每个人找到合适的位置"><a href="#彼得原理：给每个人找到合适的位置" class="headerlink" title="彼得原理：给每个人找到合适的位置"></a>彼得原理：给每个人找到合适的位置</h4><h4 id="德西效应：挖掘真正的“内部动机”"><a href="#德西效应：挖掘真正的“内部动机”" class="headerlink" title="德西效应：挖掘真正的“内部动机”"></a>德西效应：挖掘真正的“内部动机”</h4><h4 id="不值得定律：“必须做”不如“值得做”"><a href="#不值得定律：“必须做”不如“值得做”" class="headerlink" title="不值得定律：“必须做”不如“值得做”"></a>不值得定律：“必须做”不如“值得做”</h4><h4 id="雷尼尔效应：用“心”留人，胜过用“薪”留人"><a href="#雷尼尔效应：用“心”留人，胜过用“薪”留人" class="headerlink" title="雷尼尔效应：用“心”留人，胜过用“薪”留人"></a>雷尼尔效应：用“心”留人，胜过用“薪”留人</h4><h4 id="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"><a href="#罗森塔尔效应：寄予什么样的期望，就会培养什么样的人" class="headerlink" title="罗森塔尔效应：寄予什么样的期望，就会培养什么样的人"></a>罗森塔尔效应：寄予什么样的期望，就会培养什么样的人</h4><h4 id="破窗效应：不要轻易打破任何一扇窗户"><a href="#破窗效应：不要轻易打破任何一扇窗户" class="headerlink" title="破窗效应：不要轻易打破任何一扇窗户"></a>破窗效应：不要轻易打破任何一扇窗户</h4><h3 id="史华兹论断：合适的选择，就是好的选择"><a href="#史华兹论断：合适的选择，就是好的选择" class="headerlink" title="史华兹论断：合适的选择，就是好的选择"></a>史华兹论断：合适的选择，就是好的选择</h3><h4 id="史华兹论断：“幸福”与“不幸”"><a href="#史华兹论断：“幸福”与“不幸”" class="headerlink" title="史华兹论断：“幸福”与“不幸”"></a>史华兹论断：“幸福”与“不幸”</h4><h4 id="贝勃定律：幸福本质上是种“敏感度”"><a href="#贝勃定律：幸福本质上是种“敏感度”" class="headerlink" title="贝勃定律：幸福本质上是种“敏感度”"></a>贝勃定律：幸福本质上是种“敏感度”</h4><h4 id="狄德罗效应：幸福来自给生活做减法"><a href="#狄德罗效应：幸福来自给生活做减法" class="headerlink" title="狄德罗效应：幸福来自给生活做减法"></a>狄德罗效应：幸福来自给生活做减法</h4><h4 id="鳄鱼法则：关键时刻的取舍之道"><a href="#鳄鱼法则：关键时刻的取舍之道" class="headerlink" title="鳄鱼法则：关键时刻的取舍之道"></a>鳄鱼法则：关键时刻的取舍之道</h4><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><blockquote>
-<p>最后，没有最后，也就是最后！！！<br>为什么越在意的，就越容易失去？</p>
-</blockquote>
-<blockquote>
-<p>为什么你不懂社交，保持微笑也好？</p>
-</blockquote>
-<blockquote>
-<p>为什么想讨好他人的喜欢，最好的方法是反驳他？</p>
-</blockquote>
-<blockquote>
-<p>为什么如果有可能出错，就一定会出错？</p>
-</blockquote>
-<blockquote>
-<p>为什眼中世界，其实就是内心世界？</p>
-</blockquote>
-<blockquote>
-<p>如果想知道答案——那就请读一下这本书吧！</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/26/yuque/%E3%80%8AMurphy%E2%80%98s%20Law%E3%80%8B%20%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Mac快捷键设置（大自然的搬运工）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/23/yuque/Mac%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE%EF%BC%88%E5%A4%A7%E8%87%AA%E7%84%B6%E7%9A%84%E6%90%AC%E8%BF%90%E5%B7%A5%EF%BC%89/">Mac快捷键设置（大自然的搬运工）</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/23/yuque/Mac%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE%EF%BC%88%E5%A4%A7%E8%87%AA%E7%84%B6%E7%9A%84%E6%90%AC%E8%BF%90%E5%B7%A5%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2019-10-23T04:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av44127555">https://www.bilibili.com/video/av44127555</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/23/yuque/Mac%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE%EF%BC%88%E5%A4%A7%E8%87%AA%E7%84%B6%E7%9A%84%E6%90%AC%E8%BF%90%E5%B7%A5%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
     </nav>
   
 

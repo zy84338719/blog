@@ -16,7 +16,7 @@
 <meta property="og:description" content="逃逸分析的用处（为了性能）最大的好处应该是减少 gc 的压力，不逃逸的对象分配在栈上，当函数返回时就回收了资源，不需要 gc 标记清除。因为逃逸分析完后可以确定哪些变量可以分配在栈上，栈的分配比堆快，性能好。同步消除，如果你定义的对象的方法上有同步锁，但在运行时，却只有一个线程在访问，此时逃逸分析后的机器码，会去掉同步锁运行。go 消除了堆和栈的区别 go 在一定程度消除了堆和栈的区别，因为 go">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-14T08:17:14.000Z">
-<meta property="article:modified_time" content="2021-07-29T16:02:04.738Z">
+<meta property="article:modified_time" content="2021-12-16T18:42:30.760Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -508,11 +508,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
             
             <div class="clearfix"></div>

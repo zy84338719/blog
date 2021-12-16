@@ -182,19 +182,225 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/正则表达式（转载）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/守护进程配置指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">正则表达式（转载）</a>
+      <a class="article-title" href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">守护进程配置指南</a>
     </h1>
   
 
         
-        <a href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/" class="archive-article-date">
+        <a href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2021-12-16T13:56:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>supervisor 配置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/tmp/supervisor.sock   ; socket文件的路径，supervisorctl用XML_RPC和supervisord通信就是通过它进行</span><br><span class="line">                              的。如果不设置的话，supervisorctl也就不能用了</span><br><span class="line">                              不设置的话，默认为none。 非必须设置</span><br><span class="line">;chmod=0700                 ; 这个简单，就是修改上面的那个socket文件的权限为0700</span><br><span class="line">                              不设置的话，默认为0700。 非必须设置</span><br><span class="line">;chown=nobody:nogroup       ; 这个一样，修改上面的那个socket文件的属组为user.group</span><br><span class="line">                              不设置的话，默认为启动supervisord进程的用户及属组。非必须设置</span><br><span class="line">;username=user              ; 使用supervisorctl连接的时候，认证的用户</span><br><span class="line">                               不设置的话，默认为不需要用户。 非必须设置</span><br><span class="line">;password=123               ; 和上面的用户名对应的密码，可以直接使用明码，也可以使用SHA加密</span><br><span class="line">                              如：&#123;SHA&#125;82ab876d1387bfafe46cc1c8a2ef074eae50cb1d</span><br><span class="line">                              默认不设置。。。非必须设置</span><br><span class="line"></span><br><span class="line">;[inet_http_server]         ; 侦听在TCP上的socket，Web Server和远程的supervisorctl都要用到他</span><br><span class="line">                              不设置的话，默认为不开启。非必须设置</span><br><span class="line">;port=127.0.0.1:9001        ; 这个是侦听的IP和端口，侦听所有IP用 :9001或*:9001。</span><br><span class="line">                              这个必须设置，只要上面的[inet_http_server]开启了，就必须设置它</span><br><span class="line">;username=user              ; 这个和上面的uinx_http_server一个样。非必须设置</span><br><span class="line">;password=123               ; 这个也一个样。非必须设置</span><br><span class="line"></span><br><span class="line">[supervisord]                ;这个主要是定义supervisord这个服务端进程的一些参数的</span><br><span class="line">                              这个必须设置，不设置，supervisor就不用干活了</span><br><span class="line">logfile=/tmp/supervisord.log ; 这个是supervisord这个主进程的日志路径，注意和子进程的日志不搭嘎。</span><br><span class="line">                               默认路径$CWD/supervisord.log，$CWD是当前目录。。非必须设置</span><br><span class="line">logfile_maxbytes=50MB        ; 这个是上面那个日志文件的最大的大小，当超过50M的时候，会生成一个新的日</span><br><span class="line">                               志文件。当设置为0时，表示不限制文件大小</span><br><span class="line">                               默认值是50M，非必须设置。</span><br><span class="line">logfile_backups=10           ; 日志文件保持的数量，上面的日志文件大于50M时，就会生成一个新文件。文件</span><br><span class="line">                               数量大于10时，最初的老文件被新文件覆盖，文件数量将保持为10</span><br><span class="line">                               当设置为0时，表示不限制文件的数量。</span><br><span class="line">                               默认情况下为10。。。非必须设置</span><br><span class="line">loglevel=info                ; 日志级别，有critical, error, warn, info, debug, trace, or blather等</span><br><span class="line">                               默认为info。。。非必须设置项</span><br><span class="line">pidfile=/tmp/supervisord.pid ; supervisord的pid文件路径。</span><br><span class="line">                               默认为$CWD/supervisord.pid。。。非必须设置</span><br><span class="line">nodaemon=false               ; 如果是true，supervisord进程将在前台运行</span><br><span class="line">                               默认为false，也就是后台以守护进程运行。。。非必须设置</span><br><span class="line">minfds=1024                  ; 这个是最少系统空闲的文件描述符，低于这个值supervisor将不会启动。</span><br><span class="line">                               系统的文件描述符在这里设置cat /proc/sys/fs/file-max</span><br><span class="line">                               默认情况下为1024。。。非必须设置</span><br><span class="line">minprocs=200                 ; 最小可用的进程描述符，低于这个值supervisor也将不会正常启动。</span><br><span class="line">                              ulimit  -u这个命令，可以查看linux下面用户的最大进程数</span><br><span class="line">                              默认为200。。。非必须设置</span><br><span class="line">;umask=022                   ; 进程创建文件的掩码</span><br><span class="line">                               默认为022。。非必须设置项</span><br><span class="line">;user=chrism                 ; 这个参数可以设置一个非root用户，当我们以root用户启动supervisord之后。</span><br><span class="line">                               我这里面设置的这个用户，也可以对supervisord进行管理</span><br><span class="line">                               默认情况是不设置。。。非必须设置项</span><br><span class="line">;identifier=supervisor       ; 这个参数是supervisord的标识符，主要是给XML_RPC用的。当你有多个</span><br><span class="line">                               supervisor的时候，而且想调用XML_RPC统一管理，就需要为每个</span><br><span class="line">                               supervisor设置不同的标识符了</span><br><span class="line">                               默认是supervisord。。。非必需设置</span><br><span class="line">;directory=/tmp              ; 这个参数是当supervisord作为守护进程运行的时候，设置这个参数的话，启动</span><br><span class="line">                               supervisord进程之前，会先切换到这个目录</span><br><span class="line">                               默认不设置。。。非必须设置</span><br><span class="line">;nocleanup=true              ; 这个参数当为false的时候，会在supervisord进程启动的时候，把以前子进程</span><br><span class="line">                               产生的日志文件(路径为AUTO的情况下)清除掉。有时候咱们想要看历史日志，当</span><br><span class="line">                               然不想日志被清除了。所以可以设置为true</span><br><span class="line">                               默认是false，有调试需求的同学可以设置为true。。。非必须设置</span><br><span class="line">;childlogdir=/tmp            ; 当子进程日志路径为AUTO的时候，子进程日志文件的存放路径。</span><br><span class="line">                               默认路径是这个东西，执行下面的这个命令看看就OK了，处理的东西就默认路径</span><br><span class="line">                               python -c &quot;import tempfile;print tempfile.gettempdir()&quot;</span><br><span class="line">                               非必须设置</span><br><span class="line">;environment=KEY=&quot;value&quot;     ; 这个是用来设置环境变量的，supervisord在linux中启动默认继承了linux的</span><br><span class="line">                               环境变量，在这里可以设置supervisord进程特有的其他环境变量。</span><br><span class="line">                               supervisord启动子进程时，子进程会拷贝父进程的内存空间内容。 所以设置的</span><br><span class="line">                               这些环境变量也会被子进程继承。</span><br><span class="line">                               小例子：environment=name=&quot;haha&quot;,age=&quot;hehe&quot;</span><br><span class="line">                               默认为不设置。。。非必须设置</span><br><span class="line">;strip_ansi=false            ; 这个选项如果设置为true，会清除子进程日志中的所有ANSI 序列。什么是ANSI</span><br><span class="line">                               序列呢？就是我们的\n,\t这些东西。</span><br><span class="line">                               默认为false。。。非必须设置</span><br><span class="line"></span><br><span class="line">; the below section must remain in the config file for RPC</span><br><span class="line">; (supervisorctl/web interface) to work, additional interfaces may be</span><br><span class="line">; added by defining them in separate rpcinterface: sections</span><br><span class="line">[rpcinterface:supervisor]    ;这个选项是给XML_RPC用的，当然你如果想使用supervisord或者web server 这</span><br><span class="line">                              个选项必须要开启的</span><br><span class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line"></span><br><span class="line">[supervisorctl]              ;这个主要是针对supervisorctl的一些配置</span><br><span class="line">serverurl=unix:///tmp/supervisor.sock ; 这个是supervisorctl本地连接supervisord的时候，本地UNIX socket</span><br><span class="line">                                        路径，注意这个是和前面的[unix_http_server]对应的</span><br><span class="line">                                        默认值就是unix:///tmp/supervisor.sock。。非必须设置</span><br><span class="line">;serverurl=http://127.0.0.1:9001 ; 这个是supervisorctl远程连接supervisord的时候，用到的TCP socket路径</span><br><span class="line">                                   注意这个和前面的[inet_http_server]对应</span><br><span class="line">                                   默认就是http://127.0.0.1:9001。。。非必须项</span><br><span class="line"></span><br><span class="line">;username=chris              ; 用户名</span><br><span class="line">                               默认空。。非必须设置</span><br><span class="line">;password=123                ; 密码</span><br><span class="line">                              默认空。。非必须设置</span><br><span class="line">;prompt=mysupervisor         ; 输入用户名密码时候的提示符</span><br><span class="line">                               默认supervisor。。非必须设置</span><br><span class="line">;history_file=~/.sc_history  ; 这个参数和shell中的history类似，我们可以用上下键来查找前面执行过的命令</span><br><span class="line">                               默认是no file的。。所以我们想要有这种功能，必须指定一个文件。。。非</span><br><span class="line">                               必须设置</span><br><span class="line"></span><br><span class="line">; The below sample program section shows all possible program subsection values,</span><br><span class="line">; create one or more &#x27;real&#x27; program: sections to be able to control them under</span><br><span class="line">; supervisor.</span><br><span class="line"></span><br><span class="line">;[program:theprogramname]      ;这个就是咱们要管理的子进程了，&quot;:&quot;后面的是名字，最好别乱写和实际进程</span><br><span class="line">                                有点关联最好。这样的program我们可以设置一个或多个，一个program就是</span><br><span class="line">                                要被管理的一个进程</span><br><span class="line">;command=/bin/cat              ; 这个就是我们的要启动进程的命令路径了，可以带参数</span><br><span class="line">                                例子：/home/test.py -a &#x27;hehe&#x27;</span><br><span class="line">                                有一点需要注意的是，我们的command只能是那种在终端运行的进程，不能是</span><br><span class="line">                                守护进程。这个想想也知道了，比如说command=service httpd start。</span><br><span class="line">                                httpd这个进程被linux的service管理了，我们的supervisor再去启动这个命令</span><br><span class="line">                                这已经不是严格意义的子进程了。</span><br><span class="line">                                这个是个必须设置的项</span><br><span class="line">;process_name=%(program_name)s ; 这个是进程名，如果我们下面的numprocs参数为1的话，就不用管这个参数</span><br><span class="line">                                 了，它默认值%(program_name)s也就是上面的那个program冒号后面的名字，</span><br><span class="line">                                 但是如果numprocs为多个的话，那就不能这么干了。想想也知道，不可能每个</span><br><span class="line">                                 进程都用同一个进程名吧。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;numprocs=1                    ; 启动进程的数目。当不为1时，就是进程池的概念，注意process_name的设置</span><br><span class="line">                                 默认为1    。。非必须设置</span><br><span class="line">;directory=/tmp                ; 进程运行前，会前切换到这个目录</span><br><span class="line">                                 默认不设置。。。非必须设置</span><br><span class="line">;umask=022                     ; 进程掩码，默认none，非必须</span><br><span class="line">;priority=999                  ; 子进程启动关闭优先级，优先级低的，最先启动，关闭的时候最后关闭</span><br><span class="line">                                 默认值为999 。。非必须设置</span><br><span class="line">;autostart=true                ; 如果是true的话，子进程将在supervisord启动后被自动启动</span><br><span class="line">                                 默认就是true   。。非必须设置</span><br><span class="line">;autorestart=unexpected        ; 这个是设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected</span><br><span class="line">                                 和true。如果为false的时候，无论什么情况下，都不会被重新启动，</span><br><span class="line">                                 如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的退</span><br><span class="line">                                 出码的时候，才会被自动重启。当为true的时候，只要子进程挂掉，将会被无</span><br><span class="line">                                 条件的重启</span><br><span class="line">;startsecs=1                   ; 这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启</span><br><span class="line">                                 动成功了</span><br><span class="line">                                 默认值为1 。。非必须设置</span><br><span class="line">;startretries=3                ; 当进程启动失败后，最大尝试启动的次数。。当超过3次后，supervisor将把</span><br><span class="line">                                 此进程的状态置为FAIL</span><br><span class="line">                                 默认值为3 。。非必须设置</span><br><span class="line">;exitcodes=0,2                 ; 注意和上面的的autorestart=unexpected对应。。exitcodes里面的定义的</span><br><span class="line">                                 退出码是expected的。</span><br><span class="line">;stopsignal=QUIT               ; 进程停止信号，可以为TERM, HUP, INT, QUIT, KILL, USR1, or USR2等信号</span><br><span class="line">                                  默认为TERM 。。当用设定的信号去干掉进程，退出码会被认为是expected</span><br><span class="line">                                  非必须设置</span><br><span class="line">;stopwaitsecs=10               ; 这个是当我们向子进程发送stopsignal信号后，到系统返回信息</span><br><span class="line">                                 给supervisord，所等待的最大时间。 超过这个时间，supervisord会向该</span><br><span class="line">                                 子进程发送一个强制kill的信号。</span><br><span class="line">                                 默认为10秒。。非必须设置</span><br><span class="line">;stopasgroup=false             ; 这个东西主要用于，supervisord管理的子进程，这个子进程本身还有</span><br><span class="line">                                 子进程。那么我们如果仅仅干掉supervisord的子进程的话，子进程的子进程</span><br><span class="line">                                 有可能会变成孤儿进程。所以咱们可以设置可个选项，把整个该子进程的</span><br><span class="line">                                 整个进程组都干掉。 设置为true的话，一般killasgroup也会被设置为true。</span><br><span class="line">                                 需要注意的是，该选项发送的是stop信号</span><br><span class="line">                                 默认为false。。非必须设置。。</span><br><span class="line">;killasgroup=false             ; 这个和上面的stopasgroup类似，不过发送的是kill信号</span><br><span class="line">;user=chrism                   ; 如果supervisord是root启动，我们在这里设置这个非root用户，可以用来</span><br><span class="line">                                 管理该program</span><br><span class="line">                                 默认不设置。。。非必须设置项</span><br><span class="line">;redirect_stderr=true          ; 如果为true，则stderr的日志会被写入stdout日志文件中</span><br><span class="line">                                 默认为false，非必须设置</span><br><span class="line">;stdout_logfile=/a/path        ; 子进程的stdout的日志路径，可以指定路径，AUTO，none等三个选项。</span><br><span class="line">                                 设置为none的话，将没有日志产生。设置为AUTO的话，将随机找一个地方</span><br><span class="line">                                 生成日志文件，而且当supervisord重新启动的时候，以前的日志文件会被</span><br><span class="line">                                 清空。当 redirect_stderr=true的时候，sterr也会写进这个日志文件</span><br><span class="line">;stdout_logfile_maxbytes=1MB   ; 日志文件最大大小，和[supervisord]中定义的一样。默认为50</span><br><span class="line">;stdout_logfile_backups=10     ; 和[supervisord]定义的一样。默认10</span><br><span class="line">;stdout_capture_maxbytes=1MB   ; 这个东西是设定capture管道的大小，当值不为0的时候，子进程可以从stdout</span><br><span class="line">                                 发送信息，而supervisor可以根据信息，发送相应的event。</span><br><span class="line">                                 默认为0，为0的时候表达关闭管道。。。非必须项</span><br><span class="line">;stdout_events_enabled=false   ; 当设置为ture的时候，当子进程由stdout向文件描述符中写日志的时候，将</span><br><span class="line">                                 触发supervisord发送PROCESS_LOG_STDOUT类型的event</span><br><span class="line">                                 默认为false。。。非必须设置</span><br><span class="line">;stderr_logfile=/a/path        ; 这个东西是设置stderr写的日志路径，当redirect_stderr=true。这个就不用</span><br><span class="line">                                 设置了，设置了也是白搭。因为它会被写入stdout_logfile的同一个文件中</span><br><span class="line">                                 默认为AUTO，也就是随便找个地存，supervisord重启被清空。。非必须设置</span><br><span class="line">;stderr_logfile_maxbytes=1MB   ; 这个出现好几次了，就不重复了</span><br><span class="line">;stderr_logfile_backups=10     ; 这个也是</span><br><span class="line">;stderr_capture_maxbytes=1MB   ; 这个一样，和stdout_capture一样。 默认为0，关闭状态</span><br><span class="line">;stderr_events_enabled=false   ; 这个也是一样，默认为false</span><br><span class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; 这个是该子进程的环境变量，和别的子进程是不共享的</span><br><span class="line">;serverurl=AUTO                ;</span><br><span class="line"></span><br><span class="line">; The below sample eventlistener section shows all possible</span><br><span class="line">; eventlistener subsection values, create one or more &#x27;real&#x27;</span><br><span class="line">; eventlistener: sections to be able to handle event notifications</span><br><span class="line">; sent by supervisor.</span><br><span class="line"></span><br><span class="line">;[eventlistener:theeventlistenername] ;这个东西其实和program的地位是一样的，也是suopervisor启动的子进</span><br><span class="line">                                       程，不过它干的活是订阅supervisord发送的event。他的名字就叫</span><br><span class="line">                                       listener了。我们可以在listener里面做一系列处理，比如报警等等</span><br><span class="line">                                       楼主这两天干的活，就是弄的这玩意</span><br><span class="line">;command=/bin/eventlistener    ; 这个和上面的program一样，表示listener的可执行文件的路径</span><br><span class="line">;process_name=%(program_name)s ; 这个也一样，进程名，当下面的numprocs为多个的时候，才需要。否则默认就</span><br><span class="line">                                 OK了</span><br><span class="line">;numprocs=1                    ; 相同的listener启动的个数</span><br><span class="line">;events=EVENT                  ; event事件的类型，也就是说，只有写在这个地方的事件类型。才会被发送</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;buffer_size=10                ; 这个是event队列缓存大小，单位不太清楚，楼主猜测应该是个吧。当buffer</span><br><span class="line">                                 超过10的时候，最旧的event将会被清除，并把新的event放进去。</span><br><span class="line">                                 默认值为10。。非必须选项</span><br><span class="line">;directory=/tmp                ; 进程执行前，会切换到这个目录下执行</span><br><span class="line">                                 默认为不切换。。。非必须</span><br><span class="line">;umask=022                     ; 淹没，默认为none，不说了</span><br><span class="line">;priority=-1                   ; 启动优先级，默认-1，也不扯了</span><br><span class="line">;autostart=true                ; 是否随supervisord启动一起启动，默认true</span><br><span class="line">;autorestart=unexpected        ; 是否自动重启，和program一个样，分true,false,unexpected等，注意</span><br><span class="line">                                  unexpected和exitcodes的关系</span><br><span class="line">;startsecs=1                   ; 也是一样，进程启动后跑了几秒钟，才被认定为成功启动，默认1</span><br><span class="line">;startretries=3                ; 失败最大尝试次数，默认3</span><br><span class="line">;exitcodes=0,2                 ; 期望或者说预料中的进程退出码，</span><br><span class="line">;stopsignal=QUIT               ; 干掉进程的信号，默认为TERM，比如设置为QUIT，那么如果QUIT来干这个进程</span><br><span class="line">                                 那么会被认为是正常维护，退出码也被认为是expected中的</span><br><span class="line">;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)</span><br><span class="line">;stopasgroup=false             ; send stop signal to the UNIX process group (default false)</span><br><span class="line">;killasgroup=false             ; SIGKILL the UNIX process group (def false)</span><br><span class="line">;user=chrism                   ;设置普通用户，可以用来管理该listener进程。</span><br><span class="line">                                默认为空。。非必须设置</span><br><span class="line">;redirect_stderr=true          ; 为true的话，stderr的log会并入stdout的log里面</span><br><span class="line">                                默认为false。。。非必须设置</span><br><span class="line">;stdout_logfile=/a/path        ; 这个不说了，好几遍了</span><br><span class="line">;stdout_logfile_maxbytes=1MB   ; 这个也是</span><br><span class="line">;stdout_logfile_backups=10     ; 这个也是</span><br><span class="line">;stdout_events_enabled=false   ; 这个其实是错的，listener是不能发送event</span><br><span class="line">;stderr_logfile=/a/path        ; 这个也是</span><br><span class="line">;stderr_logfile_maxbytes=1MB   ; 这个也是</span><br><span class="line">;stderr_logfile_backups        ; 这个不说了</span><br><span class="line">;stderr_events_enabled=false   ; 这个也是错的，listener不能发送event</span><br><span class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; 这个是该子进程的环境变量</span><br><span class="line">                                 默认为空。。。非必须设置</span><br><span class="line">;serverurl=AUTO                ; override serverurl computation (childutils)</span><br><span class="line"></span><br><span class="line">; The below sample group section shows all possible group values,</span><br><span class="line">; create one or more &#x27;real&#x27; group: sections to create &quot;heterogeneous&quot;</span><br><span class="line">; process groups.</span><br><span class="line"></span><br><span class="line">;[group:thegroupname]  ;这个东西就是给programs分组，划分到组里面的program。我们就不用一个一个去操作了</span><br><span class="line">                         我们可以对组名进行统一的操作。 注意：program被划分到组里面之后，就相当于原来</span><br><span class="line">                         的配置从supervisor的配置文件里消失了。。。supervisor只会对组进行管理，而不再</span><br><span class="line">                         会对组里面的单个program进行管理了</span><br><span class="line">;programs=progname1,progname2  ; 组成员，用逗号分开</span><br><span class="line">                                 这个是个必须的设置项</span><br><span class="line">;priority=999                  ; 优先级，相对于组和组之间说的</span><br><span class="line">                                 默认999。。非必须选项</span><br><span class="line"></span><br><span class="line">; The [include] section can just contain the &quot;files&quot; setting.  This</span><br><span class="line">; setting can list multiple files (separated by whitespace or</span><br><span class="line">; newlines).  It can also contain wildcards.  The filenames are</span><br><span class="line">; interpreted as relative to this file.  Included files *cannot*</span><br><span class="line">; include files themselves.</span><br><span class="line"></span><br><span class="line">;[include]                         ;这个东西挺有用的，当我们要管理的进程很多的时候，写在一个文件里面</span><br><span class="line">                                    就有点大了。我们可以把配置信息写到多个文件中，然后include过来</span><br><span class="line">;files = relative/directory/*.ini</span><br></pre></td></tr></table></figure>
+
+<p>系统级守护</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Supervisor daemon</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/bin/start_supervisord.sh</span><br><span class="line">ExecStop=/usr/bin/supervisorctl $OPTIONS shutdown</span><br><span class="line">ExecReload=/usr/bin/supervisorctl $OPTIONS reload</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure //状态异常</span><br><span class="line">RestartSec=42s  // 检测时间</span><br><span class="line">SysVStartPriority=99</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Chrome 浏览器截长图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/">Chrome 浏览器截长图</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/" class="archive-article-date">
+  	<time datetime="2021-08-23T16:57:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​</p>
+<h1 id="演示文稿"><a href="#演示文稿" class="headerlink" title="演示文稿"></a>演示文稿<img src="https://cdn.nlark.com/yuque/0/2021/gif/190217/1629738171910-3352b522-1dcb-4767-ab66-f80f88c82c7a.gif#clientId=ub70ba39b-ad9d-4&from=drop&id=u05ac54b5&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E9%95%BF%E5%9B%BE.gif&originHeight=1202&originWidth=1608&originalType=binary%E2%88%B6=1&size=3734464&status=done&style=none&taskId=u392e434a-371f-4488-810c-48dc8536ccf" alt="截长图.gif"></h1><h1 id="步骤分解"><a href="#步骤分解" class="headerlink" title="步骤分解"></a>步骤分解</h1><p>macOS</p>
+<h2 id="打开调试模式"><a href="#打开调试模式" class="headerlink" title="打开调试模式"></a>打开调试模式</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629737977711-d8f46be5-2119-41d2-9b66-e39604d2b721.png#clientId=ub70ba39b-ad9d-4&from=paste&height=449&id=u2c9470dd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=449&originWidth=762&originalType=binary%E2%88%B6=1&size=221635&status=done&style=none&taskId=ub5e8241b-dbd3-4b46-9662-86f1d4fffa5&width=762" alt="image.png"></p>
+<h2 id="鼠标右键"><a href="#鼠标右键" class="headerlink" title="鼠标右键"></a>鼠标右键</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629738002502-feaeb737-1cd5-4435-814b-06b5052ae854.png#clientId=ub70ba39b-ad9d-4&from=paste&height=377&id=u7c709de7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=377&originWidth=300&originalType=binary%E2%88%B6=1&size=84714&status=done&style=none&taskId=uf14a5292-3088-4ef7-8e4d-a30486426d0&width=300" alt="image.png"><br>​</p>
+<h2 id="输入-Command-shift-P"><a href="#输入-Command-shift-P" class="headerlink" title="输入 Command +shift + P"></a>输入 Command +shift + P</h2><p>​</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629738073080-ef36d85b-c344-434f-93a3-04bfe1282b11.png#clientId=ub70ba39b-ad9d-4&from=paste&height=203&id=ud50444f3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=203&originWidth=611&originalType=binary%E2%88%B6=1&size=79360&status=done&style=none&taskId=u781f57e5-4934-4398-b31c-ae6b6cb8a90&width=611" alt="image.png"></p>
+<h2 id="然后输入-full-size-screenshot"><a href="#然后输入-full-size-screenshot" class="headerlink" title="然后输入 full size screenshot"></a>然后输入 full size screenshot</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何在有限的资源里使用电脑" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/">如何在有限的资源里使用电脑</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/" class="archive-article-date">
+  	<time datetime="2021-08-19T06:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-为何有这个问题？"><a href="#1-为何有这个问题？" class="headerlink" title="1.为何有这个问题？"></a>1.为何有这个问题？</h1><p>公司发的电脑是 M1 的 8G 研发同学用，可能是公司为了考验我，那我决定进行有限资源的应用使用。</p>
+<h1 id="2-我们如何做？"><a href="#2-我们如何做？" class="headerlink" title="2.我们如何做？"></a>2.我们如何做？</h1><h2 id="1-破釜沉舟-gt-安装：柠檬清理"><a href="#1-破釜沉舟-gt-安装：柠檬清理" class="headerlink" title="1.破釜沉舟 -&gt;安装：柠檬清理"></a>1.破釜沉舟 -&gt;安装：<a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E6%9F%A0%E6%AA%AC%E6%B8%85%E7%90%86">柠檬清理</a></h2><p><strong>他能帮我们做什么？</strong><br>将系统不用的内存进行回收，将系统不常用内存放到内存交换分区中。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/190217/1629358333404-f049b85e-b1e7-40af-8767-79a5696377c2.gif#clientId=ud1608a22-6cbb-4&from=drop&height=530&id=u053009f7&margin=%5Bobject%20Object%5D&name=%E6%9F%A0%E6%AA%AC.gif&originHeight=1152&originWidth=1488&originalType=binary%E2%88%B6=1&size=887410&status=done&style=none&taskId=u13f63ecb-ca07-4f0c-aa41-ab9fae9eb8f&width=684" alt="柠檬.gif"></p>
+<h2 id="2-精准定位-gt-活动监视器"><a href="#2-精准定位-gt-活动监视器" class="headerlink" title="2.精准定位 -&gt; 活动监视器"></a>2.精准定位 -&gt; 活动监视器</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629359331616-fe174010-5f55-4f18-87e7-6b54de1d2a45.png#clientId=ud1608a22-6cbb-4&from=paste&height=676&id=AbViF&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1352&originWidth=1992&originalType=binary%E2%88%B6=1&size=372804&status=done&style=none&taskId=u1f992a2f-ad4e-441d-b56d-30d793cd8fa&width=996" alt="image.png"> 细心的你肯定会发现。我没有使用 chrome （我们为什么要用 chrome？chrome 为什么快？本质上它帮助我们自动缓内容到内存，对于小内存设备建议不使用该应用）</p>
+<h2 id="3-降本提效-gt-超级剪贴板"><a href="#3-降本提效-gt-超级剪贴板" class="headerlink" title="3.降本提效 -&gt; 超级剪贴板"></a>3.降本提效 -&gt; 超级剪贴板</h2><p>​</p>
+<p>办公利器 剪贴板的好助手 <a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E8%B6%85%E7%BA%A7%E5%89%AA%E8%B4%B4%E6%9D%BF">下载地址</a></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629359752546-79185de3-623e-47b4-b820-a1bff303551f.png#clientId=ud1608a22-6cbb-4&from=drop&id=ud84c9a8d&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-08-19%2015.55.33.png&originHeight=2100&originWidth=3354&originalType=binary%E2%88%B6=1&size=2585009&status=done&style=none&taskId=ucc23bca8-531b-4558-a715-23889344ebb" alt="截屏2021-08-19 15.55.33.png"></h2><p>4.效率提升-&gt;你的魔法<br><a target="_blank" rel="noopener" href="https://www.alfredapp.com/">https://www.alfredapp.com/</a></p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><p>5.常用工具-&gt; 关系你我</p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/gl8sdq?view=doc_embed">macOS 新人必备</a></p>
+<p>历史文档：<br><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/5b63b101-c821-48be-b35d-5a8d3bb338c7#">https://www.yuque.com/docs/share/5b63b101-c821-48be-b35d-5a8d3bb338c7?#</a> 《佛系提升 macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验》</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/正则表达式（转载融合）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/">正则表达式（转载融合）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/" class="archive-article-date">
   	<time datetime="2021-07-29T15:32:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-29</time>
 </a>
         
@@ -544,7 +750,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/">展开全文 >></a>
         </p>
       
 
@@ -663,7 +869,7 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>所有软件均来源于网络，旨在推广苹果电脑在国内的应用，并为大家带来更好的下载体验。如本站的内容对您的权利造成了影响，请发邮件至<a href="mailto:&#x7a;&#104;&#97;&#110;&#103;&#x79;&#105;&#64;&#109;&#117;&#x72;&#112;&#x68;&#x79;&#x79;&#105;&#46;&#x63;&#x6f;&#109;">&#x7a;&#104;&#97;&#110;&#103;&#x79;&#105;&#64;&#109;&#117;&#x72;&#112;&#x68;&#x79;&#x79;&#105;&#46;&#x63;&#x6f;&#109;</a>,我们会在第一时间将涉及版权的内容进行删除。</strong><br>**<br><strong>苹果软件分为 apple 芯片以及 intel 芯片 intel 芯片软件通过 Rosetta 模拟器进行运行转译 brew 软件安装方式 会自动查找芯片相关软件包，推荐试用 brew 安装软件</strong></p>
+        <p><strong>所有软件均来源于网络，旨在推广苹果电脑在国内的应用，并为大家带来更好的下载体验。如本站的内容对您的权利造成了影响，请发邮件至<a href="mailto:&#122;&#104;&#x61;&#110;&#103;&#x79;&#105;&#64;&#109;&#x75;&#114;&#x70;&#x68;&#x79;&#x79;&#x69;&#46;&#x63;&#111;&#109;">&#122;&#104;&#x61;&#110;&#103;&#x79;&#105;&#64;&#109;&#x75;&#114;&#x70;&#x68;&#x79;&#x79;&#x69;&#46;&#x63;&#111;&#109;</a>,我们会在第一时间将涉及版权的内容进行删除。</strong><br>**<br><strong>苹果软件分为 apple 芯片以及 intel 芯片 intel 芯片软件通过 Rosetta 模拟器进行运行转译 brew 软件安装方式 会自动查找芯片相关软件包，推荐试用 brew 安装软件</strong></p>
 <h1 id="生产力"><a href="#生产力" class="headerlink" title="生产力"></a>生产力</h1><p>| Chrome<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/chrome">intel</a> <a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/arm/chrome">arm</a> | tab 增强<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E5%85%B6%E4%BB%96/tab%E5%A2%9E%E5%BC%BA">下载</a> | touchbar 增强<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E5%85%B6%E4%BB%96/touchbar%E5%A2%9E%E5%BC%BA">下载</a> | 超级剪贴板<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E8%B6%85%E7%BA%A7%E5%89%AA%E8%B4%B4%E6%9D%BF">intel</a> |<br>| — | — | — | — |<br>| 微信小助手<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/other/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E5%8A%A9%E6%89%8B">下载</a> | jumpGFW<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/jumpGFW">下载</a> | 微信<br><a target="_blank" rel="noopener" href="https://weixin.qq.com/cgi-bin/readtemplate?t=mac%E2%9F%A8=zh_cn">下载</a> | 垃圾清理<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E6%9F%A0%E6%AA%AC%E6%B8%85%E7%90%86">下载</a> |<br>| | | | |</p>
 <h2 id="研发-amp-QA"><a href="#研发-amp-QA" class="headerlink" title="研发&amp;QA"></a>研发&amp;QA</h2><p>| homebrew<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/brew">访问软件集合</a> | charles<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/brew/charles">brew 版本</a> | 编程语言<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/brew/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80">brew 版本</a> | JetBrains 全家桶<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/brew/JetBrains%E5%85%A8%E5%AE%B6%E6%A1%B6">brew 版本</a> |<br>| — | — | — | — |<br>| AXURE RP<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%08AXURE%20RP">下载</a> | ssh 工具<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/ssh%E5%B7%A5%E5%85%B7">下载</a> | 脑图<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E8%84%91%E5%9B%BE">下载</a> | kafka 可视化<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/kafka%E5%8F%AF%E8%A7%86%E5%8C%96">下载</a> |</p>
 <h2 id="产品经理"><a href="#产品经理" class="headerlink" title="产品经理"></a>产品经理</h2><p>| AXURE RP<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%08AXURE%20RP">下载</a> | 脑图<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E8%84%91%E5%9B%BE">下载</a> | 数据库<br><a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B7%A5%E5%85%B7">下载</a> | |<br>| — | — | — | — |<br>| | | | |</p>
@@ -1726,257 +1932,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/(转)面试中被问到三次握手四次挥手应该怎么回答？---------不看后悔系列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/22/yuque/(%E8%BD%AC)%E9%9D%A2%E8%AF%95%E4%B8%AD%E8%A2%AB%E9%97%AE%E5%88%B0%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%9B%9E%E7%AD%94%EF%BC%9F---------%E4%B8%8D%E7%9C%8B%E5%90%8E%E6%82%94%E7%B3%BB%E5%88%97/">(转)面试中被问到三次握手四次挥手应该怎么回答？---------不看后悔系列</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/22/yuque/(%E8%BD%AC)%E9%9D%A2%E8%AF%95%E4%B8%AD%E8%A2%AB%E9%97%AE%E5%88%B0%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%9B%9E%E7%AD%94%EF%BC%9F---------%E4%B8%8D%E7%9C%8B%E5%90%8E%E6%82%94%E7%B3%BB%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-05-22T02:50:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>写在前面的话        在面试中，三次握手和四次挥手可以说是问的最频繁的一个知识点了，我相信大家也都看过很多关于三次握手与四次挥手的博客，今天的这篇博客，重点是围绕着面试，我们应该掌握哪些比较重要的点，哪些是比较被面试官给问到的，我觉得如果你能把我下面列举的一些点都记住、理解，我想就差不多了。<br>​</p>
-<p>三次握手<br>       当面试官问你为什么需要有三次握手、三次握手的作用、讲讲三次三次握手的时候，我想很多人会这样回答：<br>​</p>
-<p>首先很多人会先讲下握手的过程：<br>      1、第一次握手：客户端给服务器发送一个 SYN 报文。<br>      2、第二次握手：服务器收到 SYN 报文之后，会应答一个 SYN+ACK 报文。<br>      3、第三次握手：客户端收到 SYN+ACK 报文之后，会回应一个 ACK 报文。<br>      4、服务器收到 ACK 报文之后，三次握手建立完成。<br>       作用是为了确认双方的接收与发送能力是否正常。<br>​</p>
-<p>这里我顺便解释一下为啥只有三次握手才能确认双方的接受与发送能力是否正常，而两次却不可以：<br>       第一次握手：客户端发送网络包，服务端收到了。这样服务端就能得出结论：客户端的发送能力、服务端的接收能力是正常的。<br>       第二次握手：服务端发包，客户端收到了。这样客户端就能得出结论：服务端的接收、发送能力，客户端的接收、发送能力是正常的。不过此时服务器并不能确认客户端的接收能力是否正常。<br>       第三次握手：客户端发包，服务端收到了。这样服务端就能得出结论：客户端的接收、发送能力正常，服务器自己的发送、接收能力也正常。<br>       因此，需要三次握手才能确认双方的接收与发送能力是否正常。<br>​</p>
-<p>这样回答其实也是可以的，但我觉得，这个过程的我们应该要描述的更详细一点，因为三次握手的过程中，双方是由很多状态的改变的，而这些状态，也是面试官可能会问的点。所以我觉得在回答三次握手的时候，我们应该要描述的详细一点，而且描述的详细一点意味着可以扯久一点。加分的描述我觉得应该是这样：<br>       刚开始客户端处于 closed 的状态，服务端处于 listen 状态。然后<br>      1、第一次握手：客户端给服务端发一个 SYN 报文，并指明客户端的初始化序列号 ISN（c）。此时客户端处于 SYN_Send 状态。<br>      2、第二次握手：服务器收到客户端的 SYN 报文之后，会以自己的 SYN 报文作为应答，并且也是指定了自己的初始化序列号 ISN(s)，同时会把客户端的 ISN + 1 作为 ACK 的值，表示自己已经收到了客户端的 SYN，此时服务器处于 SYN_REVD 的状态。<br>      3、第三次握手：客户端收到 SYN 报文之后，会发送一个 ACK 报文，当然，也是一样把服务器的 ISN + 1 作为 ACK 的值，表示已经收到了服务端的 SYN 报文，此时客户端处于 establised 状态。<br>      4、服务器收到 ACK 报文之后，也处于 establised 状态，此时，双方以建立起了链接。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621651967738-a68ce385-d689-4cbe-b08e-e7c96e42628d.png#clientId=uc95f8f26-a32d-4&from=paste&height=228&id=u9a074920&margin=%5Bobject%20Object%5D&name=image.png&originHeight=359&originWidth=656&originalType=binary&size=67282&status=done&style=none&taskId=ua422b30a-4a9a-4e31-8cc1-1bad3bab0a1&width=417" alt="image.png"><br>三次握手的作用<br>       三次握手的作用也是有好多的，多记住几个，保证不亏。例如：<br>      1、确认双方的接受能力、发送能力是否正常。<br>      2、指定自己的初始化序列号，为后面的可靠传送做准备。<br>      3、如果是 https 协议的话，三次握手这个过程，还会进行数字证书的验证以及加密密钥的生成到。<br>​</p>
-<p>单单这样还不足以应付三次握手，面试官可能还会问一些其他的问题，例如：<br>1、（ISN）是固定的吗？<br>       三次握手的一个重要功能是客户端和服务端交换 ISN(Initial Sequence Number), 以便让对方知道接下来接收数据的时候如何按序列号组装数据。<br>       如果 ISN 是固定的，攻击者很容易猜出后续的确认号，因此 ISN 是动态生成的。<br>​</p>
-<p>2、什么是半连接队列<br>       服务器第一次收到客户端的 SYN 之后，就会处于 SYN_RCVD 状态，此时双方还没有完全建立其连接，服务器会把此种状态下请求连接放在一个队列里，我们把这种队列称之为半连接队列。当然还有一个全连接队列，就是已经完成三次握手，建立起连接的就会放在全连接队列中。如果队列满了就有可能会出现丢包现象。<br>​</p>
-<p>这里在补充一点关于 SYN-ACK 重传次数的问题：　服务器发送完 SYN－ACK 包，如果未收到客户确认包，服务器进行首次重传，等待一段时间仍未收到客户确认包，进行第二次重传，如果重传次数超 过系统规定的最大重传次数，系统将该连接信息从半连接队列中删除。注意，每次重传等待的时间不一定相同，一般会是指数增长，例如间隔时间为 1s, 2s, 4s, 8s, …<br>​</p>
-<p>3、三次握手过程中可以携带数据吗<br>       很多人可能会认为三次握手都不能携带数据，其实第三次握手的时候，是可以携带数据的。也就是说，第一次、第二次握手不可以携带数据，而第三次握手是可以携带数据的。<br>​</p>
-<p>为什么这样呢？大家可以想一个问题，假如第一次握手可以携带数据的话，如果有人要恶意攻击服务器，那他每次都在第一次握手中的 SYN 报文中放入大量的数据，因为攻击者根本就不理服务器的接收、发送能力是否正常，然后疯狂着重复发 SYN 报文的话，这会让服务器花费很多时间、内存空间来接收这些报文。也就是说，第一次握手可以放数据的话，其中一个简单的原因就是会让服务器更加容易受到攻击了。<br>而对于第三次的话，此时客户端已经处于 established 状态，也就是说，对于客户端来说，他已经建立起连接了，并且也已经知道服务器的接收、发送能力是正常的了，所以能携带数据页没啥毛病。<br>​</p>
-<p>四次挥手<br>       四次挥手也一样，千万不要对方一个 FIN 报文，我方一个 ACK 报文，再我方一个 FIN 报文，我方一个 ACK 报文。然后结束，最好是说的详细一点，例如想下面这样就差不多了，要把每个阶段的状态记好。<br>       刚开始双方都处于 establised 状态，假如是客户端先发起关闭请求，则：<br>​</p>
-<p>1、第一次挥手：客户端发送一个 FIN 报文，报文中会指定一个序列号。此时客户端处于 FIN_WAIT1 状态。<br>      2、第二次握手：服务端收到 FIN 之后，会发送 ACK 报文，且把客户端的序列号值 + 1 作为 ACK 报文的序列号值，表明已经收到客户端的报文了，此时服务端处于 CLOSE_WAIT 状态。<br>      3、第三次挥手：如果服务端也想断开连接了，和客户端的第一次挥手一样，发给 FIN 报文，且指定一个序列号。此时服务端处于 LAST_ACK 的状态。<br>      4、第四次挥手：客户端收到 FIN 之后，一样发送一个 ACK 报文作为应答，且把服务端的序列号值 + 1 作为自己 ACK 报文的序列号值，此时客户端处于 TIME_WAIT 状态。需要过一阵子以确保服务端收到自己的 ACK 报文之后才会进入 CLOSED 状态<br>      5、服务端收到 ACK 报文之后，就处于关闭连接了，处于 CLOSED 状态。<br>​</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621651942836-3ed4da3a-0c83-4eb6-8cc7-f8553b9acb47.png#clientId=uc95f8f26-a32d-4&from=paste&height=259&id=u94613fdc&margin=%5Bobject%20Object%5D&name=image.png&originHeight=380&originWidth=648&originalType=binary&size=72854&status=done&style=none&taskId=u11a4bde7-5dc0-4a9a-850a-fa48724178c&width=441" alt="image.png"><br>       这里特别需要主要的就是 TIME_WAIT 这个状态了，这个是面试的高频考点，就是要理解，为什么客户端发送 ACK 之后不直接关闭，而是要等一阵子才关闭。这其中的原因就是，要确保服务器是否已经收到了我们的 ACK 报文，如果没有收到的话，服务器会重新发 FIN 报文给客户端，客户端再次收到 ACK 报文之后，就知道之前的 ACK 报文丢失了，然后再次发送 ACK 报文。<br>       至于 TIME_WAIT 持续的时间至少是一个报文的来回时间。一般会设置一个计时，如果过了这个计时没有再次收到 FIN 报文，则代表对方成功就是 ACK 报文，此时处于 CLOSED 状态。<br>       这里我给出每个状态所包含的含义，有兴趣的可以看看。<br>​</p>
-<p>LISTEN - 侦听来自远方 TCP 端口的连接请求；<br>SYN-SENT -在发送连接请求后等待匹配的连接请求；<br>SYN-RECEIVED - 在收到和发送一个连接请求后等待对连接请求的确认；<br>ESTABLISHED- 代表一个打开的连接，数据可以传送给用户；<br>FIN-WAIT-1 - 等待远程 TCP 的连接中断请求，或先前的连接中断请求的确认；<br>FIN-WAIT-2 - 从远程 TCP 等待连接中断请求；<br>CLOSE-WAIT - 等待从本地用户发来的连接中断请求；<br>CLOSING -等待远程 TCP 对连接中断的确认；<br>LAST-ACK - 等待原来发向远程 TCP 的连接中断请求的确认；<br>TIME-WAIT -等待足够的时间以确保远程 TCP 接收到连接中断请求的确认；<br>CLOSED - 没有任何连接状态；<br>       最后，在放张三次握手与四次挥手的图<br>​</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621651931156-c034b947-08ed-4c13-bd0c-9d24f4278d80.png#clientId=uc95f8f26-a32d-4&from=paste&height=2092&id=u8d7d4eef&margin=%5Bobject%20Object%5D&name=image.png&originHeight=4184&originWidth=2536&originalType=binary&size=579092&status=done&style=none&taskId=u741199ba-7bda-400f-b125-562d61925db&width=1268" alt="image.png"></p>
-<p>[</p>
-<p>](<a target="_blank" rel="noopener" href="https://blog.csdn.net/dreamispossible/article/details/91345391">https://blog.csdn.net/dreamispossible/article/details/91345391</a>)</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/22/yuque/(%E8%BD%AC)%E9%9D%A2%E8%AF%95%E4%B8%AD%E8%A2%AB%E9%97%AE%E5%88%B0%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%9B%9E%E7%AD%94%EF%BC%9F---------%E4%B8%8D%E7%9C%8B%E5%90%8E%E6%82%94%E7%B3%BB%E5%88%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/singleflight 防缓存击穿 使用及原理(转)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/22/yuque/singleflight%20%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%20%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86(%E8%BD%AC)/">singleflight 防缓存击穿 使用及原理(转)</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/22/yuque/singleflight%20%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%20%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86(%E8%BD%AC)/" class="archive-article-date">
-  	<time datetime="2021-05-22T02:17:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>SingleFlight 总结<br>提供了三个参数 Do 同步通知、Dochan 异步 chan 通知、Forget 删除 map 的存在的键值<br>每次调用都会重置 map<br>结构体是由 mu sync.Mutex、m map[string]*call 组成，mu 用于操作的排它锁，m 用于存储已有的键值的个数<br>如果 m 中存在当前键值对，就会阻塞等待，不存在的时候会加创建 call 结构存入 m 中<br>Dochan 会异步执行，将结果放入 chan 通知其他阻塞的协程<br>阻塞的协程永的 WaitGroup 实现<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39787367/article/details/108849202">
-</a></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;golang.org/x/sync/singleflight&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> singleSetCache singleflight.Group</span><br><span class="line"></span><br><span class="line">	getAndSetCache := <span class="function"><span class="keyword">func</span><span class="params">(requestID <span class="keyword">int</span>, cacheKey <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;request %v start to get and set cache...&quot;</span>, requestID)</span><br><span class="line">		value, _, _ := singleSetCache.Do(cacheKey, <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(ret <span class="keyword">interface</span>&#123;&#125;, err error)</span></span> &#123; <span class="comment">//do的入参key，可以直接使用缓存的key，这样同一个缓存，只有一个协程会去读DB</span></span><br><span class="line">			log.Printf(<span class="string">&quot;request %v is setting cache...&quot;</span>, requestID)</span><br><span class="line">			time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v set cache success!&quot;</span>, requestID)</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;VALUE&quot;</span>, <span class="literal">nil</span></span><br><span class="line">		&#125;)</span><br><span class="line">		<span class="keyword">return</span> value.(<span class="keyword">string</span>), <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	cacheKey := <span class="string">&quot;cacheKey&quot;</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">10</span>; i++ &#123; <span class="comment">//模拟多个协程同时请求</span></span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(requestID <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			value, _ := getAndSetCache(requestID, cacheKey)</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v get value: %v&quot;</span>, requestID, value)</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(<span class="number">20</span> * time.Second)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">10</span>; i++ &#123; <span class="comment">//模拟多个协程同时请求</span></span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(requestID <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			value, _ := getAndSetCache(requestID, cacheKey)</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v get value: %v&quot;</span>, requestID, value)</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	time.Sleep(<span class="number">20</span> * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>每一次调用 do 都会重新开始，内存不会持久化支持的 map 集合</p>
-<h4 id="docall-的简单使用"><a href="#docall-的简单使用" class="headerlink" title="docall 的简单使用"></a>docall 的简单使用</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;golang.org/x/sync/singleflight&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> singleSetCache singleflight.Group</span><br><span class="line"></span><br><span class="line">	getAndSetCache := <span class="function"><span class="keyword">func</span><span class="params">(requestID <span class="keyword">int</span>, cacheKey <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;request %v start to get and set cache...&quot;</span>, requestID)</span><br><span class="line">		retChan := singleSetCache.DoChan(cacheKey, <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(ret <span class="keyword">interface</span>&#123;&#125;, err error)</span></span> &#123;</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v is setting cache...&quot;</span>, requestID)</span><br><span class="line">			time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v set cache success!&quot;</span>, requestID)</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;VALUE&quot;</span>, <span class="literal">nil</span></span><br><span class="line">		&#125;)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">var</span> ret singleflight.Result</span><br><span class="line"></span><br><span class="line">		timeout := time.After(<span class="number">5</span> * time.Second)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">select</span> &#123; <span class="comment">//加入了超时机制</span></span><br><span class="line">		<span class="keyword">case</span> &lt;-timeout:</span><br><span class="line">			log.Printf(<span class="string">&quot;time out!&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, errors.New(<span class="string">&quot;time out&quot;</span>)</span><br><span class="line">		<span class="keyword">case</span> ret = &lt;-retChan: <span class="comment">//从chan中取出结果</span></span><br><span class="line">			<span class="keyword">return</span> ret.Val.(<span class="keyword">string</span>), ret.Err</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	cacheKey := <span class="string">&quot;cacheKey&quot;</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(requestID <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			value, _ := getAndSetCache(requestID, cacheKey)</span><br><span class="line">			log.Printf(<span class="string">&quot;request %v get value: %v&quot;</span>, requestID, value)</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(<span class="number">20</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">每一次调用dochan都会重新开始，内存不会持久化支持的<span class="keyword">map</span>集合,只不过将结果挡在<span class="keyword">chan</span>中进行传输</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/22/yuque/singleflight%20%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%20%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86(%E8%BD%AC)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Shell" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/16/yuque/Shell/">Shell</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/16/yuque/Shell/" class="archive-article-date">
-  	<time datetime="2021-05-16T16:27:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>尽管 Linux 应用程序提供了 GUI ，但是大部分程序员仍偏好于使用命令行(command-line interface)，称为 shell。用户通常在 GUI 中启动一个 shell 窗口然后就在 shell 窗口下进行工作。<br>​</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621182445459-ebe8240b-053b-4c50-9399-026a0ea897c1.png#clientId=u2db7fa05-71af-4&from=paste&height=506&id=uf1b74d22&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1012&originWidth=1672&originalType=binary&size=265667&status=done&style=none&taskId=u05e875a5-1f1e-48b9-a9bc-47760151327&width=836" alt="image.png"><br>shell 命令行使用速度快、功能更强大、而且易于扩展、并且不会带来肢体重复性劳损(RSI)。<br>​</p>
-<p>下面会介绍一些最简单的 bash shell。当 shell 启动时，它首先进行初始化，在屏幕上输出一个 提示符(prompt)，通常是一个百分号或者美元符号，等待用户输入<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1621182464109-0b2874df-364f-4758-aced-e6049fcf1413.png#clientId=u2db7fa05-71af-4&from=paste&height=83&id=ua6ab99ea&margin=%5Bobject%20Object%5D&name=image.png&originHeight=166&originWidth=1200&originalType=binary&size=52122&status=done&style=none&taskId=u8c005444-1aa1-4b4c-a536-56a6711a3eb&width=600" alt="image.png"><br>​</p>
-<p>​</p>
-<p>等用户输入一个命令后，shell 提取其中的第一个词，这里的词指的是被空格或制表符分隔开的一连串字符。假定这个词是将要运行程序的程序名，那么就会搜索这个程序，如果找到了这个程序就会运行它。然后 shell 会将自己挂起直到程序运行完毕，之后再尝试读入下一条指令。shell 也是一个普通的用户程序。它的主要功能就是读取用户的输入和显示计算的输出。shell 命令中可以包含参数，它们作为字符串传递给所调用的程序。比如<br>​</p>
-<p>​</p>
-<p>cp src dest<br>会调用 cp 应用程序并包含两个参数 src 和 dest。这个程序会解释第一个参数是一个已经存在的文件名，然后创建一个该文件的副本，名称为 dest。<br>​</p>
-<p>并不是所有的参数都是文件名，比如下面<br>​</p>
-<p>​</p>
-<p>head -20 file<br>第一个参数 -20，会告诉 head 应用程序打印文件的前 20 行，而不是默认的 10 行。控制命令操作或者指定可选值的参数称为标志(flag)，按照惯例标志应该使用 - 来表示。这个符号是必要的，比如<br>​</p>
-<p>​</p>
-<p>head 20 file<br>是一个完全合法的命令，它会告诉 head 程序输出文件名为 20 的文件的前 10 行，然后输出文件名为 file 文件的前 10 行。Linux 操作系统可以接受一个或多个参数。<br>​</p>
-<p>为了更容易的指定多个文件名，shell 支持 魔法字符(magic character)，也被称为通配符(wild cards)。比如，* 可以匹配一个或者多个可能的字符串<br>​</p>
-<p>​</p>
-<p>ls *.c<br>告诉 ls 列举出所有文件名以 .c 结束的文件。如果同时存在多个文件，则会在后面进行并列。<br>​</p>
-<p>另一个通配符是问号，负责匹配任意一个字符。一组在中括号中的字符可以表示其中任意一个，因此<br>​</p>
-<p>​</p>
-<p>ls [abc]*<br>会列举出所有以 a、b 或者 c 开头的文件。<br>​</p>
-<p>shell 应用程序不一定通过终端进行输入和输出。shell 启动时，就会获取 标准输入、标准输出、标准错误文件进行访问的能力。<br>​</p>
-<p>标准输出是从键盘输入的，标准输出或者标准错误是输出到显示器的。许多 Linux 程序默认是从标准输入进行输入并从标准输出进行输出。比如<br>​</p>
-<p>​</p>
-<p>sort<br>会调用 sort 程序，会从终端读取数据(直到用户输入 ctrl-d 结束)，根据字母顺序进行排序，然后将结果输出到屏幕上。<br>​</p>
-<p>通常还可以重定向标准输入和标准输出，重定向标准输入使用 &lt; 后面跟文件名。标准输出可以通过一个大于号 &gt; 进行重定向。允许一个命令中重定向标准输入和输出。例如命令<br>​</p>
-<p>​</p>
-<p>sort <in >out<br>会使 sort 从文件 in 中得到输入，并把结果输出到 out 文件中。由于标准错误没有重定向，所以错误信息会直接打印到屏幕上。从标准输入读入，对其进行处理并将其写入到标准输出的程序称为 过滤器。<br>​</p>
-<p>考虑下面由三个分开的命令组成的指令<br>​</p>
-<p>​</p>
-<p>sort <in >temp;head -30 &lt;temp;rm temp<br>首先会调用 sort 应用程序，从标准输入 in 中进行读取，并通过标准输出到 temp。当程序运行完毕后，shell 会运行 head ，告诉它打印前 30 行，并在标准输出(默认为终端)上打印。最后，temp 临时文件被删除。轻轻的，你走了，你挥一挥衣袖，不带走一片云彩。<br>​</p>
-<p>命令行中的第一个程序通常会产生输出，在上面的例子中，产生的输出都不 temp 文件接收。然而，Linux 还提供了一个简单的命令来做这件事，例如下面<br>​</p>
-<p>​</p>
-<p>sort &lt;in | head -30<br>上面 | 称为竖线符号，它的意思是从 sort 应用程序产生的排序输出会直接作为输入显示，无需创建、使用和移除临时文件。由管道符号连接的命令集合称为管道(pipeline)。例如如下<br>​</p>
-<p>​</p>
-<p>grep cxuan *.t | sort | head -30 | tail -5 &gt;foo<br>对任意以 .t 结尾的文件中包含 cxuan 的行被写到标准输出中，然后进行排序。这些内容中的前 30 行被 head 出来并传给 tail ，它又将最后 5 行传递给 foo。这个例子提供了一个管道将多个命令连接起来。<br>​</p>
-<p>可以把一系列 shell 命令放在一个文件中，然后将此文件作为输入来运行。shell 会按照顺序对他们进行处理，就像在键盘上键入命令一样。包含 shell 命令的文件被称为 shell 脚本(shell scripts)。<br>​</p>
-<p>推荐一个 shell 命令的学习网站：<a target="_blank" rel="noopener" href="https://www.shellscript.sh/">https://www.shellscript.sh/</a><br>​</p>
-<p>shell 脚本其实也是一段程序，shell 脚本中可以对变量进行赋值，也包含循环控制语句比如 if、for、while 等，shell 的设计目标是让其看起来和 C 相似(There is no doubt that C is father)。由于 shell 也是一个用户程序，所以用户可以选择不同的 shell。<br>​</p>
-<p>作者：cxuan<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/leetbook/read/awesome-linux-handbook/egyys5/">https://leetcode-cn.com/leetbook/read/awesome-linux-handbook/egyys5/</a><br>来源：力扣（LeetCode）<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/16/yuque/Shell/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -2120,11 +2078,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
             
             <div class="clearfix"></div>

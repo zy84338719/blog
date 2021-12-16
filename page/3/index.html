@@ -182,6 +182,588 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/短服务" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/11/yuque/%E7%9F%AD%E6%9C%8D%E5%8A%A1/">短服务</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/11/yuque/%E7%9F%AD%E6%9C%8D%E5%8A%A1/" class="archive-article-date">
+  	<time datetime="2021-05-11T16:37:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="如何实现一个短链接服务"><a href="#如何实现一个短链接服务" class="headerlink" title="如何实现一个短链接服务"></a>如何实现一个短链接服务</h1><p>短链接，通俗来说，就是将长的 URL 网址，通过程序计算等方式，转换为简短的网址字符串。<br>大家经常会收到一些莫名的营销短信，里面有一个非常短的链接让你跳转。新浪微博因为限制字数，所以也会经常见到这种看着不像网址的网址。短链的兴起应该就是微博限制字数激起了大家的创造力。<br>如果创建一个短链系统，我们应该做什么呢？</p>
+<ol>
+<li>将长链接变为短链；</li>
+<li>用户访问短链接，会跳转到正确的长链接上去。</li>
+</ol>
+<p>查找到对应的长网址，并跳转到对应的页面。</p>
+<h2 id="短链生成方法"><a href="#短链生成方法" class="headerlink" title="短链生成方法"></a>短链生成方法</h2><p>短码一般是由[a - z, A - Z, 0 - 9]这 62 个字母或数字组成，短码的长度也可以自定义，但一般不超过 8 位。比较常用的都是 6 位，6 位的短码已经能有 568 亿种的组合：(26+26+10)^6 = 56800235584，已满足绝大多数的使用场景。<br>目前比较流行的生成短码方法有：自增 id、摘要算法、普通随机数。</p>
+<h3 id="自增-id"><a href="#自增-id" class="headerlink" title="自增 id"></a>自增 id</h3><p>该方法是一种无碰撞的方法，原理是，每新增一个短码，就在上次添加的短码 id 基础上加 1，然后将这个 10 进制的 id 值，转化成一个 62 进制的字符串。<br>一般利用数据表中的自增 id 来完成：每次先查询数据表中的自增 id 最大值 max，那么需要插入的长网址对应自增 id 值就是 max+1，将 max+1 转成 62 进制即可得到短码。<br>但是短码 id 是从一位长度开始递增，短码的长度不固定，不过可以用 id 从指定的数字开始递增的方式来处理，确保所有的短码长度都一致。同时，生成的短码是有序的，可能会有安全的问题，可以将生成的短码 id，结合长网址等其他关键字，进行 md5 运算生成最后的短码。</p>
+<h3 id="摘要算法"><a href="#摘要算法" class="headerlink" title="摘要算法"></a>摘要算法</h3><p>摘要算法又称哈希算法，它表示输入任意长度的数据，输出固定长度的数据。相同的输入数据始终得到相同的输出，不同的输入数据尽量得到不同的输出。<br>算法过程：</p>
+<ol>
+<li>将长网址 md5 生成 32 位签名串,分为 4 段, 每段 8 个字节；</li>
+<li>对这四段循环处理, 取 8 个字节, 将他看成 16 进制串与 0x3fffffff(30 位 1)与操作, 即超过 30 位的忽略处理；</li>
+<li>这 30 位分成 6 段, 每 5 位的数字作为字母表的索引取得特定字符, 依次进行获得 6 位字符串；</li>
+<li>总的 md5 串可以获得 4 个 6 位串；取里面的任意一个就可作为这个长 url 的短 url 地址；</li>
+</ol>
+<p>这种算法,虽然会生成 4 个,但是仍然存在重复几率。<br>虽然几率很小，但是该方法依然存在碰撞的可能性，解决冲突会比较麻烦。不过该方法生成的短码位数是固定的，也不存在连续生成的短码有序的情况。</p>
+<h3 id="普通随机数"><a href="#普通随机数" class="headerlink" title="普通随机数"></a>普通随机数</h3><p>该方法是从 62 个字符串中随机取出一个 6 位短码的组合，然后去数据库中查询该短码是否已存在。如果已存在，就继续循环该方法重新获取短码，否则就直接返回。<br>该方法是最简单的一种实现，不过由于 Math.round()方法生成的随机数属于伪随机数，碰撞的可能性也不小。在数据比较多的情况下，可能会循环很多次，才能生成一个不冲突的短码。</p>
+<h2 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h2><p>以上算法利弊我们一个一个来分析。<br>如果使用自增 id 算法，会有一个问题就是不法分子是可以穷举你的短链地址的。原理就是将 10 进制数字转为 62 进制，那么别人也可以使用相同的方式遍历你的短链获取对应的原始链接。打个比方说：<a target="_blank" rel="noopener" href="http://tinyurl.com/a3300%E5%92%8C">http://tinyurl.com/a3300 和</a><a target="_blank" rel="noopener" href="http://bit.ly/a3300%EF%BC%8C%E8%BF%99%E4%B8%A4%E4%B8%AA%E7%9F%AD%E9%93%BE%E7%BD%91%E7%AB%99%EF%BC%8C%E5%88%86%E5%88%AB%E4%BB%8Ea3300">http://bit.ly/a3300，这两个短链网站，分别从 a3300</a>- a3399，能够试出来多次返回正确的 url。所以这种方式生成的短链对于使用者来说其实是不安全的。<br>摘要算法，其实就是 hash 算法吧，一说 hash 大家可能觉得很 low，但是事实上 hash 可能是最优解。比如：<a target="_blank" rel="noopener" href="http://www.sina.lt/">http://www.sina.lt/</a>和<a target="_blank" rel="noopener" href="http://mrw.so/">http://mrw.so/</a>连续生成的 url 发现并没有规律，很有可能就是使用 hash 算法来实现。<br>普通随机数算法，这种算法生成的东西和摘要算法一样，但是碰撞的概率会大一些。因为摘要算法毕竟是对 url 进行 hash 生成，随机数算法就是简单的随机生成，数量一旦上来必然会导致重复。<br>综合以上，我选择最 low 的算法：摘要算法。<br>​</p>
+<p>​</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;crypto/md5&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/spaolacci/murmur3&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Hash</span><span class="params">(data []<span class="keyword">byte</span>)</span> <span class="title">uint64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> murmur3.Sum64(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Hash32</span><span class="params">(data []<span class="keyword">byte</span>)</span> <span class="title">uint32</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> murmur3.Sum32(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(Short)</span> <span class="title">getShortUrl</span><span class="params">(key, url <span class="keyword">string</span>,ct <span class="keyword">int</span>/*冲突标记*/)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="comment">//加密字符传前的混合 KEY</span></span><br><span class="line">	<span class="comment">// 要使用生成 URL 的字符</span></span><br><span class="line">	<span class="comment">// 对传入网址进行 MMH3 加密</span></span><br><span class="line">    hash32 := Hash32([]<span class="keyword">byte</span>(key + url))</span><br><span class="line">    <span class="keyword">if</span> ct !=<span class="number">0</span>&#123;</span><br><span class="line">        hash32 = Hash32([]<span class="keyword">byte</span>(key + url+<span class="keyword">string</span>(i)))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 把加密字符按照 8 位一组 16 进制与 0x3FFFFFFF 进行位与运算</span></span><br><span class="line">	lHexLong := <span class="number">0x3FFFFFFF</span> &amp; hash32</span><br><span class="line">	outChars := <span class="string">&quot;&quot;</span></span><br><span class="line">	<span class="comment">//循环获得每组6位的字符串</span></span><br><span class="line">	<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">6</span>; j++ &#123;</span><br><span class="line">		<span class="comment">// 把得到的值与 0x0000003E 这是62 进行mod运算，取得字符数组 chars 索引(具体需要看chars数组的长度   以防下标溢出，注意起点为0)</span></span><br><span class="line">		index := lHexLong % <span class="number">0x0000003E</span></span><br><span class="line">		<span class="comment">// 把取得的字符相加</span></span><br><span class="line">		outChars += model.Chars[index]</span><br><span class="line">		<span class="comment">// 每次循环按位右移 5 位</span></span><br><span class="line">		lHexLong = lHexLong &gt;&gt; <span class="number">5</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 把字符串存入对应索引的输出数组</span></span><br><span class="line">	<span class="keyword">return</span> outChars + CreateShortExtra()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这块可以做分库分表设计</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateShortExtra</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	x := (getDays() / <span class="number">62</span>) % <span class="number">62</span></span><br><span class="line">	y := getDays() % <span class="number">62</span></span><br><span class="line">	<span class="keyword">return</span> Chars[x] + Chars[y]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDays</span><span class="params">()</span> <span class="title">int64</span></span> &#123;</span><br><span class="line">	yearMonthDay := time.Date(<span class="number">2021</span>, <span class="number">01</span>, <span class="number">01</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.Local)</span><br><span class="line">	<span class="keyword">return</span> (time.Now().Unix() - yearMonthDay.Unix()) / <span class="number">3600</span> / <span class="number">24</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Chars = []<span class="keyword">string</span>&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;f&quot;</span>, <span class="string">&quot;g&quot;</span>, <span class="string">&quot;h&quot;</span>,</span><br><span class="line">	<span class="string">&quot;i&quot;</span>, <span class="string">&quot;j&quot;</span>, <span class="string">&quot;k&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;m&quot;</span>, <span class="string">&quot;n&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;q&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="string">&quot;s&quot;</span>, <span class="string">&quot;t&quot;</span>,</span><br><span class="line">	<span class="string">&quot;u&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;w&quot;</span>, <span class="string">&quot;x&quot;</span>, <span class="string">&quot;y&quot;</span>, <span class="string">&quot;z&quot;</span>, <span class="string">&quot;0&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>, <span class="string">&quot;5&quot;</span>,</span><br><span class="line">	<span class="string">&quot;6&quot;</span>, <span class="string">&quot;7&quot;</span>, <span class="string">&quot;8&quot;</span>, <span class="string">&quot;9&quot;</span>, <span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>, <span class="string">&quot;D&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;F&quot;</span>, <span class="string">&quot;G&quot;</span>, <span class="string">&quot;H&quot;</span>,</span><br><span class="line">	<span class="string">&quot;I&quot;</span>, <span class="string">&quot;J&quot;</span>, <span class="string">&quot;K&quot;</span>, <span class="string">&quot;L&quot;</span>, <span class="string">&quot;M&quot;</span>, <span class="string">&quot;N&quot;</span>, <span class="string">&quot;O&quot;</span>, <span class="string">&quot;P&quot;</span>, <span class="string">&quot;Q&quot;</span>, <span class="string">&quot;R&quot;</span>, <span class="string">&quot;S&quot;</span>, <span class="string">&quot;T&quot;</span>,</span><br><span class="line">	<span class="string">&quot;U&quot;</span>, <span class="string">&quot;V&quot;</span>, <span class="string">&quot;W&quot;</span>, <span class="string">&quot;X&quot;</span>, <span class="string">&quot;Y&quot;</span>, <span class="string">&quot;Z&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="是否有分库分表的需要？"><a href="#是否有分库分表的需要？" class="headerlink" title="是否有分库分表的需要？"></a>是否有分库分表的需要？</h2><p>对于单条数据 10b 以内，一亿条数据总容量大约为 953G，单表肯定无法撑住这么大的量，所以有分表的需要，如果你对服务很有信心 2 年内能达到这个规模，那么你可以从一开始设计就考虑分表的方案。<br>那么如何定义分表的规则呢？<br>如果按照单表 500 万条记录来算，总计可以分为 20 张表，那么单表容量就是 47G，还是挺大，所以考虑分表的 key 和单表容量，如果分为 100 张表那么单表容量就是 10G，并且通过数字后缀路由到表中也比较容易。可以对 short_code 做 encoding 编码生成数字类型然后做路由。<br>​</p>
+<h2 id="高并发？"><a href="#高并发？" class="headerlink" title="高并发？"></a>高并发？</h2><p>需要考虑 缓存击穿的默认页面问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/11/yuque/%E7%9F%AD%E6%9C%8D%E5%8A%A1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/命令行的艺术(转载)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/28/yuque/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%89%BA%E6%9C%AF(%E8%BD%AC%E8%BD%BD)/">命令行的艺术(转载)</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/28/yuque/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%89%BA%E6%9C%AF(%E8%BD%AC%E8%BD%BD)/" class="archive-article-date">
+  	<time datetime="2021-04-28T18:06:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://badges.gitter.im/Join%20Chat.svg#id=PYcfN&originHeight=20&originWidth=99&originalType=binary&status=done&style=none"></p>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E5%9F%BA%E7%A1%80">基础</a></li>
+<li><a href="#%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8">日常使用</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86">文件及数据处理</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E8%AF%95">系统调试</a></li>
+<li><a href="#%E5%8D%95%E8%A1%8C%E8%84%9A%E6%9C%AC">单行脚本</a></li>
+<li><a href="#%E5%86%B7%E9%97%A8%E4%BD%86%E6%9C%89%E7%94%A8">冷门但有用</a></li>
+<li><a href="#%E4%BB%85%E9%99%90-os-x-%E7%B3%BB%E7%BB%9F">仅限 OS X 系统</a></li>
+<li><a href="#%E4%BB%85%E9%99%90-windows-%E7%B3%BB%E7%BB%9F">仅限 Windows 系统</a></li>
+<li><a href="#%E6%9B%B4%E5%A4%9A%E8%B5%84%E6%BA%90">更多资源</a></li>
+<li><a href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E">免责声明</a></li>
+</ul>
+<p>熟练使用命令行是一种常常被忽视，或被认为难以掌握的技能，但实际上，它会提高你作为工程师的灵活性以及生产力。本文是一份我在 Linux 上工作时，发现的一些命令行使用技巧的摘要。有些技巧非常基础，而另一些则相当复杂，甚至晦涩难懂。这篇文章并不长，但当你能够熟练掌握这里列出的所有技巧时，你就学会了很多关于命令行的东西了。</p>
+<p>这篇文章是<a href="AUTHORS.md">许多作者和译者</a>共同的成果。</p>
+<p>这里的部分内容</p>
+<p><a target="_blank" rel="noopener" href="http://www.quora.com/What-are-some-lesser-known-but-useful-Unix-commands">首次</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.quora.com/What-are-the-most-useful-Swiss-army-knife-one-liners-on-Unix">出现</a></p>
+<p>于 <a target="_blank" rel="noopener" href="http://www.quora.com/What-are-some-time-saving-tips-that-every-Linux-user-should-know">Quora</a>，</p>
+<p>但已经迁移到了 Github，并由众多高手做出了许多改进。</p>
+<p>如果你在本文中发现了错误或者存在可以改善的地方，请<a href="/CONTRIBUTING.md"><strong>贡献你的一份力量</strong></a>。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>涵盖范围：</p>
+<ul>
+<li>这篇文章不仅能帮助刚接触命令行的新手，而且对具有经验的人也大有裨益。本文致力于做到<em>覆盖面广</em>（涉及所有重要的内容），_具体_（给出具体的最常用的例子），以及<em>简洁</em>（避免冗余的内容，或是可以在其他地方轻松查到的细枝末节）。在特定应用场景下，本文的内容属于基本功或者能帮助您节约大量的时间。</li>
+<li>本文主要为 Linux 所写，但在<a href="#%E4%BB%85%E9%99%90-os-x-%E7%B3%BB%E7%BB%9F">仅限 OS X 系统</a>章节和<a href="#%E4%BB%85%E9%99%90-windows-%E7%B3%BB%E7%BB%9F">仅限 Windows 系统</a>章节中也包含有对应操作系统的内容。除去这两个章节外，其它的内容大部分均可在其他类 Unix 系统或 OS X，甚至 Cygwin 中得到应用。</li>
+<li>本文主要关注于交互式 Bash，但也有很多技巧可以应用于其他 shell 和 Bash 脚本当中。</li>
+<li>除去“标准的”Unix 命令，本文还包括了一些依赖于特定软件包的命令（前提是它们具有足够的价值）。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>为了能在一页内展示尽量多的东西，一些具体的信息可以在引用的页面中找到。我们相信机智的你知道如何使用 Google 或者其他搜索引擎来查阅到更多的详细信息。文中部分命令需要您使用 <code>apt-get</code>，<code>yum</code>，<code>dnf</code>，<code>pacman</code>，</li>
+</ul>
+<p><code>pip</code> 或 <code>brew</code>（以及其它合适的包管理器）来安装依赖的程序。</p>
+<ul>
+<li>遇到问题的话，请尝试使用 <a target="_blank" rel="noopener" href="http://explainshell.com/">Explainshell</a> 去获取相关命令、参数、管道等内容的解释。</li>
+</ul>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
+<li>学习 Bash 的基础知识。具体地，在命令行中输入 <code>man bash</code> 并至少全文浏览一遍; 它理解起来很简单并且不冗长。其他的 shell 可能很好用，但 Bash 的功能已经足够强大并且到几乎总是可用的（ 如果你<em>只</em>学习 zsh，fish 或其他的 shell 的话，在你自己的设备上会显得很方便，但过度依赖这些功能会给您带来不便，例如当你需要在服务器上工作时）。</li>
+<li>熟悉至少一个基于文本的编辑器。通常而言 Vim （<code>vi</code>） 会是你最好的选择，毕竟在终端中编辑文本时 Vim 是最好用的工具（甚至大部分情况下 Vim 要比 Emacs、大型 IDE 或是炫酷的编辑器更好用）。</li>
+<li>学会如何使用 <code>man</code> 命令去阅读文档。学会使用 <code>apropos</code> 去查找文档。知道有些命令并不对应可执行文件，而是在 Bash 内置好的，此时可以使用 <code>help</code> 和 <code>help -d</code> 命令获取帮助信息。你可以用 <code>type 命令</code> 来判断这个命令到底是可执行文件、shell 内置命令还是别名。</li>
+<li>学会使用 <code>&gt;</code> 和 <code>&lt;</code> 来重定向输出和输入，学会使用 <code>|</code> 来重定向管道。明白 <code>&gt;</code> 会覆盖了输出文件而 <code>&gt;&gt;</code> 是在文件末添加。了解标准输出 stdout 和标准错误 stderr。</li>
+<li>学会使用通配符 <code>*</code> （或许再算上 <code>?</code> 和 <code>[</code>…<code>]</code>） 和引用以及引用中 <code>&#39;</code> 和 <code>&quot;</code> 的区别（后文中有一些具体的例子）。</li>
+<li>熟悉 Bash 中的任务管理工具：<code>&amp;</code>，<strong>ctrl-z</strong>，<strong>ctrl-c</strong>，<code>jobs</code>，<code>fg</code>，<code>bg</code>，<code>kill</code> 等。</li>
+<li>学会使用 <code>ssh</code> 进行远程命令行登录，最好知道如何使用 <code>ssh-agent</code>，<code>ssh-add</code> 等命令来实现基础的无密码认证登录。</li>
+<li>学会基本的文件管理工具：<code>ls</code> 和 <code>ls -l</code> （了解 <code>ls -l</code> 中每一列代表的意义），<code>less</code>，<code>head</code>，<code>tail</code> 和 <code>tail -f</code> （甚至 <code>less +F</code>），<code>ln</code> 和 <code>ln -s</code> （了解硬链接与软链接的区别），<code>chown</code>，<code>chmod</code>，<code>du</code> （硬盘使用情况概述：<code>du -hs *</code>）。 关于文件系统的管理，学习 <code>df</code>，<code>mount</code>，<code>fdisk</code>，<code>mkfs</code>，<code>lsblk</code>。知道 inode 是什么（与 <code>ls -i</code> 和 <code>df -i</code> 等命令相关）。</li>
+<li>学习基本的网络管理工具：<code>ip</code> 或 <code>ifconfig</code>，<code>dig</code>。</li>
+<li>学习并使用一种版本控制管理系统，例如 <code>git</code>。</li>
+<li>熟悉正则表达式，学会使用 <code>grep</code>／<code>egrep</code>，它们的参数中 <code>-i</code>，<code>-o</code>，<code>-v</code>，<code>-A</code>，<code>-B</code> 和 <code>-C</code> 这些是很常用并值得认真学习的。</li>
+<li>学会使用 <code>apt-get</code>，<code>yum</code>，<code>dnf</code> 或 <code>pacman</code> （具体使用哪个取决于你使用的 Linux 发行版）来查找和安装软件包。并确保你的环境中有 <code>pip</code> 来安装基于 Python 的命令行工具 （接下来提到的部分程序使用 <code>pip</code> 来安装会很方便）。</li>
+</ul>
+<h2 id="日常使用"><a href="#日常使用" class="headerlink" title="日常使用"></a>日常使用</h2><ul>
+<li>在 Bash 中，可以通过按 <strong>Tab</strong> 键实现自动补全参数，使用 <strong>ctrl-r</strong> 搜索命令行历史记录（按下按键之后，输入关键字便可以搜索，重复按下 <strong>ctrl-r</strong> 会向后查找匹配项，按下 <strong>Enter</strong> 键会执行当前匹配的命令，而按下右方向键会将匹配项放入当前行中，不会直接执行，以便做出修改）。</li>
+<li>在 Bash 中，可以按下 <strong>ctrl-w</strong> 删除你键入的最后一个单词，<strong>ctrl-u</strong> 可以删除行内光标所在位置之前的内容，<strong>alt-b</strong> 和 <strong>alt-f</strong> 可以以单词为单位移动光标，<strong>ctrl-a</strong> 可以将光标移至行首，<strong>ctrl-e</strong> 可以将光标移至行尾，<strong>ctrl-k</strong> 可以删除光标至行尾的所有内容，<strong>ctrl-l</strong> 可以清屏。键入 <code>man readline</code> 可以查看 Bash 中的默认快捷键。内容有很多，例如 <strong>alt-.</strong> 循环地移向前一个参数，而 <strong>alt-*</strong> 可以展开通配符。</li>
+<li>你喜欢的话，可以执行 <code>set -o vi</code> 来使用 vi 风格的快捷键，而执行 <code>set -o emacs</code> 可以把它改回来。</li>
+<li>为了便于编辑长命令，在设置你的默认编辑器后（例如 <code>export EDITOR=vim</code>），<strong>ctrl-x</strong> <strong>ctrl-e</strong> 会打开一个编辑器来编辑当前输入的命令。在 vi 风格下快捷键则是 <strong>escape-v</strong>。</li>
+<li>键入 <code>history</code> 查看命令行历史记录，再用 <code>!n</code>（<code>n</code> 是命令编号）就可以再次执行。其中有许多缩写，最有用的大概就是 <code>!$</code>， 它用于指代上次键入的参数，而 <code>!!</code> 可以指代上次键入的命令了（参考 man 页面中的“HISTORY EXPANSION”）。不过这些功能，你也可以通过快捷键 <strong>ctrl-r</strong> 和 <strong>alt-.</strong> 来实现。</li>
+<li><code>cd</code> 命令可以切换工作路径，输入 <code>cd ~</code> 可以进入 home 目录。要访问你的 home 目录中的文件，可以使用前缀 <code>~</code>（例如 <code>~/.bashrc</code>）。在 <code>sh</code> 脚本里则用环境变量 <code>$HOME</code> 指代 home 目录的路径。</li>
+<li>回到前一个工作路径：<code>cd -</code>。</li>
+<li>如果你输入命令的时候中途改了主意，按下 <strong>alt-#</strong> 在行首添加 <code>#</code> 把它当做注释再按下回车执行（或者依次按下 <strong>ctrl-a</strong>， <strong>#**， **enter</strong>）。这样做的话，之后借助命令行历史记录，你可以很方便恢复你刚才输入到一半的命令。</li>
+<li>使用 <code>xargs</code> （ 或 <code>parallel</code>）。他们非常给力。注意到你可以控制每行参数个数（<code>-L</code>）和最大并行数（<code>-P</code>）。如果你不确定它们是否会按你想的那样工作，先使用 <code>xargs echo</code> 查看一下。此外，使用 <code>-I&#123;&#125;</code> 会很方便。例如：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&#x27;*.py&#x27;</span> | xargs grep some_function</span><br><span class="line">cat hosts | xargs -I&#123;&#125; ssh root@&#123;&#125; hostname</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>pstree -p</code> 以一种优雅的方式展示进程树。</li>
+<li>使用 <code>pgrep</code> 和 <code>pkill</code> 根据名字查找进程或发送信号（<code>-f</code> 参数通常有用）。</li>
+<li>了解你可以发往进程的信号的种类。比如，使用 <code>kill -STOP [pid]</code> 停止一个进程。使用 <code>man 7 signal</code> 查看详细列表。</li>
+<li>使用 <code>nohup</code> 或 <code>disown</code> 使一个后台进程持续运行。</li>
+<li>使用 <code>netstat -lntp</code> 或 <code>ss -plat</code> 检查哪些进程在监听端口（默认是检查 TCP 端口; 添加参数 <code>-u</code> 则检查 UDP 端口）或者 <code>lsof -iTCP -sTCP:LISTEN -P -n</code> (这也可以在 OS X 上运行)。</li>
+<li><code>lsof</code> 来查看开启的套接字和文件。</li>
+<li>使用 <code>uptime</code> 或 <code>w</code> 来查看系统已经运行多长时间。</li>
+<li>使用 <code>alias</code> 来创建常用命令的快捷形式。例如：<code>alias ll=&#39;ls -latr&#39;</code> 创建了一个新的命令别名 <code>ll</code>。</li>
+<li>可以把别名、shell 选项和常用函数保存在 <code>~/.bashrc</code>，具体看下这篇<a target="_blank" rel="noopener" href="http://superuser.com/a/183980/7106">文章</a>。这样做的话你就可以在所有 shell 会话中使用你的设定。</li>
+<li>把环境变量的设定以及登陆时要执行的命令保存在 <code>~/.bash_profile</code>。而对于从图形界面启动的 shell 和 <code>cron</code> 启动的 shell，则需要单独配置文件。</li>
+<li>要想在几台电脑中同步你的配置文件（例如 <code>.bashrc</code> 和 <code>.bash_profile</code>），可以借助 Git。</li>
+<li>当变量和文件名中包含空格的时候要格外小心。Bash 变量要用引号括起来，比如 <code>&quot;$FOO&quot;</code>。尽量使用 <code>-0</code> 或 <code>-print0</code> 选项以便用 NULL 来分隔文件名，例如 <code>locate -0 pattern | xargs -0 ls -al</code> 或 <code>find / -print0 -type d | xargs -0 ls -al</code>。如果 for 循环中循环访问的文件名含有空字符（空格、tab 等字符），只需用 <code>IFS=$&#39;\n&#39;</code> 把内部字段分隔符设为换行符。</li>
+<li>在 Bash 脚本中，使用 <code>set -x</code> 去调试输出（或者使用它的变体 <code>set -v</code>，它会记录原始输入，包括多余的参数和注释）。尽可能地使用严格模式：使用 <code>set -e</code> 令脚本在发生错误时退出而不是继续运行；使用 <code>set -u</code> 来检查是否使用了未赋值的变量；试试 <code>set -o pipefail</code>，它可以监测管道中的错误。当牵扯到很多脚本时，使用 <code>trap</code> 来检测 ERR 和 EXIT。一个好的习惯是在脚本文件开头这样写，这会使它能够检测一些错误，并在错误发生时中断程序并输出信息：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> -euo pipefail</span><br><span class="line"><span class="built_in">trap</span> <span class="string">&quot;echo &#x27;error: Script failed: see failed command above&#x27;&quot;</span> ERR</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 Bash 脚本中，子 shell（使用括号 <code>(...)</code>）是一种组织参数的便捷方式。一个常见的例子是临时地移动工作路径，代码如下：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># do something in current dir</span></span><br><span class="line">(<span class="built_in">cd</span> /some/other/dir &amp;&amp; other-command)</span><br><span class="line"><span class="comment"># continue in original dir</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 Bash 中，变量有许多的扩展方式。<code>$&#123;name:?error message&#125;</code> 用于检查变量是否存在。此外，当 Bash 脚本只需要一个参数时，可以使用这样的代码 <code>input_file=$&#123;1:?usage: $0 input_file&#125;</code>。在变量为空时使用默认值：<code>$&#123;name:-default&#125;</code>。如果你要在之前的例子中再加一个（可选的）参数，可以使用类似这样的代码 <code>output_file=$&#123;2:-logfile&#125;</code>，如果省略了 <img src="https://g.yuque.com/gr/latex?2%EF%BC%8C%E5%AE%83%E7%9A%84%E5%80%BC%E5%B0%B1%E4%B8%BA%E7%A9%BA%EF%BC%8C%E4%BA%8E%E6%98%AF%20%60output_file%60%20%E5%B0%B1%E4%BC%9A%E8%A2%AB%E8%AE%BE%E4%B8%BA%20%60logfile%60%E3%80%82%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9A%60i=#card=math&code=2%EF%BC%8C%E5%AE%83%E7%9A%84%E5%80%BC%E5%B0%B1%E4%B8%BA%E7%A9%BA%EF%BC%8C%E4%BA%8E%E6%98%AF%20%60output_file%60%20%E5%B0%B1%E4%BC%9A%E8%A2%AB%E8%AE%BE%E4%B8%BA%20%60logfile%60%E3%80%82%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9A%60i%3D&id=ZI9eN">(( (i + 1) % 5 ))<code>。序列：</code>{1..10}<code>。截断字符串：</code><img src="https://g.yuque.com/gr/latex?%7Bvar%25suffix%7D%60%20%E5%92%8C%20%60#card=math&code=%7Bvar%25suffix%7D%60%20%E5%92%8C%20%60&id=s1AcL">{var#prefix}<code>。例如，假设</code>var=foo.pdf<code>，那么</code>echo ${var%.pdf}.txt<code>将输出</code>foo.txt`。</li>
+<li>使用括号扩展（<code>&#123;</code>…<code>&#125;</code>）来减少输入相似文本，并自动化文本组合。这在某些情况下会很有用，例如 <code>mv foo.&#123;txt,pdf&#125; some-dir</code>（同时移动两个文件），<code>cp somefile&#123;,.bak&#125;</code>（会被扩展成 <code>cp somefile somefile.bak</code>）或者 <code>mkdir -p test-&#123;a,b,c&#125;/subtest-&#123;1,2,3&#125;</code>（会被扩展成所有可能的组合，并创建一个目录树）。</li>
+<li>通过使用 <code>&lt;(some command)</code> 可以将输出视为文件。例如，对比本地文件 <code>/etc/hosts</code> 和一个远程文件：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diff /etc/hosts &lt;(ssh somehost cat /etc/hosts)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编写脚本时，你可能会想要把代码都放在大括号里。缺少右括号的话，代码就会因为语法错误而无法执行。如果你的脚本是要放在网上分享供他人使用的，这样的写法就体现出它的好处了，因为这样可以防止下载不完全代码被执行。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">      <span class="comment"># 在这里写代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>了解 Bash 中的“here documents”，例如 <code>cat &lt;&lt;EOF ...</code>。</li>
+<li>在 Bash 中，同时重定向标准输出和标准错误：<code>some-command &gt;logfile 2&gt;&amp;1</code> 或者 <code>some-command &amp;&gt;logfile</code>。通常，为了保证命令不会在标准输入里残留一个未关闭的文件句柄捆绑在你当前所在的终端上，在命令后添加 <code>&lt;/dev/null</code> 是一个好习惯。</li>
+<li>使用 <code>man ascii</code> 查看具有十六进制和十进制值的 ASCII 表。<code>man unicode</code>，<code>man utf-8</code>，以及 <code>man latin1</code> 有助于你去了解通用的编码信息。</li>
+<li>使用 <code>screen</code> 或 <code>[tmux](https://tmux.github.io/)</code> 来使用多份屏幕，当你在使用 ssh 时（保存 session 信息）将尤为有用。而 <code>byobu</code> 可以为它们提供更多的信息和易用的管理工具。另一个轻量级的 session 持久化解决方案是 <code>[dtach](https://github.com/bogner/dtach)</code>。</li>
+<li>ssh 中，了解如何使用 <code>-L</code> 或 <code>-D</code>（偶尔需要用 <code>-R</code>）开启隧道是非常有用的，比如当你需要从一台远程服务器上访问 web 页面。</li>
+<li>对 ssh 设置做一些小优化可能是很有用的，例如这个 <code>~/.ssh/config</code> 文件包含了防止特定网络环境下连接断开、压缩数据、多通道等选项：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TCPKeepAlive&#x3D;yes</span><br><span class="line">ServerAliveInterval&#x3D;15</span><br><span class="line">ServerAliveCountMax&#x3D;6</span><br><span class="line">Compression&#x3D;yes</span><br><span class="line">ControlMaster auto</span><br><span class="line">ControlPath &#x2F;tmp&#x2F;%r@%h:%p</span><br><span class="line">ControlPersist yes</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一些其他的关于 ssh 的选项是与安全相关的，应当小心翼翼的使用。例如你应当只能在可信任的网络中启用 <code>StrictHostKeyChecking=no</code>，<code>ForwardAgent=yes</code>。</li>
+<li>考虑使用 <code>[mosh](https://mosh.mit.edu/)</code> 作为 ssh 的替代品，它使用 UDP 协议。它可以避免连接被中断并且对带宽需求更小，但它需要在服务端做相应的配置。</li>
+<li>获取八进制形式的文件访问权限（修改系统设置时通常需要，但 <code>ls</code> 的功能不那么好用并且通常会搞砸），可以使用类似如下的代码：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stat</span> -c <span class="string">&#x27;%A %a %n&#x27;</span> /etc/timezone</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 <code>[percol](https://github.com/mooz/percol)</code> 或者 <code>[fzf](https://github.com/junegunn/fzf)</code> 可以交互式地从另一个命令输出中选取值。</li>
+<li>使用 <code>fpp</code>（<a target="_blank" rel="noopener" href="https://github.com/facebook/PathPicker">PathPicker</a>）可以与基于另一个命令(例如 <code>git</code>）输出的文件交互。</li>
+<li>将 web 服务器上当前目录下所有的文件（以及子目录）暴露给你所处网络的所有用户，使用：</li>
+</ul>
+<p><code>python -m SimpleHTTPServer 7777</code> （使用端口 7777 和 Python 2）或<code>python -m http.server 7777</code> （使用端口 7777 和 Python 3）。</p>
+<ul>
+<li>以其他用户的身份执行命令，使用 <code>sudo</code>。默认以 root 用户的身份执行；使用 <code>-u</code> 来指定其他用户。使用 <code>-i</code> 来以该用户登录（需要输入<em>你自己的</em>密码）。</li>
+<li>将 shell 切换为其他用户，使用 <code>su username</code> 或者 <code>sudo - username</code>。加入 <code>-</code> 会使得切换后的环境与使用该用户登录后的环境相同。省略用户名则默认为 root。切换到哪个用户，就需要输入<em>哪个用户的</em>密码。</li>
+<li>了解命令行的 <a target="_blank" rel="noopener" href="https://wiki.debian.org/CommonErrorMessages/ArgumentListTooLong">128K 限制</a>。使用通配符匹配大量文件名时，常会遇到“Argument list too long”的错误信息。（这种情况下换用 <code>find</code> 或 <code>xargs</code> 通常可以解决。）</li>
+<li>当你需要一个基本的计算器时，可以使用 <code>python</code> 解释器（当然你要用 python 的时候也是这样）。例如：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 2+3</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件及数据处理"><a href="#文件及数据处理" class="headerlink" title="文件及数据处理"></a>文件及数据处理</h2><ul>
+<li>在当前目录下通过文件名查找一个文件，使用类似于这样的命令：<code>find . -iname &#39;*something*&#39;</code>。在所有路径下通过文件名查找文件，使用 <code>locate something</code> （但注意到 <code>updatedb</code> 可能没有对最近新建的文件建立索引，所以你可能无法定位到这些未被索引的文件）。</li>
+<li>使用 <code>[ag](https://github.com/ggreer/the_silver_searcher)</code> 在源代码或数据文件里检索（<code>grep -r</code> 同样可以做到，但相比之下 <code>ag</code> 更加先进）。</li>
+<li>将 HTML 转为文本：<code>lynx -dump -stdin</code>。</li>
+<li>Markdown，HTML，以及所有文档格式之间的转换，试试 <code>[pandoc](http://pandoc.org/)</code>。</li>
+<li>当你要处理棘手的 XML 时候，<code>xmlstarlet</code> 算是上古时代流传下来的神器。</li>
+<li>使用 <code>[jq](http://stedolan.github.io/jq/)</code> 处理 JSON。</li>
+<li>使用 <code>[shyaml](https://github.com/0k/shyaml)</code> 处理 YAML。</li>
+<li>要处理 Excel 或 CSV 文件的话，<a target="_blank" rel="noopener" href="https://github.com/onyxfish/csvkit">csvkit</a> 提供了 <code>in2csv</code>，<code>csvcut</code>，<code>csvjoin</code>，<code>csvgrep</code> 等方便易用的工具。</li>
+<li>当你要处理 Amazon S3 相关的工作的时候，<code>[s3cmd](https://github.com/s3tools/s3cmd)</code> 是一个很方便的工具而 <code>[s4cmd](https://github.com/bloomreach/s4cmd)</code> 的效率更高。Amazon 官方提供的 <code>[aws](https://github.com/aws/aws-cli)</code> 以及  <code>[saws](https://github.com/donnemartin/saws)</code> 是其他 AWS 相关工作的基础，值得学习。</li>
+<li>了解如何使用 <code>sort</code> 和 <code>uniq</code>，包括 uniq 的 <code>-u</code> 参数和 <code>-d</code> 参数，具体内容在后文单行脚本节中。另外可以了解一下 <code>comm</code>。</li>
+<li>了解如何使用 <code>cut</code>，<code>paste</code> 和 <code>join</code> 来更改文件。很多人都会使用 <code>cut</code>，但遗忘了 <code>join</code>。</li>
+<li>了解如何运用 <code>wc</code> 去计算新行数（<code>-l</code>），字符数（<code>-m</code>），单词数（<code>-w</code>）以及字节数（<code>-c</code>）。</li>
+<li>了解如何使用 <code>tee</code> 将标准输入复制到文件甚至标准输出，例如 <code>ls -al | tee file.txt</code>。</li>
+<li>要进行一些复杂的计算，比如分组、逆序和一些其他的统计分析，可以考虑使用 <code>[datamash](https://www.gnu.org/software/datamash/)</code>。</li>
+<li>注意到语言设置（中文或英文等）对许多命令行工具有一些微妙的影响，比如排序的顺序和性能。大多数 Linux 的安装过程会将 <code>LANG</code> 或其他有关的变量设置为符合本地的设置。要意识到当你改变语言设置时，排序的结果可能会改变。明白国际化可能会使 sort 或其他命令运行效率下降<em>许多倍</em>。某些情况下（例如集合运算）你可以放心的使用 <code>export LC_ALL=C</code> 来忽略掉国际化并按照字节来判断顺序。</li>
+<li>你可以单独指定某一条命令的环境，只需在调用时把环境变量设定放在命令的前面，例如 <code>TZ=Pacific/Fiji date</code> 可以获取斐济的时间。</li>
+<li>了解如何使用 <code>awk</code> 和 <code>sed</code> 来进行简单的数据处理。 参阅 <a href="#one-liners">One-liners</a> 获取示例。</li>
+<li>替换一个或多个文件中出现的字符串：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -pi.bak -e <span class="string">&#x27;s/old-string/new-string/g&#x27;</span> my-files-*.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 <code>[repren](https://github.com/jlevy/repren)</code> 来批量重命名文件，或是在多个文件中搜索替换内容。（有些时候 <code>rename</code> 命令也可以批量重命名，但要注意，它在不同 Linux 发行版中的功能并不完全一样。）</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将文件、目录和内容全部重命名 foo -&gt; bar:</span></span><br><span class="line">repren --full --preserve-case --from foo --to bar .</span><br><span class="line"><span class="comment"># 还原所有备份文件 whatever.bak -&gt; whatever:</span></span><br><span class="line">repren --renames --from <span class="string">&#x27;(.*)\.bak&#x27;</span> --to <span class="string">&#x27;\1&#x27;</span> *.bak</span><br><span class="line"><span class="comment"># 用 rename 实现上述功能（若可用）:</span></span><br><span class="line">rename <span class="string">&#x27;s/\.bak$//&#x27;</span> *.bak</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>根据 man 页面的描述，<code>rsync</code> 是一个快速且非常灵活的文件复制工具。它闻名于设备之间的文件同步，但其实它在本地情况下也同样有用。在安全设置允许下，用 <code>rsync</code> 代替 <code>scp</code> 可以实现文件续传，而不用重新从头开始。它同时也是删除大量文件的<a target="_blank" rel="noopener" href="https://web.archive.org/web/20130929001850/http://linuxnote.net/jianingy/en/linux/a-fast-way-to-remove-huge-number-of-files.html">最快方法</a>之一：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir empty &amp;&amp; rsync -r --delete empty/ some-dir &amp;&amp; rmdir some-dir</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若要在复制文件时获取当前进度，可使用 <code>pv</code>，<code>[pycp](https://github.com/dmerejkowsky/pycp)</code>，<code>[progress](https://github.com/Xfennec/progress)</code>，<code>rsync --progress</code>。若所执行的复制为 block 块拷贝，可以使用 <code>dd status=progress</code>。</li>
+<li>使用 <code>shuf</code> 可以以行为单位来打乱文件的内容或从一个文件中随机选取多行。</li>
+<li>了解 <code>sort</code> 的参数。显示数字时，使用 <code>-n</code> 或者 <code>-h</code> 来显示更易读的数（例如 <code>du -h</code> 的输出）。明白排序时关键字的工作原理（<code>-t</code> 和 <code>-k</code>）。例如，注意到你需要 <code>-k1，1</code> 来仅按第一个域来排序，而 <code>-k1</code> 意味着按整行排序。稳定排序（<code>sort -s</code>）在某些情况下很有用。例如，以第二个域为主关键字，第一个域为次关键字进行排序，你可以使用 <code>sort -k1，1 | sort -s -k2，2</code>。</li>
+<li>如果你想在 Bash 命令行中写 tab 制表符，按下 <strong>ctrl-v</strong> <strong>[Tab]</strong> 或键入 <code>$&#39;\t&#39;</code> （后者可能更好，因为你可以复制粘贴它）。</li>
+<li>标准的源代码对比及合并工具是 <code>diff</code> 和 <code>patch</code>。使用 <code>diffstat</code> 查看变更总览数据。注意到 <code>diff -r</code> 对整个文件夹有效。使用 <code>diff -r tree1 tree2 | diffstat</code> 查看变更的统计数据。<code>vimdiff</code> 用于比对并编辑文件。</li>
+<li>对于二进制文件，使用 <code>hd</code>，<code>hexdump</code> 或者 <code>xxd</code> 使其以十六进制显示，使用 <code>bvi</code>，<code>hexedit</code> 或者 <code>biew</code> 来进行二进制编辑。</li>
+<li>同样对于二进制文件，<code>strings</code>（包括 <code>grep</code> 等工具）可以帮助在二进制文件中查找特定比特。</li>
+<li>制作二进制差分文件（Delta 压缩），使用 <code>xdelta3</code>。</li>
+<li>使用 <code>iconv</code> 更改文本编码。需要更高级的功能，可以使用 <code>uconv</code>，它支持一些高级的 Unicode 功能。例如，这条命令移除了所有重音符号：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uconv -f utf-8 -t utf-8 -x <span class="string">&#x27;::Any-Lower; ::Any-NFD; [:Nonspacing Mark:] &gt;; ::Any-NFC; &#x27;</span> &lt; input.txt &gt; output.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拆分文件可以使用 <code>split</code>（按大小拆分）和 <code>csplit</code>（按模式拆分）。</li>
+<li>操作日期和时间表达式，可以用 <code>[dateutils](http://www.fresse.org/dateutils/)</code> 中的 <code>dateadd</code>、<code>datediff</code>、<code>strptime</code> 等工具。</li>
+<li>使用 <code>zless</code>、<code>zmore</code>、<code>zcat</code> 和 <code>zgrep</code> 对压缩过的文件进行操作。</li>
+<li>文件属性可以通过 <code>chattr</code> 进行设置，它比文件权限更加底层。例如，为了保护文件不被意外删除，可以使用不可修改标记：<code>sudo chattr +i /critical/directory/or/file</code></li>
+<li>使用 <code>getfacl</code> 和 <code>setfacl</code> 以保存和恢复文件权限。例如：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getfacl -R /some/path &gt; permissions.txt</span><br><span class="line">setfacl --restore=permissions.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为了高效地创建空文件，请使用 <code>truncate</code>（创建<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A8%80%E7%96%8F%E6%96%87%E4%BB%B6">稀疏文件</a>），<code>fallocate</code>（用于 ext4，xfs，btrf 和 ocfs2 文件系统），<code>xfs_mkfile</code>（适用于几乎所有的文件系统，包含在 xfsprogs 包中），<code>mkfile</code>（用于类 Unix 操作系统，比如 Solaris 和 Mac OS）。</li>
+</ul>
+<h2 id="系统调试"><a href="#系统调试" class="headerlink" title="系统调试"></a>系统调试</h2><ul>
+<li><code>curl</code> 和 <code>curl -I</code> 可以被轻松地应用于 web 调试中，它们的好兄弟 <code>wget</code> 也是如此，或者也可以试试更潮的 <code>[httpie](https://github.com/jkbrzt/httpie)</code>。</li>
+<li>获取 CPU 和硬盘的使用状态，通常使用使用 <code>top</code>（<code>htop</code> 更佳），<code>iostat</code> 和 <code>iotop</code>。而 <code>iostat -mxz 15</code> 可以让你获悉 CPU 和每个硬盘分区的基本信息和性能表现。</li>
+<li>使用 <code>netstat</code> 和 <code>ss</code> 查看网络连接的细节。</li>
+<li><code>dstat</code> 在你想要对系统的现状有一个粗略的认识时是非常有用的。然而若要对系统有一个深度的总体认识，使用 <code>[glances](https://github.com/nicolargo/glances)</code>，它会在一个终端窗口中向你提供一些系统级的数据。</li>
+<li>若要了解内存状态，运行并理解 <code>free</code> 和 <code>vmstat</code> 的输出。值得留意的是“cached”的值，它指的是 Linux 内核用来作为文件缓存的内存大小，而与空闲内存无关。</li>
+<li>Java 系统调试则是一件截然不同的事，一个可以用于 Oracle 的 JVM 或其他 JVM 上的调试的技巧是你可以运行 <code>kill -3 &lt;pid&gt;</code> 同时一个完整的栈轨迹和堆概述（包括 GC 的细节）会被保存到标准错误或是日志文件。JDK 中的 <code>jps</code>，<code>jstat</code>，<code>jstack</code>，<code>jmap</code> 很有用。<a target="_blank" rel="noopener" href="https://github.com/aragozin/jvm-tools">SJK tools</a> 更高级。</li>
+<li>使用 <code>[mtr](http://www.bitwizard.nl/mtr/)</code> 去跟踪路由，用于确定网络问题。</li>
+<li>用 <code>[ncdu](https://dev.yorhel.nl/ncdu)</code> 来查看磁盘使用情况，它比寻常的命令，如 <code>du -sh *</code>，更节省时间。</li>
+<li>查找正在使用带宽的套接字连接或进程，使用 <code>[iftop](http://www.ex-parrot.com/~pdw/iftop/)</code> 或 <code>[nethogs](https://github.com/raboof/nethogs)</code>。</li>
+<li><code>ab</code> 工具（Apache 中自带）可以简单粗暴地检查 web 服务器的性能。对于更复杂的负载测试，使用 <code>siege</code>。</li>
+<li><code>[wireshark](https://wireshark.org/)</code>，<code>[tshark](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html)</code> 和 <code>[ngrep](http://ngrep.sourceforge.net/)</code> 可用于复杂的网络调试。</li>
+<li>了解 <code>strace</code> 和 <code>ltrace</code>。这俩工具在你的程序运行失败、挂起甚至崩溃，而你却不知道为什么或你想对性能有个总体的认识的时候是非常有用的。注意 profile 参数（<code>-c</code>）和附加到一个运行的进程参数 （<code>-p</code>）。</li>
+<li>了解使用 <code>ldd</code> 来检查共享库。但是<a target="_blank" rel="noopener" href="http://www.catonmat.net/blog/ldd-arbitrary-code-execution/">永远不要在不信任的文件上运行</a>。</li>
+<li>了解如何运用 <code>gdb</code> 连接到一个运行着的进程并获取它的堆栈轨迹。</li>
+<li>学会使用 <code>/proc</code>。它在调试正在出现的问题的时候有时会效果惊人。比如：<code>/proc/cpuinfo</code>，<code>/proc/meminfo</code>，<code>/proc/cmdline</code>，<code>/proc/xxx/cwd</code>，<code>/proc/xxx/exe</code>，<code>/proc/xxx/fd/</code>，<code>/proc/xxx/smaps</code>（这里的 <code>xxx</code> 表示进程的 id 或 pid）。</li>
+<li>当调试一些之前出现的问题的时候，<code>[sar](http://sebastien.godard.pagesperso-orange.fr/)</code> 非常有用。它展示了 cpu、内存以及网络等的历史数据。</li>
+<li>关于更深层次的系统分析以及性能分析，看看 <code>stap</code>（<a target="_blank" rel="noopener" href="https://sourceware.org/systemtap/wiki">SystemTap</a>），<code>[perf](https://en.wikipedia.org/wiki/Perf_(Linux))</code>，以及<code>[sysdig](https://github.com/draios/sysdig)</code>。</li>
+<li>查看你当前使用的系统，使用 <code>uname</code>，<code>uname -a</code>（Unix／kernel 信息）或者 <code>lsb_release -a</code>（Linux 发行版信息）。</li>
+<li>无论什么东西工作得很欢乐（可能是硬件或驱动问题）时可以试试 <code>dmesg</code>。</li>
+<li>如果你删除了一个文件，但通过 <code>du</code> 发现没有释放预期的磁盘空间，请检查文件是否被进程占用：</li>
+</ul>
+<p><code>lsof | grep deleted | grep &quot;filename-of-my-big-file&quot;</code></p>
+<h2 id="单行脚本"><a href="#单行脚本" class="headerlink" title="单行脚本"></a>单行脚本</h2><p>一些命令组合的例子：</p>
+<ul>
+<li>当你需要对文本文件做集合交、并、差运算时，<code>sort</code> 和 <code>uniq</code> 会是你的好帮手。具体例子请参照代码后面的，此处假设 <code>a</code> 与 <code>b</code> 是两内容不同的文件。这种方式效率很高，并且在小文件和上 G 的文件上都能运用（注意尽管在 <code>/tmp</code> 在一个小的根分区上时你可能需要 <code>-T</code> 参数，但是实际上 <code>sort</code> 并不被内存大小约束），参阅前文中关于 <code>LC_ALL</code> 和 <code>sort</code> 的 <code>-u</code> 参数的部分。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sort a b | uniq &gt; c   <span class="comment"># c 是 a 并 b</span></span><br><span class="line">sort a b | uniq -d &gt; c   <span class="comment"># c 是 a 交 b</span></span><br><span class="line">sort a b b | uniq -u &gt; c   <span class="comment"># c 是 a - b</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 <code>grep . *</code>（每行都会附上文件名）或者 <code>head -100 *</code>（每个文件有一个标题）来阅读检查目录下所有文件的内容。这在检查一个充满配置文件的目录（如 <code>/sys</code>、<code>/proc</code>、<code>/etc</code>）时特别好用。</li>
+<li>计算文本文件第三列中所有数的和（可能比同等作用的 Python 代码快三倍且代码量少三倍）：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123; x += $3 &#125; END &#123; print x &#125;&#x27;</span> myfile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果你想在文件树上查看大小/日期，这可能看起来像递归版的 <code>ls -l</code> 但比 <code>ls -lR</code> 更易于理解：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">type</span> f -ls</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>假设你有一个类似于 web 服务器日志文件的文本文件，并且一个确定的值只会出现在某些行上，假设一个 <code>acct_id</code> 参数在 URI 中。如果你想计算出每个 <code>acct_id</code> 值有多少次请求，使用如下代码：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">egrep -o <span class="string">&#x27;acct_id=[0-9]+&#x27;</span> access.log | cut -d= -f2 | sort | uniq -c | sort -rn</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>要持续监测文件改动，可以使用 <code>watch</code>，例如检查某个文件夹中文件的改变，可以用 <code>watch -d -n 2 &#39;ls -rtlh | tail&#39;</code>；或者在排查 WiFi 设置故障时要监测网络设置的更改，可以用 <code>watch -d -n 2 ifconfig</code>。</li>
+<li>运行这个函数从这篇文档中随机获取一条技巧（解析 Markdown 文件并抽取项目）：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">taocl</span></span>() &#123;</span><br><span class="line">  curl -s https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/README-zh.md|</span><br><span class="line">    pandoc -f markdown -t html |</span><br><span class="line">    iconv -f <span class="string">&#x27;utf-8&#x27;</span> -t <span class="string">&#x27;unicode&#x27;</span> |</span><br><span class="line">    xmlstarlet fo --html --dropdtd |</span><br><span class="line">    xmlstarlet sel -t -v <span class="string">&quot;(html/body/ul/li[count(p)&gt;0])[<span class="variable">$RANDOM</span> mod last()+1]&quot;</span> |</span><br><span class="line">    xmlstarlet unesc | fmt -80</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="冷门但有用"><a href="#冷门但有用" class="headerlink" title="冷门但有用"></a>冷门但有用</h2><ul>
+<li><code>expr</code>：计算表达式或正则匹配</li>
+<li><code>m4</code>：简单的宏处理器</li>
+<li><code>yes</code>：多次打印字符串</li>
+<li><code>cal</code>：漂亮的日历</li>
+<li><code>env</code>：执行一个命令（脚本文件中很有用）</li>
+<li><code>printenv</code>：打印环境变量（调试时或在写脚本文件时很有用）</li>
+<li><code>look</code>：查找以特定字符串开头的单词或行</li>
+<li><code>cut</code>，<code>paste</code> 和 <code>join</code>：数据修改</li>
+<li><code>fmt</code>：格式化文本段落</li>
+<li><code>pr</code>：将文本格式化成页／列形式</li>
+<li><code>fold</code>：包裹文本中的几行</li>
+<li><code>column</code>：将文本格式化成多个对齐、定宽的列或表格</li>
+<li><code>expand</code> 和 <code>unexpand</code>：制表符与空格之间转换</li>
+<li><code>nl</code>：添加行号</li>
+<li><code>seq</code>：打印数字</li>
+<li><code>bc</code>：计算器</li>
+<li><code>factor</code>：分解因数</li>
+<li><code>[gpg](https://gnupg.org/)</code>：加密并签名文件</li>
+<li><code>toe</code>：terminfo 入口列表</li>
+<li><code>nc</code>：网络调试及数据传输</li>
+<li><code>socat</code>：套接字代理，与 <code>netcat</code> 类似</li>
+<li><code>[slurm](https://github.com/mattthias/slurm)</code>：网络流量可视化</li>
+<li><code>dd</code>：文件或设备间传输数据</li>
+<li><code>file</code>：确定文件类型</li>
+<li><code>tree</code>：以树的形式显示路径和文件，类似于递归的 <code>ls</code></li>
+<li><code>stat</code>：文件信息</li>
+<li><code>time</code>：执行命令，并计算执行时间</li>
+<li><code>timeout</code>：在指定时长范围内执行命令，并在规定时间结束后停止进程</li>
+<li><code>lockfile</code>：使文件只能通过 <code>rm -f</code> 移除</li>
+<li><code>logrotate</code>： 切换、压缩以及发送日志文件</li>
+<li><code>watch</code>：重复运行同一个命令，展示结果并／或高亮有更改的部分</li>
+<li><code>[when-changed](https://github.com/joh/when-changed)</code>：当检测到文件更改时执行指定命令。参阅 <code>inotifywait</code> 和 <code>entr</code>。</li>
+<li><code>tac</code>：反向输出文件</li>
+<li><code>shuf</code>：文件中随机选取几行</li>
+<li><code>comm</code>：一行一行的比较排序过的文件</li>
+<li><code>strings</code>：从二进制文件中抽取文本</li>
+<li><code>tr</code>：转换字母</li>
+<li><code>iconv</code> 或 <code>uconv</code>：文本编码转换</li>
+<li><code>split</code> 和 <code>csplit</code>：分割文件</li>
+<li><code>sponge</code>：在写入前读取所有输入，在读取文件后再向同一文件写入时比较有用，例如 <code>grep -v something some-file | sponge some-file</code></li>
+<li><code>units</code>：将一种计量单位转换为另一种等效的计量单位（参阅 <code>/usr/share/units/definitions.units</code>）</li>
+<li><code>apg</code>：随机生成密码</li>
+<li><code>xz</code>：高比例的文件压缩</li>
+<li><code>ldd</code>：动态库信息</li>
+<li><code>nm</code>：提取 obj 文件中的符号</li>
+<li><code>ab</code> 或 <code>[wrk](https://github.com/wg/wrk)</code>：web 服务器性能分析</li>
+<li><code>strace</code>：调试系统调用</li>
+<li><code>[mtr](http://www.bitwizard.nl/mtr/)</code>：更好的网络调试跟踪工具</li>
+<li><code>cssh</code>：可视化的并发 shell</li>
+<li><code>rsync</code>：通过 ssh 或本地文件系统同步文件和文件夹</li>
+<li><code>[wireshark](https://wireshark.org/)</code> 和 <code>[tshark](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html)</code>：抓包和网络调试工具</li>
+<li><code>[ngrep](http://ngrep.sourceforge.net/)</code>：网络层的 grep</li>
+<li><code>host</code> 和 <code>dig</code>：DNS 查找</li>
+<li><code>lsof</code>：列出当前系统打开文件的工具以及查看端口信息</li>
+<li><code>dstat</code>：系统状态查看</li>
+<li><code>[glances](https://github.com/nicolargo/glances)</code>：高层次的多子系统总览</li>
+<li><code>iostat</code>：硬盘使用状态</li>
+<li><code>mpstat</code>： CPU 使用状态</li>
+<li><code>vmstat</code>： 内存使用状态</li>
+<li><code>htop</code>：top 的加强版</li>
+<li><code>last</code>：登入记录</li>
+<li><code>w</code>：查看处于登录状态的用户</li>
+<li><code>id</code>：用户/组 ID 信息</li>
+<li><code>[sar](http://sebastien.godard.pagesperso-orange.fr/)</code>：系统历史数据</li>
+<li><code>[iftop](http://www.ex-parrot.com/~pdw/iftop/)</code> 或 <code>[nethogs](https://github.com/raboof/nethogs)</code>：套接字及进程的网络利用情况</li>
+<li><code>ss</code>：套接字数据</li>
+<li><code>dmesg</code>：引导及系统错误信息</li>
+<li><code>sysctl</code>： 在内核运行时动态地查看和修改内核的运行参数</li>
+<li><code>hdparm</code>：SATA/ATA 磁盘更改及性能分析</li>
+<li><code>lsblk</code>：列出块设备信息：以树形展示你的磁盘以及磁盘分区信息</li>
+<li><code>lshw</code>，<code>lscpu</code>，<code>lspci</code>，<code>lsusb</code> 和 <code>dmidecode</code>：查看硬件信息，包括 CPU、BIOS、RAID、显卡、USB 设备等</li>
+<li><code>lsmod</code> 和 <code>modinfo</code>：列出内核模块，并显示其细节</li>
+<li><code>fortune</code>，<code>ddate</code> 和 <code>sl</code>：额，这主要取决于你是否认为蒸汽火车和莫名其妙的名人名言是否“有用”</li>
+</ul>
+<h2 id="仅限-OS-X-系统"><a href="#仅限-OS-X-系统" class="headerlink" title="仅限 OS X 系统"></a>仅限 OS X 系统</h2><p>以下是<em>仅限于</em> OS X 系统的技巧。</p>
+<ul>
+<li>用 <code>brew</code> （Homebrew）或者 <code>port</code> （MacPorts）进行包管理。这些可以用来在 OS X 系统上安装以上的大多数命令。</li>
+<li>用 <code>pbcopy</code> 复制任何命令的输出到桌面应用，用 <code>pbpaste</code> 粘贴输入。</li>
+<li>若要在 OS X 终端中将 Option 键视为 alt 键（例如在上面介绍的 <strong>alt-b</strong>、<strong>alt-f</strong> 等命令中用到），打开 偏好设置 -&gt; 描述文件 -&gt; 键盘 并勾选“使用 Option 键作为 Meta 键”。</li>
+<li>用 <code>open</code> 或者 <code>open -a /Applications/Whatever.app</code> 使用桌面应用打开文件。</li>
+<li>Spotlight：用 <code>mdfind</code> 搜索文件，用 <code>mdls</code> 列出元数据（例如照片的 EXIF 信息）。</li>
+<li>注意 OS X 系统是基于 BSD UNIX 的，许多命令（例如 <code>ps</code>，<code>ls</code>，<code>tail</code>，<code>awk</code>，<code>sed</code>）都和 Linux 中有微妙的不同（ Linux 很大程度上受到了 System V-style Unix 和 GNU 工具影响）。你可以通过标题为 “BSD General Commands Manual” 的 man 页面发现这些不同。在有些情况下 GNU 版本的命令也可能被安装（例如 <code>gawk</code> 和 <code>gsed</code> 对应 GNU 中的 awk 和 sed ）。如果要写跨平台的 Bash 脚本，避免使用这些命令（例如，考虑 Python 或者 <code>perl</code> ）或者经过仔细的测试。</li>
+<li>用 <code>sw_vers</code> 获取 OS X 的版本信息。</li>
+</ul>
+<h2 id="仅限-Windows-系统"><a href="#仅限-Windows-系统" class="headerlink" title="仅限 Windows 系统"></a>仅限 Windows 系统</h2><p>以下是<em>仅限于</em> Windows 系统的技巧。</p>
+<h3 id="在-Winodws-下获取-Unix-工具"><a href="#在-Winodws-下获取-Unix-工具" class="headerlink" title="在 Winodws 下获取 Unix 工具"></a>在 Winodws 下获取 Unix 工具</h3><ul>
+<li>可以安装 <a target="_blank" rel="noopener" href="https://cygwin.com/">Cygwin</a> 允许你在 Microsoft Windows 中体验 Unix shell 的威力。这样的话，本文中介绍的大多数内容都将适用。</li>
+<li>在 Windows 10 上，你可以使用 <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/commandline/wsl/about">Bash on Ubuntu on Windows</a>，它提供了一个熟悉的 Bash 环境，包含了不少 Unix 命令行工具。好处是它允许 Linux 上编写的程序在 Windows 上运行，而另一方面，Windows 上编写的程序却无法在 Bash 命令行中运行。</li>
+<li>如果你在 Windows 上主要想用 GNU 开发者工具（例如 GCC），可以考虑 <a target="_blank" rel="noopener" href="http://www.mingw.org/">MinGW</a> 以及它的 <a target="_blank" rel="noopener" href="http://www.mingw.org/wiki/msys">MSYS</a> 包，这个包提供了例如 bash，gawk，make 和 grep 的工具。MSYS 并不包含所有可以与 Cygwin 媲美的特性。当制作 Unix 工具的原生 Windows 端口时 MinGW 将特别地有用。</li>
+<li>另一个在 Windows 下实现接近 Unix 环境外观效果的选项是 <a target="_blank" rel="noopener" href="https://github.com/dthree/cash">Cash</a>。注意在此环境下只有很少的 Unix 命令和命令行可用。</li>
+</ul>
+<h3 id="实用-Windows-命令行工具"><a href="#实用-Windows-命令行工具" class="headerlink" title="实用 Windows 命令行工具"></a>实用 Windows 命令行工具</h3><ul>
+<li>可以使用 <code>wmic</code> 在命令行环境下给大部分 Windows 系统管理任务编写脚本以及执行这些任务。</li>
+<li>Windows 实用的原生命令行网络工具包括 <code>ping</code>，<code>ipconfig</code>，<code>tracert</code>，和 <code>netstat</code>。</li>
+<li>可以使用 <code>Rundll32</code> 命令来实现<a target="_blank" rel="noopener" href="http://www.thewindowsclub.com/rundll32-shortcut-commands-windows">许多有用的 Windows 任务</a> 。</li>
+</ul>
+<h3 id="Cygwin-技巧"><a href="#Cygwin-技巧" class="headerlink" title="Cygwin 技巧"></a>Cygwin 技巧</h3><ul>
+<li>通过 Cygwin 的包管理器来安装额外的 Unix 程序。</li>
+<li>使用 <code>mintty</code> 作为你的命令行窗口。</li>
+<li>要访问 Windows 剪贴板，可以通过 <code>/dev/clipboard</code>。</li>
+<li>运行 <code>cygstart</code> 以通过默认程序打开一个文件。</li>
+<li>要访问 Windows 注册表，可以使用 <code>regtool</code>。</li>
+<li>注意 Windows 驱动器路径 <code>C:\</code> 在 Cygwin 中用 <code>/cygdrive/c</code> 代表，而 Cygwin 的 <code>/</code> 代表 Windows 中的 <code>C:\cygwin</code>。要转换 Cygwin 和 Windows 风格的路径可以用 <code>cygpath</code>。这在需要调用 Windows 程序的脚本里很有用。</li>
+<li>学会使用 <code>wmic</code>，你就可以从命令行执行大多数 Windows 系统管理任务，并编成脚本。</li>
+<li>要在 Windows 下获得 Unix 的界面和体验，另一个办法是使用 <a target="_blank" rel="noopener" href="https://github.com/dthree/cash">Cash</a>。需要注意的是，这个环境支持的 Unix 命令和命令行参数非常少。</li>
+<li>要在 Windows 上获取 GNU 开发者工具（比如 GCC）的另一个办法是使用 <a target="_blank" rel="noopener" href="http://www.mingw.org/">MinGW</a> 以及它的 <a target="_blank" rel="noopener" href="http://www.mingw.org/wiki/msys">MSYS</a> 软件包，该软件包提供了 bash、gawk、make、grep 等工具。然而 MSYS 提供的功能没有 Cygwin 完善。MinGW 在创建 Unix 工具的 Windows 原生移植方面非常有用。</li>
+</ul>
+<h2 id="更多资源"><a href="#更多资源" class="headerlink" title="更多资源"></a>更多资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/alebcay/awesome-shell">awesome-shell</a>：一份精心组织的命令行工具及资源的列表。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/herrbischoff/awesome-osx-command-line">awesome-osx-command-line</a>：一份针对 OS X 命令行的更深入的指南。</li>
+<li><a target="_blank" rel="noopener" href="http://redsymbol.net/articles/unofficial-bash-strict-mode/">Strict mode</a>：为了编写更好的脚本文件。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/koalaman/shellcheck">shellcheck</a>：一个静态 shell 脚本分析工具，本质上是 bash／sh／zsh 的 lint。</li>
+<li><a target="_blank" rel="noopener" href="http://www.dwheeler.com/essays/filenames-in-shell.html">Filenames and Pathnames in Shell</a>：有关如何在 shell 脚本里正确处理文件名的细枝末节。</li>
+<li><a target="_blank" rel="noopener" href="http://datascienceatthecommandline.com/#tools">Data Science at the Command Line</a>：用于数据科学的一些命令和工具，摘自同名书籍。</li>
+</ul>
+<h2 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h2><p>除去特别小的工作，你编写的代码应当方便他人阅读。能力往往伴随着责任，你 <em>有能力</em> 在 Bash 中玩一些奇技淫巧并不意味着你应该去做！;)</p>
+<h2 id="授权条款"><a href="#授权条款" class="headerlink" title="授权条款"></a>授权条款</h2><p><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png#id=MXDok&originHeight=31&originWidth=88&originalType=binary&status=done&style=none"></p>
+<p>本文使用授权协议 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/28/yuque/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%89%BA%E6%9C%AF(%E8%BD%AC%E8%BD%BD)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/SSL!TLS协议运行机制的概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/17/yuque/SSL!TLS%E5%8D%8F%E8%AE%AE%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E7%9A%84%E6%A6%82%E8%BF%B0/">SSL/TLS协议运行机制的概述</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/17/yuque/SSL!TLS%E5%8D%8F%E8%AE%AE%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E7%9A%84%E6%A6%82%E8%BF%B0/" class="archive-article-date">
+  	<time datetime="2021-04-17T12:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>互联网的通信安全，建立在 SSL/TLS 协议之上。<br>本文简要介绍 SSL/TLS 协议的运行机制。文章的重点是设计思想和运行过程，不涉及具体的实现细节。如果想了解这方面的内容，请参阅<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc5246">RFC 文档</a>。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1618663679901-a0f8d1ac-efc6-4807-a116-bdcbb4945748.jpeg#clientId=u7a059e36-0a31-4&from=paste&height=405&id=ufba86c45&margin=%5Bobject%20Object%5D&originHeight=405&originWidth=610&originalType=url&status=done&style=none&taskId=u2f4d44fa-1c98-44f5-b890-aa1be3831c2&width=610"></p>
+<h2 id="一、作用"><a href="#一、作用" class="headerlink" title="一、作用"></a>一、作用</h2><p>不使用 SSL/TLS 的 HTTP 通信，就是不加密的通信。所有信息明文传播，带来了三大风险。<br>（1）<strong>窃听风险</strong>（eavesdropping）：第三方可以获知通信内容。<br>（2）<strong>篡改风险</strong>（tampering）：第三方可以修改通信内容。<br>（3）<strong>冒充风险</strong>（pretending）：第三方可以冒充他人身份参与通信。<br>SSL/TLS 协议是为了解决这三大风险而设计的，希望达到：<br>（1） 所有信息都是<strong>加密传播</strong>，第三方无法窃听。<br>（2） 具有<strong>校验机制</strong>，一旦被篡改，通信双方会立刻发现。<br>（3） 配备<strong>身份证书</strong>，防止身份被冒充。<br>互联网是开放环境，通信双方都是未知身份，这为协议的设计带来了很大的难度。而且，协议还必须能够经受所有匪夷所思的攻击，这使得 SSL/TLS 协议变得异常复杂。</p>
+<h2 id="二、历史"><a href="#二、历史" class="headerlink" title="二、历史"></a>二、历史</h2><p>互联网加密通信协议的历史，几乎与互联网一样长。<br>1994 年，NetScape 公司设计了 SSL 协议（Secure Sockets Layer）的 1.0 版，但是未发布。<br>1995 年，NetScape 公司发布 SSL 2.0 版，很快发现有严重漏洞。<br>1996 年，SSL 3.0 版问世，得到大规模应用。<br>1999 年，互联网标准化组织 ISOC 接替 NetScape 公司，发布了 SSL 的升级版<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer">TLS</a>1.0 版。<br>2006 年和 2008 年，TLS 进行了两次升级，分别为 TLS 1.1 版和 TLS 1.2 版。最新的变动是 2011 年 TLS 1.2 的<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc6176">修订版</a>。<br>目前，应用最广泛的是 TLS 1.0，接下来是 SSL 3.0。但是，主流浏览器都已经实现了 TLS 1.2 的支持。<br>TLS 1.0 通常被标示为 SSL 3.1，TLS 1.1 为 SSL 3.2，TLS 1.2 为 SSL 3.3。</p>
+<h2 id="三、基本的运行过程"><a href="#三、基本的运行过程" class="headerlink" title="三、基本的运行过程"></a>三、基本的运行过程</h2><p>SSL/TLS 协议的基本思路是采用<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Public-key_cryptography">公钥加密法</a>，也就是说，客户端先向服务器端索要公钥，然后用公钥加密信息，服务器收到密文后，用自己的私钥解密。<br>但是，这里有两个问题。</p>
+<h3 id="（1）如何保证公钥不被篡改？"><a href="#（1）如何保证公钥不被篡改？" class="headerlink" title="（1）如何保证公钥不被篡改？"></a>（1）如何保证公钥不被篡改？</h3><p>解决方法：将公钥放在<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Digital_certificate">数字证书</a>中。只要证书是可信的，公钥就是可信的。</p>
+<h3 id="（2）公钥加密计算量太大，如何减少耗用的时间？"><a href="#（2）公钥加密计算量太大，如何减少耗用的时间？" class="headerlink" title="（2）公钥加密计算量太大，如何减少耗用的时间？"></a>（2）公钥加密计算量太大，如何减少耗用的时间？</h3><p>解决方法：每一次对话（session），客户端和服务器端都生成一个”对话密钥”（session key），用它来加密信息。由于”对话密钥”是对称加密，所以运算速度非常快，而服务器公钥只用于加密”对话密钥”本身，这样就减少了加密运算的消耗时间。<br>因此，SSL/TLS 协议的基本过程是这样的：<br>（1） 客户端向服务器端索要并验证公钥。<br>（2） 双方协商生成”对话密钥”。<br>（3） 双方采用”对话密钥”进行加密通信。<br>上面过程的前两步，又称为”握手阶段”（handshake）。</p>
+<h2 id="四、握手阶段的详细过程"><a href="#四、握手阶段的详细过程" class="headerlink" title="四、握手阶段的详细过程"></a>四、握手阶段的详细过程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1618663680009-1b684b5e-0716-4bd8-b74a-337b45ff6eb2.png#clientId=u7a059e36-0a31-4&from=paste&height=531&id=u2eea81ef&margin=%5Bobject%20Object%5D&originHeight=531&originWidth=580&originalType=url&status=done&style=none&taskId=u5a8a4e23-f73e-4608-b64d-05cb904c619&width=580"><br>“握手阶段”涉及四次通信，我们一个个来看。需要注意的是，”握手阶段”的所有通信都是明文的。</p>
+<h3 id="4-1-客户端发出请求（ClientHello）"><a href="#4-1-客户端发出请求（ClientHello）" class="headerlink" title="4.1 客户端发出请求（ClientHello）"></a>4.1 客户端发出请求（ClientHello）</h3><p>首先，客户端（通常是浏览器）先向服务器发出加密通信的请求，这被叫做 ClientHello 请求。<br>在这一步，客户端主要向服务器提供以下信息。<br>（1） 支持的协议版本，比如 TLS 1.0 版。<br>（2） 一个客户端生成的随机数，稍后用于生成”对话密钥”。<br>（3） 支持的加密方法，比如 RSA 公钥加密。<br>（4） 支持的压缩方法。<br>这里需要注意的是，客户端发送的信息之中不包括服务器的域名。也就是说，理论上服务器只能包含一个网站，否则会分不清应该向客户端提供哪一个网站的数字证书。这就是为什么通常一台服务器只能有一张数字证书的原因。<br>对于虚拟主机的用户来说，这当然很不方便。2006 年，TLS 协议加入了一个<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc4366">Server Name Indication 扩展</a>，允许客户端向服务器提供它所请求的域名。</p>
+<h3 id="4-2-服务器回应（SeverHello）"><a href="#4-2-服务器回应（SeverHello）" class="headerlink" title="4.2 服务器回应（SeverHello）"></a>4.2 服务器回应（SeverHello）</h3><p>服务器收到客户端请求后，向客户端发出回应，这叫做 SeverHello。服务器的回应包含以下内容。<br>（1） 确认使用的加密通信协议版本，比如 TLS 1.0 版本。如果浏览器与服务器支持的版本不一致，服务器关闭加密通信。<br>（2） 一个服务器生成的随机数，稍后用于生成”对话密钥”。<br>（3） 确认使用的加密方法，比如 RSA 公钥加密。<br>（4） 服务器证书。<br>除了上面这些信息，如果服务器需要确认客户端的身份，就会再包含一项请求，要求客户端提供”客户端证书”。比如，金融机构往往只允许认证客户连入自己的网络，就会向正式客户提供 USB 密钥，里面就包含了一张客户端证书。</p>
+<h3 id="4-3-客户端回应"><a href="#4-3-客户端回应" class="headerlink" title="4.3 客户端回应"></a>4.3 客户端回应</h3><p>客户端收到服务器回应以后，首先验证服务器证书。如果证书不是可信机构颁布、或者证书中的域名与实际域名不一致、或者证书已经过期，就会向访问者显示一个警告，由其选择是否还要继续通信。<br>如果证书没有问题，客户端就会从证书中取出服务器的公钥。然后，向服务器发送下面三项信息。<br>（1） 一个随机数。该随机数用服务器公钥加密，防止被窃听。<br>（2） 编码改变通知，表示随后的信息都将用双方商定的加密方法和密钥发送。<br>（3） 客户端握手结束通知，表示客户端的握手阶段已经结束。这一项同时也是前面发送的所有内容的 hash 值，用来供服务器校验。<br>上面第一项的随机数，是整个握手阶段出现的第三个随机数，又称”pre-master key”。有了它以后，客户端和服务器就同时有了三个随机数，接着双方就用事先商定的加密方法，各自生成本次会话所用的同一把”会话密钥”。<br>至于为什么一定要用三个随机数，来生成”会话密钥”，<a target="_blank" rel="noopener" href="http://blog.csdn.net/dog250/article/details/5717162">dog250</a>解释得很好：<br>“不管是客户端还是服务器，都需要随机数，这样生成的密钥才不会每次都一样。由于 SSL 协议中证书是静态的，因此十分有必要引入一种随机因素来保证协商出来的密钥的随机性。<br>对于 RSA 密钥交换算法来说，pre-master-key 本身就是一个随机数，再加上 hello 消息中的随机，三个随机数通过一个密钥导出器最终导出一个对称密钥。<br>pre master 的存在在于 SSL 协议不信任每个主机都能产生完全随机的随机数，如果随机数不随机，那么 pre master secret 就有可能被猜出来，那么仅适用 pre master secret 作为密钥就不合适了，因此必须引入新的随机因素，那么客户端和服务器加上 pre master secret 三个随机数一同生成的密钥就不容易被猜出了，一个伪随机可能完全不随机，可是是三个伪随机就十分接近随机了，每增加一个自由度，随机性增加的可不是一。”<br>此外，如果前一步，服务器要求客户端证书，客户端会在这一步发送证书及相关信息。</p>
+<h3 id="4-4-服务器的最后回应"><a href="#4-4-服务器的最后回应" class="headerlink" title="4.4 服务器的最后回应"></a>4.4 服务器的最后回应</h3><p>服务器收到客户端的第三个随机数 pre-master key 之后，计算生成本次会话所用的”会话密钥”。然后，向客户端最后发送下面信息。<br>（1）编码改变通知，表示随后的信息都将用双方商定的加密方法和密钥发送。<br>（2）服务器握手结束通知，表示服务器的握手阶段已经结束。这一项同时也是前面发送的所有内容的 hash 值，用来供客户端校验。<br>至此，整个握手阶段全部结束。接下来，客户端与服务器进入加密通信，就完全是使用普通的 HTTP 协议，只不过用”会话密钥”加密内容。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/190217/1618663678842-81cb0e30-d9f2-4af1-a974-065f74017178.gif#clientId=u7a059e36-0a31-4&from=paste&height=302&id=u30395458&margin=%5Bobject%20Object%5D&originHeight=302&originWidth=317&originalType=url&status=done&style=none&taskId=ue3e60ebd-8c26-4475-b2cd-027158f7a36&width=317"></p>
+<h2 id="五、参考链接"><a href="#五、参考链接" class="headerlink" title="五、参考链接"></a>五、参考链接</h2><ul>
+<li>MicroSoft TechNet,<a target="_blank" rel="noopener" href="http://technet.microsoft.com/en-us/library/cc785811(v=ws.10).aspx">SSL/TLS in Detail</a></li>
+<li>Jeff Moser,<a target="_blank" rel="noopener" href="http://www.moserware.com/2009/06/first-few-milliseconds-of-https.html">The First Few Milliseconds of an HTTPS Connection</a></li>
+<li>Wikipedia,<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Transport_Layer_Security">Transport Layer Security</a></li>
+<li>StackExchange,<a target="_blank" rel="noopener" href="http://security.stackexchange.com/questions/20803/how-does-ssl-work">How does SSL work?</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/17/yuque/SSL!TLS%E5%8D%8F%E8%AE%AE%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E7%9A%84%E6%A6%82%E8%BF%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/SSH 使用说明（超级详细）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1274,433 +1856,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Goroutine 并发调度模型深度解析之手撸一个高性能 goroutine 池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/14/yuque/Goroutine%20%E5%B9%B6%E5%8F%91%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%89%8B%E6%92%B8%E4%B8%80%E4%B8%AA%E9%AB%98%E6%80%A7%E8%83%BD%20goroutine%20%E6%B1%A0/">Goroutine 并发调度模型深度解析之手撸一个高性能 goroutine 池</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/14/yuque/Goroutine%20%E5%B9%B6%E5%8F%91%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%89%8B%E6%92%B8%E4%B8%80%E4%B8%AA%E9%AB%98%E6%80%A7%E8%83%BD%20goroutine%20%E6%B1%A0/" class="archive-article-date">
-  	<time datetime="2021-03-14T12:26:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>并发（并行），一直以来都是一个编程语言里的核心主题之一，也是被开发者关注最多的话题；Go 语言作为一个出道以来就自带 『高并发』光环的富二代编程语言，它的并发（并行）编程肯定是值得开发者去探究的，而 Go 语言中的并发（并行）编程是经由 goroutine 实现的，goroutine 是 golang 最重要的特性之一，具有使用成本低、消耗资源低、能效高等特点，官方宣称原生 goroutine 并发成千上万不成问题，于是它也成为 Gopher 们经常使用的特性。</p>
-<blockquote>
-<p>Goroutine 是优秀的，但不是完美的，在极大规模的高并发场景下，也可能会暴露出问题，什么问题呢？又有什么可选的解决方案？本文将通过 runtime 对 goroutine 的调度分析，帮助大家理解它的机理和发现一些内存和调度的原理和问题，并且基于此提出一种个人的解决方案 — 一个高性能的 Goroutine Pool（协程池）。</p>
-</blockquote>
-<h1 id="Goroutine-amp-Scheduler"><a href="#Goroutine-amp-Scheduler" class="headerlink" title="Goroutine &amp; Scheduler"></a>Goroutine &amp; Scheduler</h1><p><strong>Goroutine</strong>，Go 语言基于并发（并行）编程给出的自家的解决方案。goroutine 是什么？通常 goroutine 会被当做 coroutine（协程）的 golang 实现，从比较粗浅的层面来看，这种认知也算是合理，但实际上，goroutine 并非传统意义上的协程，现在主流的线程模型分三种：内核级线程模型、用户级线程模型和两级线程模型（也称混合型线程模型），传统的协程库属于<strong>用户级线程模型</strong>，而 goroutine 和它的 <code>Go Scheduler</code> 在底层实现上其实是属于<strong>两级线程模型</strong>，因此，有时候为了方便理解可以简单把 goroutine 类比成协程，但心里一定要有个清晰的认知 — goroutine 并不等同于协程。</p>
-<h2 id="线程那些事儿"><a href="#线程那些事儿" class="headerlink" title="线程那些事儿"></a>线程那些事儿</h2><p>互联网时代以降，由于在线用户数量的爆炸，单台服务器处理的连接也水涨船高，迫使编程模式由从前的串行模式升级到并发模型，而几十年来，并发模型也是一代代地升级，有 IO 多路复用、多进程以及多线程，这几种模型都各有长短，现代复杂的高并发架构大多是几种模型协同使用，不同场景应用不同模型，扬长避短，发挥服务器的最大性能，而多线程，因为其轻量和易用，成为并发编程中使用频率最高的并发模型，而后衍生的协程等其他子产品，也都基于它，而我们今天要分析的 goroutine 也是基于线程，因此，我们先来聊聊线程的三大模型：<br>线程的实现模型主要有 3 种：内核级线程模型、用户级线程模型和两级线程模型（也称混合型线程模型），它们之间最大的差异就在于用户线程与内核调度实体（KSE，Kernel Scheduling Entity）之间的对应关系上。而所谓的内核调度实体 KSE 就是指可以被操作系统内核调度器调度的对象实体（这说的啥玩意儿，敢不敢通俗易懂一点？）。简单来说 KSE 就是<strong>内核级线程</strong>，是操作系统内核的最小调度单元，也就是我们写代码的时候通俗理解上的线程了（这么说不就懂了嘛！装什么 13）。</p>
-<h3 id="用户级线程模型"><a href="#用户级线程模型" class="headerlink" title="用户级线程模型"></a>用户级线程模型</h3><p>用户线程与内核线程 KSE 是多对一（N : 1）的映射模型，多个用户线程的一般从属于单个进程并且多线程的调度是由用户自己的线程库来完成，线程的创建、销毁以及多线程之间的协调等操作都是由用户自己的线程库来负责而无须借助系统调用来实现。一个进程中所有创建的线程都只和同一个 KSE 在运行时动态绑定，也就是说，操作系统只知道用户进程而对其中的线程是无感知的，内核的所有调度都是基于用户进程。许多语言实现的 <strong>协程库</strong> 基本上都属于这种方式（比如 python 的 gevent）。由于线程调度是在用户层面完成的，也就是相较于内核调度不需要让 CPU 在用户态和内核态之间切换，这种实现方式相比内核级线程可以做的很轻量级，对系统资源的消耗会小很多，因此可以创建的线程数量与上下文切换所花费的代价也会小得多。但该模型有个原罪：并不能做到真正意义上的并发，假设在某个用户进程上的某个用户线程因为一个阻塞调用（比如 I/O 阻塞）而被 CPU 给中断（抢占式调度）了，那么该进程内的所有线程都被阻塞（因为单个用户进程内的线程自调度是没有 CPU 时钟中断的，从而没有轮转调度），整个进程被挂起。即便是多 CPU 的机器，也无济于事，因为在用户级线程模型下，一个 CPU 关联运行的是整个用户进程，进程内的子线程绑定到 CPU 执行是由用户进程调度的，内部线程对 CPU 是不可见的，此时可以理解为 CPU 的调度单位是用户进程。所以很多的<strong>协程库</strong>会把自己一些阻塞的操作重新封装为完全的非阻塞形式，然后在以前要阻塞的点上，主动让出自己，并通过某种方式通知或唤醒其他待执行的用户线程在该 KSE 上运行，从而避免了内核调度器由于 KSE 阻塞而做上下文切换，这样整个进程也不会被阻塞了。</p>
-<h3 id="内核级线程模型"><a href="#内核级线程模型" class="headerlink" title="内核级线程模型"></a>内核级线程模型</h3><p>用户线程与内核线程 KSE 是一对一（1 : 1）的映射模型，也就是每一个用户线程绑定一个实际的内核线程，而线程的调度则完全交付给操作系统内核去做，应用程序对线程的创建、终止以及同步都基于内核提供的系统调用来完成，大部分编程语言的线程库(比如 Java 的 java.lang.Thread、C++11 的 std::thread 等等)都是对操作系统的线程（内核级线程）的一层封装，创建出来的每个线程与一个独立的 KSE 静态绑定，因此其调度完全由操作系统内核调度器去做，也就是说，一个进程里创建出来的多个线程每一个都绑定一个 KSE。这种模型的优势和劣势同样明显：优势是实现简单，直接借助操作系统内核的线程以及调度器，所以 CPU 可以快速切换调度线程，于是多个线程可以同时运行，因此相较于用户级线程模型它真正做到了并行处理；但它的劣势是，由于直接借助了操作系统内核来创建、销毁和以及多个线程之间的上下文切换和调度，因此资源成本大幅上涨，且对性能影响很大。</p>
-<h3 id="两级线程模型"><a href="#两级线程模型" class="headerlink" title="两级线程模型"></a>两级线程模型</h3><p>两级线程模型是博采众长之后的产物，充分吸收前两种线程模型的优点且尽量规避它们的缺点。在此模型下，用户线程与内核 KSE 是多对多（N : M）的映射模型：首先，区别于用户级线程模型，两级线程模型中的一个进程可以与多个内核线程 KSE 关联，也就是说一个进程内的多个线程可以分别绑定一个自己的 KSE，这点和内核级线程模型相似；其次，又区别于内核级线程模型，它的进程里的线程并不与 KSE 唯一绑定，而是可以多个用户线程映射到同一个 KSE，当某个 KSE 因为其绑定的线程的阻塞操作被内核调度出 CPU 时，其关联的进程中其余用户线程可以重新与其他 KSE 绑定运行。所以，两级线程模型既不是用户级线程模型那种完全靠自己调度的也不是内核级线程模型完全靠操作系统调度的，而是中间态（自身调度与系统调度协同工作），也就是 — 『薛定谔的模型』（误），因为这种模型的高度复杂性，操作系统内核开发者一般不会使用，所以更多时候是作为第三方库的形式出现，而 Go 语言中的 runtime 调度器就是采用的这种实现方案，实现了 Goroutine 与 KSE 之间的动态关联，不过 Go 语言的实现更加高级和优雅；该模型为何被称为两级？<strong>即用户调度器实现用户线程到 KSE 的『调度』，内核调度器实现 KSE 到 CPU 上的『调度』</strong>。</p>
-<h2 id="G-P-M-模型概述"><a href="#G-P-M-模型概述" class="headerlink" title="G-P-M 模型概述"></a>G-P-M 模型概述</h2><p>每一个 OS 线程都有一个固定大小的内存块(一般会是 2MB)来做栈，这个栈会用来存储当前正在被调用或挂起(指在调用其它函数时)的函数的内部变量。这个固定大小的栈同时很大又很小。因为 2MB 的栈对于一个小小的 goroutine 来说是很大的内存浪费，而对于一些复杂的任务（如深度嵌套的递归）来说又显得太小。因此，Go 语言做了它自己的『线程』。<br>在 Go 语言中，每一个 goroutine 是一个独立的执行单元，相较于每个 OS 线程固定分配 2M 内存的模式，goroutine 的栈采取了动态扩容方式， 初始时仅为 2KB，随着任务执行按需增长，最大可达 1GB（64 位机器最大是 1G，32 位机器最大是 256M），且完全由 golang 自己的调度器 <strong>Go Scheduler</strong> 来调度。此外，GC 还会周期性地将不再使用的内存回收，收缩栈空间。 因此，Go 程序可以同时并发成千上万个 goroutine 是得益于它强劲的调度器和高效的内存模型。Go 的创造者大概对 goroutine 的定位就是屠龙刀，因为他们不仅让 goroutine 作为 golang 并发编程的最核心组件（开发者的程序都是基于 goroutine 运行的）而且 golang 中的许多标准库的实现也到处能见到 goroutine 的身影，比如 net/http 这个包，甚至语言本身的组件 runtime 运行时和 GC 垃圾回收器都是运行在 goroutine 上的，作者对 goroutine 的厚望可见一斑。<br>任何用户线程最终肯定都是要交由 OS 线程来执行的，goroutine（称为 G）也不例外，但是 G 并不直接绑定 OS 线程运行，而是由 Goroutine Scheduler 中的 P - <em>Logical Processor</em> （逻辑处理器）来作为两者的『中介』，P 可以看作是一个抽象的资源或者一个上下文，一个 P 绑定一个 OS 线程，在 golang 的实现里把 OS 线程抽象成一个数据结构：M，G 实际上是由 M 通过 P 来进行调度运行的，但是在 G 的层面来看，P 提供了 G 运行所需的一切资源和环境，因此在 G 看来 P 就是运行它的 “CPU”，由 G、P、M 这三种由 Go 抽象出来的实现，最终形成了 Go 调度器的基本结构：</p>
-<ul>
-<li>G: 表示 Goroutine，每个 Goroutine 对应一个 G 结构体，G 存储 Goroutine 的运行堆栈、状态以及任务函数，可重用。G 并非执行体，每个 G 需要绑定到 P 才能被调度执行。</li>
-<li>P: Processor，表示逻辑处理器， 对 G 来说，P 相当于 CPU 核，G 只有绑定到 P(在 P 的 local runq 中)才能被调度。对 M 来说，P 提供了相关的执行环境(Context)，如内存分配状态(mcache)，任务队列(G)等，P 的数量决定了系统内最大可并行的 G 的数量（前提：物理 CPU 核数 &gt;= P 的数量），P 的数量由用户设置的 GOMAXPROCS 决定，但是不论 GOMAXPROCS 设置为多大，P 的数量最大为 256。</li>
-<li>M: Machine，OS 线程抽象，代表着真正执行计算的资源，在绑定有效的 P 后，进入 schedule 循环；而 schedule 循环的机制大致是从 Global 队列、P 的 Local 队列以及 wait 队列中获取 G，切换到 G 的执行栈上并执行 G 的函数，调用 goexit 做清理工作并回到 M，如此反复。M 并不保留 G 状态，这是 G 可以跨 M 调度的基础，M 的数量是不定的，由 Go Runtime 调整，为了防止创建过多 OS 线程导致系统调度不过来，目前默认最大限制为 10000 个。</li>
-</ul>
-<p>关于 P，我们需要再絮叨几句，在 Go 1.0 发布的时候，它的调度器其实 G-M 模型，也就是没有 P 的，调度过程全由 G 和 M 完成，这个模型暴露出一些问题：</p>
-<ul>
-<li>单一全局互斥锁(Sched.Lock)和集中状态存储的存在导致所有 goroutine 相关操作，比如：创建、重新调度等都要上锁；</li>
-<li>goroutine 传递问题：M 经常在 M 之间传递『可运行』的 goroutine，这导致调度延迟增大以及额外的性能损耗；</li>
-<li>每个 M 做内存缓存，导致内存占用过高，数据局部性较差；</li>
-<li>由于 syscall 调用而形成的剧烈的 worker thread 阻塞和解除阻塞，导致额外的性能损耗。</li>
-</ul>
-<p>这些问题实在太扎眼了，导致 Go1.0 虽然号称原生支持并发，却在并发性能上一直饱受诟病，然后，Go 语言委员会中一个核心开发大佬看不下了，亲自下场重新设计和实现了 Go 调度器（在原有的 G-M 模型中引入了 P）并且实现了一个叫做 <a target="_blank" rel="noopener" href="https://supertech.csail.mit.edu/papers/steal.pdf"><em>work-stealing</em></a> 的调度算法：</p>
-<ul>
-<li>每个 P 维护一个 G 的本地队列；</li>
-<li>当一个 G 被创建出来，或者变为可执行状态时，就把他放到 P 的可执行队列中；</li>
-<li>当一个 G 在 M 里执行结束后，P 会从队列中把该 G 取出；如果此时 P 的队列为空，即没有其他 G 可以执行， M 就随机选择另外一个 P，从其可执行的 G 队列中取走一半。</li>
-</ul>
-<p>该算法避免了在 goroutine 调度时使用全局锁。<br><em><strong>至此，Go 调度器的基本模型确立：</strong></em><br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818570-42edf3ee-6769-4abf-b5d9-66bb7af1fb04.png#align=left&display=inline&height=409&margin=%5Bobject%20Object%5D&originHeight=409&originWidth=506&size=0&status=done&style=none&width=506"></p>
-<h2 id="G-P-M-模型调度"><a href="#G-P-M-模型调度" class="headerlink" title="G-P-M 模型调度"></a>G-P-M 模型调度</h2><p>Go 调度器工作时会维护两种用来保存 G 的任务队列：一种是一个 Global 任务队列，一种是每个 P 维护的 Local 任务队列。<br>当通过 <code>go</code> 关键字创建一个新的 goroutine 的时候，它会优先被放入 P 的本地队列。为了运行 goroutine，M 需要持有（绑定）一个 P，接着 M 会启动一个 OS 线程，循环从 P 的本地队列里取出一个 goroutine 并执行。当然还有上文提及的 <code>work-stealing</code> 调度算法：当 M 执行完了当前 P 的 Local 队列里的所有 G 后，P 也不会就这么在那躺尸啥都不干，它会先尝试从 Global 队列寻找 G 来执行，如果 Global 队列为空，它会随机挑选另外一个 P，从它的队列里中拿走一半的 G 到自己的队列中执行。<br><strong>如果一切正常，调度器会以上述的那种方式顺畅地运行，但这个世界没这么美好，总有意外发生，以下分析 goroutine 在两种例外情况下的行为。</strong><br>Go runtime 会在下面的 goroutine 被阻塞的情况下运行另外一个 goroutine：</p>
-<ul>
-<li>blocking syscall (for example opening a file)</li>
-<li>network input</li>
-<li>channel operations</li>
-<li>primitives in the sync package</li>
-</ul>
-<p>这四种场景又可归类为两种类型：</p>
-<h3 id="用户态阻塞-唤醒"><a href="#用户态阻塞-唤醒" class="headerlink" title="用户态阻塞/唤醒"></a>用户态阻塞/唤醒</h3><p>当 goroutine 因为 channel 操作或者 network I/O 而阻塞时（实际上 golang 已经用 netpoller 实现了 goroutine 网络 I/O 阻塞不会导致 M 被阻塞，仅阻塞 G，这里仅仅是举个栗子），对应的 G 会被放置到某个 wait 队列(如 channel 的 waitq)，该 G 的状态由 <code>_Gruning</code> 变为 <code>_Gwaitting</code> ，而 M 会跳过该 G 尝试获取并执行下一个 G，如果此时没有 runnable 的 G 供 M 运行，那么 M 将解绑 P，并进入 sleep 状态；当阻塞的 G 被另一端的 G2 唤醒时（比如 channel 的可读/写通知），G 被标记为 runnable，尝试加入 G2 所在 P 的 runnext，然后再是 P 的 Local 队列和 Global 队列。</p>
-<h3 id="系统调用阻塞"><a href="#系统调用阻塞" class="headerlink" title="系统调用阻塞"></a>系统调用阻塞</h3><p>当 G 被阻塞在某个系统调用上时，此时 G 会阻塞在 <code>_Gsyscall</code> 状态，M 也处于 block on syscall 状态，此时的 M 可被抢占调度：执行该 G 的 M 会与 P 解绑，而 P 则尝试与其它 idle 的 M 绑定，继续执行其它 G。如果没有其它 idle 的 M，但 P 的 Local 队列中仍然有 G 需要执行，则创建一个新的 M；当系统调用完成后，G 会重新尝试获取一个 idle 的 P 进入它的 Local 队列恢复执行，如果没有 idle 的 P，G 会被标记为 runnable 加入到 Global 队列。<br><strong>以上就是从宏观的角度对 Goroutine 和它的调度器进行的一些概要性的介绍，当然，Go 的调度中更复杂的抢占式调度、阻塞调度的更多细节，大家可以自行去找相关资料深入理解，本文只讲到 Go 调度器的基本调度过程，为后面自己实现一个 Goroutine Pool 提供理论基础，这里便不再继续深入上述说的那几个调度了，事实上如果要完全讲清楚 Go 调度器，一篇文章的篇幅也实在是捉襟见肘，所以想了解更多细节的同学可以去看看 Go 调度器 G-P-M 模型的设计者 Dmitry Vyukov 写的该模型的设计文档《<a target="_blank" rel="noopener" href="https://docs.google.com/document/d/1ETuA2IOmnaQ4j81AtTGT40Y4_Jr6_IDASEKg0t0dBR8/edit#!">Go Preemptive Scheduler Design</a>》以及直接去看源码，G-P-M 模型的定义放在 <code>src/runtime/runtime2.go</code> 里面，而调度过程则放在了 <code>src/runtime/proc.go</code> 里。</strong></p>
-<h1 id="大规模-Goroutine-的瓶颈"><a href="#大规模-Goroutine-的瓶颈" class="headerlink" title="大规模 Goroutine 的瓶颈"></a>大规模 Goroutine 的瓶颈</h1><p>既然 Go 调度器已经这么<del>牛逼</del>优秀了，我们为什么还要自己去实现一个 golang 的 Goroutine Pool 呢？事实上，优秀不代表完美，任何不考虑具体应用场景的编程模式都是耍流氓！有基于 G-P-M 的 Go 调度器背书，go 程序的并发编程中，可以任性地起大规模的 goroutine 来执行任务，官方也宣称用 golang 写并发程序的时候随便起个成千上万的 goroutine 毫无压力。<br>然而，你起 1000 个 goroutine 没有问题，10000 也没有问题，10w 个可能也没问题；那，100w 个呢？1000w 个呢？（这里只是举个极端的例子，实际编程起这么大规模的 goroutine 的例子极少）这里就会出问题，什么问题呢？</p>
-<ol>
-<li>首先，即便每个 goroutine 只分配 2KB 的内存，但如果是恐怖如斯的数量，聚少成多，内存暴涨，就会对 GC 造成极大的负担，写过 Java 的同学应该知道 jvm GC 那万恶的 STW（Stop The World）机制，也就是 GC 的时候会挂起用户程序直到垃圾回收完，虽然 Go1.8 之后的 GC 已经去掉了 STW 以及优化成了并行 GC，性能上有了不小的提升，但是，如果太过于频繁地进行 GC，依然会有性能瓶颈；</li>
-<li>其次，还记得前面我们说的 runtime 和 GC 也都是 goroutine 吗？是的，如果 goroutine 规模太大，内存吃紧，runtime 调度和垃圾回收同样会出问题，虽然 G-P-M 模型足够优秀，韩信点兵，多多益善，但你不能不给士兵发口粮（内存）吧？巧妇难为无米之炊，没有内存，Go 调度器就会阻塞 goroutine，结果就是 P 的 Local 队列积压，又导致内存溢出，这就是个死循环…，甚至极有可能程序直接 Crash 掉，本来是想享受 golang 并发带来的<del>快感</del>效益，结果却得不偿失。</li>
-</ol>
-<h2 id="一个-http-标准库引发的血案"><a href="#一个-http-标准库引发的血案" class="headerlink" title="一个 http 标准库引发的血案"></a>一个 http 标准库引发的血案</h2><p>我想，作为 golang 拥趸的 Gopher 们一定都使用过它的 net/http 标准库，很多人都说用 golang 写 Web server 完全可以不用借助第三方的 Web framework，仅用 net/http 标准库就能写一个高性能的 Web server，的确，我也用过它写过 Web server，简洁高效，性能表现也相当不错，除非有比较特殊的需求否则一般的确不用借助第三方 Web framework，但是天下没有白吃的午餐，net/http 为啥这么快？要搞清这个问题，从源码入手是最好的途径。孔子曾经曰过：源码面前，如同裸奔。所以，<del>高清</del>无码是阻碍程序猿发展大大滴绊脚石啊，源码才是我们进步阶梯，切记切记！<br>接下来我们就来先看看 net/http 内部是怎么实现的。<br>net/http 接收请求且开始处理的源码放在 <code>src/net/http/server.go</code> 里，先从入口函数 <code>ListenAndServe</code> 进去：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1func (srv *Server) ListenAndServe() error &#123;</span><br><span class="line"> 2	addr :&#x3D; srv.Addr</span><br><span class="line"> 3	if addr &#x3D;&#x3D; &quot;&quot; &#123;</span><br><span class="line"> 4		addr &#x3D; &quot;:http&quot;</span><br><span class="line"> 5	&#125;</span><br><span class="line"> 6	ln, err :&#x3D; net.Listen(&quot;tcp&quot;, addr)</span><br><span class="line"> 7	if err !&#x3D; nil &#123;</span><br><span class="line"> 8		return err</span><br><span class="line"> 9	&#125;</span><br><span class="line">10	return srv.Serve(tcpKeepAliveListener&#123;ln.(*net.TCPListener)&#125;)</span><br><span class="line">11&#125;</span><br></pre></td></tr></table></figure>
-
-<p>看到最后那个 srv.Serve 调用了吗？没错，这个 <code>Serve</code> 方法里面就是实际处理 http 请求的逻辑，我们再进入这个方法内部：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1func (srv *Server) Serve(l net.Listener) error &#123;</span><br><span class="line"> 2	defer l.Close()</span><br><span class="line"> 3	...</span><br><span class="line"> 4    &#x2F;&#x2F; 不断循环取出TCP连接</span><br><span class="line"> 5	for &#123;</span><br><span class="line"> 6        &#x2F;&#x2F; 看我看我！！！</span><br><span class="line"> 7		rw, e :&#x3D; l.Accept()</span><br><span class="line"> 8        ...</span><br><span class="line"> 9        &#x2F;&#x2F; 再看我再看我！！！</span><br><span class="line">10		go c.serve(ctx)</span><br><span class="line">11	&#125;</span><br><span class="line">12&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>首先，这个方法的参数<code>(l net.Listener)</code> ，是一个 TCP 监听的封装，负责监听网络端口， <code>rw, e := l.Accept()</code> 则是一个阻塞操作，从网络端口取出一个新的 TCP 连接进行处理，最后 <code>go c.serve(ctx)</code> 就是最后真正去处理这个 http 请求的逻辑了，看到前面的 go 关键字了吗？没错，这里启动了一个新的 goroutine 去执行处理逻辑，而且这是在一个无限循环体里面，所以意味着，每来一个请求它就会开一个 goroutine 去处理，相当任性粗暴啊…，不过有 Go 调度器背书，一般来说也没啥压力，然而，如果，我是说如果哈，突然一大波请求涌进来了（比方说黑客搞了成千上万的肉鸡 DDOS 你，没错！就这么倒霉！），这时候，就很成问题了，他来 10w 个请求你就要开给他 10w 个 goroutine，来 100w 个你就要老老实实开给他 100w 个，线程调度压力陡升，内存爆满，再然后，你就跪了…</strong></p>
-<h2 id="釜底抽薪"><a href="#釜底抽薪" class="headerlink" title="釜底抽薪"></a>釜底抽薪</h2><p>有问题，就一定有解决的办法，那么，有什么方案可以减缓大规模 goroutine 对系统的调度和内存压力？要想解决问题，最重要的是找到造成问题的根源，这个问题根源是什么？goroutine 的数量过多导致资源侵占，那要解决这个问题就要限制运行的 goroutine 数量，合理复用，节省资源，具体就是 — goroutine 池化。<br>超大规模并发的场景下，不加限制的大规模的 goroutine 可能造成内存暴涨，给机器带来极大的压力，吞吐量下降和处理速度变慢还是其次，更危险的是可能使得程序 crash。所以，goroutine 池化是有其现实意义的。<br>首先，100w 个任务，是不是真的需要 100w 个 goroutine 来处理？未必！用 1w 个 goroutine 也一样可以处理，让一个 goroutine 多处理几个任务就是了嘛，池化的核心优势就在于对 goroutine 的复用。此举首先极大减轻了 runtime 调度 goroutine 的压力，其次，便是降低了对内存的消耗。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1615724818520-6432e7ff-f730-4e8c-8e74-343e8bd2af64.jpeg#align=left&display=inline&height=200&margin=%5Bobject%20Object%5D&originHeight=200&originWidth=200&size=0&status=done&style=none&width=200"><br>有一个商场，来了 1000 个顾客买东西，那么该如何安排导购员服务这 1000 人呢？有两种方案：<br>第一，我雇 1000 个导购员实行一对一服务，这种当然是最高效的，但是太浪费资源了，雇 1000 个人的成本极高且管理困难，这些可以先按下不表，但是每个顾客到商场买东西也不是一进来就马上买，一般都得逛一逛，选一选，也就是得花时间挑，1000 个导购员一对一盯着，效率极低；这就引出第二种方案：我只雇 10 个导购员，就在商场里待命，有顾客需要咨询的时候招呼导购员过去进行处理，导购员处理完之后就回来，等下一个顾客需要咨询的时候再去，如此往返反复…<br>第二种方案有没有觉得很眼熟？没错，其基本思路就是模拟一个 I/O 多路复用，通过一种机制，可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。关于多路复用，不在本文的讨论范围之内，便不再赘述，详细原理可以参考 <a target="_blank" rel="noopener" href="https://www.zybuluo.com/phper/note/595507">I/O 多路复用</a>。<br>第一种方案就是 net/http 标准库采用的：来一个请求开一个 goroutine 处理；第二种方案就是 Goroutine Pool（I/O 多路复用）。</p>
-<h1 id="实现一个-Goroutine-Pool"><a href="#实现一个-Goroutine-Pool" class="headerlink" title="实现一个 Goroutine Pool"></a>实现一个 Goroutine Pool</h1><p>因为上述陈列的一些由于 goroutine 规模过大而可能引发的问题，需要有方案来解决这些问题，上文已经分析过，把 goroutine 池化是一种行之有效的方案，基于此，可以实现一个 Goroutine Pool，复用 goroutine，减轻 runtime 的调度压力以及缓解内存压力，依托这些优化，在大规模 goroutine 并发的场景下可以极大地提高并发性能。</p>
-<blockquote>
-<p>哎玛！前面絮絮叨叨了这么多，终于进入正题了，接下来就开始讲解如何实现一个高性能的 Goroutine Pool，秒杀原生并发的 goroutine，在执行速度和占用内存上提高并发程序的性能。好了，话不多说，开始<del>装逼</del>分析。</p>
-</blockquote>
-<h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>Goroutine Pool 的实现思路大致如下：</p>
-<blockquote>
-<p>启动服务之时先初始化一个 Goroutine Pool 池，这个 Pool 维护了一个类似栈的 LIFO 队列 ，里面存放负责处理任务的 Worker，然后在 client 端提交 task 到 Pool 中之后，在 Pool 内部，接收 task 之后的核心操作是：</p>
-<ol>
-<li>检查当前 Worker 队列中是否有可用的 Worker，如果有，取出执行当前的 task；</li>
-<li>没有可用的 Worker，判断当前在运行的 Worker 是否已超过该 Pool 的容量：{是 —&gt; 再判断工作池是否为非阻塞模式：[是 ——&gt; 直接返回 nil，否 ——&gt; 阻塞等待直至有 Worker 被放回 Pool]，否 —&gt; 新开一个 Worker（goroutine）处理}；</li>
-<li>每个 Worker 执行完任务之后，放回 Pool 的队列中等待。</li>
-</ol>
-</blockquote>
-<p>核心调度流程如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818568-4b5a554e-916f-4d36-b322-71208fd3e7f6.png#align=left&display=inline&height=2266&margin=%5Bobject%20Object%5D&originHeight=2266&originWidth=1690&size=0&status=done&style=none&width=1690"><br>按照这个设计思路，我实现了一个高性能的 Goroutine Pool，较好地解决了上述的大规模调度和资源占用的问题，在执行速度和内存占用方面相较于原生 goroutine 并发占有明显的优势，尤其是内存占用，因为复用，所以规避了无脑启动大规模 goroutine 的弊端，可以节省大量的内存。<br>此外，该调度系统还有一个清理过期 Worker 的定时任务，该任务在初始化一个 Pool 之时启动，每隔一定的时间间隔去检查空闲 Worker 队列中是否有已经过期的 Worker，有则清理掉，通过定时清理过期 worker，进一步节省系统资源。<br>完整的项目代码可以在我的 GitHub 上获取：<a target="_blank" rel="noopener" href="https://github.com/panjf2000/ants">传送门</a>，也欢迎提意见和交流。</p>
-<h2 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h2><p>Goroutine Pool 的设计原理前面已经讲过了，整个调度过程相信大家应该可以理解了，但是有一句老话说得好，空谈误国，实干兴邦，设计思路有了，具体实现的时候肯定会有很多细节、难点，接下来我们通过分析这个 Goroutine Pool 的几个核心实现以及它们的联动来引导大家过一遍 Goroutine Pool 的原理。</p>
-<h3 id="首先是-Pool-struct-："><a href="#首先是-Pool-struct-：" class="headerlink" title="首先是 Pool struct ："></a>首先是 <code>Pool struct</code> ：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">type sig struct&#123;&#125;</span><br><span class="line"></span><br><span class="line">type f func() error</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Pool accept the tasks from client,it limits the total</span><br><span class="line">&#x2F;&#x2F; of goroutines to a given number by recycling goroutines.</span><br><span class="line">type Pool struct &#123;</span><br><span class="line">	&#x2F;&#x2F; capacity of the pool.</span><br><span class="line">	capacity int32</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; running is the number of the currently running goroutines.</span><br><span class="line">	running int32</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; expiryDuration set the expired time (second) of every worker.</span><br><span class="line">	expiryDuration time.Duration</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; workers is a slice that store the available workers.</span><br><span class="line">	workers []*Worker</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; release is used to notice the pool to closed itself.</span><br><span class="line">	release chan sig</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; lock for synchronous operation.</span><br><span class="line">	lock sync.Mutex</span><br><span class="line"></span><br><span class="line">	once sync.Once</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>Pool</code> 是一个通用的协程池，支持不同类型的任务，亦即每一个任务绑定一个函数提交到池中，批量执行不同类型任务，是一种广义的协程池；本项目中还实现了另一种协程池 — 批量执行同类任务的协程池 <code>PoolWithFunc</code> ，每一个 <code>PoolWithFunc</code> 只会绑定一个任务函数 <code>pf</code> ，这种 Pool 适用于大批量相同任务的场景，因为每个 Pool 只绑定一个任务函数，因此 <code>PoolWithFunc</code> 相较于 <code>Pool</code> 会更加节省内存，但通用性就不如前者了，为了让大家更好地理解协程池的原理，这里我们用通用的 <code>Pool</code> 来分析。<br><code>capacity</code> 是该 Pool 的容量，也就是开启 worker 数量的上限，每一个 worker 绑定一个 goroutine； <code>running</code> 是当前正在执行任务的 worker 数量； <code>expiryDuration</code> 是 worker 的过期时长，在空闲队列中的 worker 的最新一次运行时间与当前时间之差如果大于这个值则表示已过期，定时清理任务会清理掉这个 worker； <code>workers</code> 是一个 slice，用来存放空闲 worker，请求进入 Pool 之后会首先检查 <code>workers</code> 中是否有空闲 worker，若有则取出绑定任务执行，否则判断当前运行的 worker 是否已经达到容量上限，是—阻塞等待，否—新开一个 worker 执行任务； <code>release</code> 是当关闭该 Pool 支持通知所有 worker 退出运行以防 goroutine 泄露； <code>lock</code> 是一个锁，用以支持 Pool 的同步操作； <code>once</code> 用在确保 Pool 关闭操作只会执行一次。</p>
-<h3 id="初始化-Pool-并启动定期清理过期-worker-任务"><a href="#初始化-Pool-并启动定期清理过期-worker-任务" class="headerlink" title="初始化 Pool 并启动定期清理过期 worker 任务"></a>初始化 Pool 并启动定期清理过期 worker 任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; NewPool generates a instance of ants pool</span><br><span class="line"> func NewPool(size int) (*Pool, error) &#123;</span><br><span class="line"> 	return NewTimingPool(size, DefaultCleanIntervalTime)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F; NewTimingPool generates a instance of ants pool with a custom timed task</span><br><span class="line"> func NewTimingPool(size, expiry int) (*Pool, error) &#123;</span><br><span class="line"> 	if size &lt;&#x3D; 0 &#123;</span><br><span class="line"> 		return nil, ErrInvalidPoolSize</span><br><span class="line">	&#125;</span><br><span class="line">	if expiry &lt;&#x3D; 0 &#123;</span><br><span class="line">		return nil, ErrInvalidPoolExpiry</span><br><span class="line">	&#125;</span><br><span class="line">	p :&#x3D; &amp;Pool&#123;</span><br><span class="line">		capacity:       int32(size),</span><br><span class="line">		freeSignal:     make(chan sig, math.MaxInt32),</span><br><span class="line">		release:        make(chan sig, 1),</span><br><span class="line">		expiryDuration: time.Duration(expiry) * time.Second,</span><br><span class="line">	&#125;</span><br><span class="line">	&#x2F;&#x2F; 启动定期清理过期worker任务，独立goroutine运行，</span><br><span class="line">	&#x2F;&#x2F; 进一步节省系统资源</span><br><span class="line">	p.monitorAndClear()</span><br><span class="line">	return p, nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="提交任务到-Pool"><a href="#提交任务到-Pool" class="headerlink" title="提交任务到 Pool"></a>提交任务到 Pool</h3><p><code>p.Submit(task f)</code> 如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Submit submit a task to pool</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Pool)</span> <span class="title">Submit</span><span class="params">(task f)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(p.release) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> ErrPoolClosed</span><br><span class="line">	&#125;</span><br><span class="line">	w := p.getWorker()</span><br><span class="line">	w.task &lt;- task</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第一个 if 判断当前 Pool 是否已被关闭，若是则不再接受新任务，否则获取一个 Pool 中可用的 worker，绑定该 <code>task</code> 执行。</p>
-<h3 id="获取可用-worker（核心）"><a href="#获取可用-worker（核心）" class="headerlink" title="获取可用 worker（核心）"></a>获取可用 worker（核心）</h3><p><code>p.getWorker()</code> 源码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getWorker returns a available worker to run the tasks.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Pool)</span> <span class="title">getWorker</span><span class="params">()</span> *<span class="title">Worker</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> w *Worker</span><br><span class="line">	<span class="comment">// 标志变量，判断当前正在运行的worker数量是否已到达Pool的容量上限</span></span><br><span class="line">	waiting := <span class="literal">false</span></span><br><span class="line">	<span class="comment">// 加锁，检测队列中是否有可用worker，并进行相应操作</span></span><br><span class="line">	p.lock.Lock()</span><br><span class="line">	idleWorkers := p.workers</span><br><span class="line">	n := <span class="built_in">len</span>(idleWorkers) - <span class="number">1</span></span><br><span class="line">	<span class="comment">// 当前队列中无可用worker</span></span><br><span class="line">	<span class="keyword">if</span> n &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// 判断运行worker数目已达到该Pool的容量上限，置等待标志</span></span><br><span class="line">		waiting = p.Running() &gt;= p.Cap()</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 当前队列有可用worker，从队列尾部取出一个使用</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		w = idleWorkers[n]</span><br><span class="line">		idleWorkers[n] = <span class="literal">nil</span></span><br><span class="line">		p.workers = idleWorkers[:n]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 检测完成，解锁</span></span><br><span class="line">	p.lock.Unlock()</span><br><span class="line">	<span class="comment">// Pool容量已满，新请求等待</span></span><br><span class="line">	<span class="keyword">if</span> waiting &#123;</span><br><span class="line">		<span class="comment">// 利用锁阻塞等待直到有空闲worker</span></span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			p.lock.Lock()</span><br><span class="line">			idleWorkers = p.workers</span><br><span class="line">			l := <span class="built_in">len</span>(idleWorkers) - <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> l &lt; <span class="number">0</span> &#123;</span><br><span class="line">				p.lock.Unlock()</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line">			w = idleWorkers[l]</span><br><span class="line">			idleWorkers[l] = <span class="literal">nil</span></span><br><span class="line">			p.workers = idleWorkers[:l]</span><br><span class="line">			p.lock.Unlock()</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 当前无空闲worker但是Pool还没有满，</span></span><br><span class="line">		<span class="comment">// 则可以直接新开一个worker执行任务</span></span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> w == <span class="literal">nil</span> &#123;</span><br><span class="line">		w = &amp;Worker&#123;</span><br><span class="line">			pool: p,</span><br><span class="line">			task: <span class="built_in">make</span>(<span class="keyword">chan</span> f, <span class="number">1</span>),</span><br><span class="line">		&#125;</span><br><span class="line">		w.run()</span><br><span class="line">		<span class="comment">// 运行worker数加一</span></span><br><span class="line">		p.incRunning()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> w</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的源码中加了较为详细的注释，结合前面的设计思路，相信大家应该能理解获取可用 worker 绑定任务执行这个协程池的核心操作，主要就是实现一个 LIFO 队列用来存取可用 worker 达到资源复用的效果，之所以采用 LIFO 后进先出队列是因为后进先出可以保证空闲 worker 队列是按照每个 worker 的最后运行时间从远到近的顺序排列，方便在后续定期清理过期 worker 时排序以及清理完之后重新分配空闲 worker 队列，这里还要关注一个地方：达到 Pool 容量限制之后，额外的任务请求需要阻塞等待 idle worker，这里是为了防止无节制地创建 goroutine，事实上 Go 调度器有一个复用机制，每次使用 <code>go</code> 关键字的时候它会检查当前结构体 M 中的 P 中，是否有可用的结构体 G。如果有，则直接从中取一个，否则，需要分配一个新的结构体 G。如果分配了新的 G，需要将它挂到 runtime 的相关队列中，但是调度器却没有限制 goroutine 的数量，这在瞬时性 goroutine 爆发的场景下就可能来不及复用 G 而依然创建了大量的 goroutine，所以 <code>ants</code> 除了复用还做了限制 goroutine 数量。<br>其他部分可以依照注释理解，这里不再赘述。</p>
-<h3 id="任务执行"><a href="#任务执行" class="headerlink" title="任务执行"></a>任务执行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">1&#x2F;&#x2F; Worker is the actual executor who runs the tasks,</span><br><span class="line"> 2&#x2F;&#x2F; it starts a goroutine that accepts tasks and</span><br><span class="line"> 3&#x2F;&#x2F; performs function calls.</span><br><span class="line"> 4type Worker struct &#123;</span><br><span class="line"> 5	&#x2F;&#x2F; pool who owns this worker.</span><br><span class="line"> 6	pool *Pool</span><br><span class="line"> 7</span><br><span class="line"> 8	&#x2F;&#x2F; task is a job should be done.</span><br><span class="line"> 9	task chan f</span><br><span class="line">10</span><br><span class="line">11	&#x2F;&#x2F; recycleTime will be update when putting a worker back into queue.</span><br><span class="line">12	recycleTime time.Time</span><br><span class="line">13&#125;</span><br><span class="line">14</span><br><span class="line">15&#x2F;&#x2F; run starts a goroutine to repeat the process</span><br><span class="line">16&#x2F;&#x2F; that performs the function calls.</span><br><span class="line">17func (w *Worker) run() &#123;</span><br><span class="line">18	go func() &#123;</span><br><span class="line">19		&#x2F;&#x2F; 循环监听任务列表，一旦有任务立马取出运行</span><br><span class="line">20		for f :&#x3D; range w.task &#123;</span><br><span class="line">21			if f &#x3D;&#x3D; nil &#123;</span><br><span class="line">22				&#x2F;&#x2F; 退出goroutine，运行worker数减一</span><br><span class="line">23				w.pool.decRunning()</span><br><span class="line">24				return</span><br><span class="line">25			&#125;</span><br><span class="line">26			f()</span><br><span class="line">27			&#x2F;&#x2F; worker回收复用</span><br><span class="line">28			w.pool.putWorker(w)</span><br><span class="line">29		&#125;</span><br><span class="line">30	&#125;()</span><br><span class="line">31&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结合前面的 <code>p.Submit(task f)</code> 和 <code>p.getWorker()</code> ，提交任务到 Pool 之后，获取一个可用 worker，每新建一个 worker 实例之时都需要调用 <code>w.run()</code> 启动一个 goroutine 监听 worker 的任务列表 <code>task</code> ，一有任务提交进来就执行；所以，当调用 worker 的 <code>sendTask(task f)</code> 方法提交任务到 worker 的任务队列之后，马上就可以被接收并执行，当任务执行完之后，会调用 <code>w.pool.putWorker(w *Worker)</code> 方法将这个已经执行完任务的 worker 从当前任务解绑放回 Pool 中，以供下个任务可以使用，至此，一个任务从提交到完成的过程就此结束，Pool 调度将进入下一个循环。</p>
-<h3 id="Worker-回收（goroutine-复用）"><a href="#Worker-回收（goroutine-复用）" class="headerlink" title="Worker 回收（goroutine 复用）"></a>Worker 回收（goroutine 复用）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1&#x2F;&#x2F; putWorker puts a worker back into free pool, recycling the goroutines.</span><br><span class="line">2func (p *Pool) putWorker(worker *Worker) &#123;</span><br><span class="line">3	&#x2F;&#x2F; 写入回收时间，亦即该worker的最后一次结束运行的时间</span><br><span class="line">4	worker.recycleTime &#x3D; time.Now()</span><br><span class="line">5	p.lock.Lock()</span><br><span class="line">6	p.workers &#x3D; append(p.workers, worker)</span><br><span class="line">7	p.lock.Unlock()</span><br><span class="line">8&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="动态扩容或者缩小池容量"><a href="#动态扩容或者缩小池容量" class="headerlink" title="动态扩容或者缩小池容量"></a>动态扩容或者缩小池容量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1&#x2F;&#x2F; ReSize change the capacity of this pool</span><br><span class="line"> 2func (p *Pool) ReSize(size int) &#123;</span><br><span class="line"> 3	if size &#x3D;&#x3D; p.Cap() &#123;</span><br><span class="line"> 4		return</span><br><span class="line"> 5	&#125;</span><br><span class="line"> 6	atomic.StoreInt32(&amp;p.capacity, int32(size))</span><br><span class="line"> 7	diff :&#x3D; p.Running() - size</span><br><span class="line"> 8	if diff &gt; 0 &#123;</span><br><span class="line"> 9		for i :&#x3D; 0; i &lt; diff; i++ &#123;</span><br><span class="line">10			p.getWorker().task &lt;- nil</span><br><span class="line">11		&#125;</span><br><span class="line">12	&#125;</span><br><span class="line">13&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="定期清理过期-Worker"><a href="#定期清理过期-Worker" class="headerlink" title="定期清理过期 Worker"></a>定期清理过期 Worker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">1&#x2F;&#x2F; clear expired workers periodically.</span><br><span class="line"> 2func (p *Pool) periodicallyPurge() &#123;</span><br><span class="line"> 3	heartbeat :&#x3D; time.NewTicker(p.expiryDuration)</span><br><span class="line"> 4	for range heartbeat.C &#123;</span><br><span class="line"> 5		currentTime :&#x3D; time.Now()</span><br><span class="line"> 6		p.lock.Lock()</span><br><span class="line"> 7		idleWorkers :&#x3D; p.workers</span><br><span class="line"> 8		if len(idleWorkers) &#x3D;&#x3D; 0 &amp;&amp; p.Running() &#x3D;&#x3D; 0 &amp;&amp; len(p.release) &gt; 0 &#123;</span><br><span class="line"> 9			p.lock.Unlock()</span><br><span class="line">10			return</span><br><span class="line">11		&#125;</span><br><span class="line">12		n :&#x3D; 0</span><br><span class="line">13		for i, w :&#x3D; range idleWorkers &#123;</span><br><span class="line">14			if currentTime.Sub(w.recycleTime) &lt;&#x3D; p.expiryDuration &#123;</span><br><span class="line">15				break</span><br><span class="line">16			&#125;</span><br><span class="line">17			n &#x3D; i</span><br><span class="line">18			w.task &lt;- nil</span><br><span class="line">19			idleWorkers[i] &#x3D; nil</span><br><span class="line">20		&#125;</span><br><span class="line">21		n++</span><br><span class="line">22		if n &gt;&#x3D; len(idleWorkers) &#123;</span><br><span class="line">23			p.workers &#x3D; idleWorkers[:0]</span><br><span class="line">24		&#125; else &#123;</span><br><span class="line">25			p.workers &#x3D; idleWorkers[n:]</span><br><span class="line">26		&#125;</span><br><span class="line">27		p.lock.Unlock()</span><br><span class="line">28	&#125;</span><br><span class="line">29&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定期检查空闲 worker 队列中是否有已过期的 worker 并清理：因为采用了 LIFO 后进先出队列存放空闲 worker，所以该队列默认已经是按照 worker 的最后运行时间由远及近排序，可以方便地按顺序取出空闲队列中的每个 worker 并判断它们的最后运行时间与当前时间之差是否超过设置的过期时长，若是，则清理掉该 goroutine，释放该 worker，并且将剩下的未过期 worker 重新分配到当前 Pool 的空闲 worker 队列中，进一步节省系统资源。<br>概括起来， <code>ants</code> Goroutine Pool 的调度过程图示如下：<br><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/go/ants-pool-1.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100#align=left&display=inline&height=978&margin=%5Bobject%20Object%5D&originHeight=978&originWidth=3600&status=done&style=none&width=3600"><br><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/go/ants-pool-2.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100#align=left&display=inline&height=1782&margin=%5Bobject%20Object%5D&originHeight=1782&originWidth=3600&status=done&style=none&width=3600"><br><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/go/ants-pool-3.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100#align=left&display=inline&height=1404&margin=%5Bobject%20Object%5D&originHeight=1404&originWidth=3600&status=done&style=none&width=3600"><br><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/go/ants-pool-4.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100#align=left&display=inline&height=987&margin=%5Bobject%20Object%5D&originHeight=987&originWidth=3600&status=done&style=none&width=3600"></p>
-<h3 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h3><p>还记得前面我说除了通用的 <code>Pool struct</code> 之外，本项目还实现了一个 <code>PoolWithFunc struct</code> —一个执行批量同类任务的协程池， <code>PoolWithFunc</code> 相较于 <code>Pool</code> ，因为一个池只绑定一个任务函数，省去了每一次 task 都需要传送一个任务函数的代价，因此其性能优势比起 <code>Pool</code> 更明显，这里我们稍微讲一下一个协程池只绑定一个任务函数的细节：<br>上码！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">1type pf func(interface&#123;&#125;) error</span><br><span class="line"> 2</span><br><span class="line"> 3&#x2F;&#x2F; PoolWithFunc accept the tasks from client,it limits the total</span><br><span class="line"> 4&#x2F;&#x2F; of goroutines to a given number by recycling goroutines.</span><br><span class="line"> 5type PoolWithFunc struct &#123;</span><br><span class="line"> 6	&#x2F;&#x2F; capacity of the pool.</span><br><span class="line"> 7	capacity int32</span><br><span class="line"> 8</span><br><span class="line"> 9	&#x2F;&#x2F; running is the number of the currently running goroutines.</span><br><span class="line">10	running int32</span><br><span class="line">11</span><br><span class="line">12	&#x2F;&#x2F; expiryDuration set the expired time (second) of every worker.</span><br><span class="line">13	expiryDuration time.Duration</span><br><span class="line">14</span><br><span class="line">15	&#x2F;&#x2F; workers is a slice that store the available workers.</span><br><span class="line">16	workers []*WorkerWithFunc</span><br><span class="line">17</span><br><span class="line">18	&#x2F;&#x2F; release is used to notice the pool to closed itself.</span><br><span class="line">19	release chan sig</span><br><span class="line">20</span><br><span class="line">21	&#x2F;&#x2F; lock for synchronous operation.</span><br><span class="line">22	lock sync.Mutex</span><br><span class="line">23</span><br><span class="line">24	&#x2F;&#x2F; pf is the function for processing tasks.</span><br><span class="line">25	poolFunc pf</span><br><span class="line">26</span><br><span class="line">27	once sync.Once</span><br><span class="line">28&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>PoolWithFunc struct</code> 中的大部分字段和 <code>Pool struct</code> 基本一致，重点关注 <code>poolFunc pf</code> ，这是一个函数类型，也就是该 Pool 绑定的指定任务函数，而 client 提交到这种类型的 Pool 的数据就不再是一个任务函数 <code>task f</code> 了，而是 <code>poolFunc pf</code> 任务函数的形参，然后交由 <code>WorkerWithFunc</code> 处理：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">1&#x2F;&#x2F; WorkerWithFunc is the actual executor who runs the tasks,</span><br><span class="line"> 2&#x2F;&#x2F; it starts a goroutine that accepts tasks and</span><br><span class="line"> 3&#x2F;&#x2F; performs function calls.</span><br><span class="line"> 4type WorkerWithFunc struct &#123;</span><br><span class="line"> 5	&#x2F;&#x2F; pool who owns this worker.</span><br><span class="line"> 6	pool *PoolWithFunc</span><br><span class="line"> 7</span><br><span class="line"> 8	&#x2F;&#x2F; args is a job should be done.</span><br><span class="line"> 9	args chan interface&#123;&#125;</span><br><span class="line">10</span><br><span class="line">11	&#x2F;&#x2F; recycleTime will be update when putting a worker back into queue.</span><br><span class="line">12	recycleTime time.Time</span><br><span class="line">13&#125;</span><br><span class="line">14</span><br><span class="line">15&#x2F;&#x2F; run starts a goroutine to repeat the process</span><br><span class="line">16&#x2F;&#x2F; that performs the function calls.</span><br><span class="line">17func (w *WorkerWithFunc) run() &#123;</span><br><span class="line">18	go func() &#123;</span><br><span class="line">19		for args :&#x3D; range w.args &#123;</span><br><span class="line">20			if args &#x3D;&#x3D; nil &#123;</span><br><span class="line">21				w.pool.decRunning()</span><br><span class="line">22				return</span><br><span class="line">23			&#125;</span><br><span class="line">24			w.pool.poolFunc(args)</span><br><span class="line">25			w.pool.putWorker(w)</span><br><span class="line">26		&#125;</span><br><span class="line">27	&#125;()</span><br><span class="line">28&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的源码可以看到 <code>WorkerWithFunc</code> 是一个类似 <code>Worker</code> 的结构，只不过监听的是函数的参数队列，每接收到一个参数包，就直接调用 <code>PoolWithFunc</code> 绑定好的任务函数 <code>poolFunc pf</code> 任务函数执行任务，接下来的流程就和 <code>Worker</code> 是一致的了，执行完任务后就把 worker 放回协程池，等待下次使用。<br>至于其他逻辑如提交 <code>task</code> 、获取 <code>Worker</code> 绑定任务等基本复用自 <code>Pool struct</code> ，具体细节有细微差别，但原理一致，万变不离其宗，有兴趣的同学可以看我在 GitHub 上的源码：Goroutine Pool 协程池 <a target="_blank" rel="noopener" href="https://github.com/panjf2000/ants/">ants</a> 。</p>
-<h1 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h1><p>吹了这么久的 Goroutine Pool，那都是虚的，理论上池化可以复用 goroutine，提升性能节省内存，没有 benchmark 数据之前，好像也不能服众哈！所以，本章就来进行一次实测，验证一下再大规模 goroutine 并发的场景下，Goroutine Pool 的表现是不是真的比原生 Goroutine 并发更好！<br>测试机器参数：</p>
-<h2 id="Pool-测试"><a href="#Pool-测试" class="headerlink" title="Pool 测试"></a>Pool 测试</h2><p><a target="_blank" rel="noopener" href="https://github.com/panjf2000/ants/blob/master/ants_test.go">测试代码传送门</a><br>测试结果：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818558-80144e90-9a10-425c-be57-0dabaf13cbd5.png#align=left&display=inline&height=1036&margin=%5Bobject%20Object%5D&originHeight=1036&originWidth=1322&size=0&status=done&style=none&width=1322"><br>这里为了模拟大规模 goroutine 的场景，两次测试的并发次数分别是 100w 和 1000w，前两个测试分别是执行 100w 个并发任务不使用 Pool 和使用了 <code>ants</code> 的 Goroutine Pool 的性能，后两个则是 1000w 个任务下的表现，可以直观的看出在执行速度和内存使用上， <code>ants</code> 的 Pool 都占有明显的优势。100w 的任务量，使用 <code>ants</code> ，执行速度与原生 goroutine 相当甚至略快，但只实际使用了不到 5w 个 goroutine 完成了全部任务，且内存消耗仅为原生并发的 40%；而当任务量达到 1000w，优势则更加明显了：用了 70w 左右的 goroutine 完成全部任务，执行速度比原生 goroutine 提高了 100%，且内存消耗依旧保持在不使用 Pool 的 40% 左右。</p>
-<h2 id="PoolWithFunc-测试"><a href="#PoolWithFunc-测试" class="headerlink" title="PoolWithFunc 测试"></a>PoolWithFunc 测试</h2><p><a target="_blank" rel="noopener" href="https://github.com/panjf2000/ants/blob/master/ants_benchmark_test.go">测试代码传送门</a><br>测试结果：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818565-a6baf060-16dd-43ab-8bf2-78ab03b16bf5.png#align=left&display=inline&height=668&margin=%5Bobject%20Object%5D&originHeight=668&originWidth=1730&size=0&status=done&style=none&width=1730"></p>
-<ul>
-<li>Benchmarkxxx-4 格式为 <code>基准测试函数名-GOMAXPROCS</code> ，后面的-4 代表测试函数运行时对应的 CPU 核数</li>
-<li>1 表示执行的次数</li>
-<li>xx ns/op 表示每次的执行时间</li>
-<li>xx B/op 表示每次执行分配的总字节数（内存消耗）</li>
-<li>xx allocs/op 表示每次执行发生了多少次内存分配</li>
-</ul>
-<p>因为 <code>PoolWithFunc</code> 这个 Pool 只绑定一个任务函数，也即所有任务都是运行同一个函数，所以相较于 <code>Pool</code> 对原生 goroutine 在执行速度和内存消耗的优势更大，上面的结果可以看出，执行速度可以达到原生 goroutine 的 300%，而内存消耗的优势已经达到了两位数的差距，原生 goroutine 的内存消耗达到了 <code>ants</code> 的 35 倍且原生 goroutine 的每次执行的内存分配次数也达到了 <code>ants</code> 45 倍，1000w 的任务量， <code>ants</code> 的初始分配容量是 5w，因此它完成了所有的任务依旧只使用了 5w 个 goroutine！事实上， <code>ants</code> 的 Goroutine Pool 的容量是可以自定义的，也就是说使用者可以根据不同场景对这个参数进行调优直至达到最高性能。</p>
-<h2 id="吞吐量测试"><a href="#吞吐量测试" class="headerlink" title="吞吐量测试"></a>吞吐量测试</h2><p>上面的 benchmarks 出来以后，我当时的内心是这样的：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1615724818532-f8c96e85-4fc6-48ca-8ce5-ee7d12b4315b.jpeg#align=left&display=inline&height=360&margin=%5Bobject%20Object%5D&originHeight=360&originWidth=360&size=0&status=done&style=none&width=360"><br>但是太顺利反而让我疑惑，因为结合我过去这 20 几年的坎坷人生来看，事情应该不会这么美好才对，果不其然，细细一想，虽然 <code>ants</code> Groutine Pool 能在大规模并发下执行速度和内存消耗都对原生 goroutine 占有明显优势，但前面的测试 demo 相信大家注意到了，里面使用了 WaitGroup，也就是用来对 goroutine 同步的工具，所以上面的 benchmarks 中主进程会等待所有子 goroutine 完成任务后才算完成一次性能测试，然而又有多少场景是单台机器需要扛 100w 甚至 1000w 同步任务的？基本没有啊！结果就是造出了屠龙刀，可是世界上没有龙啊！也是无情…<br>彼时，我内心变成了这样：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/190217/1615724818562-26f0492a-8c66-4d36-891c-78d80f7dbcb6.jpeg#align=left&display=inline&height=336&margin=%5Bobject%20Object%5D&originHeight=336&originWidth=461&size=0&status=done&style=none&width=461"><br>幸好， <code>ants</code> 在同步批量任务方面有点曲高和寡，但是如果是异步批量任务的场景下，就有用武之地了，也就是说，在大批量的任务无须同步等待完成的情况下，可以再测一下 <code>ants</code> 和原生 goroutine 并发的性能对比，这个时候的性能对比也即是吞吐量对比了，就是在相同大规模数量的请求涌进来的时候， <code>ants</code> 和原生 goroutine 谁能用更快的速度、更少的内存『吞』完这些请求。<br><a target="_blank" rel="noopener" href="https://github.com/panjf2000/ants/blob/master/ants_benchmark_test.go">测试代码传送门</a><br>测试结果：</p>
-<h3 id="10w-吞吐量"><a href="#10w-吞吐量" class="headerlink" title="10w 吞吐量"></a>10w 吞吐量</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818556-68806100-73bf-4f3a-bada-ae9d70cbced0.png#align=left&display=inline&height=810&margin=%5Bobject%20Object%5D&originHeight=810&originWidth=1630&size=0&status=done&style=none&width=1630"></p>
-<h3 id="100w-吞吐量"><a href="#100w-吞吐量" class="headerlink" title="100w 吞吐量"></a>100w 吞吐量</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818574-826a69dc-444c-4a3f-9481-ecdb9306cc77.png#align=left&display=inline&height=546&margin=%5Bobject%20Object%5D&originHeight=546&originWidth=1660&size=0&status=done&style=none&width=1660"></p>
-<h3 id="1000w-吞吐量"><a href="#1000w-吞吐量" class="headerlink" title="1000w 吞吐量"></a>1000w 吞吐量</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818575-7efe55db-b15e-4a91-8813-111910c1b26a.png#align=left&display=inline&height=324&margin=%5Bobject%20Object%5D&originHeight=324&originWidth=1614&size=0&status=done&style=none&width=1614"><br>因为在我的电脑上测试 1000w 吞吐量的时候原生 goroutine 已经到了极限，因此程序直接把电脑拖垮了，无法正常测试了，所以 1000w 吞吐的测试数据只有 <code>ants</code> Pool 的。<br><strong>从该 demo 测试吞吐性能对比可以看出，使用<code>ants</code> 的吞吐性能相较于原生 goroutine 可以保持在 2<del>6 倍的性能压制，而内存消耗则可以达到 10</del>20 倍的节省优势。</strong></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此，一个高性能的 Goroutine Pool 开发就完成了，事实上，原理不难理解，总结起来就是一个『复用』，具体落实到代码细节就是锁同步、原子操作、channel 通信等这些技巧的使用， <code>ant</code> 这整个项目没有借助任何第三方的库，用 golang 的标准库就完成了所有功能，因为本身 golang 的语言原生库已经足够优秀，很多时候开发 golang 项目的时候是可以保持轻量且高性能的，未必事事需要借助第三方库。<br>关于 <code>ants</code> 的价值，其实前文也提及过了， <code>ants</code> 在大规模的异步&amp;同步批量任务处理都有着明显的性能优势（特别是异步批量任务），而单机上百万上千万的同步批量任务处理现实意义不大，但是在异步批量任务处理方面有很大的应用价值，所以我个人觉得，Goroutine Pool 真正的价值还是在：</p>
-<ol>
-<li>限制并发的 goroutine 数量；</li>
-<li>复用 goroutine，减轻 runtime 调度压力，提升程序性能；</li>
-<li>规避过多的 goroutine 侵占系统资源（CPU&amp;内存）。</li>
-</ol>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>Go 语言的三位最初的缔造者 — Rob Pike、Robert Griesemer 和 Ken Thompson 中，Robert Griesemer 参与设计了 Java 的 HotSpot 虚拟机和 Chrome 浏览器的 JavaScript V8 引擎，Rob Pike 在大名鼎鼎的 bell lab 侵淫多年，参与了 Plan9 操作系统、C 编译器以及多种语言编译器的设计和实现，Ken Thompson 更是图灵奖得主、Unix 之父、C 语言之父。这三人在计算机史上可是元老级别的人物，特别是 Ken Thompson ，是一手缔造了 Unix 和 C 语言计算机领域的上古大神，所以 Go 语言的设计哲学有着深深的 Unix 烙印：简单、模块化、正交、组合、pipe、功能短小且聚焦等；而令许多开发者青睐于 Go 的简洁、高效编程模式的原因，也正在于此。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1615724818560-b5684d5e-9929-4c26-b5be-639fee8687f2.png#align=left&display=inline&height=355&margin=%5Bobject%20Object%5D&originHeight=355&originWidth=628&size=0&status=done&style=none&width=628"><br>本文从三大线程模型到 Go 并发调度器再到自定制的 Goroutine Pool，算是较为完整的窥探了整个 Go 语言并发模型的前世今生，我们也可以看到，Go 的设计当然不完美，比如一直被诟病的 error 处理模式、不支持泛型、差强人意的包管理以及面向对象模式的过度抽象化等等，实际上没有任何一门编程语言敢说自己是完美的，还是那句话，任何不考虑应用场景和语言定位的争执都毫无意义，而 Go 的定位从出道开始就是系统编程语言&amp;云计算编程语言（这个有点模糊），而 Go 的作者们也一直坚持的是用最简单抽象的工程化设计完成最复杂的功能，所以如果从这个层面去看 Go 的并发模型，就可以看出其实除了 G-P-M 模型中引入的 P ，并没有太多革新的原创理论，两级线程模型是早已成熟的理论，抢占式调度更不是什么新鲜的调度模式，Go 的伟大之处是在于它诞生之初就是依照<a target="_blank" rel="noopener" href="https://strikefreedom.top/Go%E5%9C%A8%E8%B0%B7%E6%AD%8C%EF%BC%9A%E4%BB%A5%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E4%B8%BA%E7%9B%AE%E7%9A%84%E7%9A%84%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1">Go 在谷歌：以软件工程为目的的语言设计</a>而设计的，Go 其实就是将这些经典的理论和技术以一种优雅高效的工程化方式组合了起来，并用简单抽象的 API 或语法糖开放给使用者，Go 一直致力于找寻一个高性能&amp;开发效率的双赢点，目前为止，它做得远不够完美，但足够优秀。另外 Go 通过引入 channel 与 goroutine 协同工作，将一种区别于锁&amp;原子操作的并发编程模式 — CSP 带入了 Go 语言，对开发人员在并发编程模式上的思考有很大的启发。<br>从本文中对 Go 调度器的分析以及 <code>ants</code> Goroutine Pool 的设计与实现过程，对 Go 的并发模型做了一次解构和优化思考，在 <code>ants</code> 中的代码实现对锁同步、原子操作、channel 通信的使用也做了一次较为全面的实践，希望对 Gopher 们在 Go 语言并发模型与并发编程的理解上能有所裨益。<br><strong>感谢阅读。</strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/14/yuque/Goroutine%20%E5%B9%B6%E5%8F%91%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%89%8B%E6%92%B8%E4%B8%80%E4%B8%AA%E9%AB%98%E6%80%A7%E8%83%BD%20goroutine%20%E6%B1%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/mysql 优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/21/yuque/mysql%20%E4%BC%98%E5%8C%96/">mysql 优化</a>
-    </h1>
-  
-
-        
-        <a href="/2021/02/21/yuque/mysql%20%E4%BC%98%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2021-02-21T16:27:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、对查询进行优化，应尽量避免全表扫描，首先应考虑在 WHERE 及 ORDER BY 涉及的列上建立索引。<br>2、应尽量避免在 WHERE 子句中对字段进行 NULL 值判断，创建表时 NULL 是默认值，但大多数时候应该使用 NOT NULL，或者使用一个特殊的值，如 0，-1 作为默认值。<br>3、应尽量避免在 WHERE 子句中使用 != 或 &lt;&gt; 操作符。MySQL 只有对以下操作符才使用索引：&lt;，&lt;=，=，&gt;，&gt;=，BETWEEN，IN，以及某些时候的 LIKE。<br>4、应尽量避免在 WHERE 子句中使用 OR 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，可以使用 UNION 合并查询：select id from t where num=10 union all select id from t where num=20。<br>5、IN 和 NOT IN 也要慎用，否则会导致全表扫描。对于连续的数值，能用 BETWEEN 就不要用 IN：select id from t where num between 1 and 3。<br>6、下面的查询也将导致全表扫描：select id from t where name like‘%abc%’ 或者 select id from t where name like‘%abc’若要提高效率，可以考虑全文检索。而 select id from t where name like‘abc%’才用到索引。<br>7、如果在 WHERE 子句中使用参数，也会导致全表扫描。<br>8、应尽量避免在 WHERE 子句中对字段进行表达式操作，应尽量避免在 WHERE 子句中对字段进行函数操作。<br>9、很多时候用 EXISTS 代替 IN 是一个好的选择：select num from a where num in(select num from b)。用下面的语句替换：select num from a where exists(select 1 from b where num=a.num)。<br>10、索引固然可以提高相应的 SELECT 的效率，但同时也降低了 INSERT 及 UPDATE 的效。因为 INSERT 或 UPDATE 时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。一个表的索引数最好不要超过 6 个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。<br>11、应尽可能的避免更新 clustered 索引数据列， 因为 clustered 索引数据列的顺序就是表记录的物理存储顺序，一旦该列值改变将导致整个表记录的顺序的调整，会耗费相当大的资源。若应用系统需要频繁更新 clustered 索引数据列，那么需要考虑是否应将该索引建为 clustered 索引。<br>12、尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。<br>13、尽可能的使用 varchar, nvarchar 代替 char, nchar。因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。<br>14、最好不要使用返回所有：select from t ，用具体的字段列表代替 “*”，不要返回用不到的任何字段。<br>15、尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理。<br>16、使用表的别名（Alias）：当在 SQL 语句中连接多个表时，请使用表的别名并把别名前缀于每个 Column 上。这样一来，就可以减少解析的时间并减少那些由 Column 歧义引起的语法错误。<br>17、使用“临时表”暂存中间结果 ：<br>简化 SQL 语句的重要方法就是采用临时表暂存中间结果。但是临时表的好处远远不止这些，将临时结果暂存在临时表，后面的查询就在 tempdb 中了，这可以避免程序中多次扫描主表，也大大减少了程序执行中“共享锁”阻塞“更新锁”，减少了阻塞，提高了并发性能。<br>18、一些 SQL 查询语句应加上 nolock，读、写是会相互阻塞的，为了提高并发性能。对于一些查询，可以加上 nolock，这样读的时候可以允许写，但缺点是可能读到未提交的脏数据。<br>使用 nolock 有 3 条原则：</p>
-<ul>
-<li>查询的结果用于“插、删、改”的不能加 nolock；</li>
-<li>查询的表属于频繁发生页分裂的，慎用 nolock ；</li>
-<li>使用临时表一样可以保存“数据前影”，起到类似 Oracle 的 undo 表空间的功能，能采用临时表提高并发性能的，不要用 nolock。</li>
-</ul>
-<p>19、常见的简化规则如下：<br>不要有超过 5 个以上的表连接（JOIN），考虑使用临时表或表变量存放中间结果。少用子查询，视图嵌套不要过深，一般视图嵌套不要超过 2 个为宜。<br>20、将需要查询的结果预先计算好放在表中，查询的时候再 Select。这在 SQL7.0 以前是最重要的手段，例如医院的住院费计算。<br>21、用 OR 的字句可以分解成多个查询，并且通过 UNION 连接多个查询。他们的速度只同是否使用索引有关，如果查询需要用到联合索引，用 UNION all 执行的效率更高。多个 OR 的字句没有用到索引，改写成 UNION 的形式再试图与索引匹配。一个关键的问题是否用到索引。<br>22、在 IN 后面值的列表中，将出现最频繁的值放在最前面，出现得最少的放在最后面，减少判断的次数。<br>23、尽量将数据的处理工作放在服务器上，减少网络的开销，如使用存储过程。<br>存储过程是编译好、优化过、并且被组织到一个执行规划里、且存储在数据库中的 SQL 语句，是控制流语言的集合，速度当然快。反复执行的动态 SQL，可以使用临时存储过程，该过程（临时表）被放在 Tempdb 中。<br>24、当服务器的内存够多时，配制<strong>线程数量 = 最大连接数+5</strong>，这样能发挥最大的效率；否则使用<strong>配制线程数量&lt; 最大连接数</strong>，启用 SQL SERVER 的线程池来解决，如果还是<strong>数量 = 最大连接数+5</strong>，严重的损害服务器的性能。<br>25、查询的关联同写的顺序 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select a.personMemberID, * from chineseresume a,personmember b where personMemberID &#x3D; b.referenceid and a.personMemberID &#x3D; &#39;JCNPRH39681&#39; （A &#x3D; B, B &#x3D; &#39;号码&#39;） select a.personMemberID, * from chineseresume a,personmember b where a.personMemberID &#x3D; b.referenceid and a.personMemberID &#x3D; &#39;JCNPRH39681&#39; and b.referenceid &#x3D; &#39;JCNPRH39681&#39; （A &#x3D; B, B &#x3D; &#39;号码&#39;, A &#x3D; &#39;号码&#39;） select a.personMemberID, * from chineseresume a,personmember b where b.referenceid &#x3D; &#39;JCNPRH39681&#39; and a.personMemberID &#x3D; &#39;JCNPRH39681&#39; （B &#x3D; &#39;号码&#39;, A &#x3D; &#39;号码&#39;）</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>26、尽量使用 EXISTS 代替 select count(1) 来判断是否存在记录。count 函数只有在统计表中所有行数时使用，而且 count(1) 比 count(*) 更有效率。<br>27、尽量使用 “&gt;=”，不要使用 “&gt;”。<br>28、索引的使用规范：</p>
-<ul>
-<li>索引的创建要与应用结合考虑，建议大的 OLTP 表不要超过 6 个索引；</li>
-<li>尽可能的使用索引字段作为查询条件，尤其是聚簇索引，必要时可以通过 index index_name 来强制指定索引；</li>
-<li>避免对大表查询时进行 table scan，必要时考虑新建索引；</li>
-<li>在使用索引字段作为条件时，如果该索引是联合索引，那么必须使用到该索引中的第一个字段作为条件时才能保证系统使用该索引，否则该索引将不会被使用；</li>
-<li>要注意索引的维护，周期性重建索引，重新编译存储过程。</li>
-</ul>
-<p>29、下列 SQL 条件语句中的列都建有恰当的索引，但执行速度却非常慢：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM record WHERE substrINg(card_no, 1, 4) &#x3D; &#39;5378&#39; --13秒 SELECT * FROM record WHERE amount&#x2F;30 &lt; 1000 --11秒 SELECT * FROM record WHERE convert(char(10), date, 112) &#x3D; &#39;19991201&#39; --10秒</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>分析：<br>WHERE 子句中对列的任何操作结果都是在 SQL 运行时逐列计算得到的，因此它不得不进行表搜索，而没有使用该列上面的索引。<br>如果这些结果在查询编译时就能得到，那么就可以被 SQL 优化器优化，使用索引，避免表搜索，因此将 SQL 重写成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM record WHERE card_no like &#39;5378%&#39; -- &lt; 1秒 SELECT * FROM record WHERE amount &lt; 1000*30 -- &lt; 1秒 SELECT * FROM record WHERE date &#x3D; &#39;1999&#x2F;12&#x2F;01&#39; -- &lt; 1秒</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>30、当有一批处理的插入或更新时，用批量插入或批量更新，绝不会一条条记录的去更新。<br>31、在所有的存储过程中，能够用 SQL 语句的，我绝不会用循环去实现。<br>例如：列出上个月的每一天，我会用 connect by 去递归查询一下，绝不会去用循环从上个月第一天到最后一天。<br>32、选择最有效率的表名顺序（只在基于规则的优化器中有效）：<br>Oracle 的解析器按照从右到左的顺序处理 FROM 子句中的表名，FROM 子句中写在最后的表（基础表 driving table）将被最先处理，在 FROM 子句中包含多个表的情况下，你必须选择记录条数最少的表作为基础表。<br>如果有 3 个以上的表连接查询，那就需要选择交叉表（intersection table）作为基础表，交叉表是指那个被其他表所引用的表。<br>33、提高 GROUP BY 语句的效率，可以通过将不需要的记录在 GROUP BY 之前过滤掉。下面两个查询返回相同结果，但第二个明显就快了许多。<br>低效：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT JOB, AVG(SAL) FROM EMP GROUP BY JOB HAVING JOB &#x3D; &#39;PRESIDENT&#39; OR JOB &#x3D; &#39;MANAGER&#39;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>高效：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT JOB, AVG(SAL) FROM EMPWHERE JOB &#x3D; &#39;PRESIDENT&#39; OR JOB &#x3D; &#39;MANAGER&#39; GROUP BY JOB</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>34、SQL 语句用大写，因为 Oracle 总是先解析 SQL 语句，把小写的字母转换成大写的再执行。<br>35、别名的使用，别名是大型数据库的应用技巧，就是表名、列名在查询中以一个字母为别名，查询速度要比建连接表快 1.5 倍。<br>36、避免死锁，在你的存储过程和触发器中访问同一个表时总是以相同的顺序；事务应经可能地缩短，在一个事务中应尽可能减少涉及到的数据量；永远不要在事务中等待用户输入。<br>37、避免使用临时表，除非却有需要，否则应尽量避免使用临时表，相反，可以使用表变量代替。大多数时候（99%），表变量驻扎在内存中，因此速度比临时表更快，临时表驻扎在 TempDb 数据库中，因此临时表上的操作需要跨数据库通信，速度自然慢。<br>38、最好不要使用触发器：</p>
-<ul>
-<li>触发一个触发器，执行一个触发器事件本身就是一个耗费资源的过程；</li>
-<li>如果能够使用约束实现的，尽量不要使用触发器；</li>
-<li>不要为不同的触发事件（Insert、Update 和 Delete）使用相同的触发器；</li>
-<li>不要在触发器中使用事务型代码。</li>
-</ul>
-<p>39、索引创建规则：</p>
-<ul>
-<li>表的主键、外键必须有索引；</li>
-<li>数据量超过 300 的表应该有索引；</li>
-<li>经常与其他表进行连接的表，在连接字段上应该建立索引；</li>
-<li>经常出现在 WHERE 子句中的字段，特别是大表的字段，应该建立索引；</li>
-<li>索引应该建在选择性高的字段上；</li>
-<li>索引应该建在小字段上，对于大的文本字段甚至超长字段，不要建索引；</li>
-<li>复合索引的建立需要进行仔细分析，尽量考虑用单字段索引代替；</li>
-<li>正确选择复合索引中的主列字段，一般是选择性较好的字段；</li>
-<li>复合索引的几个字段是否经常同时以 AND 方式出现在 WHERE 子句中？单字段查询是否极少甚至没有？如果是，则可以建立复合索引；否则考虑单字段索引；</li>
-<li>如果复合索引中包含的字段经常单独出现在 WHERE 子句中，则分解为多个单字段索引；</li>
-<li>如果复合索引所包含的字段超过 3 个，那么仔细考虑其必要性，考虑减少复合的字段；</li>
-<li>如果既有单字段索引，又有这几个字段上的复合索引，一般可以删除复合索引；</li>
-<li>频繁进行数据操作的表，不要建立太多的索引；</li>
-<li>删除无用的索引，避免对执行计划造成负面影响；</li>
-<li>表上建立的每个索引都会增加存储开销，索引对于插入、删除、更新操作也会增加处理上的开销。另外，过多的复合索引，在有单字段索引的情况下，一般都是没有存在价值的；相反，还会降低数据增加删除时的性能，特别是对频繁更新的表来说，负面影响更大。</li>
-<li>尽量不要对数据库中某个含有大量重复的值的字段建立索引。</li>
-</ul>
-<p>40、MySQL 查询优化总结：<br>使用慢查询日志去发现慢查询，使用执行计划去判断查询是否正常运行，总是去测试你的查询看看是否他们运行在最佳状态下。<br>久而久之性能总会变化，避免在整个表上使用 count(*)，它可能锁住整张表，使查询保持一致以便后续相似的查询可以使用查询缓存，在适当的情形下使用 GROUP BY 而不是 DISTINCT，在 WHERE、GROUP BY 和 ORDER BY 子句中使用有索引的列，保持索引简单，不在多个索引中包含同一个列。<br>有时候 MySQL 会使用错误的索引，对于这种情况使用 USE INDEX，检查使用 SQL_MODE=STRICT 的问题，对于记录数小于 5 的索引字段，在 UNION 的时候使用 LIMIT 不是是用 OR。<br>为了避免在更新前 SELECT，使用 INSERT ON DUPLICATE KEY 或者 INSERT IGNORE；不要用 UPDATE 去实现，不要使用 MAX；使用索引字段和 ORDER BY 子句 LIMIT M，N 实际上可以减缓查询在某些情况下，有节制地使用，在 WHERE 子句中使用 UNION 代替子查询，在重新启动的 MySQL，记得来温暖你的数据库，以确保数据在内存和查询速度快，考虑持久连接，而不是多个连接，以减少开销。<br>基准查询，包括使用服务器上的负载，有时一个简单的查询可以影响其他查询，当负载增加在服务器上，使用 SHOW PROCESSLIST 查看慢的和有问题的查询，在开发环境中产生的镜像数据中测试的所有可疑的查询。<br>41、MySQL 备份过程：</p>
-<ul>
-<li>从二级复制服务器上进行备份；</li>
-<li>在进行备份期间停止复制，以避免在数据依赖和外键约束上出现不一致；</li>
-<li>彻底停止 MySQL，从数据库文件进行备份；</li>
-<li>如果使用 MySQL dump 进行备份，请同时备份二进制日志文件 – 确保复制没有中断；</li>
-<li>不要信任 LVM 快照，这很可能产生数据不一致，将来会给你带来麻烦；</li>
-<li>为了更容易进行单表恢复，以表为单位导出数据——如果数据是与其他表隔离的。</li>
-<li>当使用 mysqldump 时请使用 –opt；</li>
-<li>在备份之前检查和优化表；</li>
-<li>为了更快的进行导入，在导入时临时禁用外键约束。；</li>
-<li>为了更快的进行导入，在导入时临时禁用唯一性检测；</li>
-<li>在每一次备份后计算数据库，表以及索引的尺寸，以便更够监控数据尺寸的增长；</li>
-<li>通过自动调度脚本监控复制实例的错误和延迟；</li>
-<li>定期执行备份。</li>
-</ul>
-<p>42、查询缓冲并不自动处理空格，因此，在写 SQL 语句时，应尽量减少空格的使用，尤其是在 SQL 首和尾的空格（因为查询缓冲并不自动截取首尾空格）。<br>43、member 用 mid 做标准进行分表方便查询么？一般的业务需求中基本上都是以 username 为查询依据，正常应当是 username 做 hash 取模来分表。<br>而分表的话 MySQL 的 partition 功能就是干这个的，对代码是透明的；在代码层面去实现貌似是不合理的。<br>44、我们应该为数据库里的每张表都设置一个 ID 做为其主键，而且最好的是一个 INT 型的（推荐使用 UNSIGNED），并设置上自动增加的 AUTO_INCREMENT 标志。<br>45、在所有的存储过程和触发器的开始处设置 SET NOCOUNT ON，在结束时设置 SET NOCOUNT OFF。无需在执行存储过程和触发器的每个语句后向客户端发送 DONE_IN_PROC 消息。<br>46、MySQL 查询可以启用高速查询缓存。这是提高数据库性能的有效 MySQL 优化方法之一。当同一个查询被执行多次时，从缓存中提取数据和直接从数据库中返回数据快很多。<br>47、EXPLAIN SELECT 查询用来跟踪查看效果：<br>使用 EXPLAIN 关键字可以让你知道 MySQL 是如何处理你的 SQL 语句的。这可以帮你分析你的查询语句或是表结构的性能瓶颈。EXPLAIN 的查询结果还会告诉你你的索引主键被如何利用的，你的数据表是如何被搜索和排序的。<br>48、当只要一行数据时使用 LIMIT 1 ：<br>当你查询表的有些时候，你已经知道结果只会有一条结果，但因为你可能需要去 fetch 游标，或是你也许会去检查返回的记录数。<br>在这种情况下，加上 LIMIT 1 可以增加性能。这样一来，MySQL 数据库引擎会在找到一条数据后停止搜索，而不是继续往后查少下一条符合记录的数据。<br>49、选择表合适存储引擎：</p>
-<ul>
-<li><p><strong>myisam：</strong>应用时以读和插入操作为主，只有少量的更新和删除，并且对事务的完整性，并发性要求不是很高的。</p>
-</li>
-<li><p><strong>InnoDB：</strong>事务处理，以及并发条件下要求数据的一致性。除了插入和查询外，包括很多的更新和删除。（InnoDB 有效地降低删除和更新导致的锁定）。<br>对于支持事务的 InnoDB 类 型的表来说，影响速度的主要原因是 AUTOCOMMIT 默认设置是打开的，而且程序没有显式调用 BEGIN 开始事务，导致每插入一条都自动提交，严重影响了速度。可以在执行 SQL 前调用 begin，多条 SQL 形成一个事物（即使 autocommit 打开也可以），将大大提高性能。</p>
-</li>
-</ul>
-<p>50、优化表的数据类型，选择合适的数据类型：<br><strong>原则：</strong>更小通常更好，简单就好，所有字段都得有默认值，尽量避免 NULL。<br>例如：数据库表设计时候更小的占磁盘空间尽可能使用更小的整数类型。(mediumint 就比 int 更合适)<br>比如时间字段：datetime 和 timestamp。datetime 占用 8 个字节，timestamp 占用 4 个字节，只用了一半。而 timestamp 表示的范围是 1970—2037 适合做更新时间。<br>MySQL 可以很好的支持大数据量的存取，但是一般说来，数据库中的表越小，在它上面执行的查询也就会越快。<br>因此，在创建表的时候，为了获得更好的性能，我们可以将表中字段的宽度设得尽可能小。<br>例如：在定义邮政编码这个字段时，如果将其设置为 CHAR(255)，显然给数据库增加了不必要的空间。甚至使用 VARCHAR 这种类型也是多余的，因为 CHAR(6) 就可以很好的完成任务了。<br>同样的，如果可以的话，我们应该使用 MEDIUMINT 而不是 BIGIN 来定义整型字段，应该尽量把字段设置为 NOT NULL，这样在将来执行查询的时候，数据库不用去比较 NULL 值。<br>对于某些文本字段，例如“省份”或者“性别”，我们可以将它们定义为 ENUM 类型。因为在 MySQL 中，ENUM 类型被当作数值型数据来处理，而数值型数据被处理起来的速度要比文本类型快得多。这样，我们又可以提高数据库的性能。<br>51、字符串数据类型：char, varchar, text 选择区别。<br>52、任何对列的操作都将导致表扫描，它包括数据库函数、计算表达式等等，查询时要尽可能将操作移至等号右边。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/21/yuque/mysql%20%E4%BC%98%E5%8C%96/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/相关书籍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/17/yuque/%E7%9B%B8%E5%85%B3%E4%B9%A6%E7%B1%8D/">相关书籍</a>
-    </h1>
-  
-
-        
-        <a href="/2021/02/17/yuque/%E7%9B%B8%E5%85%B3%E4%B9%A6%E7%B1%8D/" class="archive-article-date">
-  	<time datetime="2021-02-17T13:48:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p> <a target="_blank" rel="noopener" href="https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html">https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://wskdsgcf.gitbook.io/mastering-go-zh-cn/">https://wskdsgcf.gitbook.io/mastering-go-zh-cn/</a> 3.基础知识<br> <a target="_blank" rel="noopener" href="https://github.com/CyC2018/CS-Notes">https://github.com/CyC2018/CS-Notes</a> 4.规范<br> <a target="_blank" rel="noopener" href="https://github.com/nusr/hacker-laws-zh#%e5%a5%a5%e5%8d%a1%e5%a7%86%e5%89%83%e5%88%80-occams-razor">https://github.com/nusr/hacker-laws-zh#%e5%a5%a5%e5%8d%a1%e5%a7%86%e5%89%83%e5%88%80-occams-razor</a><br> 5.leetcode 题解<br> <a target="_blank" rel="noopener" href="https://books.halfrost.com/leetcode/">https://books.halfrost.com/leetcode/</a></p>
-<p> 6.murphyyi 书籍<br> <a target="_blank" rel="noopener" href="http://godoc.murphyyi.com/">http://godoc.murphyyi.com/</a></p>
-<p> 7.     必看网站<br> <a target="_blank" rel="noopener" href="https://github.com/yanglbme/redis-multi-programming-language-practice">https://github.com/yanglbme/redis-multi-programming-language-practice</a></p>
-</li>
-<li><p> 面试</p>
-</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://www.yuque.com/fz420/smym5g/gy5h6b">https://www.yuque.com/fz420/smym5g/gy5h6b</a></p>
-<ol start="9">
-<li>git</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6918358493867016199?utm_source=gold_browser_extension">https://juejin.cn/post/6918358493867016199?utm_source=gold_browser_extension</a></li>
-<li>创业 <a target="_blank" rel="noopener" href="http://r.ftqq.com/howto-make-more-money/ch16.html">http://r.ftqq.com/howto-make-more-money/ch16.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://ftqq.com/docker2saas/">https://ftqq.com/docker2saas/</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/golang-standards/project-layout">https://github.com/golang-standards/project-layout</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.yuque.com/fz420/golang/sf3c6m">https://www.yuque.com/fz420/golang/sf3c6m</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/aikuyun/bigdata-doc">https://github.com/aikuyun/bigdata-doc</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/aikuyun/linux-quick-start">https://github.com/aikuyun/linux-quick-start</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.yuque.com/evawu/gllvyk">https://www.yuque.com/evawu/gllvyk</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/zhaofeng092/python_auto_office">https://github.com/zhaofeng092/python_auto_office</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/Virtomize/confluence-go-api">https://github.com/Virtomize/confluence-go-api</a></li>
-<li><a target="_blank" rel="noopener" href="https://strikefreedom.top/go-event-loop-networking-library-gnet">https://strikefreedom.top/go-event-loop-networking-library-gnet</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_28864139/article/details/112098720">https://blog.csdn.net/weixin_28864139/article/details/112098720</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jobbible/p/9723997.html">https://www.cnblogs.com/jobbible/p/9723997.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/59125443">https://zhuanlan.zhihu.com/p/59125443</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq/blob/master/docs/cn/architecture.md">https://github.com/apache/rocketmq/blob/master/docs/cn/architecture.md</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/L-Test/p/11668928.html">https://www.cnblogs.com/L-Test/p/11668928.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xu704928452/article/details/102831478">https://blog.csdn.net/xu704928452/article/details/102831478</a></li>
-<li><a target="_blank" rel="noopener" href="https://codetop.cc/#/home">https://codetop.cc/#/home</a></li>
-<li><a target="_blank" rel="noopener" href="https://studygolang.com/articles/20714">https://studygolang.com/articles/20714</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/cy973071263/article/details/105188519">https://blog.csdn.net/cy973071263/article/details/105188519</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27876575">https://www.zhihu.com/question/27876575</a></li>
-<li><a target="_blank" rel="noopener" href="https://strikefreedom.top/go-netpoll-io-multiplexing-reactor">https://strikefreedom.top/go-netpoll-io-multiplexing-reactor</a></li>
-</ol>
-<p>好事情</p>
-<ol start="32">
-<li><a target="_blank" rel="noopener" href="https://github.com/SmartKeyerror/Psyduck">https://github.com/SmartKeyerror/Psyduck</a></li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/17/yuque/%E7%9B%B8%E5%85%B3%E4%B9%A6%E7%B1%8D/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1844,11 +2002,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
             
             <div class="clearfix"></div>

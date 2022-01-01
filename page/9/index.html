@@ -182,27 +182,27 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/mysql 范式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/代理nps" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">mysql 范式</a>
+      <a class="article-title" href="/2021/02/15/yuque/%E4%BB%A3%E7%90%86nps/">代理nps</a>
     </h1>
   
 
         
-        <a href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:23:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+        <a href="/2021/02/15/yuque/%E4%BB%A3%E7%90%86nps/" class="archive-article-date">
+  	<time datetime="2021-02-15T15:30:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>第一范式 原子性’不可再分<br>第二范式 消除部分码函数依赖<br>第三范式 完全消除函数依赖</p>
+        <p><a target="_blank" rel="noopener" href="https://ehang-io.github.io/nps/#/install?id=%e5%ae%89%e8%a3%85%e5%8c%85%e5%ae%89%e8%a3%85">https://ehang-io.github.io/nps/#/install?id=%e5%ae%89%e8%a3%85%e5%8c%85%e5%ae%89%e8%a3%85</a></p>
 
       
 
@@ -215,7 +215,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/mysql%20%E8%8C%83%E5%BC%8F/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/02/15/yuque/%E4%BB%A3%E7%90%86nps/">展开全文 >></a>
         </p>
       
 
@@ -245,538 +245,49 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/Mysql 锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/WireGuard NAT-to-NAT 实践" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">Mysql 锁</a>
+      <a class="article-title" href="/2021/02/15/yuque/WireGuard%20NAT-to-NAT%20%E5%AE%9E%E8%B7%B5/">WireGuard NAT-to-NAT 实践</a>
     </h1>
   
 
         
-        <a href="/2020/05/04/yuque/Mysql%20%E9%94%81/" class="archive-article-date">
-  	<time datetime="2020-05-04T23:23:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
+        <a href="/2021/02/15/yuque/WireGuard%20NAT-to-NAT%20%E5%AE%9E%E8%B7%B5/" class="archive-article-date">
+  	<time datetime="2021-02-15T15:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>加上一个版本控制即可</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>会话 0：<br>lock table tablelock read;<br>select * from tablelock; —读（查），可以（自己加了锁，自己可以读）<br>delete from tablelock where id=1; —写（增删改），不可以</p>
-<p>在当前会话中访问其他表（emp 表，未加锁）：<br>select * from emp; —读，不可以<br>delete from emp where eid = 1; —写，不可以</p>
-<p>结论 1：<br>—如果某一个会话，对 A 表加了锁，则该会话可以对 A 表进行读操作，不能进行写操作；且该会话不能对其他表进行读、写操作。<br>—即如果给 A 表加了读锁，则当前会话只能对 A 表进行读操作。</p>
-<p>会话 1（其他会话）：<br>select * from tablelock; –读（查），可以<br>delete from tablelock where id=1; —写，会“等待”会话 0 将锁释放</p>
-<p>select * from emp; –读（查），可以<br>delete from emp where eid=1; —写，可以</p>
-<p>结论 2：<br>会话 0 给 A 表加了锁：</p>
-<p>其他会话的操作：<br>a.可以对其他表（A 表以外的表）进行读、写操作<br>b.对 A 表：读–可以；写–需要等待释放锁</p>
-<p>加写锁：</p>
-<p>会话 0：<br>lock table tablelock write;<br>结论：当前会话（会话 0）可以对加了写锁的表进行任何操作（增删改查）；但是不能操作（增删改查）其他表</p>
-<p>其他会话：<br>对会话 0 中加写锁的表可以进行增删改查的前提是：等待会话 0 释放写锁</p>
-<p>MySQL 表级锁的锁模式：<br>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，<br>在执行更新操作（增删改（DML））前，会自动给涉及的表加写锁。</p>
-<p>所以对 MyISAM 表进行操作，会有以下情况：<br>a.对 MyISAM 表的读操作（如读锁），不会阻塞其他进程（会话）对同一表的读请求，但会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它进程的写操作。<br>b.对 MyISAM 表的写操作（加写锁），会阻塞其他进程（会话）对同一表的读和写操作，只有当写锁释放后，才会执行其他进程的读写操作。</p>
-<h2 id="行锁（InnoDB-需要命中索引，否则行锁无效）"><a href="#行锁（InnoDB-需要命中索引，否则行锁无效）" class="headerlink" title="行锁（InnoDB 需要命中索引，否则行锁无效）"></a>行锁（InnoDB 需要命中索引，否则行锁无效）</h2><p>创建行锁条件：</p>
-<p>1、表中创建索引， select 。。。 where   字段（必须是索引）   不然行锁就无效。</p>
-<p>2、必须要有事务，这样才是 行锁（排他锁）</p>
-<p>3、在 select   语句后面 加 上    FOR UPDATE；</p>
-<p>例子： 测试是否 加了锁，先执行 1 后执行 2</p>
-<p>查询 1</p>
-<p>START TRANSACTION;  #加事务</p>
-<p>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;  #加锁</p>
-<p>select SLEEP(5);  # 睡眠</p>
-<p>COMMIT; #提交</p>
-<p>查询 2 ：</p>
-<p>START TRANSACTION; <br>SELECT UserID,Password,Age FROM AccountsDB.Accounts_InFo    WHERE Accounts = ‘hello2’ FOR UPDATE;<br>COMMIT;</p>
+        <p>最近有连接两个内网的小需求，想起了之前写过的 <a target="_blank" rel="noopener" href="https://10101.io/2018/11/10/wireguard">WireGuard 搭建和使用折腾小记</a>，决定尝试着使用 WireGuard 来实现。因为两个内网都在 NAT 后，自己也没有固定的公网 IP，所以只能借助一台 VPS 作为中继服务器，用来分别连接两个内网并进行流量转发。以下内容为自己的一点记录，其实大体上和之前的文章区别不大，不过这次主要以手动命令配置为主，方便自己进一步理解。</p>
+<h2 id="拓扑环境"><a href="#拓扑环境" class="headerlink" title="拓扑环境"></a>拓扑环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NAT-A (192.168.0.0&#x2F;24) --- Gateway (VPS) --- NAT-B (10.180.0.0&#x2F;16)</span><br><span class="line">wg 隧道接口 IP 我这里采用的是 10.10.10.0&#x2F;24 网段的 IP，如下：</span><br><span class="line">• NAT-A：10.10.10.2&#x2F;24</span><br><span class="line">• GW：10.10.10.1&#x2F;24</span><br><span class="line">• NAT-B：10.10.10.3&#x2F;24</span><br></pre></td></tr></table></figure>
 
-      
+<h2 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h2><h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><ol>
+<li>NAT-A、NAT-B、VPS 均采用一台 Linux PC 作为 WireGuard endpoint；</li>
+<li>WireGuard 安装过程不再赘述，见<a target="_blank" rel="noopener" href="https://www.wireguard.com/install/">官方文档</a>；</li>
+<li>iptables、iproute2</li>
+</ol>
+<h3 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h3><h4 id="GW-端"><a href="#GW-端" class="headerlink" title="GW 端"></a>GW 端</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 1. 生成密钥对</span><br><span class="line">wg genkey | tee privatekey | wg pubkey &gt; publickey</span><br><span class="line"># 2. 创建 WireGuard tunnel 接口</span><br><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line"># 3. 为 wg 接口配置 IP 地址</span><br><span class="line">ip address add dev wg0 10.10.10.1&#x2F;24</span><br><span class="line"># 4. 指定 gw 端 wg0 接口私钥及接听端口</span><br><span class="line">wg set wg0 private-key $(cat privatekey) listen-port 60000</span><br><span class="line"># 5. 启用 wg0 接口</span><br><span class="line">ip link set up dev wg0</span><br><span class="line"># 6. 开启流量转发</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line"># &gt; filter 表转发链中允许 wg0 接口的出入流量</span><br><span class="line">iptables -A FORWARD -i wg0 -j ACCEPT</span><br><span class="line">iptables -A FORWARD -o wg0 -j ACCEPT</span><br><span class="line"># &gt; nat 表动态伪装 snat</span><br><span class="line">iptables -t nat -A POSTROUTING -o $OUTBOUND_INTERFACE -j MASQUERADE</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
+<h4 id="NAT-A-端"><a href="#NAT-A-端" class="headerlink" title="NAT-A 端"></a>NAT-A 端</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 1. 生成密钥对</span><br><span class="line">wg genkey | tee privatekey | wg pubkey &gt; publickey</span><br><span class="line"># 2. 创建 WireGuard tunnel 接口</span><br><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line"># 3. 为 WireGuard 接口配置 IP 地址</span><br><span class="line">ip address add dev wg0 10.10.10.2&#x2F;24</span><br><span class="line"># 4. 指定 NAT-A 端接口密钥及 peer 信息（注意替换字段内容）</span><br><span class="line"># &gt; allowed-ips: 指定需要经隧道的 IP 段，即指定相应 IP 段的静态路由；这里除了添加 WireGuard 网段，还需添加 NAT-B 网段地址，即相当于添加路由 ip route add 10.180.0.0&#x2F;16 dev wg0</span><br><span class="line"># &gt; endpoint: 指定 gw 端的地址和监听端口</span><br><span class="line"># &gt; persistent-keepalive：用于保持长连接</span><br><span class="line">wg set wg0 private-key $(cat privatekey) peer $GW_PUBKEY allowed-ips 10.10.10.0&#x2F;24,10.180.0.0&#x2F;16 endpoint $GW_IP:60000 persistent-keepalive 10</span><br><span class="line"># 5. 启用 wg0 接口</span><br><span class="line">ip link set up dev wg0</span><br><span class="line"># 6. 开启流量转发</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line"># &gt; filter 表转发链中允许 wg0 接口的出入流量</span><br><span class="line">iptables -A FORWARD -i wg0 -j ACCEPT</span><br><span class="line">iptables -A FORWARD -o wg0 -j ACCEPT</span><br><span class="line"># &gt; nat 表动态伪装 snat</span><br><span class="line">iptables -t nat -A POSTROUTING -o $OUTBOUNG_INTERFACE -j MASQUERADE</span><br></pre></td></tr></table></figure>
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql%20%E9%94%81/">展开全文 >></a>
-        </p>
-      
+<h4 id="NAT-B-端"><a href="#NAT-B-端" class="headerlink" title="NAT-B 端"></a>NAT-B 端</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 1. 生成密钥对</span><br><span class="line">wg genkey | tee privatekey | wg pubkey &gt; publickey</span><br><span class="line"># 2. 创建 WireGuard tunnel 接口</span><br><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line"># 3. 为 WireGuard 接口配置 IP 地址</span><br><span class="line">ip address add dev wg0 10.10.10.3&#x2F;24</span><br><span class="line"># 4. 指定 NAT-B 端接口密钥及 peer 信息（注意替换字段内容）</span><br><span class="line"># &gt; allowed-ips: 指定需要经隧道的 IP 段，相当于指定了相应 IP 段的静态路由；这里除了指定 WireGuard 网段，还添加了 NAT-A 网段地址，即相当于添加路由 ip route add 192.168.0.0&#x2F;24 dev wg0</span><br><span class="line"># &gt; endpoint: 指定 gw 端的地址和监听端口</span><br><span class="line"># &gt; persistent-keepalive：用于保持长连接；设置为 0 代表不打开</span><br><span class="line">wg set wg0 private-key $(cat privatekey) peer $GW_PUBKEY allowed-ips 10.10.10.0&#x2F;24,192.168.0.0&#x2F;24 endpoint $GW_IP:60000 persistent-keepalive 10</span><br><span class="line"># 5. 启用 wg0 接口</span><br><span class="line">ip link set up dev wg0</span><br><span class="line"># 6. 开启流量转发</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line"># &gt; filter 表转发链中允许 wg0 接口的出入流量</span><br><span class="line">iptables -A FORWARD -i wg0 -j ACCEPT</span><br><span class="line">iptables -A FORWARD -o wg0 -j ACCEPT</span><br><span class="line"># &gt; nat 表动态伪装 snat</span><br><span class="line">iptables -t nat -A POSTROUTING -o $OUTBOUNG_INTERFACE -j MASQUERADE</span><br></pre></td></tr></table></figure>
 
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
+<h4 id="GW-端添加-peer"><a href="#GW-端添加-peer" class="headerlink" title="GW 端添加 peer"></a>GW 端添加 peer</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 1. 添加 peer NAT-A，注意 allowed-ips 添加 NAT-A 网段，相当于添加到 NAT</span><br><span class="line">wg set wg0 peer $NAT_A_PUBKEY allowed-ips 10.10.10.2&#x2F;32,192.168.0.0&#x2F;24</span><br><span class="line"># 2. 添加 peer NAT-B，注意 allowed-ips 添加 NAT-B 网段</span><br><span class="line">wg set wg0 peer $NAT_B_PUBKEY allowed-ips 10.10.10.3&#x2F;32,10.180.0.0&#x2F;16</span><br></pre></td></tr></table></figure>
 
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
+<p>至此，就全部配置完成了，NAT-A (192.168.0.0/24) 与 NAT-B (10.180.0.0/16) 两个 LAN 可以通过 GW 进行通信了。如需添加更多 NAT 网络，同样操作即可，主要就是 allowed-ips 即路由的设置。</p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>上述过程可以编写成配置文件（默认保存位置 /etc/wireguard）通过 wg-quick 命令快速运行，这里不再赘述（可参考 <a target="_blank" rel="noopener" href="https://10101.io/2018/11/10/wireguard">WireGuard 搭建和使用折腾小记</a>），各端配置文件示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># GW</span><br><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 60000</span><br><span class="line">Address &#x3D; 10.10.10.1&#x2F;24</span><br><span class="line">PrivateKey &#x3D; $GW_PRIVATE_KEY</span><br><span class="line">PostUp &#x3D; iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o $OUTBOUND_INTF -j MASQUERADE</span><br><span class="line">PostDown &#x3D; iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o $OUTBOUND_INTF -j MASQUERADE</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; $NAT_A_PUBKEY</span><br><span class="line">AllowedIPs &#x3D; 10.10.10.2&#x2F;32, 192.168.0.0&#x2F;24</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; $NAT_B_PUBKEY</span><br><span class="line">AllowedIPs &#x3D; 10.10.10.3&#x2F;32, 10.180.0.0&#x2F;16</span><br><span class="line"># NAT-A</span><br><span class="line">[Interface]</span><br><span class="line">Address &#x3D; 10.10.10.2&#x2F;24</span><br><span class="line">PrivateKey &#x3D; $NAT_A_PRIVATEKEY</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; $GW_PUBKEY</span><br><span class="line">AllowedIPs &#x3D; 10.10.10.0&#x2F;24,10.180.0.0&#x2F;16</span><br><span class="line">Endpoint &#x3D; $GW_IP:60000</span><br><span class="line">PersistentKeepalive &#x3D; 10</span><br><span class="line"># NAT-B</span><br><span class="line">[Interface]</span><br><span class="line">Address &#x3D; 10.10.10.3&#x2F;24</span><br><span class="line">PrivateKey &#x3D; $NAT_B_PRIVATEKEY</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; $GW_PUBKEY</span><br><span class="line">AllowedIPs &#x3D; 10.10.10.0&#x2F;24,192.168.0.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; $GW_IP:60000</span><br><span class="line">PersistentKeepalive &#x3D; 10</span><br></pre></td></tr></table></figure>
 
-
-
-
-  
-    <article id="post-yuque/Mysql 创建索引方法及类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Mysql%20%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E6%96%B9%E6%B3%95%E5%8F%8A%E7%B1%BB%E5%9E%8B/">Mysql 创建索引方法及类型</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Mysql%20%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E6%96%B9%E6%B3%95%E5%8F%8A%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2020-05-04T22:54:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>类型 4 种<br>1。普通索引 index<br>2。唯一索引 unique<br>3。全文索引 fulltext 不支持中文<br>4。多列值索引  index</p>
-<h3 id="1-1-新建表中添加索引"><a href="#1-1-新建表中添加索引" class="headerlink" title="1.1 新建表中添加索引"></a>1.1 新建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>index index_no(no)<br>) |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>unique index index_no(no)<br>） |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>fulltext index index_no(no) |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2<br>3<br>4<br>5<br>6<br>7 | create table t_dept(<br>no int not null primary key,<br>name varchar(20) null,<br>sex varchar(2) null,<br>info varchar(20) null,<br>key index_no_name(no,name)<br>) |<br>| — | — |</p>
-<h3 id="1-2-在已建表中添加索引"><a href="#1-2-在已建表中添加索引" class="headerlink" title="1.2 在已建表中添加索引"></a>1.2 在已建表中添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | create index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | create unique index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | create fulltext index index_name<br>on t_dept(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | create index index_name_no<br>on t_dept(name,no) |<br>| — | — |</p>
-<h3 id="1-3-以修改表的方式添加索引"><a href="#1-3-以修改表的方式添加索引" class="headerlink" title="1.3 以修改表的方式添加索引"></a>1.3 以修改表的方式添加索引</h3><p>① 普通索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name(name); |<br>| — | — |</p>
-<p>② 唯一索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add unique index index_name(name); |<br>| — | — |</p>
-<p>③ 全文索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add fulltext index_name(name); |<br>| — | — |</p>
-<p>④ 多列索引</p>
-<p>| 1<br>2 | alter table t_dept<br>add index index_name_no(name,no); |<br>| — | — |</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Mysql%20%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E6%96%B9%E6%B3%95%E5%8F%8A%E7%B1%BB%E5%9E%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/RPC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/RPC/">RPC</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/RPC/" class="archive-article-date">
-  	<time datetime="2020-05-04T16:27:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/RPC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MQ" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/MQ/">MQ</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/MQ/" class="archive-article-date">
-  	<time datetime="2020-05-04T16:27:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/MQ/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/memcache" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/memcache/">memcache</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/memcache/" class="archive-article-date">
-  	<time datetime="2020-05-04T15:40:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2020/svg/190217/1588608394667-351ac965-90f6-4e8b-b593-401a5b8d8ed7.svg">```<br>适合存储的数据<br>① 访问比较频繁的数据，安全性差的数据，丢失无所谓的数据。<br>② 数据更新，比较频繁的数据，比如用户的在线状态。<br>③ 数据的单个键值不能太大，不要超过 1Mb 数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/memcache/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/04/yuque/Redis/">Redis</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/04/yuque/Redis/" class="archive-article-date">
-  	<time datetime="2020-05-04T14:54:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br></pre></td><td class="code"><pre><span class="line">redis</span><br><span class="line">	数据类型</span><br><span class="line">		string</span><br><span class="line">			最基本类型，做简单的kv缓存</span><br><span class="line">		hash</span><br><span class="line">			类似map的结构，比如一个对象给缓存在redis里，每次读写的时候可以操作对象里的某个属性</span><br><span class="line">		list</span><br><span class="line">			有序列表，例如：微博某个大V的粉丝，就可以以list的格式放在redis里去缓存</span><br><span class="line">			通过list存储一些列表型的数据结构，类似粉丝列表了、文章的评论列表了之类的东西</span><br><span class="line">			通过lrange命令，就是从某个元素开始读取多少个元素，可以基于list实现分页查询</span><br><span class="line">			可以搞个简单的消息队列，从list头怼进去，从list尾巴那里弄出来</span><br><span class="line">		set</span><br><span class="line">			无序集合，自动去重</span><br><span class="line">			可以基于set玩儿交集、并集、差集的操作，比如交集吧，可以把两个人的粉丝列表整一个交集，看看俩人的共同好友是谁</span><br><span class="line">		sorted set</span><br><span class="line">			排序的set，去重但是可以排序</span><br><span class="line">			比如说你要是想根据时间对数据排序，那么可以写入进去的时候用某个时间作为分数，人家自动给你按照时间排序了</span><br><span class="line">	数据分布算法</span><br><span class="line">		解决把整个数据集按照分区的规则映射到多个节点的问题。即把数据划分到多个节点上，每个节点负责整体数据的一个子集</span><br><span class="line">		哈希分区</span><br><span class="line">			使用特定的数据（包括redis的键或用户ID），再根据节点数量N，使用公式：hash(key)%N计算出一个0~（N-1）值，用来决定数据映射到哪一个节点上。即哈希值对节点总数取余。余数x，表示这条数据存放在第（x+1）个节点上</span><br><span class="line">			优点</span><br><span class="line">				简单</span><br><span class="line">			缺点</span><br><span class="line">				当节点数量N变化时（扩容或者收缩），数据和节点之间的映射关系需要重新计算，这样的话，按照新的规则映射，要么之前存储的数据找不到，要么之前数据被重新映射到新的节点（导致以前存储的数据发生数据迁移）。这是难以接受的</span><br><span class="line">		一致性哈希分区</span><br><span class="line">			把所有的数据包括节点数据都放在一个哈希环上，我们除了需要计算要存储的数据的key的hash之外，还要计算节点的hash，然后在存储时，选择一个跟key的hash最接近的节点（顺时针找到第一个大于等于该哈希值的节点），存储进去</span><br><span class="line">			优点</span><br><span class="line">				加入和删除节点只影响哈希环中相邻的节点，对其他的节点无影响</span><br><span class="line">			缺点</span><br><span class="line">				加减节点，会造成哈希环中部分数据无法命中，需要手动处理或者忽略这部分数据，因此一致性哈希常用于缓存场景</span><br><span class="line">				当使用少量节点时，节点变化将大范围影响哈希环中数据映射，因此这种方式不适合少量数据节点的分布式方案</span><br><span class="line">				普通的一致性哈希分区在增加节点时需要增加一倍或减去一半节点才能保证数据和负载的均衡</span><br><span class="line">		虚拟槽分区</span><br><span class="line">			虚拟槽分区就是为了解决一致性哈希分区的不足而被创造的。虚拟槽分区巧妙地使用了哈希空间，使用分散度良好的哈希函数把所有的数据映射到一个固定范围的整数集合中，整数定义为槽（slot）。这个范围一般远远大于节点数，比如redis Cluster槽的范围是0-16383，一共16384个槽。槽是集群内数据管理和迁移的基本单位。采用大范围槽的主要目的是为了方便数据拆分和集群扩展。每个节点会负责一定数量的槽（虚拟节点），之前我们在介绍一致性哈希的时候，是将物理节点直接通过哈希运算得到其hash值，而后数据的key计算出来之后，与节点的哈希进行比较，决定存放在哪个节点中．而现在，我们用几个槽（虚拟节点）代表一个物理节点．不同槽（虚拟节点）的hash是通过不同的哈希函数计算出来的。以redis为例子，假设现在我们有5个节点，一共分配16384个槽（虚拟节点）</span><br><span class="line">		redis把数据分布到不同节点带来集群功能的限制</span><br><span class="line">			key批量操作支持有限</span><br><span class="line">				如mset，mget,目前只支持 具有相同slot值得key执行批量操作。对于映射为不同slot值得key由于执行mset,mget等操作可能存在于多个节点上因此不被支持</span><br><span class="line">			key事物操作支持有限</span><br><span class="line">				同理只支持多个key在同一个节点上的事物操作，当多个key分布在不同的节点上时无法使用事物功能</span><br><span class="line">			key作为数据分区的最小粒度</span><br><span class="line">				因此不能将一个大的键值对象如hash,list等映射到不同的节点</span><br><span class="line">			不支持多数据库空间</span><br><span class="line">				单机下的redis可以支持16个数据库，集群模式下只能使用一个数据空间，即db 0</span><br><span class="line">			复制结构只支持一层</span><br><span class="line">				从节点只能复制主节点，不支持嵌套树状复制结构</span><br><span class="line">	线程模型</span><br><span class="line">		文件事件处理器</span><br><span class="line">			Redis基于Reactor模式开发了网络事件处理器，这个处理器被称为文件事件处理器。它的组成结构为4部分：多个套接字、IO多路复用程序、文件事件分派器、事件处理器。因为文件事件分派器队列的消费是单线程的，所以Redis才叫单线程模型</span><br><span class="line">			文件事件处理器是单线程模式运行的，但是通过IO多路复用机制监听多个socket，可以实现高性能的网络通信模型，又可以跟内部其他单线程的模块进行对接，保证了redis内部的线程模型的简单性</span><br><span class="line">			多个socket可能并发的产生不同的操作，每个操作对应不同的文件事件，但是IO多路复用程序会监听多个socket，但是会将socket放入一个队列中排队，每次从队列中取出一个socket给事件分派器，事件分派器把socket给对应的事件处理器，然后一个socket的事件处理完之后，IO多路复用程序才会将队列中的下一个socket给事件分派器。文件事件分派器会根据每个socket当前产生的事件，来选择对应的事件处理器来处理</span><br><span class="line">			如果是客户端要连接redis，那么会为socket关联连接应答处理器 如果是客户端要写数据到redis，那么会为socket关联命令请求处理器</span><br><span class="line">			如果是客户端要从redis读数据，那么会为socket关联命令回复处理器</span><br><span class="line">		文件事件</span><br><span class="line">			AE_READABLE</span><br><span class="line">				当socket变得可读时（比如客户端对redis执行write操作，或者close操作），或者有新的可以应答的socket出现时（客户端对redis执行connect操作），socket就会产生一个AE_READABLE事件</span><br><span class="line">			AE_WRITABLE</span><br><span class="line">				当socket变得可写的时候（客户端对redis执行read操作），socket会产生一个AE_WRITABLE事件</span><br><span class="line">			IO多路复用程序可以同时监听AE_REABLE和AE_WRITABLE两种事件，要是一个socket同时产生了AE_READABLE和AE_WRITABLE两种事件，那么文件事件分派器优先处理AE_READABLE事件，然后才是AE_WRITABLE事件</span><br><span class="line">		客户端与redis通信的一次流程</span><br><span class="line">			在redis启动初始化的时候，redis会将连接应答处理器跟AE_READABLE事件关联起来，接着如果一个客户端跟redis发起连接，此时会产生一个AE_READABLE事件，然后由连接应答处理器来处理跟客户端建立连接，创建客户端对应的socket，同时将这个socket的AE_READABLE事件跟命令请求处理器关联起来</span><br><span class="line">			当客户端向redis发起请求的时候（不管是读请求还是写请求，都一样），首先就会在socket产生一个AE_READABLE事件，然后由对应的命令请求处理器来处理。这个命令请求处理器就会从socket中读取请求相关数据，然后进行执行和处理</span><br><span class="line">			接着redis这边准备好了给客户端的响应数据之后，就会将socket的AE_WRITABLE事件跟命令回复处理器关联起来，当客户端这边准备好读取响应数据时，就会在socket上产生一个AE_WRITABLE事件，会由对应的命令回复处理器来处理，就是将准备好的响应数据写入socket，供客户端来读取</span><br><span class="line">			命令回复处理器写完之后，就会删除这个socket的AE_WRITABLE事件和命令回复处理器的关联关系</span><br><span class="line">		为啥单线程模型效率也能那么高</span><br><span class="line">			纯内存操作</span><br><span class="line">			核心基于非阻塞IO多路复用机制</span><br><span class="line">			单线程避免了多线程的频繁上下文切换问题</span><br><span class="line">	缓存过期策略</span><br><span class="line">		定时删除</span><br><span class="line">			在设置key的过期时间的同时，创建一个定时器(timer)，让定时器在key的过期时间来临时，立即执行对key的删除操作</span><br><span class="line">			优点</span><br><span class="line">				对内存友好，保证内存被尽快释放</span><br><span class="line">			缺点</span><br><span class="line">				对CPU时间最不友好。若过期key过多时，删除过期key会占用很多的CPU时间，（当内存不紧张而CPU紧张时）会对服务器的响应时间和吞吐量造成影响</span><br><span class="line">		惰性删除</span><br><span class="line">			放任key过期不管，但是每次去数据库获取key的时候去检查是否过期，若过期，则删除，返回null.</span><br><span class="line">			优点</span><br><span class="line">				对CPU时间友好。程序只会在取key的时候对key进行过期检查，这可以保证删除过期key的操作只会在非做不可的情况下进行（如果此时还不删除的话，我们就会获取到了已经过期的key)，并且删除的目标仅限于当前处理的key</span><br><span class="line">			缺点</span><br><span class="line">				若大量的过期的key没有再次被访问，从而不会被清除，这样会占用大量内存，而且服务器不会自己去释放它们</span><br><span class="line">		定期删除</span><br><span class="line">			每隔一段时间，程序就对数据库进行一次检查，删除里面过期的key</span><br><span class="line">			优点</span><br><span class="line">				定时删除占用太多CPU时间，影响服务器的响应时间和吞吐量</span><br><span class="line">				惰性删除浪费太多内存，有内存泄漏的危险</span><br><span class="line">				定期删除就是前两种策略的折中。</span><br><span class="line">				服务器必须根据情况，合理地设置删除操作的执行时长和执行频率。</span><br><span class="line">	淘汰策略</span><br><span class="line">		noeviction</span><br><span class="line">			不删除策略, 达到最大内存限制时, 如果需要更多内存, 直接返回错误信息。 大多数写命令都会导致占用更多的内存(有极少数会例外, 如 DEL )</span><br><span class="line">		allkeys-lru</span><br><span class="line">			所有key通用; 优先删除最近最少使用(less recently used ,LRU) 的 key</span><br><span class="line">		allkeys-random</span><br><span class="line">			所有key通用; 随机删除一部分 key</span><br><span class="line">		volatile-lru</span><br><span class="line">			只限于设置了 expire 的部分; 优先删除最近最少使用(less recently used ,LRU) 的 key</span><br><span class="line">		volatile-random</span><br><span class="line">			只限于设置了 expire 的部分; 随机删除一部分 key</span><br><span class="line">		volatile-ttl</span><br><span class="line">			只限于设置了 expire 的部分; 优先删除剩余时间(time to live,TTL) 短的key</span><br><span class="line">	持久化</span><br><span class="line">		持久化意义</span><br><span class="line">			主要是做灾难恢复，数据恢复，防止数据丢失</span><br><span class="line">		RDB</span><br><span class="line">			工作原理</span><br><span class="line">				对redis中的数据执行周期性的持久化，生成redis内存中的数据的一份完整快照</span><br><span class="line">			优点</span><br><span class="line">				RDB会生成多个数据文件，每个数据文件都代表了某一个时刻中redis的数据，这种多个数据文件的方式，非常适合做冷备</span><br><span class="line">				RDB对redis对外提供的读写服务，影响非常小，可以让redis保持高性能，因为redis主进程只需要fork一个子进程，让子 进程执行磁盘IO操作来进行RDB持久化即可</span><br><span class="line">				相对于AOF持久化机制来说，直接基于RDB数据文件来重启和恢复redis进程，更加快速</span><br><span class="line">			缺点</span><br><span class="line">				如果想要在redis故障时，尽可能少的丢失数据，那么RDB没有AOF好。一般来说，RDB数据快照文件，都是每隔5分钟， 或者更长时间生成一次，这个时候就得接受一旦redis进程宕机，那么会丢失最近5分钟的数据</span><br><span class="line">				RDB每次在fork子进程来执行RDB快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒</span><br><span class="line">		AOF</span><br><span class="line">			工作原理</span><br><span class="line">				对每条写入命令作为日志，以append-only的模式写入一个日志文件中，在redis重启 的时候，可以通过回放AOF日志中的写入指令来重新构建整个数据集</span><br><span class="line">			优点</span><br><span class="line">				AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据</span><br><span class="line">				AOF日志文件以append-only模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复</span><br><span class="line">				AOF日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。因为在rewrite log的时候，会对其中的指导进行压缩，创建出一份需要恢复数据的最小日志出来。再创建新日志文件的时候，老的日志文件还是照常写入。当新的merge后的日志文件ready的时候，再交换新老日志文件即可</span><br><span class="line">				AOF日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用flushall命令清空了所有数据， 只要这个时候后台rewrite还没有发生，那么就可以立即拷贝AOF文件，将最后一条flushall命令给删了，然后再将该AOF文件放回去，就可以通过恢复机制，自动恢复所有数据</span><br><span class="line">			缺点</span><br><span class="line">				对于同一份数据来说，AOF日志文件通常比RDB数据快照文件更大</span><br><span class="line">				AOF开启后，支持的写QPS会比RDB支持的写QPS低，因为AOF一般会配置成每秒fsync一次日志文件，当然，每秒一次fsync，性能也还是很高的</span><br><span class="line">				以前AOF发生过bug，就是通过AOF记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似AOF这种较为复杂的基于命令日志&#x2F;merge&#x2F;回放的方式，比基于RDB每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有bug。不过AOF就是为了避免rewrite过程导致的bug，因此每次rewrite并不是基于旧的指令日志进行merge的，而是基于当时内存中的数据进行指令的重新构建，这样健壮性会好很多</span><br><span class="line">		RDB与AOF如何选择</span><br><span class="line">			1、不要仅仅使用RDB，因为那样会导致你丢失很多数据</span><br><span class="line">			2、也不要仅仅使用AOF，因为那样有两个问题，第一，你通过AOF做冷备，没有RDB做冷备，来的恢复速度更快; 第二，RDB每次简单粗暴生成数据快照，更加健壮，可以避免AOF这种复杂的备份和恢复机制的bug</span><br><span class="line">			3、综合使用AOF和RDB两种持久化机制，用AOF来保证数据不丢失，作为数据恢复的第一选择; 用RDB来做不同程度的冷备，在AOF文件都丢失或损坏不可用的时候，还可以使用RDB来进行快速的数据恢复</span><br><span class="line">			4、如果同时使用RDB和AOF两种持久化机制，那么在redis重启的时候，会使用AOF来重新构建数据，因为AOF中的数据更加完整</span><br><span class="line">	redis实现高并发</span><br><span class="line">		读写分离</span><br><span class="line">			一主多从，主负责写，从负责读，从节点可以进行水平扩容实现高并发</span><br><span class="line">		主从架构</span><br><span class="line">			redis replication基本原理</span><br><span class="line">				redis replication --&gt; 主从架构 --&gt; 读写分离架构 --&gt; 水平扩容支撑读高并发架构</span><br><span class="line">			redis replication核心机制</span><br><span class="line">				redis通过异步方式将数据复制到slave</span><br><span class="line">				一个master配置多个slave,slave做复制的时候，不阻塞master node正常工作，不会阻塞自己的查询操作</span><br><span class="line">				slave node用来横向扩容，做读写分离，扩容的slave node可以提供读的吞吐量</span><br><span class="line">			主从复制核心原理</span><br><span class="line">				启动一个slave node的时候，它会发送一个PSYNC命令给master node 如果是slave重连master，master仅仅会复制slave部分缺少的数据</span><br><span class="line">				如果是第一次连接，那么会触发master的full resynchronization全量同步</span><br><span class="line">				全量复制</span><br><span class="line">					master执行bgsave，在本地生成一份rdb快照文件</span><br><span class="line">					master node将rdb快照文件发送给slave node，如果rdb复制时间超过60秒（repl-timeout）,那么slave node就会认为复制失败，可以适当调大这个参数</span><br><span class="line">					master node在生成rdb时，会将所有新的写命令缓存在内存中，在salve node保存了rdb之后，再将新的写命令复制给salve node</span><br><span class="line">					client-output-buffer-limit slave 256MB 64MB 60，如果在复制期间，内存缓冲区持续消耗超过64MB，或者一次性超过256MB，那么停止复制，复制失败</span><br><span class="line">					slave node接收到rdb之后，清空自己的旧数据，然后重新加载rdb到自己的内存中，同时基于旧的数据版本对外提供服务</span><br><span class="line">					如果slave node开启了AOF，那么会立即执行BGREWRITEAOF，重写AOF</span><br><span class="line">				增量复制</span><br><span class="line">					如果全量复制过程中，master-slave网络连接断掉，那么salve重新连接master时，会触发增量复制</span><br><span class="line">					master直接从自己的backlog中获取部分丢失的数据，发送给slave node，默认backlog就是1MB</span><br><span class="line">					msater就是根据slave发送的psync中的offset来从backlog中获取数据的</span><br><span class="line">				数据同步机制</span><br><span class="line">					master和slave都维护一个offset</span><br><span class="line">						master会在自身不断累加offset，slave也会在自身不断累加offset slave每秒都会上报自己的offset给master，同时master也会保存每个slave的offset</span><br><span class="line">						通过master和slave中的offset的差异性，才能知道数据不一致的情况</span><br><span class="line">					backlog</span><br><span class="line">						master node有一个backlog，默认1MB大小 master node给slave node复制数据时，也会将数据在backlog中同步一份</span><br><span class="line">						backlog主要是用来做全量复制中断后的增量复制</span><br><span class="line">					master run id</span><br><span class="line">						info server命令，可以看到master run id 根据host+ip定位master node不靠谱，如果master node重启或者数据发生了变化，slave node应该根据run id来区分，run id 不同就做全量复制</span><br><span class="line">					psync</span><br><span class="line">						从节点使用psync从master node进行复制，psync runid offset master node会根据自身的情况返回响应信息，可能是FULLRESYNC runid offset触发全量复制，可能是CONTINUE触发增量复制</span><br><span class="line">				断点续传</span><br><span class="line">					master node会在内存中维护一个backlog，master和slave都会保存一个replica offset还有一个master id，replica offset保存在backlog中，如果master和slave连接中断，恢复网络后，slave会让master从上一次的replica offset开始继续复制，如果找不到对应的offset，那么就会执行一次full resynchronization</span><br><span class="line">	redis实现高可用</span><br><span class="line">		redis哨兵架构</span><br><span class="line">			哨兵</span><br><span class="line">				redis高可用架构，叫做故障转移，failover，也可以叫做主备切换</span><br><span class="line">				主要功能</span><br><span class="line">					集群监控，负责监控redis master和slave进程是否工作</span><br><span class="line">					消息通知，如果某个redis实例有故障，那么哨兵负责发送消息作为报警通知给管理员</span><br><span class="line">					故障转移，如果master node挂掉了，那么会自动转移到slave node上</span><br><span class="line">					配置中心，如果故障转移发生了，通知client新的master地址</span><br><span class="line">				哨兵集群</span><br><span class="line">					故障转移时，判断一个master node是宕机了，需要大部分的哨兵都同意才行，涉及到了分布式选举的问题</span><br><span class="line">					即使部分哨兵节点挂掉了，哨兵集群还是能正常工作的，因为如果一个作为高可用机制重要组成部分的故障转移系统本身是单点的，那就很坑爹了</span><br><span class="line">				核心知识</span><br><span class="line">					哨兵至少需要3个实例，来保证自己的健壮性</span><br><span class="line">					哨兵 + redis主从的部署架构，是不会保证数据零丢失的，只能保证redis集群的高可用性</span><br><span class="line">					对于哨兵 + redis主从这种复杂的部署架构，尽量在测试环境和生产环境，都进行充足的测试和演练</span><br><span class="line">				为什么哨兵集群只有2个节点无法正常工作？</span><br><span class="line">					如果哨兵集群仅仅部署了个2个哨兵实例，quorum&#x3D;1</span><br><span class="line">					master宕机，s1和s2中只要有1个哨兵认为master宕机就可以执行切换，同时s1和s2中会选举出一个哨兵来执行故障转移</span><br><span class="line">					同时这个时候，需要majority，也就是大多数哨兵都是运行的，2个哨兵的majority就是2，2个哨兵都运行着，就可以允许执行故障转移</span><br><span class="line">					但是如果整个M1和S1运行的机器宕机了，那么哨兵只有1个了，此时就没有majority来允许执行故障转移，虽然另外一台机器还有一个R1，但是故障转移不会执行</span><br><span class="line">				3节点哨兵集群</span><br><span class="line">					如果M1所在机器宕机了，那么三个哨兵还剩下2个，S2和S3可以一致认为master宕机，然后选举出一个来执行故障转移</span><br><span class="line">					同时3个哨兵的majority是2，所以还剩下的2个哨兵运行着，就可以允许执行故障转移</span><br><span class="line">			哨兵主备切换数据丢失问题</span><br><span class="line">				异步复制导致数据丢失</span><br><span class="line">					master -&gt; slave的复制是异步的，所以可能有部分数据还没复制到slave，master就宕机了，此时这些部分数据就丢失了</span><br><span class="line">				脑裂导致的数据丢失</span><br><span class="line">					脑裂：某个master所在机器突然脱离了正常的网络，跟其他slave机器不能连接，但是实际上master还运行着 此时哨兵可能就会认为master宕机了，然后开启选举，将其他slave切换成了master</span><br><span class="line">					这个时候，集群里就会有两个master，也就是所谓的脑裂</span><br><span class="line">					虽然某个slave被切换成了master，但是可能client还没来得及切换到新的master，还继续写向旧master的数据可能也丢失了 因此旧master再次恢复的时候，会被作为一个slave挂到新的master上去，自己的数据会清空，重新从新的master复制数据</span><br><span class="line">				数据丢失处理方式</span><br><span class="line">					配置参数：要求至少有1个slave，数据复制和同步的延迟不能超过10秒 min-slaves-to-write 1</span><br><span class="line">					min-slaves-max-lag 10</span><br><span class="line">					数据复制和同步的延迟都超过了10秒钟，那么这个时候，master就不会再接收任何请求了</span><br><span class="line">					减少异步复制的数据丢失</span><br><span class="line">						有了min-slaves-max-lag这个配置，就可以确保说，一旦slave复制数据和ack延时太长，就认为可能master宕机后损失的数据太多了， 那么就拒绝写请求，这样可以把master宕机时由于部分数据未同步到slave导致的数据丢失降低的可控范围内</span><br><span class="line">					减少脑裂的数据丢失</span><br><span class="line">						如果一个master出现了脑裂，跟其他slave丢了连接，那么上面两个配置可以确保说，如果不能继续给指定数量的slave发送数据， 而且slave超过10秒没有给自己ack消息，那么就直接拒绝客户端的写请求</span><br><span class="line">			哨兵底层原理</span><br><span class="line">				sdown和odown转换机制</span><br><span class="line">					sdown和odown两种失败状态 sdown是主观宕机，就一个哨兵如果自己觉得一个master宕机了，那么就是主观宕机</span><br><span class="line">					odown是客观宕机，如果quorum数量的哨兵都觉得一个master宕机了，那么就是客观宕机</span><br><span class="line">					sdown达成的条件很简单，如果一个哨兵ping一个master，超过了is-master-down-after-milliseconds指定的毫秒数之后，就主观认为master宕机</span><br><span class="line">					sdown到odown转换的条件很简单，如果一个哨兵在指定时间内，收到了quorum指定数量的其他哨兵也认为那个master是sdown了，那么就认为是odown了，客观认为master宕机</span><br><span class="line">				哨兵集群的自动发现机制</span><br><span class="line">					哨兵互相之间的发现，是通过redis的pub&#x2F;sub系统实现的，每个哨兵都会往__sentinel__:hello这个channel里发送一个消息，这时候所有其他哨兵都可以消费到这个消息，并感知到其他的哨兵的存在 每隔两秒钟，每个哨兵都会往自己监控的某个master+slaves对应的__sentinel__:hello channel里发送一个消息，内容是自己的host、ip和runid还有对这个master的监控配置</span><br><span class="line">					每个哨兵也会去监听自己监控的每个master+slaves对应的__sentinel__:hello channel，然后去感知到同样在监听这个master+slaves的其他哨兵的存在</span><br><span class="line">					每个哨兵还会跟其他哨兵交换对master的监控配置，互相进行监控配置的同步</span><br><span class="line">				slave配置的自动纠正</span><br><span class="line">					哨兵会负责自动纠正slave的一些配置，比如slave如果要成为潜在的master候选人，哨兵会确保slave在复制现有master的数据; 如果slave连接到了一个错误的master上，比如故障转移之后，那么哨兵会确保它们连接到正确的master上</span><br><span class="line">				slave-&gt;master选举算法</span><br><span class="line">					如果一个master被认为odown了，而且majority哨兵都允许了主备切换，那么某个哨兵就会执行主备切换操作，此时首先要选举一个slave来</span><br><span class="line">					考虑slave的一些信息</span><br><span class="line">						跟master断开连接的时长</span><br><span class="line">						slave优先级</span><br><span class="line">						复制offset</span><br><span class="line">						run id</span><br><span class="line">					对slave进行排序</span><br><span class="line">						按照slave优先级进行排序，slave priority越低，优先级就越高</span><br><span class="line">						）如果slave priority相同，那么看replica offset，哪个slave复制了越多的数据，offset越靠后，优先级就越高</span><br><span class="line">						如果上面两个条件都相同，那么选择一个run id比较小的那个slave</span><br><span class="line">				quorum和majority</span><br><span class="line">					每次一个哨兵要做主备切换，首先需要quorum数量的哨兵认为odown，然后选举出一个哨兵来做切换，这个哨兵还得得到majority哨兵的授权，才能正式执行切换 如果quorum &lt; majority，比如5个哨兵，majority就是3，quorum设置为2，那么就3个哨兵授权就可以执行切换</span><br><span class="line">					但是如果quorum &gt;&#x3D; majority，那么必须quorum数量的哨兵都授权，比如5个哨兵，quorum是5，那么必须5个哨兵都同意授权，才能执行切换</span><br><span class="line">				configuration epoch</span><br><span class="line">					哨兵会对一套redis master+slave进行监控，有相应的监控的配置 执行切换的那个哨兵，会从要切换到的新master（salve-&gt;master）那里得到一个configuration epoch，这就是一个version号，每次切换的version号都必须是唯一的</span><br><span class="line">					如果第一个选举出的哨兵切换失败了，那么其他哨兵，会等待failover-timeout时间，然后接替继续执行切换，此时会重新获取一个新的configuration epoch，作为新的version号</span><br><span class="line">				configuraiton传播</span><br><span class="line">					哨兵完成切换之后，会在自己本地更新生成最新的master配置，然后同步给其他的哨兵，就是通过之前说的pub&#x2F;sub消息机制 这里之前的version号就很重要了，因为各种消息都是通过一个channel去发布和监听的，所以一个哨兵完成一次新的切换之后，新的master配置是跟着新的version号的</span><br><span class="line">					其他的哨兵都是根据版本号的大小来更新自己的master配置的</span><br><span class="line">		redis cluster集群模式</span><br><span class="line">			集群架构模式</span><br><span class="line">				支撑N个redis master node，每个master node都可以挂载多个slave node</span><br><span class="line">				读写分离的架构，对于每个master来说，写就写到master，然后读就从mater对应的slave去读</span><br><span class="line">				高可用，因为每个master都有salve节点，那么如果mater挂掉，redis cluster这套机制，就会自动将某个slave切换成master</span><br><span class="line">				多master + 读写分离 + 高可用</span><br><span class="line">			与redis replication+哨兵对比</span><br><span class="line">				数据量很少，主要是承载高并发高性能的场景，比如你的缓存一般就几个G，单机足够了</span><br><span class="line">				replication，一个mater，多个slave，要几个slave跟你的要求的读吞吐量有关系，然后自己搭建一个sentinal集群，去保证redis主从架构的高可用性</span><br><span class="line">				redis cluster，主要是针对海量数据+高并发+高可用的场景，海量数据，如果你的数据量很大，那么建议就用redis cluster</span><br><span class="line">			核心原理</span><br><span class="line">				节点间的内部通信机制</span><br><span class="line">					基础通信原理</span><br><span class="line">						redis cluster节点间采取gossip协议进行通信 跟集中式不同，不是将集群元数据（节点信息，故障，等等）集中存储在某个节点上，而是互相之间不断通信，保持整个集群所有节点的数据是完整的</span><br><span class="line">						维护集群的元数据用得，集中式，一种叫做gossip</span><br><span class="line">						集中式：好处在于，元数据的更新和读取，时效性非常好，一旦元数据出现了变更，立即就更新到集中式的存储中，其他节点读取的时候立即就可以感知到; 不好在于，所有的元数据的跟新压力全部集中在一个地方，可能会导致元数据的存储有压力</span><br><span class="line">						gossip：好处在于，元数据的更新比较分散，不是集中在一个地方，更新请求会陆陆续续，打到所有节点上去更新，有一定的延时，降低了压力; 缺点，元数据更新有延时，可能导致集群的一些操作会有一些滞后</span><br><span class="line">						我们刚才做reshard，去做另外一个操作，会发现说，configuration error，达成一致</span><br><span class="line">						10000端口</span><br><span class="line">						每个节点都有一个专门用于节点间通信的端口，就是自己提供服务的端口号+10000，比如7001，那么用于节点间通信的就是17001端口</span><br><span class="line">						每隔节点每隔一段时间都会往另外几个节点发送ping消息，同时其他几点接收到ping之后返回pong</span><br><span class="line">						交换的信息</span><br><span class="line">						故障信息，节点的增加和移除，hash slot信息，等等</span><br><span class="line">					gossip协议</span><br><span class="line">						gossip协议包含多种消息，包括ping，pong，meet，fail，等等 meet: 某个节点发送meet给新加入的节点，让新节点加入集群中，然后新节点就会开始与其他节点进行通信</span><br><span class="line">						redis-trib.rb add-node</span><br><span class="line">						其实内部就是发送了一个gossip meet消息，给新加入的节点，通知那个节点去加入我们的集群</span><br><span class="line">						ping: 每个节点都会频繁给其他节点发送ping，其中包含自己的状态还有自己维护的集群元数据，互相通过ping交换元数据</span><br><span class="line">						每个节点每秒都会频繁发送ping给其他的集群，ping，频繁的互相之间交换数据，互相进行元数据的更新</span><br><span class="line">						pong: 返回ping和meet，包含自己的状态和其他信息，也可以用于信息广播和更新</span><br><span class="line">						fail: 某个节点判断另一个节点fail之后，就发送fail给其他节点，通知其他节点，指定的节点宕机了</span><br><span class="line">					ping消息深入</span><br><span class="line">						ping很频繁，而且要携带一些元数据，所以可能会加重网络负担 每个节点每秒会执行10次ping，每次会选择5个最久没有通信的其他节点</span><br><span class="line">						当然如果发现某个节点通信延时达到了cluster_node_timeout &#x2F; 2，那么立即发送ping，避免数据交换延时过长，落后的时间太长了</span><br><span class="line">						比如说，两个节点之间都10分钟没有交换数据了，那么整个集群处于严重的元数据不一致的情况，就会有问题</span><br><span class="line">						所以cluster_node_timeout可以调节，如果调节比较大，那么会降低发送的频率</span><br><span class="line">						每次ping，一个是带上自己节点的信息，还有就是带上1&#x2F;10其他节点的信息，发送出去，进行数据交换</span><br><span class="line">						至少包含3个其他节点的信息，最多包含总节点-2个其他节点的信息</span><br><span class="line">				高可用性与主备切换原理</span><br><span class="line">					判断节点宕机</span><br><span class="line">						如果一个节点认为另外一个节点宕机，那么就是pfail，主观宕机 如果多个节点都认为另外一个节点宕机了，那么就是fail，客观宕机，跟哨兵的原理几乎一样，sdown，odown</span><br><span class="line">						在cluster-node-timeout内，某个节点一直没有返回pong，那么就被认为pfail</span><br><span class="line">						如果一个节点认为某个节点pfail了，那么会在gossip ping消息中，ping给其他节点，如果超过半数的节点都认为pfail了，那么就会变成fail</span><br><span class="line">					从节点过滤</span><br><span class="line">						对宕机的master node，从其所有的slave node中，选择一个切换成master node 检查每个slave node与master node断开连接的时间，如果超过了cluster-node-timeout * cluster-slave-validity-factor，那么就没有资格切换成master</span><br><span class="line">						这个也是跟哨兵是一样的，从节点超时过滤的步骤</span><br><span class="line">					从节点选举</span><br><span class="line">						哨兵：对所有从节点进行排序，slave priority，offset，run id 每个从节点，都根据自己对master复制数据的offset，来设置一个选举时间，offset越大（复制数据越多）的从节点，选举时间越靠前，优先进行选举</span><br><span class="line">						所有的master node开始slave选举投票，给要进行选举的slave进行投票，如果大部分master node（N&#x2F;2 + 1）都投票给了某个从节点，那么选举通过，那个从节点可以切换成master</span><br><span class="line">						从节点执行主备切换，从节点切换为主节点</span><br><span class="line">					与哨兵比较</span><br><span class="line">						整个流程跟哨兵相比，非常类似，所以说，redis cluster功能强大，直接集成了replication和sentinal的功能</span><br><span class="line">	缓存带来的问题</span><br><span class="line">		缓存与数据库双写不一致</span><br><span class="line">		缓存血崩</span><br><span class="line">			描述</span><br><span class="line">				缓存层由于某些原因整体崩溃掉，导致大量请求到达后端数据库，从而导致数据库崩溃，整个系统崩溃</span><br><span class="line">			发生的原因</span><br><span class="line">				 Redis服务器宕机，所有的请求都走存储层</span><br><span class="line">				 对设置过期时间的数据，在某段时间内大量的数据同时失效。对于这种情况可以在缓存的时候加上一个随机值，这样会大幅度减少缓存在同一时间过期</span><br><span class="line">			解决方法</span><br><span class="line">				保证缓存层服务高可用性。如主从架构、Sentinel或者Redis Cluster都实现了高可用</span><br><span class="line">				降级、熔断和限流</span><br><span class="line">				 降级：服务降级是当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。</span><br><span class="line">				   限流：限流可以认为服务降级的一种，限流就是限制系统的输入和输出流量已达到保护系统的目的。一般来说系统的吞吐量是可以被测算的，为了保证系统的稳定运行，一旦达到的需要限制的阈值，就需要限制流量并采取一些措施以完成限制流量的目的。比如：延迟处理，拒绝处理，或者部分拒绝处理等等。</span><br><span class="line">				   熔断：一般是指软件系统中，由于某些原因使得服务出现了过载现象，为防止造成整个系统故障，从而采用的一种保护措施，所以很多地方把熔断亦称为过载保护。很多时候刚开始可能只是系统出现了局部的、小规模的故障，然而由于种种原因，故障影响的范围越来越大，最终导致了全局性的后果</span><br><span class="line">		缓存穿透</span><br><span class="line">			描述</span><br><span class="line">				查询一个一定不存在的数据，由于缓存是不命中时需要从数据库查询，查不到数据则不写入缓存，这将导致不存在的数据每次请求都要到数据库去查询，失去了缓存保护后端存储的意义</span><br><span class="line">			解决方法</span><br><span class="line">				 缓存空对象</span><br><span class="line">					 如果一个查询返回的数据为空，就将这个空结果进行缓存，设置5分钟的过期时间</span><br><span class="line">					 缓存空对象的存在的问题：</span><br><span class="line">					   (1) 空值做了缓存，意味着缓存层中存了更多的键，需要更多的内存空间（如果是攻击，问题更严重），比较有效的方法就是针对这类数据设置一个较短的过期时间，让其自动剔除。</span><br><span class="line">					   (2) 缓存层和存储层会有一段时间窗口的不一致，可能对业务有一定的影响。可以通过设置过期时间或者利用消息系统清除缓存中的空对象</span><br><span class="line">				布隆过滤器</span><br><span class="line">					描述</span><br><span class="line">						在访问缓存层和存储层之前，将存在的key用布隆过滤器提前保存起来，做第一层拦截。如果一个要查询的key在布隆过滤器中判断肯定不存在，则不会查询直接返回</span><br><span class="line">					基本原理及要点</span><br><span class="line">						位数组+k个独立的hash函数， 一个值通过多个哈希函数计算得到在数组中对应的位，并将该位的标识改为1。如果请求查询一个数，先通过哈希函数计算，如果得到的位存在标识有0，说明这个值肯定不存在，这样可以避免不必要的数据库查询。</span><br><span class="line">						适用：利用布隆过滤器减少磁盘IO或网络请求，因为一旦一个值必定不存在的话，就可以不用进行后续昂贵的查询操作。</span><br><span class="line">						优点：查询快，占用空间小。</span><br><span class="line">						缺点：存在误判，删除困难</span><br><span class="line">						如何减少布隆过滤器的误判：增大位数组的长度，增加哈希函数的数量</span><br><span class="line"></span><br><span class="line">		redis并发竞争问题</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/04/yuque/Redis/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Goroutine与Channel锁之外的另一种同步机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/26/yuque/Goroutine%E4%B8%8EChannel%E9%94%81%E4%B9%8B%E5%A4%96%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/">Goroutine与Channel锁之外的另一种同步机制</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/26/yuque/Goroutine%E4%B8%8EChannel%E9%94%81%E4%B9%8B%E5%A4%96%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2020-04-26T19:14:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Goroutine-与-Channel-锁之外的另一种同步机制"><a href="#Goroutine-与-Channel-锁之外的另一种同步机制" class="headerlink" title="Goroutine 与 Channel: 锁之外的另一种同步机制"></a>Goroutine 与 Channel: 锁之外的另一种同步机制</h3><p>在主流的编程语言中为了保证多线程之间共享数据安全性和一致性，都会提供一套基本的同步工具集，如锁，条件变量，原子操作等等。Go 语言标准库也毫不意外的提供了这些同步机制，使用方式也和其他语言也差不多。</p>
-<p>除了这些基本的同步手段，Go 语言还提供了一种新的同步机制: Channel，它在 Go 语言中是一个像 int, float32 等的基本类型，一个 channel 可以认为是一个能够在多个 Goroutine 之间传递某一类型的数据的管道。Go 中的 channel 无论是实现机制还是使用场景都和 Java 中的 BlockingQueue 很接近。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明channel变量</span></span><br><span class="line"><span class="keyword">var</span> syncChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)  <span class="comment">// 无缓冲channel，主要用于两个Goroutine之间建立同步点</span></span><br><span class="line"><span class="keyword">var</span> cacheChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)  <span class="comment">// 缓冲channel</span></span><br><span class="line"><span class="comment">// 向channel中写入数据</span></span><br><span class="line">syncChan &lt;- <span class="number">1</span></span><br><span class="line">cacheChan &lt;- <span class="number">1</span></span><br><span class="line"><span class="comment">// 从channel读取数据</span></span><br><span class="line"><span class="keyword">var</span> i = &lt;-syncChan</span><br><span class="line"><span class="keyword">var</span> j = &lt;-cacheChan</span><br></pre></td></tr></table></figure>
-
-<p>几乎等价于的 Java 中的操作:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TransferQueue&lt;Integer&gt; syncQueue = <span class="keyword">new</span> LinkedTransferQueue&lt;Integer&gt;();</span><br><span class="line">BlockingQueue&lt;Integer&gt; cacheQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Integer&gt;(<span class="number">10</span>);</span><br><span class="line">syncQueue.transfer(<span class="number">1</span>);</span><br><span class="line">cacheQueue.put(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> i = syncQueue.take();</span><br><span class="line"><span class="keyword">int</span> j = cacheQueu.take();</span><br></pre></td></tr></table></figure>
-
-<p>a. 与 Java 的 BlockingQueue 一样用在需要生产者消费者模型的并发环境中。</p>
-<p>b. 锁同步场景下一种替代方案。在 Go 的并发编程中有一句很经典的话：<a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html#concurrency">不要以共享内存的方式去通信，而要以通信的方式去共享内存</a>。在 Go 语言中并不鼓励用锁保护共享状态的方式在不同的 Goroutine 中分享信息(以共享内存的方式去通信)。而是鼓励通过 channel 将共享状态或共享状态的变化在各个 Goroutine 之间传递（以通信的方式去共享内存），这样同样能像用锁一样保证在同一的时间只有一个 Goroutine 访问共享状态。但这的确需要转换以前用锁做并发同步的思维方式，大家觉得那种适合自己和自己的使用场景就用哪种好了，并不能很简单、绝对地说哪种方式更好，更高效。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/26/yuque/Goroutine%E4%B8%8EChannel%E9%94%81%E4%B9%8B%E5%A4%96%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/切片数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/">切片数组</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/" class="archive-article-date">
-  	<time datetime="2020-03-25T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>数组是值拷贝<br>切片是引用传递</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.数组是多个相同类型数据的组合,一个数组一旦声明/定义了,其长度是固定的, 不能动态变化</p>
-<p>2.数组中的元素可以是任何数据类型，包括值类型和引用类型，但是不能混用。</p>
-<p>3.数组创建后，如果没有赋值，有默认值(零值)</p>
-<p>4.数组的下标是从 0 开始的</p>
-<p>5.数组下标必须在指定范围内使用，否则报 panic:数组越界，比如</p>
-<p>6.数组默认是值传递，因此值会进行拷贝。数组间不会相互影响 7.长度是数组类型的一部分，在传递函数参数时 需要考虑数组的长度</p>
-<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>1.切片的英文是 slice 2.切片是数组的一个引用，因此切片是引用类型，在进行传递时，遵守引用传递的机制。</p>
-<p>3.切片的使用和数组类似，遍历切片、访问切片的元素和求切片长度 len(slice)都一样。</p>
-<p>4.切片的长度是可以变化的，因此切片是一个可以动态变化数组。 5.通过 make 方式创建切片可以指定切片的大小和容量 6.通过 make 方式创建的切片对应的数组是由 make 底层维护，对外不可见，即只能通过 slice 去访问各个元素.<br>切片的数据类型</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer</span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>扩容</p>
-<ul>
-<li>当需要的容量超过原切片容量的两倍时，会使用需要的容量作为新容量。</li>
-<li>当原切片长度小于 1024 时，新切片的容量会直接翻倍。而当原切片的容量大于等于 1024 时，会反复地增加 25%，直到新容量超过所需要的容量。</li>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://staaldraad.github.io/2017/04/17/nat-to-nat-with-wireguard/">https://staaldraad.github.io/2017/04/17/nat-to-nat-with-wireguard/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.wireguard.com/">https://www.wireguard.com/</a></li>
 </ul>
 
       
@@ -790,7 +301,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/25/yuque/%E5%88%87%E7%89%87%E6%95%B0%E7%BB%84/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/02/15/yuque/WireGuard%20NAT-to-NAT%20%E5%AE%9E%E8%B7%B5/">展开全文 >></a>
         </p>
       
 
@@ -820,35 +331,91 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/常见算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/wireguard" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/25/yuque/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/">常见算法</a>
+      <a class="article-title" href="/2021/02/15/yuque/wireguard/">wireguard</a>
     </h1>
   
 
         
-        <a href="/2020/03/25/yuque/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-03-25T06:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
+        <a href="/2021/02/15/yuque/wireguard/" class="archive-article-date">
+  	<time datetime="2021-02-15T15:16:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1590125088066-d05512d0-944e-4e0e-9ea2-ad2a966456ee.png#align=left&display=inline&height=399&margin=%5Bobject%20Object%5D&name=image.png&originHeight=399&originWidth=746&size=163928&status=done&style=none&width=746" alt="image.png"><br>快排 1.选取基准值<code>tag</code>：选取第一个元素为基准值（<code>每次递归调用的基准值不等</code>） 2.从 0 向后查找到比 tag 大的数，否则 i++ 3.从 n 向前查找到比 tag 小的数，否则 j– 4.交换两个数 5.全部交换后此时 i==j,递归调用，继续比较<code>i</code>位置两侧位置</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方式，递归传入分割后的数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(s)&lt;=<span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[<span class="number">0</span>]</span><br><span class="line">    i:=<span class="number">0</span></span><br><span class="line">    j:=<span class="built_in">len</span>(s)<span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s[:i])</span><br><span class="line">    quicksort(s[i+<span class="number">1</span>:])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-WireGuard-的主端配置"><a href="#1-WireGuard-的主端配置" class="headerlink" title="1.WireGuard 的主端配置"></a>1.WireGuard 的主端配置</h3><p>首先我们创建一个 WireGuard 配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第二种方式，递归传入原数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quicksort</span><span class="params">(s []<span class="keyword">int</span>,start <span class="keyword">int</span>,end <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> start &gt;=end&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    tag:=s[start]</span><br><span class="line">    i:=start</span><br><span class="line">    j:=end</span><br><span class="line">    <span class="keyword">for</span> i&lt;j  &#123;</span><br><span class="line">        <span class="keyword">for</span> s[j]&gt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> s[i]&lt;tag&amp;&amp;i&lt;j &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        s[i],s[j]=s[j],s[i]<span class="comment">//交换</span></span><br><span class="line">    &#125;</span><br><span class="line">    quicksort(s,start,i<span class="number">-1</span>)</span><br><span class="line">    quicksort(s,i+<span class="number">1</span>,end)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8001</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.12&#x2F;32,172.16.12.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8002</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// QuickSort</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;math/rand&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">swap</span><span class="params">(a <span class="keyword">int</span>, b <span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> b, a</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">partition</span><span class="params">(aris []<span class="keyword">int</span>, begin <span class="keyword">int</span>, end <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	pvalue := aris[begin]</span><br><span class="line">	i := begin</span><br><span class="line">	j := begin + <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> j &lt; end &#123;</span><br><span class="line">		<span class="keyword">if</span> aris[j] &lt; pvalue &#123;</span><br><span class="line">			i++</span><br><span class="line">			aris[i], aris[j] = swap(aris[i], aris[j])</span><br><span class="line">		&#125;</span><br><span class="line">		j++</span><br><span class="line">	&#125;</span><br><span class="line">	aris[i], aris[begin] = swap(aris[i], aris[begin])</span><br><span class="line">	<span class="keyword">return</span> i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quick_sort</span><span class="params">(aris []<span class="keyword">int</span>, begin <span class="keyword">int</span>, end <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> begin+<span class="number">1</span> &lt; end &#123;</span><br><span class="line">		mid := partition(aris, begin, end)</span><br><span class="line">		quick_sort(aris, begin, mid)</span><br><span class="line">		quick_sort(aris, mid+<span class="number">1</span>, end)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rand_array</span><span class="params">(aris []<span class="keyword">int</span>, lent <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; lent; i++ &#123;</span><br><span class="line">		r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line">		aris[i] = r.Intn(<span class="number">1000</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	intas := []<span class="keyword">int</span>&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">20</span>, <span class="number">4</span>, <span class="number">77</span>, <span class="number">1</span>, <span class="number">22</span>&#125;</span><br><span class="line">	rand_array(intas, <span class="number">10</span>)</span><br><span class="line">	fmt.Println(intas)</span><br><span class="line">	quick_sort(intas, <span class="number">0</span>, <span class="number">10</span>)</span><br><span class="line">	fmt.Println(intas)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们需要创建一个网卡配置文件（此配置等价于移动客户端的 Interface 配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
 
-<p>选择排序</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    numbers := []<span class="keyword">int</span>&#123;<span class="number">6</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line">    SelectSort(numbers)</span><br><span class="line"></span><br><span class="line">    fmt.Println(numbers)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SelectSort</span><span class="params">(values []<span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    length := <span class="built_in">len</span>(values)</span><br><span class="line">    <span class="keyword">if</span> length &lt;= <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; length; i++ &#123;</span><br><span class="line">        min := i <span class="comment">// 初始的最小值位置从0开始，依次向右</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从i右侧的所有元素中找出当前最小值所在的下标</span></span><br><span class="line">        <span class="keyword">for</span> j := length - <span class="number">1</span>; j &gt; i; j-- &#123;</span><br><span class="line">            <span class="keyword">if</span> values[j] &lt; values[min] &#123;</span><br><span class="line">                min = j</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//fmt.Printf(&quot;i:%d min:%d\n&quot;, i, min)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 把每次找出来的最小值与之前的最小值做交换</span></span><br><span class="line">        values[i], values[min] = values[min], values[i]</span><br><span class="line"></span><br><span class="line">        <span class="comment">//fmt.Println(values)</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.11</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
+<p>接着我们需要创建一个网卡路由文件（由于对方存在 172.16.12.0/24 这个 IP 地址段的前提下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.12.0&#x2F;24 via 172.16.1.12 dev wg0</span><br></pre></td></tr></table></figure>
+
+<p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-WireGuard-的对端配置"><a href="#2-WireGuard-的对端配置" class="headerlink" title="2.WireGuard 的对端配置"></a>2.WireGuard 的对端配置</h3><p>在对端设备，我们依然需要创建一个 WireGuard 配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32,172.16.11.0&#x2F;24</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001</span><br><span class="line">PersistentKeepalive &#x3D; 25</span><br></pre></td></tr></table></figure>
+
+<p>然后我们需要创建一个网卡配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;wg0</span><br><span class="line">TYPE&#x3D;wireguard</span><br><span class="line">IPADDR&#x3D;172.16.1.12</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NAME&#x3D;wg0</span><br><span class="line">ZONE&#x3D;public</span><br></pre></td></tr></table></figure>
+
+<p>接着我们需要创建一个网卡路由文件（假设对方存在 172.16.11.0/24 这个 IP 地址段的前提下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;route-wg0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">172.16.11.0&#x2F;24 via 172.16.1.11 dev wg0</span><br></pre></td></tr></table></figure>
+
+<p>最后我们需要允许本机的 NAT 转换，并允许系统进行 IPV4 转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-masquerade --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">sed -i &#39;&#x2F;net.ipv4.ip_forward&#x2F;d&#39; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">echo &quot;net.ipv4.ip_forward&#x3D;1&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-WireGuard-的自动启动"><a href="#3-WireGuard-的自动启动" class="headerlink" title="3.WireGuard 的自动启动"></a>3.WireGuard 的自动启动</h3><p>第一种方案你需要编辑并添加开机启动项（手动模式推荐）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip link add dev wg0 type wireguard</span><br><span class="line">wg setconf wg0 &#x2F;etc&#x2F;wireguard&#x2F;wg0.conf</span><br><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+
+<p>注意 CentOS7 默认此文件没有执行权限，你需要赋予执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x &#x2F;etc&#x2F;rc.local</span><br></pre></td></tr></table></figure>
+
+<p>做完操作后你可以使用开机启动项的三条命令直接启用 WireGuard 进程<br>第二种方案则是需要在 Interface 里写入以下信息（注意替换 eth0 为你的互联网出口网卡，并且如果使用 wg-quick 则不需要本例 PostUp 和 PostDown 两个 iptables 命令）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
+<p>注意这样启动后网卡本身是没有防火墙区域的，你需要手动绑定一个区域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;work --add-interface&#x3D;wg0 --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>然后设置 systemd 自动启动即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@wg0</span><br><span class="line">systemctl start wg-quick@wg0</span><br></pre></td></tr></table></figure>
+
+<h2 id="WireGuard-配置说明"><a href="#WireGuard-配置说明" class="headerlink" title="WireGuard 配置说明"></a>WireGuard 配置说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">ListenPort &#x3D; 8002  #本机监听 WireGuard 端口</span><br><span class="line">PrivateKey &#x3D; 填写本机的 privatekey 内容  #本机加密私钥</span><br><span class="line">DNS &#x3D; 1.1.1.1  #强制本机使用 DNS 服务器</span><br><span class="line">MTU &#x3D; 1300  #强制本机使用指定 MTU 值</span><br><span class="line">#Table &#x3D; 100 #强制本机将注入系统的路由的 table 指定为 100 ( 系统默认为 255 和 254 )</span><br><span class="line">#PostUp &#x3D; ip rule add from 10.10.1.0&#x2F;24 table 100 ; ip rule add from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">#PreDown &#x3D; ip rule delete from 10.10.1.0&#x2F;24 table 100 ; ip rule delete from 10.10.2.0&#x2F;24 table 100</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写对端的 publickey 内容  #本机加密的对端公钥（加密后数据仅对端可以解密）</span><br><span class="line">AllowedIPs &#x3D; 172.16.1.11&#x2F;32  #本机允许的对端设备的 IP 地址段，其实就是在本机中这个虚拟网卡对端都有哪些设备 IP 地址（多 peer 不可重复）</span><br><span class="line">Endpoint &#x3D; another.domain.name:8001  #对端 WireGuard 的外部 IP（可以有一侧的 IP 地址是虚假的公网 IP）</span><br><span class="line">PersistentKeepalive &#x3D; 25   #当会话存在一端 IP 地址为 NAT 地址或虚假公网 IP 地址时，由该方阶段性每 25 秒发送 keepalive 报文保持会话的可用性，防止被设备终止。</span><br></pre></td></tr></table></figure>
+
+<p>在上方基础上，额外要注意的是<br>1、如果你存在多个 [Peer] ，则在下面直接增加一个新的 [Peer] 栏目<br>2、如果多个 Peer 存在不同的 IP，请不要让 AllowedIPs 存在重叠的 IP 地址段（比如配置多个相同/24 只有一个生效）<br>3、Endpoint 既支持以域名的方式访问，也支持以 IP 的方式访问。<br>4、会话链接的建立只要保证两端数据在一台设备上成功协商，即使有一端 IP 地址后期变更过也不会影响 VPN 的稳定性。<br>5、使用命令 wg 可以看到当前服务的运行情况。<br>6、如果你是本来打算连服务器的移动端，则在配置中你需要将移动端的 “AllowedIPs =” 补写一条内容 0.0.0.0/0,::0 以允许所有流量<br>7、前面标注 # 的三条内容，作为 iproute2 的使用方式，通过指定路由条目的 table 与 ip rule 联动控制策略流量转发。<br>8、PreUp，PostUp，PreDown，PostDown 这四个命令参数，是作为 wg-quick 快速设置/删除接口之前/之后由 bash（1）执行的四条命令，常用于配置自定义 DNS 或防火墙规则。 特殊字符串 ％i 作为变量替代所控制的 INTERFACE 配置名。 每个命令参数都支持多条命令，参数内的多条命令将按前后顺序依次执行。</p>
+<h2 id="WireGuard-的快速启动配置文件"><a href="#WireGuard-的快速启动配置文件" class="headerlink" title="WireGuard 的快速启动配置文件"></a>WireGuard 的快速启动配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;wireguard&#x2F;myserver.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">Address &#x3D; 172.16.11.0&#x2F;24</span><br><span class="line">#PostUp &#x3D; iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">#PostDown &#x3D; iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">ListenPort &#x3D; 8000</span><br><span class="line">PrivateKey &#x3D; 填写一份 privatekey 内容</span><br><span class="line">[Peer]</span><br><span class="line">PublicKey &#x3D; 填写一份 publicKey 内容</span><br><span class="line">AllowedIPs &#x3D; 172.16.11.1&#x2F;32</span><br></pre></td></tr></table></figure>
+
+<p>此配置完毕后 配置文件名为 myserver ，可以直接输入 wg-quick up myserver 启动进程<br>（如果启动失败可以先 down 一次再 up 一次）<br>（如果你是 iptables 则使用两条 iptables 命令，去掉前面的＃并记得修改 eth0 为当前系统公网网卡即可）<br>然后将新设备绑定到指定区域中，并配置好地址转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;external --add-interface&#x3D;myserver --permanent</span><br><span class="line">firewall-cmd --zone&#x3D;external --add-masquerade --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>最后一样配置开机启动即可（注意命令加入的位置，在此将标准配置版的 WireGuard 进程予以注释，如果同时使用请删掉 # 字符。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager-wait-online.service</span><br><span class="line">sed -i &#39;s&#x2F;--timeout&#x3D;30&#x2F;--timeout&#x3D;10&#x2F;g&#39; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;NetworkManager-wait-online.service &amp;&amp; systemctl daemon-reload</span><br><span class="line">systemctl enable wg-quick@myserver</span><br><span class="line">systemctl start wg-quick@myserver</span><br></pre></td></tr></table></figure>
 
       
 
@@ -861,7 +428,847 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/25/yuque/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/02/15/yuque/wireguard/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/openvpn clinet" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/13/yuque/openvpn%20clinet/">openvpn clinet</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/13/yuque/openvpn%20clinet/" class="archive-article-date">
+  	<time datetime="2021-02-13T17:36:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>完成以下操作，配置 Linux 客户端。</p>
+<ol>
+<li>执行以下命令安装 OpenVPN 客户端。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y openvpn</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>将步骤三中下载的证书解压拷贝到/etc/openvpn/conf/目录。</li>
+<li>执行以下命令启动 Openvpn 客户端软件。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openvpn --config &#x2F;etc&#x2F;openvpn&#x2F;conf&#x2F;config.ovpn --daemo</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/yuque/openvpn%20clinet/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/SSH 命令的三种代理功能（-L!-R!-D）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">SSH 命令的三种代理功能（-L/-R/-D）</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2021-02-13T10:11:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ssh 命令除了登陆外还有三种代理功能：</p>
+<ul>
+<li>正向代理（-L）：相当于 iptable 的 port forwarding</li>
+<li>反向代理（-R）：相当于 frp 或者 ngrok</li>
+<li>socks5 代理（-D）：相当于 ss/ssr</li>
+</ul>
+<p>如要长期高效的服务，应使用对应的专用软件。如没法安装软件，比如当你处在限制环境下想要访问下某个不可达到的目标，或者某个临时需求，那么 ssh 就是你的兜底方案。</p>
+<p><strong>正向代理：</strong><br>所谓“正向代理”就是在本地启动端口，把本地端口数据转发到远端。<br>用法 1：远程端口映射到其他机器<br>HostB 上启动一个 PortB 端口，映射到 HostC:PortC 上，在 HostB 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostB$ ssh -L 0.0.0.0:PortB:HostC:PortC user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostB:PortB 相当于访问 HostC:PortC（和 iptable 的 port-forwarding 类似）。<br>用法 2：本地端口通过跳板映射到其他机器<br>HostA 上启动一个 PortA 端口，通过 HostB 转发到 HostC:PortC 上，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>这时访问 HostA:PortA 相当于访问 HostC:PortC。<br>两种用法的区别是，第一种用法本地到跳板机 HostB 的数据是明文的，而第二种用法一般本地就是 HostA，访问本地的 PortA，数据被 ssh 加密传输给 HostB 又转发给 HostC:PortC。<br><strong>反向代理：</strong><br>所谓“反向代理”就是让远端启动端口，把远端端口数据转发到本地。<br>HostA 将自己可以访问的 HostB:PortB 暴露给外网服务器 HostC:PortC，在 HostA 上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -R HostC:PortC:HostB:PortB  user@HostC</span><br></pre></td></tr></table></figure>
+
+<p>那么链接 HostC:PortC 就相当于链接 HostB:PortB。使用时需修改 HostC 的 /etc/ssh/sshd_config，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
+
+<p>相当于内网穿透，比如 HostA 和 HostB 是同一个内网下的两台可以互相访问的机器，HostC 是外网跳板机，HostC 不能访问 HostA，但是 HostA 可以访问 HostC。<br>那么通过在内网 HostA 上运行 <code>ssh -R</code> 告诉 HostC，创建 PortC 端口监听，把该端口所有数据转发给我（HostA），我会再转发给同一个内网下的 HostB:PortB。<br>同内网下的 HostA/HostB 也可以是同一台机器，换句话说就是<strong>内网 HostA 把自己可以访问的端口暴露给了外网 HostC。</strong><br>按照前文《<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57477087">韦易笑：内网穿透：在公网访问你家的 NAS</a>》中，相当于再 HostA 上启动了 frpc，而再 HostC 上启动了 frps。</p>
+<p><strong>本地 socks5 代理</strong><br>在 HostA 的本地 1080 端口启动一个 socks5 服务，通过本地 socks5 代理的数据会通过 ssh 链接先发送给 HostB，再从 HostB 转发送给远程主机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HostA$ ssh -D localhost:1080  HostB</span><br></pre></td></tr></table></figure>
+
+<p>那么在 HostA 上面，浏览器配置 socks5 代理为 127.0.0.1:1080，看网页时就能把数据通过 HostB 代理出去，类似 ss/ssr 版本，只不过用 ssh 来实现。</p>
+<p><strong>使用优化</strong><br>为了更好用一点，ssh 后面还可以加上：<code>-CqTnN</code> 参数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -CqTnN -L 0.0.0.0:PortA:HostC:PortC  user@HostB</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>-C</code> 为压缩数据，<code>-q</code> 安静模式，<code>-T</code> 禁止远程分配终端，<code>-n</code> 关闭标准输入，<code>-N</code> 不执行远程命令。此外视需要还可以增加 <code>-f</code> 参数，把 ssh 放到后台运行。<br>这些 ssh 代理没有短线重连功能，链接断了命令就退出了，所以需要些脚本监控重启，或者使用 autossh 之类的工具保持链接。<br><strong>功能对比</strong><br>正向代理（-L）的第一种用法可以用 iptable 的 port-forwarding 模拟，iptable 性能更好，但是需要 root 权限，ssh -L 性能不好，但是正向代理花样更多些。反向代理（-R）一般就作为没有安装 frp/ngrok/shootback 时候的一种代替，但是数据传输的性能和稳定性当然 frp 这些专用软件更好。<br>socks5 代理（-D）其实是可以代替 ss/ssr 的，区别和上面类似。所以要长久使用，推荐安装对应软件，临时用一下 ssh 挺顺手。</p>
+<p>–<br>补充下 iptable 的 <code>port-forwarding</code> 怎么设置，十分管用的功能，两个函数即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#! &#x2F;bin&#x2F;sh</span><br><span class="line"># create forward rule by source interface</span><br><span class="line"># http:&#x2F;&#x2F;serverfault.com&#x2F;questions&#x2F;532569&#x2F;how-to-do-port-forwarding-redirecting-on-debian</span><br><span class="line">PortForward1() &#123;</span><br><span class="line">    local IN_IF&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -A PREROUTING -t nat -i $IN_IF -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -A FORWARD -p tcp -d $OUT_IP --dport $OUT_PORT -j ACCEPT</span><br><span class="line">    $IPTBL -A POSTROUTING -t nat -j MASQUERADE</span><br><span class="line">&#125;</span><br><span class="line"># create forward rule by source ip</span><br><span class="line"># http:&#x2F;&#x2F;blog.csdn.net&#x2F;zzhongcy&#x2F;article&#x2F;details&#x2F;42738285</span><br><span class="line">ForwardPort2() &#123;</span><br><span class="line">    local IN_IP&#x3D;$1</span><br><span class="line">    local IN_PORT&#x3D;$2</span><br><span class="line">    local OUT_IP&#x3D;$3</span><br><span class="line">    local OUT_PORT&#x3D;$4</span><br><span class="line">    local IPTBL&#x3D;&quot;&#x2F;sbin&#x2F;iptables&quot;</span><br><span class="line">    echo &quot;1&quot; &gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward</span><br><span class="line">    $IPTBL -t nat -A PREROUTING --dst $IN_IP -p tcp --dport $IN_PORT -j DNAT --to-destination $&#123;OUT_IP&#125;:$&#123;OUT_PORT&#125;</span><br><span class="line">    $IPTBL -t nat -A POSTROUTING --dst $OUT_IP -p tcp --dport $OUT_PORT -j SNAT --to-source $IN_IP</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个函数是按照网卡名称设置转发：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward1 eth1 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>这时，本地 eth1 网卡的 8765 端口就会被转发给 202.115.8.2 的 8765 端口。<br>第二个函数是按照本机的 ip 地址，比如本机是 192.168.1.2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PortForward2 192.168.1.2 8765 202.115.8.2 8765</span><br></pre></td></tr></table></figure>
+
+<p>那么任何访问本机 192.168.1.2 这个地址 8765 端口，都会被转发到 202.115.8.2:8765<br>这个 iptable 的 <code>port forwarding</code> 是内核层运行的，性能极好，只不过每次重启都需要重新设置下。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/yuque/SSH%20%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD%EF%BC%88-L!-R!-D%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/整蛊小程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">整蛊小程序</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="archive-article-date">
+  	<time datetime="2021-01-26T12:27:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="中午-12-点以后才能发作"><a href="#中午-12-点以后才能发作" class="headerlink" title="中午 12 点以后才能发作"></a>中午 12 点以后才能发作</h3><h2 id="Mac-版本"><a href="#Mac-版本" class="headerlink" title="Mac 版本"></a>Mac 版本</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1612456252512-9464128e-baa8-4e90-982d-40f9ac06b5d5.png#height=182&id=G4fXp&margin=%5Bobject%20Object%5D&name=image.png&originHeight=364&originWidth=318&originalType=binary%E2%88%B6=1&size=46979&status=done&style=none&width=159" alt="image.png"><br>打开 终端 输入下面命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 国外</span></span><br><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/zy84338719/-static/main/app.sh )</span>&quot;</span></span><br><span class="line"><span class="comment"># 国内</span></span><br><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://demo-1251965636.cos.ap-beijing.myqcloud.com/happy/app.sh )</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">ps -ax |grep happy</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 6663 ttys001    0:00.00 happy</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="built_in">kill</span> -9 6663</span><br></pre></td></tr></table></figure>
+
+<p>源代码<br><a target="_blank" rel="noopener" href="https://github.com/zy84338719/golang-daily/tree/master/happy">https://github.com/zy84338719/golang-daily/tree/master/happy</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/26/yuque/%E6%95%B4%E8%9B%8A%E5%B0%8F%E7%A8%8B%E5%BA%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/python 日常办公" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">python 日常办公</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/" class="archive-article-date">
+  	<time datetime="2021-01-17T12:50:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://www.yuque.com/yichu/python">https://www.yuque.com/yichu/python</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/17/yuque/python%20%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go Mod 终极入门指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">Go Mod 终极入门指南</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2021-01-16T19:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>go modules 是 go 官方包管理方案。<br>go 1.14 已经发布，正式推荐 go modules 可用于生产环境。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583056526255-11406b86-8b63-474a-a46e-1c41a469a63d.png#align=left&display=inline&height=539&margin=%5Bobject%20Object%5D&originHeight=539&originWidth=1027&status=done&style=none&width=1027"></p>
+<p>今天这篇文章，来介绍 go modules</p>
+<h2 id="什么是-go-modules"><a href="#什么是-go-modules" class="headerlink" title="什么是 go modules"></a>什么是 go modules</h2><p>go modules 是 Go 语言的依赖解决方案，发布于 go 1.11，成长为 go 1.12，丰富于 go 1.13，正式于 go1.14 推荐在生产环境上使用。</p>
+<p>go modules 目前集成在 go 的工具链中，只要安装了 go， 自然而然就可以使用 go modules 了，而 go modules 的出现也解决了在 go 1.11 前的几个常见争议问题：</p>
+<ol>
+<li>go 语言长久以来的依赖管理问题</li>
+<li>淘汰现在的 GOPATH 使用模式</li>
+<li>统一社区中的其他依赖管理工具（提供了迁移功能）</li>
+</ol>
+<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p>go 1.11 前使用 GOPATH</p>
+<h3 id="GOPATH-是什么"><a href="#GOPATH-是什么" class="headerlink" title="GOPATH 是什么"></a>GOPATH 是什么</h3><p>使用如下命令查看<br>go env</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">GO111MODULE&#x3D;&quot;on&quot;</span><br><span class="line">GOARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOBIN&#x3D;&quot;&quot;</span><br><span class="line">GOCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Caches&#x2F;go-build&quot;</span><br><span class="line">GOENV&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;Library&#x2F;Application Support&#x2F;go&#x2F;env&quot;</span><br><span class="line">GOEXE&#x3D;&quot;&quot;</span><br><span class="line">GOFLAGS&#x3D;&quot;&quot;</span><br><span class="line">GOHOSTARCH&#x3D;&quot;amd64&quot;</span><br><span class="line">GOHOSTOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOINSECURE&#x3D;&quot;&quot;</span><br><span class="line">GOMODCACHE&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&#x2F;pkg&#x2F;mod&quot;</span><br><span class="line">GONOPROXY&#x3D;&quot;&quot;</span><br><span class="line">GONOSUMDB&#x3D;&quot;&quot;</span><br><span class="line">GOOS&#x3D;&quot;darwin&quot;</span><br><span class="line">GOPATH&#x3D;&quot;&#x2F;Users&#x2F;zhangyi&#x2F;go&quot;</span><br><span class="line">GOPRIVATE&#x3D;&quot;&quot;</span><br><span class="line">GOPROXY&#x3D;&quot;https:&#x2F;&#x2F;goproxy.cn,direct&quot;</span><br><span class="line">GOROOT&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&quot;</span><br><span class="line">GOSUMDB&#x3D;&quot;sum.golang.org&quot;</span><br><span class="line">GOTMPDIR&#x3D;&quot;&quot;</span><br><span class="line">GOTOOLDIR&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;go&#x2F;1.15.5&#x2F;libexec&#x2F;pkg&#x2F;tool&#x2F;darwin_amd64&quot;</span><br><span class="line">GCCGO&#x3D;&quot;gccgo&quot;</span><br><span class="line">AR&#x3D;&quot;ar&quot;</span><br><span class="line">CC&#x3D;&quot;clang&quot;</span><br><span class="line">CXX&#x3D;&quot;clang++&quot;</span><br><span class="line">CGO_ENABLED&#x3D;&quot;1&quot;</span><br><span class="line">GOMOD&#x3D;&quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">CGO_CFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_CPPFLAGS&#x3D;&quot;&quot;</span><br><span class="line">CGO_CXXFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_FFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">CGO_LDFLAGS&#x3D;&quot;-g -O2&quot;</span><br><span class="line">PKG_CONFIG&#x3D;&quot;pkg-config&quot;</span><br><span class="line">GOGCCFLAGS&#x3D;&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length&#x3D;0 -fdebug-prefix-map&#x3D;&#x2F;var&#x2F;folders&#x2F;mt&#x2F;w0md4fbn74xggzrf18zb1v_h0000gn&#x2F;T&#x2F;go-build126588908&#x3D;&#x2F;tmp&#x2F;go-build -gno-record-gcc-switches -fno-common&quot;</span><br></pre></td></tr></table></figure>
+
+<p>GOPATH 下包含了三个子目录</p>
+<ul>
+<li>bin     存放所有编译生成的二进制文件</li>
+<li>pkg     存放预编译的目标文件，以加快程序的后续编译速度</li>
+<li>src       存入项目代码</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span></span><br><span class="line">❯ ls</span><br><span class="line">bin pkg</span><br></pre></td></tr></table></figure>
+
+<p>因此在 GOPATH 模式下，我们需要将应用代码存放在固定的 `` <code>go get -u -v 下载到</code> <code>GOPATH</code> 下。</p>
+<h3 id="为什么要弃用-GOPATH"><a href="#为什么要弃用-GOPATH" class="headerlink" title="为什么要弃用 GOPATH"></a>为什么要弃用 GOPATH</h3><p>主要原因：</p>
+<ul>
+<li>GOPATH 模式没有版本控制的概念，具有致命的缺陷，至少会有以下问题<ul>
+<li>在执行 go get 时，你无法传达任何的版本信息，也就是说你无法知道自己当前更新的哪一个版本，也无法拉取自己所期望的版本</li>
+<li>在运行 go 应用时，你无法保证其他人与你所期望依赖的第三方库是相同的版本，也就是说在项目依赖库的管理上，你无法保证所有人的依赖版本一致。</li>
+<li>你没办法处理 v1,v2,v3 等不同版本的引用问题，因为 GOPATH 下导入的路径都是一样的</li>
+</ul>
+</li>
+<li>GO 语言官方从 go 1.11 起开始推进 go modules</li>
+</ul>
+<h3 id="GOPATH-同期其他方案"><a href="#GOPATH-同期其他方案" class="headerlink" title="GOPATH 同期其他方案"></a>GOPATH 同期其他方案</h3><p>go 1 在 2012 年 03 月 28 号发布<br>go 1.11 是在 2018 年 08 月 25 号才正式发布<br>在这个空档时间内，并没有 go modules 这一个东西，早期还好说，因为刚发布，使用的人不多，所以没有明显暴露，但是后期 go 语言使用的人越来越多了，那怎么办？</p>
+<p>这时候社区涌现了大量的依赖解决方案，百花齐放；其中有名的有</p>
+<ul>
+<li>vendor</li>
+<li>dep</li>
+</ul>
+<p>现在已经退出主流。</p>
+<h2 id="go-modules-使用"><a href="#go-modules-使用" class="headerlink" title="go modules 使用"></a>go modules 使用</h2><p>在初步了解了 go modules 有历史后，我们正式进入到 go modules 的使用介绍，首先我们将从头开始一个 go modules 项目（原则上所创建的目录应试不要放在 GOPATH 中）</p>
+<h3 id="go-mod-常用命令"><a href="#go-mod-常用命令" class="headerlink" title="go mod 常用命令"></a>go mod 常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go mod init</td>
+<td>生成  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod download</td>
+<td>下载 go.mod  中的旨的依赖</td>
+</tr>
+<tr>
+<td>go mod tidy</td>
+<td>整理现在的依赖</td>
+</tr>
+<tr>
+<td>go mod graph</td>
+<td>查看现在的依赖结构</td>
+</tr>
+<tr>
+<td>go mod edit</td>
+<td>编辑  go.mod  文件</td>
+</tr>
+<tr>
+<td>go mod vendor</td>
+<td>导出项目所有的依赖到  vendor  目录</td>
+</tr>
+<tr>
+<td>go mod verify</td>
+<td>校验一个模块是否被篡改过</td>
+</tr>
+<tr>
+<td>go mod why</td>
+<td>查看为什么需要依赖某模块</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>在 go modules 中有如下常用环境变量，我们可以通过 go env 来查看，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">GO111MODULE=<span class="string">&quot;on&quot;</span></span><br><span class="line">GOARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOBIN=<span class="string">&quot;&quot;</span></span><br><span class="line">GOCACHE=<span class="string">&quot;/Users/zhangyi/Library/Caches/go-build&quot;</span></span><br><span class="line">GOENV=<span class="string">&quot;/Users/zhangyi/Library/Application Support/go/env&quot;</span></span><br><span class="line">GOEXE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">GOHOSTARCH=<span class="string">&quot;amd64&quot;</span></span><br><span class="line">GOHOSTOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOINSECURE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOMODCACHE=<span class="string">&quot;/Users/zhangyi/go/pkg/mod&quot;</span></span><br><span class="line">GONOPROXY=<span class="string">&quot;&quot;</span></span><br><span class="line">GONOSUMDB=<span class="string">&quot;&quot;</span></span><br><span class="line">GOOS=<span class="string">&quot;darwin&quot;</span></span><br><span class="line">GOPATH=<span class="string">&quot;/Users/zhangyi/go&quot;</span></span><br><span class="line">GOPRIVATE=<span class="string">&quot;&quot;</span></span><br><span class="line">GOPROXY=<span class="string">&quot;https://goproxy.cn,direct&quot;</span></span><br><span class="line">GOROOT=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec&quot;</span></span><br><span class="line">GOSUMDB=<span class="string">&quot;sum.golang.org&quot;</span></span><br><span class="line">GOTMPDIR=<span class="string">&quot;&quot;</span></span><br><span class="line">GOTOOLDIR=<span class="string">&quot;/usr/local/Cellar/go/1.15.5/libexec/pkg/tool/darwin_amd64&quot;</span></span><br><span class="line">GCCGO=<span class="string">&quot;gccgo&quot;</span></span><br><span class="line">AR=<span class="string">&quot;ar&quot;</span></span><br><span class="line">CC=<span class="string">&quot;clang&quot;</span></span><br><span class="line">CXX=<span class="string">&quot;clang++&quot;</span></span><br><span class="line">CGO_ENABLED=<span class="string">&quot;1&quot;</span></span><br><span class="line">GOMOD=<span class="string">&quot;/dev/null&quot;</span></span><br><span class="line">CGO_CFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_CPPFLAGS=<span class="string">&quot;&quot;</span></span><br><span class="line">CGO_CXXFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_FFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">CGO_LDFLAGS=<span class="string">&quot;-g -O2&quot;</span></span><br><span class="line">PKG_CONFIG=<span class="string">&quot;pkg-config&quot;</span></span><br><span class="line">GOGCCFLAGS=<span class="string">&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/mt/w0md4fbn74xggzrf18zb1v_h0000gn/T/go-build583788123=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">每个命令 设置的时候 可以 用 go env -w </a></p>
+<h4 id="GO111MODULE"><a href="#GO111MODULE" class="headerlink" title="GO111MODULE"></a>GO111MODULE</h4><p>作为 go modules 功能的开关，其允许设置以下参数：</p>
+<ul>
+<li>auto 只要项目包含了 go.mod 文件就自动启用 go modules<ul>
+<li>目前在 1.11~1.14 中仍然是默认值</li>
+</ul>
+</li>
+<li>on   启用 go modules</li>
+<li>off   禁用 go modules</li>
+</ul>
+<h4 id="GOPROXY"><a href="#GOPROXY" class="headerlink" title="GOPROXY"></a>GOPROXY</h4><p>用于设置 go 模块代理，作用用于使 go 在后续拉取模块版本时能够脱离传统的 VCS 方式，直接通过镜像来快速拉取。</p>
+<p>GOPROXY 的默认值<br><a href="">
+</a></p>
+<p>这有一个严重问题，就是在国内无法访问 <a target="_blank" rel="noopener" href="https://proxy.golang.org/">https://proxy.golang.org</a><br>，因此这会直接卡住你的第一步，所以你必须在开启 go modules 时，指定 GOPROXY<br><a href="">
+</a></p>
+<p>GOPROXY 的值是一个以英文逗号来分割的列表，可以设置多个值；如果你不想使用，也可以设置为 <code>off</code> ，这会禁用 go 在后续操作中使用任何 go 模块代理</p>
+<p>direct 是什么？<br>上面的设置中，列表中有个 direct 标识，它有什么作用呢？<br>实际上，direct 是一个特殊的标识符，用于指示 go 回源到模块版本的源地址去抓取（比如 github 等），场景如下：</p>
+<ol>
+<li>当值列表中上一个 go 模块代理返回 404/410 时，</li>
+<li>go 自动尝试列表中下一个，</li>
+<li>遇到 direct 时回源（也就是回到源地址去抓取），</li>
+<li>而遇到 EOF 时终止并抛出类似“invalid version: unknown revision…”的错误。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/106947/1583064116238-1d06dc6a-a478-4f75-825f-59d1495d5a85.png#align=left&display=inline&height=334&margin=%5Bobject%20Object%5D&originHeight=334&originWidth=760&status=done&style=none&width=760"></p>
+<h3 id="GOSUMDB"><a href="#GOSUMDB" class="headerlink" title="GOSUMDB"></a>GOSUMDB</h3><p>用于在拉取模块版本时（无论是从源站还是通过 go modules proxy）保证拉取到的模块的数据未经过篡改，若发布不一致，也就是可能存在篡改</p>
+<p>GOSUMDB 默认值</p>
+<p><a href="">
+</a></p>
+<p>同样， 在国内是无法访问的，但是 GOSUMDB 可以这被 GOPROXY 所代理（详见：Proxying a Checksum Database）</p>
+<p>因此我们可以通过设置 GOPROXY 来解决，而先前我们所设置的模块代理 goproxy.cn 就能支持代理 sum.golang.org，所以，这一个问题在设置 GOPROXY 后，就不需要关心了</p>
+<p>另外若对 GOSUMDB 有自定义需求，其支持中如下格式：</p>
+<ul>
+<li>格式 1: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt;</code></li>
+<li>格式 2: <code>&lt;SUMDB_NAME&gt;+&lt;PUBLIC_KEY&gt; &lt;SUMDB_URL&gt;</code></li>
+</ul>
+<p>同样，也可以设置为 <code>off</code> ，关闭 go 后续操作中校验模块版本功能。</p>
+<h4 id="GONOPROXY-GONOSUMDB-GOPRIVATE"><a href="#GONOPROXY-GONOSUMDB-GOPRIVATE" class="headerlink" title="GONOPROXY/GONOSUMDB/GOPRIVATE"></a>GONOPROXY/GONOSUMDB/GOPRIVATE</h4><p>针对于私有模块的拉取场景<br>一般建议直接设置 GORPIVATE，它的值将作为 GONOPROXY/GONOSUMDB 的默认值，所以建议的最佳姿势是直接使用 GORPIVATE<br><a href="">
+</a></p>
+<p>设置的后，前缀为 git.xxx.com 和 github.com/eddycjy/mquote 的模块都会被认为是私有模块。<br>此处也支持通配符，<br><a href="">
+</a></p>
+<p>这样子设置后，所有要薽路径为 example.com 的子域名都将不经过 GORPOXY 和 GOSUMDB，<strong>需要注意的是不包括 example.com 本身。</strong></p>
+<h3 id="启用-go-mod"><a href="#启用-go-mod" class="headerlink" title="启用 go mod"></a>启用 go mod</h3><p>目前 go modules 并不是默认开启的，因此 go 语言提供了 GO111MODULE 这个环境变量来作为 go modules 的开关，其允许设置以下参数</p>
+<ul>
+<li>auto 默认值，只要项目中包含了 go.mod 文件就启用 go moduels</li>
+<li>on</li>
+<li>off</li>
+</ul>
+<p>如果你不确定你当前的值是什么，可以执行 go env 命令查看<br>如果需要对 GO111MODULE 的值变更，推荐通过 go env 命令设置<br><a href="">
+</a></p>
+<p>但需要注意的是，如果对应的系统环境变量有值了，go env 是不支持覆盖写入的，否则会出现如下报错信息</p>
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p>在完成 Go modules 的开启后，我们需要创建一个示例项目来进行演示，执行如下命令：<br>   <a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p $HOME&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">$ cd $HOME&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com&#x2F;eddycjy&#x2F;module-repo</span><br><span class="line">go: creating new go.mod: module github.com&#x2F;eddycjy&#x2F;module-repo</span><br></pre></td></tr></table></figure>
+
+<p><a href="">   </a><br><a href="">
+</a></p>
+<p>在执行 go mod init 命令时，我们指定了模块导入路径为 github.com/eddycjy/module-repo，接下来我们在该项目根目录下创建 main.go 文件</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/eddycjy/mquote&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  fmt.Println(mquote.GetHello())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>然后在项目根目录下执行 go get github.com/eddycjy/mquote 命令，如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go: finding github.com/eddycjy/mquote latest</span><br><span class="line">go: downloading github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">go: extracting github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<h3 id="查看-go-mod-文件"><a href="#查看-go-mod-文件" class="headerlink" title="查看 go.mod 文件"></a>查看 go.mod 文件</h3><p>在初始化项目时，会自动生成一个 go.mod 文件，是启用了 go modules 项目所必须的最重要的标识，同时也是 GO111MODULE 值为 auto 时的识别标识，它描述了当前项目的元信息，每一行都以一个动词开头<br>在我们刚刚进行了初始化和简单拉取后，我们再次查看 go.mod 文件，基本内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line">go 1.13</span><br><span class="line">require (</span><br><span class="line">  github.com/eddycjy/mquote v0.0.0-20200220041913-e066a990ce6f</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>为了更进一步的讲解，我们模拟引用如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">module github.com/eddycjy/module-repo</span><br><span class="line"><span class="comment"># 标识当前要模块的 go 语言版本，值为初始化时的版本，目前来看还只是个标识作用。</span></span><br><span class="line">go 1.13</span><br><span class="line"><span class="comment"># 用于设置一个特定的模块版本</span></span><br><span class="line">require (</span><br><span class="line">    example.com/apple v0.1.2</span><br><span class="line">    example.com/banana v1.2.3</span><br><span class="line">    example.com/banana/v2 v2.3.4</span><br><span class="line">    example.com/pear // indirect   <span class="comment"># indirect 表示该模块为间接模块（可能是你 go get，或者其他模块所依赖的）</span></span><br><span class="line">    example.com/strawberry // incompatible</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 用于从使用中排除一个特定的模块版本</span></span><br><span class="line">exclude example.com/banana v1.2.4</span><br><span class="line"><span class="comment"># 用于将一个模块版本替换为另外一个模块版本</span></span><br><span class="line">replace example.com/apple v0.1.2 =&gt; example.com/fried v0.1.0</span><br><span class="line">replace example.com/banana =&gt; example.com/fish</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-go-sum"><a href="#查看-go-sum" class="headerlink" title="查看 go.sum"></a>查看 go.sum</h3><p>在第一次拉取模块依赖后，会发现多出了一个 go.sum 文件，其详细罗列了当前项目直接/间接依赖的所有模块的版本，并写明了那些模块版本的 SHA-256 哈希值以备 go 在售后操作中保证项目所依赖的那些模块版本不会被篡改。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1 h1:cc+pgV0LnR8Fhou0zNHughT7IbSnLvfUZ+X3fvshrv8=</span><br><span class="line">github.com/eddycjy/mquote/module/tour v0.0.1/go.mod h1:8uL1FOiQJZ4/1hzqQ5mv4Sm7nJcwYu41F3nZmkiWx5I=</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><a href="">     </a><br>我们可以看到一个模块路径可能有如下两种</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">github.com/eddycjy/mquote v0.0.1/go.mod h1:ZtlkDs7Mriynl7wsDQ4cU23okEtVYqHwl7F1eDh4qPg=</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>h1 hash 是 go modules 将目标模块版本的 zip 文件开包后，针对所有包内文件依次进行 hash，然后再把它们的 hash 结果按照固定格式和算法组成总的 hash 值。</p>
+<p>h1 hash 和 go.mod hash 两者，要不就是同时存在，要不就是只存在 go.mod hash。那么什么情况下不存在 h1 hash 呢？ 就是当 go 认为肯定用不到这个模块版本时就会省略它的 h1 hash，就会出现不存在 h1 hash，只存在 go.mod hash 情况。</p>
+<h3 id="查看全局缓存"><a href="#查看全局缓存" class="headerlink" title="查看全局缓存"></a>查看全局缓存</h3><p>我们刚刚成功的将  <code>github.com/eddycjy/mquote</code>   拉取了下来，其拉取的结果缓存在<br>GOPATH/pkg/sum 目录下，而在 mod 目录下会以 github.com/foo/bar 的格式进行存放</p>
+<p>├── cache<br>├── github.com<br>├── golang.org<br>├── google.golang.org<br>├── gopkg.in…<br><a href="">
+</a></p>
+<p>需要注意的是同一个模块版本的数据只缓存一份，所有其他模块共享使用。如果你希望清理所有已经缓存的模块，可以使用</p>
+<h2 id="go-modules-的-go-get-行为"><a href="#go-modules-的-go-get-行为" class="headerlink" title="go modules 的 go get 行为"></a>go modules 的 go get 行为</h2><p>在拉取项目依赖时，你会发现拉取的过程总共分了三大步，分别是</p>
+<ul>
+<li>finding 发现</li>
+<li>downloading 下载</li>
+<li>extracting 提取</li>
+</ul>
+<p>并且在拉取信息上一共分为了三段内容<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861221259-8884bc24-157e-47d5-9d98-e9a0b4bf3ad5.png#align=left&display=inline&height=430&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.26.55.png&originHeight=430&originWidth=1294&size=163681&status=done&style=none&width=1294" alt="截屏2021-01-17 下午1.26.55.png"></p>
+<p>pkg/mod 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~/go/pkg</span><br><span class="line">❯ ls</span><br><span class="line">mod   sumdb</span><br><span class="line"></span><br><span class="line">~/go/pkg</span><br><span class="line">❯ <span class="built_in">cd</span> mod</span><br><span class="line"></span><br><span class="line">go/pkg/mod</span><br><span class="line">❯ ls</span><br><span class="line">cache             github.com        golang.org        gopkg.in</span><br><span class="line">fyne.io           go.uber.org       google.golang.org moul.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，所拉取版本的 commit 时间是以 UTC 时区为准，而并非本地时区，同时我们会发现我们 go get 命令所拉取到的版本是 <code>v.0.0.0</code> ，这是因为我们是直接执行 go get -u 获取的，并没有指定任何的版本信息，由 go modules 自行按内部规则进行选择。</p>
+<h3 id="go-get-行为"><a href="#go-get-行为" class="headerlink" title="go get 行为"></a>go get 行为</h3><p>刚刚我们用 go get   命令拉取了新的依赖，那么 go get 又提供了哪些功能有呢？ 常用的拉取命令</p>
+<p><strong>那么我们想选择具体版本应该如何执行呢</strong>？如下</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go get golang.org/x/text<a href="/latest">@latest </a></td>
+<td>拉取最新的版本，若存在  tag，则优先使用。</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/master">@master </a></td>
+<td>拉取  master  分支的最新  commit</td>
+</tr>
+<tr>
+<td>go get golang.org/x/text<a href="/v0.3.2">@v0.3.2 </a></td>
+<td>拉取  tagv0.3.2  的 commit</td>
+</tr>
+<tr>
+<td>go get golang/x/text<a href="/342b2e">@342b2e </a></td>
+<td>拉取 hash342b2e  的 commit，最终会被转换为 v0.3.2</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br><a href="">
+</a><br>go get 版本选择<br>我们回顾一下我们拉取的 go get github.com/eddycjy/mquote， 其结果是 <code>v0.0.0-20200220041913-e066a990ce6f</code> ，对照着上面所提到的 go get 行为来看，你可能还会有一些疑惑，<br><strong>那么就是在 go get 没有指定任何版本的情况下，它的版本选择规则是怎么样的</strong>，也就是为什么 go get 拉取的是  v0.0.0，它什么时候会拉取正常带版本号的 tags 呢。实际上这需要区分两种情况，如下</p>
+<ol>
+<li>所拉取的模块有发布 tags：<ol>
+<li>如果只有单个模块，那么就取主版本号最大的那个 tag</li>
+<li>如果有多个模块，则推算相应的模块路径，取主版本号最大的那个 tag（子模块的 tag 的模块路径会有前缀要求）</li>
+</ol>
+</li>
+<li>所拉取的模块没有发布过 tags<ol>
+<li>默认取主分支最新一次 commit 的 commithash</li>
+</ol>
+</li>
+</ol>
+<h4 id="没有发布过-tags"><a href="#没有发布过-tags" class="headerlink" title="没有发布过 tags"></a>没有发布过 tags</h4><p>那么为佬以拉取的是 v0.0.0，因为 github.com/eddycjy/mquote 没有发布任何的 tag，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861317038-557c0ab0-ee10-4f8b-9b6c-ea060d40fb7a.png#align=left&display=inline&height=522&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.28.31.png&originHeight=522&originWidth=1454&size=123515&status=done&style=none&width=1454" alt="截屏2021-01-17 下午1.28.31.png"></p>
+<p>因此它默认取的是主分支最新一次 commit 的 commit_time 和 commit_hash，也就是 0200220041913-e066a990ce6f</p>
+<h4 id="有发布过-tags"><a href="#有发布过-tags" class="headerlink" title="有发布过 tags"></a>有发布过 tags</h4><p>在项目有发布 tags 的情况下，还存在着多种模式，也就是只有单个模块和多个模块，我们统一以多个模块来进行展示，因为多个模块的情况下就已经包含了单个模块的使用了，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861506695-0692c455-2c28-48cb-a1be-93a8810555e4.png#align=left&display=inline&height=842&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.31.39.png&originHeight=842&originWidth=1322&size=222789&status=done&style=none&width=1322" alt="截屏2021-01-17 下午1.31.39.png"></p>
+<p>在这个项目中，我们一共打了两个 tag，分别是 v0.0.1 和 module/tour/v0.0.1. 这时候你可能会奇怪，为什么要打 module/tour/v0.0.1 ，这么奇怪的 tag，这有什么意思吗？</p>
+<p>其实 go modules 在同一个项目下多个模块的 tag 表现方式，其主要目录结构为</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── go.mod</span><br><span class="line">├── module</span><br><span class="line">│   └── tour</span><br><span class="line">│       ├── go.mod</span><br><span class="line">│       └── tour.go</span><br><span class="line">└── quote.go</span><br></pre></td></tr></table></figure>
+
+<p><a href="">      </a><br><a href="">
+</a><br>可以看到 mquote 这个项目的根目录有一个 go.mod 文件，而在 module/tour 目录下也有一个 go.mod 文件，其模块导入和版本信息的对应关系如下</p>
+<table>
+<thead>
+<tr>
+<th><strong>tag</strong></th>
+<th><strong>模块导入路径</strong></th>
+<th><strong>含义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.1</td>
+<td>github.com/eddycjy/mquote</td>
+<td>mquote  项目的 v0.0.1 版本</td>
+</tr>
+<tr>
+<td>module/tour/v0.0.1</td>
+<td>github.com/eddycjy/mquote/module/tour</td>
+<td>mquote  项目下子模块 module/tour  的 v0.0.1  版本</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a></p>
+<p><a href="">
+</a></p>
+<h4 id="导入主模块和子模块"><a href="#导入主模块和子模块" class="headerlink" title="导入主模块和子模块"></a>导入主模块和子模块</h4><p>结合上述内容，拉取主模块的话，还是照旧执行如下命令</p>
+<p>go: finding github.com/eddycjy/mquote v0.0.1<br>go: downloading github.com/eddycjy/mquote v0.0.1<br>go: extracting github.com/eddycjy/mquote v0.0.1</p>
+<p>如果是想拉取子模块，执行</p>
+<p>go: finding github.com/eddycjy/mquote/module v0.0.1<br>go: finding github.com/eddycjy/mquote/module/tour v0.0.1<br>go: downloading github.com/eddycjy/mquote/module/tour v0.0.1<br>go: extracting github.com/eddycjy/mquote/module/tour v0.0.1<br><a href="">
+</a></p>
+<p>我们将主模块和子模块的拉取进行对比，你会发现子模块的拉取会多出一步，它会发现 github.com/eddycjy/mquote/module，再继续推算，最终拉取到 module/tour</p>
+<h2 id="go-mod-的导入路径"><a href="#go-mod-的导入路径" class="headerlink" title="go mod 的导入路径"></a>go mod 的导入路径</h2><h3 id="不同版本的导入路径"><a href="#不同版本的导入路径" class="headerlink" title="不同版本的导入路径"></a>不同版本的导入路径</h3><p>在前面的模块拉取和引用中，你会发现我们的模块导入路径就是 github.com/eddycjy/mquote 和 github.com/eddycjy/mquote/module/tour ，似乎并没有什么特殊的。</p>
+<p>其实不然，实际上 go modules 在主版本号为 v0 和 v1 的情况下省略了版本号，而在主版本号为 v2 及以上刚需要明确指定出主版本号，否则会出现冲突，其 tag 与模块导入路径的大致对应关系如下：</p>
+<table>
+<thead>
+<tr>
+<th>tag</th>
+<th>模块导入路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v1.0.0</td>
+<td>github.com/eddycjy/mquote</td>
+</tr>
+<tr>
+<td>v2.0.0</td>
+<td>github.com/eddycjy/mquote/v2</td>
+</tr>
+<tr>
+<td>v3.0.0</td>
+<td>github.com/eddycjy/mquote/v3</td>
+</tr>
+</tbody></table>
+<p><a href="">
+</a><br>简单来讲，就是主版本号为 v0 和 v1，不需要在模块导入路径包含主版本信息，而在 v1 版本以后，也就是 v2 起，必须在模块的导入路径末尾加上主版本号，引用时就需要调整为如下格式</p>
+<p><a href="">      </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;github.com&#x2F;eddycjy&#x2F;mquote&#x2F;v2&#x2F;example&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><a href="">
+</a></p>
+<p>另外忽略主版本号 v0 和 v1 是强制性的（不是可选项），因此每个软件包只有一个明确且规范的导入路径。</p>
+<h3 id="为什么忽略-v0、v1"><a href="#为什么忽略-v0、v1" class="headerlink" title="为什么忽略 v0、v1"></a>为什么忽略 v0、v1</h3><ol>
+<li>导入路径中忽略 v1 的原因是：考虑到许多开发人员创建一旦到达 v1 版本便永不改变的软件包，这是官方所鼓励的，不认为所有这些开发人员在无意发布 v2 版本时都应被迫拥有明确的 v1 版本尾缀，<strong>这将导致 v1 版本变成“噪音”且无意义。</strong></li>
+<li>导入路径中忽略了 v0 版本的原因是： 根据语义化版本规范，v0 的这些版本完全没有兼容性保证。需要<strong>一个显式的 v0 版本的标识对确保兼容性没有多大帮助。</strong></li>
+</ol>
+<h2 id="go-modules-语义化版本控制"><a href="#go-modules-语义化版本控制" class="headerlink" title="go modules 语义化版本控制"></a>go modules 语义化版本控制</h2><p>我们不断地在 go modules 的使用中提到版本号，其实质上被称为“语义化版本”，假设我们的版本号 v1.2.3，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861346684-ab7daa23-0890-4a55-82ed-48ff42ec56ed.png#align=left&display=inline&height=598&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.29.01.png&originHeight=598&originWidth=1216&size=97845&status=done&style=none&width=1216" alt="截屏2021-01-17 下午1.29.01.png"></p>
+<p>其版本格式为 <strong>主版本号.次版本号.修订号</strong>， 版本号的递增规则如下</p>
+<ol>
+<li>主版本号：当你做了不兼容的 API 修改</li>
+<li>次版本号： 当你做了向下兼容的功能性新增</li>
+<li>修订号：当你做了向下兼容的问题修正。</li>
+</ol>
+<p>假设你是先行版本号或者特殊情况，可以将版本追加到“主版本.次版本号.修订号”的后面，作为延伸</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861427051-ba13e616-eaab-4b7a-b356-a4c77f92e3ea.png#align=left&display=inline&height=502&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.19.png&originHeight=502&originWidth=1286&size=104448&status=done&style=none&width=1286" alt="截屏2021-01-17 下午1.30.19.png"></p>
+<p>至此我们介绍了 go modules 所支持的两类版本号方式，在我们发布新版本打 tag 时，需要注意遵循，否则不遵循语义化版本规则的版本号都是无法进行拉取的。</p>
+<h3 id="go-moduels-的最小版本选择"><a href="#go-moduels-的最小版本选择" class="headerlink" title="go moduels 的最小版本选择"></a>go moduels 的最小版本选择</h3><p>现在我们已经有一个模块，也有发布的 tag，但是一个模块往往依赖着许多其他的模块，并且不同的模块在依赖时很有可能会出现依赖同一个模块的不同版本，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1610861456233-18052bae-5a2f-4484-b45b-0bb87273d4b8.png#align=left&display=inline&height=684&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-17%20%E4%B8%8B%E5%8D%881.30.52.png&originHeight=684&originWidth=1072&size=252115&status=done&style=none&width=1072" alt="截屏2021-01-17 下午1.30.52.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/16/yuque/Go%20Mod%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Go 环境变量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">Go 环境变量</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" class="archive-article-date">
+  	<time datetime="2021-01-15T16:00:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 开发环境依赖于一些操作系统环境变量，你最好在安装 Go 之间就已经设置好他们。如果你使用的是 Windows 的话，你完全不用进行手动设置，Go 将被默认安装在目录 <code>c:/go</code> 下。这里列举几个最为重要的环境变量：</p>
+<ul>
+<li><strong>$GOROOT</strong> 表示 Go 在你的电脑上的安装位置，它的值一般都是 <code>$HOME/go</code>，当然，你也可以安装在别的地方。</li>
+<li><strong>$GOARCH</strong> 表示目标机器的处理器架构，它的值可以是 386、amd64 或 arm。</li>
+<li><strong>$GOOS</strong> 表示目标机器的操作系统，它的值可以是 darwin、freebsd、linux 或 windows。</li>
+<li><strong>$GOBIN</strong> 表示编译器和链接器的安装位置，默认是 <code>$GOROOT/bin</code>，如果你使用的是 Go 1.0.3 及以后的版本，一般情况下你可以将它的值设置为空，Go 将会使用前面提到的默认值。</li>
+</ul>
+<p>目标机器是指你打算运行你的 Go 应用程序的机器。<br>Go 编译器支持交叉编译，也就是说你可以在一台机器上构建运行在具有不同操作系统和处理器架构上运行的应用程序，也就是说编写源代码的机器可以和目标机器有完全不同的特性（操作系统与处理器架构）。<br>为了区分本地机器和目标机器，你可以使用 <code>$GOHOSTOS</code> 和 <code>$GOHOSTARCH</code> 设置本地机器的操作系统名称和编译体系结构，这两个变量只有在进行交叉编译的时候才会用到，如果你不进行显示设置，他们的值会和本地机器（<code>$GOOS</code> 和 <code>$GOARCH</code>）一样。</p>
+<ul>
+<li><strong>$GOPATH</strong> 默认采用和 <code>$GOROOT</code> 一样的值，但从 Go 1.1 版本开始，你必须修改为其它路径。它可以包含多个包含 Go 语言源码文件、包文件和可执行文件的路径，而这些路径下又必须分别包含三个规定的目录：<code>src</code>、<code>pkg</code> 和 <code>bin</code>，这三个目录分别用于存放源码文件、包文件和可执行文件。</li>
+<li><strong>$GOARM</strong> 专门针对基于 arm 架构的处理器，它的值可以是 5 或 6，默认为 6。</li>
+<li><strong>$GOMAXPROCS</strong> 用于设置应用程序可使用的处理器个数与核数，详见第 14.1.3 节。</li>
+</ul>
+<p>在接下来的章节中，我们将会讨论如何在 Linux、Mac OS X 和 Windows 上安装 Go 语言。在 FreeBSD 上的安装和 Linux 非常类似。开发团队正在尝试将 Go 语言移植到其它例如 OpenBSD、DragonFlyBSD、NetBSD、Plan 9、Haiku 和 Solaris 操作系统上，你可以在这个页面找到最近的动态：<a target="_blank" rel="noopener" href="http://go-lang.cat-v.org/os-ports">Go Porting Efforts</a>。</p>
+<p><code>GOPROXY</code><br>设置代理服务器，可以设置多个代理服务器以及 direct，比如<a target="_blank" rel="noopener" href="https://goproxy.cn,direct/">https://goproxy.cn,direct</a></p>
+<p><code>GOSUMDB</code><br>用来校验你下载的库的 hash 是否==官方的 hash 一样。</p>
+<p><code>GOPRIVATE</code><br>设置不使用代理的人下限为，比如一些公司内部的仓库等，如<code>GOPRIVATE=*.corp.example.com,rsc.io/private</code>。<br>作为和之前的兼容，还保留着 <code>GONOPROXY</code> 功能与 <code>GOPRIVATE</code> 一样。</p>
+<p>go help module-auth 了解 GOSUMDB 和 GONOSUMDB 变量<br>go help goproxy 了解 proxy 的通讯协议<br>go help modules 了解 module 的功能。<br>go help module-get 了解 go get 命令的变化。<br>go help gopath-get 显示先前的基于 GOPATH 的 go get 功能。<br>go help module-private 了解私有库的设置</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/15/yuque/Go%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/特洛伊使用说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">特洛伊使用说明</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="archive-article-date">
+  	<time datetime="2021-01-03T13:13:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>下载代理软件 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z?_lake_card=%7B%22uid%22:%221609679990619-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/7z/190217/1609680002840-384fab53-a5e4-48d5-94e1-04702f0b01ec.7z%22,%22name%22:%22Trojan-Qt5-Windows.7z%22,%22size%22:23724484,%22type%22:%22%22,%22ext%22:%227z%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22AD6cQ%22,%22card%22:%22file%22%7D">Trojan-Qt5-Windows.7z</a><br>如果 windows 提示打不开 下载解压缩 <a target="_blank" rel="noopener" href="http://www.winrar.com.cn/">http://www.winrar.com.cn/</a> 软件即可</p>
+<p>macos <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg?_lake_card=%7B%22uid%22:%221611542907886-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/dmg/190217/1611543072025-ca55e697-6187-4f68-a54e-2f07b0d0c4ff.dmg%22,%22name%22:%22Trojan-Qt5-macOS+(1).dmg%22,%22size%22:39300693,%22type%22:%22%22,%22ext%22:%22dmg%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%225frYR%22,%22card%22:%22file%22%7D">Trojan-Qt5-macOS (1).dmg</a></p>
+<p>ios 使用软件(需要非中国大陆 apple id)，否则打开白屏幕：<a target="_blank" rel="noopener" href="https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518">https://apps.apple.com/us/app/shadowlink-shadowsocks-tool/id1439686518</a></p>
+<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>PAC 代理：为防火墙智能代理，会自动过滤 中国大陆以内的 ip 地址数据包。 （国内非 T 子，访问国外为 T 子）<br>全局代理：为全局 T 子 如果采用这个模式，中国大陆某些视频网站会提示你版权出现问题或者访问国内网站特别慢的情况发生</p>
+<h1 id="ios-端"><a href="#ios-端" class="headerlink" title="ios 端"></a>ios 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22uploaded%22,%22name%22:%22RPReplay_Final1613837361.MP4%22,%22size%22:123451548,%22percent%22:100,%22taskId%22:%2243bbwmUvodwp%22,%22margin%22:true,%22id%22:%22kacxw%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/MP4/1613838724900-8252848e-cd46-4e23-a92f-238cf1323c43.MP4%22,%22card%22:%22video%22%7D#kacxw"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="RPReplay_Final1613837361.MP4 (117.73MB)"></a></p>
+<h1 id="windows-端"><a href="#windows-端" class="headerlink" title="windows 端"></a>windows 端</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E5%AE%89%E8%A3%85.mp4%22,%22size%22:3165670,%22percent%22:100,%22taskId%22:%22IYh5Ld4rMzks%22,%22margin%22:true,%22id%22:%22oXemB%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609680841234-7c5d380b-0a94-4b7b-a6ec-57ce0811cf0f.mp4%22,%22card%22:%22video%22%7D#oXemB"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="安装.mp4 (3.02MB)"></a></p>
+<h2 id="windows-使用"><a href="#windows-使用" class="headerlink" title="windows 使用"></a>windows 使用</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22%E4%BD%BF%E7%94%A8.mp4%22,%22size%22:2699578,%22percent%22:100,%22taskId%22:%22gtUbrKF5RI6Z%22,%22margin%22:true,%22id%22:%222TKQD%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1609681118723-5929eda8-e0e0-472b-953d-461d836386cb.mp4%22,%22card%22:%22video%22%7D#2TKQD"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="使用.mp4 (2.57MB)"></a></p>
+<h1 id="MacOS-使用"><a href="#MacOS-使用" class="headerlink" title="MacOS 使用"></a>MacOS 使用</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/murphyyi/blog/bsgts7?_lake_card=%7B%22status%22:%22done%22,%22name%22:%22tro.mp4%22,%22size%22:105906344,%22percent%22:100,%22taskId%22:%22jtcGxLWC2rzM%22,%22margin%22:true,%22id%22:%22dkdJr%22,%22videoId%22:%22inputs/prod/yuque/2021/190217/mp4/1611553175119-214606d4-c00e-4dd5-98a2-5407cdafe5e8.mp4%22,%22card%22:%22video%22%7D#dkdJr"><img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ" alt="tro.mp4 (101MB)"></a></p>
+<h1 id="正常使用状态"><a href="#正常使用状态" class="headerlink" title="正常使用状态"></a>正常使用状态</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552878301-bcfa22f2-f08a-44ed-bd17-d71f6481e47d.png#align=left&display=inline&height=86&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=145&size=12770&status=done&style=none&width=145" alt="image.png"><br>蓝色小马 上面带个 G 全局代理</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611552920679-2cb4cf23-df72-47ea-a52f-d93d57ff0bf4.png#align=left&display=inline&height=44&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=76&size=6568&status=done&style=none&width=76" alt="image.png"><br>绿色小马 上面带个 P 国外代理 误伤概率比较高<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1611553009805-f6d8cec9-72ce-4790-8935-cb2f43197e61.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2021-01-25%2013.36.41.png&originHeight=343&originWidth=494&size=192789&status=done&style=none&width=494" alt="截屏2021-01-25 13.36.41.png"></p>
+<h1 id="使用注意："><a href="#使用注意：" class="headerlink" title="使用注意："></a>使用注意：</h1><p>访问外 wang<br><img src="https://cdn.nlark.com/yuque/0/2021/png/190217/1609681415544-d2aba294-f93f-4ac0-b7f4-5b043df99b2f.png#align=left&display=inline&height=371&margin=%5Bobject%20Object%5D&name=image.png&originHeight=742&originWidth=712&size=358619&status=done&style=none&width=356" alt="image.png"></p>
+<p>内网访问不了，请关闭该软件</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/03/yuque/%E7%89%B9%E6%B4%9B%E4%BC%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">展开全文 >></a>
         </p>
       
 
@@ -893,7 +1300,7 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -905,7 +1312,7 @@ var _hmt = _hmt || [];
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Murphy Yi
+    		&copy; 2022 Murphy Yi
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1013,15 +1420,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1033,15 +1432,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">read</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

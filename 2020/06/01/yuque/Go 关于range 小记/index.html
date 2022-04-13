@@ -16,7 +16,7 @@
 <meta property="og:description" content="1234567891011121314151617181920212223&#x2F;&#x2F; 读未初始化的chanfunc main() &amp;#123;	a:&#x3D;[]ss&amp;#123;&amp;#123;age: 2&amp;#125;,&amp;#123;age: 222&amp;#125;&amp;#125;	for _,v :&#x3D;range a&amp;#123;		v.age&#x3D;22		println(&amp;v)	&amp;#125;	for _,v :&#x3D;rang">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-01T06:51:49.000Z">
-<meta property="article:modified_time" content="2022-01-01T16:05:38.256Z">
+<meta property="article:modified_time" content="2022-04-13T12:10:47.048Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -206,7 +206,7 @@ var _hmt = _hmt || [];
 
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0xc00006af58</span></span><br><span class="line"><span class="number">0xc00006af58</span></span><br><span class="line"><span class="number">0xc00006af50</span></span><br><span class="line"><span class="number">0xc00006af50</span></span><br></pre></td></tr></table></figure>
 
-<p>说明这块是副本<br>​</p>
+<p>说明这块是副本</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读未初始化的chan</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	a:=[]*ss&#123;&#123;age: <span class="number">2</span>&#125;,&#123;age: <span class="number">222</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _,v :=<span class="keyword">range</span> a&#123;</span><br><span class="line">		v.age=<span class="number">22</span></span><br><span class="line">		<span class="built_in">println</span>(&amp;v)</span><br><span class="line">        <span class="built_in">println</span>(v.age)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _,v :=<span class="keyword">range</span> a&#123;</span><br><span class="line">		<span class="built_in">println</span>(&amp;v)</span><br><span class="line">        <span class="built_in">println</span>(v.age)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> ss <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
@@ -494,7 +494,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -503,10 +511,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

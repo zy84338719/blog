@@ -182,6 +182,375 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Mysql 中对 date datetime time timestamp 区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/01/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/">Mysql 中对 date datetime time timestamp 区别</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/01/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/" class="archive-article-date">
+  	<time datetime="2022-01-01T15:36:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中对于时间的存储自己见表的时候都是设置的 varchar 类型的，感觉挺方便的。<br>昨天拿别人建好的表写代码，发现这张表中时间类型为 datetime 的，凭感觉试了一下不行，网上查了刚开始试了好几个都是不对的，一脸懵逼。</p>
+<hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#crop=0&crop=0&crop=1&crop=1&height=469&id=LrfEr&originHeight=634&originWidth=1009&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=746"></p>
+<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。</p>
+<p>用 navicat 找了一张表添加了一个 timestamp 的字段，如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#crop=0&crop=0&crop=1&crop=1&height=211&id=Xu71f&originHeight=211&originWidth=654&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=654"></p>
+<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,</p>
+<p>言归正传，本次数据库中用的是 datetime 类型的，在 java 中生成可以存储的时间数据方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Date date = new Date();</span><br><span class="line"></span><br><span class="line">Timestamp timeStamep = new Timestamp(date.getTime());</span><br><span class="line"></span><br><span class="line">System.out.println(timeStamep);</span><br><span class="line"></span><br><span class="line">//输出结果： 2016-09-22 10:38:14.964</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/01/yuque/Mysql%20%E4%B8%AD%E5%AF%B9%20date%20datetime%20time%20timestamp%20%E5%8C%BA%E5%88%AB/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/dockerfile 的学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/01/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">dockerfile 的学习</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/01/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2022-01-01T15:34:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在  <a target="_blank" rel="noopener" href="https://mrbird.cc/Docker-Image-Container.html">Docker 镜像与容器</a>  一节中我们通过 Dockerfile 构建了镜像，这节我们来了解下 Dockerfile 的语法。Dockerfile 包含了诸多关键字，所以要学习 Dockerfile 的用法，得先从这些关键字入手。</p>
+<h2 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h2><p>位于 Dockerfile 开头，表示基于什么镜像构建：</p>
+<table>
+<thead>
+<tr>
+<th>12</th>
+<th>FROM scratch # 制作 base imageFROM ubuntu:16.04 #使用 ubuntu:16.04 这个 image</th>
+</tr>
+</thead>
+</table>
+<p>出于安全考虑，最好使用官方的 image 作为 base image。</p>
+<h2 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h2><p>Dockerfile 的元数据，描述作用。</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>LABEL version=”1.0” author=”mrbird” description=”dockerfile demo”</th>
+</tr>
+</thead>
+</table>
+<p>Dockerfile 最好都要有元数据，这样更易于理解。</p>
+<h2 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h2><p>运行命令，每次 run 都会生成一个图层，所以最好将命令合并:</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>FROM ubuntuRUN apt-get update \ &amp;&amp; apt-get install -y vim</th>
+</tr>
+</thead>
+</table>
+<p><code>\</code>换行</p>
+<h2 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="WORKDIR"></a>WORKDIR</h2><p>用于指定工作目录，切换路径：</p>
+<table>
+<thead>
+<tr>
+<th>1234</th>
+<th>FROM ubuntuWORKDIR /test # 没有则自动创建 test 目录 WORKDIR demoRUN pwd</th>
+</tr>
+</thead>
+</table>
+<p>输出 /test/demo。<br>最好不要用 RUN cd 来切换目录，而使用 WORKDIR，这样可以减少不必要的图层，尽量使用绝对目录。</p>
+<h2 id="ADD-amp-COPY"><a href="#ADD-amp-COPY" class="headerlink" title="ADD &amp; COPY"></a>ADD &amp; COPY</h2><p>ADD 和 COPY 都可以将构建环境中的文件或目录复制到镜像中，比如</p>
+<table>
+<thead>
+<tr>
+<th>12</th>
+<th>WORKDIR /demoADD test test/</th>
+</tr>
+</thead>
+</table>
+<table>
+<thead>
+<tr>
+<th>12</th>
+<th>WORKDIR /demoCOPY test test/</th>
+</tr>
+</thead>
+</table>
+<p>最终都会将 test 文件添加到/demo/test/目录下。<br>区别：</p>
+<ol>
+<li>ADD 添加的文件是压缩文件的话，会自动解压。</li>
+<li>COPY 只能复制构建目录下的文件，ADD 可以添加一个构建上下文中的文件或目录，也可以是一个 URL，如：<table>
+<thead>
+<tr>
+<th>1</th>
+<th>ADD <a target="_blank" rel="noopener" href="http://wordpress.org/latest.zip">http://wordpress.org/latest.zip</a> /</th>
+</tr>
+</thead>
+</table>
+</li>
+</ol>
+<h2 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h2><p>设置环境变量常量。</p>
+<table>
+<thead>
+<tr>
+<th>12</th>
+<th>ENV MYSQL_VERSION 5.7RUN apt-get install -y mysql-server=”${MYSQL_VERSION}”</th>
+</tr>
+</thead>
+</table>
+<p>通过设定常量，可以提高可维护性。</p>
+<h2 id="VOLUME-amp-EXPOSE"><a href="#VOLUME-amp-EXPOSE" class="headerlink" title="VOLUME &amp; EXPOSE"></a>VOLUME &amp; EXPOSE</h2><p>存储和网络，这里先略，后面学习到这一块再说。</p>
+<h2 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h2><ol>
+<li>设置容器启动后默认执行的命令和参数。</li>
+<li>docker run 指定了其他命令，CMD 命令会被忽略。</li>
+<li>定义了多个 CMD，只有最后一个有效。</li>
+</ol>
+<p>比如有如下 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th>1234</th>
+<th>FROM ubuntuENV name mrbirdCMD echo “hello docker”CMD echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>构建镜像，运行：</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>docker run [image]</th>
+</tr>
+</thead>
+</table>
+<p>输出 hello mrbird。<br>如果运行：</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>docker run -it [image] /bin/bash</th>
+</tr>
+</thead>
+</table>
+<p>则没有输出。</p>
+<h2 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h2><ol>
+<li>设置容器启动时运行的命令。</li>
+<li>不会被忽略，一定会执行。</li>
+<li>一般写一个 shell 脚本作为 ENTRYPOINT。</li>
+</ol>
+<p>比如 mongodb 官方 Dockerfile 末尾一段：</p>
+<table>
+<thead>
+<tr>
+<th>12345</th>
+<th>COPY docker-entrypoint.sh /usr/local/bin/ENTRYPOINT [“docker-entrypoint.sh”]EXPOSE 27017CMD [“mongod”]</th>
+</tr>
+</thead>
+</table>
+<p>ENTRYPOINT 和 CMD 结合使用有一个技巧：<br>比如有如下一个 Dockerfile：</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>FROM ubuntuENTRYPOINT [“/bin/ls”]CMD []</th>
+</tr>
+</thead>
+</table>
+<p>意思是在 ubuntu 这个镜像上构建，通过 ENTRYPOINT 运行/bin/ls 命令，然后<code>CMD []</code>这行可以介绍额外的参数选项。<br>通过这个 Dockerfile 构建镜像后(image id 为 95c35bb00761)，分别运行下面这些命令来创建容器：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1554795567882-75cc977e-f3e2-447d-8969-f6feb955605d.png#crop=0&crop=0&crop=1&crop=1&height=543&id=PLaOr&originHeight=543&originWidth=555&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=555">ker<br>可以看到我们通过相同的镜像构建出了不同的容器。</p>
+<h2 id="Shell-和-Exec-格式"><a href="#Shell-和-Exec-格式" class="headerlink" title="Shell 和 Exec 格式"></a>Shell 和 Exec 格式</h2><p>在 Dockerfile 中，命令的写法有 Shell 格式和 Exec 格式：<br>Shell 格式的 Dockerfile 如下：</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>RUN apt-get install -y vimCMD echo “hello world”ENTRYPOINTT echo “hello world”</th>
+</tr>
+</thead>
+</table>
+<p>Exec 格式如下所示:</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>RUN [“apt-get”,”install”,”-y”,”vim”]CMD [“/bin/echo”,”hello world”]ENTRYPOINTT [“/bin/echo”,”hello world”]</th>
+</tr>
+</thead>
+</table>
+<p>在使用 Exec 格式的时候需要注意和常量的搭配使用问题，比如在 Shell 格式下：</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>FROM ubuntuENV name mrbirdENTRYPOINTER echo “hello $name”</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello mrbird。<br>但是在 Exec 格式下：</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/echo”,”hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>创建镜像，运行容器后输出：hello $name。<br>正确的写法是:</p>
+<table>
+<thead>
+<tr>
+<th>123</th>
+<th>FROM ubuntuENV name mrbirdENTRYPOINTER [“/bin/bash”,”-c”,”echo hello $name”]</th>
+</tr>
+</thead>
+</table>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技//" class="article-tag-list-link color2">技</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/技/术//" class="article-tag-list-link color2">术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/01/yuque/dockerfile%20%E7%9A%84%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/HTTP 状态码的完整列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1331,9 +1700,7 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>tags: [learn]<br>categories: Java<br>​</p>
-<hr>
-<p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
+        <p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
 <p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
 <p>通过服务器返回的信息获取会话例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">&quot;set-cookie&quot;</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">&quot;;&quot;</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1353,7 +1720,41 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J//" class="article-tag-list-link color2">J</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v//" class="article-tag-list-link color2">v</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
         <p class="article-more-link">
@@ -1608,7 +2009,6 @@ var _hmt = _hmt || [];
 <li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
 <li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
 </ul>
-<p>​</p>
 
       
 
@@ -1690,135 +2090,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2022/01/01/yuque/redis%E9%94%81%E4%B8%8Ezookeerper%E9%94%81%E5%8C%BA%E5%88%AB%EF%BC%881%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/mybait xml 配置谨记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/01/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/">mybait xml 配置谨记</a>
-    </h1>
-  
-
-        
-        <a href="/2022/01/01/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2022-01-01T14:33:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>select* from table where ‘字段 1’&gt;=10 怎么表示，那么问题来啦<br>xml 转义可以使用<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1551755611316-53cb3fe4-54c4-4a18-89c7-611a8b9f7746.png?x-oss-process=image/watermark,type_d3F5LW1pY3JvaGVp,size_22,text_bXVycGh5eWk=,color_FFFFFF,shadow_50,t_80,g_se,x_10,y_10#crop=0&crop=0&crop=1&crop=1&height=253&id=F3Tq6&originHeight=265&originWidth=781&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=746"><br>根据这个规则上面的 sql 写法应该变成<br>select *from table where ‘字段 1’&gt; =10</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/01/01/yuque/mybait%20xml%20%E9%85%8D%E7%BD%AE%E8%B0%A8%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何快速的学习一门新技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/01/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">如何快速的学习一门新技术</a>
-    </h1>
-  
-
-        
-        <a href="/2022/01/01/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/" class="archive-article-date">
-  	<time datetime="2022-01-01T14:31:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-我们有一个需求"><a href="#1-我们有一个需求" class="headerlink" title="1.我们有一个需求"></a>1.我们有一个需求</h1><h2 id="项目开发时，我们需要解决某个问题（例如页面局部刷新）"><a href="#项目开发时，我们需要解决某个问题（例如页面局部刷新）" class="headerlink" title="项目开发时，我们需要解决某个问题（例如页面局部刷新）"></a>项目开发时，我们需要解决某个问题（例如页面局部刷新）</h2><h2 id="跳槽，学习新技术"><a href="#跳槽，学习新技术" class="headerlink" title="跳槽，学习新技术"></a>跳槽，学习新技术</h2><h1 id="2-我们先看看使用现有技术能否解决这个问题"><a href="#2-我们先看看使用现有技术能否解决这个问题" class="headerlink" title="2.我们先看看使用现有技术能否解决这个问题"></a>2.我们先看看使用现有技术能否解决这个问题</h1><h2 id="可以解决"><a href="#可以解决" class="headerlink" title="可以解决"></a>可以解决</h2><p>1.使用传统的方法 iframe<br>发现使用传统方法可以解决，但是不够好 2.使用新技术-&gt;axjx</p>
-<h1 id="3-学习一下新技术或者知识点的"><a href="#3-学习一下新技术或者知识点的" class="headerlink" title="3.学习一下新技术或者知识点的"></a>3.学习一下新技术或者知识点的</h1><p>1.原理 2.基本语法</p>
-<h1 id="4-快速入门案例"><a href="#4-快速入门案例" class="headerlink" title="4.快速入门案例"></a>4.快速入门案例</h1><p>1.简单<br>2 了解新技术或者知识点的基本使用<br>这里不需要设计技术细节</p>
-<h1 id="5-讨论这个新技术知识点的"><a href="#5-讨论这个新技术知识点的" class="headerlink" title="5.讨论这个新技术知识点的"></a>5.讨论这个新技术知识点的</h1><p>1.怎么规范使用 2.使用陷阱 3.需要使用时，注意什么</p>
-<h3 id="这里体现一个程序员的水平"><a href="#这里体现一个程序员的水平" class="headerlink" title="这里体现一个程序员的水平"></a>这里体现一个程序员的水平</h3><h1 id="1-gt-2-gt-3-gt-4-gt-5"><a href="#1-gt-2-gt-3-gt-4-gt-5" class="headerlink" title="1-&gt;2-&gt;3-&gt;4-&gt;5-|"></a>1-&gt;2-&gt;3-&gt;4-&gt;5-|</h1><h1 id="往复循环"><a href="#往复循环" class="headerlink" title="|      往复循环      |"></a>|      往复循环      |</h1><h1 id="lt-lt-lt-lt-lt-lt"><a href="#lt-lt-lt-lt-lt-lt" class="headerlink" title="| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |"></a>| &lt;-&lt;-&lt;-&lt;-&lt;-&lt;- |</h1>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/01/01/yuque/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/">展开全文 >></a>
         </p>
       
 
@@ -1970,7 +2241,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1979,10 +2258,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

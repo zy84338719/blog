@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
   <title>mysql 的 服务层和存储引擎层 | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。 sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎 对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit  ​">
+  <meta name="description" content="引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。 sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎 对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql 的 服务层和存储引擎层">
 <meta property="og:url" content="http://zy84338719.github.io/blog/2022/01/01/yuque/mysql%20%E7%9A%84%20%E6%9C%8D%E5%8A%A1%E5%B1%82%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。 sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎 对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit  ​">
+<meta property="og:description" content="引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。 sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎 对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-01T14:53:07.000Z">
-<meta property="article:modified_time" content="2022-01-01T16:05:34.000Z">
+<meta property="article:modified_time" content="2022-04-13T12:10:42.427Z">
 <meta property="article:author" content="Murphy Yi">
 <meta name="twitter:card" content="summary">
   
@@ -207,7 +207,6 @@ var _hmt = _hmt || [];
 <li>sql 等执行过程分为两类，一类对于查询等过程如下：权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎</li>
 <li>对于更新等语句执行流程如下：分析器—-》权限校验—-》执行器—》引擎—redo log prepare—》binlog—》redo log commit</li>
 </ul>
-<p>​</p>
 
       
 
@@ -489,7 +488,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -498,10 +505,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

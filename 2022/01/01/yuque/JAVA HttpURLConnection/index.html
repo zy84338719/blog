@@ -8,16 +8,17 @@
   <link rel="dns-prefetch" href="http://zy84338719.github.io/blog">
   <title>JAVA HttpURLConnection | Murphy Yi site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="tags: [learn]categories: Java​  在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。 这里以 Java Web 后台服">
+  <meta name="description" content="在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。 这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA HttpURLConnection">
 <meta property="og:url" content="http://zy84338719.github.io/blog/2022/01/01/yuque/JAVA%20HttpURLConnection/index.html">
 <meta property="og:site_name" content="Murphy Yi site">
-<meta property="og:description" content="tags: [learn]categories: Java​  在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。 这里以 Java Web 后台服">
+<meta property="og:description" content="在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。 这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cook">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-01T15:01:19.000Z">
-<meta property="article:modified_time" content="2022-01-01T16:05:33.972Z">
+<meta property="article:modified_time" content="2022-04-13T12:10:42.399Z">
 <meta property="article:author" content="Murphy Yi">
+<meta property="article:tag" content="learn">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Murphy Yi site" type="application/atom+xml">
@@ -202,9 +203,7 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>tags: [learn]<br>categories: Java<br>​</p>
-<hr>
-<p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
+        <p>在 Java Web 开发中，会话保持是服务器识别客户端（一般指浏览器）的方式。对此，各大浏览器都是支持会话保持的。然而在开发者通过 Java API HttpURLConnection 开发网络请求工具的时候，HttpURLConnection 是不支持会话的，需要自己动手获取服务器返回的会话信息。</p>
 <p>这里以 Java Web 后台服务的会话为例，开发者需要编写程序，通过获取服务器返回的 cookie 值，截取其中的 session ID。获取 session ID 之后，提交请求时将其加入 RequestProperty，即可保持与服务器的当前会话。</p>
 <p>通过服务器返回的信息获取会话例程如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@author</span> johnson</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@method</span> getSessionID</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@description</span> 执行从cookie获取会话sessionID的方法，用于保持与服务器的会话</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> actionURL 远程服务器的URL</span></span><br><span class="line"><span class="comment">	 * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getSessionID</span><span class="params">(String actionURL)</span></span>&#123;</span><br><span class="line">	String sessionID;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(actionURL);</span><br><span class="line">		HttpURLConnection connection = (HttpURLConnection)url.openConnection();</span><br><span class="line">		String cookieValue = connection.getHeaderField(<span class="string">&quot;set-cookie&quot;</span>);</span><br><span class="line">		<span class="keyword">if</span>(cookieValue != <span class="keyword">null</span>)&#123;</span><br><span class="line">			sessionID = cookieValue.substring(<span class="number">0</span>, cookieValue.indexOf(<span class="string">&quot;;&quot;</span>));</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		sessionID = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sessionID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -255,7 +254,41 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J//" class="article-tag-list-link color2">J</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v//" class="article-tag-list-link color2">v</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/J/a/v/a//" class="article-tag-list-link color2">a</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -497,7 +530,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -506,10 +547,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

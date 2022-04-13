@@ -182,6 +182,208 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/channel的整体结构图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/13/yuque/channel%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE/">channel的整体结构图</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/13/yuque/channel%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE/" class="archive-article-date">
+  	<time datetime="2020-05-13T14:57:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="channel-的整体结构图"><a href="#channel-的整体结构图" class="headerlink" title="channel 的整体结构图"></a>channel 的整体结构图</h2><p><img src="https://i6448038.github.io/img/channel/hchan.png#align=left&display=inline&height=673&margin=%5Bobject%20Object%5D&originHeight=673&originWidth=898&status=uploading&style=none&width=898"><br>简单说明：</p>
+<ul>
+<li><code>buf</code>是有缓冲的 channel 所特有的结构，用来存储缓存数据。是个循环链表</li>
+<li><code>sendx</code>和<code>recvx</code>用于记录<code>buf</code>这个循环链表中的发送或者接收的 index</li>
+<li><code>lock</code>是个互斥锁。</li>
+<li><code>recvq</code>和<code>sendq</code>分别是接收(&lt;-channel)或者发送(channel &lt;- xxx)的 goroutine 抽象出来的结构体(sudog)的队列。是个双向链表</li>
+</ul>
+<p>源码位于<code>/runtime/chan.go</code>中(目前版本：1.11)。结构体为<code>hchan</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">type hchan struct &#123;</span><br><span class="line">    qcount   uint           &#x2F;&#x2F; total data in the queue</span><br><span class="line">    dataqsiz uint           &#x2F;&#x2F; size of the circular queue</span><br><span class="line">    buf      unsafe.Pointer &#x2F;&#x2F; points to an array of dataqsiz elements</span><br><span class="line">    elemsize uint16</span><br><span class="line">    closed   uint32</span><br><span class="line">    elemtype *_type &#x2F;&#x2F; element type</span><br><span class="line">    sendx    uint   &#x2F;&#x2F; send index</span><br><span class="line">    recvx    uint   &#x2F;&#x2F; receive index</span><br><span class="line">    recvq    waitq  &#x2F;&#x2F; list of recv waiters</span><br><span class="line">    sendq    waitq  &#x2F;&#x2F; list of send waiters</span><br><span class="line">    &#x2F;&#x2F; lock protects all fields in hchan, as well as several</span><br><span class="line">    &#x2F;&#x2F; fields in sudogs blocked on this channel.</span><br><span class="line">    &#x2F;&#x2F;</span><br><span class="line">    &#x2F;&#x2F; Do not change another G&#39;s status while holding this lock</span><br><span class="line">    &#x2F;&#x2F; (in particular, do not ready a G), as this can deadlock</span><br><span class="line">    &#x2F;&#x2F; with stack shrinking.</span><br><span class="line">    lock mutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面我们来详细介绍<code>hchan</code>中各部分是如何使用的。</p>
+<h2 id="先从创建开始"><a href="#先从创建开始" class="headerlink" title="先从创建开始"></a>先从创建开始</h2><p>我们首先创建一个 channel。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch :&#x3D; make(chan int, 3)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i6448038.github.io/img/channel/hchan1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>创建 channel 实际上就是在内存中实例化了一个<code>hchan</code>的结构体，并返回一个 ch 指针，我们使用过程中 channel 在函数之间的传递都是用的这个指针，这就是为什么函数传递中无需使用 channel 的指针，而直接用 channel 就行了，因为 channel 本身就是一个指针。</p>
+<h2 id="channel-中发送-send-ch-lt-xxx-和-recv-lt-ch-接收"><a href="#channel-中发送-send-ch-lt-xxx-和-recv-lt-ch-接收" class="headerlink" title="channel 中发送 send(ch &lt;- xxx)和 recv(&lt;- ch)接收"></a>channel 中发送 send(ch &lt;- xxx)和 recv(&lt;- ch)接收</h2><p>先考虑一个问题，如果你想让 goroutine 以先进先出(FIFO)的方式进入一个结构体中，你会怎么操作？<br>加锁！对的！channel 就是用了一个锁。hchan 本身包含一个互斥锁<code>mutex</code></p>
+<h3 id="channel-中队列是如何实现的"><a href="#channel-中队列是如何实现的" class="headerlink" title="channel 中队列是如何实现的"></a>channel 中队列是如何实现的</h3><p>channel 中有个缓存 buf，是用来缓存数据的(假如实例化了带缓存的 channel 的话)队列。我们先来看看是如何实现“队列”的。<br>还是刚才创建的那个 channel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch :&#x3D; make(chan int, 3)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i6448038.github.io/img/channel/hchan_gif1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>当使用<code>send (ch &lt;- xx)</code>或者<code>recv ( &lt;-ch)</code>的时候，首先要锁住<code>hchan</code>这个结构体。<br><img src="https://i6448038.github.io/img/channel/hchan_gif2.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>然后开始<code>send (ch &lt;- xx)</code>数据。<br>一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+
+<p>二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+
+<p>三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+
+<p>这时候满了，队列塞不进去了<br>动态图表示为：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381844596-946fe7aa-394a-4788-a1c5-823827771819.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800"><br>然后是取<code>recv ( &lt;-ch)</code>的过程，是个逆向的操作，也是需要加锁。<br><img src="https://i6448038.github.io/img/channel/hchan_gif6.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>然后开始<code>recv (&lt;-ch)</code>数据。<br>一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+
+<p>二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+
+<p>三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;-ch</span><br></pre></td></tr></table></figure>
+
+<p>图为：<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842416-1c3eb9a9-ea28-4140-bb72-ff5d6214dbdf.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800"><br>注意以上两幅图中<code>buf</code>和<code>recvx</code>以及<code>sendx</code>的变化，<code>recvx</code>和<code>sendx</code>是根据循环链表<code>buf</code>的变动而改变的。<br>至于为什么 channel 会使用循环链表作为缓存结构，我个人认为是在缓存列表在动态的<code>send</code>和<code>recv</code>过程中，定位当前<code>send</code>或者<code>recvx</code>的位置、选择<code>send</code>的和<code>recvx</code>的位置比较方便吧，只要顺着链表顺序一直旋转操作就好。<br>缓存中按链表顺序存放，取数据的时候按链表顺序读取，符合 FIFO 的原则。</p>
+<h3 id="send-recv-的细化操作"><a href="#send-recv-的细化操作" class="headerlink" title="send/recv 的细化操作"></a>send/recv 的细化操作</h3><p>注意：缓存链表中以上每一步的操作，都是需要加锁操作的！<br>每一步的操作的细节可以细化为：</p>
+<ul>
+<li>第一，加锁</li>
+<li>第二，把数据从 goroutine 中 copy 到“队列”中(或者从队列中 copy 到 goroutine 中）。</li>
+<li>第三，释放锁</li>
+</ul>
+<p>每一步的操作总结为动态图为：(发送过程)<br><img src="https://i6448038.github.io/img/channel/send_single.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>或者为：(接收过程)<br><img src="https://cdn.nlark.com/yuque/0/2020/gif/190217/1589381842056-5f3f00d7-b84d-46c5-97b3-f67955996ed6.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&size=0&status=done&style=none&width=800"><br>所以不难看出，Go 中那句经典的话：<code>Do not communicate by sharing memory; instead, share memory by communicating.</code>的具体实现就是利用 channel 把数据从一端 copy 到了另一端！<br>还真是符合<code>channel</code>的英文含义：<br><img src="https://i6448038.github.io/img/channel/hchan_channl.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"></p>
+<h3 id="当-channel-缓存满了之后会发生什么？这其中的原理是怎样的？"><a href="#当-channel-缓存满了之后会发生什么？这其中的原理是怎样的？" class="headerlink" title="当 channel 缓存满了之后会发生什么？这其中的原理是怎样的？"></a>当 channel 缓存满了之后会发生什么？这其中的原理是怎样的？</h3><p>使用的时候，我们都知道，当 channel 缓存满了，或者没有缓存的时候，我们继续 send(ch &lt;- xxx)或者 recv(&lt;- ch)会阻塞当前 goroutine，但是，是如何实现的呢？<br>我们知道，Go 的 goroutine 是用户态的线程(<code>user-space threads</code>)，用户态的线程是需要自己去调度的，Go 有运行时的 scheduler 去帮我们完成调度这件事情。关于 Go 的调度模型 GMP 模型我在此不做赘述，如果不了解，可以看我另一篇文章(<a target="_blank" rel="noopener" href="https://i6448038.github.io/2017/12/04/golang-concurrency-principle/">Go 调度原理</a>)<br>goroutine 的阻塞操作，实际上是调用<code>send (ch &lt;- xx)</code>或者<code>recv ( &lt;-ch)</code>的时候主动触发的，具体请看以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;goroutine1 中，记做G1</span><br><span class="line">ch :&#x3D; make(chan int, 3)</span><br><span class="line">ch &lt;- 1</span><br><span class="line">ch &lt;- 1</span><br><span class="line">ch &lt;- 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i6448038.github.io/img/channel/hchan_block.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br><img src="https://i6448038.github.io/img/channel/hchan_block1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>这个时候 G1 正在正常运行,当再次进行 send 操作(ch&lt;-1)的时候，会主动调用 Go 的调度器,让 G1 等待，并从让出 M，让其他 G 去使用<br><img src="https://i6448038.github.io/img/channel/hchan_block2.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>同时 G1 也会被抽象成含有 G1 指针和 send 元素的<code>sudog</code>结构体保存到 hchan 的<code>sendq</code>中等待被唤醒。<br><img src="https://i6448038.github.io/img/channel/hchan_blok3.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>那么，G1 什么时候被唤醒呢？这个时候 G2 隆重登场。<br><img src="https://i6448038.github.io/img/channel/hchan_block4.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>G2 执行了 recv 操作<code>p := &lt;-ch</code>，于是会发生以下的操作：<br><img src="https://i6448038.github.io/img/channel/hchan_block5.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>G2 从缓存队列中取出数据，channel 会将等待队列中的 G1 推出，将 G1 当时 send 的数据推到缓存中，然后调用 Go 的 scheduler，唤醒 G1，并把 G1 放到可运行的 Goroutine 队列中。<br><img src="https://i6448038.github.io/img/channel/hchan_block6.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"></p>
+<h3 id="假如是先进行执行-recv-操作的-G2-会怎么样？"><a href="#假如是先进行执行-recv-操作的-G2-会怎么样？" class="headerlink" title="假如是先进行执行 recv 操作的 G2 会怎么样？"></a>假如是先进行执行 recv 操作的 G2 会怎么样？</h3><p>你可能会顺着以上的思路反推。首先：<br><img src="https://i6448038.github.io/img/channel/hchan_block7_1.png#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>这个时候 G2 会主动调用 Go 的调度器,让 G2 等待，并从让出 M，让其他 G 去使用。<br>G2 还会被抽象成含有 G2 指针和 recv 空元素的<code>sudog</code>结构体保存到 hchan 的<code>recvq</code>中等待被唤醒<br><img src="https://i6448038.github.io/img/channel/hchan_block7.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>此时恰好有个 goroutine G1 开始向 channel 中推送数据 <code>ch &lt;- 1</code>。<br>此时，非常有意思的事情发生了：<br><img src="https://i6448038.github.io/img/channel/hchan_block8.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"><br>G1 并没有锁住 channel，然后将数据放到缓存中，而是直接把数据从 G1 直接 copy 到了 G2 的栈中。<br>这种方式非常的赞！在唤醒过程中，G2 无需再获得 channel 的锁，然后从缓存中取数据。减少了内存的 copy，提高了效率。<br>之后的事情显而易见：<br><img src="https://i6448038.github.io/img/channel/hchan_block9.gif#align=left&display=inline&height=600&margin=%5Bobject%20Object%5D&originHeight=600&originWidth=800&status=uploading&style=none&width=800"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/13/yuque/channel%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BC%A0%E8%BE%93%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F/">如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BC%A0%E8%BE%93%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F/" class="archive-article-date">
+  	<time datetime="2020-05-12T07:52:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="这个是肯定的，用-MQ-有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。"><a href="#这个是肯定的，用-MQ-有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。" class="headerlink" title="这个是肯定的，用 MQ 有个基本原则，就是数据不能多一条，也不能少一条，不能多，就是前面说的重复消费和幂等性问题。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。"></a>这个是肯定的，用 MQ 有个基本原则，就是<strong>数据不能多一条，也不能少一条</strong>，不能多，就是前面说的<a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed">重复消费和幂等性问题</a>。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。</h2><p>如果说你这个是用 MQ 来传递非常核心的消息，比如说计费、扣费的一些消息，那必须确保这个 MQ 传递过程中<strong>绝对不会把计费消息给弄丢</strong>。</p>
+<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e9%9d%a2%e8%af%95%e9%a2%98%e5%89%96%e6%9e%90">面试题剖析</a></h2><p>数据的丢失问题，可能出现在生产者、MQ、消费者中，咱们从 RabbitMQ 和 Kafka 分别来分析一下吧。</p>
+<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=rabbitmq">RabbitMQ</a></h3><p><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589269976738-9d5af23e-e39a-4eb7-a7b2-8ecf635f1fc4.png#align=left&display=inline&height=328&margin=%5Bobject%20Object%5D&originHeight=328&originWidth=672&size=0&status=done&style=none&width=672"></p>
+<h4 id="生产者弄丢了数据"><a href="#生产者弄丢了数据" class="headerlink" title="生产者弄丢了数据"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e7%94%9f%e4%ba%a7%e8%80%85%e5%bc%84%e4%b8%a2%e4%ba%86%e6%95%b0%e6%8d%ae">生产者弄丢了数据</a></h4><p>生产者将数据发送到 RabbitMQ 的时候，可能数据就在半路给搞丢了，因为网络问题啥的，都有可能。<br>此时可以选择用 RabbitMQ 提供的事务功能，就是生产者<strong>发送数据之前</strong>开启 RabbitMQ 事务 <code>channel.txSelect</code> ，然后发送消息，如果消息没有成功被 RabbitMQ 接收到，那么生产者会收到异常报错，此时就可以回滚事务 <code>channel.txRollback</code> ，然后重试发送消息；如果收到了消息，那么可以提交事务 <code>channel.txCommit</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 开启事务</span><br><span class="line">channel.txSelect</span><br><span class="line">try &#123;</span><br><span class="line">    &#x2F;&#x2F; 这里发送消息</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    channel.txRollback</span><br><span class="line">    &#x2F;&#x2F; 这里再次重发这条消息</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 提交事务</span><br><span class="line">channel.txCommitCopy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+
+<p>但是问题是，RabbitMQ 事务机制（同步）一搞，基本上<strong>吞吐量会下来，因为太耗性能</strong>。<br>所以一般来说，如果你要确保说写 RabbitMQ 的消息别丢，可以开启 <code>confirm</code> 模式，在生产者那里设置开启 <code>confirm</code> 模式之后，你每次写的消息都会分配一个唯一的 id，然后如果写入了 RabbitMQ 中，RabbitMQ 会给你回传一个 <code>ack</code> 消息，告诉你说这个消息 ok 了。如果 RabbitMQ 没能处理这个消息，会回调你的一个 <code>nack</code> 接口，告诉你这个消息接收失败，你可以重试。而且你可以结合这个机制自己在内存里维护每个消息 id 的状态，如果超过一定时间还没接收到这个消息的回调，那么你可以重发。<br>事务机制和 <code>confirm</code> 机制最大的不同在于，<strong>事务机制是同步的</strong>，你提交一个事务之后会<strong>阻塞</strong>在那儿，但是 <code>confirm</code> 机制是<strong>异步</strong>的，你发送个消息之后就可以发送下一个消息，然后那个消息 RabbitMQ 接收了之后会异步回调你的一个接口通知你这个消息接收到了。<br>所以一般在生产者这块<strong>避免数据丢失</strong>，都是用 <code>confirm</code> 机制的。</p>
+<h4 id="RabbitMQ-弄丢了数据"><a href="#RabbitMQ-弄丢了数据" class="headerlink" title="RabbitMQ 弄丢了数据"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=rabbitmq-%e5%bc%84%e4%b8%a2%e4%ba%86%e6%95%b0%e6%8d%ae">RabbitMQ 弄丢了数据</a></h4><p>就是 RabbitMQ 自己弄丢了数据，这个你必须<strong>开启 RabbitMQ 的持久化</strong>，就是消息写入之后会持久化到磁盘，哪怕是 RabbitMQ 自己挂了，<strong>恢复之后会自动读取之前存储的数据</strong>，一般数据不会丢。除非极其罕见的是，RabbitMQ 还没持久化，自己就挂了，<strong>可能导致少量数据丢失</strong>，但是这个概率较小。<br>设置持久化有<strong>两个步骤</strong>：</p>
+<ul>
+<li>创建 queue 的时候将其设置为持久化</li>
+</ul>
+<p>这样就可以保证 RabbitMQ 持久化 queue 的元数据，但是它是不会持久化 queue 里的数据的。</p>
+<ul>
+<li>第二个是发送消息的时候将消息的 <code>deliveryMode</code> 设置为 2</li>
+</ul>
+<p>就是将消息设置为持久化的，此时 RabbitMQ 就会将消息持久化到磁盘上去。<br>必须要同时设置这两个持久化才行，RabbitMQ 哪怕是挂了，再次重启，也会从磁盘上重启恢复 queue，恢复这个 queue 里的数据。<br>注意，哪怕是你给 RabbitMQ 开启了持久化机制，也有一种可能，就是这个消息写到了 RabbitMQ 中，但是还没来得及持久化到磁盘上，结果不巧，此时 RabbitMQ 挂了，就会导致内存里的一点点数据丢失。<br>所以，持久化可以跟生产者那边的 <code>confirm</code> 机制配合起来，只有消息被持久化到磁盘之后，才会通知生产者 <code>ack</code> 了，所以哪怕是在持久化到磁盘之前，RabbitMQ 挂了，数据丢了，生产者收不到 <code>ack</code> ，你也是可以自己重发的。</p>
+<h4 id="消费端弄丢了数据"><a href="#消费端弄丢了数据" class="headerlink" title="消费端弄丢了数据"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e6%b6%88%e8%b4%b9%e7%ab%af%e5%bc%84%e4%b8%a2%e4%ba%86%e6%95%b0%e6%8d%ae">消费端弄丢了数据</a></h4><p>RabbitMQ 如果丢失了数据，主要是因为你消费的时候，<strong>刚消费到，还没处理，结果进程挂了</strong>，比如重启了，那么就尴尬了，RabbitMQ 认为你都消费了，这数据就丢了。<br>这个时候得用 RabbitMQ 提供的 <code>ack</code> 机制，简单来说，就是你必须关闭 RabbitMQ 的自动 <code>ack</code> ，可以通过一个 api 来调用就行，然后每次你自己代码里确保处理完的时候，再在程序里 <code>ack</code> 一把。这样的话，如果你还没处理完，不就没有 <code>ack</code> 了？那 RabbitMQ 就认为你还没处理完，这个时候 RabbitMQ 会把这个消费分配给别的 consumer 去处理，消息是不会丢的。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1589269978510-0ea4db71-0797-49d7-a37d-cfb7f6639301.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&originHeight=287&originWidth=594&size=0&status=done&style=none&width=594"></p>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=kafka">Kafka</a></h3><h4 id="消费端弄丢了数据-1"><a href="#消费端弄丢了数据-1" class="headerlink" title="消费端弄丢了数据"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e6%b6%88%e8%b4%b9%e7%ab%af%e5%bc%84%e4%b8%a2%e4%ba%86%e6%95%b0%e6%8d%ae-1">消费端弄丢了数据</a></h4><p>唯一可能导致消费者弄丢数据的情况，就是说，你消费到了这个消息，然后消费者那边<strong>自动提交了 offset</strong>，让 Kafka 以为你已经消费好了这个消息，但其实你才刚准备处理这个消息，你还没处理，你自己就挂了，此时这条消息就丢咯。<br>这不是跟 RabbitMQ 差不多吗，大家都知道 Kafka 会自动提交 offset，那么只要<strong>关闭自动提交</strong> offset，在处理完之后自己手动提交 offset，就可以保证数据不会丢。但是此时确实还是<strong>可能会有重复消费</strong>，比如你刚处理完，还没提交 offset，结果自己挂了，此时肯定会重复消费一次，自己保证幂等性就好了。<br>生产环境碰到的一个问题，就是说我们的 Kafka 消费者消费到了数据之后是写到一个内存的 queue 里先缓冲一下，结果有的时候，你刚把消息写入内存 queue，然后消费者会自动提交 offset。然后此时我们重启了系统，就会导致内存 queue 里还没来得及处理的数据就丢失了。</p>
+<h4 id="Kafka-弄丢了数据"><a href="#Kafka-弄丢了数据" class="headerlink" title="Kafka 弄丢了数据"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=kafka-%e5%bc%84%e4%b8%a2%e4%ba%86%e6%95%b0%e6%8d%ae">Kafka 弄丢了数据</a></h4><p>这块比较常见的一个场景，就是 Kafka 某个 broker 宕机，然后重新选举 partition 的 leader。大家想想，要是此时其他的 follower 刚好还有些数据没有同步，结果此时 leader 挂了，然后选举某个 follower 成 leader 之后，不就少了一些数据？这就丢了一些数据啊。<br>生产环境也遇到过，我们也是，之前 Kafka 的 leader 机器宕机了，将 follower 切换为 leader 之后，就会发现说这个数据就丢了。<br>所以此时一般是要求起码设置如下 4 个参数：</p>
+<ul>
+<li>给 topic 设置 <code>replication.factor</code> 参数：这个值必须大于 1，要求每个 partition 必须有至少 2 个副本。</li>
+<li>在 Kafka 服务端设置 <code>min.insync.replicas</code> 参数：这个值必须大于 1，这个是要求一个 leader 至少感知到有至少一个 follower 还跟自己保持联系，没掉队，这样才能确保 leader 挂了还有一个 follower 吧。</li>
+<li>在 producer 端设置 <code>acks=all</code> ：这个是要求每条数据，必须是<strong>写入所有 replica 之后，才能认为是写成功了</strong>。</li>
+<li>在 producer 端设置 <code>retries=MAX</code> （很大很大很大的一个值，无限次重试的意思）：这个是<strong>要求一旦写入失败，就无限重试</strong>，卡在这里了。</li>
+</ul>
+<p>我们生产环境就是按照上述要求配置的，这样配置之后，至少在 Kafka broker 端就可以保证在 leader 所在 broker 发生故障，进行 leader 切换时，数据不会丢失。</p>
+<h4 id="生产者会不会弄丢数据？"><a href="#生产者会不会弄丢数据？" class="headerlink" title="生产者会不会弄丢数据？"></a><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages?id=%e7%94%9f%e4%ba%a7%e8%80%85%e4%bc%9a%e4%b8%8d%e4%bc%9a%e5%bc%84%e4%b8%a2%e6%95%b0%e6%8d%ae%ef%bc%9f">生产者会不会弄丢数据？</a></h4><p>如果按照上述的思路设置了 <code>acks=all</code> ，一定不会丢，要求是，你的 leader 接收到消息，所有的 follower 都同步到了消息之后，才认为本次写成功了。如果没满足这个条件，生产者会自动不断的重试，重试无限次。</p>
+<p><a target="_blank" rel="noopener" href="https://doocs.github.io/advanced-java/#/./docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed"> 上一篇</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/12/yuque/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BC%A0%E8%BE%93%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4%EF%BC%8C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/如何保证消息队列的高可用？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -924,154 +1126,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-yuque/PMG 模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/07/yuque/PMG%20%E6%A8%A1%E5%9E%8B/">PMG 模型</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/07/yuque/PMG%20%E6%A8%A1%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2020-05-07T04:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>坦白讲 PMG 模型就是<br>本质是 任务分配到携程任务本地队列，携程放到携程处理器，携程处理器再放到物理线程中执行<br><img src="https://cdn.nlark.com/yuque/0/2020/png/190217/1588826204460-b7d21bad-8e06-4888-93df-01fda825b495.png#align=left&display=inline&height=370&margin=%5Bobject%20Object%5D&name=%E6%88%AA%E5%B1%8F2020-05-07%20%E4%B8%8B%E5%8D%8812.36.41.png&originHeight=367&originWidth=666&size=77722&status=done&style=none&width=671" alt="截屏2020-05-07 下午12.36.41.png"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/07/yuque/PMG%20%E6%A8%A1%E5%9E%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Golang关键字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/07/yuque/Golang%E5%85%B3%E9%94%AE%E5%AD%97/">Golang关键字</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/07/yuque/Golang%E5%85%B3%E9%94%AE%E5%AD%97/" class="archive-article-date">
-  	<time datetime="2020-05-07T03:49:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>var 和 const ：变量和常量的声明</li>
-<li>var varName type   或者 varName : = value</li>
-<li>package and import: 导入</li>
-<li>func： 用于定义函数和方法</li>
-<li>return ：用于从函数返回</li>
-<li>defer someCode ：在函数退出之前执行</li>
-<li>go : 用于并行</li>
-<li>select 用于选择不同类型的通讯</li>
-<li>interface 用于定义接口</li>
-<li>struct 用于定义抽象数据类型</li>
-<li>break、case、continue、for、fallthrough、else、if、switch、goto、default 流程控制<ul>
-<li>fallthrough 的用法注意总结 [推荐阅读 <a target="_blank" rel="noopener" href="https://blog.csdn.net/ajdfhajdkfakr/article/details/79086125">https://blog.csdn.net/ajdfhajdkfakr/article/details/79086125</a>]</li>
-</ul>
-</li>
-</ul>
-<p><strong>1.加了 fallthrough 后，会直接运行【紧跟的后一个】case 或 default 语句，不论条件是否满足都会执行</strong><br><strong>2.加了 fallthrough 语句后，【紧跟的后一个】case 条件不能定义常量和变量</strong><br><strong>3.执行完 fallthrough 后直接跳到下一个条件语句，本条件执行语句后面的语句不执行</strong></p>
-<ul>
-<li>chan 用于 channel 通讯</li>
-<li>type 用于声明自定义类型</li>
-<li>map 用于声明 map 类型数据</li>
-<li>range 用于读取 slice、map、channel 数据</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/07/yuque/Golang%E5%85%B3%E9%94%AE%E5%AD%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/11/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/13/">Next &amp;raquo;</a>
@@ -1194,7 +1248,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,10 +1265,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>

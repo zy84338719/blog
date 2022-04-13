@@ -18,8 +18,9 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#crop=0&crop=0&crop=1&crop=1&height=469&id=LrfEr&originHeight=634&originWidth=1009&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#crop=0&crop=0&crop=1&crop=1&height=211&id=Xu71f&originHeight=211&originWidth=654&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=654">
 <meta property="article:published_time" content="2022-01-01T15:36:15.000Z">
-<meta property="article:modified_time" content="2022-01-01T16:05:33.592Z">
+<meta property="article:modified_time" content="2022-04-13T12:10:42.003Z">
 <meta property="article:author" content="Murphy Yi">
+<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#crop=0&crop=0&crop=1&crop=1&height=469&id=LrfEr&originHeight=634&originWidth=1009&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=746">
   
@@ -208,9 +209,9 @@ var _hmt = _hmt || [];
         <p>在 MySQL 中对于时间的存储自己见表的时候都是设置的 varchar 类型的，感觉挺方便的。<br>昨天拿别人建好的表写代码，发现这张表中时间类型为 datetime 的，凭感觉试了一下不行，网上查了刚开始试了好几个都是不对的，一脸懵逼。</p>
 <hr>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707385-eeb4f2fb-73e9-49ac-abd8-55b64a2966e5.png#crop=0&crop=0&crop=1&crop=1&height=469&id=LrfEr&originHeight=634&originWidth=1009&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=746"></p>
-<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。<br>​</p>
+<p>如图，mysql 中的 datetime 类型数据对应的是 Java 中的 Timestamp 类。<br>date：只有日期，没有时间，2016-09-21；<br>time：只有时间，没有日期，23:42:31；<br>datetime：日期时间都有，2016-09-21 23:42:31 。<br>timestamp：可以在进行 Insert 或者 update 的时候自动的为你插入时间，时间格式：2016-09-21 23:42:31。</p>
 <p>用 navicat 找了一张表添加了一个 timestamp 的字段，如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/190217/1555932707386-0b5e6b5f-4705-4d35-9284-9827c194197f.png#crop=0&crop=0&crop=1&crop=1&height=211&id=Xu71f&originHeight=211&originWidth=654&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=0&status=done&style=none&title=&width=654"></p>
-<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,<br>​</p>
+<p>导出表结构看到该字段 sql 为：<code>time_test</code> timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,</p>
 <p>言归正传，本次数据库中用的是 datetime 类型的，在 java 中生成可以存储的时间数据方法如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Date date = new Date();</span><br><span class="line"></span><br><span class="line">Timestamp timeStamep = new Timestamp(date.getTime());</span><br><span class="line"></span><br><span class="line">System.out.println(timeStamep);</span><br><span class="line"></span><br><span class="line">//输出结果： 2016-09-22 10:38:14.964</span><br></pre></td></tr></table></figure>
 
@@ -252,6 +253,17 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
@@ -509,7 +521,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">learn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,10 +538,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">learn</a>
               </li>
             
             <div class="clearfix"></div>
